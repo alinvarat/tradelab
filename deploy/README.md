@@ -1,4 +1,14 @@
 # Running TradeLab online long-term
+
+**Kuber CI secrets:** In the GitHub repository, add `KUBER_API_TOKEN` and
+`OPENROUTER_API_KEY` under **Settings → Secrets and variables → Actions**.
+Run **Test and deploy** on `main` (or push to `main`). The workflow writes the
+OpenRouter key to a private temporary file outside the checkout; `.kuberrc.ts`
+passes it to Kuber as the `app` service's `env_file`. Kuber injects it through
+the `app-env` Kubernetes Secret, not the image. Use CI for hosted deployments
+so they keep receiving this Secret. After rollout, sign in and check
+`/api/llm_trader`: it should report trader status rather than `disabled`.
+
 `server.py` listens only on `127.0.0.1:8770` and has no login. Never open that port directly; publish it through a tunnel that does the authentication (Cloudflare Tunnel + Cloudflare Access for `tradelab.dgnr.us`, which already answers with an Access login).
 
 On an always-on Linux host (Python 3.13, no packages needed):
