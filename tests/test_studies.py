@@ -109,6 +109,41 @@ class PointInTime(unittest.TestCase):
         self.assertEqual(rows[0]["top"], ["S14"])                          # 10% of 15 = 1
 
 
+class LlmEarnings(unittest.TestCase):
+    def test_parse_reply(self):
+        self.assertEqual(st.parse_direction('ok {"direction": "Short", "confidence": 80, "reason": "guide cut"}'),
+                         {"direction": "short", "confidence": 80, "reason": "guide cut"})
+        self.assertEqual(st.parse_direction("no json")["direction"], "skip")
+        self.assertEqual(st.parse_direction('{"direction": "buy"}')["direction"], "skip")
+        self.assertEqual(st.parse_direction('{"direction": "long", "confidence": 250}')["confidence"], 100)
+
+    def test_exhibit_and_text(self):
+        self.assertEqual(st.pick_exhibit(["a8-k.htm", "aex991.htm", "R1.htm"], "a8-k.htm"), "aex991.htm")
+        self.assertEqual(st.pick_exhibit(["a8-k.htm"], "a8-k.htm"), "a8-k.htm")
+        self.assertEqual(st.html_text("<html><style>x{}</style><p>Revenue&nbsp;up  <b>9%</b></p></html>"),
+                         "Revenue up 9%")
+
+    def test_short_gains_when_price_falls_and_both_sides_pay_cost(self):
+        self.assertGreater(st.signed_net(-0.05, -1), 0.049)
+        self.assertLess(st.signed_net(0.0, 1), 0)
+        self.assertEqual(st.signed_net(0.05, 0), 0.0)
+
+    def test_summary_and_verdict(self):
+        rows = []
+        for i in range(80):
+            g = 0.02 if i % 2 else -0.02
+            for h in (1, 3, 5):
+                rows.append({"symbol": f"S{i % 20}", "ts": 1790000000 + 86400 * 31 * (i // 20), "horizon": h,
+                             "gross": g, "direction": "long" if g > 0 else "short", "confidence": 90,
+                             "rand_sign": 1 if i % 3 else -1})
+        h1 = st.llm_summary(rows, 1)
+        self.assertEqual(h1["n"], 80)
+        self.assertEqual(h1["hit"], 1.0)
+        self.assertGreater(h1["mean_diff"], 0)
+        self.assertEqual(st.llm_verdict(rows), "edge candidate")
+        self.assertEqual(st.llm_verdict(rows[:30]), "too few, keep collecting")
+
+
 class Items(unittest.TestCase):
     def test_only_locked_items_count_and_each_counts_once(self):
         self.assertEqual(st.item_tags(["2.02", "9.01"]), ["2.02"])
