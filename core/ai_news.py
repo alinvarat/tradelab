@@ -129,14 +129,18 @@ def providers() -> dict:
     return out
 
 
-def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None) -> tuple:
+DECISION_MODEL = os.environ.get("TRADELAB_LLM_MODEL", "openrouter/deepseek/deepseek-v4-pro-0813")   # best DeepSeek, pinned
+
+
+def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, model=None) -> tuple:
     """One free-form answer from the DeepSeek model: -> (text, model_name) or ("", reason). Same safety rules as
     score_opencode (empty temp dir, no --auto) / score_openrouter (key from the environment only)."""
-    name = OPENCODE_MODEL.split("/", 1)[-1]
+    full = model or OPENCODE_MODEL
+    name = full.split("/", 1)[-1]
     if opencode_available():
         try:
             with tempfile.TemporaryDirectory() as empty:
-                r = run(["opencode", "run", "-m", OPENCODE_MODEL, "--archived", system + "\n\n" + user],
+                r = run(["opencode", "run", "-m", full, "--archived", system + "\n\n" + user],
                         capture_output=True, text=True, timeout=timeout, cwd=empty)
             return (ANSI.sub("", r.stdout), name) if r.returncode == 0 else ("", f"opencode exit {r.returncode}")
         except Exception as exc:  # noqa: BLE001

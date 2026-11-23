@@ -145,7 +145,7 @@ def archive_headlines(symbol: str, limit=5) -> list:
 class LlmTrader:
     def __init__(self, state_path=STATE, log_path=LOG, chat=None, rng_seed=None):
         self.state_path, self.log_path = Path(state_path), Path(log_path)
-        self.chat = chat or ai_news.chat
+        self.chat = chat or (lambda system, user: ai_news.chat(system, user, model=ai_news.DECISION_MODEL))
         self.lock = threading.RLock()
         self.rng = random.Random(rng_seed)
         self.pool = ThreadPoolExecutor(10)
@@ -153,6 +153,7 @@ class LlmTrader:
         self.context: dict[str, dict] = {}
         self.last_scan, self.last_error = 0.0, None
         self.cands: list = []
+        self.last_quotes: dict[str, dict] = {}
         if self.state_path.exists():
             d = json.loads(self.state_path.read_text())
             self.acct, self.ctrl = Account.from_dict(d["account"]), Account.from_dict(d["ctrl"])
@@ -327,8 +328,9 @@ class LlmTrader:
         syms = {c["symbol"] for c in ctx["candidates"]}
         user = "Candidates and context (JSON):\n" + json.dumps({"market": ctx["market"], "candidates": ctx["candidates"]})
         out = {}
-        for name, system in (("bull_case", BULL), ("bear_case", BEAR)):
-            raw, model = self.chat(system, user)
+        with ThreadPoolExecutor(2) as ex:      # bull and bear run at the same time: one round trip of latency, not two
+            replies = list(ex.map(lambda sys_: self.chat(sys_, user), (BULL, BEAR)))
+        for name, (raw, model) in zip(("bull_case", "bear_case"), replies):
             out[name] = parse_arguments(raw, syms)
             self.record("debate", side=name, model=model, arguments=out[name], raw=raw[:2000], error=None if raw else model)
         return out
@@ -449,6 +451,7 @@ class LlmTrader:
     def scan(self, quotes=None):
         now = time.time()
         quotes = quotes if quotes is not None else self.fetch()
+        self.last_quotes.update(quotes)
         with self.lock:
             for acct in (self.acct, self.ctrl):
                 for s in set(acct.positions) | {o.symbol for o in acct.orders if o.status == "pending"}:
@@ -522,25 +525,40 @@ class LlmTrader:
                     "control_equity_usd": self.ctrl.equity(), "capital_usd": self.capital_usd, "paused": self.paused,
                     "calls_today": self.calls["n"], "max_calls_day": MAX_CALLS_DAY, "error": self.last_error,
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
-                    "model": ai_news.OPENCODE_MODEL.split("/", 1)[-1],
+                    "model": ai_news.DECISION_MODEL.split("/", 1)[-1],
                     "positions": [{"symbol": s, "qty": p.qty, "entry": p.entry,
                                    "mark": a.last[s].bid if s in a.last else None} for s, p in a.positions.items()],
                     "decisions": self.decisions[::-1][:40], "evaluation": self.evaluate(), "log_file": str(self.log_path.name)}
 
 
+    HOT_PCT = 3.5   # stocks this far from the shock threshold are re-polled every pass so a developing shock is seen early
+
+    def hot(self):
+        return [s for s, q in self.last_quotes.items() if abs(q.get("change_pct") or 0) >= self.HOT_PCT][:20]
+
     def watch(self):
         """Fast tier: re-quote only open positions/pending orders so stops and targets react within seconds."""
         syms = set(self.acct.positions) | set(self.ctrl.positions)
-        for s in syms:
+        hot_quotes = {}
+        for s in sorted(syms | set(self.hot())):
             try:
                 q = data.quote_fast(s, ttl=1.0)
             except Exception:  # noqa: BLE001
                 continue
+            if s in self.last_quotes:
+                hot_quotes[s] = q
+                self.last_quotes[s] = q
             with self.lock:
                 if s in self.acct.positions or s in self.acct.last:
                     self.acct.on_quote(self._q(q))
                 if s in self.ctrl.positions or s in self.ctrl.last:
                     self.ctrl.on_quote(self._q(q))
+        if hot_quotes and self.hot_shock(hot_quotes):
+            self.scan(quotes=dict(self.last_quotes))     # a hot stock just crossed the threshold: decide now, not at the next full pass
+
+    def hot_shock(self, quotes):
+        now = time.time()
+        return any(f"{_day(now)}:{s}" not in self.seen and self.shock(q, now) is not None for s, q in quotes.items())
 
 
 def loop(t: LlmTrader, every=SCAN_S):
