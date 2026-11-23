@@ -30,12 +30,12 @@ def spearman(a, b):
     return cov / math.sqrt(va * vb) if va and vb else 0.0
 
 
-def load(data=DATA, horizon="1d"):
+def load(data=DATA, horizon="1d", model=None):
     scores = {}
     path = data / "ai_scores.jsonl"
     for line in path.read_text().splitlines() if path.exists() else []:
         r = json.loads(line)
-        if r["confidence"] >= 0.3:
+        if r["confidence"] >= 0.3 and (model is None or r["model"] == model):
             scores[r["key"]] = r
     seen, rows = set(), []
     path = data / "labels.jsonl"
@@ -47,7 +47,7 @@ def load(data=DATA, horizon="1d"):
     return rows
 
 
-def evaluate(rows, seed=20261123):
+def evaluate(rows, seed=20261123, tail=0.025):
     out = {"pairs": len(rows), "needed": NEEDED}
     if len(rows) < NEEDED:
         out["verdict"] = f"too early ({len(rows)}/{NEEDED} usable pairs): no conclusion allowed"
@@ -62,8 +62,8 @@ def evaluate(rows, seed=20261123):
         boots.append((spearman(a, y), spearman(l, y)))
     q = lambda v, p: sorted(v)[int(p * (len(v) - 1))]
     ai_c, lex_c = spearman(ai, ret), spearman(lex, ret)
-    ai_ci = (q([b[0] for b in boots], .025), q([b[0] for b in boots], .975))
-    diff_ci = (q([b[0] - b[1] for b in boots], .025), q([b[0] - b[1] for b in boots], .975))
+    ai_ci = (q([b[0] for b in boots], tail), q([b[0] for b in boots], 1 - tail))
+    diff_ci = (q([b[0] - b[1] for b in boots], tail), q([b[0] - b[1] for b in boots], 1 - tail))
     out |= {"ai_corr": ai_c, "ai_ci": ai_ci, "lexicon_corr": lex_c, "diff_ci": diff_ci}
     useful = ai_c > 0 and ai_ci[0] > 0 and diff_ci[0] > 0
     out["verdict"] = ("AI score useful in this window (needs a later window)" if useful
@@ -71,5 +71,12 @@ def evaluate(rows, seed=20261123):
     return out
 
 
+def models(data=DATA):
+    path = data / "ai_scores.jsonl"
+    return sorted({json.loads(l)["model"] for l in path.read_text().splitlines()}) if path.exists() else []
+
+
 if __name__ == "__main__":
-    print(json.dumps(evaluate(load()), indent=1))
+    ms = models()
+    tail = 0.025 if len(ms) <= 1 else 0.005 / len(ms) * 2  # Bonferroni over the models tested (see score_protocol.md)
+    print(json.dumps({m: evaluate(load(model=m), tail=tail) for m in ms} or {"none": evaluate([])}, indent=1))

@@ -136,25 +136,29 @@ def settle_labels(now, price_fn=spot):
     return wrote
 
 
-def ai_score_new(fresh, today, score_fn=ai_news.score):
-    """AI-score new headlines that mention a large cap, within per-run and per-day caps. Returns rows written."""
-    todo = [x for x in fresh if x["symbols"]][:AI_PER_RUN]
-    done_today = 0
-    if AI_SCORES.exists():
-        done_today = sum(1 for l in AI_SCORES.read_text().splitlines()[-3000:] if f'"day": "{today}"' in l)
-    todo = todo[:max(0, AI_PER_DAY - done_today)]
+def ai_score_new(fresh, today, providers=None):
+    """Score new headlines that mention a large cap with every available model (`providers`: {model: fn}), within
+    per-run and per-day caps for each model. Returns rows written."""
+    providers = ai_news.providers() if providers is None else providers
+    linked = [x for x in fresh if x["symbols"]][:AI_PER_RUN]
     wrote = 0
-    for i in range(0, len(todo), AI_BATCH):
-        batch = todo[i:i + AI_BATCH]
-        scores = score_fn([{"id": x["key"], "title": x["title"], "summary": x["summary"], "symbols": x["symbols"]}
-                           for x in batch])
-        with AI_SCORES.open("a") as f:
-            for x in batch:
-                s = scores.get(x["key"])
-                if s:
-                    f.write(json.dumps({"key": x["key"], "day": today, "model": ai_news.MODEL, "symbols": x["symbols"],
-                                        "lexicon": x["sentiment"], **s}) + "\n")
-                    wrote += 1
+    for model, fn in providers.items():
+        done_today = 0
+        if AI_SCORES.exists():
+            done_today = sum(1 for l in AI_SCORES.read_text().splitlines()[-6000:]
+                             if f'"day": "{today}"' in l and f'"model": "{model}"' in l)
+        todo = linked[:max(0, AI_PER_DAY - done_today)]
+        for i in range(0, len(todo), AI_BATCH):
+            batch = todo[i:i + AI_BATCH]
+            scores = fn([{"id": x["key"], "title": x["title"], "summary": x["summary"], "symbols": x["symbols"]}
+                         for x in batch])
+            with AI_SCORES.open("a") as f:
+                for x in batch:
+                    s = scores.get(x["key"])
+                    if s:
+                        f.write(json.dumps({"key": x["key"], "day": today, "model": model, "symbols": x["symbols"],
+                                            "lexicon": x["sentiment"], **s}) + "\n")
+                        wrote += 1
     return wrote
 
 
@@ -179,7 +183,7 @@ def main():
     now = time.time()
     open_labels(fresh, now)
     wrote = settle_labels(now)
-    scored = ai_score_new(fresh, now_dt.strftime("%Y-%m-%d")) if ai_news.available() else 0
+    scored = ai_score_new(fresh, now_dt.strftime("%Y-%m-%d"))
     print(now_dt.isoformat(), "fetched", len(items), "new", len(fresh), "linked", sum(bool(x["symbols"]) for x in fresh),
           "labels", wrote, "ai_scored", scored)
 
