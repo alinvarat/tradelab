@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from core.universe import TICKERS
-from core import event_trader
+from core import event_trader, news_archive
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 
@@ -537,6 +537,8 @@ if __name__ == "__main__":
     threading.Thread(target=backup_loop, daemon=True).start()
     threading.Thread(target=shock_warm_loop, daemon=True).start()
     threading.Thread(target=history_loop, daemon=True).start()
+    if os.environ.get("TRADELAB_NEWS_ARCHIVE") == "1":  # set in the container; the systemd collector uses its own copy
+        threading.Thread(target=news_archive.loop, daemon=True).start()
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)
     print(f"TradeLab on http://{HOST}:{PORT}", flush=True)

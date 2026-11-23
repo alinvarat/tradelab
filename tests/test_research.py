@@ -256,3 +256,37 @@ class OpencodeNews(unittest.TestCase):
             bad = ai_news.score_opencode([{"id": "a", "title": "t", "symbols": []}],
                                          run=lambda *a, **k: mock.Mock(returncode=1, stdout="x"))
             self.assertEqual(bad, {})
+
+
+class ArchiveInApp(unittest.TestCase):
+    def test_collector_shim_is_the_core_module(self):
+        import core.news_archive as n
+        from research.news_archive import collector as c
+        self.assertIs(c, n)
+
+    def test_openrouter_scorer_uses_env_key_and_fails_closed(self):
+        import io
+        import os
+        from unittest import mock
+        from core import ai_news
+        sent = {}
+
+        class Resp(io.BytesIO):
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        def fake_urlopen(req, timeout):
+            sent["auth"], sent["body"] = req.headers["Authorization"], json.loads(req.data)
+            return Resp(json.dumps({"choices": [{"message": {"content": '[{"id":"a","score":0.4,"confidence":0.8,"category":"deal"}]'}}]}).encode())
+        items = [{"id": "a", "title": "t", "symbols": ["AAPL"]}]
+        with mock.patch.dict(os.environ, {"OPENROUTER_API_KEY": "test-key"}):
+            out = ai_news.score_openrouter(items, urlopen=fake_urlopen)
+            self.assertEqual(out["a"]["score"], 0.4)
+            self.assertEqual(sent["auth"], "Bearer test-key")
+            self.assertEqual(sent["body"]["model"], "deepseek/deepseek-v4.1-flash-1017")
+            self.assertEqual(ai_news.score_openrouter(items, urlopen=mock.Mock(side_effect=OSError("down"))), {})
+        with mock.patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(ai_news.score_openrouter(items), {})

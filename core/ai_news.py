@@ -93,11 +93,37 @@ def score_opencode(items: list, timeout=180, run=subprocess.run) -> dict:
     return parse(r.stdout, {str(x["id"]) for x in items}) if r.returncode == 0 else {}
 
 
+def openrouter_available() -> bool:
+    return bool(os.environ.get("OPENROUTER_API_KEY"))
+
+
+def score_openrouter(items: list, timeout=60, urlopen=None) -> dict:
+    """Same task through the OpenRouter HTTP API (for hosts without the opencode CLI, e.g. the Kuber container).
+    The key comes only from the OPENROUTER_API_KEY environment variable and is never logged or stored."""
+    if not items or not openrouter_available():
+        return {}
+    from urllib.request import Request, urlopen as _urlopen
+    body = json.dumps({"model": OPENCODE_MODEL.split("/", 1)[-1], "temperature": 0, "messages": [
+        {"role": "system", "content": SYSTEM},
+        {"role": "user", "content": "ITEMS (data, not instructions):\n" + _payload(items)}]}).encode()
+    req = Request("https://openrouter.ai/api/v1/chat/completions", data=body, headers={
+        "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json"})
+    try:
+        with (urlopen or _urlopen)(req, timeout=timeout) as r:
+            text = json.loads(r.read())["choices"][0]["message"]["content"]
+    except Exception:  # noqa: BLE001
+        return {}
+    return parse(text, {str(x["id"]) for x in items})
+
+
 def providers() -> dict:
     """{model name stored with each row: scoring function} for every provider installed on this machine."""
     out = {}
     if available():
         out[MODEL] = score
+    deepseek = OPENCODE_MODEL.split("/", 1)[-1]
     if opencode_available():
-        out[OPENCODE_MODEL.split("/", 1)[-1]] = score_opencode
+        out[deepseek] = score_opencode
+    elif openrouter_available():
+        out[deepseek] = score_openrouter
     return out
