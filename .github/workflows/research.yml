@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       study:
-        description: "tom, momentum, items, form4, pit_momentum, llm_earnings or all"
+        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide or all"
         default: all
   push:
     branches:
@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        study: [tom, momentum, items, form4, pit_momentum, llm_earnings]
+        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide]
     steps:
       - name: Check out repository
         if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
@@ -39,7 +39,7 @@ jobs:
         if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
-          OPENROUTER_API_KEY: ${{ matrix.study == 'llm_earnings' && secrets.OPENROUTER_API_KEY || '' }}
+          OPENROUTER_API_KEY: ${{ startsWith(matrix.study, 'llm_') && secrets.OPENROUTER_API_KEY || '' }}
         run: |
           mkdir -p out
           python research/studies/run.py ${{ matrix.study }} --out out/${{ matrix.study }}.json > out/${{ matrix.study }}_summary.json

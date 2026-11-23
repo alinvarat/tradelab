@@ -144,6 +144,43 @@ class LlmEarnings(unittest.TestCase):
         self.assertEqual(st.llm_verdict(rows[:30]), "too few, keep collecting")
 
 
+class WideEarnings(unittest.TestCase):
+    def test_form_idx_keeps_only_plain_8k(self):
+        text = ("Form Type   Company Name   CIK   Date Filed   File Name\n" + "-" * 40 + "\n"
+                "8-K              APPLE INC                        320193      20261020    edgar/data/320193/0001140361-26-042798.txt\n"
+                "8-K/A            3M CO 2                          66740       20261020    edgar/data/66740/0000066740-26-000099.txt\n"
+                "10-Q             MICROSOFT CORP                   789019      20261020    edgar/data/789019/0000950170-26-000001.txt\n")
+        got = st.parse_form_idx(text)
+        self.assertEqual(got, [{"form": "8-K", "cik": 320193, "accession": "0001140361-26-042798", "date": "2026-10-20"}])
+
+    def test_liquidity_tiers_and_exclusions(self):
+        def mk(price, vol, n=25):
+            return [{"t": i, "o": price, "h": price, "l": price, "c": price, "v": vol} for i in range(n)]
+        self.assertEqual(st.liquidity_cost(mk(50, 3_000_000), 22), 0.0009)       # 150M/day
+        self.assertEqual(st.liquidity_cost(mk(50, 1_000_000), 22), 0.0020)       # 50M
+        self.assertEqual(st.liquidity_cost(mk(50, 200_000), 22), 0.0040)         # 10M
+        self.assertIsNone(st.liquidity_cost(mk(50, 50_000), 22))                 # 2.5M: too thin
+        self.assertIsNone(st.liquidity_cost(mk(2, 50_000_000), 22))              # under 3 USD
+        self.assertIsNone(st.liquidity_cost(mk(50, 3_000_000), 3))               # not enough history
+
+    def test_tier_cost_is_charged_on_both_sides(self):
+        self.assertAlmostEqual(st.signed_net(0.0, 1, 1.0, 0.004), (1 - 0.004) ** 2 - 1)
+        self.assertAlmostEqual(st.signed_net(0.0, 1, 2.0, 0.004), (1 - 0.008) ** 2 - 1)
+
+    def test_daily_book_averages_each_entry_session(self):
+        rows = [{"horizon": 1, "direction": "long", "gross": 0.02, "entry_t": 1},
+                {"horizon": 1, "direction": "short", "gross": 0.02, "entry_t": 1},
+                {"horizon": 1, "direction": "skip", "gross": 0.5, "entry_t": 1},
+                {"horizon": 3, "direction": "long", "gross": 0.5, "entry_t": 2},
+                {"horizon": 1, "direction": "long", "gross": 0.01, "entry_t": 2}]
+        book = st.daily_book(rows)
+        self.assertEqual([t for t, _ in book], [1, 2])
+        self.assertAlmostEqual(book[0][1], (st.signed_net(0.02, 1) + st.signed_net(0.02, -1)) / 2)
+        p = st.leverage_path([0.1, -0.5], 2)
+        self.assertAlmostEqual(p["end_equity"], 0.0)
+        self.assertAlmostEqual(p["worst_drawdown"], -1.0)
+
+
 class Items(unittest.TestCase):
     def test_only_locked_items_count_and_each_counts_once(self):
         self.assertEqual(st.item_tags(["2.02", "9.01"]), ["2.02"])

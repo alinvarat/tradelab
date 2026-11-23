@@ -251,9 +251,64 @@ def sign_of(direction: str) -> int:
     return {"long": 1, "short": -1}.get(direction, 0)
 
 
-def signed_net(gross: float, sign: int, cost_mult: float = 1.0) -> float:
-    """Net of a long (sign 1) or short (sign -1) held from open to close; the short gains -gross."""
-    return nb.net_return(sign * gross, "stock", cost_mult) if sign else 0.0
+def signed_net(gross: float, sign: int, cost_mult: float = 1.0, cost_side: float | None = None) -> float:
+    """Net of a long (sign 1) or short (sign -1) held from open to close; the short gains -gross.
+    cost_side overrides the default stock cost per side (liquidity tiers)."""
+    if not sign:
+        return 0.0
+    if cost_side is None:
+        return nb.net_return(sign * gross, "stock", cost_mult)
+    return (1 + sign * gross) * (1 - cost_side * cost_mult) ** 2 - 1
+
+
+LIQ_TIERS = ((100e6, 0.0009), (20e6, 0.0020), (5e6, 0.0040))
+
+
+def liquidity_cost(bars: list, entry_index: int, days: int = 20, min_price: float = 3.0) -> float | None:
+    """Per-side cost from the median dollar volume of the sessions before entry; None = excluded (too thin/cheap)."""
+    prev = bars[max(0, entry_index - days):entry_index]
+    if len(prev) < days // 2 or not prev[-1].get("c") or prev[-1]["c"] < min_price:
+        return None
+    dv = sorted((b.get("c") or 0) * (b.get("v") or 0) for b in prev)
+    med = dv[len(dv) // 2]
+    for floor, cost in LIQ_TIERS:
+        if med >= floor:
+            return cost
+    return None
+
+
+def parse_form_idx(text: str, forms=("8-K",)) -> list:
+    """EDGAR daily form.idx -> [{'form','cik','date','accession'}] for the requested form types."""
+    import re
+    out = []
+    for line in text.splitlines():
+        m = re.match(r"^(\S+)\s+.*?\s(\d{1,10})\s+(\d{8}|\d{4}-\d{2}-\d{2})\s+(edgar/\S+\.txt)\s*$", line)
+        if not m or m.group(1) not in forms:
+            continue
+        acc = m.group(4).rsplit("/", 1)[-1][:-4]
+        d = m.group(3)
+        out.append({"form": m.group(1), "cik": int(m.group(2)), "accession": acc,
+                    "date": d if "-" in d else f"{d[:4]}-{d[4:6]}-{d[6:]}"})
+    return out
+
+
+def daily_book(rows: list, horizon: int = 1) -> list:
+    """[(entry_t, mean net of that session's non-skip trades)] in time order; rows need 'entry_t'."""
+    import collections
+    by = collections.defaultdict(list)
+    for r in rows:
+        if r["horizon"] == horizon and r["direction"] != "skip":
+            by[r["entry_t"]].append(signed_net(r["gross"], sign_of(r["direction"]), 1.0, r.get("cost_side")))
+    return [(t, sum(v) / len(v)) for t, v in sorted(by.items())]
+
+
+def leverage_path(returns: list, lev: float) -> dict:
+    e, peak, dd = 1.0, 1.0, 0.0
+    for x in returns:
+        e *= max(1 + lev * x, 0.0)
+        peak = max(peak, e)
+        dd = min(dd, e / peak - 1 if peak else -1.0)
+    return {"end_equity": e, "worst_drawdown": dd}
 
 
 def llm_summary(rows: list, horizon: int, min_conf: int = 0) -> dict:
@@ -263,8 +318,8 @@ def llm_summary(rows: list, horizon: int, min_conf: int = 0) -> dict:
     taken = [r for r in sub if r["direction"] != "skip" and r["confidence"] >= min_conf]
     if not taken:
         return {"n_events": len(sub), "n": 0}
-    mine = [signed_net(r["gross"], sign_of(r["direction"])) for r in taken]
-    rand = [signed_net(r["gross"], r["rand_sign"]) for r in taken]
+    mine = [signed_net(r["gross"], sign_of(r["direction"]), 1.0, r.get("cost_side")) for r in taken]
+    rand = [signed_net(r["gross"], r["rand_sign"], 1.0, r.get("cost_side")) for r in taken]
     diff = [a - b for a, b in zip(mine, rand)]
     keys = [nb.cluster_key(r) for r in taken]
     rng = _r.Random(20261124)
@@ -272,10 +327,10 @@ def llm_summary(rows: list, horizon: int, min_conf: int = 0) -> dict:
     return {"n_events": len(sub), "n": k, "skip_rate": 1 - k / len(sub),
             "hit": sum(1 for r in taken if sign_of(r["direction"]) * r["gross"] > 0) / k,
             "mean_gross_signed": sum(sign_of(r["direction"]) * r["gross"] for r in taken) / k,
-            "mean_net": sum(mine) / k, "mean_net_2x": sum(signed_net(r["gross"], sign_of(r["direction"]), 2.0)
-                                                         for r in taken) / k,
+            "mean_net": sum(mine) / k, "mean_net_2x": sum(signed_net(r["gross"], sign_of(r["direction"]), 2.0,
+                                                                     r.get("cost_side")) for r in taken) / k,
             "mean_random_dir": sum(rand) / k, "mean_diff": sum(diff) / k,
-            "mean_always_long": sum(nb.net_return(r["gross"]) for r in sub) / len(sub),
+            "mean_always_long": sum(signed_net(r["gross"], 1, 1.0, r.get("cost_side")) for r in sub) / len(sub),
             "p_diff_block": nb.block_bootstrap_p(diff, keys, rng), "p_net_block": nb.block_bootstrap_p(mine, keys, rng)}
 
 
