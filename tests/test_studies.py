@@ -124,7 +124,7 @@ class LlmEarnings(unittest.TestCase):
                          "Revenue up 9%")
 
     def test_short_gains_when_price_falls_and_both_sides_pay_cost(self):
-        self.assertGreater(st.signed_net(-0.05, -1), 0.049)
+        self.assertAlmostEqual(st.signed_net(-0.05, -1), 1.05 * (1 - 0.0009) ** 2 - 1)
         self.assertLess(st.signed_net(0.0, 1), 0)
         self.assertEqual(st.signed_net(0.05, 0), 0.0)
 
