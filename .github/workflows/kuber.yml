@@ -32,6 +32,11 @@ jobs:
       - name: Run tests
         run: python -m unittest discover -s tests -t .
 
+      - name: Test decision log in Chrome
+        run: |
+          python -m pip install playwright==1.65.2
+          python tests/ui_logs_browser.py
+
   deploy:
     name: Deploy with Kuber
     needs: test
