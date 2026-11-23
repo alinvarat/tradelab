@@ -1,6 +1,7 @@
 """TradeLab: multi-market paper-trading simulator with analysis, news, backtests and an AI analyst.
 Run: python3 server.py  ->  http://127.0.0.1:8770   (simulated money only; no broker connection exists)."""
 import json
+import math
 import os
 import shutil
 import signal
@@ -8,11 +9,13 @@ import sys
 import threading
 import time
 import traceback
+import urllib.error
 from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from core.universe import TICKERS
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 
@@ -75,6 +78,14 @@ def save():
     tmp = STATE.with_suffix(".tmp")
     tmp.write_text(json.dumps(d))
     tmp.replace(STATE)
+
+
+def num(v, name, lo=None, hi=None):
+    """Parse a finite number from request JSON or raise ValueError (-> HTTP 400)."""
+    x = float(v)
+    if not math.isfinite(x) or (lo is not None and x < lo) or (hi is not None and x > hi):
+        raise ValueError(f"{name} must be a finite number" + (f" in [{lo}, {hi}]" if lo is not None else ""))
+    return x
 
 
 def to_quote(q: dict) -> Quote:
@@ -184,7 +195,6 @@ _shock_cache = {"ts": 0, "rows": None}
 
 def shocks():
     """Large US stocks that gapped >= 3% at the latest open on >= 1.5x their 50-day volume, with headlines."""
-    from research.events import TICKERS
     if _shock_cache["rows"] is not None and time.time() - _shock_cache["ts"] < 1800:
         return _shock_cache["rows"]
 
@@ -284,7 +294,9 @@ class Handler(BaseHTTPRequestHandler):
                     return self._send(200, news.symbol_news(q["symbol"], q.get("name", "")))
                 return self._send(200, news.market_news())
             if p == "search":
-                return self._send(200, data.search(q.get("q", "")))
+                if not q.get("q", "").strip():
+                    return self._send(200, [])
+                return self._send(200, data.search(q["q"]))
             if p == "overview":
                 return self._send(200, overview())
             if p == "account":
@@ -307,6 +319,11 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(404, {"error": "not found"})
         except KeyError as e:
             self._send(400, {"error": f"missing {e}"})
+        except urllib.error.HTTPError as e:
+            if e.code in (400, 404):  # the data provider does not know this symbol/request
+                self._send(404, {"error": "unknown symbol or no data"})
+            else:
+                self._send(502, {"error": str(e)[:300]})
         except Exception as e:  # noqa: BLE001
             self._send(502, {"error": str(e)[:300]})
 
@@ -317,15 +334,17 @@ class Handler(BaseHTTPRequestHandler):
             n = int(self.headers.get("Content-Length") or 0)
             b = json.loads(self.rfile.read(n) or b"{}")
             p = u.path[5:]
-            f = lambda k: float(b[k]) if b.get(k) not in (None, "") else None  # noqa: E731
+            f = lambda k: num(b[k], k, 0) if b.get(k) not in (None, "") else None  # noqa: E731
             if p == "order":
                 sym = b["symbol"].strip().upper()
                 if sym.endswith(".BK"):
                     return self._send(400, {"error": "this simulator covers global markets only"})
                 if not refresh(sym):
                     return self._send(400, {"error": f"no quote for {sym}"})
+                if int(b["side"]) not in (1, -1):
+                    raise ValueError("side must be 1 (buy) or -1 (sell)")
                 with lock:
-                    o = acct.place(sym, int(b["side"]), float(b["qty"]), b.get("type", "market"), f("price"),
+                    o = acct.place(sym, int(b["side"]), num(b["qty"], "qty", 0, 1e9), b.get("type", "market"), f("price"),
                                    f("sl"), f("tp"))
                 save()
                 return self._send(200, vars(o))
@@ -347,9 +366,11 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200, {"ok": ok})
             if p == "reset":
                 with lock:
-                    acct = Account(balance=float(b.get("balance", 100000)), leverage=float(b.get("leverage", 1)),
-                                   fee_rate=float(b.get("fee_pct", 0.05)) / 100, min_fee=float(b.get("min_fee", 0)),
-                                   slippage=float(b.get("slippage_pct", 0.02)) / 100,
+                    acct = Account(balance=num(b.get("balance", 100000), "balance", 1, 1e12),
+                                   leverage=num(b.get("leverage", 1), "leverage", 1, 100),
+                                   fee_rate=num(b.get("fee_pct", 0.05), "fee_pct", 0, 100) / 100,
+                                   min_fee=num(b.get("min_fee", 0), "min_fee", 0, 1e6),
+                                   slippage=num(b.get("slippage_pct", 0.02), "slippage_pct", 0, 100) / 100,
                                    allow_short=bool(b.get("allow_short", True)))
                     for s, qd in quotes.items():
                         acct.on_quote(to_quote(qd))
@@ -374,10 +395,11 @@ class Handler(BaseHTTPRequestHandler):
                         state["alerts"] = [a for a in state["alerts"] if a["id"] != b["id"]]
                     else:
                         state["alerts"].append({"id": int(time.time() * 1000), "symbol": b["symbol"].upper(),
-                                                "op": b["op"], "price": float(b["price"]), "created": time.time()})
+                                                "op": b["op"], "price": num(b["price"], "price", 0), "created": time.time()})
                 save()
                 return self._send(200, {"alerts": state["alerts"]})
             if p == "backtest":
+                num(b.get("capital", 10000), "capital", 1, 1e12)
                 return self._send(200, backtest.run(
                     b["symbol"], b.get("strategy", "sma_cross"), b.get("params") or {}, b.get("range", "5y"),
                     b.get("interval", "1d"), float(b.get("capital", 10000)), float(b.get("fee_pct", 0.05)),
@@ -413,6 +435,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(404, {"error": "not found"})
         except KeyError as e:
             self._send(400, {"error": f"missing {e}"})
+        except (ValueError, TypeError) as e:
+            self._send(400, {"error": f"invalid input: {str(e)[:200]}"})
         except Exception as e:  # noqa: BLE001
             self._send(502, {"error": str(e)[:300]})
 

@@ -4,6 +4,7 @@ closed-market rule: market orders wait for an open market instead of filling at 
 No real orders exist anywhere in this code."""
 from dataclasses import dataclass, field, asdict
 import itertools
+import math
 import time
 
 
@@ -109,7 +110,8 @@ class Account:
     # ---- orders ----------------------------------------------------------
     def place(self, symbol, side, qty, type="market", price=None, sl=None, tp=None) -> Order:
         o = Order(next(self._ids), symbol, 1 if side > 0 else -1, float(qty), type, price, sl, tp)
-        if qty <= 0 or type not in ("market", "limit", "stop") or (type != "market" and not price):
+        finite = all(v is None or math.isfinite(v) for v in (qty, price, sl, tp))
+        if not finite or qty <= 0 or type not in ("market", "limit", "stop") or (type != "market" and not price):
             o.status, o.note = "rejected", "invalid quantity, type or price"
         self.orders.append(o)
         if o.status == "pending":
