@@ -126,14 +126,15 @@ def summarize(rows: list, rng: random.Random | None = None, cost_mult: float = 1
             "p_mean_block": block_bootstrap_p(net, keys, rng), "p_diff_block": block_bootstrap_p(diff, keys, rng)}
 
 
-def contributions(rows: list, cost_mult: float = 1.0) -> list:
-    """Per symbol: events, summed net and summed paired difference (net minus control), largest |sum| first.
-    Shows whether one firm carries the pooled mean."""
+def contributions(rows: list, cost_mult: float = 1.0, key=None) -> list:
+    """Per symbol (or per key(row), e.g. month): events, summed net and summed paired difference (net minus
+    control), largest |sum| first. Shows whether one firm or one month carries the pooled mean."""
+    key = key or (lambda r: r.get("symbol", "?"))
     agg: dict = {}
     for r in rows:
         cls = r.get("asset_class", "stock")
-        a = agg.setdefault(r.get("symbol", "?"), {"symbol": r.get("symbol", "?"), "n": 0, "sum_net": 0.0,
-                                                   "sum_diff": 0.0})
+        g = key(r)
+        a = agg.setdefault(g, {"symbol": g, "n": 0, "sum_net": 0.0, "sum_diff": 0.0})
         net = net_return(r["gross"], cls, cost_mult)
         a["n"] += 1
         a["sum_net"] += net
@@ -176,12 +177,16 @@ def sec_filings(cik: int, forms=("8-K",), since: str | None = None) -> list:
     d = _sec_json(f"https://data.sec.gov/submissions/CIK{cik:010d}.json")
     recent = (d.get("filings") or {}).get("recent") or {}
     out = []
-    for form, acc, date, doc in zip(recent.get("form", []), recent.get("acceptanceDateTime", []),
-                                    recent.get("filingDate", []), recent.get("primaryDocument", [])):
+    forms_l = recent.get("form", [])
+    items_l = recent.get("items") or [""] * len(forms_l)
+    for form, acc, date, doc, items, accno in zip(forms_l, recent.get("acceptanceDateTime", []),
+                                                  recent.get("filingDate", []), recent.get("primaryDocument", []),
+                                                  items_l, recent.get("accessionNumber") or [""] * len(forms_l)):
         if form not in forms or not acc:
             continue
         if since and date < since:
             continue
-        out.append({"form": form, "accepted": acc, "date": date, "doc": doc,
+        out.append({"form": form, "accepted": acc, "date": date, "doc": doc, "accession": accno,
+                    "items": [x.strip() for x in (items or "").split(",") if x.strip()],
                     "ts": calendar.timegm(time.strptime(acc.replace("Z", "")[:19], "%Y-%m-%dT%H:%M:%S"))})
     return out
