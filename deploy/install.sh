@@ -5,7 +5,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 UNITS="$HOME/.config/systemd/user"
 mkdir -p "$UNITS"
-names=(tradelab-news-archive tradelab-dvol-collect tradelab-watchdog tradelab-backup tradelab-state-backup)
+names=(tradelab-news-archive tradelab-dvol-collect tradelab-watchdog tradelab-backup)
 [[ "${1:-}" == "--no-server" ]] || names+=(tradelab-server)
 for src in "$REPO"/deploy/*.service "$REPO"/deploy/*.timer "$REPO"/research/ops/*.service "$REPO"/research/ops/*.timer \
            "$REPO"/research/news_archive/*.service "$REPO"/research/news_archive/*.timer \

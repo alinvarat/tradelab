@@ -426,6 +426,23 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, f.read_bytes(), ct)
 
 
+def backup_loop(keep=14):
+    """Once a day copy the account files to data/backups/YYYY-MM-DD/ (inside the data volume; keeps `keep` days)."""
+    while True:
+        try:
+            target = ROOT / "data" / "backups" / time.strftime("%Y-%m-%d", time.gmtime())
+            if not target.exists():
+                target.mkdir(parents=True)
+                for name in ("state.json", "auto.json", "hunter.json", "ai_log.jsonl"):
+                    if (ROOT / "data" / name).exists():
+                        shutil.copy2(ROOT / "data" / name, target / name)
+                for old in sorted((ROOT / "data" / "backups").iterdir())[:-keep]:
+                    shutil.rmtree(old, ignore_errors=True)
+        except Exception:  # noqa: BLE001
+            traceback.print_exc()
+        time.sleep(3600)
+
+
 def shutdown(signum, _frame):
     """SIGTERM/SIGINT: persist every account once, then exit (systemd restarts it when wanted)."""
     for name, fn in (("server", save), ("auto", getattr(auto, "save", None)), ("hunter", getattr(hunt, "save", None))):
@@ -445,6 +462,7 @@ if __name__ == "__main__":
     hunt = hunter.Hunter()
     threading.Thread(target=hunter.loop, args=(hunt,), daemon=True).start()
     threading.Thread(target=poller, daemon=True).start()
+    threading.Thread(target=backup_loop, daemon=True).start()
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)
     print(f"TradeLab on http://{HOST}:{PORT}", flush=True)
