@@ -1,0 +1,85 @@
+{
+ "weeks": 84,
+ "cases": {
+  "base": {
+   "signal": {
+    "weeks_traded": 41,
+    "months_ge_3x": 0,
+    "best_month": 1.0,
+    "median_month": 0.65625,
+    "months_below_half": 9,
+    "continuous_multiple": 3.0596159804644204e-06
+   },
+   "every_week": {
+    "weeks_traded": 84,
+    "months_ge_3x": 0,
+    "best_month": 1.2075775454497628,
+    "median_month": 0.28125,
+    "months_below_half": 20,
+    "continuous_multiple": 4.755532353013975e-12
+   },
+   "oracle_best_weeks": {
+    "weeks_traded": 3,
+    "months_ge_3x": 2,
+    "best_month": 4.293609050488046,
+    "median_month": 1.0,
+    "months_below_half": 0,
+    "continuous_multiple": 35.70105208638301
+   },
+   "signal_weeks_with_data": 84,
+   "weeks_without_dvol_signal": 0,
+   "mean_week_multiple": {
+    "signal": 0.7677056153052054,
+    "other": 0.8605050554691223
+   },
+   "best_week_multiples": [
+    4.29,
+    4.21,
+    1.98,
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "stress": {
+   "signal": {
+    "weeks_traded": 41,
+    "months_ge_3x": 0,
+    "best_month": 1.0,
+    "median_month": 0.65625,
+    "months_below_half": 9,
+    "continuous_multiple": 2.770323578483877e-06
+   },
+   "every_week": {
+    "weeks_traded": 84,
+    "months_ge_3x": 0,
+    "best_month": 1.046219592624415,
+    "median_month": 0.28125,
+    "months_below_half": 20,
+    "continuous_multiple": 3.253910180132767e-12
+   },
+   "oracle_best_weeks": {
+    "weeks_traded": 3,
+    "months_ge_3x": 2,
+    "best_month": 3.7198918848868097,
+    "median_month": 1.0,
+    "months_below_half": 0,
+    "continuous_multiple": 24.42797319036353
+   },
+   "signal_weeks_with_data": 84,
+   "weeks_without_dvol_signal": 0,
+   "mean_week_multiple": {
+    "signal": 0.7631488374698527,
+    "other": 0.8346596289096188
+   },
+   "best_week_multiples": [
+    3.72,
+    3.67,
+    1.79,
+    1.0,
+    1.0,
+    1.0
+   ]
+  }
+ }
+}
