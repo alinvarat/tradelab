@@ -47,9 +47,24 @@ jobs:
       - name: Deploy
         env:
           KUBER_API_KEY: ${{ secrets.KUBER_API_TOKEN }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           if [ -z "$KUBER_API_KEY" ]; then
             echo "::error::Add the KUBER_API_TOKEN repository secret before deploying."
             exit 1
           fi
+          if [ -z "$OPENROUTER_API_KEY" ]; then
+            echo "::error::Add the OPENROUTER_API_KEY repository secret before deploying."
+            exit 1
+          fi
+          if [[ "$OPENROUTER_API_KEY" == *$'\n'* || "$OPENROUTER_API_KEY" == *$'\r'* ]]; then
+            echo "::error::OPENROUTER_API_KEY must be a single line."
+            exit 1
+          fi
+          umask 077
+          runtime_env="$(mktemp "$RUNNER_TEMP/tradelab-env.XXXXXX")"
+          trap 'rm -f -- "$runtime_env"' EXIT
+          printf 'OPENROUTER_API_KEY=%s\n' "$OPENROUTER_API_KEY" > "$runtime_env"
+          unset OPENROUTER_API_KEY
+          export TRADELAB_RUNTIME_ENV_FILE="$runtime_env"
           bunx --bun @dmgnr/kuber@2.7.1 ci --trust
