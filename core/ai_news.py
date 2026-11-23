@@ -129,7 +129,7 @@ def providers() -> dict:
     return out
 
 
-DECISION_MODEL = os.environ.get("TRADELAB_LLM_MODEL", "openrouter/deepseek/deepseek-v4-pro-0813")   # best DeepSeek, pinned
+DECISION_MODEL = os.environ.get("TRADELAB_LLM_MODEL", OPENCODE_MODEL)   # owner rule: DeepSeek v4.1 flash 1017 only, everywhere
 
 
 def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, model=None) -> tuple:
@@ -153,7 +153,10 @@ def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, 
             "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json"})
         try:
             with (urlopen or _urlopen)(req, timeout=timeout) as r:
-                return json.loads(r.read())["choices"][0]["message"]["content"], name
+                resp = json.loads(r.read())
+            served = str(resp.get("model", name))
+            note = "" if served == name else f" (SERVED: {served})"   # flag any difference, never hide it
+            return resp["choices"][0]["message"]["content"], name + note
         except Exception as exc:  # noqa: BLE001
             return "", f"openrouter error: {exc!r}"[:200]
     return "", "no provider (need opencode or OPENROUTER_API_KEY)"
