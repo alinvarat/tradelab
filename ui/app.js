@@ -137,7 +137,7 @@ function attachSearch(box, onPick) {
 const views = {};
 let ACCOUNT = null;
 
-views.markets = async () => {
+views.markets = async (refresh = false) => {
   const wl = $("#watchlist");
   load(wl, async () => {
     const d = await api("quotes");
@@ -147,14 +147,14 @@ views.markets = async () => {
       { h: "Last", num: 1, f: (r) => fmt(r.price) },
       { h: "Change", num: 1, f: (r) => pct(r.change_pct), cls: (r) => cls(r.change_pct) },
       { h: "Day range", num: 1, f: (r) => (r.low != null ? `${fmt(r.low)} – ${fmt(r.high)}` : "–") },
-      { h: "Market", f: (r) => (r.error ? "no quote" : r.open ? "open" : "closed") },
+      { h: "Market", f: (r) => (r.error ? "No quote" : r.open ? "Market open" : "Market closed") },
       { h: "", f: (r) => `<button class="ghost sm" data-rm="${esc(r.symbol)}" aria-label="Remove ${esc(r.symbol)}">Remove</button>` },
     ], rows, { click: (r) => r.symbol, empty: "Your watchlist is empty. Add a symbol above." });
     bindRowOpen(wl);
     $$("[data-rm]", wl).forEach((b) => b.addEventListener("click", async () => { await api("watchlist", { symbol: b.dataset.rm, action: "remove" }); views.markets(); }));
   }, "markets");
   const ov = $("#overview");
-  if (!ov.dataset.loaded || arguments[0]) load(ov, async () => {
+  if (!ov.dataset.loaded || refresh) load(ov, async () => {
     const d = await api("overview");
     ov.innerHTML = Object.entries(d.groups).map(([g, rows]) => `<h3 style="margin: var(--space-md) 0 var(--space-2xs)">${esc(g)}</h3>` + table([
       { h: "Name", f: (r) => symCell(r.name, r.symbol) },
@@ -172,7 +172,7 @@ views.markets = async () => {
       <p class="note">30-day range ${Math.min(...f.history.map((x) => x.v))} to ${Math.max(...f.history.map((x) => x.v))}. Source ${esc(f.source)}.</p>` : `<div class="empty">Index unavailable right now.</div>`;
   }, "markets");
   const mn = $("#mk-news");
-  if (!mn.dataset.loaded || arguments[0]) load(mn, async () => {
+  if (!mn.dataset.loaded || refresh) load(mn, async () => {
     const d = await api("news");
     mn.innerHTML = newsList(d.items.slice(0, 12));
     mn.dataset.loaded = 1;
@@ -690,7 +690,7 @@ const accountAmounts = (thb, dollars) => thb == null ? "–" : `${fmt(thb, 2)} T
 views.overview = async () => {
   const el = $("#ov-table");
   let d;
-  try { d = await api("accounts"); } catch (e) { el.innerHTML = errBox(e, "accounts"); return; }
+  try { d = await api("accounts"); } catch (e) { el.innerHTML = errBox(e, "overview"); return; }
   $("#ov-sub").textContent = `Current exchange rate: 1 USD = ${fmt(d.thb_per_usd, 2)} THB | Buzz events: ${d.buzz_events ?? "–"}`;
   el.innerHTML = table([
     { h: "Account", f: (r) => `<a href="#${r.tab}"><b>${esc(r.name)}</b></a>` },
@@ -708,7 +708,7 @@ views.overview = async () => {
 let logSource = "llm";
 let logRequest;
 const logMarkup = new WeakMap();
-const BADGE = { buy: "BUY", sell: "SELL", adjust: "ADJUST", hold: "PASS" };
+const BADGE = { buy: "BUY", sell: "SELL", adjust: "ADJUST" };
 const hmin = (s) => (s % 3600 === 0 ? s / 3600 + "h" : s / 3600 >= 1 ? (s / 3600).toFixed(1) + "h" : Math.round(s / 60) + "m");
 function cycleCard(c) {
   const key = esc(c.ts);
@@ -717,10 +717,12 @@ function cycleCard(c) {
   const acts = {}; (c.actions || []).forEach((a) => { (acts[a.symbol] = acts[a.symbol] || []).push(a); });
   const outs = {}; (c.outcomes || []).forEach((o) => { (outs[o.symbol] = outs[o.symbol] || []).push(o); });
   const mk = c.market || {}, ac = c.account || {};
+  const held = new Set((ac.positions || []).map((position) => position.symbol));
+  const badge = (d) => esc(d.action === "hold" ? (held.has(d.symbol) ? "Hold position" : "Pass on entry") : BADGE[d.action] || d.action);
   const rows = (c.candidates || []).map((x) => {
     const d = byDec[x.symbol], a = acts[x.symbol] || [], o = outs[x.symbol] || [];
     const heads = (x.headlines || []).map((h) => `${esc(h.title)} <span class="muted">[${esc(h.source)}, lexicon ${h.lexicon ?? "-"}${h.ai_scores && Object.keys(h.ai_scores).length ? ", AI " + Object.values(h.ai_scores).join("/") : ""}]</span>`).join("<br>") || "-";
-    const decision = d ? `<b>${BADGE[d.action] || esc(d.action)}</b>${d.action === "buy" ? ` margin ${fmt(d.size_pct, 1)}% x ${fmt(d.leverage || 1, 1)} | ${esc(d.entry || "market")}${d.limit_price ? " @ " + fmt(d.limit_price) : ""} | ${esc(d.horizon || "")} | stop ${fmt(d.stop_pct, 0)}%${d.target_pct ? " target " + fmt(d.target_pct, 0) + "%" : ""} | look again in ${d.review_in_min} min` : ""}<br>${esc(d.reason || "")}` : "<b>PASS</b> (no reason given)";
+    const decision = d ? `<b>${badge(d)}</b>${d.action === "buy" ? ` margin ${fmt(d.size_pct, 1)}% x ${fmt(d.leverage || 1, 1)} | ${esc(d.entry || "market")}${d.limit_price ? " @ " + fmt(d.limit_price) : ""} | ${esc(d.horizon || "")} | stop ${fmt(d.stop_pct, 0)}%${d.target_pct ? " target " + fmt(d.target_pct, 0) + "%" : ""} | look again in ${d.review_in_min} min` : ""}<br>${esc(d.reason || "")}` : "<b>No model decision</b>";
     const did = a.map((z) => z.kind === "skip" ? `<span class="muted">not executed: ${esc(z.why)}</span>` : z.kind === "order" ? execHtml({ status: z.status, notional_usd: z.notional_usd, margin_usd: z.margin_usd, leverage: z.leverage, entry: z.entry, limit_price: z.limit_price, valid_until: z.valid_until, stop_price: z.stop_price, target_price: z.target_price, risk_pct_equity: z.risk_pct_equity, clipped_by: z.clipped_by, control: z.control, scaled_in: z.scaled_in }) : esc(z.kind + " " + (z.status || ""))).join("<br>");
     const res = o.map((z) => `+${hmin(z.horizon_s)} vs SPY ${pct(z.abnormal * 100)}`).join("<br>");
     return `<tr><td>${symCell(x.symbol, x.name)}</td><td class="num">${pct(x.move_pct)}<br><span class="muted">vs SPY ${x.abnormal_pct != null ? pct(x.abnormal_pct) : "-"}</span></td><td class="num">${fmt(x.volume_ratio, 1)}x</td>
@@ -729,7 +731,7 @@ function cycleCard(c) {
   }).join("");
   const extra = (c.decisions || []).filter((d) => !(c.candidates || []).some((x) => x.symbol === d.symbol)).map((d) => {
     const a = (acts[d.symbol] || []).map((z) => esc(z.kind + " " + (z.status || z.why || ""))).join(", ");
-    return `<li><b>${BADGE[d.action] || esc(d.action)} ${esc(d.symbol)}</b> (position review): ${esc(d.reason || "")}${a ? " <span class='muted'>→ " + a + "</span>" : ""}</li>`;
+    return `<li><b><span>${badge(d)}</span> ${esc(d.symbol)}</b> (position review): ${esc(d.reason || "")}${a ? " <span class='muted'>→ " + a + "</span>" : ""}</li>`;
   }).join("");
   return `<div class="panel" data-log-cycle="${key}" style="margin:12px 0"><div class="row spread"><b>${when} | ${esc(c.trigger || "?")}</b><span class="small muted">${esc(c.model || "")} ${c.seconds != null ? "| " + c.seconds + " s" : ""}</span></div>
     <p class="small muted">SPY ${mk.spy_move_pct != null ? pct(mk.spy_move_pct) : "-"} | VIX ${mk.vix ?? "-"} | account ${fmt(ac.equity_usd, 2)} USD, exposure ${ac.exposure_pct ?? 0}%, ${(ac.positions || []).length} open</p>
@@ -817,7 +819,7 @@ const accountBasis = (d) => `<p class="small muted"><span>Starting capital for e
 views.llm = async () => {
   const figs = $("#llm-figs");
   let l;
-  try { l = await api("llm_trader"); } catch (e) { figs.innerHTML = errBox(e, "llm_trader"); return; }
+  try { l = await api("llm_trader"); } catch (e) { figs.innerHTML = errBox(e, "llm"); return; }
   if (l.disabled) { figs.innerHTML = `<div class="empty">The DeepSeek trader is off on this server (needs the OPENROUTER_API_KEY secret).</div>`; return; }
   const ev = l.evaluation || {}, dis = ev.discrimination || {};
   $("#llm-sub").textContent = `${l.model} | calls today ${l.calls_today}/${l.max_calls_day}${l.error ? " | " + l.error : ""}`;
@@ -1045,7 +1047,10 @@ const TH = {
   "data only": "เก็บข้อมูลเท่านั้น", "running": "กำลังทำงาน", "paused": "หยุดชั่วคราว", "ruined": "ทุนต่ำกว่าเกณฑ์",
   "buy": "ซื้อ", "sell": "ขาย", "hold": "ไม่ส่งคำสั่ง", "adjust": "ปรับสถานะ",
   "closed": "ปิดสถานะแล้ว", "filled": "จับคู่แล้ว", "pending": "รอผล", "adjusted": "ปรับแล้ว",
-  "intraday": "ภายในวัน", "swing": "ถือหลายวัน", "long": "ซื้อ", "scalp": "ถือช่วงสั้น",
+  "intraday": "ภายในวัน", "swing": "ถือหลายวัน", "scalp": "ถือช่วงสั้น",
+  "Market open": "ตลาดเปิด", "Market closed": "ตลาดปิด", "No quote": "ไม่มีราคา",
+  "Hold position": "ถือสถานะต่อ", "Pass on entry": "ไม่เปิดสถานะ", "No model decision": "โมเดลไม่ได้ตอบ",
+  "you place the orders": "ส่งคำสั่งเอง", "Manual paper trading account": "บัญชีจำลองสำหรับส่งคำสั่งเอง",
   "No decisions yet; the model is asked when new shocks appear.": "ยังไม่มีคำตัดสิน ระบบจะถามโมเดลเมื่อพบหุ้นที่เคลื่อนไหวแรง",
   "+1h / +1d": "+1 ชม. / +1 วัน",
   "events with a +1d result": "เหตุการณ์ที่มีผล +1 วัน", "buzz events": "เหตุการณ์กระแส", "mean +1d return vs SPY": "ผลตอบแทน +1 วันเฉลี่ย เทียบ SPY",
@@ -1063,7 +1068,8 @@ const TH = {
 let LANG = "en";
 try { LANG = localStorage.getItem("lang") || "en"; } catch (e) { /* private window */ }
 const NOTE_TH = [
-  [/^Every account below is separate play money.*$/, "ทุกบัญชีใช้เงินจำลอง บัญชีสั่งเองเริ่มที่ 100,000 ดอลลาร์และแปลงเป็นบาทด้วยค่าเงินล่าสุด บัญชีบอทเริ่มที่ 5,000 บาท ส่วนยอดเงินบาทของบอทและบัญชีสุ่มเทียบใช้อัตราตอนเปิดบัญชีนั้น"],
+  [/^Every account below is separate play money.*$/, "ทุกบัญชีใช้เงินจำลอง บัญชีสั่งเองแปลงเป็นบาทด้วยค่าเงินล่าสุด บัญชีบอทเริ่มที่ 5,000 บาท ส่วนยอดเงินบาทของบอทและบัญชีสุ่มเทียบใช้อัตราตอนเปิดบัญชีนั้น"],
+  [/^(\d+\/\d+) pairs vs random control$/, "คู่ที่ปิดแล้ว $1 เทียบบัญชีสุ่ม"],
   [/^Each card is one decision cycle.*$/, "แต่ละการ์ดคือการตัดสินใจหนึ่งรอบของ DeepSeek: สิ่งที่โมเดลเห็น การโต้แย้งฝั่งซื้อ/ค้าน การตัดสินใจและเหตุผลของทุกตัว (รวมทั้งที่ไม่ซื้อ) สิ่งที่ระบบทำ และผลหลังจากนั้น เรียงใหม่สุดก่อน"],
   [/^Event trader \(fixed rule\).*$/, "Event trader (กติกาตายตัว): ทุกหุ้นใหญ่ที่ขยับตั้งแต่ 5% พร้อมปริมาณซื้อขายจริง พร้อมข่าว สิ่งที่กติกาทำ และเหตุผลที่ไม่เทรด"],
   [/^No open positions right now\..*$/, "ตอนนี้ไม่มีตำแหน่งที่ถืออยู่ กติกาถือได้สูงสุด 3 ตัวพร้อมกัน เหตุการณ์ที่เกินจะขึ้นว่า 'max positions' ด้านล่าง"],
