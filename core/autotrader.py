@@ -22,6 +22,7 @@ from pathlib import Path
 
 from . import data, research as R
 from .engine import Account, Quote
+from .storage import write_json_atomic
 
 STATE = Path(__file__).resolve().parent.parent / "data" / "auto.json"
 UNIVERSE = ["SPY", "QQQ", "EFA", "EEM", "TLT", "IEF", "GLD", "DBC", "VNQ", "BTC-USD"]
@@ -83,9 +84,7 @@ class AutoTrader:
         with self.lock:
             d = {"version": 2, "account": self.acct.to_dict(), **{k: getattr(self, k) for k in self.KEYS}}
             d["lessons"], d["log"] = self.lessons[-400:], self.log[-600:]
-        tmp = STATE.with_suffix(".tmp")
-        tmp.write_text(json.dumps(d, default=str))
-        tmp.replace(STATE)
+            write_json_atomic(STATE, d, default=str)
 
     def reset(self):
         rate = data.fx_to_usd("THB")

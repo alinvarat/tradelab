@@ -15,6 +15,7 @@ from pathlib import Path
 
 from . import data, indicators as ind
 from .engine import Account, Quote
+from .storage import write_json_atomic
 
 STATE = Path(__file__).resolve().parent.parent / "data" / "hunter.json"
 COINS = ["BTC-USD", "ETH-USD", "SOL-USD"]
@@ -53,9 +54,7 @@ class Hunter:
             d = {"account": self.acct.to_dict(), "log": self.log[-500:], "months": self.months, "month": self.month,
                  "month_start": self.month_start, "done_month": self.done_month, "last_day": self.last_day,
                  "capital_usd": self.capital_usd}
-        tmp = STATE.with_suffix(".tmp")
-        tmp.write_text(json.dumps(d))
-        tmp.replace(STATE)
+            write_json_atomic(STATE, d)
 
     def on_quote(self, q: Quote):
         with self.lock:

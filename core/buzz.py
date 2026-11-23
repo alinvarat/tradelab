@@ -17,6 +17,7 @@ from statistics import mean, median
 from urllib.request import Request, urlopen
 
 from . import data, news
+from .storage import write_json_atomic
 
 DATA = Path(os.environ.get("TRADELAB_BUZZ_DIR") or Path(__file__).resolve().parent.parent / "research/buzz/data")
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120 Safari/537.36"}
@@ -112,10 +113,8 @@ class BuzzMonitor:
     def save(self):
         with self.lock:
             d = {"events": self.events[-3000:], "seen": sorted(self.seen)[-20000:]}
-        self.state_path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = self.state_path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(d, default=str))
-        tmp.replace(self.state_path)
+            self.state_path.parent.mkdir(parents=True, exist_ok=True)
+            write_json_atomic(self.state_path, d, default=str)
 
     @staticmethod
     def _headlines(sym, name):

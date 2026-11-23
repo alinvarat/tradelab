@@ -18,6 +18,8 @@ Every mistake found while building and researching, how it was caught, and the f
 | 11 | Unit tests assumed zero slippage while the default is 0.02% | 2 false failures | test run | tests set `slippage=0` explicitly |
 | 12 | Yahoo per-symbol RSS returned unrelated headlines | wrong news on a symbol | smoke test | keep items that mention the ticker or company name |
 | 13 | The Logs poll replaced unchanged HTML, and Thai translation ran after a delay | English headers flashed and open details collapsed | read-only Chrome observation on Kuber across two polls | keep identical markup, retain interaction state on updates and translate before paint |
+| 14 | Pairs were matched by the trade's `opened_ts` within 5 s of the decision, and market orders filled on the account's last quote (sometimes a day old) | complete pairs (model NVDA / control HON) never counted, and a fill could use a stale price | API showed 0/30 closed pairs while the log showed both legs closed | the link id travels as `ref` from order to position to trade; a bounded nearest-time fallback covers records saved before that; a fresh quote is pushed before every market order |
+| 15 | Every state writer used one fixed `<state>.tmp` name | two saves racing deleted each other's temp file (`FileNotFoundError`) | error seen while writing the DeepSeek state | one unique temp file per save plus an atomic replace (`core/storage.py`) |
 
 ## Research mistakes and traps
 | # | Trap | Evidence | Rule now |

@@ -101,6 +101,24 @@ class Orders(unittest.TestCase):
         self.assertEqual(b.positions["X"].qty, 2)
         self.assertEqual(b.place("X", 1, 1, "limit", 1).id, 3)
 
+    def test_reference_is_carried_from_order_to_position_to_trade(self):
+        a = acct()
+        a.place("X", 1, 10, ref="link-1")
+        self.assertEqual(a.positions["X"].ref, "link-1")
+        t, _ = a.close("X")
+        self.assertEqual(t.ref, "link-1")
+        saved = Account.from_dict(a.to_dict())
+        self.assertEqual(saved.trades[-1].ref, "link-1")
+
+    def test_state_saved_before_references_still_loads(self):
+        a = acct()
+        a.place("X", 1, 10)
+        a.close("X")
+        d = a.to_dict()
+        for row in d["orders"] + d["trades"]:
+            row.pop("ref")
+        self.assertIsNone(Account.from_dict(d).trades[-1].ref)
+
 
 if __name__ == "__main__":
     unittest.main()

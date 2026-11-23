@@ -19,6 +19,7 @@ from core.universe import TICKERS
 from core import buzz, dvol_collect, event_trader, llm_trader, news_archive, steward
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
+from core.storage import write_json_atomic
 
 ROOT = Path(__file__).resolve().parent
 UI = ROOT / "ui"
@@ -81,9 +82,7 @@ def load():
 def save():
     with lock:
         d = {"account": acct.to_dict(), **state}
-    tmp = STATE.with_suffix(".tmp")
-    tmp.write_text(json.dumps(d))
-    tmp.replace(STATE)
+        write_json_atomic(STATE, d)
 
 
 def num(v, name, lo=None, hi=None):

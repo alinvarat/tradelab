@@ -32,6 +32,7 @@ class Position:
     tp: float | None = None
     opened_ts: float = 0.0
     fees: float = 0.0        # USD fees paid on the open part, not yet booked to a trade
+    ref: str | None = None   # caller's reference (e.g. the LLM trader's pair id); copied to the trade on close
 
 
 @dataclass
@@ -49,6 +50,7 @@ class Order:
     filled_ts: float | None = None
     fill_px: float | None = None
     note: str = ""
+    ref: str | None = None
 
 
 @dataclass
@@ -63,6 +65,7 @@ class Trade:
     reason: str
     opened_ts: float
     closed_ts: float
+    ref: str | None = None
 
 
 class Account:
@@ -108,8 +111,8 @@ class Account:
         return max(notional_usd * self.fee_rate, self.min_fee) if notional_usd > 0 else 0.0
 
     # ---- orders ----------------------------------------------------------
-    def place(self, symbol, side, qty, type="market", price=None, sl=None, tp=None) -> Order:
-        o = Order(next(self._ids), symbol, 1 if side > 0 else -1, float(qty), type, price, sl, tp)
+    def place(self, symbol, side, qty, type="market", price=None, sl=None, tp=None, ref=None) -> Order:
+        o = Order(next(self._ids), symbol, 1 if side > 0 else -1, float(qty), type, price, sl, tp, ref=ref)
         finite = all(v is None or math.isfinite(v) for v in (qty, price, sl, tp))
         if not finite or qty <= 0 or type not in ("market", "limit", "stop") or (type != "market" and not price):
             o.status, o.note = "rejected", "invalid quantity, type or price"
@@ -150,13 +153,13 @@ class Account:
             else:
                 return
         px *= (1 + o.side * self.slippage) if o.type != "limit" else 1
-        err = self._execute(o.symbol, o.side, o.qty, px, q, o.sl, o.tp)
+        err = self._execute(o.symbol, o.side, o.qty, px, q, o.sl, o.tp, ref=o.ref)
         if err:
             o.status, o.note = "rejected", err
         else:
             o.status, o.fill_px, o.filled_ts, o.note = "filled", px, q.ts, ""
 
-    def _execute(self, sym, side, qty, px, q: Quote, sl=None, tp=None, reason="order"):
+    def _execute(self, sym, side, qty, px, q: Quote, sl=None, tp=None, reason="order", ref=None):
         p = self.positions.get(sym)
         fx = q.fx
         if p and p.side != side:  # reduce, close or flip
@@ -182,7 +185,7 @@ class Account:
             if tp is not None:
                 p.tp = tp
         else:
-            self.positions[sym] = Position(sym, side, qty, px, sl, tp, q.ts, fee)
+            self.positions[sym] = Position(sym, side, qty, px, sl, tp, q.ts, fee, ref)
         return None
 
     def _close_part(self, sym, qty, px, q: Quote, reason):
@@ -193,7 +196,7 @@ class Account:
         share = qty / p.qty
         open_fee = p.fees * share
         self.balance += gross - fee
-        t = Trade(sym, p.side, qty, p.entry, px, gross - fee - open_fee, fee + open_fee, reason, p.opened_ts, q.ts)
+        t = Trade(sym, p.side, qty, p.entry, px, gross - fee - open_fee, fee + open_fee, reason, p.opened_ts, q.ts, p.ref)
         self.trades.append(t)
         p.qty -= qty
         p.fees -= open_fee
