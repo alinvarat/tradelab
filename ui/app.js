@@ -201,9 +201,11 @@ views.news = async (force) => {
   load(el, async () => { NEWS = await api("news"); renderNews(); }, "news");
 };
 function renderNews() {
-  const s = NEWS.summary, a = NEWS.archive || {};
+  const s = NEWS.summary, a = NEWS.archive || {}, lt = NEWS.latency || {};
+  const lat = (label, x) => x ? `${label} ${x.complete_pairs ?? 0}/${x.needed ?? 100} pairs, net vs control ${x.mean_net != null ? pct(x.mean_net * 100) : "-"}${x.net_ci95 ? " (CI " + pct(x.net_ci95[0] * 100) + " to " + pct(x.net_ci95[1] * 100) + ")" : ""} — ${x.verdict || ""}` : `${label} waiting for data`;
   $("#news-sum").innerHTML = `<div class="figures"><div class="figure"><b>${s.count}</b><span>Headlines</span></div><div class="figure"><b class="up">${s.positive}</b><span>Positive</span></div><div class="figure"><b class="down">${s.negative}</b><span>Negative</span></div><div class="figure"><b>${s.avg > 0 ? "+" : ""}${s.avg.toFixed(2)}</b><span>Average, ${esc(s.label.toLowerCase())}</span></div></div>
-    <p class="small muted">Archive: ${a.linked ?? 0} linked headlines in the last scan, ${a.ai_scored ?? 0} AI-scored, ${a.labels ?? 0} return labels written, ${a.feeds_ok ?? 0}/${a.feeds ?? 0} sources healthy. The DeepSeek trader reads this archive, not only the live list below.</p>`;
+    <p class="small muted">Archive: ${a.linked ?? 0} linked headlines in the last scan, ${a.ai_scored ?? 0} AI-scored, ${a.labels ?? 0} return labels written, ${a.feeds_ok ?? 0}/${a.feeds ?? 0} sources healthy. The DeepSeek trader reads this archive, not only the live list below.</p>
+    <p class="small muted">News latency, entry at first sight after ${(lt.horizons?.["1m"]?.cost_round_trip_pct ?? 0.14).toFixed(2)}% cost: ${lat("+1m", (lt.horizons || {})["1m"])}; ${lat("+5m", (lt.horizons || {})["5m"])}.</p>`;
   const it = NEWS.items.filter((n) => newsFilter === "all" || (newsFilter === "pos" ? n.sentiment > 0.1 : newsFilter === "neg" ? n.sentiment < -0.1 : Math.abs(n.sentiment) <= 0.1));
   $("#news-list").innerHTML = newsList(it);
 }

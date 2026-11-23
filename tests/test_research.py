@@ -193,6 +193,37 @@ class NewsData(unittest.TestCase):
             # a 1d horizon reached 10 hours late is dropped, not labelled with a stale price
             self.assertEqual(c.settle_labels(now + 86400 + 10 * 3600, price_fn=lambda s: {"NVDA": 90.0, "SPY": 500.0}), 0)
 
+    def test_latency_labels_pair_the_event_with_a_random_control(self):
+        from research.news_archive import collector as c
+        with tempfile.TemporaryDirectory() as d:
+            c.OPEN, c.LATENCY_LABELS = Path(d) / "o.json", Path(d) / "lat.jsonl"
+            now = 1_000_000.0
+            fresh = [{"key": "k1", "symbols": ["NVDA"], "title": "t", "source": "s", "sentiment": 0.3}]
+            c.open_labels(fresh, now, price_fn=lambda syms: {s: 100.0 for s in syms} | {"SPY": 500.0})
+            pending = json.loads(c.OPEN.read_text())["k1"]
+            ctrl = pending["control"]
+            self.assertNotIn(ctrl, ("NVDA", "SPY"))
+            prices = {"NVDA": 101.0, ctrl: 100.0, "SPY": 500.0}
+            self.assertEqual(c.settle_latency(now + 90, price_fn=lambda syms: {s: prices.get(s, 100.0) for s in syms}), 1)
+            row = json.loads(c.LATENCY_LABELS.read_text().splitlines()[0])
+            self.assertEqual((row["horizon"], row["symbol"], row["control"]), ("1m", "NVDA", ctrl))
+            self.assertAlmostEqual(row["abnormal"], 0.01, places=4)
+            self.assertAlmostEqual(row["control_abnormal"], 0.0, places=4)
+            self.assertEqual(c.settle_latency(now + 330, price_fn=lambda syms: {s: prices.get(s, 100.0) for s in syms}), 1)
+            self.assertEqual([json.loads(x)["horizon"] for x in c.LATENCY_LABELS.read_text().splitlines()], ["1m", "5m"])
+
+    def test_latency_evaluation_gates_on_complete_pairs_and_applies_cost(self):
+        from core import news_latency
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "lat.jsonl"
+            rows = [{"horizon": "1m", "abnormal": 0.001, "control_abnormal": 0.0} for _ in range(99)]
+            rows += [{"horizon": "5m", "abnormal": 0.001, "control_abnormal": 0.0} for _ in range(100)]
+            path.write_text("\n".join(json.dumps(x) for x in rows) + "\n")
+            out = news_latency.evaluate(path, use_cache=False)
+            self.assertIn("too early (99/100 complete pairs)", out["horizons"]["1m"]["verdict"])
+            self.assertEqual(out["horizons"]["5m"]["verdict"], "no edge shown")     # net -0.04% after the 0.14% round trip
+            self.assertAlmostEqual(out["horizons"]["5m"]["mean_net"], 0.001 - news_latency.COST_ROUND_TRIP, places=6)
+
     def test_watchdog_flags_dead_feeds(self):
         with tempfile.TemporaryDirectory() as d:
             old = watchdog.NEWS
