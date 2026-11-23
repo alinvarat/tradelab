@@ -706,9 +706,12 @@ views.overview = async () => {
 
 /* ---------- decision log ---------- */
 let logSource = "llm";
+let logRequest;
+const logMarkup = new WeakMap();
 const BADGE = { buy: "BUY", sell: "SELL", adjust: "ADJUST", hold: "PASS" };
 const hmin = (s) => (s % 3600 === 0 ? s / 3600 + "h" : s / 3600 >= 1 ? (s / 3600).toFixed(1) + "h" : Math.round(s / 60) + "m");
 function cycleCard(c) {
+  const key = esc(c.ts);
   const when = new Date(c.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" });
   const byDec = {}; (c.decisions || []).forEach((d) => { byDec[d.symbol] = d; });
   const acts = {}; (c.actions || []).forEach((a) => { (acts[a.symbol] = acts[a.symbol] || []).push(a); });
@@ -722,48 +725,73 @@ function cycleCard(c) {
     const res = o.map((z) => `+${hmin(z.horizon_s)} vs SPY ${pct(z.abnormal * 100)}`).join("<br>");
     return `<tr><td>${symCell(x.symbol, x.name)}</td><td class="num">${pct(x.move_pct)}<br><span class="muted">vs SPY ${x.abnormal_pct != null ? pct(x.abnormal_pct) : "-"}</span></td><td class="num">${fmt(x.volume_ratio, 1)}x</td>
       <td>${decision}${did ? "<br>" + did : ""}</td><td>${heads}</td>
-      <td><details><summary>bull / bear</summary><b>Bull:</b> ${esc((c.bull || {})[x.symbol] || "-")}<br><b>Bear:</b> ${esc((c.bear || {})[x.symbol] || "-")}</details></td><td>${res || "<span class='muted'>pending</span>"}</td></tr>`;
+      <td><details data-log-detail="${key}:debate:${esc(x.symbol)}"><summary>bull / bear</summary><b>Bull:</b> ${esc((c.bull || {})[x.symbol] || "-")}<br><b>Bear:</b> ${esc((c.bear || {})[x.symbol] || "-")}</details></td><td>${res || "<span class='muted'>pending</span>"}</td></tr>`;
   }).join("");
   const extra = (c.decisions || []).filter((d) => !(c.candidates || []).some((x) => x.symbol === d.symbol)).map((d) => {
     const a = (acts[d.symbol] || []).map((z) => esc(z.kind + " " + (z.status || z.why || ""))).join(", ");
     return `<li><b>${BADGE[d.action] || esc(d.action)} ${esc(d.symbol)}</b> (position review): ${esc(d.reason || "")}${a ? " <span class='muted'>→ " + a + "</span>" : ""}</li>`;
   }).join("");
-  return `<div class="panel" style="margin:12px 0"><div class="row spread"><b>${when} | ${esc(c.trigger || "?")}</b><span class="small muted">${esc(c.model || "")} ${c.seconds != null ? "| " + c.seconds + " s" : ""}</span></div>
+  return `<div class="panel" data-log-cycle="${key}" style="margin:12px 0"><div class="row spread"><b>${when} | ${esc(c.trigger || "?")}</b><span class="small muted">${esc(c.model || "")} ${c.seconds != null ? "| " + c.seconds + " s" : ""}</span></div>
     <p class="small muted">SPY ${mk.spy_move_pct != null ? pct(mk.spy_move_pct) : "-"} | VIX ${mk.vix ?? "-"} | account ${fmt(ac.equity_usd, 2)} USD, exposure ${ac.exposure_pct ?? 0}%, ${(ac.positions || []).length} open</p>
     ${c.market_view ? `<p><b>Market view:</b> ${esc(c.market_view)}</p>` : ""}${c.error ? `<p class="down">Error: ${esc(c.error)}</p>` : ""}
     ${rows ? `<div class="tbl-wrap"><table><thead><tr><th>Stock</th><th>Move</th><th>Volume</th><th>Decision and reason</th><th>Headlines the model saw</th><th>Debate</th><th>What happened next</th></tr></thead><tbody>${rows}</tbody></table></div>` : ""}
     ${extra ? `<ul>${extra}</ul>` : ""}${(c.rejected || []).length ? `<p class="small muted">Ignored model output: ${c.rejected.map(esc).join("; ")}</p>` : ""}
-    <details><summary class="small muted">raw model reply</summary><pre class="small">${esc(c.raw || "")}</pre></details></div>`;
+    <details data-log-detail="${key}:reply"><summary class="small muted">raw model reply</summary><pre class="small">${esc(c.raw || "")}</pre></details></div>`;
+}
+function updateLogMarkup(el, markup) {
+  if (logMarkup.get(el) === markup) return;
+  const open = new Set($$("details[open][data-log-detail]", el).map((detail) => detail.dataset.logDetail));
+  const active = document.activeElement;
+  const focused = active?.matches("summary") && el.contains(active) ? active.parentElement.dataset.logDetail : undefined;
+  const scrollKey = (wrap) => wrap.closest("[data-log-cycle]")?.dataset.logCycle || "";
+  const scroll = new Map($$(".tbl-wrap", el).map((wrap) => [scrollKey(wrap), wrap.scrollLeft]));
+  el.innerHTML = markup;
+  logMarkup.set(el, markup);
+  for (const detail of $$("details[data-log-detail]", el)) {
+    detail.open = open.has(detail.dataset.logDetail);
+    if (focused === detail.dataset.logDetail) $("summary", detail).focus({ preventScroll: true });
+  }
+  for (const wrap of $$(".tbl-wrap", el)) wrap.scrollLeft = scroll.get(scrollKey(wrap)) || 0;
 }
 views.logs = async () => {
   $("#lg-llm").onclick = () => { logSource = "llm"; views.logs(); };
   $("#lg-evt").onclick = () => { logSource = "evt"; views.logs(); };
   const box = $("#lg-cycles");
+  const source = logSource;
+  if (logRequest?.source === source) return;
+  const request = logRequest = { source };
+  const current = () => logRequest === request && logSource === source && route.view === "logs";
   try {
-    if (logSource === "llm") {
+    if (source === "llm") {
       const d = await api("llm_log?n=30");
-      $("#lg-note").textContent = "Each card is one decision cycle of the DeepSeek trader: what it was shown, the bull and bear cases, its decision and reason for every stock (including why it passed), what the system did, and the result afterwards. Newest first.";
-      box.innerHTML = d.cycles.length ? d.cycles.map(cycleCard).join("") : `<div class="empty">No decision cycles yet. The model is asked when a stock moves 5%+ on real volume, and to review open positions.</div>`;
-      $("#lg-closed").innerHTML = table([
+      if (!current()) return;
+      updateLogMarkup($("#lg-note"), "Each card is one decision cycle of the DeepSeek trader: what it was shown, the bull and bear cases, its decision and reason for every stock (including why it passed), what the system did, and the result afterwards. Newest first.");
+      updateLogMarkup(box, d.cycles.length ? d.cycles.map(cycleCard).join("") : `<div class="empty">No decision cycles yet. The model is asked when a stock moves 5%+ on real volume, and to review open positions.</div>`);
+      updateLogMarkup($("#lg-closed"), table([
         { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
         { h: "Account", f: (r) => esc(r.account || r.kind) }, { h: "Stock", f: (r) => symCell(r.symbol || "", "") },
         { h: "Why closed", f: (r) => esc(r.reason || r.message || "") }, { h: "P/L %", num: 1, f: (r) => (r.pnl_pct != null ? pct(r.pnl_pct) : "-"), cls: (r) => cls(r.pnl_pct) },
         { h: "Held (h)", num: 1, f: (r) => (r.held_hours != null ? fmt(r.held_hours, 1) : "-") },
-      ], d.closed, { empty: "No closed trades yet." });
+      ], d.closed, { empty: "No closed trades yet." }));
     } else {
       const d = await api("event_log?n=60");
-      $("#lg-note").textContent = "Event trader (fixed rule): every large-cap move of 5%+ on real volume, with the headlines, what the rule did, and why it did not trade when it did not.";
-      box.innerHTML = table([
+      if (!current()) return;
+      updateLogMarkup($("#lg-note"), "Event trader (fixed rule): every large-cap move of 5%+ on real volume, with the headlines, what the rule did, and why it did not trade when it did not.");
+      updateLogMarkup(box, table([
         { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
         { h: "What", f: (r) => esc(r.kind) }, { h: "Stock", f: (r) => symCell(r.symbol || "", "") },
         { h: "Move", num: 1, f: (r) => (r.move_pct != null ? pct(r.move_pct) : "-") },
         { h: "Context", f: (r) => (r.kind === "event" ? `SPY ${r.spy_move_pct != null ? pct(r.spy_move_pct) : "-"}, vs SPY ${r.abnormal_move_pct != null ? pct(r.abnormal_move_pct) : "-"}, VIX ${r.vix ?? "-"}, volume ${fmt(r.vol_ratio, 1)}x` : "") },
         { h: "Decision", f: (r) => (r.kind === "event" ? (r.entry ? `bought ${fmt(r.entry.usd, 2)} USD (control ${esc((r.control || {}).symbol || "-")})` : esc(r.skipped ? "not traded: " + r.skipped : r.direction === "down" ? "not traded: down-move (data only)" : "-")) : esc(r.message || "")) },
         { h: "Headlines", f: (r) => (r.headlines || []).map((x) => esc(x.title)).join("<br>") },
-      ], d.rows, { empty: "No events yet." });
-      $("#lg-closed").innerHTML = "";
+      ], d.rows, { empty: "No events yet." }));
+      updateLogMarkup($("#lg-closed"), "");
     }
-  } catch (e) { box.innerHTML = errBox(e, "log"); }
+  } catch (e) {
+    if (current()) updateLogMarkup(box, errBox(e, "logs"));
+  } finally {
+    if (logRequest === request) logRequest = undefined;
+  }
 };
 
 function execHtml(x) {
@@ -1030,8 +1058,9 @@ const NOTE_TH = [
 const textNodes = (root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out = []; while (w.nextNode()) out.push(w.currentNode); return out; };
 function applyLang() {
   const btn = $("#lang-btn");
-  if (btn) btn.textContent = LANG === "th" ? "EN" : "ไทย";
-  document.documentElement.lang = LANG;
+  const buttonLabel = LANG === "th" ? "EN" : "ไทย";
+  if (btn && btn.textContent !== buttonLabel) btn.textContent = buttonLabel;
+  if (document.documentElement.lang !== LANG) document.documentElement.lang = LANG;
   for (const n of textNodes(document.body)) {
     if (n.parentNode && ["SCRIPT", "STYLE"].includes(n.parentNode.nodeName)) continue;
     if (n.__en === undefined) {
@@ -1046,8 +1075,8 @@ function applyLang() {
     if (want !== undefined && n.nodeValue !== want) n.nodeValue = want;
   }
 }
-let langTimer;
-new MutationObserver(() => { clearTimeout(langTimer); langTimer = setTimeout(applyLang, 80); }).observe(document.body, { childList: true, subtree: true, characterData: true });
+// Translate DOM updates before the next paint instead of showing English for a frame.
+new MutationObserver(applyLang).observe(document.body, { childList: true, subtree: true, characterData: true });
 document.addEventListener("click", (e) => {
   if (e.target.id !== "lang-btn") return;
   LANG = LANG === "th" ? "en" : "th";

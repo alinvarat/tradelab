@@ -17,6 +17,7 @@ Every mistake found while building and researching, how it was caught, and the f
 | 10 | `pkill -f "python3 -u server.py"` matched its own shell | the command killed itself | exit code 144 | kill only PIDs from `pgrep -f '^python3 -u server.py'` |
 | 11 | Unit tests assumed zero slippage while the default is 0.02% | 2 false failures | test run | tests set `slippage=0` explicitly |
 | 12 | Yahoo per-symbol RSS returned unrelated headlines | wrong news on a symbol | smoke test | keep items that mention the ticker or company name |
+| 13 | The Logs poll replaced unchanged HTML, and Thai translation ran after a delay | English headers flashed and open details collapsed | read-only Chrome observation on Kuber across two polls | keep identical markup, retain interaction state on updates and translate before paint |
 
 ## Research mistakes and traps
 | # | Trap | Evidence | Rule now |
