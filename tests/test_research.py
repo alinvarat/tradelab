@@ -135,3 +135,24 @@ class Watchdog(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SmarterBot(unittest.TestCase):
+    def test_vol_target_never_leverages_and_keeps_weights_at_most_one(self):
+        from research.smarter_bot import backtest as sb
+        n = 400
+        px = {s: [100 * (1 + 0.001 * i + (0.01 if i % 2 else -0.01)) for i in range(n)] for s in sb.UNI}
+        px["SHY"] = [100 + 0.01 * i for i in range(n)]
+        days = [f"2005-{1 + i // 28 % 12:02d}-{1 + i % 28:02d}" for i in range(n)]
+        f = sb.rule("V2", days, px)
+        for i in range(260, n, 7):
+            w = f(i, None)
+            self.assertLessEqual(sum(w.values()), 1.0 + 1e-9)
+            self.assertTrue(all(v >= 0 for v in w.values()))
+
+    def test_empty_when_no_asset_beats_cash(self):
+        from research.smarter_bot import backtest as sb
+        n = 300
+        px = {s: [100 - 0.1 * i for i in range(n)] for s in sb.UNI}
+        px["SHY"] = [100 + 0.05 * i for i in range(n)]
+        self.assertEqual(sb.ensemble(px, 290, False, {s: [None] * n for s in sb.UNI}), {})
