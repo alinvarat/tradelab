@@ -591,19 +591,19 @@ def accounts_summary():
     add("manual", "Manual sandbox", "portfolio", acct, acct.initial, "you place the orders", "Manual paper trading account")
     if auto:
         add("auto", "Auto trader (monthly momentum)", "auto", auto.acct, auto.capital_usd, "paused" if auto.paused else "running",
-            "all cash this month" if not auto.targets else "holding " + ", ".join(auto.targets))
+            ("all cash this month" if not auto.targets else "holding " + ", ".join(auto.targets)) + "; no leverage")
     if hunt:
         v = hunt.view()
         add("hunter", "Hunter (20x BTC/ETH/SOL)", "auto", hunt.acct, hunt.capital_usd,
-            "ruined" if v["ruined"] else "running", "leveraged crypto trend; high risk by design")
+            "ruined" if v["ruined"] else "running", "20x leverage by design; high risk")
     if evt:
         ev = evt.evaluate()
         add("event", "Event trader (rule)", "events", evt.acct, evt.capital_usd, "paused" if evt.paused else "running",
-            f"{ev['closed_pairs']}/{ev['needed']} pairs vs random control", ctrl=evt.ctrl)
+            f"{ev['closed_pairs']}/{ev['needed']} pairs vs random control; no leverage (1x)", ctrl=evt.ctrl)
     if llm:
         ev = llm.evaluate()
-        add("llm", "DeepSeek trader", "llm", llm.acct, llm.capital_usd, "paused" if llm.paused else "running",
-            f"{ev['closed_pairs']}/{ev['needed']} pairs vs random control", ctrl=llm.ctrl)
+        add("llm", "DeepSeek trader (v4, whole market)", "llm", llm.acct, llm.capital_usd, "paused" if llm.paused else "running",
+            f"{ev['closed_pairs']}/{ev['needed']} pairs; model picks 1-20x leverage", ctrl=llm.ctrl)
     extra = {"buzz_events": len(buzzmon.events) if buzzmon else None}
     return {"rows": rows, "thb_per_usd": 1 / rate, **extra}
 

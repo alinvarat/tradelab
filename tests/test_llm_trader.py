@@ -673,7 +673,7 @@ class FastTier(Base):
         self.assertNotIn("AAA", self.t.acct.positions)       # stopped out within one fast-tier pass
 
     def test_default_cadences_are_seconds_not_minutes(self):
-        self.assertLessEqual(lt.SCAN_S, 10)
+        self.assertLessEqual(lt.SCAN_S, 15)
         self.assertLessEqual(lt.WATCH_S, 2)
 
 

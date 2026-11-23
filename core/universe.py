@@ -33,7 +33,8 @@ STOCKS = _dedupe(STOCKS)
 ASSETS = {"stock": STOCKS, "etf": _dedupe(ETFS), "commodity": _dedupe(COMMODITIES),
           "fx": _dedupe(FX), "crypto": _dedupe(CRYPTO)}
 CLASS = {s: c for c, rows in ASSETS.items() for s in rows}
-ALL = _dedupe([s for rows in ASSETS.values() for s in rows])
+# Round-robin the classes so a rotating slice of the scan always contains every asset class, not only stocks.
+ALL = _dedupe([rows[i] for i in range(max(len(r) for r in ASSETS.values())) for rows in ASSETS.values() if i < len(rows)])
 # A move this large in a session counts as a shock; stocks/ETFs also need unusual volume.
 SHOCK_PCT = {"stock": 5.0, "etf": 3.0, "commodity": 2.0, "fx": 1.0, "crypto": 5.0}
 

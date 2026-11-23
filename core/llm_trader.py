@@ -29,7 +29,7 @@ log = logging.getLogger("tradelab.llm")
 DATA = Path(__file__).resolve().parent.parent / "data"
 STATE = DATA / "llm_trader_v4.json"          # protocol v4 account; the v3 files stay untouched on the volume
 LOG = DATA / "llm_trader_log_v4.jsonl"
-SCAN_S = int(os.environ.get("TRADELAB_LLM_EVERY", "10"))
+SCAN_S = int(os.environ.get("TRADELAB_LLM_EVERY", "15"))
 WATCH_S = 2   # open positions are re-quoted this often (stops/targets trigger on these quotes)
 CAPITAL_THB = 5000.0
 # Owner rule (2026-11-23): no investment restrictions. The only limits left are physical ones: cash/margin, a quote that is
@@ -259,6 +259,7 @@ class LlmTrader:
         self.last_fin = time.time()
         self.logged_trades: dict = {}
         self.last_quotes: dict[str, dict] = {}
+        self.fetch_cursor = 0
         if self.state_path.exists():
             d = json.loads(self.state_path.read_text())
             self.acct, self.ctrl = Account.from_dict(d["account"]), Account.from_dict(d["ctrl"])
@@ -339,9 +340,15 @@ class LlmTrader:
                 return data.quote_fast(s, ttl=1.5)
             except Exception:  # noqa: BLE001
                 return None
-        got = list(self.pool.map(get, ALL))
-        quotes = {s: q for s, q in zip(ALL, got) if q}
-        if sum(q is None for q in got) > 0.3 * len(ALL):
+        batch = ALL[self.fetch_cursor:self.fetch_cursor + 130]
+        if not batch:
+            batch = ALL[:130]
+            self.fetch_cursor = 0
+        self.fetch_cursor = (self.fetch_cursor + len(batch)) % len(ALL)
+        need = set(batch) | set(self.acct.positions) | set(self.ctrl.positions) | set(self.pending)
+        got = list(self.pool.map(get, sorted(need)))
+        quotes = {s: q for s, q in zip(sorted(need), got) if q}
+        if sum(q is None for q in got) > 0.3 * len(need):
             self.last_error = "quote source failing; backing off 30 s"
             time.sleep(30)
         for extra in ("SPY", "^VIX", "DX-Y.NYB", "^TNX", "GC=F", "CL=F", "BTC-USD"):
