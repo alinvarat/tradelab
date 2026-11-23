@@ -1,0 +1,15 @@
+[Unit]
+Description=TradeLab LLM trader (DeepSeek, paper money only)
+After=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+WorkingDirectory=%h/Project/tradelab
+ExecStart=/usr/bin/python3 -u -m research.llm_trader.run
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+Restart=always
+RestartSec=10
+TimeoutStopSec=20
+
+[Install]
+WantedBy=default.target

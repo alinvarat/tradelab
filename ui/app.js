@@ -699,6 +699,24 @@ views.events = async () => {
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
     <div class="figure"><b>${d.paused ? "Paused" : "Running"}</b><span>${esc(d.rules.shock)}</span></div></div>
     <p class="small muted">${esc(d.rules.trade)}</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
+  try {
+    const l = await api("llm_trader");
+    $("#llm-panel").hidden = !!l.disabled;
+    if (!l.disabled) {
+      const ev2 = l.evaluation || {};
+      $("#llm-sub").textContent = `${l.model} | calls today ${l.calls_today}/${l.max_calls_day}${l.error ? " | " + l.error : ""}`;
+      $("#llm-figs").innerHTML = `<div class="figures">
+        <div class="figure hot"><b>${fmt(l.equity_thb, 0)} THB</b><span>Model account</span></div>
+        <div class="figure"><b>${fmt(l.control_equity_usd, 2)} USD</b><span>Random control</span></div>
+        <div class="figure"><b>${ev2.closed_pairs ?? 0} / ${ev2.needed ?? 30}</b><span>closed pairs</span></div></div><p><b>Verdict:</b> ${esc(ev2.verdict || "")}</p>`;
+      $("#llm-list").innerHTML = table([
+        { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
+        { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Action", f: (r) => esc(r.action) },
+        { h: "Size %", num: 1, f: (r) => fmt(r.size_pct, 1) }, { h: "Result", f: (r) => esc((r.executed && (r.executed.status + (r.executed.why ? " (" + r.executed.why + ")" : ""))) || "-") },
+        { h: "Reason (model)", f: (r) => esc(r.reason) },
+      ], l.decisions, { empty: "No decisions yet; the model is asked when new shocks appear." });
+    }
+  } catch (e) { $("#llm-panel").hidden = true; }
   list.innerHTML = table([
     { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
     { h: "Stock", f: (r) => symCell(r.symbol, "") },

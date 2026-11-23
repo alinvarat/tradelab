@@ -163,6 +163,9 @@ def ai_score_new(fresh, today, providers=None):
     return wrote
 
 
+STATUS: dict = {}  # last run summary (shown by /healthz)
+
+
 def main():
     now_dt = datetime.now(timezone.utc)
     DATA.mkdir(parents=True, exist_ok=True)
@@ -185,6 +188,8 @@ def main():
     open_labels(fresh, now)
     wrote = settle_labels(now)
     scored = ai_score_new(fresh, now_dt.strftime("%Y-%m-%d"))
+    STATUS.update(ts=now, fetched=len(items), new=len(fresh), linked=sum(bool(x["symbols"]) for x in fresh), labels=wrote,
+                  ai_scored=scored, feeds_ok=sum(1 for h in health.values() if not h["error"]), feeds=len(health))
     print(now_dt.isoformat(), "fetched", len(items), "new", len(fresh), "linked", sum(bool(x["symbols"]) for x in fresh),
           "labels", wrote, "ai_scored", scored)
 
