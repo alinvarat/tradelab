@@ -21,6 +21,7 @@
       <a href="#chart" data-view="chart">Chart and analysis</a>
       <a href="#portfolio" data-view="portfolio">Portfolio</a>
       <a href="#events" data-view="events">Events</a>
+      <a href="#buzz" data-view="buzz">Buzz</a>
       <a href="#news" data-view="news">News</a>
       <a href="#screener" data-view="screener">Screener</a>
       <a href="#backtest" data-view="backtest">Backtest</a>
@@ -152,6 +153,12 @@
   <div class="panel" id="llm-panel" hidden><div class="row spread"><h2>LLM trader (DeepSeek, paper)</h2><span class="small muted" id="llm-sub"></span></div>
     <div id="llm-figs"></div><div id="llm-list"></div></div>
   <div class="panel"><h2>Large single-stock moves with headlines</h2><div id="ev-list"><div class="empty">No events yet.</div></div></div>
+</section>
+<section class="view" id="v-buzz" hidden>
+  <div class="panel"><div class="row spread"><h2>Social buzz, whole US market (analysis only)</h2><span class="small muted" id="bz-sub"></span></div>
+    <div id="bz-figs"></div></div>
+  <div class="panel"><h2>Most mentioned right now</h2><div id="bz-top"></div></div>
+  <div class="panel"><h2>Buzz events (surges in mentions) and what happened next</h2><div id="bz-list"><div class="empty">No events yet.</div></div></div>
 </section>
 <section class="view" id="v-news" hidden>
   <div class="view-head"><div><h1>News</h1><p>CNBC, MarketWatch, Yahoo Finance, CoinDesk and Google News, with a headline sentiment score.</p></div>
