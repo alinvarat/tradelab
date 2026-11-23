@@ -13,20 +13,26 @@ import hashlib
 import json
 from pathlib import Path
 import os
+import random
 import time
 import traceback
 
 from . import ai_news, data as market, entities, news
+from .universe import TICKERS
 
 DATA = Path(os.environ.get("TRADELAB_NEWS_DIR") or Path(__file__).resolve().parent.parent / "research/news_archive/data")
 HEALTH = DATA / "feed_health.json"
 OPEN = DATA / "labels_open.json"
 LABELS = DATA / "labels.jsonl"
+LATENCY_LABELS = DATA / "latency.jsonl"
 AI_SCORES = DATA / "ai_scores.jsonl"
 AI_PER_RUN, AI_PER_DAY, AI_BATCH = 40, 600, 20  # cost caps for AI scoring (linked headlines only)
 BYBIT = "https://api.bytick.com/v5/announcements/index?locale=en-US&type=delistings&limit=20&page=1"
 HORIZONS = {"1h": 3600, "1d": 86400, "3d": 3 * 86400}
 GRACE = 6 * 3600  # a horizon is only labelled if we got a price within this window after it (else dropped)
+# Short-horizon study: what happens right after WE first see a headline, before an order could be filled.
+LATENCY = {"1m": 60, "5m": 300}
+LATENCY_GRACE = {"1m": 120, "5m": 300}   # a 1m label arrives at 60-180 s; a 5m label at 300-600 s
 
 
 def key(source, title):
@@ -86,20 +92,28 @@ def spot(symbols):
 
 
 def open_labels(fresh, now, price_fn=spot):
-    """Remember the price at first sight for new headlines that mention a large cap."""
+    """Remember the price at first sight for new headlines that mention a large cap, plus a random control stock
+    (deterministic per headline, never one of the linked symbols) for the short-horizon latency study."""
     linked = [x for x in fresh if x["symbols"]]
     if not linked:
         return
-    syms = sorted({s for x in linked for s in x["symbols"]} | {"SPY"})
+    plans = []
+    for x in linked:
+        pool = [t for t in TICKERS if t not in x["symbols"] and t != "SPY"]
+        control = random.Random(x["key"]).choice(pool) if pool else None
+        plans.append((x, control))
+    syms = sorted({s for x, _ in plans for s in x["symbols"]} | {c for _, c in plans if c} | {"SPY"})
     px = price_fn(syms)
     if "SPY" not in px:
         return
     pending = json.loads(OPEN.read_text()) if OPEN.exists() else {}
-    for x in linked:
+    for x, control in plans:
         got = {s: px[s] for s in x["symbols"] if s in px}
         if got:
             pending[x["key"]] = {"t0": now, "symbols": got, "spy0": px["SPY"], "title": x["title"][:140],
-                                 "source": x["source"], "sentiment": x["sentiment"], "done": []}
+                                 "source": x["source"], "sentiment": x["sentiment"], "done": [],
+                                 "control": control,
+                                 "control0": px[control] if control in px else None}
     OPEN.write_text(json.dumps(pending))
 
 
@@ -133,6 +147,52 @@ def settle_labels(now, price_fn=spot):
                         wrote += 1
                 v["done"].append(h)
     pending = {k: v for k, v in pending.items() if len(v["done"]) < len(HORIZONS) and now - v["t0"] < 4 * 86400}
+    OPEN.write_text(json.dumps(pending))
+    return wrote
+
+
+def settle_latency(now, price_fn=spot):
+    """Write the short-horizon (+1m/+5m) rows: the stock's return and a random control's return, both vs SPY, from
+    our first sight of the headline. Uses the same pending entries as settle_labels but its own file."""
+    if not OPEN.exists():
+        return 0
+    pending = json.loads(OPEN.read_text())
+    due = {k: v for k, v in pending.items()
+           if any(h not in v.get("latency_done", []) and now - v["t0"] >= s for h, s in LATENCY.items())}
+    if not due:
+        return 0
+    syms = {s for v in due.values() for s in v["symbols"]}
+    syms |= {v.get("control") for v in due.values() if v.get("control")}
+    syms.add("SPY")
+    px = price_fn(sorted(syms))
+    if "SPY" not in px:
+        return 0
+    wrote = 0
+    with LATENCY_LABELS.open("a") as f:
+        for k, v in due.items():
+            for h, secs in LATENCY.items():
+                age = now - v["t0"]
+                if h in v.get("latency_done", []) or age < secs:
+                    continue
+                if age > secs + LATENCY_GRACE[h]:
+                    v.setdefault("latency_done", []).append(h)
+                    continue
+                spy = px["SPY"] / v["spy0"] - 1
+                for s, p0 in v["symbols"].items():
+                    if s not in px:
+                        continue
+                    ret = px[s] / p0 - 1
+                    ctrl = v.get("control")
+                    c0 = v.get("control0")
+                    c_ret = px[ctrl] / c0 - 1 if ctrl and c0 and ctrl in px else None
+                    f.write(json.dumps({"key": k, "horizon": h, "symbol": s, "ret": round(ret, 5),
+                                        "spy_ret": round(spy, 5), "abnormal": round(ret - spy, 5),
+                                        "control": ctrl, "control_ret": round(c_ret, 5) if c_ret is not None else None,
+                                        "control_abnormal": round(c_ret - spy, 5) if c_ret is not None else None,
+                                        "t0": v["t0"], "title": v["title"], "source": v["source"],
+                                        "sentiment": v["sentiment"]}) + "\n")
+                    wrote += 1
+                v.setdefault("latency_done", []).append(h)
     OPEN.write_text(json.dumps(pending))
     return wrote
 
@@ -187,11 +247,13 @@ def main():
     now = time.time()
     open_labels(fresh, now)
     wrote = settle_labels(now)
+    latency = settle_latency(now)
     scored = ai_score_new(fresh, now_dt.strftime("%Y-%m-%d"))
     STATUS.update(ts=now, fetched=len(items), new=len(fresh), linked=sum(bool(x["symbols"]) for x in fresh), labels=wrote,
-                  ai_scored=scored, feeds_ok=sum(1 for h in health.values() if not h["error"]), feeds=len(health))
+                  latency_labels=latency, ai_scored=scored, feeds_ok=sum(1 for h in health.values() if not h["error"]),
+                  feeds=len(health))
     print(now_dt.isoformat(), "fetched", len(items), "new", len(fresh), "linked", sum(bool(x["symbols"]) for x in fresh),
-          "labels", wrote, "ai_scored", scored)
+          "labels", wrote, "latency", latency, "ai_scored", scored)
 
 
 def loop(every=30):
