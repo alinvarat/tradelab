@@ -35,11 +35,11 @@ def fetch_bars(symbol, tries=4):
             time.sleep(2 * (k + 1))
 
 
-def load_bars(symbols):
+def load_bars(symbols, min_bars=300):
     out = {}
     for s in symbols:
         b = fetch_bars(s)
-        if len(b) > 300:
+        if len(b) > min_bars:
             out[s] = b
     log(f"bars: {len(out)}/{len(symbols)} symbols")
     return out
@@ -161,7 +161,43 @@ def study_form4(symbols, first_year=2018):
     return {"form4_buy": by_horizon(rows), "events": len(events), "exact_acceptance": exact}, rows
 
 
-STUDIES = {"tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+SP500_URL = "https://raw.githubusercontent.com/fja05680/sp500/master/sp500_ticker_start_end.csv"
+
+
+def leverage_paths(rows, levels=(1, 2, 3), fin_year=0.08, cost=0.0009):
+    """Ending equity, worst drawdown and months >= 3x when the monthly net is levered L times (reported only)."""
+    out = {}
+    for lev in levels:
+        e, peak, dd, hits = 1.0, 1.0, 0.0, 0
+        for r in rows:
+            m = 1 + lev * ((1 + r["gross"]) * (1 - cost) ** 2 - 1) - (lev - 1) * fin_year / 12
+            hits += m >= 3
+            e *= max(m, 0.0)
+            peak = max(peak, e)
+            dd = min(dd, e / peak - 1 if peak else -1.0)
+        out[f"{lev}x"] = {"end_equity": e, "worst_drawdown": dd, "months_3x": hits}
+    return out
+
+
+def study_pit_momentum(_symbols):
+    import urllib.request
+    with urllib.request.urlopen(urllib.request.Request(SP500_URL, headers={"User-Agent": "TradeLab research"}),
+                                timeout=60) as r:
+        spells = st.parse_membership(r.read().decode())
+    names = sorted(t for t, sp in spells.items() if any(b is None or b >= "2015-01-01" for _, b in sp))
+    log(f"S&P 500 tickers with membership since 2015: {len(names)}")
+    pool = load_bars(names)
+    rows = st.momentum_rows(pool, members=lambda day: st.members_on(spells, day))
+    kept = [r for r in rows if (r["coverage"] or 0) >= 0.8]
+    cov = [r["coverage"] for r in rows if r["coverage"] is not None]
+    summ = {"pit_momentum_12_1": st.verdict(kept, group=lambda r: r["month"]),
+            "months_total": len(rows), "months_coverage_ok": len(kept),
+            "coverage_min": min(cov) if cov else None, "coverage_mean": sum(cov) / len(cov) if cov else None,
+            "tickers_with_bars": len(pool), "tickers_wanted": len(names), "leverage_paths": leverage_paths(kept)}
+    return summ, rows
+
+
+STUDIES = {"pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):
