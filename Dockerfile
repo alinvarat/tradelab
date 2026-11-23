@@ -9,7 +9,6 @@ WORKDIR /app
 COPY server.py ./
 COPY core ./core
 COPY ui ./ui
-COPY data/events.csv ./data/events.csv
 
 RUN useradd --system --uid 10001 --create-home app \
     && chown -R app:app /app

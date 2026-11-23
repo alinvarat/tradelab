@@ -1,10 +1,10 @@
-"""US macro event calendar from data/events.csv (FOMC, CPI, NFP; dates taken from the
+"""US macro event calendar from core/events.csv (FOMC, CPI, NFP; dates taken from the
 BLS and Federal Reserve schedule pages listed per row; verify against the source before relying on them)."""
 import csv
 import datetime as dt
 from pathlib import Path
 
-CSV = Path(__file__).resolve().parent.parent / "data" / "events.csv"
+CSV = Path(__file__).resolve().parent / "events.csv"  # in core/, not data/: a mounted data volume would hide it
 DESC = {"FOMC": "Fed interest-rate decision", "CPI": "US consumer price inflation", "NFP": "US non-farm payrolls (jobs)"}
 
 

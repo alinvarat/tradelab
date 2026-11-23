@@ -31,3 +31,11 @@ class NumberParsing(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Calendar(unittest.TestCase):
+    def test_calendar_lives_in_core_so_a_data_volume_cannot_hide_it(self):
+        from core import econ_calendar
+        self.assertEqual(econ_calendar.CSV.parent.name, "core")
+        self.assertTrue(econ_calendar.CSV.exists())
+        self.assertGreater(len(econ_calendar.events()), 5)
