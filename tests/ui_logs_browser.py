@@ -29,13 +29,14 @@ def check_log_refresh():
             return route.fulfill(json={"stats": {"equity": 100000}, "positions": []})
         if url.path == "/api/alerts":
             return route.fulfill(json={"alerts": [], "log": []})
-        return route.fulfill(path=UI / (url.path.lstrip("/") or "index.html"))
+        file = UI / (url.path.lstrip("/") or "index.html")
+        return route.fulfill(path=file) if file.is_file() else route.fulfill(status=404)
 
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(channel="chrome")
         page = browser.new_page(viewport={"width": 390, "height": 844})
         page.route("**/*", offline)
-        page.add_init_script("""() => {
+        page.add_init_script("""(() => {
           if (location.hostname !== 'tradelab.test') return;
           localStorage.setItem('lang', 'th');
           window.englishLogFrame = false;
@@ -45,7 +46,7 @@ def check_log_refresh():
             requestAnimationFrame(watchFrame);
           }
           requestAnimationFrame(watchFrame);
-        }""")
+        })()""")
         page.goto(ORIGIN + "/#logs")
         header = page.locator("#lg-cycles th").first
         expect(header).to_have_text("หุ้น")
