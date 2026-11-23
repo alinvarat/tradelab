@@ -1,6 +1,7 @@
 """On-demand AI analyst: runs the local `claude` CLI with no tools, from /tmp, with the analysis and
 headlines as input. Every call is logged to data/ai_log.jsonl. Called only when the user presses the button."""
 import json
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -21,6 +22,9 @@ def analyst(symbol: str, analysis: dict, news: dict, question: str = "") -> dict
               "sentiment": x["sentiment"]} for x in news.get("items", [])[:15]]
     prompt = json.dumps({"technical": slim, "news_summary": news.get("summary"), "headlines": heads,
                          "user_question": question or None}, default=str)
+    if shutil.which("claude") is None:  # e.g. inside the production container
+        return {"text": "", "error": "AI analyst is not available on this server (no claude CLI installed).",
+                "seconds": 0, "model": MODEL}
     t0 = time.time()
     rec = {"ts": t0, "symbol": symbol, "model": MODEL, "input": prompt}
     try:
