@@ -2,6 +2,9 @@
 Run: python3 server.py  ->  http://127.0.0.1:8770   (simulated money only; no broker connection exists)."""
 import json
 import os
+import shutil
+import signal
+import sys
 import threading
 import time
 import traceback
@@ -16,8 +19,9 @@ from core.engine import Account, Quote
 ROOT = Path(__file__).resolve().parent
 UI = ROOT / "ui"
 STATE = ROOT / "data" / "state.json"
-PORT = 8770
-HOST = os.environ.get("TRADELAB_HOST", "127.0.0.1")
+HOST = os.environ.get("TRADELAB_HOST", "127.0.0.1")  # keep 127.0.0.1 behind a tunnel; the server has no login
+PORT = int(os.environ.get("TRADELAB_PORT", "8770"))
+STARTED = time.time()
 
 DEFAULT_WATCH = ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "SPY", "QQQ",
                  "BTC-USD", "ETH-USD", "SOL-USD", "GC=F", "CL=F", "EURUSD=X", "USDJPY=X"]
@@ -52,7 +56,15 @@ hunt: hunter.Hunter | None = None
 def load():
     global acct
     if STATE.exists():
-        d = json.loads(STATE.read_text())
+        try:
+            d = json.loads(STATE.read_text())
+        except ValueError:  # corrupt file: use the newest backup instead of crash-looping
+            backups = sorted((ROOT / "data" / "backups").glob("*/state.json"))
+            if not backups:
+                raise
+            print(f"state.json unreadable; restoring {backups[-1]}", flush=True)
+            shutil.copy(STATE, STATE.with_suffix(".corrupt"))
+            d = json.loads(backups[-1].read_text())
         acct = Account.from_dict(d["account"])
         state.update({k: d[k] for k in ("watchlist", "alerts", "alert_log") if k in d})
 
@@ -242,6 +254,12 @@ class Handler(BaseHTTPRequestHandler):
         u = urlparse(self.path)
         q = {k: v[0] for k, v in parse_qs(u.query).items()}
         try:
+            if u.path == "/healthz":
+                now = time.time()
+                ok = now - status["last_poll"] < 300 or now - STARTED < 120
+                return self._send(200 if ok else 503, {
+                    "ok": ok, "uptime_s": round(now - STARTED), "last_poll_age_s": round(now - status["last_poll"]),
+                    "auto_cycle_age_s": round(now - getattr(auto, "last_cycle", STARTED)) if auto else None})
             if not u.path.startswith("/api/"):
                 return self._static(u.path)
             p = u.path[5:]
@@ -408,6 +426,18 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, f.read_bytes(), ct)
 
 
+def shutdown(signum, _frame):
+    """SIGTERM/SIGINT: persist every account once, then exit (systemd restarts it when wanted)."""
+    for name, fn in (("server", save), ("auto", getattr(auto, "save", None)), ("hunter", getattr(hunt, "save", None))):
+        try:
+            if fn:
+                fn()
+        except Exception:  # noqa: BLE001
+            traceback.print_exc()
+    print(f"saved state on signal {signum}", flush=True)
+    sys.exit(0)
+
+
 if __name__ == "__main__":
     load()
     auto = autotrader.AutoTrader()
@@ -415,5 +445,7 @@ if __name__ == "__main__":
     hunt = hunter.Hunter()
     threading.Thread(target=hunter.loop, args=(hunt,), daemon=True).start()
     threading.Thread(target=poller, daemon=True).start()
+    signal.signal(signal.SIGTERM, shutdown)
+    signal.signal(signal.SIGINT, shutdown)
     print(f"TradeLab on http://{HOST}:{PORT}", flush=True)
     ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()

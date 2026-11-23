@@ -341,4 +341,5 @@ def loop(at: AutoTrader, every=900):
             at.cycle()
         except Exception as e:  # noqa: BLE001
             at.note(f"cycle error: {e}")
+        at.last_cycle = time.time()
         time.sleep(every)

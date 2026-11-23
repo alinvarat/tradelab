@@ -1,0 +1,6 @@
+[Unit]
+Description=TradeLab: daily copy of account state files
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Project/tradelab
+ExecStart=/usr/bin/python3 deploy/backup_state.py

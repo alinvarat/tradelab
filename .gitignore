@@ -8,3 +8,6 @@ data/*.jsonl
 *.zip
 # news archive grows daily; each machine collects its own
 research/news_archive/data/
+data/backups/
+data/*.corrupt
+research/ops/status.json

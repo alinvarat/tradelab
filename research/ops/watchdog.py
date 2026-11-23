@@ -3,7 +3,10 @@ Read-only: it never starts trades and never edits collected data."""
 from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
+import os
+import shutil
 import subprocess
+from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 NEWS = ROOT / "news_archive" / "data"
@@ -31,6 +34,18 @@ def check(now):
         state = subprocess.run(["systemctl", "--user", "is-active", unit], capture_output=True, text=True).stdout.strip()
         if state != "active":
             problems.append(f"{unit} is {state or 'unknown'}")
+    try:
+        port = os.environ.get("TRADELAB_PORT", "8770")
+        health = json.loads(urlopen(f"http://127.0.0.1:{port}/healthz", timeout=10).read())
+        if not health["ok"]:
+            problems.append(f"TradeLab server unhealthy: {health}")
+        elif health.get("auto_cycle_age_s") and health["auto_cycle_age_s"] > 3600:
+            problems.append(f"auto trader has not completed a cycle for {health['auto_cycle_age_s']} s")
+    except Exception as exc:  # noqa: BLE001
+        problems.append(f"TradeLab server not answering: {exc!r}")
+    free_gb = shutil.disk_usage(ROOT).free / 1e9
+    if free_gb < 1:
+        problems.append(f"only {free_gb:.1f} GB disk free")
     if TEST_START <= now <= TEST_END and now.weekday() == 0 and now.hour >= 10:
         today = now.strftime("%Y%m%d")
         got = sorted(p.name for p in DVOL.glob(today + "T09*.json.gz"))

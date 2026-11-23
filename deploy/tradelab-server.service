@@ -1,12 +1,15 @@
 [Unit]
 Description=TradeLab paper-trading server (simulated money only)
 After=network-online.target
+StartLimitIntervalSec=0
 
 [Service]
 WorkingDirectory=%h/Project/tradelab
 ExecStart=/usr/bin/python3 -u server.py
 Restart=always
 RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGTERM
 
 [Install]
 WantedBy=default.target
