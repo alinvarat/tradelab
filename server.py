@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from core.universe import TICKERS
-from core import event_trader, llm_trader, news_archive
+from core import buzz, event_trader, llm_trader, news_archive
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 
@@ -57,6 +57,7 @@ auto: autotrader.AutoTrader | None = None
 hunt: hunter.Hunter | None = None
 evt: event_trader.EventTrader | None = None
 llm: llm_trader.LlmTrader | None = None
+buzzmon: buzz.BuzzMonitor | None = None
 
 
 def load():
@@ -273,6 +274,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200 if ok else 503, {
                     "ok": ok, "uptime_s": round(now - STARTED), "last_poll_age_s": round(now - status["last_poll"]),
                     "auto_cycle_age_s": round(now - getattr(auto, "last_cycle", STARTED)) if auto else None,
+                    "buzz": ({"last_scan_age_s": round(now - buzzmon.last_scan), "events": len(buzzmon.events), "error": buzzmon.last_error}
+                             if buzzmon and buzzmon.last_scan else None),
                     "news_archive": ({**news_archive.STATUS, "age_s": round(now - news_archive.STATUS["ts"])}
                                      if news_archive.STATUS else None),
                     "llm_trader": ({"last_scan_age_s": round(now - llm.last_scan), "error": llm.last_error}
@@ -323,6 +326,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200, hunt.view())
             if p == "events":
                 return self._send(200, evt.view())
+            if p == "buzz":
+                return self._send(200, buzzmon.view() if buzzmon else {"disabled": True})
             if p == "llm_trader":
                 return self._send(200, llm.view() if llm else {"disabled": True})
             if p == "strategies":
@@ -522,7 +527,7 @@ def backup_loop(keep=14):
 def shutdown(signum, _frame):
     """SIGTERM/SIGINT: persist every account once, then exit (systemd restarts it when wanted)."""
     for name, fn in (("server", save), ("auto", getattr(auto, "save", None)), ("hunter", getattr(hunt, "save", None)),
-                     ("events", getattr(evt, "save", None)), ("llm", getattr(llm, "save", None))):
+                     ("events", getattr(evt, "save", None)), ("llm", getattr(llm, "save", None)), ("buzz", getattr(buzzmon, "save", None))):
         try:
             if fn:
                 fn()
@@ -540,6 +545,9 @@ if __name__ == "__main__":
     threading.Thread(target=hunter.loop, args=(hunt,), daemon=True).start()
     evt = event_trader.EventTrader()
     threading.Thread(target=event_trader.loop, args=(evt,), daemon=True).start()
+    if os.environ.get("TRADELAB_BUZZ", "1") == "1":  # read-only analysis; on by default
+        buzzmon = buzz.BuzzMonitor()
+        threading.Thread(target=buzz.loop, args=(buzzmon,), daemon=True).start()
     if os.environ.get("TRADELAB_LLM_TRADER") == "1":  # needs opencode or OPENROUTER_API_KEY; off by default
         llm = llm_trader.LlmTrader()
         threading.Thread(target=llm_trader.loop, args=(llm,), daemon=True).start()

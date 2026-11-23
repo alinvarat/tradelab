@@ -685,6 +685,36 @@ function rorCalc() {
 ["#size-form", "#ror-form"].forEach((id) => $(id).addEventListener("input", id === "#size-form" ? sizeCalc : rorCalc));
 views.tools = () => { sizeCalc(); rorCalc(); };
 
+/* ---------- social buzz ---------- */
+views.buzz = async () => {
+  const figs = $("#bz-figs");
+  let d;
+  try { d = await api("buzz"); } catch (e) { figs.innerHTML = errBox(e, "buzz"); return; }
+  if (d.disabled) { figs.innerHTML = `<div class="empty">Buzz monitor is off on this server.</div>`; return; }
+  const e1 = d.eval_1d || {};
+  $("#bz-sub").textContent = `scans every ${d.scan_every_s}s, last ${d.last_scan_age_s ?? "never"}s ago | universe ${d.universe} stocks${d.error ? " | error: " + d.error : ""}`;
+  figs.innerHTML = `<div class="figures">
+    <div class="figure hot"><b>${d.n_events}</b><span>buzz events</span></div>
+    <div class="figure"><b>${e1.events ?? 0} / ${e1.needed ?? 100}</b><span>events with a +1d result</span></div>
+    <div class="figure"><b>${e1.mean != null ? pct(e1.mean * 100) : "-"}</b><span>mean +1d return vs SPY</span></div>
+    <div class="figure"><b>${e1.control_mean != null ? pct(e1.control_mean * 100) : "-"}</b><span>matched controls</span></div></div>
+    <p class="small muted">${esc(d.rule)}</p><p><b>Verdict:</b> ${esc(e1.verdict || "")}</p>`;
+  $("#bz-top").innerHTML = table([
+    { h: "Rank", num: 1, f: (r) => r.rank }, { h: "Ticker", f: (r) => symCell(r.ticker, r.name) },
+    { h: "Mentions", num: 1, f: (r) => fmt(r.mentions, 0) }, { h: "24h ago", num: 1, f: (r) => fmt(r.mentions_24h, 0) },
+    { h: "Upvotes", num: 1, f: (r) => fmt(r.upvotes, 0) },
+  ], d.top_now, { empty: "Waiting for the first scan." });
+  $("#bz-list").innerHTML = table([
+    { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
+    { h: "Ticker", f: (r) => symCell(r.ticker, r.name) },
+    { h: "Mentions", num: 1, f: (r) => `${r.mentions} (was ${r.mentions_24h})` },
+    { h: "Move", num: 1, f: (r) => pct(r.move_pct), cls: (r) => cls(r.move_pct) },
+    { h: "+1h / +1d vs SPY", f: (r) => `${r.out["3600"] != null ? pct(r.out["3600"] * 100) : "-"} / ${r.out["86400"] != null ? pct(r.out["86400"] * 100) : "-"}` },
+    { h: "Control +1d", f: (r) => (r.out_ctrl["86400"] != null ? pct(r.out_ctrl["86400"] * 100) : esc(r.control ? r.control.symbol : "-")) },
+    { h: "Headlines", f: (r) => (r.headlines || []).map((x) => esc(x.title)).join("<br>") || "-" },
+  ], d.events, { empty: "No events yet." });
+};
+
 /* ---------- event trader ---------- */
 views.events = async () => {
   const figs = $("#ev-figs"), list = $("#ev-list");
