@@ -161,6 +161,12 @@ class ForwardEarnings(unittest.TestCase):
         self.assertEqual(st.llm_forward_verdict(self.rows(640, 0.0)), "no edge shown")
 
 
+class Other8K(unittest.TestCase):
+    def test_prompt_allows_skipping_routine_filings(self):
+        self.assertIn("skip", st.LLM_SYSTEM_8K)
+        self.assertIn("8-K", st.LLM_SYSTEM_8K)
+
+
 class WideEarnings(unittest.TestCase):
     def test_form_idx_keeps_only_plain_8k(self):
         text = ("Form Type   Company Name   CIK   Date Filed   File Name\n" + "-" * 40 + "\n"
