@@ -15,12 +15,14 @@ import sys
 import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from core import data as market, entities, news  # noqa: E402
+from core import ai_news, data as market, entities, news  # noqa: E402
 
 DATA = Path(__file__).parent / "data"
 HEALTH = DATA / "feed_health.json"
 OPEN = DATA / "labels_open.json"
 LABELS = DATA / "labels.jsonl"
+AI_SCORES = DATA / "ai_scores.jsonl"
+AI_PER_RUN, AI_PER_DAY, AI_BATCH = 40, 600, 20  # cost caps for AI scoring (linked headlines only)
 BYBIT = "https://api.bytick.com/v5/announcements/index?locale=en-US&type=delistings&limit=20&page=1"
 HORIZONS = {"1h": 3600, "1d": 86400, "3d": 3 * 86400}
 GRACE = 6 * 3600  # a horizon is only labelled if we got a price within this window after it (else dropped)
@@ -134,6 +136,28 @@ def settle_labels(now, price_fn=spot):
     return wrote
 
 
+def ai_score_new(fresh, today, score_fn=ai_news.score):
+    """AI-score new headlines that mention a large cap, within per-run and per-day caps. Returns rows written."""
+    todo = [x for x in fresh if x["symbols"]][:AI_PER_RUN]
+    done_today = 0
+    if AI_SCORES.exists():
+        done_today = sum(1 for l in AI_SCORES.read_text().splitlines()[-3000:] if f'"day": "{today}"' in l)
+    todo = todo[:max(0, AI_PER_DAY - done_today)]
+    wrote = 0
+    for i in range(0, len(todo), AI_BATCH):
+        batch = todo[i:i + AI_BATCH]
+        scores = score_fn([{"id": x["key"], "title": x["title"], "summary": x["summary"], "symbols": x["symbols"]}
+                           for x in batch])
+        with AI_SCORES.open("a") as f:
+            for x in batch:
+                s = scores.get(x["key"])
+                if s:
+                    f.write(json.dumps({"key": x["key"], "day": today, "model": ai_news.MODEL, "symbols": x["symbols"],
+                                        "lexicon": x["sentiment"], **s}) + "\n")
+                    wrote += 1
+    return wrote
+
+
 def main():
     now_dt = datetime.now(timezone.utc)
     DATA.mkdir(exist_ok=True)
@@ -155,8 +179,9 @@ def main():
     now = time.time()
     open_labels(fresh, now)
     wrote = settle_labels(now)
+    scored = ai_score_new(fresh, now_dt.strftime("%Y-%m-%d")) if ai_news.available() else 0
     print(now_dt.isoformat(), "fetched", len(items), "new", len(fresh), "linked", sum(bool(x["symbols"]) for x in fresh),
-          "labels", wrote)
+          "labels", wrote, "ai_scored", scored)
 
 
 if __name__ == "__main__":

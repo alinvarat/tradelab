@@ -121,6 +121,18 @@ class News(unittest.TestCase):
 
 
 class Watchdog(unittest.TestCase):
+    def test_sidecar_files_do_not_break_newest_news(self):
+        with tempfile.TemporaryDirectory() as d:
+            old = watchdog.NEWS
+            try:
+                watchdog.NEWS = Path(d)
+                (Path(d) / "2026-11-23.jsonl").write_text(json.dumps({"first_seen_utc": "2026-11-23T10:00:00+00:00"}) + "\n")
+                (Path(d) / "zz_ai_scores.jsonl").write_text(json.dumps({"key": "k", "score": 0.1}) + "\n")
+                (Path(d) / "labels.jsonl").write_text(json.dumps({"key": "k"}) + "\n")
+                self.assertEqual(watchdog.newest_news(None).hour, 10)
+            finally:
+                watchdog.NEWS = old
+
     def test_stale_news_is_reported(self):
         with tempfile.TemporaryDirectory() as d:
             old = watchdog.NEWS
@@ -172,3 +184,50 @@ class NewsData(unittest.TestCase):
                 self.assertTrue(any("feeds dead or stale" in p for p in problems))
             finally:
                 watchdog.NEWS = old
+
+
+class AiNewsScores(unittest.TestCase):
+    def test_parse_clamps_and_ignores_garbage(self):
+        from core import ai_news
+        text = 'noise [{"id":"a","score":3,"confidence":2,"category":"hack"},{"id":"zz","score":1},{"id":"b","score":"x"},' \
+               '{"id":"c","score":-0.4,"confidence":0.7,"category":"legal"}] tail'
+        out = ai_news.parse(text, {"a", "b", "c"})
+        self.assertEqual(out["a"], {"score": 1.0, "confidence": 1.0, "category": "other"})
+        self.assertNotIn("zz", out)
+        self.assertNotIn("b", out)
+        self.assertEqual(out["c"]["category"], "legal")
+        self.assertEqual(ai_news.parse("no json", {"a"}), {})
+
+    def test_score_fails_closed(self):
+        from unittest import mock
+        from core import ai_news
+        with mock.patch("core.ai_news.shutil.which", return_value=None):
+            self.assertEqual(ai_news.score([{"id": "a", "title": "t", "symbols": []}]), {})
+
+    def test_collector_respects_caps_and_skips_unlinked(self):
+        from research.news_archive import collector as c
+        with tempfile.TemporaryDirectory() as d:
+            c.AI_SCORES = Path(d) / "s.jsonl"
+            fresh = [{"key": f"k{i}", "title": "t", "summary": "", "symbols": ["AAPL"] if i % 2 == 0 else [], "sentiment": 0.1}
+                     for i in range(10)]
+            calls = []
+
+            def fake(items):
+                calls.append(len(items))
+                return {x["id"]: {"score": 0.5, "confidence": 0.9, "category": "other"} for x in items}
+            self.assertEqual(c.ai_score_new(fresh, "2026-11-23", fake), 5)           # only the 5 linked ones
+            c.AI_PER_DAY = 6
+            self.assertEqual(c.ai_score_new(fresh, "2026-11-23", fake), 1)           # per-day cap leaves room for 1
+            c.AI_PER_DAY = 600
+
+    def test_evaluation_waits_for_enough_pairs_and_detects_signal(self):
+        from research.news_archive import evaluate_scores as ev
+        self.assertIn("too early", ev.evaluate([(0.5, 0.1, 0.01)] * 50)["verdict"])
+        rng = __import__("random").Random(3)
+        rows = []
+        for _ in range(300):
+            ret = rng.gauss(0, 0.02)
+            rows.append((ret * 20 + rng.gauss(0, 0.3), rng.uniform(-1, 1), ret))   # AI tracks returns, lexicon is noise
+        self.assertIn("AI score useful", ev.evaluate(rows)["verdict"])
+        noise = [(rng.uniform(-1, 1), rng.uniform(-1, 1), rng.gauss(0, 0.02)) for _ in range(300)]
+        self.assertEqual(ev.evaluate(noise)["verdict"], "no demonstrated advantage")
