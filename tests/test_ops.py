@@ -43,6 +43,29 @@ class Steward(unittest.TestCase):
         self.assertIn("Never suggest changing a locked protocol", steward.SYSTEM)
 
 
+class SingleModel(unittest.TestCase):
+    def test_every_component_uses_flash_1017_and_a_swap_is_flagged(self):
+        import io
+        import os
+        from core import ai_news
+        self.assertEqual(ai_news.DECISION_MODEL, "openrouter/deepseek/deepseek-v4.1-flash-1017")
+        self.assertEqual(ai_news.OPENCODE_MODEL, ai_news.DECISION_MODEL)
+
+        class R(io.BytesIO):
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+        fake = lambda served: (lambda req, timeout: R(json.dumps(
+            {"model": served, "choices": [{"message": {"content": "x"}}]}).encode()))
+        with mock.patch.dict(os.environ, {"OPENROUTER_API_KEY": "k"}), mock.patch("core.ai_news.opencode_available", return_value=False):
+            _, same = ai_news.chat("s", "u", urlopen=fake("deepseek/deepseek-v4.1-flash-1017"), model=ai_news.DECISION_MODEL)
+            _, other = ai_news.chat("s", "u", urlopen=fake("vendor/other"), model=ai_news.DECISION_MODEL)
+        self.assertEqual(same, "deepseek/deepseek-v4.1-flash-1017")
+        self.assertIn("SERVED: vendor/other", other)
+
+
 class QuoteFast(unittest.TestCase):
     def test_same_fields_as_quote_from_a_meta_block(self):
         meta = {"regularMarketPrice": 100.0, "previousClose": 90.0, "regularMarketTime": 4_000_000_000,
