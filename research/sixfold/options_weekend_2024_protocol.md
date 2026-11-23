@@ -1,0 +1,2 @@
+# 2024 backcast for locked weekend direction
+Freeze the existing weekend trend direction, Monday-to-Friday same-month calendar, target exits, original strike and size constraints, and costs before fetching 2024 weekly prints. Include all complete months 2024, both targets and cases, with $147 independent full-year and a single 2024–October 2026 account. Compare 500 random directions on 2024 eligible weeks. The older time period is an out-of-sample transfer in instrument tape, not recent live forward confirmation; broader spot history was used before.

@@ -1,0 +1,52 @@
+{
+  "input_sha256": "95ea09d635213bdec608b455397dae0c2d48d06da172f709f6ef65c5b67a7347",
+  "days": 304,
+  "paired_by_month": {
+    "2026-01": 31,
+    "2026-02": 28,
+    "2026-03": 31,
+    "2026-04": 30,
+    "2026-05": 31,
+    "2026-06": 30,
+    "2026-07": 31,
+    "2026-08": 31,
+    "2026-09": 30,
+    "2026-10": 31
+  },
+  "leads": {
+    "temperature_2m_previous_day1": {
+      "paired_days": 304,
+      "raw_bias_f": -1.0828947368421054,
+      "error_sd_f": 4.1829652393372285,
+      "bias_corrected_mae_f": 3.60075924853399,
+      "bias_corrected_rmse_f": 4.322779861850574,
+      "coverage": {
+        "0.8": 0.7236842105263158,
+        "0.95": 0.9375
+      }
+    },
+    "temperature_2m_previous_day2": {
+      "paired_days": 304,
+      "raw_bias_f": -0.8325657894736842,
+      "error_sd_f": 4.371233446504805,
+      "bias_corrected_mae_f": 3.649285546224571,
+      "bias_corrected_rmse_f": 4.449184676272231,
+      "coverage": {
+        "0.8": 0.7302631578947368,
+        "0.95": 0.9243421052631579
+      }
+    }
+  },
+  "fit": {
+    "fit_days": 727,
+    "mean_error_f": 0.03370013755158191,
+    "noaa_sha256": "8d3ad5889484c57cdb52dbf5c1bf36cef85c40bfde64a6a3d66be4f569ccfc19",
+    "sd_error_f": 3.8744064411003913,
+    "source_urls": [
+      "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=40.779&longitude=-73.969&timezone=GMT&start_date=2022-01-01&end_date=2022-12-31&hourly=temperature_2m_previous_day2&temperature_unit=fahrenheit&models=gfs_global",
+      "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=40.779&longitude=-73.969&timezone=GMT&start_date=2023-01-01&end_date=2023-12-31&hourly=temperature_2m_previous_day2&temperature_unit=fahrenheit&models=gfs_global",
+      "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=40.779&longitude=-73.969&timezone=GMT&start_date=2024-01-01&end_date=2024-12-31&hourly=temperature_2m_previous_day2&temperature_unit=fahrenheit&models=gfs_global",
+      "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=40.779&longitude=-73.969&timezone=GMT&start_date=2025-01-01&end_date=2026-01-01&hourly=temperature_2m_previous_day2&temperature_unit=fahrenheit&models=gfs_global"
+    ]
+  }
+}

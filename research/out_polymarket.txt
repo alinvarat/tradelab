@@ -1,0 +1,32 @@
+490 resolved binary markets with price history
+
+price 30 day(s) before end -> actual win rate (both sides of each market counted)
+  0.01-0.05: n=   38  price 0.023  won 0.026  return per $ if bought +15%
+  0.05-0.10: n=   26  price 0.072  won 0.154  return per $ if bought +115%
+  0.10-0.20: n=   33  price 0.145  won 0.182  return per $ if bought +25%
+  0.20-0.35: n=   39  price 0.277  won 0.436  return per $ if bought +57%
+  0.35-0.65: n=   78  price 0.500  won 0.500  return per $ if bought +0%
+  0.65-0.80: n=   39  price 0.723  won 0.564  return per $ if bought -22%
+  0.80-0.90: n=   33  price 0.855  won 0.818  return per $ if bought -4%
+  0.90-0.95: n=   26  price 0.928  won 0.846  return per $ if bought -9%
+  0.95-0.99: n=   38  price 0.977  won 0.974  return per $ if bought -0%
+
+price 7 day(s) before end -> actual win rate (both sides of each market counted)
+  0.01-0.05: n=   38  price 0.029  won 0.053  return per $ if bought +84%
+  0.10-0.20: n=   28  price 0.155  won 0.071  return per $ if bought -54%
+  0.20-0.35: n=   50  price 0.279  won 0.340  return per $ if bought +22%
+  0.35-0.65: n=  136  price 0.500  won 0.500  return per $ if bought +0%
+  0.65-0.80: n=   50  price 0.721  won 0.660  return per $ if bought -8%
+  0.80-0.90: n=   28  price 0.845  won 0.929  return per $ if bought +10%
+  0.95-0.99: n=   38  price 0.971  won 0.947  return per $ if bought -2%
+
+price 1 day(s) before end -> actual win rate (both sides of each market counted)
+  0.01-0.05: n=   35  price 0.025  won 0.086  return per $ if bought +238%
+  0.05-0.10: n=   22  price 0.071  won 0.045  return per $ if bought -36%
+  0.10-0.20: n=   28  price 0.158  won 0.107  return per $ if bought -32%
+  0.20-0.35: n=   61  price 0.282  won 0.393  return per $ if bought +40%
+  0.35-0.65: n=  235  price 0.499  won 0.498  return per $ if bought -0%
+  0.65-0.80: n=   62  price 0.717  won 0.613  return per $ if bought -15%
+  0.80-0.90: n=   28  price 0.842  won 0.893  return per $ if bought +6%
+  0.90-0.95: n=   22  price 0.929  won 0.955  return per $ if bought +3%
+  0.95-0.99: n=   34  price 0.974  won 0.912  return per $ if bought -6%

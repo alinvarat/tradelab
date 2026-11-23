@@ -1,0 +1,380 @@
+{
+  "snapshot_sha256": "9cdd2ee29151c02c4545da97ec0e236d59eb1ece9e3b1f2e86cb6fb6e69a960b",
+  "horizon_days": 30,
+  "rules": {
+    "continuation": {
+      "delay_0": {
+        "reference": {
+          "windows": 152,
+          "hits_6x": 2,
+          "hit_windows": [
+            {
+              "start": "2021-03-01",
+              "end": "2021-03-30",
+              "target_trade": {
+                "symbol": "CHZUSDT",
+                "scheduled_entry": "2021-03-08",
+                "entry": "2021-03-08",
+                "exit": "2021-03-12",
+                "reason": "target",
+                "raw_entry": 0.128357,
+                "raw_exit": null,
+                "running_equity_before": 0.9042572155841911,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2021-03-08",
+              "end": "2021-04-06",
+              "target_trade": {
+                "symbol": "CHZUSDT",
+                "scheduled_entry": "2021-03-08",
+                "entry": "2021-03-08",
+                "exit": "2021-03-12",
+                "reason": "target",
+                "raw_entry": 0.128357,
+                "raw_exit": null,
+                "running_equity_before": 1.0,
+                "running_equity_after": 6.0
+              }
+            }
+          ],
+          "unique_target_symbol_dates": [
+            [
+              "CHZUSDT",
+              "2021-03-12"
+            ]
+          ],
+          "median_multiple": 0.7706956427527911,
+          "loss_50pct": 32,
+          "loss_95pct": 4,
+          "best_multiple": 6.0
+        },
+        "holdout": {
+          "windows": 101,
+          "hits_6x": 0,
+          "hit_windows": [],
+          "unique_target_symbol_dates": [],
+          "median_multiple": 0.7195034407333752,
+          "loss_50pct": 13,
+          "loss_95pct": 0,
+          "best_multiple": 4.796958623286003
+        },
+        "later_2026": {
+          "windows": 39,
+          "hits_6x": 5,
+          "hit_windows": [
+            {
+              "start": "2026-03-09",
+              "end": "2026-04-07",
+              "target_trade": {
+                "symbol": "STOUSDT",
+                "scheduled_entry": "2026-03-30",
+                "entry": "2026-03-30",
+                "exit": "2026-04-02",
+                "reason": "target",
+                "raw_entry": 0.1498,
+                "raw_exit": null,
+                "running_equity_before": 0.5707015983468309,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2026-03-16",
+              "end": "2026-04-14",
+              "target_trade": {
+                "symbol": "STOUSDT",
+                "scheduled_entry": "2026-03-30",
+                "entry": "2026-03-30",
+                "exit": "2026-04-02",
+                "reason": "target",
+                "raw_entry": 0.1498,
+                "raw_exit": null,
+                "running_equity_before": 0.8957436739938797,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2026-03-23",
+              "end": "2026-04-21",
+              "target_trade": {
+                "symbol": "STOUSDT",
+                "scheduled_entry": "2026-03-30",
+                "entry": "2026-03-30",
+                "exit": "2026-04-02",
+                "reason": "target",
+                "raw_entry": 0.1498,
+                "raw_exit": null,
+                "running_equity_before": 0.9750808266264196,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2026-03-30",
+              "end": "2026-04-28",
+              "target_trade": {
+                "symbol": "STOUSDT",
+                "scheduled_entry": "2026-03-30",
+                "entry": "2026-03-30",
+                "exit": "2026-04-02",
+                "reason": "target",
+                "raw_entry": 0.1498,
+                "raw_exit": null,
+                "running_equity_before": 1.0,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2026-04-06",
+              "end": "2026-05-05",
+              "target_trade": {
+                "symbol": "\u5e01\u5b89\u4eba\u751fUSDT",
+                "scheduled_entry": "2026-04-13",
+                "entry": "2026-04-13",
+                "exit": "2026-04-18",
+                "reason": "target",
+                "raw_entry": 0.1779,
+                "raw_exit": null,
+                "running_equity_before": 2.5752047135317935,
+                "running_equity_after": 6.0
+              }
+            }
+          ],
+          "unique_target_symbol_dates": [
+            [
+              "STOUSDT",
+              "2026-04-02"
+            ],
+            [
+              "\u5e01\u5b89\u4eba\u751fUSDT",
+              "2026-04-18"
+            ]
+          ],
+          "median_multiple": 0.6018737884739743,
+          "loss_50pct": 16,
+          "loss_95pct": 0,
+          "best_multiple": 6.0
+        }
+      },
+      "delay_1": {
+        "reference": {
+          "windows": 152,
+          "hits_6x": 0,
+          "hit_windows": [],
+          "unique_target_symbol_dates": [],
+          "median_multiple": 0.8638425585602578,
+          "loss_50pct": 27,
+          "loss_95pct": 4,
+          "best_multiple": 4.96118210804107
+        },
+        "holdout": {
+          "windows": 101,
+          "hits_6x": 0,
+          "hit_windows": [],
+          "unique_target_symbol_dates": [],
+          "median_multiple": 0.8607927248963687,
+          "loss_50pct": 11,
+          "loss_95pct": 0,
+          "best_multiple": 3.1903040828717377
+        },
+        "later_2026": {
+          "windows": 39,
+          "hits_6x": 4,
+          "hit_windows": [
+            {
+              "start": "2026-03-16",
+              "end": "2026-04-14",
+              "target_trade": {
+                "symbol": "STOUSDT",
+                "scheduled_entry": "2026-03-30",
+                "entry": "2026-03-31",
+                "exit": "2026-04-02",
+                "reason": "target",
+                "raw_entry": 0.1499,
+                "raw_exit": null,
+                "running_equity_before": 0.8079581395322287,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2026-03-23",
+              "end": "2026-04-21",
+              "target_trade": {
+                "symbol": "STOUSDT",
+                "scheduled_entry": "2026-03-30",
+                "entry": "2026-03-31",
+                "exit": "2026-04-02",
+                "reason": "target",
+                "raw_entry": 0.1499,
+                "raw_exit": null,
+                "running_equity_before": 0.8708180512786722,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2026-03-30",
+              "end": "2026-04-28",
+              "target_trade": {
+                "symbol": "STOUSDT",
+                "scheduled_entry": "2026-03-30",
+                "entry": "2026-03-31",
+                "exit": "2026-04-02",
+                "reason": "target",
+                "raw_entry": 0.1499,
+                "raw_exit": null,
+                "running_equity_before": 1.0,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2026-04-06",
+              "end": "2026-05-05",
+              "target_trade": {
+                "symbol": "\u5e01\u5b89\u4eba\u751fUSDT",
+                "scheduled_entry": "2026-04-13",
+                "entry": "2026-04-14",
+                "exit": "2026-04-18",
+                "reason": "target",
+                "raw_entry": 0.2069,
+                "raw_exit": null,
+                "running_equity_before": 2.491664927338237,
+                "running_equity_after": 6.0
+              }
+            }
+          ],
+          "unique_target_symbol_dates": [
+            [
+              "STOUSDT",
+              "2026-04-02"
+            ],
+            [
+              "\u5e01\u5b89\u4eba\u751fUSDT",
+              "2026-04-18"
+            ]
+          ],
+          "median_multiple": 0.5412152494411927,
+          "loss_50pct": 18,
+          "loss_95pct": 0,
+          "best_multiple": 6.0
+        }
+      }
+    },
+    "reversal": {
+      "delay_0": {
+        "reference": {
+          "windows": 152,
+          "hits_6x": 0,
+          "hit_windows": [],
+          "unique_target_symbol_dates": [],
+          "median_multiple": 1.0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "best_multiple": 1.3424155504028417
+        },
+        "holdout": {
+          "windows": 101,
+          "hits_6x": 0,
+          "hit_windows": [],
+          "unique_target_symbol_dates": [],
+          "median_multiple": 0.9145113483653536,
+          "loss_50pct": 16,
+          "loss_95pct": 13,
+          "best_multiple": 2.7953605551349945
+        },
+        "later_2026": {
+          "windows": 39,
+          "hits_6x": 0,
+          "hit_windows": [],
+          "unique_target_symbol_dates": [],
+          "median_multiple": 1.0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "best_multiple": 1.945392518751816
+        }
+      },
+      "delay_1": {
+        "reference": {
+          "windows": 152,
+          "hits_6x": 0,
+          "hit_windows": [],
+          "unique_target_symbol_dates": [],
+          "median_multiple": 1.0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "best_multiple": 1.3569256208569869
+        },
+        "holdout": {
+          "windows": 101,
+          "hits_6x": 3,
+          "hit_windows": [
+            {
+              "start": "2025-08-25",
+              "end": "2025-09-23",
+              "target_trade": {
+                "symbol": "BAKEUSDT",
+                "scheduled_entry": "2025-09-08",
+                "entry": "2025-09-09",
+                "exit": "2025-09-10",
+                "reason": "target",
+                "raw_entry": 0.0342,
+                "raw_exit": null,
+                "running_equity_before": 1.0,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2025-09-01",
+              "end": "2025-09-30",
+              "target_trade": {
+                "symbol": "BAKEUSDT",
+                "scheduled_entry": "2025-09-08",
+                "entry": "2025-09-09",
+                "exit": "2025-09-10",
+                "reason": "target",
+                "raw_entry": 0.0342,
+                "raw_exit": null,
+                "running_equity_before": 1.0,
+                "running_equity_after": 6.0
+              }
+            },
+            {
+              "start": "2025-09-08",
+              "end": "2025-10-07",
+              "target_trade": {
+                "symbol": "BAKEUSDT",
+                "scheduled_entry": "2025-09-08",
+                "entry": "2025-09-09",
+                "exit": "2025-09-10",
+                "reason": "target",
+                "raw_entry": 0.0342,
+                "raw_exit": null,
+                "running_equity_before": 1.0,
+                "running_equity_after": 6.0
+              }
+            }
+          ],
+          "unique_target_symbol_dates": [
+            [
+              "BAKEUSDT",
+              "2025-09-10"
+            ]
+          ],
+          "median_multiple": 0.9032411613817867,
+          "loss_50pct": 10,
+          "loss_95pct": 8,
+          "best_multiple": 6.0
+        },
+        "later_2026": {
+          "windows": 39,
+          "hits_6x": 0,
+          "hit_windows": [],
+          "unique_target_symbol_dates": [],
+          "median_multiple": 1.0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "best_multiple": 1.5394257684322168
+        }
+      }
+    }
+  }
+}

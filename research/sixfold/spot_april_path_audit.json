@@ -1,0 +1,48 @@
+{
+  "symbol": "\u5e01\u5b89\u4eba\u751fUSDT",
+  "initial_usdt_approximation": 147.0,
+  "friction_per_side": 0.0035,
+  "first_purchase": {
+    "minute_utc": "2026-04-06T00:01:00+00:00",
+    "units": 2126.0855510792053,
+    "gross_usdt": 146.48729446935724,
+    "vwap": 0.0689,
+    "source_aggregate_ids": [
+      4176411
+    ],
+    "net_account_usdt": null
+  },
+  "first_sale": {
+    "minute_utc": "2026-04-13T00:00:00+00:00",
+    "units": 2126.0855510792053,
+    "gross_usdt": 378.3082380920986,
+    "vwap": 0.1779365077289898,
+    "source_aggregate_ids": [
+      4932810,
+      4932811,
+      4932815
+    ],
+    "net_account_usdt": 376.98415925877623
+  },
+  "second_purchase": {
+    "minute_utc": "2026-04-13T00:01:00+00:00",
+    "units": 2113.3282310101263,
+    "gross_usdt": 375.66931665049947,
+    "vwap": 0.17776193548076413,
+    "source_aggregate_ids": [
+      4932868,
+      4932869,
+      4932870,
+      4932877
+    ],
+    "net_account_usdt": null
+  },
+  "second_limit_target_price": 0.4188170249471905,
+  "second_sale_market_evidence": {
+    "minute_utc": "2026-04-18T01:03:00+00:00",
+    "demand_units_at_or_above_limit": 39111.9,
+    "demand_usdt_at_or_above_limit": 16388.101049999997,
+    "demand_aggregate_count": 14
+  },
+  "interpretation": "Trade prices and volume are historical. Simulated fill ordering and queue are unobserved."
+}

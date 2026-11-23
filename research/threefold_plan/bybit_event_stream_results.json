@@ -1,0 +1,59 @@
+{
+  "sha256": "408b2522bcfb8c53519203764f72ede0bf51c1ee2b0a47cd1c1eae46501b137f",
+  "diagnostic_only": true,
+  "entry": "2026-11-23T13:05:21.157000+00:00",
+  "exit": "2026-11-23T13:05:29.157000+00:00",
+  "capture_stop": {
+    "reason": "window_complete",
+    "failure": false,
+    "snapshots": 5
+  },
+  "pairs": {
+    "DIAMUSDT": {
+      "base": {
+        "status": "stale_or_missing"
+      },
+      "higher": {
+        "status": "stale_or_missing"
+      }
+    },
+    "MBXUSDT": {
+      "base": {
+        "status": "stale_or_missing"
+      },
+      "higher": {
+        "status": "stale_or_missing"
+      }
+    },
+    "MCRTUSDT": {
+      "base": {
+        "status": "modeled",
+        "end_usdt": "143.3178340326626921618201892"
+      },
+      "higher": {
+        "status": "modeled",
+        "end_usdt": "141.4679527855889084188936773"
+      }
+    },
+    "NSUSDT": {
+      "base": {
+        "status": "modeled",
+        "end_usdt": "145.3941709585651288865040734"
+      },
+      "higher": {
+        "status": "modeled",
+        "end_usdt": "143.5177949190911398832190912"
+      }
+    },
+    "OBTUSDT": {
+      "base": {
+        "status": "modeled",
+        "end_usdt": "141.9628261008986335761103211"
+      },
+      "higher": {
+        "status": "modeled",
+        "end_usdt": "140.1398646868366561997626166"
+      }
+    }
+  }
+}

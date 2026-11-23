@@ -1,0 +1,280 @@
+{
+  "binance": {
+    "url": "https://data-api.binance.vision/api/v3/depth?symbol=BTCUSDT&limit=10",
+    "sent_utc": "2026-11-23T12:53:14.250290+00:00",
+    "received_utc": "2026-11-23T12:53:14.687525+00:00",
+    "payload": {
+      "lastUpdateId": 103510966101,
+      "bids": [
+        [
+          "61213.61000000",
+          "0.22679000"
+        ],
+        [
+          "61213.60000000",
+          "0.00063000"
+        ],
+        [
+          "61212.64000000",
+          "0.00009000"
+        ],
+        [
+          "61212.63000000",
+          "0.01955000"
+        ],
+        [
+          "61212.50000000",
+          "0.00009000"
+        ],
+        [
+          "61212.49000000",
+          "0.30877000"
+        ],
+        [
+          "61212.48000000",
+          "0.00027000"
+        ],
+        [
+          "61212.09000000",
+          "0.00009000"
+        ],
+        [
+          "61212.04000000",
+          "0.00009000"
+        ],
+        [
+          "61212.03000000",
+          "0.04102000"
+        ]
+      ],
+      "asks": [
+        [
+          "61213.62000000",
+          "6.88498000"
+        ],
+        [
+          "61213.63000000",
+          "0.40908000"
+        ],
+        [
+          "61213.86000000",
+          "0.00009000"
+        ],
+        [
+          "61214.18000000",
+          "0.00009000"
+        ],
+        [
+          "61214.20000000",
+          "0.00009000"
+        ],
+        [
+          "61214.72000000",
+          "0.00400000"
+        ],
+        [
+          "61214.91000000",
+          "0.77934000"
+        ],
+        [
+          "61214.92000000",
+          "2.59034000"
+        ],
+        [
+          "61214.98000000",
+          "0.02050000"
+        ],
+        [
+          "61215.24000000",
+          "0.00009000"
+        ]
+      ]
+    }
+  },
+  "deribit": {
+    "instrument": {
+      "state": "open",
+      "price_index": "btc_usd",
+      "kind": "option",
+      "instrument_name": "BTC-24NOV26-61000-C",
+      "maker_commission": 0.0003,
+      "taker_commission": 0.0003,
+      "product_group": "BTC",
+      "underlying_type": "crypto",
+      "instrument_type": "reversed",
+      "instrument_id": 736969,
+      "expiration_timestamp": 1795507200000,
+      "creation_timestamp": 1795161615000,
+      "is_active": true,
+      "contract_size": 1.0,
+      "tick_size": 0.0001,
+      "strike": 61000.0,
+      "counter_currency": "USD",
+      "option_type": "call",
+      "min_trade_amount": 0.1,
+      "block_trade_commission": 0.0003,
+      "block_trade_min_trade_amount": 25,
+      "block_trade_tick_size": 0.0001,
+      "settlement_currency": "BTC",
+      "settlement_period": "day",
+      "base_currency": "BTC",
+      "index_id": 1000033,
+      "quote_currency": "BTC",
+      "tick_size_steps": [
+        {
+          "tick_size": 0.0005,
+          "above_price": 0.005
+        }
+      ],
+      "lot_size": 1,
+      "base_currency_uuid": "5b71fc48-3dd3-540c-809b-f8c94d0e68b5",
+      "quote_currency_uuid": "5b71fc48-3dd3-540c-809b-f8c94d0e68b5"
+    },
+    "index": {
+      "url": "https://www.deribit.com/api/v2/public/get_index_price?index_name=btc_usd",
+      "sent_utc": "2026-11-23T12:53:14.717239+00:00",
+      "received_utc": "2026-11-23T12:53:15.011436+00:00",
+      "payload": {
+        "jsonrpc": "2.0",
+        "result": {
+          "estimated_delivery_price": 61139.65,
+          "index_price": 61139.65
+        },
+        "usIn": 1795438394924052,
+        "usOut": 1795438394924300,
+        "usDiff": 248,
+        "testnet": false
+      }
+    },
+    "book": {
+      "url": "https://www.deribit.com/api/v2/public/get_order_book?instrument_name=BTC-24NOV26-61000-C&depth=10",
+      "sent_utc": "2026-11-23T12:53:15.011566+00:00",
+      "received_utc": "2026-11-23T12:53:15.295560+00:00",
+      "payload": {
+        "jsonrpc": "2.0",
+        "result": {
+          "timestamp": 1795438394819,
+          "state": "open",
+          "stats": {
+            "high": 0.017,
+            "low": 0.01,
+            "price_change": -14.7059,
+            "volume": 27.9,
+            "volume_delayed": 0.0,
+            "volume_realtime": 27.9,
+            "volume_delayed_usd": 0.0,
+            "volume_realtime_usd": 24943.38,
+            "volume_usd": 24943.38
+          },
+          "greeks": {
+            "delta": 0.5346,
+            "gamma": 0.00023,
+            "vega": 11.34875,
+            "theta": -342.96119,
+            "rho": 0.6967
+          },
+          "change_id": 184180961201,
+          "index_price": 61139.65,
+          "instrument_name": "BTC-24NOV26-61000-C",
+          "bids": [
+            [
+              0.012,
+              3.6
+            ],
+            [
+              0.0115,
+              75.0
+            ],
+            [
+              0.011,
+              22.2
+            ],
+            [
+              0.0105,
+              105.8
+            ],
+            [
+              0.01,
+              15.2
+            ],
+            [
+              0.0095,
+              15.2
+            ],
+            [
+              0.009,
+              15.0
+            ],
+            [
+              0.0085,
+              0.4
+            ],
+            [
+              0.0032,
+              12.6
+            ],
+            [
+              0.0016,
+              0.4
+            ]
+          ],
+          "asks": [
+            [
+              0.0125,
+              18.4
+            ],
+            [
+              0.013,
+              32.8
+            ],
+            [
+              0.0135,
+              53.2
+            ],
+            [
+              0.014,
+              98.9
+            ],
+            [
+              0.0145,
+              15.6
+            ],
+            [
+              0.015,
+              15.1
+            ],
+            [
+              0.0155,
+              15.1
+            ],
+            [
+              0.016,
+              17.0
+            ]
+          ],
+          "last_price": 0.0145,
+          "settlement_price": 0.01555574,
+          "min_price": 0.0001,
+          "max_price": 0.046,
+          "open_interest": 29.1,
+          "mark_price": 0.0123,
+          "interest_rate": 0.0,
+          "best_ask_price": 0.0125,
+          "best_bid_price": 0.012,
+          "estimated_delivery_price": 61139.65,
+          "mark_iv": 60.44,
+          "bid_iv": 58.78,
+          "ask_iv": 61.48,
+          "underlying_price": 61125.38,
+          "underlying_index": "BTC-24NOV26",
+          "best_ask_amount": 18.4,
+          "best_bid_amount": 3.6
+        },
+        "usIn": 1795438395209845,
+        "usOut": 1795438395210307,
+        "usDiff": 462,
+        "testnet": false
+      }
+    }
+  }
+}

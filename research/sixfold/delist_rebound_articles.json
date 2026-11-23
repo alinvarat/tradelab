@@ -1,0 +1,158 @@
+{
+  "accepted": [
+    {
+      "day": "2026-05-12",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-cmeth-bltdbc6fb605a3bb8c6/",
+      "symbols": [
+        "CMETH"
+      ]
+    },
+    {
+      "day": "2026-07-09",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+      "symbols": [
+        "ARTY",
+        "CTA",
+        "GTAI",
+        "LBTC",
+        "MBOX",
+        "NAKA",
+        "U"
+      ]
+    },
+    {
+      "day": "2026-07-16",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+      "symbols": [
+        "CBK",
+        "FLIP",
+        "FUEL",
+        "OL",
+        "PAAL",
+        "SAROS",
+        "STREAM"
+      ]
+    },
+    {
+      "day": "2026-07-28",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+      "symbols": [
+        "XTER",
+        "SCA",
+        "TOKEN",
+        "HPOS10I",
+        "PUMPBTC",
+        "AFC",
+        "INTER",
+        "XAVA",
+        "AO"
+      ]
+    },
+    {
+      "day": "2026-08-17",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+      "symbols": [
+        "CAMP",
+        "WHITEWHALE",
+        "CUDIS",
+        "PIRATE",
+        "TAI",
+        "SVL"
+      ]
+    },
+    {
+      "day": "2026-08-20",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-elizaos-prcl-tusd--art2489b2a8c89e/",
+      "symbols": [
+        "ELIZAOS",
+        "PRCL",
+        "TUSD"
+      ]
+    },
+    {
+      "day": "2026-08-28",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-gods-scrt--art74f3fc794bf8/",
+      "symbols": [
+        "GODS",
+        "SCRT"
+      ]
+    },
+    {
+      "day": "2026-09-10",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-l3-vic--art6d24cb99655a/",
+      "symbols": [
+        "L3",
+        "VIC"
+      ]
+    },
+    {
+      "day": "2026-09-17",
+      "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-4-token-s-on-sep-24-2026--art1a1071a0dd4e/",
+      "symbols": [
+        "NEON",
+        "SUNDOG",
+        "ICX",
+        "TAC"
+      ]
+    },
+    {
+      "day": "2026-10-01",
+      "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-2-token-s-on-oct-8-2026--art1b7b7449b6c5/",
+      "symbols": [
+        "SCOR",
+        "AGI"
+      ]
+    },
+    {
+      "day": "2026-10-21",
+      "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-1-token-s-on-oct-28-2026--art0d9083316016/",
+      "symbols": [
+        "HFT"
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "day": "2026-02-06",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-milk-bltefdeac69abd58d66/",
+      "title": "Delisting of MILK",
+      "reason": "no explicit spot USDT pair in accessible article text"
+    },
+    {
+      "day": "2026-03-10",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-solo-blt17135c880c7c9d8c/",
+      "title": "Delisting of SOLO",
+      "reason": "no explicit spot USDT pair in accessible article text"
+    },
+    {
+      "day": "2026-05-11",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-sweat-bltde47b697fbba93b3/",
+      "title": "Delisting of SWEAT",
+      "reason": "no explicit spot USDT pair in accessible article text"
+    },
+    {
+      "day": "2026-06-23",
+      "url": "https://announcements.bybit.com/en-US/article/delisting-of-imu-penguin-spell-bltae9bab723625bd08/",
+      "title": "Delisting of IMU,PENGUIN,SPELL",
+      "reason": "no explicit spot USDT pair in accessible article text"
+    },
+    {
+      "day": "2026-08-31",
+      "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-1-trading-pair-s-on-2026-09-04-08-00-00-utc--artd943dfd207ea/",
+      "title": "Bybit to Delist 1 Trading Pair(s) on 2026-09-04 08:00:00 UTC",
+      "reason": "no explicit spot USDT pair in accessible article text"
+    },
+    {
+      "day": "2026-09-17",
+      "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-3-trading-pair-s-on-sep-24-2026--art93c64e0a0297/",
+      "title": "Bybit to Delist 3 Trading Pair(s) on Sep 24, 2026",
+      "reason": "article lists only USDC pairs"
+    },
+    {
+      "day": "2026-10-15",
+      "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-1-token-s-on-oct-13-2026--art47d51eee7847/",
+      "title": "Bybit to Delist 1 Token(s) on Oct 13, 2026",
+      "reason": "catalog timestamp after effective removal"
+    }
+  ]
+}

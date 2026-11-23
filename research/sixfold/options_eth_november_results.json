@@ -1,0 +1,315 @@
+{
+  "partial_month": true,
+  "input_sha256": "e3776219c401b9383043291288039ea50970bd978e73f907fc8ed052134bbb15",
+  "prior_result_sha256": "8ad8e2dcc88aeed1d755b5495923c9558c9f83df5187a776c65ccd09b38b6af1",
+  "cases": {
+    "3x_base": {
+      "balance": 138.937997656,
+      "fills": [
+        {
+          "entry_day": "2026-11-02",
+          "instrument": "ETH-6NOV26-2100-P",
+          "ending": 138.937997656,
+          "trade_timestamp": 1793614695445,
+          "minimum_premium_with_cost_usd": 8.062002344,
+          "status": "filled_proxy",
+          "spent_usd": 8.062002344,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 2224.18,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 147,
+          "modeled_exit": "expiry",
+          "contract_units": 1
+        },
+        {
+          "entry_day": "2026-11-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-13NOV26-1900-P",
+          "ending": 138.937997656,
+          "month": "2026-11",
+          "starting": 138.937997656
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-20NOV26-1640-P",
+          "ending": 138.937997656,
+          "month": "2026-11",
+          "starting": 138.937997656
+        }
+      ],
+      "random_direction_balances": {
+        "CCC": 147,
+        "CCP": 147,
+        "CPC": 147,
+        "CPP": 147,
+        "PCC": 138.937997656,
+        "PCP": 138.937997656,
+        "PPC": 138.937997656,
+        "PPP": 138.937997656
+      },
+      "carried_start": 4.987590277345,
+      "carried_end": 4.987590277345,
+      "carried_fills": [
+        {
+          "entry_day": "2026-11-02",
+          "status": "minimum_order_over_budget",
+          "instrument": "ETH-6NOV26-2100-P",
+          "ending": 4.987590277345,
+          "trade_timestamp": 1793614695445,
+          "minimum_premium_with_cost_usd": 8.062002344,
+          "month": "2026-11",
+          "starting": 4.987590277345
+        },
+        {
+          "entry_day": "2026-11-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-13NOV26-1900-P",
+          "ending": 4.987590277345,
+          "month": "2026-11",
+          "starting": 4.987590277345
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-20NOV26-1640-P",
+          "ending": 4.987590277345,
+          "month": "2026-11",
+          "starting": 4.987590277345
+        }
+      ]
+    },
+    "3x_stress": {
+      "balance": 137.655406374,
+      "fills": [
+        {
+          "entry_day": "2026-11-02",
+          "instrument": "ETH-6NOV26-2100-P",
+          "ending": 137.655406374,
+          "trade_timestamp": 1793614695445,
+          "minimum_premium_with_cost_usd": 9.344593626,
+          "status": "filled_proxy",
+          "spent_usd": 9.344593626,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 2224.18,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 147,
+          "modeled_exit": "expiry",
+          "contract_units": 1
+        },
+        {
+          "entry_day": "2026-11-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-13NOV26-1900-P",
+          "ending": 137.655406374,
+          "month": "2026-11",
+          "starting": 137.655406374
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-20NOV26-1640-P",
+          "ending": 137.655406374,
+          "month": "2026-11",
+          "starting": 137.655406374
+        }
+      ],
+      "random_direction_balances": {
+        "CCC": 147,
+        "CCP": 147,
+        "CPC": 147,
+        "CPP": 147,
+        "PCC": 137.655406374,
+        "PCP": 137.655406374,
+        "PPC": 137.655406374,
+        "PPP": 137.655406374
+      },
+      "carried_start": 6.530370628641,
+      "carried_end": 6.530370628641,
+      "carried_fills": [
+        {
+          "entry_day": "2026-11-02",
+          "status": "minimum_order_over_budget",
+          "instrument": "ETH-6NOV26-2100-P",
+          "ending": 6.530370628641,
+          "trade_timestamp": 1793614695445,
+          "minimum_premium_with_cost_usd": 9.344593626,
+          "month": "2026-11",
+          "starting": 6.530370628641
+        },
+        {
+          "entry_day": "2026-11-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-13NOV26-1900-P",
+          "ending": 6.530370628641,
+          "month": "2026-11",
+          "starting": 6.530370628641
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-20NOV26-1640-P",
+          "ending": 6.530370628641,
+          "month": "2026-11",
+          "starting": 6.530370628641
+        }
+      ]
+    },
+    "6x_base": {
+      "balance": 138.937997656,
+      "fills": [
+        {
+          "entry_day": "2026-11-02",
+          "instrument": "ETH-6NOV26-2100-P",
+          "ending": 138.937997656,
+          "trade_timestamp": 1793614695445,
+          "minimum_premium_with_cost_usd": 8.062002344,
+          "status": "filled_proxy",
+          "spent_usd": 8.062002344,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 2224.18,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 147,
+          "modeled_exit": "expiry",
+          "contract_units": 1
+        },
+        {
+          "entry_day": "2026-11-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-13NOV26-1900-P",
+          "ending": 138.937997656,
+          "month": "2026-11",
+          "starting": 138.937997656
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-20NOV26-1640-P",
+          "ending": 138.937997656,
+          "month": "2026-11",
+          "starting": 138.937997656
+        }
+      ],
+      "random_direction_balances": {
+        "CCC": 147,
+        "CCP": 147,
+        "CPC": 147,
+        "CPP": 147,
+        "PCC": 138.937997656,
+        "PCP": 138.937997656,
+        "PPC": 138.937997656,
+        "PPP": 138.937997656
+      },
+      "carried_start": 4.987590277345,
+      "carried_end": 4.987590277345,
+      "carried_fills": [
+        {
+          "entry_day": "2026-11-02",
+          "status": "minimum_order_over_budget",
+          "instrument": "ETH-6NOV26-2100-P",
+          "ending": 4.987590277345,
+          "trade_timestamp": 1793614695445,
+          "minimum_premium_with_cost_usd": 8.062002344,
+          "month": "2026-11",
+          "starting": 4.987590277345
+        },
+        {
+          "entry_day": "2026-11-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-13NOV26-1900-P",
+          "ending": 4.987590277345,
+          "month": "2026-11",
+          "starting": 4.987590277345
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-20NOV26-1640-P",
+          "ending": 4.987590277345,
+          "month": "2026-11",
+          "starting": 4.987590277345
+        }
+      ]
+    },
+    "6x_stress": {
+      "balance": 137.655406374,
+      "fills": [
+        {
+          "entry_day": "2026-11-02",
+          "instrument": "ETH-6NOV26-2100-P",
+          "ending": 137.655406374,
+          "trade_timestamp": 1793614695445,
+          "minimum_premium_with_cost_usd": 9.344593626,
+          "status": "filled_proxy",
+          "spent_usd": 9.344593626,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 2224.18,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 147,
+          "modeled_exit": "expiry",
+          "contract_units": 1
+        },
+        {
+          "entry_day": "2026-11-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-13NOV26-1900-P",
+          "ending": 137.655406374,
+          "month": "2026-11",
+          "starting": 137.655406374
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-20NOV26-1640-P",
+          "ending": 137.655406374,
+          "month": "2026-11",
+          "starting": 137.655406374
+        }
+      ],
+      "random_direction_balances": {
+        "CCC": 147,
+        "CCP": 147,
+        "CPC": 147,
+        "CPP": 147,
+        "PCC": 137.655406374,
+        "PCP": 137.655406374,
+        "PPC": 137.655406374,
+        "PPP": 137.655406374
+      },
+      "carried_start": 6.530370628641,
+      "carried_end": 6.530370628641,
+      "carried_fills": [
+        {
+          "entry_day": "2026-11-02",
+          "status": "minimum_order_over_budget",
+          "instrument": "ETH-6NOV26-2100-P",
+          "ending": 6.530370628641,
+          "trade_timestamp": 1793614695445,
+          "minimum_premium_with_cost_usd": 9.344593626,
+          "month": "2026-11",
+          "starting": 6.530370628641
+        },
+        {
+          "entry_day": "2026-11-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-13NOV26-1900-P",
+          "ending": 6.530370628641,
+          "month": "2026-11",
+          "starting": 6.530370628641
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "ETH-20NOV26-1640-P",
+          "ending": 6.530370628641,
+          "month": "2026-11",
+          "starting": 6.530370628641
+        }
+      ]
+    }
+  }
+}

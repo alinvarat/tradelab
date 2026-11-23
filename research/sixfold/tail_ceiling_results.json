@@ -1,0 +1,306 @@
+{
+  "input_sha256": "616f14c043dfd05a65d52221592a946e6f4313dcf4cc882f582ec7e66489eb86",
+  "one_winning_trade_per_month_oracle": true,
+  "cases": {
+    "base": {
+      "unlimited": {
+        "2024-01": null,
+        "2024-02": null,
+        "2024-03": null,
+        "2024-04": null,
+        "2024-05": null,
+        "2024-06": null,
+        "2024-07": null,
+        "2024-08": null,
+        "2024-09": null,
+        "2024-10": null,
+        "2024-11": null,
+        "2024-12": {
+          "ticker": "KXHIGHNY-24DEC10-B50.5",
+          "day": "2024-12-10",
+          "quoted": 0.12,
+          "capacity_proxy": 4002.0,
+          "count": 1065,
+          "fee": 8.44,
+          "multiple": 7.245646258503402
+        },
+        "2025-01": null,
+        "2025-02": null,
+        "2025-03": null,
+        "2025-04": null,
+        "2025-05": {
+          "ticker": "KXHIGHNY-25MAY29-T68",
+          "day": "2025-05-29",
+          "quoted": 0.11,
+          "capacity_proxy": 508.0,
+          "count": 1153,
+          "fee": 8.53,
+          "multiple": 7.844285714285714
+        },
+        "2025-06": {
+          "ticker": "KXHIGHNY-25JUN02-T72",
+          "day": "2025-06-02",
+          "quoted": 0.14,
+          "capacity_proxy": 1497.0,
+          "count": 924,
+          "fee": 8.25,
+          "multiple": 6.286734693877551
+        },
+        "2025-07": null,
+        "2025-08": null,
+        "2025-09": {
+          "ticker": "KXHIGHNY-25SEP25-B77.5",
+          "day": "2025-09-25",
+          "quoted": 0.12,
+          "capacity_proxy": 558.0,
+          "count": 1065,
+          "fee": 8.44,
+          "multiple": 7.245646258503402
+        },
+        "2025-10": null,
+        "2025-11": {
+          "ticker": "KXHIGHNY-25NOV05-B66.5",
+          "day": "2025-11-05",
+          "quoted": 0.06,
+          "capacity_proxy": 743.0,
+          "count": 1971,
+          "fee": 8.99,
+          "multiple": 13.40843537414966
+        },
+        "2025-12": {
+          "ticker": "KXHIGHNY-25DEC02-B39.5",
+          "day": "2025-12-02",
+          "quoted": 0.1,
+          "capacity_proxy": 2056.0,
+          "count": 1257,
+          "fee": 8.62,
+          "multiple": 8.551768707482994
+        }
+      },
+      "volume_capped": {
+        "2024-01": null,
+        "2024-02": null,
+        "2024-03": null,
+        "2024-04": null,
+        "2024-05": null,
+        "2024-06": null,
+        "2024-07": null,
+        "2024-08": null,
+        "2024-09": null,
+        "2024-10": null,
+        "2024-11": null,
+        "2024-12": {
+          "ticker": "KXHIGHNY-24DEC10-B50.5",
+          "day": "2024-12-10",
+          "quoted": 0.12,
+          "capacity_proxy": 4002.0,
+          "count": 1065,
+          "fee": 8.44,
+          "multiple": 7.245646258503402
+        },
+        "2025-01": null,
+        "2025-02": null,
+        "2025-03": null,
+        "2025-04": null,
+        "2025-05": {
+          "ticker": "KXHIGHNY-25MAY29-T68",
+          "day": "2025-05-29",
+          "quoted": 0.11,
+          "capacity_proxy": 508.0,
+          "count": 508,
+          "fee": 3.76,
+          "multiple": 4.015510204081632
+        },
+        "2025-06": {
+          "ticker": "KXHIGHNY-25JUN02-T72",
+          "day": "2025-06-02",
+          "quoted": 0.14,
+          "capacity_proxy": 1497.0,
+          "count": 924,
+          "fee": 8.25,
+          "multiple": 6.286734693877551
+        },
+        "2025-07": null,
+        "2025-08": null,
+        "2025-09": {
+          "ticker": "KXHIGHNY-25SEP25-B77.5",
+          "day": "2025-09-25",
+          "quoted": 0.12,
+          "capacity_proxy": 558.0,
+          "count": 558,
+          "fee": 4.42,
+          "multiple": 4.272380952380952
+        },
+        "2025-10": null,
+        "2025-11": {
+          "ticker": "KXHIGHNY-25NOV05-B66.5",
+          "day": "2025-11-05",
+          "quoted": 0.06,
+          "capacity_proxy": 743.0,
+          "count": 743,
+          "fee": 3.39,
+          "multiple": 5.677551020408163
+        },
+        "2025-12": {
+          "ticker": "KXHIGHNY-25DEC02-B39.5",
+          "day": "2025-12-02",
+          "quoted": 0.1,
+          "capacity_proxy": 2056.0,
+          "count": 1257,
+          "fee": 8.62,
+          "multiple": 8.551768707482994
+        }
+      }
+    },
+    "stress": {
+      "unlimited": {
+        "2024-01": null,
+        "2024-02": null,
+        "2024-03": null,
+        "2024-04": null,
+        "2024-05": null,
+        "2024-06": null,
+        "2024-07": null,
+        "2024-08": null,
+        "2024-09": null,
+        "2024-10": null,
+        "2024-11": null,
+        "2024-12": {
+          "ticker": "KXHIGHNY-24DEC10-B50.5",
+          "day": "2024-12-10",
+          "quoted": 0.12,
+          "capacity_proxy": 4002.0,
+          "count": 990,
+          "fee": 8.35,
+          "multiple": 6.735034013605442
+        },
+        "2025-01": null,
+        "2025-02": null,
+        "2025-03": null,
+        "2025-04": null,
+        "2025-05": {
+          "ticker": "KXHIGHNY-25MAY29-T68",
+          "day": "2025-05-29",
+          "quoted": 0.11,
+          "capacity_proxy": 508.0,
+          "count": 1065,
+          "fee": 8.44,
+          "multiple": 7.245646258503402
+        },
+        "2025-06": {
+          "ticker": "KXHIGHNY-25JUN02-T72",
+          "day": "2025-06-02",
+          "quoted": 0.14,
+          "capacity_proxy": 1497.0,
+          "count": 867,
+          "fee": 8.16,
+          "multiple": 5.898775510204081
+        },
+        "2025-07": null,
+        "2025-08": null,
+        "2025-09": {
+          "ticker": "KXHIGHNY-25SEP25-B77.5",
+          "day": "2025-09-25",
+          "quoted": 0.12,
+          "capacity_proxy": 558.0,
+          "count": 990,
+          "fee": 8.35,
+          "multiple": 6.735034013605442
+        },
+        "2025-10": null,
+        "2025-11": {
+          "ticker": "KXHIGHNY-25NOV05-B66.5",
+          "day": "2025-11-05",
+          "quoted": 0.06,
+          "capacity_proxy": 743.0,
+          "count": 1726,
+          "fee": 8.9,
+          "multiple": 11.741632653061224
+        },
+        "2025-12": {
+          "ticker": "KXHIGHNY-25DEC02-B39.5",
+          "day": "2025-12-02",
+          "quoted": 0.1,
+          "capacity_proxy": 2056.0,
+          "count": 1153,
+          "fee": 8.53,
+          "multiple": 7.844285714285714
+        }
+      },
+      "volume_capped": {
+        "2024-01": null,
+        "2024-02": null,
+        "2024-03": null,
+        "2024-04": null,
+        "2024-05": null,
+        "2024-06": null,
+        "2024-07": null,
+        "2024-08": null,
+        "2024-09": null,
+        "2024-10": null,
+        "2024-11": null,
+        "2024-12": {
+          "ticker": "KXHIGHNY-24DEC10-B50.5",
+          "day": "2024-12-10",
+          "quoted": 0.12,
+          "capacity_proxy": 4002.0,
+          "count": 990,
+          "fee": 8.35,
+          "multiple": 6.735034013605442
+        },
+        "2025-01": null,
+        "2025-02": null,
+        "2025-03": null,
+        "2025-04": null,
+        "2025-05": {
+          "ticker": "KXHIGHNY-25MAY29-T68",
+          "day": "2025-05-29",
+          "quoted": 0.11,
+          "capacity_proxy": 508.0,
+          "count": 508,
+          "fee": 4.03,
+          "multiple": 3.9791156462585033
+        },
+        "2025-06": {
+          "ticker": "KXHIGHNY-25JUN02-T72",
+          "day": "2025-06-02",
+          "quoted": 0.14,
+          "capacity_proxy": 1497.0,
+          "count": 867,
+          "fee": 8.16,
+          "multiple": 5.898775510204081
+        },
+        "2025-07": null,
+        "2025-08": null,
+        "2025-09": {
+          "ticker": "KXHIGHNY-25SEP25-B77.5",
+          "day": "2025-09-25",
+          "quoted": 0.12,
+          "capacity_proxy": 558.0,
+          "count": 558,
+          "fee": 4.71,
+          "multiple": 4.232448979591837
+        },
+        "2025-10": null,
+        "2025-11": {
+          "ticker": "KXHIGHNY-25NOV05-B66.5",
+          "day": "2025-11-05",
+          "quoted": 0.06,
+          "capacity_proxy": 743.0,
+          "count": 743,
+          "fee": 3.83,
+          "multiple": 5.624013605442177
+        },
+        "2025-12": {
+          "ticker": "KXHIGHNY-25DEC02-B39.5",
+          "day": "2025-12-02",
+          "quoted": 0.1,
+          "capacity_proxy": 2056.0,
+          "count": 1153,
+          "fee": 8.53,
+          "multiple": 7.844285714285714
+        }
+      }
+    }
+  }
+}

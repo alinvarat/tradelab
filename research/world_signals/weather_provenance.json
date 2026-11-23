@@ -1,0 +1,25 @@
+{
+  "weather_UNG.json": {
+    "client": "curl",
+    "prior_failures": [
+      "urllib access remained stalled; used HTTP 200 curl snapshot"
+    ],
+    "retrieved_at_utc": "2026-11-23T10:28:27.246571+00:00",
+    "sha256": "317a89d463812415f6cea9d2e2bed5b90f5b88f8d3f35d51c733f74d15942e46",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/UNG?period1=1388534400&period2=1767225600&interval=1d"
+  },
+  "weather_UNL.json": {
+    "client": "core.data.http_get",
+    "prior_failures": [],
+    "retrieved_at_utc": "2026-11-23T10:30:13.527769+00:00",
+    "sha256": "cfdbdfe06b26a5873e9c4138dfdb8908e30f1033a19d5b1e16a5c5129d34952f",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/UNL?period1=1388534400&period2=1767225600&interval=1d"
+  },
+  "weather_noaa_daily.csv": {
+    "client": "core.data.http_get",
+    "prior_failures": [],
+    "retrieved_at_utc": "2026-11-23T10:30:31.493935+00:00",
+    "sha256": "8d3ad5889484c57cdb52dbf5c1bf36cef85c40bfde64a6a3d66be4f569ccfc19",
+    "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=daily-summaries&stations=USW00094728%2CUSW00094846%2CUSW00013874&startDate=2008-12-20&endDate=2025-12-31&dataTypes=TMAX%2CTMIN&units=standard&format=csv&includeAttributes=true&includeStationName=true"
+  }
+}

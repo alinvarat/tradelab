@@ -1,0 +1,7 @@
+# Spot risk diagnostics, locked before computing this diagnostic
+
+The calendar and rolling analyses are already known. Keep both selectors, calendar months, scheduled exits, and friction fixed. This is a descriptive change to exposure/exit, with no independent holdout claim, intended to see whether realistic risk boundaries rescue a single continuous paper account.
+
+- Variant A buys with half current equity. Keep half in cash for the duration of each trade. For a missing bar while invested assume zero proceeds from the half used, retaining cash. A 6× portfolio exit requires prices high enough after costs for equity including cash to reach 6×, with the same buffer on the required asset price.
+- Variant B uses full current equity and a standing sell stop at 75% of the raw entry price. On any bar with opening price below the stop, exit at opening price. If low breaches the stop, fill at stop less 0.35% additional slippage on the sale price on top of the original fixed sale friction. If target and stop are both crossed intraday, apply opening fills first then stop first, because intraday order is unknown. If a bar vanishes before a stop can execute, the standing stop does not guarantee recovery.
+- No re-entry before the next originally scheduled rotation. Pay 0.35% per side in both variants. Use position mark net of estimated exit costs. Record each calendar period's 6× hits, months ≤0.50×, continuous equity ratio and month median. No parameter tuning and no orders.

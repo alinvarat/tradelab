@@ -1,0 +1,493 @@
+{
+  "sessions": 837,
+  "inputs": {
+    "bitx_fomc_inputs.json.gz": "7b958a09ae83e5dc97144cf02caeefd7a0785e28c3501803276c980288a6db81",
+    "bitx_fomc_2026_inputs.json.gz": "0fb81cd98f3758e5ac4d0977d3b2f9c9eaf085f33adf7b21398bdf11821f14ff"
+  },
+  "cases": {
+    "base": {
+      "2023-07": {
+        "intraday_after_cost": 1.1765788531105585,
+        "overnight_after_cost": 1.0509279286252564,
+        "combined_after_cost_bound": 1.2945085662415552,
+        "both_legs_zero_cost_bound": 1.357817298932683
+      },
+      "2023-08": {
+        "intraday_after_cost": 1.2632828361239876,
+        "overnight_after_cost": 1.0396140131971576,
+        "combined_after_cost_bound": 1.3469829867627456,
+        "both_legs_zero_cost_bound": 1.4096122360581067
+      },
+      "2023-09": {
+        "intraday_after_cost": 1.0727850367468,
+        "overnight_after_cost": 1.2988439885674932,
+        "combined_after_cost_bound": 1.4256535596281175,
+        "both_legs_zero_cost_bound": 1.497032767722465
+      },
+      "2023-10": {
+        "intraday_after_cost": 1.1657574029482596,
+        "overnight_after_cost": 1.8733385148405115,
+        "combined_after_cost_bound": 2.2729833768979137,
+        "both_legs_zero_cost_bound": 2.4014995293477357
+      },
+      "2023-11": {
+        "intraday_after_cost": 1.3413168614689617,
+        "overnight_after_cost": 1.3488835714137566,
+        "combined_after_cost_bound": 1.9112328957628628,
+        "both_legs_zero_cost_bound": 1.999203043167947
+      },
+      "2023-12": {
+        "intraday_after_cost": 1.2613625044151269,
+        "overnight_after_cost": 1.4787872099281834,
+        "combined_after_cost_bound": 1.9497358169061878,
+        "both_legs_zero_cost_bound": 2.0599753144885997
+      },
+      "2024-01": {
+        "intraday_after_cost": 1.3891872285199225,
+        "overnight_after_cost": 1.2636240952668667,
+        "combined_after_cost_bound": 1.8422183342500653,
+        "both_legs_zero_cost_bound": 1.9350784573622914
+      },
+      "2024-02": {
+        "intraday_after_cost": 1.4234943545568441,
+        "overnight_after_cost": 1.6414219677346542,
+        "combined_after_cost_bound": 2.552155589154863,
+        "both_legs_zero_cost_bound": 2.6703353978872753
+      },
+      "2024-03": {
+        "intraday_after_cost": 1.3961187680839975,
+        "overnight_after_cost": 1.8048491604907797,
+        "combined_after_cost_bound": 2.6622542157121964,
+        "both_legs_zero_cost_bound": 2.792004411200991
+      },
+      "2024-04": {
+        "intraday_after_cost": 1.2669186347810497,
+        "overnight_after_cost": 1.3552425097511078,
+        "combined_after_cost_bound": 1.7716051464683857,
+        "both_legs_zero_cost_bound": 1.8531485136969088
+      },
+      "2024-05": {
+        "intraday_after_cost": 1.3362337092223038,
+        "overnight_after_cost": 1.47609901729235,
+        "combined_after_cost_bound": 2.0839349622414103,
+        "both_legs_zero_cost_bound": 2.190753425491677
+      },
+      "2024-06": {
+        "intraday_after_cost": 1.0945586039482347,
+        "overnight_after_cost": 1.1952661895600216,
+        "combined_after_cost_bound": 1.34087584517267,
+        "both_legs_zero_cost_bound": 1.4166899519919096
+      },
+      "2024-07": {
+        "intraday_after_cost": 1.2602859672741193,
+        "overnight_after_cost": 1.5061417629864997,
+        "combined_after_cost_bound": 2.031573322140073,
+        "both_legs_zero_cost_bound": 2.1464399724793615
+      },
+      "2024-08": {
+        "intraday_after_cost": 1.6857484646861562,
+        "overnight_after_cost": 1.4823146327284986,
+        "combined_after_cost_bound": 2.624660020481417,
+        "both_legs_zero_cost_bound": 2.7730602291012856
+      },
+      "2024-09": {
+        "intraday_after_cost": 1.3208089453356946,
+        "overnight_after_cost": 1.3201239791319832,
+        "combined_after_cost_bound": 1.8214352315898945,
+        "both_legs_zero_cost_bound": 1.9088273364623978
+      },
+      "2024-10": {
+        "intraday_after_cost": 1.2550107868589189,
+        "overnight_after_cost": 1.337490767286454,
+        "combined_after_cost_bound": 1.8104923621880193,
+        "both_legs_zero_cost_bound": 1.876147255002108
+      },
+      "2024-11": {
+        "intraday_after_cost": 1.5219167605179242,
+        "overnight_after_cost": 1.7256632307517896,
+        "combined_after_cost_bound": 2.7900304254584034,
+        "both_legs_zero_cost_bound": 2.932766659890825
+      },
+      "2024-12": {
+        "intraday_after_cost": 1.3504856193037948,
+        "overnight_after_cost": 1.4310621726318828,
+        "combined_after_cost_bound": 2.042016496465176,
+        "both_legs_zero_cost_bound": 2.146713144673648
+      },
+      "2025-01": {
+        "intraday_after_cost": 1.3154808659876323,
+        "overnight_after_cost": 1.2719903939019321,
+        "combined_after_cost_bound": 1.786019060757465,
+        "both_legs_zero_cost_bound": 1.8678451093019022
+      },
+      "2025-02": {
+        "intraday_after_cost": 1.2892302096190928,
+        "overnight_after_cost": 1.2559201220960872,
+        "combined_after_cost_bound": 1.6518796381126406,
+        "both_legs_zero_cost_bound": 1.7465344305838688
+      },
+      "2025-03": {
+        "intraday_after_cost": 1.296834543957666,
+        "overnight_after_cost": 1.3498570775636929,
+        "combined_after_cost_bound": 1.8216320501488166,
+        "both_legs_zero_cost_bound": 1.8968433581748487
+      },
+      "2025-04": {
+        "intraday_after_cost": 1.475855806355845,
+        "overnight_after_cost": 1.353025629594131,
+        "combined_after_cost_bound": 2.1465687802190607,
+        "both_legs_zero_cost_bound": 2.245370957823712
+      },
+      "2025-05": {
+        "intraday_after_cost": 1.2342496813882746,
+        "overnight_after_cost": 1.3076416314261932,
+        "combined_after_cost_bound": 1.6874685622134382,
+        "both_legs_zero_cost_bound": 1.7832099995865924
+      },
+      "2025-06": {
+        "intraday_after_cost": 1.1089241831137877,
+        "overnight_after_cost": 1.3149981537319104,
+        "combined_after_cost_bound": 1.5438998249796325,
+        "both_legs_zero_cost_bound": 1.6140255319395784
+      },
+      "2025-07": {
+        "intraday_after_cost": 1.1375672455246204,
+        "overnight_after_cost": 1.354278385238548,
+        "combined_after_cost_bound": 1.6158062240583375,
+        "both_legs_zero_cost_bound": 1.711913439237214
+      },
+      "2025-08": {
+        "intraday_after_cost": 1.2132960184186288,
+        "overnight_after_cost": 1.1024473062971292,
+        "combined_after_cost_bound": 1.3944909396200498,
+        "both_legs_zero_cost_bound": 1.4659881716884657
+      },
+      "2025-09": {
+        "intraday_after_cost": 1.1413020737788122,
+        "overnight_after_cost": 1.242625598534916,
+        "combined_after_cost_bound": 1.483757121713452,
+        "both_legs_zero_cost_bound": 1.5666028902338902
+      },
+      "2025-10": {
+        "intraday_after_cost": 1.224539750530493,
+        "overnight_after_cost": 1.3605226003660145,
+        "combined_after_cost_bound": 1.7490227637437958,
+        "both_legs_zero_cost_bound": 1.8455728169208918
+      },
+      "2025-11": {
+        "intraday_after_cost": 1.2604516171086864,
+        "overnight_after_cost": 1.2776192687392258,
+        "combined_after_cost_bound": 1.6560225654950829,
+        "both_legs_zero_cost_bound": 1.7271430524299236
+      },
+      "2025-12": {
+        "intraday_after_cost": 1.1682382871233499,
+        "overnight_after_cost": 1.4727995599301378,
+        "combined_after_cost_bound": 1.7806479510285176,
+        "both_legs_zero_cost_bound": 1.886045741162839
+      },
+      "2026-01": {
+        "intraday_after_cost": 1.2310659406222815,
+        "overnight_after_cost": 1.1252358135669414,
+        "combined_after_cost_bound": 1.4458209667625113,
+        "both_legs_zero_cost_bound": 1.5036586070672588
+      },
+      "2026-02": {
+        "intraday_after_cost": 1.363645926121373,
+        "overnight_after_cost": 1.2384117149700868,
+        "combined_after_cost_bound": 1.7269133684670466,
+        "both_legs_zero_cost_bound": 1.7931820968537857
+      },
+      "2026-03": {
+        "intraday_after_cost": 1.268843602350647,
+        "overnight_after_cost": 1.5240138159464396,
+        "combined_after_cost_bound": 2.0126525777686766,
+        "both_legs_zero_cost_bound": 2.137108329713031
+      },
+      "2026-04": {
+        "intraday_after_cost": 1.225487917565647,
+        "overnight_after_cost": 1.390493764206367,
+        "combined_after_cost_bound": 1.8179599971880287,
+        "both_legs_zero_cost_bound": 1.9165105658677537
+      },
+      "2026-05": {
+        "intraday_after_cost": 1.1172046722302948,
+        "overnight_after_cost": 1.0923713465264304,
+        "combined_after_cost_bound": 1.2732453192707691,
+        "both_legs_zero_cost_bound": 1.3318502013170102
+      },
+      "2026-06": {
+        "intraday_after_cost": 1.0927825948538392,
+        "overnight_after_cost": 1.3478190070647305,
+        "combined_after_cost_bound": 1.5054305653234108,
+        "both_legs_zero_cost_bound": 1.578507937425885
+      },
+      "2026-07": {
+        "intraday_after_cost": 1.2698208778279898,
+        "overnight_after_cost": 1.2665423673360565,
+        "combined_after_cost_bound": 1.6941467278260962,
+        "both_legs_zero_cost_bound": 1.788289008478003
+      },
+      "2026-08": {
+        "intraday_after_cost": 1.2776086197515282,
+        "overnight_after_cost": 1.3702244372250867,
+        "combined_after_cost_bound": 1.8665587274267992,
+        "both_legs_zero_cost_bound": 1.9721333905527902
+      },
+      "2026-09": {
+        "intraday_after_cost": 1.2732173465638952,
+        "overnight_after_cost": 1.266581595158269,
+        "combined_after_cost_bound": 1.700261188896181,
+        "both_legs_zero_cost_bound": 1.7868754967972567
+      },
+      "2026-10": {
+        "intraday_after_cost": 1.1773708404568408,
+        "overnight_after_cost": 1.163212750558017,
+        "combined_after_cost_bound": 1.407960434604519,
+        "both_legs_zero_cost_bound": 1.4986017445619195
+      }
+    },
+    "stress": {
+      "2023-07": {
+        "intraday_after_cost": 1.139289122103561,
+        "overnight_after_cost": 1.0166852716960382,
+        "combined_after_cost_bound": 1.237660036751368,
+        "both_legs_zero_cost_bound": 1.357817298932683
+      },
+      "2023-08": {
+        "intraday_after_cost": 1.2303017373788097,
+        "overnight_after_cost": 1.0209137271631568,
+        "combined_after_cost_bound": 1.2981726569800098,
+        "both_legs_zero_cost_bound": 1.4096122360581067
+      },
+      "2023-09": {
+        "intraday_after_cost": 1.0557957186472455,
+        "overnight_after_cost": 1.2517207980069742,
+        "combined_after_cost_bound": 1.3697520849450597,
+        "both_legs_zero_cost_bound": 1.497032767722465
+      },
+      "2023-10": {
+        "intraday_after_cost": 1.1200467479946827,
+        "overnight_after_cost": 1.773085659199135,
+        "combined_after_cost_bound": 2.1584367479444535,
+        "both_legs_zero_cost_bound": 2.4014995293477357
+      },
+      "2023-11": {
+        "intraday_after_cost": 1.2840966290014222,
+        "overnight_after_cost": 1.2946658517072593,
+        "combined_after_cost_bound": 1.8271326364697833,
+        "both_legs_zero_cost_bound": 1.999203043167947
+      },
+      "2023-12": {
+        "intraday_after_cost": 1.2119030662293768,
+        "overnight_after_cost": 1.3996490085263589,
+        "combined_after_cost_bound": 1.845394512949304,
+        "both_legs_zero_cost_bound": 2.0599753144885997
+      },
+      "2024-01": {
+        "intraday_after_cost": 1.3154648096904717,
+        "overnight_after_cost": 1.2205645161823833,
+        "combined_after_cost_bound": 1.7652550358316612,
+        "both_legs_zero_cost_bound": 1.9350784573622914
+      },
+      "2024-02": {
+        "intraday_after_cost": 1.349293281114692,
+        "overnight_after_cost": 1.5382958476991246,
+        "combined_after_cost_bound": 2.4520827067278175,
+        "both_legs_zero_cost_bound": 2.6703353978872753
+      },
+      "2024-03": {
+        "intraday_after_cost": 1.3367595856484489,
+        "overnight_after_cost": 1.7168243763718867,
+        "combined_after_cost_bound": 2.5451066559658866,
+        "both_legs_zero_cost_bound": 2.792004411200991
+      },
+      "2024-04": {
+        "intraday_after_cost": 1.2116374590094299,
+        "overnight_after_cost": 1.3151884650583978,
+        "combined_after_cost_bound": 1.7027233091449878,
+        "both_legs_zero_cost_bound": 1.8531485136969088
+      },
+      "2024-05": {
+        "intraday_after_cost": 1.2774352228259624,
+        "overnight_after_cost": 1.4016861916906307,
+        "combined_after_cost_bound": 1.9999600763573633,
+        "both_legs_zero_cost_bound": 2.190753425491677
+      },
+      "2024-06": {
+        "intraday_after_cost": 1.068532736692834,
+        "overnight_after_cost": 1.146279221564423,
+        "combined_after_cost_bound": 1.2747657079795276,
+        "both_legs_zero_cost_bound": 1.4166899519919096
+      },
+      "2024-07": {
+        "intraday_after_cost": 1.2024228908683474,
+        "overnight_after_cost": 1.4216424879945289,
+        "combined_after_cost_bound": 1.9308084362481837,
+        "both_legs_zero_cost_bound": 2.1464399724793615
+      },
+      "2024-08": {
+        "intraday_after_cost": 1.6133617981106647,
+        "overnight_after_cost": 1.4075103207835247,
+        "combined_after_cost_bound": 2.4922077849123765,
+        "both_legs_zero_cost_bound": 2.7730602291012856
+      },
+      "2024-09": {
+        "intraday_after_cost": 1.2663889076512342,
+        "overnight_after_cost": 1.2736848605480895,
+        "combined_after_cost_bound": 1.7412863519835071,
+        "both_legs_zero_cost_bound": 1.9088273364623978
+      },
+      "2024-10": {
+        "intraday_after_cost": 1.188743998933665,
+        "overnight_after_cost": 1.2735858224542875,
+        "combined_after_cost_bound": 1.7569834577158536,
+        "both_legs_zero_cost_bound": 1.876147255002108
+      },
+      "2024-11": {
+        "intraday_after_cost": 1.4396629837189827,
+        "overnight_after_cost": 1.6446120315264596,
+        "combined_after_cost_bound": 2.6844016517479705,
+        "both_legs_zero_cost_bound": 2.932766659890825
+      },
+      "2024-12": {
+        "intraday_after_cost": 1.2910600040337652,
+        "overnight_after_cost": 1.3612313482379241,
+        "combined_after_cost_bound": 1.9424247603781062,
+        "both_legs_zero_cost_bound": 2.146713144673648
+      },
+      "2025-01": {
+        "intraday_after_cost": 1.2444268776913678,
+        "overnight_after_cost": 1.2126286295310826,
+        "combined_after_cost_bound": 1.7278759134892887,
+        "both_legs_zero_cost_bound": 1.8678451093019022
+      },
+      "2025-02": {
+        "intraday_after_cost": 1.254071222435702,
+        "overnight_after_cost": 1.2040062684615207,
+        "combined_after_cost_bound": 1.570738614147955,
+        "both_legs_zero_cost_bound": 1.7465344305838688
+      },
+      "2025-03": {
+        "intraday_after_cost": 1.2363868778269584,
+        "overnight_after_cost": 1.3165285075770568,
+        "combined_after_cost_bound": 1.7502038148348986,
+        "both_legs_zero_cost_bound": 1.8968433581748487
+      },
+      "2025-04": {
+        "intraday_after_cost": 1.3974575140316303,
+        "overnight_after_cost": 1.2917713216740172,
+        "combined_after_cost_bound": 2.0551186123816647,
+        "both_legs_zero_cost_bound": 2.245370957823712
+      },
+      "2025-05": {
+        "intraday_after_cost": 1.1853129469392252,
+        "overnight_after_cost": 1.247607668083289,
+        "combined_after_cost_bound": 1.6060403404250547,
+        "both_legs_zero_cost_bound": 1.7832099995865924
+      },
+      "2025-06": {
+        "intraday_after_cost": 1.0734077808691291,
+        "overnight_after_cost": 1.250864024890075,
+        "combined_after_cost_bound": 1.486917317075817,
+        "both_legs_zero_cost_bound": 1.6140255319395784
+      },
+      "2025-07": {
+        "intraday_after_cost": 1.1057003778064833,
+        "overnight_after_cost": 1.2857884234779087,
+        "combined_after_cost_bound": 1.535088690346373,
+        "both_legs_zero_cost_bound": 1.711913439237214
+      },
+      "2025-08": {
+        "intraday_after_cost": 1.1555656622295973,
+        "overnight_after_cost": 1.072016104826873,
+        "combined_after_cost_bound": 1.3354287582332665,
+        "both_legs_zero_cost_bound": 1.4659881716884657
+      },
+      "2025-09": {
+        "intraday_after_cost": 1.1013931115271447,
+        "overnight_after_cost": 1.1855372503024852,
+        "combined_after_cost_bound": 1.4113924038285626,
+        "both_legs_zero_cost_bound": 1.5666028902338902
+      },
+      "2025-10": {
+        "intraday_after_cost": 1.1672656629038043,
+        "overnight_after_cost": 1.300655326357417,
+        "combined_after_cost_bound": 1.663720703844389,
+        "both_legs_zero_cost_bound": 1.8455728169208918
+      },
+      "2025-11": {
+        "intraday_after_cost": 1.2226173697912832,
+        "overnight_after_cost": 1.2336754561104957,
+        "combined_after_cost_bound": 1.591088063775224,
+        "both_legs_zero_cost_bound": 1.7271430524299236
+      },
+      "2025-12": {
+        "intraday_after_cost": 1.1349807755294825,
+        "overnight_after_cost": 1.3970122266775657,
+        "combined_after_cost_bound": 1.6890228810247274,
+        "both_legs_zero_cost_bound": 1.886045741162839
+      },
+      "2026-01": {
+        "intraday_after_cost": 1.176895166854864,
+        "overnight_after_cost": 1.0935302194052094,
+        "combined_after_cost_bound": 1.3980743155738686,
+        "both_legs_zero_cost_bound": 1.5036586070672588
+      },
+      "2026-02": {
+        "intraday_after_cost": 1.3167432200213445,
+        "overnight_after_cost": 1.2108991779928895,
+        "combined_after_cost_bound": 1.6717467057647595,
+        "both_legs_zero_cost_bound": 1.7931820968537857
+      },
+      "2026-03": {
+        "intraday_after_cost": 1.2161405948937039,
+        "overnight_after_cost": 1.4537251443974646,
+        "combined_after_cost_bound": 1.9027476106330434,
+        "both_legs_zero_cost_bound": 2.137108329713031
+      },
+      "2026-04": {
+        "intraday_after_cost": 1.1629649886367899,
+        "overnight_after_cost": 1.3358294299555167,
+        "combined_after_cost_bound": 1.7309132103383662,
+        "both_legs_zero_cost_bound": 1.9165105658677537
+      },
+      "2026-05": {
+        "intraday_after_cost": 1.068964355886262,
+        "overnight_after_cost": 1.0607327679820089,
+        "combined_after_cost_bound": 1.2228419934666028,
+        "both_legs_zero_cost_bound": 1.3318502013170102
+      },
+      "2026-06": {
+        "intraday_after_cost": 1.0510090938329797,
+        "overnight_after_cost": 1.314540757942719,
+        "combined_after_cost_bound": 1.4418327285193366,
+        "both_legs_zero_cost_bound": 1.578507937425885
+      },
+      "2026-07": {
+        "intraday_after_cost": 1.207890102067162,
+        "overnight_after_cost": 1.2081107025711597,
+        "combined_after_cost_bound": 1.6134138639198494,
+        "both_legs_zero_cost_bound": 1.788289008478003
+      },
+      "2026-08": {
+        "intraday_after_cost": 1.2073455683663055,
+        "overnight_after_cost": 1.3098193042262158,
+        "combined_after_cost_bound": 1.7997469497883625,
+        "both_legs_zero_cost_bound": 1.9721333905527902
+      },
+      "2026-09": {
+        "intraday_after_cost": 1.2156139813018905,
+        "overnight_after_cost": 1.2137249131267658,
+        "combined_after_cost_bound": 1.625444348327383,
+        "both_legs_zero_cost_bound": 1.7868754967972567
+      },
+      "2026-10": {
+        "intraday_after_cost": 1.1336006332521846,
+        "overnight_after_cost": 1.1262794370732248,
+        "combined_after_cost_bound": 1.341443042046857,
+        "both_legs_zero_cost_bound": 1.4986017445619195
+      }
+    }
+  }
+}

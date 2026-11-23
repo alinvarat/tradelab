@@ -1,0 +1,2 @@
+# July–September 2026 transfer
+Freeze the four-hour rule, costs and 60-pair prior-month selector already used on October. Score consecutive complete UTC months July, August, September with prior warmup defined independently for each. Use the three-month chained wallet and list each month separately. Matching random-date comparisons remain per month. This is retrospective transfer to new hourly snapshots; the prior daily archive was used for other strategies.

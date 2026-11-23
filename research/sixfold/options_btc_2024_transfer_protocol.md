@@ -1,0 +1,2 @@
+# Further fixed BTC direction transfers to 2024
+Score the original trailing seven-day BTC direction and the prior Friday VIX direction without tuning, on the 2024 weekly tape previously acquired for the weekend rule. Compare 500 identically eligible random directions by rule and 3×/6× objective with the same half-wallet cap, exit and costs. Start 147 USD once per case, no deposits, and require original start capital at month open for funded hits. This is a different time slice for these previously fixed signals, not newly acquired market data for the overall project.

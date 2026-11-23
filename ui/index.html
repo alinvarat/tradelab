@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TradeLab</title>
+<meta name="description" content="Paper-trading simulator for global markets with charts, analysis, news, backtests and a self-reviewing auto trader.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Saira+Condensed:wght@800&display=swap">
+<link rel="stylesheet" href="app.css">
+<script src="vendor/lightweight-charts.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <span class="brand">TradeLab</span>
+    <nav class="tabs" aria-label="Views">
+      <a href="#auto" data-view="auto">Auto trader</a>
+      <a href="#markets" data-view="markets">Markets</a>
+      <a href="#chart" data-view="chart">Chart and analysis</a>
+      <a href="#portfolio" data-view="portfolio">Portfolio</a>
+      <a href="#news" data-view="news">News</a>
+      <a href="#screener" data-view="screener">Screener</a>
+      <a href="#backtest" data-view="backtest">Backtest</a>
+      <a href="#calendar" data-view="calendar">Calendar and alerts</a>
+      <a href="#tools" data-view="tools">Risk tools</a>
+    </nav>
+    <span class="sim-flag" id="simflag">Simulated money</span>
+  </div>
+</header>
+<noscript><p>TradeLab needs JavaScript to load market data.</p></noscript>
+<main>
+
+<!-- AUTO -->
+<section class="view" id="v-auto" hidden>
+  <div class="view-head">
+    <div><h1>Auto trader</h1><p>5,000 THB of simulated money in a monthly momentum portfolio of ten global assets. It relearns daily and reviews its losing months.</p></div>
+    <div class="row"><button class="sm" data-auto="learn">Learn now</button><button class="sm" data-auto="pause" id="auto-pause">Pause</button><button class="sm" data-auto="reset" id="auto-reset">Restart</button></div>
+  </div>
+  <div id="auto-figs"></div>
+  <div class="grid g-2">
+    <div class="panel"><h2>Current model</h2><div id="auto-model"></div>
+      <p class="note">Each month it holds the assets with the strongest recent return, only if they beat cash; otherwise it holds cash. Costs 0.10% fee and 0.05% slippage per side. Past results do not predict future returns.</p></div>
+    <div class="panel"><h2>This month's targets</h2><div id="auto-targets"></div></div>
+  </div>
+  <div class="panel"><h2>Equity</h2><div class="chart-box" id="c-auto" style="height: 220px"></div></div>
+  <div class="grid g-2">
+    <div class="panel"><h2>Lessons from mistakes</h2><div id="auto-lessons"></div></div>
+    <div class="panel"><h2>Activity</h2><div id="auto-log"></div></div>
+  </div>
+  <div class="grid g-2">
+    <div class="panel"><h2>Monthly results</h2><div id="auto-months"></div></div>
+    <div class="panel"><h2>Open positions</h2><div id="auto-pos"></div></div>
+  </div>
+  <div class="panel"><h2>Settings tested, best train first</h2><div id="auto-grid"></div></div>
+  <div class="panel"><div class="row spread"><h2>Hunter: 20x crypto trend, 6x monthly target</h2><button class="sm" id="hunt-reset">Restart hunter</button></div>
+    <p class="note">A separate 5,000 THB paper account. Backtest 2023-2026: a 6x month in about 1 of 10 months, the account wiped in about 1 of 2 months. Shown so the gamble can be judged on real forward results.</p>
+    <div id="hunt-figs"></div>
+    <div class="grid g-2"><div><h3>Positions</h3><div id="hunt-pos"></div><h3 style="margin-top: var(--space-md)">Months</h3><div id="hunt-months"></div></div><div><h3>Activity</h3><div id="hunt-log"></div></div></div>
+  </div>
+</section>
+
+<!-- MARKETS -->
+<section class="view" id="v-markets" hidden>
+  <div class="view-head">
+    <div><h1>Markets</h1><p>Global indices, rates, commodities, crypto and your watchlist.</p></div>
+    <button class="sm" data-refresh="markets">Refresh</button>
+  </div>
+  <div class="grid g-chart">
+    <div>
+      <div class="panel">
+        <div class="row spread"><h2>Watchlist</h2>
+          <form class="row" id="watch-add"><label class="visually-hidden" for="watch-sym">Add symbol</label><input id="watch-sym" placeholder="Add symbol, e.g. AMD" autocomplete="off"><button class="sm">Add</button></form>
+        </div>
+        <div id="watchlist"></div>
+      </div>
+      <div class="panel"><h2>Global overview</h2><div id="overview"></div></div>
+    </div>
+    <aside>
+      <div class="panel"><h2>Crypto fear and greed</h2><div id="fng"></div></div>
+      <div class="panel"><h2>Top headlines</h2><div id="mk-news"></div></div>
+    </aside>
+  </div>
+</section>
+
+<!-- CHART -->
+<section class="view" id="v-chart" hidden>
+  <div class="row spread" style="margin-bottom: var(--space-sm)">
+    <div class="search" id="chart-search"><label class="visually-hidden" for="sym-input">Symbol</label><input id="sym-input" placeholder="Search symbol or company" autocomplete="off"><div class="suggest" hidden></div></div>
+    <div class="row">
+      <div class="seg" id="ranges" role="group" aria-label="Range"></div>
+      <div class="seg" id="overlays" role="group" aria-label="Overlays"></div>
+    </div>
+  </div>
+  <div class="quote-head" id="qhead"></div>
+  <div class="grid g-chart">
+    <div>
+      <div class="chart-box" id="c-main"><div class="chart-legend" id="lg-main"></div></div>
+      <div class="chart-sub" id="c-rsi"><div class="chart-legend"><span><i class="k6"></i>RSI 14</span><span>30 / 70 bands</span></div></div>
+      <div class="chart-sub" id="c-macd"><div class="chart-legend"><span><i class="k1"></i>MACD</span><span><i class="k2"></i>Signal</span><span>Histogram</span></div></div>
+      <div class="grid g-2" style="margin-top: var(--space-lg)">
+        <div class="panel"><h2>Technical signals</h2><div id="signals"></div></div>
+        <div class="panel"><h2>Key levels</h2><div id="levels"></div></div>
+        <div class="panel"><h2>Performance and risk</h2><div id="perf"></div></div>
+        <div class="panel"><h2>Recent events</h2><div id="events"></div></div>
+      </div>
+      <div class="panel"><div class="row spread"><h2>AI analyst</h2><span class="small muted">Runs Claude Sonnet once per press; logged to data/ai_log.jsonl</span></div>
+        <form id="ai-form" class="row"><label class="visually-hidden" for="ai-q">Question</label><input id="ai-q" style="flex:1" placeholder="Optional question, e.g. Is a pullback entry reasonable here?"><button class="primary">Analyze</button></form>
+        <div id="ai-out" class="ai-out" style="margin-top: var(--space-sm)"></div>
+      </div>
+      <div class="panel"><h2>News for this symbol</h2><div id="sym-news"></div></div>
+    </div>
+    <aside>
+      <div class="ticket" id="ticket"></div>
+      <div class="panel"><h2>Technical rating</h2><div id="rating"></div></div>
+      <div class="panel"><h2>Position here</h2><div id="pos-here"></div></div>
+    </aside>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="view" id="v-portfolio" hidden>
+  <div class="view-head"><div><h1>Portfolio</h1><p>Paper account in USD. Fills at bid and ask with fees and slippage.</p></div><button class="sm" data-refresh="portfolio">Refresh</button></div>
+  <div id="acct-figs"></div>
+  <div class="panel"><h2>Equity curve</h2><div class="chart-box" id="c-equity" style="height: 260px"></div></div>
+  <div class="panel"><h2>Open positions</h2><div id="positions"></div></div>
+  <div class="grid g-2">
+    <div class="panel"><h2>Orders</h2><div id="orders"></div></div>
+    <div class="panel"><h2>Allocation</h2><div id="alloc"></div></div>
+  </div>
+  <div class="panel"><h2>Trade history</h2><div id="trades"></div></div>
+  <div class="panel"><h2>Account settings</h2>
+    <form id="reset-form" class="form-grid">
+      <label class="f">Starting balance (USD)<input name="balance" type="number" step="any" min="100" value="100000"></label>
+      <label class="f">Leverage<input name="leverage" type="number" step="any" min="1" max="100" value="1"></label>
+      <label class="f">Fee per side (%)<input name="fee_pct" type="number" step="any" min="0" value="0.05"></label>
+      <label class="f">Minimum fee (USD)<input name="min_fee" type="number" step="any" min="0" value="0"></label>
+      <label class="f">Slippage per side (%)<input name="slippage_pct" type="number" step="any" min="0" value="0.02"></label>
+      <label class="check"><input name="allow_short" type="checkbox" checked>Allow short selling</label>
+      <button class="sell" type="submit">Reset account</button>
+    </form>
+    <p class="note">Reset erases positions, orders and history and starts again with these settings.</p>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="view" id="v-news" hidden>
+  <div class="view-head"><div><h1>News</h1><p>CNBC, MarketWatch, Yahoo Finance, CoinDesk and Google News, with a headline sentiment score.</p></div>
+    <div class="row"><div class="seg" id="news-filter" role="group" aria-label="Sentiment filter"></div><button class="sm" data-refresh="news">Refresh</button></div></div>
+  <div id="news-sum"></div>
+  <div id="news-list"></div>
+  <p class="note">Sentiment is a word-list score of each headline from -1 to +1. It misreads sarcasm and context; read the article.</p>
+</section>
+
+<!-- SCREENER -->
+<section class="view" id="v-screener" hidden>
+  <div class="view-head"><div><h1>Screener</h1><p>Every symbol scored on ten daily indicators. Click a row to open its chart.</p></div>
+    <div class="row"><div class="seg" id="scr-universe" role="group" aria-label="Universe"></div><select id="scr-filter" aria-label="Filter"><option value="">All ratings</option><option>Strong buy</option><option>Buy</option><option>Neutral</option><option>Sell</option><option>Strong sell</option><option value="above200">Above SMA200</option><option value="oversold">RSI under 30</option><option value="overbought">RSI over 70</option></select><button class="sm primary" id="scr-run">Run scan</button></div></div>
+  <div id="screener"></div>
+  <div class="panel"><div class="row spread"><h2>News shocks, last two sessions</h2><button class="sm" id="shock-run">Scan 104 large caps</button></div>
+    <div id="shocks"><div class="empty">Finds stocks that gapped 3% or more at the open on at least 1.5 times normal volume, with their headlines.</div></div>
+    <p class="note">Research on 2010 to 2026 (research/METHODS.md): after a news gap down, large caps beat random-day entries by about 3% over the next 60 days, but as a portfolio this did not reliably beat holding SPY and had deeper drawdowns. Selling after bad news stopped working after 2018.</p></div>
+</section>
+
+<!-- BACKTEST -->
+<section class="view" id="v-backtest" hidden>
+  <div class="view-head"><div><h1>Backtest</h1><p>Signal at the close, fill at the next open, fees and slippage on both sides.</p></div></div>
+  <form id="bt-form" class="form-grid well">
+    <label class="f">Symbol<input name="symbol" value="SPY" required></label>
+    <label class="f">Strategy<select name="strategy" id="bt-strat"></select></label>
+    <label class="f">History<select name="range"><option value="1y">1 year</option><option value="2y">2 years</option><option value="5y" selected>5 years</option><option value="10y">10 years</option><option value="max">Max</option></select></label>
+    <label class="f">Bar size<select name="interval"><option value="1d">Daily</option><option value="1wk">Weekly</option></select></label>
+    <label class="f">Capital<input name="capital" type="number" value="10000" step="any"></label>
+    <label class="f">Fee per side (%)<input name="fee_pct" type="number" value="0.05" step="any"></label>
+    <label class="f">Slippage per side (%)<input name="slip_pct" type="number" value="0.02" step="any"></label>
+    <label class="f">Position size (% equity)<input name="position_pct" type="number" value="100" step="any"></label>
+    <label class="f">Stop (x ATR, 0 = none)<input name="stop_atr" type="number" value="0" step="any"></label>
+    <label class="check"><input name="allow_short" type="checkbox">Allow shorts</label>
+    <div id="bt-params" class="form-grid" style="grid-column: 1 / -1"></div>
+    <button class="primary">Run backtest</button>
+  </form>
+  <div id="bt-out" style="margin-top: var(--space-lg)"></div>
+</section>
+
+<!-- CALENDAR -->
+<section class="view" id="v-calendar" hidden>
+  <div class="view-head"><div><h1>Calendar and alerts</h1><p>US macro releases and your price alerts.</p></div></div>
+  <div class="grid g-2">
+    <div class="panel"><h2>Macro calendar</h2><div id="cal"></div><p class="note">FOMC, CPI and NFP dates from the Federal Reserve and BLS schedules (linked per row). Check the source before trading around them; the list ends when the file does.</p></div>
+    <div>
+      <div class="panel"><h2>Price alerts</h2>
+        <form id="alert-form" class="form-grid">
+          <label class="f">Symbol<input name="symbol" required placeholder="NVDA"></label>
+          <label class="f">When price is<select name="op"><option value="above">Above</option><option value="below">Below</option></select></label>
+          <label class="f">Price<input name="price" type="number" step="any" required></label>
+          <button class="primary">Add alert</button>
+        </form>
+        <div id="alerts" style="margin-top: var(--space-sm)"></div>
+      </div>
+      <div class="panel"><h2>Triggered</h2><div id="alert-log"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="view" id="v-tools" hidden>
+  <div class="view-head"><div><h1>Risk tools</h1><p>Size a position from the amount you are willing to lose.</p></div></div>
+  <div class="grid g-2">
+    <div class="panel"><h2>Position size</h2>
+      <form id="size-form" class="form-grid">
+        <label class="f">Account (USD)<input name="acct" type="number" step="any" value="100000"></label>
+        <label class="f">Risk per trade (%)<input name="risk" type="number" step="any" value="1"></label>
+        <label class="f">Entry price<input name="entry" type="number" step="any" value="100"></label>
+        <label class="f">Stop price<input name="stop" type="number" step="any" value="95"></label>
+        <label class="f">Target price<input name="target" type="number" step="any" value="112"></label>
+      </form>
+      <div id="size-out" style="margin-top: var(--space-md)"></div>
+    </div>
+    <div class="panel"><h2>Risk of ruin by win rate</h2>
+      <form id="ror-form" class="form-grid">
+        <label class="f">Win rate (%)<input name="win" type="number" value="45" step="any"></label>
+        <label class="f">Reward to risk<input name="rr" type="number" value="2" step="any"></label>
+        <label class="f">Risk per trade (%)<input name="risk" type="number" value="1" step="any"></label>
+        <label class="f">Trades<input name="n" type="number" value="200" step="1"></label>
+      </form>
+      <div id="ror-out" style="margin-top: var(--space-md)"></div>
+      <p class="note">Monte Carlo of 2,000 random trade sequences with these inputs; it ignores costs and changing odds.</p>
+    </div>
+  </div>
+</section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

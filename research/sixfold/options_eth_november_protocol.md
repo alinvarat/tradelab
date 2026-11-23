@@ -1,0 +1,2 @@
+# ETH November fresh transfer
+Freeze before reading November ETH option prices. Use ETH with the unchanged weekly half-cash sizing rule; the same three completed Monday–Friday windows as BTC November. Record independent fresh $147 and a no-top-up carryover from the same rule's Jan–Oct 2026 ETH continuous account. Use the two targets and the same costs, direction randomization and observed buy/sell size check. No Nov 23–27 outcome yet. A partial month is a forward calendar checkpoint only.

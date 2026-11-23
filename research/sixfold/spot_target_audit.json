@@ -1,0 +1,171 @@
+{
+  "note": "Candle crossings corroborate price feasibility, not order book fills.",
+  "target_entries": [
+    {
+      "rule": "continuation",
+      "variant": "base",
+      "month": "2021-03",
+      "symbol": "CHZUSDT",
+      "entry_minute": [
+        "2021-03-08T00:00:00+00:00",
+        0.128357,
+        94290.663646
+      ],
+      "target_minute": [
+        "2021-03-12T20:06:00+00:00",
+        0.9449,
+        37297350.307793,
+        40492
+      ],
+      "target_price": 0.857667393065352,
+      "source_archives_sha256": {
+        "https://data.binance.vision/data/spot/monthly/klines/CHZUSDT/1m/CHZUSDT-1m-2021-03.zip": "2e847323aa2f0a67aa75b9835f0b6384d6bf0e99ec191f1a24ebecc17b1685d3"
+      },
+      "aggregate_trade_evidence": {
+        "url": "https://data-api.binance.vision/api/v3/aggTrades?symbol=CHZUSDT&startTime=1615579560000&endTime=1615579619999&limit=1000",
+        "source_pages_sha256": [
+          "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        ],
+        "aggregates_in_target_minute": 0,
+        "page_limit_reached": false,
+        "buyer_taker_aggregates_at_or_above_target": 0,
+        "buyer_taker_quote_volume_at_or_above_target": 0
+      }
+    },
+    {
+      "rule": "continuation",
+      "variant": "base",
+      "month": "2026-04",
+      "symbol": "\u5e01\u5b89\u4eba\u751fUSDT",
+      "entry_minute": [
+        "2026-04-13T00:00:00+00:00",
+        0.1779,
+        7693.35055
+      ],
+      "target_minute": [
+        "2026-04-18T01:03:00+00:00",
+        0.4192,
+        131156.25385,
+        1368
+      ],
+      "target_price": 0.4174029495607935,
+      "source_archives_sha256": {
+        "https://data.binance.vision/data/spot/monthly/klines/%E5%B8%81%E5%AE%89%E4%BA%BA%E7%94%9FUSDT/1m/%E5%B8%81%E5%AE%89%E4%BA%BA%E7%94%9FUSDT-1m-2026-04.zip": "5f7c0e2b72229a1eb72df8cb775cc34c04a9b200f4afa6edcbccd46997e3a042"
+      },
+      "aggregate_trade_evidence": {
+        "url": "https://data-api.binance.vision/api/v3/aggTrades?symbol=%E5%B8%81%E5%AE%89%E4%BA%BA%E7%94%9FUSDT&startTime=1776474180000&endTime=1776474239999&limit=1000",
+        "source_pages_sha256": [
+          "f9926b82bf561bbbc3679edb049c8d29f2231baeaebfa5b05d68e9dff31be663"
+        ],
+        "aggregates_in_target_minute": 974,
+        "page_limit_reached": false,
+        "buyer_taker_aggregates_at_or_above_target": 145,
+        "buyer_taker_quote_volume_at_or_above_target": 57309.47782
+      }
+    },
+    {
+      "rule": "continuation",
+      "variant": "late",
+      "month": "2026-04",
+      "symbol": "\u5e01\u5b89\u4eba\u751fUSDT",
+      "entry_minute": [
+        "2026-04-14T00:00:00+00:00",
+        0.2069,
+        26166.03914
+      ],
+      "target_minute": [
+        "2026-04-18T04:42:00+00:00",
+        0.5265,
+        1792519.77499,
+        6734
+      ],
+      "target_price": 0.5017208804473545,
+      "source_archives_sha256": {
+        "https://data.binance.vision/data/spot/monthly/klines/%E5%B8%81%E5%AE%89%E4%BA%BA%E7%94%9FUSDT/1m/%E5%B8%81%E5%AE%89%E4%BA%BA%E7%94%9FUSDT-1m-2026-04.zip": "5f7c0e2b72229a1eb72df8cb775cc34c04a9b200f4afa6edcbccd46997e3a042"
+      },
+      "aggregate_trade_evidence": {
+        "url": "https://data-api.binance.vision/api/v3/aggTrades?symbol=%E5%B8%81%E5%AE%89%E4%BA%BA%E7%94%9FUSDT&startTime=1776487320000&endTime=1776487379999&limit=1000",
+        "source_pages_sha256": [
+          "b68be2861b4180f73299a4b45ed89654f85d081c3c2bc40662b707bb891ff210",
+          "619883e78801075ce3f3d56edf1ce116a8e9592c31b3e20defc99104f4deff96",
+          "d7513a84066fba4c957e8fab144b401b992f14eee859082695cca688137ae038",
+          "c81480ac3d92e10eb99a4ae981ae4893d031347c400d86929f9b956ce56915c0"
+        ],
+        "aggregates_in_target_minute": 3791,
+        "page_limit_reached": false,
+        "buyer_taker_aggregates_at_or_above_target": 1873,
+        "buyer_taker_quote_volume_at_or_above_target": 706202.20713
+      }
+    },
+    {
+      "rule": "reversal",
+      "variant": "late",
+      "month": "2025-09",
+      "symbol": "BAKEUSDT",
+      "entry_minute": [
+        "2025-09-09T00:00:00+00:00",
+        0.0342,
+        12784.50495
+      ],
+      "target_minute": [
+        "2025-09-10T10:53:00+00:00",
+        0.214,
+        1488981.23865,
+        4505
+      ],
+      "target_price": 0.20664144505770193,
+      "source_archives_sha256": {
+        "https://data.binance.vision/data/spot/monthly/klines/BAKEUSDT/1m/BAKEUSDT-1m-2025-09.zip": "365e9cf0303f257938e06f056a2e018b656aba71ba38b5b16cd8cbea570b5cc8"
+      },
+      "aggregate_trade_evidence": {
+        "url": "https://data-api.binance.vision/api/v3/aggTrades?symbol=BAKEUSDT&startTime=1757501580000&endTime=1757501639999&limit=1000",
+        "source_pages_sha256": [
+          "34f23eb63c657774f90ad1ca90a61ccce35194589a8580125685a50ab3c8746c",
+          "f117103a717c782441f3483a057cb451aa8eb4cb3b8c852525bb0d669f2255d8",
+          "a78ea026dfae5dc911735101140589fae51e41063cfa4edf58076f3a692bc87f",
+          "86c4cc864628b7e8bd3b84e97d33655da105ccc7c07ac29d5852797d2cc66487"
+        ],
+        "aggregates_in_target_minute": 3339,
+        "page_limit_reached": false,
+        "buyer_taker_aggregates_at_or_above_target": 1334,
+        "buyer_taker_quote_volume_at_or_above_target": 566448.2762
+      }
+    },
+    {
+      "rule": "continuation",
+      "variant": "rolling_delay_0",
+      "month": "2026-03",
+      "symbol": "STOUSDT",
+      "entry_minute": [
+        "2026-03-30T00:00:00+00:00",
+        0.1498,
+        4951.71485
+      ],
+      "target_minute": [
+        "2026-04-02T05:44:00+00:00",
+        0.9082,
+        1496886.92223,
+        5506
+      ],
+      "target_price": 0.9051136979427997,
+      "source_archives_sha256": {
+        "https://data.binance.vision/data/spot/monthly/klines/STOUSDT/1m/STOUSDT-1m-2026-03.zip": "58affc0304acc8353ff825a0e7077f7139502360acba4cf4f988ab763e40a22e",
+        "https://data.binance.vision/data/spot/monthly/klines/STOUSDT/1m/STOUSDT-1m-2026-04.zip": "506ee8c012d0a3895411e74ba86f62ad47e90e74109cd85c72532a8ef57eb799"
+      },
+      "aggregate_trade_evidence": {
+        "url": "https://data-api.binance.vision/api/v3/aggTrades?symbol=STOUSDT&startTime=1775108640000&endTime=1775108699999&limit=1000",
+        "source_pages_sha256": [
+          "be89a80c23c5cd99caec68db2a5d4c2543795f80b5780a5eb2ce5f62a958c7f1",
+          "e07a56f9763c2b50fc91fa37c4cf46607e111e1bacea957df8dce7206a3d8dc9",
+          "23246030a94ed1f90b8c8031c98185490790c89e00293669d0a61a2fc7383f82",
+          "b51e6fc9ee86f84ae06391fdf072083e5705a30a6df8c9a40619b0ff8c1c358e",
+          "f2f12c53958e9ea1c4679c54580eeafa6581b5b8e49ad2e67a4a784c82700bf3"
+        ],
+        "aggregates_in_target_minute": 4644,
+        "page_limit_reached": false,
+        "buyer_taker_aggregates_at_or_above_target": 5,
+        "buyer_taker_quote_volume_at_or_above_target": 3926.698
+      }
+    }
+  ]
+}

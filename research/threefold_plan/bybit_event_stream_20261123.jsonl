@@ -1,0 +1,2 @@
+{"kind":"start","utc":"2026-11-23T13:04:55.581Z","data":{"url":"wss://stream.bybit.com/v5/public/spot","topics":["orderbook.50.DIAMUSDT","orderbook.50.MBXUSDT","orderbook.50.MCRTUSDT","orderbook.50.NSUSDT","orderbook.50.OBTUSDT"],"notice":"https://announcements.bybit.com/en-US/article/bybit-to-delist-5-token-s-on-nov-27-2026--artf4aaa6a1db57/","seconds":18}}
+{"kind":"stop","utc":"2026-11-23T13:04:55.678Z","data":{"reason":"websocket_error","failure":true,"snapshots":0}}

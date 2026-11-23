@@ -1,0 +1,52 @@
+{
+  "source_sha256": {
+    "vix": "5cc06eeb8ae4f54204294167e0f634aca36dc185c771ffa225a47c4af18950d8",
+    "agreement": "e23308d4cc1f05bf9395ef967839120a5d603baaa3c07df588b01f0089036750",
+    "budget": "8ad8e2dcc88aeed1d755b5495923c9558c9f83df5187a776c65ccd09b38b6af1"
+  },
+  "funded_months": [
+    {
+      "rule": "vix",
+      "month": "2026-01",
+      "start": 147.0,
+      "end": 441.0,
+      "sale_ids": [
+        "408444549"
+      ]
+    },
+    {
+      "rule": "agreement",
+      "month": "2026-04",
+      "start": 229.889904901227,
+      "end": 689.6697147036809,
+      "sale_ids": [
+        "425097817"
+      ]
+    },
+    {
+      "rule": "budget",
+      "month": "2026-04",
+      "start": 229.889904901227,
+      "end": 689.6697147036809,
+      "sale_ids": [
+        "425097817"
+      ]
+    }
+  ],
+  "unique_sales": {
+    "408444549": {
+      "instrument": "BTC-16JAN26-98000-C",
+      "price": 0.01,
+      "observed_size": 0.6,
+      "simulated_size": 0.5,
+      "timestamp": 1768411038515
+    },
+    "425097817": {
+      "instrument": "BTC-17APR26-76000-C",
+      "price": 0.009,
+      "observed_size": 4.6,
+      "simulated_size": 1.0,
+      "timestamp": 1776155828215
+    }
+  }
+}

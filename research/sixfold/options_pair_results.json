@@ -1,0 +1,1297 @@
+{
+  "snapshot_sha256": "339f080b6f0aa66db4a2f7b84ba8bad99608804059c6db718739e8d4a70408fa",
+  "assets": {
+    "BTC": {
+      "2025_base": {
+        "reset": {
+          "months": [
+            {
+              "month": "2025-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-11",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-12",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "missing_leg": 30,
+            "prints_over_60_seconds_apart": 16
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": null
+        },
+        "continuous": {
+          "months": [
+            {
+              "month": "2025-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-11",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-12",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "missing_leg": 30,
+            "prints_over_60_seconds_apart": 16
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": 0
+        }
+      },
+      "2025_stress": {
+        "reset": {
+          "months": [
+            {
+              "month": "2025-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-11",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-12",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "missing_leg": 30,
+            "prints_over_60_seconds_apart": 16
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": null
+        },
+        "continuous": {
+          "months": [
+            {
+              "month": "2025-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-11",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-12",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "missing_leg": 30,
+            "prints_over_60_seconds_apart": 16
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": 0
+        }
+      },
+      "2026_base": {
+        "reset": {
+          "months": [
+            {
+              "month": "2026-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-02",
+              "start": 147.0,
+              "end": 77.12238763505002,
+              "multiple": 0.5246420927554423
+            },
+            {
+              "month": "2026-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "prints_over_60_seconds_apart": 12,
+            "missing_leg": 25,
+            "filled_proxy": 1
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 0.5246420927554423,
+          "max_month_end_drawdown": null
+        },
+        "continuous": {
+          "months": [
+            {
+              "month": "2026-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-02",
+              "start": 147.0,
+              "end": 77.12238763505002,
+              "multiple": 0.5246420927554423
+            },
+            {
+              "month": "2026-03",
+              "start": 77.12238763505002,
+              "end": 77.12238763505002,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-04",
+              "start": 77.12238763505002,
+              "end": 77.12238763505002,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-05",
+              "start": 77.12238763505002,
+              "end": 77.12238763505002,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-06",
+              "start": 77.12238763505002,
+              "end": 77.12238763505002,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-07",
+              "start": 77.12238763505002,
+              "end": 77.12238763505002,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-08",
+              "start": 77.12238763505002,
+              "end": 77.12238763505002,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-09",
+              "start": 77.12238763505002,
+              "end": 77.12238763505002,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-10",
+              "start": 77.12238763505002,
+              "end": 77.12238763505002,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "prints_over_60_seconds_apart": 12,
+            "missing_leg": 25,
+            "filled_proxy": 1
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 0.5246420927554423,
+          "max_month_end_drawdown": 0.47535790724455773
+        }
+      },
+      "2026_stress": {
+        "reset": {
+          "months": [
+            {
+              "month": "2026-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "prints_over_60_seconds_apart": 12,
+            "missing_leg": 25,
+            "over_budget": 1
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": null
+        },
+        "continuous": {
+          "months": [
+            {
+              "month": "2026-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "prints_over_60_seconds_apart": 12,
+            "missing_leg": 25,
+            "over_budget": 1
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": 0
+        }
+      }
+    },
+    "ETH": {
+      "2025_base": {
+        "reset": {
+          "months": [
+            {
+              "month": "2025-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-11",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-12",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "missing_leg": 17,
+            "prints_over_60_seconds_apart": 29
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": null
+        },
+        "continuous": {
+          "months": [
+            {
+              "month": "2025-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-11",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-12",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "missing_leg": 17,
+            "prints_over_60_seconds_apart": 29
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": 0
+        }
+      },
+      "2025_stress": {
+        "reset": {
+          "months": [
+            {
+              "month": "2025-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-11",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-12",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "missing_leg": 17,
+            "prints_over_60_seconds_apart": 29
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": null
+        },
+        "continuous": {
+          "months": [
+            {
+              "month": "2025-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-10",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-11",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2025-12",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            }
+          ],
+          "status_counts": {
+            "missing_leg": 17,
+            "prints_over_60_seconds_apart": 29
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 1.0,
+          "max_month_end_drawdown": 0
+        }
+      },
+      "2026_base": {
+        "reset": {
+          "months": [
+            {
+              "month": "2026-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-10",
+              "start": 147.0,
+              "end": 137.07401256412498,
+              "multiple": 0.9324762759464285
+            }
+          ],
+          "status_counts": {
+            "prints_over_60_seconds_apart": 12,
+            "missing_leg": 25,
+            "filled_proxy": 1
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 0.9324762759464285,
+          "max_month_end_drawdown": null
+        },
+        "continuous": {
+          "months": [
+            {
+              "month": "2026-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-10",
+              "start": 147.0,
+              "end": 137.07401256412498,
+              "multiple": 0.9324762759464285
+            }
+          ],
+          "status_counts": {
+            "prints_over_60_seconds_apart": 12,
+            "missing_leg": 25,
+            "filled_proxy": 1
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 0.9324762759464285,
+          "max_month_end_drawdown": 0.06752372405357154
+        }
+      },
+      "2026_stress": {
+        "reset": {
+          "months": [
+            {
+              "month": "2026-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-10",
+              "start": 147.0,
+              "end": 135.347753879625,
+              "multiple": 0.9207330195892858
+            }
+          ],
+          "status_counts": {
+            "prints_over_60_seconds_apart": 12,
+            "missing_leg": 25,
+            "filled_proxy": 1
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 0.9207330195892858,
+          "max_month_end_drawdown": null
+        },
+        "continuous": {
+          "months": [
+            {
+              "month": "2026-01",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-02",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-03",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-04",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-05",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-06",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-07",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-08",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-09",
+              "start": 147.0,
+              "end": 147.0,
+              "multiple": 1.0
+            },
+            {
+              "month": "2026-10",
+              "start": 147.0,
+              "end": 135.347753879625,
+              "multiple": 0.9207330195892858
+            }
+          ],
+          "status_counts": {
+            "prints_over_60_seconds_apart": 12,
+            "missing_leg": 25,
+            "filled_proxy": 1
+          },
+          "3x_months": 0,
+          "6x_months": 0,
+          "half_loss_months": 0,
+          "minimum_multiple": 0.9207330195892858,
+          "max_month_end_drawdown": 0.07926698041071423
+        }
+      }
+    }
+  }
+}

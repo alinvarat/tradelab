@@ -1,0 +1,7 @@
+# Weekly option sizing and capital retention audit
+
+Previous full-budget weekly outcomes are already known. This is a descriptive sensitivity replay on the frozen tape, not a fresh signal test. Preserve all predecision data, direction, selection, expiry, entry print, exit rules, fees and random-date/side mechanics. Evaluate a single new size rule: spend at most 50% of the available cash balance on each weekly purchase inclusive of modeled fees. Keep unused cash available; skip a contract if its minimum order does not fit. No top-up. Rerun the original 100% available-cash cap as a control.
+
+Score 3× and 6× cash targets under base and stress costs, by separate monthly resets and as one continuously funded account. Report trajectories from Jan 2025, and separately from Jan 2026. A safer tail or one positive month is not enough: quantify how often the half-budget rule reaches the monthly goals, how long the account remains able to buy, and whether the target survives higher costs. No selection after seeing outcomes or real orders.
+
+After the initial sizing effects, verify the account-path comparison with a fixed second diagnostic. For each asset, target and fee scenario, randomize the direction of each eligible week 1,000 times, then carry the same $147 account across Jan–Oct 2026 without resetting. Use the 50% cap, official order minimums and the same execution assumptions. Score ending balance and count of monthly targets reached from at least the original $147 in cash. This calibration is descriptive and uses no additional sizing rules.

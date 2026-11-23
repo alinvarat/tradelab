@@ -1,0 +1,426 @@
+{
+  "primary_rules": 1,
+  "fixed_transfer_assets": 1,
+  "random_draws": 10000,
+  "base_round_trip_pct": 0.3,
+  "stress_round_trip_pct": 0.9,
+  "gate": {
+    "30_events": false,
+    "positive_net": false,
+    "random_adjusted": false,
+    "two_subperiods_positive_edge": false,
+    "stress_positive": false,
+    "transfer_positive": false
+  },
+  "deploy": false,
+  "rows": [
+    {
+      "symbol": "SPY",
+      "period": [
+        2010,
+        2020
+      ],
+      "n": 13,
+      "statement_count": 95,
+      "missing_ed4": 0,
+      "trades_per_year": 1.1818181818181819,
+      "trade_close_max_drawdown_pct": -2.9327610227069867,
+      "months_at_6x": 0,
+      "calendar_months": 132,
+      "max_month_pct": 1.1573817433035094,
+      "trades": [
+        {
+          "date": "2010-03-17",
+          "gross_pct": 0.2911924731672455
+        },
+        {
+          "date": "2011-08-10",
+          "gross_pct": -2.576783936887972
+        },
+        {
+          "date": "2014-12-18",
+          "gross_pct": 0.9963823539122174
+        },
+        {
+          "date": "2015-03-19",
+          "gross_pct": -0.21909254103525955
+        },
+        {
+          "date": "2015-06-18",
+          "gross_pct": 0.6956609898665533
+        },
+        {
+          "date": "2015-09-18",
+          "gross_pct": -0.13285460973140317
+        },
+        {
+          "date": "2016-03-17",
+          "gross_pct": 0.6839201692971697
+        },
+        {
+          "date": "2016-06-16",
+          "gross_pct": 0.2984332694043301
+        },
+        {
+          "date": "2017-03-16",
+          "gross_pct": -0.26347910217235926
+        },
+        {
+          "date": "2019-03-21",
+          "gross_pct": 1.4573817433034986
+        },
+        {
+          "date": "2019-06-20",
+          "gross_pct": -0.06081042702443806
+        },
+        {
+          "date": "2020-03-04",
+          "gross_pct": 2.2017477923305107
+        },
+        {
+          "date": "2020-03-16",
+          "gross_pct": -0.5514497937867957
+        }
+      ],
+      "net_mean_pct": -0.08305781687359247,
+      "stress_net_mean_pct": -0.6830578168735926,
+      "win_pct": 38.46153846153846,
+      "worst_trade_pct": -2.8767839368879717,
+      "random_mean_pct": -0.21149278651330575,
+      "edge_pct": 0.1284349696397133,
+      "p_random": 0.28517148285171484
+    },
+    {
+      "symbol": "SPY",
+      "period": [
+        2021,
+        2025
+      ],
+      "n": 7,
+      "statement_count": 40,
+      "missing_ed4": 0,
+      "trades_per_year": 1.4,
+      "trade_close_max_drawdown_pct": -4.834803081226957,
+      "months_at_6x": 0,
+      "calendar_months": 60,
+      "max_month_pct": 0.08342944260093521,
+      "trades": [
+        {
+          "date": "2022-05-05",
+          "gross_pct": -2.529735141486411
+        },
+        {
+          "date": "2022-11-03",
+          "gross_pct": -0.1238300410710158
+        },
+        {
+          "date": "2023-03-23",
+          "gross_pct": -0.48596090206096676
+        },
+        {
+          "date": "2023-12-14",
+          "gross_pct": -0.10370163690477385
+        },
+        {
+          "date": "2024-09-19",
+          "gross_pct": -0.005258979065425606
+        },
+        {
+          "date": "2025-03-20",
+          "gross_pct": 0.3834294426009244
+        },
+        {
+          "date": "2025-09-18",
+          "gross_pct": 0.05589978833326903
+        }
+      ],
+      "net_mean_pct": -0.7013082099506286,
+      "stress_net_mean_pct": -1.3013082099506288,
+      "win_pct": 14.285714285714286,
+      "worst_trade_pct": -2.829735141486411,
+      "random_mean_pct": -0.29391714216739495,
+      "edge_pct": -0.40739106778323353,
+      "p_random": 0.8485151484851515
+    },
+    {
+      "symbol": "SPY",
+      "period": [
+        2021,
+        2022
+      ],
+      "n": 2,
+      "statement_count": 16,
+      "missing_ed4": 0,
+      "trades_per_year": 1.0,
+      "trade_close_max_drawdown_pct": -3.241571914945063,
+      "months_at_6x": 0,
+      "calendar_months": 24,
+      "max_month_pct": 0.0,
+      "trades": [
+        {
+          "date": "2022-05-05",
+          "gross_pct": -2.529735141486411
+        },
+        {
+          "date": "2022-11-03",
+          "gross_pct": -0.1238300410710158
+        }
+      ],
+      "net_mean_pct": -1.6267825912787133,
+      "stress_net_mean_pct": -2.2267825912787136,
+      "win_pct": 0.0,
+      "worst_trade_pct": -2.829735141486411,
+      "random_mean_pct": 0.055539236124106675,
+      "edge_pct": -1.68232182740282,
+      "p_random": 0.9426057394260574
+    },
+    {
+      "symbol": "SPY",
+      "period": [
+        2023,
+        2025
+      ],
+      "n": 5,
+      "statement_count": 24,
+      "missing_ed4": 0,
+      "trades_per_year": 1.6666666666666667,
+      "trade_close_max_drawdown_pct": -1.646607120241117,
+      "months_at_6x": 0,
+      "calendar_months": 36,
+      "max_month_pct": 0.08342944260093521,
+      "trades": [
+        {
+          "date": "2023-03-23",
+          "gross_pct": -0.48596090206096676
+        },
+        {
+          "date": "2023-12-14",
+          "gross_pct": -0.10370163690477385
+        },
+        {
+          "date": "2024-09-19",
+          "gross_pct": -0.005258979065425606
+        },
+        {
+          "date": "2025-03-20",
+          "gross_pct": 0.3834294426009244
+        },
+        {
+          "date": "2025-09-18",
+          "gross_pct": 0.05589978833326903
+        }
+      ],
+      "net_mean_pct": -0.33111845741939455,
+      "stress_net_mean_pct": -0.9311184574193946,
+      "win_pct": 20.0,
+      "worst_trade_pct": -0.7859609020609667,
+      "random_mean_pct": -0.44087761288309507,
+      "edge_pct": 0.10975915546370053,
+      "p_random": 0.37246275372462756
+    },
+    {
+      "symbol": "QQQ",
+      "period": [
+        2010,
+        2020
+      ],
+      "n": 13,
+      "statement_count": 95,
+      "missing_ed4": 0,
+      "trades_per_year": 1.1818181818181819,
+      "trade_close_max_drawdown_pct": -3.0849503386198296,
+      "months_at_6x": 0,
+      "calendar_months": 132,
+      "max_month_pct": 1.5692144184232149,
+      "trades": [
+        {
+          "date": "2010-03-17",
+          "gross_pct": 0.12601881500649004
+        },
+        {
+          "date": "2011-08-10",
+          "gross_pct": -1.8715052796350329
+        },
+        {
+          "date": "2014-12-18",
+          "gross_pct": 0.958742827124337
+        },
+        {
+          "date": "2015-03-19",
+          "gross_pct": 0.04628626522524826
+        },
+        {
+          "date": "2015-06-18",
+          "gross_pct": 1.086760220462324
+        },
+        {
+          "date": "2015-09-18",
+          "gross_pct": 0.11403127754399112
+        },
+        {
+          "date": "2016-03-17",
+          "gross_pct": 0.23305677992315754
+        },
+        {
+          "date": "2016-06-16",
+          "gross_pct": 0.7929829785998432
+        },
+        {
+          "date": "2017-03-16",
+          "gross_pct": -0.2569033479407179
+        },
+        {
+          "date": "2019-03-21",
+          "gross_pct": 1.869214418423204
+        },
+        {
+          "date": "2019-06-20",
+          "gross_pct": -0.45856794833952774
+        },
+        {
+          "date": "2020-03-04",
+          "gross_pct": 2.297015623591747
+        },
+        {
+          "date": "2020-03-16",
+          "gross_pct": -2.7849503386198293
+        }
+      ],
+      "net_mean_pct": -0.1344475160488281,
+      "stress_net_mean_pct": -0.7344475160488282,
+      "win_pct": 38.46153846153846,
+      "worst_trade_pct": -3.084950338619829,
+      "random_mean_pct": -0.18024331698865162,
+      "edge_pct": 0.04579580093982353,
+      "p_random": 0.4273572642735726
+    },
+    {
+      "symbol": "QQQ",
+      "period": [
+        2021,
+        2025
+      ],
+      "n": 7,
+      "statement_count": 40,
+      "missing_ed4": 0,
+      "trades_per_year": 1.4,
+      "trade_close_max_drawdown_pct": -6.406053621518126,
+      "months_at_6x": 0,
+      "calendar_months": 60,
+      "max_month_pct": 0.19907835481536296,
+      "trades": [
+        {
+          "date": "2022-05-05",
+          "gross_pct": -3.7426616616476727
+        },
+        {
+          "date": "2022-11-03",
+          "gross_pct": -0.9581458642945462
+        },
+        {
+          "date": "2023-03-23",
+          "gross_pct": -0.05485719552409396
+        },
+        {
+          "date": "2023-12-14",
+          "gross_pct": -0.39261106591857997
+        },
+        {
+          "date": "2024-09-19",
+          "gross_pct": 0.155404990108865
+        },
+        {
+          "date": "2025-03-20",
+          "gross_pct": 0.4990783548153521
+        },
+        {
+          "date": "2025-09-18",
+          "gross_pct": 0.06892373606046664
+        }
+      ],
+      "net_mean_pct": -0.9321241009143156,
+      "stress_net_mean_pct": -1.5321241009143158,
+      "win_pct": 14.285714285714286,
+      "worst_trade_pct": -4.0426616616476725,
+      "random_mean_pct": -0.3330693053462025,
+      "edge_pct": -0.599054795568113,
+      "p_random": 0.8734126587341265
+    },
+    {
+      "symbol": "QQQ",
+      "period": [
+        2021,
+        2022
+      ],
+      "n": 2,
+      "statement_count": 16,
+      "missing_ed4": 0,
+      "trades_per_year": 1.0,
+      "trade_close_max_drawdown_pct": -5.249944945438778,
+      "months_at_6x": 0,
+      "calendar_months": 24,
+      "max_month_pct": 0.0,
+      "trades": [
+        {
+          "date": "2022-05-05",
+          "gross_pct": -3.7426616616476727
+        },
+        {
+          "date": "2022-11-03",
+          "gross_pct": -0.9581458642945462
+        }
+      ],
+      "net_mean_pct": -2.6504037629711097,
+      "stress_net_mean_pct": -3.2504037629711093,
+      "win_pct": 0.0,
+      "worst_trade_pct": -4.0426616616476725,
+      "random_mean_pct": 0.20897508773593826,
+      "edge_pct": -2.859378850707048,
+      "p_random": 1.0
+    },
+    {
+      "symbol": "QQQ",
+      "period": [
+        2023,
+        2025
+      ],
+      "n": 5,
+      "statement_count": 24,
+      "missing_ed4": 0,
+      "trades_per_year": 1.6666666666666667,
+      "trade_close_max_drawdown_pct": -1.2201667591787757,
+      "months_at_6x": 0,
+      "calendar_months": 36,
+      "max_month_pct": 0.19907835481536296,
+      "trades": [
+        {
+          "date": "2023-03-23",
+          "gross_pct": -0.05485719552409396
+        },
+        {
+          "date": "2023-12-14",
+          "gross_pct": -0.39261106591857997
+        },
+        {
+          "date": "2024-09-19",
+          "gross_pct": 0.155404990108865
+        },
+        {
+          "date": "2025-03-20",
+          "gross_pct": 0.4990783548153521
+        },
+        {
+          "date": "2025-09-18",
+          "gross_pct": 0.06892373606046664
+        }
+      ],
+      "net_mean_pct": -0.24481223609159802,
+      "stress_net_mean_pct": -0.8448122360915982,
+      "win_pct": 20.0,
+      "worst_trade_pct": -0.69261106591858,
+      "random_mean_pct": -0.5592602243608249,
+      "edge_pct": 0.31444798826922693,
+      "p_random": 0.2662733726627337
+    }
+  ]
+}

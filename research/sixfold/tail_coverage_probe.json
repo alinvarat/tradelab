@@ -1,0 +1,154 @@
+[
+  {
+    "ticker": "HIGHNY-24FEB01-T52",
+    "decision_utc": 1706792400,
+    "candlesticks": [
+      {
+        "end_period_ts": 1706796000,
+        "open_interest": "24.00",
+        "price": {
+          "close": null,
+          "high": null,
+          "low": null,
+          "mean": null,
+          "open": null,
+          "previous": "0.0900"
+        },
+        "volume": "0.00",
+        "yes_ask": {
+          "close": "0.2800",
+          "high": "0.2900",
+          "low": "0.1600",
+          "open": "0.1600"
+        },
+        "yes_bid": {
+          "close": "0.0000",
+          "high": "0.0000",
+          "low": "0.0000",
+          "open": "0.0000"
+        }
+      }
+    ],
+    "archive_trade_count": 0,
+    "archive_trade_has_more": false,
+    "archive_traded_contracts": 0
+  },
+  {
+    "ticker": "KXHIGHNY-25JAN01-T54",
+    "decision_utc": 1735736400,
+    "candlesticks": [
+      {
+        "end_period_ts": 1735736400,
+        "open_interest": "895.00",
+        "price": {
+          "close": null,
+          "high": null,
+          "low": null,
+          "mean": null,
+          "open": null,
+          "previous": "0.0200"
+        },
+        "volume": "0.00",
+        "yes_ask": {
+          "close": "0.5400",
+          "high": "0.5400",
+          "low": "0.1500",
+          "open": "0.1500"
+        },
+        "yes_bid": {
+          "close": "0.0200",
+          "high": "0.0200",
+          "low": "0.0200",
+          "open": "0.0200"
+        }
+      },
+      {
+        "end_period_ts": 1735740000,
+        "open_interest": "895.00",
+        "price": {
+          "close": null,
+          "high": null,
+          "low": null,
+          "mean": null,
+          "open": null,
+          "previous": "0.0200"
+        },
+        "volume": "0.00",
+        "yes_ask": {
+          "close": "0.0400",
+          "high": "0.5400",
+          "low": "0.0400",
+          "open": "0.5400"
+        },
+        "yes_bid": {
+          "close": "0.0200",
+          "high": "0.0300",
+          "low": "0.0200",
+          "open": "0.0200"
+        }
+      }
+    ],
+    "archive_trade_count": 0,
+    "archive_trade_has_more": false,
+    "archive_traded_contracts": 0
+  },
+  {
+    "ticker": "KXHIGHNY-25JAN01-B49.5",
+    "decision_utc": 1735736400,
+    "candlesticks": [
+      {
+        "end_period_ts": 1735736400,
+        "open_interest": "1212.00",
+        "price": {
+          "close": null,
+          "high": null,
+          "low": null,
+          "mean": null,
+          "open": null,
+          "previous": "0.5300"
+        },
+        "volume": "0.00",
+        "yes_ask": {
+          "close": "0.5500",
+          "high": "0.5500",
+          "low": "0.5400",
+          "open": "0.5400"
+        },
+        "yes_bid": {
+          "close": "0.3400",
+          "high": "0.3400",
+          "low": "0.3400",
+          "open": "0.3400"
+        }
+      },
+      {
+        "end_period_ts": 1735740000,
+        "open_interest": "2160.00",
+        "price": {
+          "close": "0.5200",
+          "high": "0.7400",
+          "low": "0.2300",
+          "mean": "0.4468",
+          "open": "0.5500",
+          "previous": "0.5300"
+        },
+        "volume": "1162.00",
+        "yes_ask": {
+          "close": "0.5100",
+          "high": "0.7400",
+          "low": "0.5000",
+          "open": "0.5500"
+        },
+        "yes_bid": {
+          "close": "0.2900",
+          "high": "0.5300",
+          "low": "0.2300",
+          "open": "0.3400"
+        }
+      }
+    ],
+    "archive_trade_count": 45,
+    "archive_trade_has_more": false,
+    "archive_traded_contracts": 1162.0
+  }
+]

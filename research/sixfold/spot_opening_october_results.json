@@ -1,0 +1,115 @@
+{
+  "input_sha256": "afc3b17286ee084736b5b7b26d8b416afa691be9edbc7fe61c9cab208418a87b",
+  "partial_month": false,
+  "bars": {
+    "BTCUSDT": 744,
+    "ETHUSDT": 744,
+    "ZECUSDT": 744,
+    "SOLUSDT": 744,
+    "XRPUSDT": 744,
+    "NEARUSDT": 744,
+    "BNBUSDT": 744,
+    "DOGEUSDT": 744,
+    "SUIUSDT": 744,
+    "UNIUSDT": 744,
+    "RLUSDUSDT": 744,
+    "ENAUSDT": 744,
+    "ADAUSDT": 744,
+    "ARBUSDT": 744,
+    "TAOUSDT": 744,
+    "LINKUSDT": 744,
+    "PUMPUSDT": 744,
+    "AVAXUSDT": 744,
+    "PEPEUSDT": 744,
+    "WLDUSDT": 744,
+    "TRXUSDT": 744,
+    "UUSDT": 744,
+    "MARSCOINUSDT": 744,
+    "LTCUSDT": 744,
+    "DASHUSDT": 744,
+    "TRUMPUSDT": 744,
+    "XLMUSDT": 744,
+    "ONDOUSDT": 744,
+    "SNDKBUSDT": 744,
+    "AAVEUSDT": 744,
+    "CRCLBUSDT": 744,
+    "FILUSDT": 744,
+    "ASTERUSDT": 744,
+    "DOTUSDT": 744,
+    "FETUSDT": 744,
+    "XPLUSDT": 744,
+    "SPCXBUSDT": 744,
+    "BCHUSDT": 744,
+    "INJUSDT": 744,
+    "PENGUUSDT": 744,
+    "APTUSDT": 744,
+    "HBARUSDT": 744,
+    "MSTRBUSDT": 744,
+    "RAYUSDT": 744,
+    "GRAMUSDT": 744,
+    "SAGAUSDT": 744,
+    "CAKEUSDT": 744,
+    "ICPUSDT": 744,
+    "POLUSDT": 744,
+    "OPUSDT": 744,
+    "LSKUSDT": 744,
+    "ZENUSDT": 744,
+    "ZROUSDT": 744,
+    "ETHFIUSDT": 744,
+    "WLFIUSDT": 744,
+    "SEIUSDT": 744,
+    "JUPUSDT": 744,
+    "ZAMAUSDT": 744,
+    "RENDERUSDT": 744,
+    "VIRTUALUSDT": 744
+  },
+  "failures": {},
+  "cases": {
+    "base": {
+      "3x_months": 0,
+      "ending_thb": 4492.300113333288,
+      "max_close_drawdown": 0.10153997733334241,
+      "months": [
+        [
+          "2026-10",
+          0.8984600226666576
+        ]
+      ],
+      "events": [
+        [
+          "2026-10-09",
+          "RAYUSDT",
+          0.8984600226666576
+        ]
+      ],
+      "random": {
+        "end_median_thb": 4973.602212920874,
+        "fraction_at_least_actual": 1.0,
+        "draws_with_3x": 0
+      }
+    },
+    "stress": {
+      "3x_months": 0,
+      "ending_thb": 4434.275342006582,
+      "max_close_drawdown": 0.11314493159868355,
+      "months": [
+        [
+          "2026-10",
+          0.8868550684013164
+        ]
+      ],
+      "events": [
+        [
+          "2026-10-09",
+          "RAYUSDT",
+          0.8868550684013164
+        ]
+      ],
+      "random": {
+        "end_median_thb": 4909.360705498389,
+        "fraction_at_least_actual": 1.0,
+        "draws_with_3x": 0
+      }
+    }
+  }
+}

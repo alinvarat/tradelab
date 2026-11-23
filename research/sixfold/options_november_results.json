@@ -1,0 +1,226 @@
+{
+  "partial_month": true,
+  "input_sha256": "f98e29596a4215797bece392b016e1129911ac825db01e441ff3208cb1055d6e",
+  "cases": {
+    "3x_base": {
+      "balance": 114.654224707472,
+      "fills": [
+        {
+          "entry_day": "2026-11-02",
+          "instrument": "BTC-6NOV26-72000-P",
+          "ending": 133.863250702941,
+          "trade_timestamp": 1793613662431,
+          "minimum_premium_with_cost_usd": 13.136749297059371,
+          "status": "filled_proxy",
+          "spent_usd": 13.136749297059371,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 75484.84,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 147,
+          "modeled_exit": "expiry",
+          "contract_units": 0.1
+        },
+        {
+          "entry_day": "2026-11-09",
+          "instrument": "BTC-13NOV26-68000-P",
+          "ending": 114.654224707472,
+          "trade_timestamp": 1794218684104,
+          "minimum_premium_with_cost_usd": 19.20902599546875,
+          "status": "filled_proxy",
+          "spent_usd": 19.20902599546875,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 68709.64,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 133.863250702941,
+          "modeled_exit": "expiry",
+          "contract_units": 0.1
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-20NOV26-59000-P",
+          "ending": 114.654224707472,
+          "month": "2026-11",
+          "starting": 114.654224707472
+        }
+      ],
+      "random_direction_balances": {
+        "CCC": 79.734045414844,
+        "CCP": 79.734045414844,
+        "CPC": 127.790974004531,
+        "CPP": 127.790974004531,
+        "PCC": 73.3238915763,
+        "PCP": 73.3238915763,
+        "PPC": 114.654224707472,
+        "PPP": 114.654224707472
+      }
+    },
+    "3x_stress": {
+      "balance": 109.307264163778,
+      "fills": [
+        {
+          "entry_day": "2026-11-02",
+          "instrument": "BTC-6NOV26-72000-P",
+          "ending": 131.578598651278,
+          "trade_timestamp": 1793613662431,
+          "minimum_premium_with_cost_usd": 15.421401348721876,
+          "status": "filled_proxy",
+          "spent_usd": 15.421401348721876,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 75484.84,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 147,
+          "modeled_exit": "expiry",
+          "contract_units": 0.1
+        },
+        {
+          "entry_day": "2026-11-09",
+          "instrument": "BTC-13NOV26-68000-P",
+          "ending": 109.307264163778,
+          "trade_timestamp": 1794218684104,
+          "minimum_premium_with_cost_usd": 22.2713344875,
+          "status": "filled_proxy",
+          "spent_usd": 22.2713344875,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 68709.64,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 131.578598651278,
+          "modeled_exit": "expiry",
+          "contract_units": 0.1
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-20NOV26-59000-P",
+          "ending": 109.307264163778,
+          "month": "2026-11",
+          "starting": 109.307264163778
+        }
+      ],
+      "random_direction_balances": {
+        "CCC": 75.932056677422,
+        "CCP": 75.932056677422,
+        "CPC": 124.7286655125,
+        "CPP": 124.7286655125,
+        "PCC": 68.407093475653,
+        "PCP": 68.407093475653,
+        "PPC": 109.307264163778,
+        "PPP": 109.307264163778
+      }
+    },
+    "6x_base": {
+      "balance": 114.654224707472,
+      "fills": [
+        {
+          "entry_day": "2026-11-02",
+          "instrument": "BTC-6NOV26-72000-P",
+          "ending": 133.863250702941,
+          "trade_timestamp": 1793613662431,
+          "minimum_premium_with_cost_usd": 13.136749297059371,
+          "status": "filled_proxy",
+          "spent_usd": 13.136749297059371,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 75484.84,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 147,
+          "modeled_exit": "expiry",
+          "contract_units": 0.1
+        },
+        {
+          "entry_day": "2026-11-09",
+          "instrument": "BTC-13NOV26-68000-P",
+          "ending": 114.654224707472,
+          "trade_timestamp": 1794218684104,
+          "minimum_premium_with_cost_usd": 19.20902599546875,
+          "status": "filled_proxy",
+          "spent_usd": 19.20902599546875,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 68709.64,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 133.863250702941,
+          "modeled_exit": "expiry",
+          "contract_units": 0.1
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-20NOV26-59000-P",
+          "ending": 114.654224707472,
+          "month": "2026-11",
+          "starting": 114.654224707472
+        }
+      ],
+      "random_direction_balances": {
+        "CCC": 79.734045414844,
+        "CCP": 79.734045414844,
+        "CPC": 127.790974004531,
+        "CPP": 127.790974004531,
+        "PCC": 73.3238915763,
+        "PCP": 73.3238915763,
+        "PPC": 114.654224707472,
+        "PPP": 114.654224707472
+      }
+    },
+    "6x_stress": {
+      "balance": 109.307264163778,
+      "fills": [
+        {
+          "entry_day": "2026-11-02",
+          "instrument": "BTC-6NOV26-72000-P",
+          "ending": 131.578598651278,
+          "trade_timestamp": 1793613662431,
+          "minimum_premium_with_cost_usd": 15.421401348721876,
+          "status": "filled_proxy",
+          "spent_usd": 15.421401348721876,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 75484.84,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 147,
+          "modeled_exit": "expiry",
+          "contract_units": 0.1
+        },
+        {
+          "entry_day": "2026-11-09",
+          "instrument": "BTC-13NOV26-68000-P",
+          "ending": 109.307264163778,
+          "trade_timestamp": 1794218684104,
+          "minimum_premium_with_cost_usd": 22.2713344875,
+          "status": "filled_proxy",
+          "spent_usd": 22.2713344875,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 68709.64,
+          "side": "P",
+          "month": "2026-11",
+          "starting": 131.578598651278,
+          "modeled_exit": "expiry",
+          "contract_units": 0.1
+        },
+        {
+          "entry_day": "2026-11-16",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-20NOV26-59000-P",
+          "ending": 109.307264163778,
+          "month": "2026-11",
+          "starting": 109.307264163778
+        }
+      ],
+      "random_direction_balances": {
+        "CCC": 75.932056677422,
+        "CCP": 75.932056677422,
+        "CPC": 124.7286655125,
+        "CPP": 124.7286655125,
+        "PCC": 68.407093475653,
+        "PCP": 68.407093475653,
+        "PPC": 109.307264163778,
+        "PPP": 109.307264163778
+      }
+    }
+  }
+}

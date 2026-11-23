@@ -1,0 +1,89 @@
+{
+  "source": "NOAA GHCN Central Park observations from world_signals/weather_noaa_daily.csv",
+  "checks": [
+    {
+      "day": "2025-01-16",
+      "ticker": "KXHIGHNY-25JAN16-B28.5",
+      "noaa_central_park_high_f": 30,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-02-11",
+      "ticker": "KXHIGHNY-25FEB11-B32.5",
+      "noaa_central_park_high_f": 35,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-03-01",
+      "ticker": "KXHIGHNY-25MAR01-B53.5",
+      "noaa_central_park_high_f": 64,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-04-09",
+      "ticker": "KXHIGHNY-25APR09-T47",
+      "noaa_central_park_high_f": 49,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-05-01",
+      "ticker": "KXHIGHNY-25MAY01-T73",
+      "noaa_central_park_high_f": 71,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-06-01",
+      "ticker": "KXHIGHNY-25JUN01-B70.5",
+      "noaa_central_park_high_f": 66,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-07-01",
+      "ticker": "KXHIGHNY-25JUL01-T91",
+      "noaa_central_park_high_f": 89,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-08-02",
+      "ticker": "KXHIGHNY-25AUG02-T84",
+      "noaa_central_park_high_f": 80,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-09-01",
+      "ticker": "KXHIGHNY-25SEP01-T75",
+      "noaa_central_park_high_f": 78,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-10-01",
+      "ticker": "KXHIGHNY-25OCT01-T72",
+      "noaa_central_park_high_f": 69,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-11-01",
+      "ticker": "KXHIGHNY-25NOV01-T60",
+      "noaa_central_park_high_f": 58,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    },
+    {
+      "day": "2025-12-01",
+      "ticker": "KXHIGHNY-25DEC01-T40",
+      "noaa_central_park_high_f": 43,
+      "settled_yes": false,
+      "independent_noaa_yes": false
+    }
+  ]
+}

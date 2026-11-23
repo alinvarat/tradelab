@@ -1,0 +1,145 @@
+{
+  "snapshot_sha256": "616f14c043dfd05a65d52221592a946e6f4313dcf4cc882f582ec7e66489eb86",
+  "periods": {
+    "2024": {
+      "counts": {
+        "winning": {
+          "missing_quote": 234,
+          "outside_cheap_quote_cap": 25,
+          "no_prior_volume": 2
+        },
+        "losing": {
+          "missing_quote": 1042,
+          "outside_cheap_quote_cap": 73,
+          "no_prior_volume": 7,
+          "picked": 4
+        },
+        "other": {}
+      },
+      "quoted_affordable_winners": [
+        {
+          "day": "2024-12-10",
+          "ticker": "KXHIGHNY-24DEC10-B50.5",
+          "reason": "no_prior_volume",
+          "p": 0.1846760660381091,
+          "ask_signal": "0.1200",
+          "ask_entry": "0.1200",
+          "prior_volume": 0.0,
+          "entry_volume": 4002.0,
+          "selected": null
+        },
+        {
+          "day": "2024-12-18",
+          "ticker": "KXHIGHNY-24DEC18-T52",
+          "reason": "no_prior_volume",
+          "p": 0.16550108405086705,
+          "ask_signal": "0.1400",
+          "ask_entry": "0.1400",
+          "prior_volume": 0.0,
+          "entry_volume": 3912.0,
+          "selected": null
+        }
+      ]
+    },
+    "2025": {
+      "counts": {
+        "winning": {
+          "outside_cheap_quote_cap": 198,
+          "missing_quote": 40,
+          "no_prior_volume": 4,
+          "no_daily_pick": 1,
+          "another_contract_picked": 2
+        },
+        "losing": {
+          "outside_cheap_quote_cap": 404,
+          "missing_quote": 348,
+          "no_prior_volume": 201,
+          "picked": 107,
+          "another_contract_picked": 89,
+          "no_entry_volume": 22,
+          "no_daily_pick": 5
+        },
+        "other": {}
+      },
+      "quoted_affordable_winners": [
+        {
+          "day": "2025-05-29",
+          "ticker": "KXHIGHNY-25MAY29-T68",
+          "reason": "no_prior_volume",
+          "p": 0.2322706425705423,
+          "ask_signal": "0.1100",
+          "ask_entry": "0.1100",
+          "prior_volume": 0.0,
+          "entry_volume": 508.0,
+          "selected": null
+        },
+        {
+          "day": "2025-06-02",
+          "ticker": "KXHIGHNY-25JUN02-T72",
+          "reason": "no_prior_volume",
+          "p": 0.3088559340031847,
+          "ask_signal": "0.1400",
+          "ask_entry": "0.1400",
+          "prior_volume": 0.0,
+          "entry_volume": 1497.0,
+          "selected": null
+        },
+        {
+          "day": "2025-06-17",
+          "ticker": "KXHIGHNY-25JUN17-T69",
+          "reason": "no_prior_volume",
+          "p": 0.1947728555017184,
+          "ask_signal": "0.1400",
+          "ask_entry": "0.1400",
+          "prior_volume": 0.0,
+          "entry_volume": 2399.0,
+          "selected": null
+        },
+        {
+          "day": "2025-06-30",
+          "ticker": "KXHIGHNY-25JUN30-B90.5",
+          "reason": "no_prior_volume",
+          "p": 0.12618141177011583,
+          "ask_signal": "0.1000",
+          "ask_entry": "0.1000",
+          "prior_volume": 0.0,
+          "entry_volume": 1583.0,
+          "selected": null
+        },
+        {
+          "day": "2025-09-25",
+          "ticker": "KXHIGHNY-25SEP25-B77.5",
+          "reason": "no_daily_pick",
+          "p": 0.15584762695614152,
+          "ask_signal": "0.1200",
+          "ask_entry": "0.1200",
+          "prior_volume": 106.0,
+          "entry_volume": 558.0,
+          "selected": null
+        },
+        {
+          "day": "2025-11-05",
+          "ticker": "KXHIGHNY-25NOV05-B66.5",
+          "reason": "another_contract_picked",
+          "p": 0.16434578323365834,
+          "ask_signal": "0.0600",
+          "ask_entry": "0.0600",
+          "prior_volume": 274.0,
+          "entry_volume": 743.0,
+          "selected": "KXHIGHNY-25NOV05-T67"
+        },
+        {
+          "day": "2025-12-02",
+          "ticker": "KXHIGHNY-25DEC02-B39.5",
+          "reason": "another_contract_picked",
+          "p": 0.18989631440380406,
+          "ask_signal": "0.1000",
+          "ask_entry": "0.1000",
+          "prior_volume": 245.0,
+          "entry_volume": 2056.0,
+          "selected": "KXHIGHNY-25DEC02-T39"
+        }
+      ]
+    }
+  }
+}

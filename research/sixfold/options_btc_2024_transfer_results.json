@@ -1,0 +1,4473 @@
+{
+  "sha256": [
+    "b4083e8273baf2acae15c98918176882c8f73905d7b405579e744c5754a6b761",
+    "ed8d8c9ffdefe46ee2e56f62dff0ac121bd856df564e53c49eb3f12bfc6ba65f"
+  ],
+  "rules": {
+    "trend": {
+      "eligible_weeks": 44,
+      "cases": {
+        "3x_base": {
+          "end": 12.377997612281,
+          "hits": 1,
+          "funded_hits": 0,
+          "drawdown_month_end": 0.9157959346103334,
+          "months": [
+            {
+              "month": "2024-01",
+              "start": 147.0,
+              "end": 39.146848533779,
+              "orders": [
+                {
+                  "entry_day": "2024-01-01",
+                  "instrument": "BTC-5JAN24-39000-P",
+                  "ending": 77.335299012366,
+                  "trade_timestamp": 1704102556558,
+                  "minimum_premium_with_cost_usd": 9.952100141090625,
+                  "status": "filled_proxy",
+                  "spent_usd": 69.66470098763438,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 43832.51,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 147.0,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.7000000000000001
+                },
+                {
+                  "entry_day": "2024-01-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JAN24-47500-C",
+                  "ending": 77.335299012366,
+                  "trade_timestamp": 1704706484478,
+                  "minimum_premium_with_cost_usd": 69.59747080256248,
+                  "month": "2024-01",
+                  "starting": 77.335299012366
+                },
+                {
+                  "entry_day": "2024-01-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19JAN24-39000-P",
+                  "ending": 77.335299012366,
+                  "month": "2024-01",
+                  "starting": 77.335299012366
+                },
+                {
+                  "entry_day": "2024-01-22",
+                  "instrument": "BTC-26JAN24-37000-P",
+                  "ending": 39.146848533779,
+                  "trade_timestamp": 1705914503953,
+                  "minimum_premium_with_cost_usd": 9.547112619646873,
+                  "status": "filled_proxy",
+                  "spent_usd": 38.18845047858749,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 39936.59,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 77.335299012366,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.4
+                }
+              ]
+            },
+            {
+              "month": "2024-02",
+              "start": 39.146848533779,
+              "end": 117.44054560133699,
+              "orders": [
+                {
+                  "entry_day": "2024-02-05",
+                  "instrument": "BTC-9FEB24-46000-C",
+                  "ending": 59.504626603867,
+                  "trade_timestamp": 1707126707301,
+                  "minimum_premium_with_cost_usd": 7.244787667162498,
+                  "status": "filled_proxy",
+                  "spent_usd": 7.244787667162498,
+                  "settled_value_usd": 27.60256573725035,
+                  "settlement_index_usd": 46283.66,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 39.146848533779,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-12",
+                  "instrument": "BTC-16FEB24-52000-C",
+                  "ending": 117.44054560133699,
+                  "trade_timestamp": 1707728793507,
+                  "minimum_premium_with_cost_usd": 16.967927794399998,
+                  "status": "filled_proxy",
+                  "spent_usd": 16.967927794399998,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 51864.41,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 59.504626603867,
+                  "modeled_exit": "early",
+                  "contract_units": 0.1,
+                  "sale_print": {
+                    "trade_seq": 1359,
+                    "trade_id": "284049223",
+                    "timestamp": 1707957557754,
+                    "tick_direction": 1,
+                    "price": 0.0165,
+                    "mark_price": 0.01694452,
+                    "iv": 48.89,
+                    "instrument_name": "BTC-16FEB24-52000-C",
+                    "index_price": 52467.71,
+                    "direction": "sell",
+                    "contracts": 2.0,
+                    "amount": 2.0
+                  },
+                  "net_if_sold_on_print": 123.00413017415451
+                }
+              ]
+            },
+            {
+              "month": "2024-03",
+              "start": 117.44054560133699,
+              "end": 86.064479417262,
+              "orders": [
+                {
+                  "entry_day": "2024-03-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8MAR24-70000-C",
+                  "ending": 117.44054560133699,
+                  "trade_timestamp": 1709542857705,
+                  "minimum_premium_with_cost_usd": 118.5762068890625,
+                  "month": "2024-03",
+                  "starting": 117.44054560133699
+                },
+                {
+                  "entry_day": "2024-03-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15MAR24-78000-C",
+                  "ending": 117.44054560133699,
+                  "trade_timestamp": 1710148466739,
+                  "minimum_premium_with_cost_usd": 113.38269556424999,
+                  "month": "2024-03",
+                  "starting": 117.44054560133699
+                },
+                {
+                  "entry_day": "2024-03-18",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-22MAR24-62000-P",
+                  "ending": 117.44054560133699,
+                  "month": "2024-03",
+                  "starting": 117.44054560133699
+                },
+                {
+                  "entry_day": "2024-03-25",
+                  "instrument": "BTC-29MAR24-61000-P",
+                  "ending": 86.064479417262,
+                  "trade_timestamp": 1711363467890,
+                  "minimum_premium_with_cost_usd": 31.376066184074997,
+                  "status": "filled_proxy",
+                  "spent_usd": 31.376066184074997,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 69984.45,
+                  "side": "P",
+                  "month": "2024-03",
+                  "starting": 117.44054560133699,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                }
+              ]
+            },
+            {
+              "month": "2024-04",
+              "start": 86.064479417262,
+              "end": 46.788459710962,
+              "orders": [
+                {
+                  "entry_day": "2024-04-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5APR24-75000-C",
+                  "ending": 86.064479417262,
+                  "month": "2024-04",
+                  "starting": 86.064479417262
+                },
+                {
+                  "entry_day": "2024-04-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12APR24-78000-C",
+                  "ending": 86.064479417262,
+                  "trade_timestamp": 1712566974772,
+                  "minimum_premium_with_cost_usd": 81.082118847625,
+                  "month": "2024-04",
+                  "starting": 86.064479417262
+                },
+                {
+                  "entry_day": "2024-04-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19APR24-61000-P",
+                  "ending": 86.064479417262,
+                  "month": "2024-04",
+                  "starting": 86.064479417262
+                },
+                {
+                  "entry_day": "2024-04-22",
+                  "instrument": "BTC-26APR24-60000-P",
+                  "ending": 46.788459710962,
+                  "trade_timestamp": 1713776451834,
+                  "minimum_premium_with_cost_usd": 39.27601970629999,
+                  "status": "filled_proxy",
+                  "spent_usd": 39.27601970629999,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 64334.21,
+                  "side": "P",
+                  "month": "2024-04",
+                  "starting": 86.064479417262,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                }
+              ]
+            },
+            {
+              "month": "2024-05",
+              "start": 46.788459710962,
+              "end": 32.581956923212,
+              "orders": [
+                {
+                  "entry_day": "2024-05-06",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-10MAY24-71000-C",
+                  "ending": 46.788459710962,
+                  "trade_timestamp": 1714990282588,
+                  "minimum_premium_with_cost_usd": 25.2858188699125,
+                  "month": "2024-05",
+                  "starting": 46.788459710962
+                },
+                {
+                  "entry_day": "2024-05-13",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-17MAY24-57000-P",
+                  "ending": 46.788459710962,
+                  "month": "2024-05",
+                  "starting": 46.788459710962
+                },
+                {
+                  "entry_day": "2024-05-20",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-24MAY24-72000-C",
+                  "ending": 46.788459710962,
+                  "trade_timestamp": 1716199621189,
+                  "minimum_premium_with_cost_usd": 29.8450928655,
+                  "month": "2024-05",
+                  "starting": 46.788459710962
+                },
+                {
+                  "entry_day": "2024-05-27",
+                  "instrument": "BTC-31MAY24-74000-C",
+                  "ending": 32.581956923212,
+                  "trade_timestamp": 1716806114971,
+                  "minimum_premium_with_cost_usd": 14.206502787749997,
+                  "status": "filled_proxy",
+                  "spent_usd": 14.206502787749997,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 68201.52,
+                  "side": "C",
+                  "month": "2024-05",
+                  "starting": 46.788459710962,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                }
+              ]
+            },
+            {
+              "month": "2024-06",
+              "start": 32.581956923212,
+              "end": 24.061616510259,
+              "orders": [
+                {
+                  "entry_day": "2024-06-03",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-7JUN24-75000-C",
+                  "ending": 32.581956923212,
+                  "month": "2024-06",
+                  "starting": 32.581956923212
+                },
+                {
+                  "entry_day": "2024-06-10",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-14JUN24-75000-C",
+                  "ending": 32.581956923212,
+                  "trade_timestamp": 1718010480079,
+                  "minimum_premium_with_cost_usd": 18.876788455424997,
+                  "month": "2024-06",
+                  "starting": 32.581956923212
+                },
+                {
+                  "entry_day": "2024-06-17",
+                  "instrument": "BTC-21JUN24-60000-P",
+                  "ending": 24.061616510259,
+                  "trade_timestamp": 1718618512603,
+                  "minimum_premium_with_cost_usd": 8.520340412953125,
+                  "status": "filled_proxy",
+                  "spent_usd": 8.520340412953125,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 64495.11,
+                  "side": "P",
+                  "month": "2024-06",
+                  "starting": 32.581956923212,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-06-24",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-28JUN24-57000-P",
+                  "ending": 24.061616510259,
+                  "trade_timestamp": 1719221063922,
+                  "minimum_premium_with_cost_usd": 14.5457648478,
+                  "month": "2024-06",
+                  "starting": 24.061616510259
+                }
+              ]
+            },
+            {
+              "month": "2024-07",
+              "start": 24.061616510259,
+              "end": 24.061616510259,
+              "orders": [
+                {
+                  "entry_day": "2024-07-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5JUL24-68000-C",
+                  "ending": 24.061616510259,
+                  "month": "2024-07",
+                  "starting": 24.061616510259
+                },
+                {
+                  "entry_day": "2024-07-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JUL24-53000-P",
+                  "ending": 24.061616510259,
+                  "trade_timestamp": 1720430222663,
+                  "minimum_premium_with_cost_usd": 28.287270221,
+                  "month": "2024-07",
+                  "starting": 24.061616510259
+                },
+                {
+                  "entry_day": "2024-07-15",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-19JUL24-68000-C",
+                  "ending": 24.061616510259,
+                  "trade_timestamp": 1721035451964,
+                  "minimum_premium_with_cost_usd": 19.248515966699998,
+                  "month": "2024-07",
+                  "starting": 24.061616510259
+                },
+                {
+                  "entry_day": "2024-07-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26JUL24-73000-C",
+                  "ending": 24.061616510259,
+                  "trade_timestamp": 1721640531197,
+                  "minimum_premium_with_cost_usd": 36.17019847619999,
+                  "month": "2024-07",
+                  "starting": 24.061616510259
+                }
+              ]
+            },
+            {
+              "month": "2024-08",
+              "start": 24.061616510259,
+              "end": 24.061616510259,
+              "orders": [
+                {
+                  "entry_day": "2024-08-05",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-9AUG24-48000-P",
+                  "ending": 24.061616510259,
+                  "trade_timestamp": 1722848654476,
+                  "minimum_premium_with_cost_usd": 62.481313349,
+                  "month": "2024-08",
+                  "starting": 24.061616510259
+                },
+                {
+                  "entry_day": "2024-08-12",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-16AUG24-63500-C",
+                  "ending": 24.061616510259,
+                  "month": "2024-08",
+                  "starting": 24.061616510259
+                }
+              ]
+            },
+            {
+              "month": "2024-09",
+              "start": 24.061616510259,
+              "end": 24.061616510259,
+              "orders": [
+                {
+                  "entry_day": "2024-09-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6SEP24-53000-P",
+                  "ending": 24.061616510259,
+                  "trade_timestamp": 1725269383944,
+                  "minimum_premium_with_cost_usd": 17.78778386325,
+                  "month": "2024-09",
+                  "starting": 24.061616510259
+                },
+                {
+                  "entry_day": "2024-09-09",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-13SEP24-51000-P",
+                  "ending": 24.061616510259,
+                  "trade_timestamp": 1725878828133,
+                  "minimum_premium_with_cost_usd": 36.781159088749995,
+                  "month": "2024-09",
+                  "starting": 24.061616510259
+                },
+                {
+                  "entry_day": "2024-09-16",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-20SEP24-64000-C",
+                  "ending": 24.061616510259,
+                  "month": "2024-09",
+                  "starting": 24.061616510259
+                },
+                {
+                  "entry_day": "2024-09-23",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-27SEP24-69000-C",
+                  "ending": 24.061616510259,
+                  "month": "2024-09",
+                  "starting": 24.061616510259
+                }
+              ]
+            },
+            {
+              "month": "2024-10",
+              "start": 24.061616510259,
+              "end": 12.377997612281,
+              "orders": [
+                {
+                  "entry_day": "2024-10-07",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-11OCT24-58000-P",
+                  "ending": 24.061616510259,
+                  "trade_timestamp": 1728292884195,
+                  "minimum_premium_with_cost_usd": 13.941282452906249,
+                  "month": "2024-10",
+                  "starting": 24.061616510259
+                },
+                {
+                  "entry_day": "2024-10-14",
+                  "instrument": "BTC-18OCT24-70000-C",
+                  "ending": 12.377997612281,
+                  "trade_timestamp": 1728897140748,
+                  "minimum_premium_with_cost_usd": 11.683618897978125,
+                  "status": "filled_proxy",
+                  "spent_usd": 11.683618897978125,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 67962.18,
+                  "side": "C",
+                  "month": "2024-10",
+                  "starting": 24.061616510259,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-10-21",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-25OCT24-74000-C",
+                  "ending": 12.377997612281,
+                  "month": "2024-10",
+                  "starting": 12.377997612281
+                }
+              ]
+            },
+            {
+              "month": "2024-11",
+              "start": 12.377997612281,
+              "end": 12.377997612281,
+              "orders": [
+                {
+                  "entry_day": "2024-11-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8NOV24-74000-C",
+                  "ending": 12.377997612281,
+                  "trade_timestamp": 1730714106938,
+                  "minimum_premium_with_cost_usd": 92.97496028131249,
+                  "month": "2024-11",
+                  "starting": 12.377997612281
+                },
+                {
+                  "entry_day": "2024-11-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15NOV24-88000-C",
+                  "ending": 12.377997612281,
+                  "trade_timestamp": 1731320125119,
+                  "minimum_premium_with_cost_usd": 39.40053266242499,
+                  "month": "2024-11",
+                  "starting": 12.377997612281
+                },
+                {
+                  "entry_day": "2024-11-18",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-22NOV24-100000-C",
+                  "ending": 12.377997612281,
+                  "trade_timestamp": 1731922482167,
+                  "minimum_premium_with_cost_usd": 61.09020101593749,
+                  "month": "2024-11",
+                  "starting": 12.377997612281
+                },
+                {
+                  "entry_day": "2024-11-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29NOV24-106000-C",
+                  "ending": 12.377997612281,
+                  "trade_timestamp": 1732526559755,
+                  "minimum_premium_with_cost_usd": 71.42398668,
+                  "month": "2024-11",
+                  "starting": 12.377997612281
+                }
+              ]
+            },
+            {
+              "month": "2024-12",
+              "start": 12.377997612281,
+              "end": 12.377997612281,
+              "orders": [
+                {
+                  "entry_day": "2024-12-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6DEC24-87000-P",
+                  "ending": 12.377997612281,
+                  "trade_timestamp": 1733136237438,
+                  "minimum_premium_with_cost_usd": 26.935045359175003,
+                  "month": "2024-12",
+                  "starting": 12.377997612281
+                },
+                {
+                  "entry_day": "2024-12-09",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-13DEC24-107000-C",
+                  "ending": 12.377997612281,
+                  "month": "2024-12",
+                  "starting": 12.377997612281
+                },
+                {
+                  "entry_day": "2024-12-16",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-20DEC24-114000-C",
+                  "ending": 12.377997612281,
+                  "trade_timestamp": 1734341618771,
+                  "minimum_premium_with_cost_usd": 44.251001775374995,
+                  "month": "2024-12",
+                  "starting": 12.377997612281
+                },
+                {
+                  "entry_day": "2024-12-23",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-27DEC24-88000-P",
+                  "ending": 12.377997612281,
+                  "trade_timestamp": 1734949876941,
+                  "minimum_premium_with_cost_usd": 31.638104576399996,
+                  "month": "2024-12",
+                  "starting": 12.377997612281
+                }
+              ]
+            }
+          ],
+          "random_median_end": 15.190854988463,
+          "random_fraction_ge": 0.732
+        },
+        "3x_stress": {
+          "end": 16.173542259422,
+          "hits": 0,
+          "funded_hits": 0,
+          "drawdown_month_end": 0.8899759029971293,
+          "months": [
+            {
+              "month": "2024-01",
+              "start": 147.0,
+              "end": 43.422435784875,
+              "orders": [
+                {
+                  "entry_day": "2024-01-01",
+                  "instrument": "BTC-5JAN24-39000-P",
+                  "ending": 76.99875456315,
+                  "trade_timestamp": 1704102556558,
+                  "minimum_premium_with_cost_usd": 11.666874239475002,
+                  "status": "filled_proxy",
+                  "spent_usd": 70.00124543685001,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 43832.51,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 147.0,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.6000000000000001
+                },
+                {
+                  "entry_day": "2024-01-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JAN24-47500-C",
+                  "ending": 76.99875456315,
+                  "trade_timestamp": 1704706484478,
+                  "minimum_premium_with_cost_usd": 81.47192079731252,
+                  "month": "2024-01",
+                  "starting": 76.99875456315
+                },
+                {
+                  "entry_day": "2024-01-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19JAN24-39000-P",
+                  "ending": 76.99875456315,
+                  "month": "2024-01",
+                  "starting": 76.99875456315
+                },
+                {
+                  "entry_day": "2024-01-22",
+                  "instrument": "BTC-26JAN24-37000-P",
+                  "ending": 43.422435784875,
+                  "trade_timestamp": 1705914503953,
+                  "minimum_premium_with_cost_usd": 11.192106259425001,
+                  "status": "filled_proxy",
+                  "spent_usd": 33.576318778275,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 39936.59,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 76.99875456315,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.30000000000000004
+                }
+              ]
+            },
+            {
+              "month": "2024-02",
+              "start": 43.422435784875,
+              "end": 42.852879929813,
+              "orders": [
+                {
+                  "entry_day": "2024-02-05",
+                  "instrument": "BTC-9FEB24-46000-C",
+                  "ending": 62.520250782413,
+                  "trade_timestamp": 1707126707301,
+                  "minimum_premium_with_cost_usd": 8.504750739712499,
+                  "status": "filled_proxy",
+                  "spent_usd": 8.504750739712499,
+                  "settled_value_usd": 27.60256573725035,
+                  "settlement_index_usd": 46283.66,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 43.422435784875,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-12",
+                  "instrument": "BTC-16FEB24-52000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1707728793507,
+                  "minimum_premium_with_cost_usd": 19.6673708526,
+                  "status": "filled_proxy",
+                  "spent_usd": 19.6673708526,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 51864.41,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 62.520250782413,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-19",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-23FEB24-56000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1708338785184,
+                  "minimum_premium_with_cost_usd": 31.299805156949994,
+                  "month": "2024-02",
+                  "starting": 42.852879929813
+                }
+              ]
+            },
+            {
+              "month": "2024-03",
+              "start": 42.852879929813,
+              "end": 42.852879929813,
+              "orders": [
+                {
+                  "entry_day": "2024-03-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8MAR24-70000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1709542857705,
+                  "minimum_premium_with_cost_usd": 138.8568271018125,
+                  "month": "2024-03",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-03-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15MAR24-78000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1710148466739,
+                  "minimum_premium_with_cost_usd": 132.72761044725002,
+                  "month": "2024-03",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-03-18",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-22MAR24-62000-P",
+                  "ending": 42.852879929813,
+                  "month": "2024-03",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-03-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29MAR24-61000-P",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1711363467890,
+                  "minimum_premium_with_cost_usd": 36.482235413175,
+                  "month": "2024-03",
+                  "starting": 42.852879929813
+                }
+              ]
+            },
+            {
+              "month": "2024-04",
+              "start": 42.852879929813,
+              "end": 42.852879929813,
+              "orders": [
+                {
+                  "entry_day": "2024-04-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5APR24-75000-C",
+                  "ending": 42.852879929813,
+                  "month": "2024-04",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-04-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12APR24-78000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1712566974772,
+                  "minimum_premium_with_cost_usd": 94.806486403125,
+                  "month": "2024-04",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-04-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19APR24-61000-P",
+                  "ending": 42.852879929813,
+                  "month": "2024-04",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-04-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26APR24-60000-P",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1713776451834,
+                  "minimum_premium_with_cost_usd": 45.7613607867,
+                  "month": "2024-04",
+                  "starting": 42.852879929813
+                }
+              ]
+            },
+            {
+              "month": "2024-05",
+              "start": 42.852879929813,
+              "end": 26.175681005063,
+              "orders": [
+                {
+                  "entry_day": "2024-05-06",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-10MAY24-71000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1714990282588,
+                  "minimum_premium_with_cost_usd": 29.342017498462504,
+                  "month": "2024-05",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-05-13",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-17MAY24-57000-P",
+                  "ending": 42.852879929813,
+                  "month": "2024-05",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-05-20",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-24MAY24-72000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1716199621189,
+                  "minimum_premium_with_cost_usd": 34.6848376545,
+                  "month": "2024-05",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-05-27",
+                  "instrument": "BTC-31MAY24-74000-C",
+                  "ending": 26.175681005063,
+                  "trade_timestamp": 1716806114971,
+                  "minimum_premium_with_cost_usd": 16.677198924750005,
+                  "status": "filled_proxy",
+                  "spent_usd": 16.677198924750005,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 68201.52,
+                  "side": "C",
+                  "month": "2024-05",
+                  "starting": 42.852879929813,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                }
+              ]
+            },
+            {
+              "month": "2024-06",
+              "start": 26.175681005063,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-06-03",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-7JUN24-75000-C",
+                  "ending": 26.175681005063,
+                  "month": "2024-06",
+                  "starting": 26.175681005063
+                },
+                {
+                  "entry_day": "2024-06-10",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-14JUN24-75000-C",
+                  "ending": 26.175681005063,
+                  "trade_timestamp": 1718010480079,
+                  "minimum_premium_with_cost_usd": 21.796954625325,
+                  "month": "2024-06",
+                  "starting": 26.175681005063
+                },
+                {
+                  "entry_day": "2024-06-17",
+                  "instrument": "BTC-21JUN24-60000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1718618512603,
+                  "minimum_premium_with_cost_usd": 10.002138745640625,
+                  "status": "filled_proxy",
+                  "spent_usd": 10.002138745640625,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 64495.11,
+                  "side": "P",
+                  "month": "2024-06",
+                  "starting": 26.175681005063,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-06-24",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-28JUN24-57000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1719221063922,
+                  "minimum_premium_with_cost_usd": 17.0520399504,
+                  "month": "2024-06",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-07",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-07-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5JUL24-68000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-07",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-07-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JUL24-53000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1720430222663,
+                  "minimum_premium_with_cost_usd": 32.90560005300001,
+                  "month": "2024-07",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-07-15",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-19JUL24-68000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1721035451964,
+                  "minimum_premium_with_cost_usd": 22.2678910203,
+                  "month": "2024-07",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-07-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26JUL24-73000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1721640531197,
+                  "minimum_premium_with_cost_usd": 42.1085892708,
+                  "month": "2024-07",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-08",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-08-05",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-9AUG24-48000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1722848654476,
+                  "minimum_premium_with_cost_usd": 73.07136645900002,
+                  "month": "2024-08",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-08-12",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-16AUG24-63500-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-08",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-09",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-09-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6SEP24-53000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1725269383944,
+                  "minimum_premium_with_cost_usd": 20.57802446925,
+                  "month": "2024-09",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-09-09",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-13SEP24-51000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1725878828133,
+                  "minimum_premium_with_cost_usd": 42.88821946575,
+                  "month": "2024-09",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-09-16",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-20SEP24-64000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-09",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-09-23",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-27SEP24-69000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-09",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-10",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-10-07",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-11OCT24-58000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1728292884195,
+                  "minimum_premium_with_cost_usd": 16.36585331428125,
+                  "month": "2024-10",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-10-14",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-18OCT24-70000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1728897140748,
+                  "minimum_premium_with_cost_usd": 13.715552619365628,
+                  "month": "2024-10",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-10-21",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-25OCT24-74000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-10",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-11",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-11-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8NOV24-74000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1730714106938,
+                  "minimum_premium_with_cost_usd": 108.78585925706253,
+                  "month": "2024-11",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-11-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15NOV24-88000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1731320125119,
+                  "minimum_premium_with_cost_usd": 45.823190024324994,
+                  "month": "2024-11",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-11-18",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-22NOV24-100000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1731922482167,
+                  "minimum_premium_with_cost_usd": 71.23347967518751,
+                  "month": "2024-11",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-11-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29NOV24-106000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1732526559755,
+                  "minimum_premium_with_cost_usd": 83.32798446000002,
+                  "month": "2024-11",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-12",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-12-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6DEC24-87000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1733136237438,
+                  "minimum_premium_with_cost_usd": 31.12282626307501,
+                  "month": "2024-12",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-12-09",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-13DEC24-107000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-12",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-12-16",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-20DEC24-114000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1734341618771,
+                  "minimum_premium_with_cost_usd": 51.398431990875,
+                  "month": "2024-12",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-12-23",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-27DEC24-88000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1734949876941,
+                  "minimum_premium_with_cost_usd": 36.6386560596,
+                  "month": "2024-12",
+                  "starting": 16.173542259422
+                }
+              ]
+            }
+          ],
+          "random_median_end": 18.280067826103,
+          "random_fraction_ge": 0.672
+        },
+        "6x_base": {
+          "end": 19.809855608764,
+          "hits": 0,
+          "funded_hits": 0,
+          "drawdown_month_end": 0.8652390774914014,
+          "months": [
+            {
+              "month": "2024-01",
+              "start": 147.0,
+              "end": 39.146848533779,
+              "orders": [
+                {
+                  "entry_day": "2024-01-01",
+                  "instrument": "BTC-5JAN24-39000-P",
+                  "ending": 77.335299012366,
+                  "trade_timestamp": 1704102556558,
+                  "minimum_premium_with_cost_usd": 9.952100141090625,
+                  "status": "filled_proxy",
+                  "spent_usd": 69.66470098763438,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 43832.51,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 147.0,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.7000000000000001
+                },
+                {
+                  "entry_day": "2024-01-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JAN24-47500-C",
+                  "ending": 77.335299012366,
+                  "trade_timestamp": 1704706484478,
+                  "minimum_premium_with_cost_usd": 69.59747080256248,
+                  "month": "2024-01",
+                  "starting": 77.335299012366
+                },
+                {
+                  "entry_day": "2024-01-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19JAN24-39000-P",
+                  "ending": 77.335299012366,
+                  "month": "2024-01",
+                  "starting": 77.335299012366
+                },
+                {
+                  "entry_day": "2024-01-22",
+                  "instrument": "BTC-26JAN24-37000-P",
+                  "ending": 39.146848533779,
+                  "trade_timestamp": 1705914503953,
+                  "minimum_premium_with_cost_usd": 9.547112619646873,
+                  "status": "filled_proxy",
+                  "spent_usd": 38.18845047858749,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 39936.59,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 77.335299012366,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.4
+                }
+              ]
+            },
+            {
+              "month": "2024-02",
+              "start": 39.146848533779,
+              "end": 42.536698809467,
+              "orders": [
+                {
+                  "entry_day": "2024-02-05",
+                  "instrument": "BTC-9FEB24-46000-C",
+                  "ending": 59.504626603867,
+                  "trade_timestamp": 1707126707301,
+                  "minimum_premium_with_cost_usd": 7.244787667162498,
+                  "status": "filled_proxy",
+                  "spent_usd": 7.244787667162498,
+                  "settled_value_usd": 27.60256573725035,
+                  "settlement_index_usd": 46283.66,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 39.146848533779,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-12",
+                  "instrument": "BTC-16FEB24-52000-C",
+                  "ending": 42.536698809467,
+                  "trade_timestamp": 1707728793507,
+                  "minimum_premium_with_cost_usd": 16.967927794399998,
+                  "status": "filled_proxy",
+                  "spent_usd": 16.967927794399998,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 51864.41,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 59.504626603867,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-19",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-23FEB24-56000-C",
+                  "ending": 42.536698809467,
+                  "trade_timestamp": 1708338785184,
+                  "minimum_premium_with_cost_usd": 26.895812471549995,
+                  "month": "2024-02",
+                  "starting": 42.536698809467
+                }
+              ]
+            },
+            {
+              "month": "2024-03",
+              "start": 42.536698809467,
+              "end": 42.536698809467,
+              "orders": [
+                {
+                  "entry_day": "2024-03-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8MAR24-70000-C",
+                  "ending": 42.536698809467,
+                  "trade_timestamp": 1709542857705,
+                  "minimum_premium_with_cost_usd": 118.5762068890625,
+                  "month": "2024-03",
+                  "starting": 42.536698809467
+                },
+                {
+                  "entry_day": "2024-03-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15MAR24-78000-C",
+                  "ending": 42.536698809467,
+                  "trade_timestamp": 1710148466739,
+                  "minimum_premium_with_cost_usd": 113.38269556424999,
+                  "month": "2024-03",
+                  "starting": 42.536698809467
+                },
+                {
+                  "entry_day": "2024-03-18",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-22MAR24-62000-P",
+                  "ending": 42.536698809467,
+                  "month": "2024-03",
+                  "starting": 42.536698809467
+                },
+                {
+                  "entry_day": "2024-03-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29MAR24-61000-P",
+                  "ending": 42.536698809467,
+                  "trade_timestamp": 1711363467890,
+                  "minimum_premium_with_cost_usd": 31.376066184074997,
+                  "month": "2024-03",
+                  "starting": 42.536698809467
+                }
+              ]
+            },
+            {
+              "month": "2024-04",
+              "start": 42.536698809467,
+              "end": 42.536698809467,
+              "orders": [
+                {
+                  "entry_day": "2024-04-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5APR24-75000-C",
+                  "ending": 42.536698809467,
+                  "month": "2024-04",
+                  "starting": 42.536698809467
+                },
+                {
+                  "entry_day": "2024-04-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12APR24-78000-C",
+                  "ending": 42.536698809467,
+                  "trade_timestamp": 1712566974772,
+                  "minimum_premium_with_cost_usd": 81.082118847625,
+                  "month": "2024-04",
+                  "starting": 42.536698809467
+                },
+                {
+                  "entry_day": "2024-04-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19APR24-61000-P",
+                  "ending": 42.536698809467,
+                  "month": "2024-04",
+                  "starting": 42.536698809467
+                },
+                {
+                  "entry_day": "2024-04-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26APR24-60000-P",
+                  "ending": 42.536698809467,
+                  "trade_timestamp": 1713776451834,
+                  "minimum_premium_with_cost_usd": 39.27601970629999,
+                  "month": "2024-04",
+                  "starting": 42.536698809467
+                }
+              ]
+            },
+            {
+              "month": "2024-05",
+              "start": 42.536698809467,
+              "end": 28.330196021717,
+              "orders": [
+                {
+                  "entry_day": "2024-05-06",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-10MAY24-71000-C",
+                  "ending": 42.536698809467,
+                  "trade_timestamp": 1714990282588,
+                  "minimum_premium_with_cost_usd": 25.2858188699125,
+                  "month": "2024-05",
+                  "starting": 42.536698809467
+                },
+                {
+                  "entry_day": "2024-05-13",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-17MAY24-57000-P",
+                  "ending": 42.536698809467,
+                  "month": "2024-05",
+                  "starting": 42.536698809467
+                },
+                {
+                  "entry_day": "2024-05-20",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-24MAY24-72000-C",
+                  "ending": 42.536698809467,
+                  "trade_timestamp": 1716199621189,
+                  "minimum_premium_with_cost_usd": 29.8450928655,
+                  "month": "2024-05",
+                  "starting": 42.536698809467
+                },
+                {
+                  "entry_day": "2024-05-27",
+                  "instrument": "BTC-31MAY24-74000-C",
+                  "ending": 28.330196021717,
+                  "trade_timestamp": 1716806114971,
+                  "minimum_premium_with_cost_usd": 14.206502787749997,
+                  "status": "filled_proxy",
+                  "spent_usd": 14.206502787749997,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 68201.52,
+                  "side": "C",
+                  "month": "2024-05",
+                  "starting": 42.536698809467,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                }
+              ]
+            },
+            {
+              "month": "2024-06",
+              "start": 28.330196021717,
+              "end": 19.809855608764,
+              "orders": [
+                {
+                  "entry_day": "2024-06-03",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-7JUN24-75000-C",
+                  "ending": 28.330196021717,
+                  "month": "2024-06",
+                  "starting": 28.330196021717
+                },
+                {
+                  "entry_day": "2024-06-10",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-14JUN24-75000-C",
+                  "ending": 28.330196021717,
+                  "trade_timestamp": 1718010480079,
+                  "minimum_premium_with_cost_usd": 18.876788455424997,
+                  "month": "2024-06",
+                  "starting": 28.330196021717
+                },
+                {
+                  "entry_day": "2024-06-17",
+                  "instrument": "BTC-21JUN24-60000-P",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1718618512603,
+                  "minimum_premium_with_cost_usd": 8.520340412953125,
+                  "status": "filled_proxy",
+                  "spent_usd": 8.520340412953125,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 64495.11,
+                  "side": "P",
+                  "month": "2024-06",
+                  "starting": 28.330196021717,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-06-24",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-28JUN24-57000-P",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1719221063922,
+                  "minimum_premium_with_cost_usd": 14.5457648478,
+                  "month": "2024-06",
+                  "starting": 19.809855608764
+                }
+              ]
+            },
+            {
+              "month": "2024-07",
+              "start": 19.809855608764,
+              "end": 19.809855608764,
+              "orders": [
+                {
+                  "entry_day": "2024-07-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5JUL24-68000-C",
+                  "ending": 19.809855608764,
+                  "month": "2024-07",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-07-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JUL24-53000-P",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1720430222663,
+                  "minimum_premium_with_cost_usd": 28.287270221,
+                  "month": "2024-07",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-07-15",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-19JUL24-68000-C",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1721035451964,
+                  "minimum_premium_with_cost_usd": 19.248515966699998,
+                  "month": "2024-07",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-07-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26JUL24-73000-C",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1721640531197,
+                  "minimum_premium_with_cost_usd": 36.17019847619999,
+                  "month": "2024-07",
+                  "starting": 19.809855608764
+                }
+              ]
+            },
+            {
+              "month": "2024-08",
+              "start": 19.809855608764,
+              "end": 19.809855608764,
+              "orders": [
+                {
+                  "entry_day": "2024-08-05",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-9AUG24-48000-P",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1722848654476,
+                  "minimum_premium_with_cost_usd": 62.481313349,
+                  "month": "2024-08",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-08-12",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-16AUG24-63500-C",
+                  "ending": 19.809855608764,
+                  "month": "2024-08",
+                  "starting": 19.809855608764
+                }
+              ]
+            },
+            {
+              "month": "2024-09",
+              "start": 19.809855608764,
+              "end": 19.809855608764,
+              "orders": [
+                {
+                  "entry_day": "2024-09-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6SEP24-53000-P",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1725269383944,
+                  "minimum_premium_with_cost_usd": 17.78778386325,
+                  "month": "2024-09",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-09-09",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-13SEP24-51000-P",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1725878828133,
+                  "minimum_premium_with_cost_usd": 36.781159088749995,
+                  "month": "2024-09",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-09-16",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-20SEP24-64000-C",
+                  "ending": 19.809855608764,
+                  "month": "2024-09",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-09-23",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-27SEP24-69000-C",
+                  "ending": 19.809855608764,
+                  "month": "2024-09",
+                  "starting": 19.809855608764
+                }
+              ]
+            },
+            {
+              "month": "2024-10",
+              "start": 19.809855608764,
+              "end": 19.809855608764,
+              "orders": [
+                {
+                  "entry_day": "2024-10-07",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-11OCT24-58000-P",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1728292884195,
+                  "minimum_premium_with_cost_usd": 13.941282452906249,
+                  "month": "2024-10",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-10-14",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-18OCT24-70000-C",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1728897140748,
+                  "minimum_premium_with_cost_usd": 11.683618897978125,
+                  "month": "2024-10",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-10-21",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-25OCT24-74000-C",
+                  "ending": 19.809855608764,
+                  "month": "2024-10",
+                  "starting": 19.809855608764
+                }
+              ]
+            },
+            {
+              "month": "2024-11",
+              "start": 19.809855608764,
+              "end": 19.809855608764,
+              "orders": [
+                {
+                  "entry_day": "2024-11-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8NOV24-74000-C",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1730714106938,
+                  "minimum_premium_with_cost_usd": 92.97496028131249,
+                  "month": "2024-11",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-11-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15NOV24-88000-C",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1731320125119,
+                  "minimum_premium_with_cost_usd": 39.40053266242499,
+                  "month": "2024-11",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-11-18",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-22NOV24-100000-C",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1731922482167,
+                  "minimum_premium_with_cost_usd": 61.09020101593749,
+                  "month": "2024-11",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-11-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29NOV24-106000-C",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1732526559755,
+                  "minimum_premium_with_cost_usd": 71.42398668,
+                  "month": "2024-11",
+                  "starting": 19.809855608764
+                }
+              ]
+            },
+            {
+              "month": "2024-12",
+              "start": 19.809855608764,
+              "end": 19.809855608764,
+              "orders": [
+                {
+                  "entry_day": "2024-12-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6DEC24-87000-P",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1733136237438,
+                  "minimum_premium_with_cost_usd": 26.935045359175003,
+                  "month": "2024-12",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-12-09",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-13DEC24-107000-C",
+                  "ending": 19.809855608764,
+                  "month": "2024-12",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-12-16",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-20DEC24-114000-C",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1734341618771,
+                  "minimum_premium_with_cost_usd": 44.251001775374995,
+                  "month": "2024-12",
+                  "starting": 19.809855608764
+                },
+                {
+                  "entry_day": "2024-12-23",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-27DEC24-88000-P",
+                  "ending": 19.809855608764,
+                  "trade_timestamp": 1734949876941,
+                  "minimum_premium_with_cost_usd": 31.638104576399996,
+                  "month": "2024-12",
+                  "starting": 19.809855608764
+                }
+              ]
+            }
+          ],
+          "random_median_end": 15.206408480738,
+          "random_fraction_ge": 0.118
+        },
+        "6x_stress": {
+          "end": 16.173542259422,
+          "hits": 0,
+          "funded_hits": 0,
+          "drawdown_month_end": 0.8899759029971293,
+          "months": [
+            {
+              "month": "2024-01",
+              "start": 147.0,
+              "end": 43.422435784875,
+              "orders": [
+                {
+                  "entry_day": "2024-01-01",
+                  "instrument": "BTC-5JAN24-39000-P",
+                  "ending": 76.99875456315,
+                  "trade_timestamp": 1704102556558,
+                  "minimum_premium_with_cost_usd": 11.666874239475002,
+                  "status": "filled_proxy",
+                  "spent_usd": 70.00124543685001,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 43832.51,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 147.0,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.6000000000000001
+                },
+                {
+                  "entry_day": "2024-01-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JAN24-47500-C",
+                  "ending": 76.99875456315,
+                  "trade_timestamp": 1704706484478,
+                  "minimum_premium_with_cost_usd": 81.47192079731252,
+                  "month": "2024-01",
+                  "starting": 76.99875456315
+                },
+                {
+                  "entry_day": "2024-01-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19JAN24-39000-P",
+                  "ending": 76.99875456315,
+                  "month": "2024-01",
+                  "starting": 76.99875456315
+                },
+                {
+                  "entry_day": "2024-01-22",
+                  "instrument": "BTC-26JAN24-37000-P",
+                  "ending": 43.422435784875,
+                  "trade_timestamp": 1705914503953,
+                  "minimum_premium_with_cost_usd": 11.192106259425001,
+                  "status": "filled_proxy",
+                  "spent_usd": 33.576318778275,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 39936.59,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 76.99875456315,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.30000000000000004
+                }
+              ]
+            },
+            {
+              "month": "2024-02",
+              "start": 43.422435784875,
+              "end": 42.852879929813,
+              "orders": [
+                {
+                  "entry_day": "2024-02-05",
+                  "instrument": "BTC-9FEB24-46000-C",
+                  "ending": 62.520250782413,
+                  "trade_timestamp": 1707126707301,
+                  "minimum_premium_with_cost_usd": 8.504750739712499,
+                  "status": "filled_proxy",
+                  "spent_usd": 8.504750739712499,
+                  "settled_value_usd": 27.60256573725035,
+                  "settlement_index_usd": 46283.66,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 43.422435784875,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-12",
+                  "instrument": "BTC-16FEB24-52000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1707728793507,
+                  "minimum_premium_with_cost_usd": 19.6673708526,
+                  "status": "filled_proxy",
+                  "spent_usd": 19.6673708526,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 51864.41,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 62.520250782413,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-19",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-23FEB24-56000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1708338785184,
+                  "minimum_premium_with_cost_usd": 31.299805156949994,
+                  "month": "2024-02",
+                  "starting": 42.852879929813
+                }
+              ]
+            },
+            {
+              "month": "2024-03",
+              "start": 42.852879929813,
+              "end": 42.852879929813,
+              "orders": [
+                {
+                  "entry_day": "2024-03-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8MAR24-70000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1709542857705,
+                  "minimum_premium_with_cost_usd": 138.8568271018125,
+                  "month": "2024-03",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-03-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15MAR24-78000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1710148466739,
+                  "minimum_premium_with_cost_usd": 132.72761044725002,
+                  "month": "2024-03",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-03-18",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-22MAR24-62000-P",
+                  "ending": 42.852879929813,
+                  "month": "2024-03",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-03-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29MAR24-61000-P",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1711363467890,
+                  "minimum_premium_with_cost_usd": 36.482235413175,
+                  "month": "2024-03",
+                  "starting": 42.852879929813
+                }
+              ]
+            },
+            {
+              "month": "2024-04",
+              "start": 42.852879929813,
+              "end": 42.852879929813,
+              "orders": [
+                {
+                  "entry_day": "2024-04-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5APR24-75000-C",
+                  "ending": 42.852879929813,
+                  "month": "2024-04",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-04-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12APR24-78000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1712566974772,
+                  "minimum_premium_with_cost_usd": 94.806486403125,
+                  "month": "2024-04",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-04-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19APR24-61000-P",
+                  "ending": 42.852879929813,
+                  "month": "2024-04",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-04-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26APR24-60000-P",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1713776451834,
+                  "minimum_premium_with_cost_usd": 45.7613607867,
+                  "month": "2024-04",
+                  "starting": 42.852879929813
+                }
+              ]
+            },
+            {
+              "month": "2024-05",
+              "start": 42.852879929813,
+              "end": 26.175681005063,
+              "orders": [
+                {
+                  "entry_day": "2024-05-06",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-10MAY24-71000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1714990282588,
+                  "minimum_premium_with_cost_usd": 29.342017498462504,
+                  "month": "2024-05",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-05-13",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-17MAY24-57000-P",
+                  "ending": 42.852879929813,
+                  "month": "2024-05",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-05-20",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-24MAY24-72000-C",
+                  "ending": 42.852879929813,
+                  "trade_timestamp": 1716199621189,
+                  "minimum_premium_with_cost_usd": 34.6848376545,
+                  "month": "2024-05",
+                  "starting": 42.852879929813
+                },
+                {
+                  "entry_day": "2024-05-27",
+                  "instrument": "BTC-31MAY24-74000-C",
+                  "ending": 26.175681005063,
+                  "trade_timestamp": 1716806114971,
+                  "minimum_premium_with_cost_usd": 16.677198924750005,
+                  "status": "filled_proxy",
+                  "spent_usd": 16.677198924750005,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 68201.52,
+                  "side": "C",
+                  "month": "2024-05",
+                  "starting": 42.852879929813,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                }
+              ]
+            },
+            {
+              "month": "2024-06",
+              "start": 26.175681005063,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-06-03",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-7JUN24-75000-C",
+                  "ending": 26.175681005063,
+                  "month": "2024-06",
+                  "starting": 26.175681005063
+                },
+                {
+                  "entry_day": "2024-06-10",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-14JUN24-75000-C",
+                  "ending": 26.175681005063,
+                  "trade_timestamp": 1718010480079,
+                  "minimum_premium_with_cost_usd": 21.796954625325,
+                  "month": "2024-06",
+                  "starting": 26.175681005063
+                },
+                {
+                  "entry_day": "2024-06-17",
+                  "instrument": "BTC-21JUN24-60000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1718618512603,
+                  "minimum_premium_with_cost_usd": 10.002138745640625,
+                  "status": "filled_proxy",
+                  "spent_usd": 10.002138745640625,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 64495.11,
+                  "side": "P",
+                  "month": "2024-06",
+                  "starting": 26.175681005063,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-06-24",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-28JUN24-57000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1719221063922,
+                  "minimum_premium_with_cost_usd": 17.0520399504,
+                  "month": "2024-06",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-07",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-07-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5JUL24-68000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-07",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-07-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JUL24-53000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1720430222663,
+                  "minimum_premium_with_cost_usd": 32.90560005300001,
+                  "month": "2024-07",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-07-15",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-19JUL24-68000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1721035451964,
+                  "minimum_premium_with_cost_usd": 22.2678910203,
+                  "month": "2024-07",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-07-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26JUL24-73000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1721640531197,
+                  "minimum_premium_with_cost_usd": 42.1085892708,
+                  "month": "2024-07",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-08",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-08-05",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-9AUG24-48000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1722848654476,
+                  "minimum_premium_with_cost_usd": 73.07136645900002,
+                  "month": "2024-08",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-08-12",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-16AUG24-63500-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-08",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-09",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-09-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6SEP24-53000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1725269383944,
+                  "minimum_premium_with_cost_usd": 20.57802446925,
+                  "month": "2024-09",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-09-09",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-13SEP24-51000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1725878828133,
+                  "minimum_premium_with_cost_usd": 42.88821946575,
+                  "month": "2024-09",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-09-16",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-20SEP24-64000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-09",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-09-23",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-27SEP24-69000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-09",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-10",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-10-07",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-11OCT24-58000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1728292884195,
+                  "minimum_premium_with_cost_usd": 16.36585331428125,
+                  "month": "2024-10",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-10-14",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-18OCT24-70000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1728897140748,
+                  "minimum_premium_with_cost_usd": 13.715552619365628,
+                  "month": "2024-10",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-10-21",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-25OCT24-74000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-10",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-11",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-11-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8NOV24-74000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1730714106938,
+                  "minimum_premium_with_cost_usd": 108.78585925706253,
+                  "month": "2024-11",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-11-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15NOV24-88000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1731320125119,
+                  "minimum_premium_with_cost_usd": 45.823190024324994,
+                  "month": "2024-11",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-11-18",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-22NOV24-100000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1731922482167,
+                  "minimum_premium_with_cost_usd": 71.23347967518751,
+                  "month": "2024-11",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-11-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29NOV24-106000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1732526559755,
+                  "minimum_premium_with_cost_usd": 83.32798446000002,
+                  "month": "2024-11",
+                  "starting": 16.173542259422
+                }
+              ]
+            },
+            {
+              "month": "2024-12",
+              "start": 16.173542259422,
+              "end": 16.173542259422,
+              "orders": [
+                {
+                  "entry_day": "2024-12-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6DEC24-87000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1733136237438,
+                  "minimum_premium_with_cost_usd": 31.12282626307501,
+                  "month": "2024-12",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-12-09",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-13DEC24-107000-C",
+                  "ending": 16.173542259422,
+                  "month": "2024-12",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-12-16",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-20DEC24-114000-C",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1734341618771,
+                  "minimum_premium_with_cost_usd": 51.398431990875,
+                  "month": "2024-12",
+                  "starting": 16.173542259422
+                },
+                {
+                  "entry_day": "2024-12-23",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-27DEC24-88000-P",
+                  "ending": 16.173542259422,
+                  "trade_timestamp": 1734949876941,
+                  "minimum_premium_with_cost_usd": 36.6386560596,
+                  "month": "2024-12",
+                  "starting": 16.173542259422
+                }
+              ]
+            }
+          ],
+          "random_median_end": 18.402611483062,
+          "random_fraction_ge": 0.668
+        }
+      }
+    },
+    "vix": {
+      "eligible_weeks": 46,
+      "cases": {
+        "3x_base": {
+          "end": 11.637455791865,
+          "hits": 0,
+          "funded_hits": 0,
+          "drawdown_month_end": 0.9208336340689456,
+          "months": [
+            {
+              "month": "2024-01",
+              "start": 147.0,
+              "end": 36.942750362109,
+              "orders": [
+                {
+                  "entry_day": "2024-01-01",
+                  "instrument": "BTC-5JAN24-46000-C",
+                  "ending": 81.14778186465,
+                  "trade_timestamp": 1704105250417,
+                  "minimum_premium_with_cost_usd": 21.950739378449995,
+                  "status": "filled_proxy",
+                  "spent_usd": 65.85221813535,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 43832.51,
+                  "side": "C",
+                  "month": "2024-01",
+                  "starting": 147.0,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.30000000000000004
+                },
+                {
+                  "entry_day": "2024-01-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JAN24-40000-P",
+                  "ending": 81.14778186465,
+                  "trade_timestamp": 1704704782374,
+                  "minimum_premium_with_cost_usd": 74.69123493125,
+                  "month": "2024-01",
+                  "starting": 81.14778186465
+                },
+                {
+                  "entry_day": "2024-01-15",
+                  "instrument": "BTC-19JAN24-46500-C",
+                  "ending": 65.58408822105,
+                  "trade_timestamp": 1705312888925,
+                  "minimum_premium_with_cost_usd": 15.563693643599999,
+                  "status": "filled_proxy",
+                  "spent_usd": 15.563693643599999,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 41301.67,
+                  "side": "C",
+                  "month": "2024-01",
+                  "starting": 81.14778186465,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-01-22",
+                  "instrument": "BTC-26JAN24-37000-P",
+                  "ending": 36.942750362109,
+                  "trade_timestamp": 1705914503953,
+                  "minimum_premium_with_cost_usd": 9.547112619646873,
+                  "status": "filled_proxy",
+                  "spent_usd": 28.64133785894062,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 39936.59,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 65.58408822105,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.30000000000000004
+                }
+              ]
+            },
+            {
+              "month": "2024-02",
+              "start": 36.942750362109,
+              "end": 21.468949615321,
+              "orders": [
+                {
+                  "entry_day": "2024-02-05",
+                  "instrument": "BTC-9FEB24-39000-P",
+                  "ending": 33.025176373415,
+                  "trade_timestamp": 1707128030543,
+                  "minimum_premium_with_cost_usd": 3.91757398869375,
+                  "status": "filled_proxy",
+                  "spent_usd": 3.91757398869375,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 46283.66,
+                  "side": "P",
+                  "month": "2024-02",
+                  "starting": 36.942750362109,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-12",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-16FEB24-52000-C",
+                  "ending": 33.025176373415,
+                  "trade_timestamp": 1707728793507,
+                  "minimum_premium_with_cost_usd": 16.967927794399998,
+                  "month": "2024-02",
+                  "starting": 33.025176373415
+                },
+                {
+                  "entry_day": "2024-02-19",
+                  "instrument": "BTC-23FEB24-48000-P",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1708339732128,
+                  "minimum_premium_with_cost_usd": 11.556226758093747,
+                  "status": "filled_proxy",
+                  "spent_usd": 11.556226758093747,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 51000.34,
+                  "side": "P",
+                  "month": "2024-02",
+                  "starting": 33.025176373415,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                }
+              ]
+            },
+            {
+              "month": "2024-03",
+              "start": 21.468949615321,
+              "end": 21.468949615321,
+              "orders": [
+                {
+                  "entry_day": "2024-03-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8MAR24-70000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1709542857705,
+                  "minimum_premium_with_cost_usd": 118.5762068890625,
+                  "month": "2024-03",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-03-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15MAR24-65000-P",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1710150976905,
+                  "minimum_premium_with_cost_usd": 55.97313397524999,
+                  "month": "2024-03",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-03-18",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-22MAR24-74000-C",
+                  "ending": 21.468949615321,
+                  "month": "2024-03",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-03-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29MAR24-73000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1711361271944,
+                  "minimum_premium_with_cost_usd": 44.723179375624994,
+                  "month": "2024-03",
+                  "starting": 21.468949615321
+                }
+              ]
+            },
+            {
+              "month": "2024-04",
+              "start": 21.468949615321,
+              "end": 21.468949615321,
+              "orders": [
+                {
+                  "entry_day": "2024-04-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5APR24-75000-C",
+                  "ending": 21.468949615321,
+                  "month": "2024-04",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-04-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12APR24-66000-P",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1712568938050,
+                  "minimum_premium_with_cost_usd": 43.859423771625,
+                  "month": "2024-04",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-04-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19APR24-61000-P",
+                  "ending": 21.468949615321,
+                  "month": "2024-04",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-04-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26APR24-60000-P",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1713776451834,
+                  "minimum_premium_with_cost_usd": 39.27601970629999,
+                  "month": "2024-04",
+                  "starting": 21.468949615321
+                }
+              ]
+            },
+            {
+              "month": "2024-05",
+              "start": 21.468949615321,
+              "end": 21.468949615321,
+              "orders": [
+                {
+                  "entry_day": "2024-05-06",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-10MAY24-71000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1714990282588,
+                  "minimum_premium_with_cost_usd": 25.2858188699125,
+                  "month": "2024-05",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-05-13",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-17MAY24-68000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1715592422341,
+                  "minimum_premium_with_cost_usd": 31.026797660249997,
+                  "month": "2024-05",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-05-20",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-24MAY24-72000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1716199621189,
+                  "minimum_premium_with_cost_usd": 29.8450928655,
+                  "month": "2024-05",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-05-27",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-31MAY24-74000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1716806114971,
+                  "minimum_premium_with_cost_usd": 14.206502787749997,
+                  "month": "2024-05",
+                  "starting": 21.468949615321
+                }
+              ]
+            },
+            {
+              "month": "2024-06",
+              "start": 21.468949615321,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-06-03",
+                  "instrument": "BTC-7JUN24-63000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1717411915662,
+                  "minimum_premium_with_cost_usd": 9.83149382345625,
+                  "status": "filled_proxy",
+                  "spent_usd": 9.83149382345625,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 71101.9,
+                  "side": "P",
+                  "month": "2024-06",
+                  "starting": 21.468949615321,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-06-10",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-14JUN24-75000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1718010480079,
+                  "minimum_premium_with_cost_usd": 18.876788455424997,
+                  "month": "2024-06",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-06-17",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-21JUN24-60000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1718618512603,
+                  "minimum_premium_with_cost_usd": 8.520340412953125,
+                  "month": "2024-06",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-06-24",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-28JUN24-57000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1719221063922,
+                  "minimum_premium_with_cost_usd": 14.5457648478,
+                  "month": "2024-06",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-07",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-07-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5JUL24-68000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-07",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-07-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JUL24-53000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1720430222663,
+                  "minimum_premium_with_cost_usd": 28.287270221,
+                  "month": "2024-07",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-07-15",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-19JUL24-68000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1721035451964,
+                  "minimum_premium_with_cost_usd": 19.248515966699998,
+                  "month": "2024-07",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-07-22",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-26JUL24-61000-P",
+                  "ending": 11.637455791865,
+                  "month": "2024-07",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-08",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-08-05",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-9AUG24-48000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1722848654476,
+                  "minimum_premium_with_cost_usd": 62.481313349,
+                  "month": "2024-08",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-08-12",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-16AUG24-63500-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-08",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-08-19",
+                  "status": "missing_predecision_index",
+                  "ending": 11.637455791865,
+                  "month": "2024-08",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-08-26",
+                  "status": "missing_predecision_index",
+                  "ending": 11.637455791865,
+                  "month": "2024-08",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-09",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-09-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6SEP24-63000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1725270254440,
+                  "minimum_premium_with_cost_usd": 15.060253128468752,
+                  "month": "2024-09",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-09-09",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-13SEP24-51000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1725878828133,
+                  "minimum_premium_with_cost_usd": 36.781159088749995,
+                  "month": "2024-09",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-09-16",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-20SEP24-64000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-09",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-09-23",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-27SEP24-69000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-09",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-10",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-10-07",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-11OCT24-58000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1728292884195,
+                  "minimum_premium_with_cost_usd": 13.941282452906249,
+                  "month": "2024-10",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-10-14",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-18OCT24-59000-P",
+                  "ending": 11.637455791865,
+                  "month": "2024-10",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-10-21",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-25OCT24-74000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-10",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-11",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-11-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8NOV24-63000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1730713736081,
+                  "minimum_premium_with_cost_usd": 69.2999013841875,
+                  "month": "2024-11",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-11-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15NOV24-88000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1731320125119,
+                  "minimum_premium_with_cost_usd": 39.40053266242499,
+                  "month": "2024-11",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-11-18",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-22NOV24-84000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1731920707765,
+                  "minimum_premium_with_cost_usd": 32.40803339839999,
+                  "month": "2024-11",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-11-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29NOV24-106000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1732526559755,
+                  "minimum_premium_with_cost_usd": 71.42398668,
+                  "month": "2024-11",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-12",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-12-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6DEC24-103000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1733130415757,
+                  "minimum_premium_with_cost_usd": 43.4908225165,
+                  "month": "2024-12",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-12-09",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-13DEC24-107000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-12",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-12-16",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-20DEC24-96000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1734341020773,
+                  "minimum_premium_with_cost_usd": 36.94574554879999,
+                  "month": "2024-12",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-12-23",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-27DEC24-88000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1734949876941,
+                  "minimum_premium_with_cost_usd": 31.638104576399996,
+                  "month": "2024-12",
+                  "starting": 11.637455791865
+                }
+              ]
+            }
+          ],
+          "random_median_end": 15.366841157863,
+          "random_fraction_ge": 0.794
+        },
+        "3x_stress": {
+          "end": 10.018221400865,
+          "hits": 0,
+          "funded_hits": 0,
+          "drawdown_month_end": 0.9318488340077211,
+          "months": [
+            {
+              "month": "2024-01",
+              "start": 147.0,
+              "end": 44.286622203225,
+              "orders": [
+                {
+                  "entry_day": "2024-01-01",
+                  "instrument": "BTC-5JAN24-46000-C",
+                  "ending": 95.9099750139,
+                  "trade_timestamp": 1704105250417,
+                  "minimum_premium_with_cost_usd": 25.54501249305,
+                  "status": "filled_proxy",
+                  "spent_usd": 51.0900249861,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 43832.51,
+                  "side": "C",
+                  "month": "2024-01",
+                  "starting": 147.0,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.2
+                },
+                {
+                  "entry_day": "2024-01-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JAN24-40000-P",
+                  "ending": 95.9099750139,
+                  "trade_timestamp": 1704704782374,
+                  "minimum_premium_with_cost_usd": 87.45144590625002,
+                  "month": "2024-01",
+                  "starting": 95.9099750139
+                },
+                {
+                  "entry_day": "2024-01-15",
+                  "instrument": "BTC-19JAN24-46500-C",
+                  "ending": 77.8629409815,
+                  "trade_timestamp": 1705312888925,
+                  "minimum_premium_with_cost_usd": 18.047034032400003,
+                  "status": "filled_proxy",
+                  "spent_usd": 18.047034032400003,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 41301.67,
+                  "side": "C",
+                  "month": "2024-01",
+                  "starting": 95.9099750139,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-01-22",
+                  "instrument": "BTC-26JAN24-37000-P",
+                  "ending": 44.286622203225,
+                  "trade_timestamp": 1705914503953,
+                  "minimum_premium_with_cost_usd": 11.192106259425001,
+                  "status": "filled_proxy",
+                  "spent_usd": 33.576318778275,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 39936.59,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 77.8629409815,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.30000000000000004
+                }
+              ]
+            },
+            {
+              "month": "2024-02",
+              "start": 44.286622203225,
+              "end": 20.020360146506,
+              "orders": [
+                {
+                  "entry_day": "2024-02-05",
+                  "instrument": "BTC-9FEB24-39000-P",
+                  "ending": 39.687730999106,
+                  "trade_timestamp": 1707128030543,
+                  "minimum_premium_with_cost_usd": 4.5988912041187495,
+                  "status": "filled_proxy",
+                  "spent_usd": 4.5988912041187495,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 46283.66,
+                  "side": "P",
+                  "month": "2024-02",
+                  "starting": 44.286622203225,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-12",
+                  "instrument": "BTC-16FEB24-52000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1707728793507,
+                  "minimum_premium_with_cost_usd": 19.6673708526,
+                  "status": "filled_proxy",
+                  "spent_usd": 19.6673708526,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 51864.41,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 39.687730999106,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-19",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-23FEB24-48000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1708339732128,
+                  "minimum_premium_with_cost_usd": 13.566005324718748,
+                  "month": "2024-02",
+                  "starting": 20.020360146506
+                }
+              ]
+            },
+            {
+              "month": "2024-03",
+              "start": 20.020360146506,
+              "end": 20.020360146506,
+              "orders": [
+                {
+                  "entry_day": "2024-03-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8MAR24-70000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1709542857705,
+                  "minimum_premium_with_cost_usd": 138.8568271018125,
+                  "month": "2024-03",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-03-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15MAR24-65000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1710150976905,
+                  "minimum_premium_with_cost_usd": 65.33198595825,
+                  "month": "2024-03",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-03-18",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-22MAR24-74000-C",
+                  "ending": 20.020360146506,
+                  "month": "2024-03",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-03-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29MAR24-73000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1711361271944,
+                  "minimum_premium_with_cost_usd": 52.148914819125,
+                  "month": "2024-03",
+                  "starting": 20.020360146506
+                }
+              ]
+            },
+            {
+              "month": "2024-04",
+              "start": 20.020360146506,
+              "end": 20.020360146506,
+              "orders": [
+                {
+                  "entry_day": "2024-04-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5APR24-75000-C",
+                  "ending": 20.020360146506,
+                  "month": "2024-04",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-04-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12APR24-66000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1712568938050,
+                  "minimum_premium_with_cost_usd": 51.108915304125006,
+                  "month": "2024-04",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-04-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19APR24-61000-P",
+                  "ending": 20.020360146506,
+                  "month": "2024-04",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-04-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26APR24-60000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1713776451834,
+                  "minimum_premium_with_cost_usd": 45.7613607867,
+                  "month": "2024-04",
+                  "starting": 20.020360146506
+                }
+              ]
+            },
+            {
+              "month": "2024-05",
+              "start": 20.020360146506,
+              "end": 20.020360146506,
+              "orders": [
+                {
+                  "entry_day": "2024-05-06",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-10MAY24-71000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1714990282588,
+                  "minimum_premium_with_cost_usd": 29.342017498462504,
+                  "month": "2024-05",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-05-13",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-17MAY24-68000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1715592422341,
+                  "minimum_premium_with_cost_usd": 36.09239727825,
+                  "month": "2024-05",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-05-20",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-24MAY24-72000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1716199621189,
+                  "minimum_premium_with_cost_usd": 34.6848376545,
+                  "month": "2024-05",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-05-27",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-31MAY24-74000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1716806114971,
+                  "minimum_premium_with_cost_usd": 16.677198924750005,
+                  "month": "2024-05",
+                  "starting": 20.020360146506
+                }
+              ]
+            },
+            {
+              "month": "2024-06",
+              "start": 20.020360146506,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-06-03",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-7JUN24-63000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1717411915662,
+                  "minimum_premium_with_cost_usd": 11.541318836231252,
+                  "month": "2024-06",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-06-10",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-14JUN24-75000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1718010480079,
+                  "minimum_premium_with_cost_usd": 21.796954625325,
+                  "month": "2024-06",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-06-17",
+                  "instrument": "BTC-21JUN24-60000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1718618512603,
+                  "minimum_premium_with_cost_usd": 10.002138745640625,
+                  "status": "filled_proxy",
+                  "spent_usd": 10.002138745640625,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 64495.11,
+                  "side": "P",
+                  "month": "2024-06",
+                  "starting": 20.020360146506,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-06-24",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-28JUN24-57000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1719221063922,
+                  "minimum_premium_with_cost_usd": 17.0520399504,
+                  "month": "2024-06",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-07",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-07-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5JUL24-68000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-07",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-07-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JUL24-53000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1720430222663,
+                  "minimum_premium_with_cost_usd": 32.90560005300001,
+                  "month": "2024-07",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-07-15",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-19JUL24-68000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1721035451964,
+                  "minimum_premium_with_cost_usd": 22.2678910203,
+                  "month": "2024-07",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-07-22",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-26JUL24-61000-P",
+                  "ending": 10.018221400865,
+                  "month": "2024-07",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-08",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-08-05",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-9AUG24-48000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1722848654476,
+                  "minimum_premium_with_cost_usd": 73.07136645900002,
+                  "month": "2024-08",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-08-12",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-16AUG24-63500-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-08",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-08-19",
+                  "status": "missing_predecision_index",
+                  "ending": 10.018221400865,
+                  "month": "2024-08",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-08-26",
+                  "status": "missing_predecision_index",
+                  "ending": 10.018221400865,
+                  "month": "2024-08",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-09",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-09-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6SEP24-63000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1725270254440,
+                  "minimum_premium_with_cost_usd": 17.4611630475,
+                  "month": "2024-09",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-09-09",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-13SEP24-51000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1725878828133,
+                  "minimum_premium_with_cost_usd": 42.88821946575,
+                  "month": "2024-09",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-09-16",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-20SEP24-64000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-09",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-09-23",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-27SEP24-69000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-09",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-10",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-10-07",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-11OCT24-58000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1728292884195,
+                  "minimum_premium_with_cost_usd": 16.36585331428125,
+                  "month": "2024-10",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-10-14",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-18OCT24-59000-P",
+                  "ending": 10.018221400865,
+                  "month": "2024-10",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-10-21",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-25OCT24-74000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-10",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-11",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-11-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8NOV24-63000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1730713736081,
+                  "minimum_premium_with_cost_usd": 80.99318499243752,
+                  "month": "2024-11",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-11-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15NOV24-88000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1731320125119,
+                  "minimum_premium_with_cost_usd": 45.823190024324994,
+                  "month": "2024-11",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-11-18",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-22NOV24-84000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1731920707765,
+                  "minimum_premium_with_cost_usd": 37.5638568936,
+                  "month": "2024-11",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-11-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29NOV24-106000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1732526559755,
+                  "minimum_premium_with_cost_usd": 83.32798446000002,
+                  "month": "2024-11",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-12",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-12-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6DEC24-103000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1733130415757,
+                  "minimum_premium_with_cost_usd": 50.556290938500005,
+                  "month": "2024-12",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-12-09",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-13DEC24-107000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-12",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-12-16",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-20DEC24-96000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1734341020773,
+                  "minimum_premium_with_cost_usd": 42.8234777952,
+                  "month": "2024-12",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-12-23",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-27DEC24-88000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1734949876941,
+                  "minimum_premium_with_cost_usd": 36.6386560596,
+                  "month": "2024-12",
+                  "starting": 10.018221400865
+                }
+              ]
+            }
+          ],
+          "random_median_end": 18.107929416942,
+          "random_fraction_ge": 1.0
+        },
+        "6x_base": {
+          "end": 11.637455791865,
+          "hits": 0,
+          "funded_hits": 0,
+          "drawdown_month_end": 0.9208336340689456,
+          "months": [
+            {
+              "month": "2024-01",
+              "start": 147.0,
+              "end": 36.942750362109,
+              "orders": [
+                {
+                  "entry_day": "2024-01-01",
+                  "instrument": "BTC-5JAN24-46000-C",
+                  "ending": 81.14778186465,
+                  "trade_timestamp": 1704105250417,
+                  "minimum_premium_with_cost_usd": 21.950739378449995,
+                  "status": "filled_proxy",
+                  "spent_usd": 65.85221813535,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 43832.51,
+                  "side": "C",
+                  "month": "2024-01",
+                  "starting": 147.0,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.30000000000000004
+                },
+                {
+                  "entry_day": "2024-01-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JAN24-40000-P",
+                  "ending": 81.14778186465,
+                  "trade_timestamp": 1704704782374,
+                  "minimum_premium_with_cost_usd": 74.69123493125,
+                  "month": "2024-01",
+                  "starting": 81.14778186465
+                },
+                {
+                  "entry_day": "2024-01-15",
+                  "instrument": "BTC-19JAN24-46500-C",
+                  "ending": 65.58408822105,
+                  "trade_timestamp": 1705312888925,
+                  "minimum_premium_with_cost_usd": 15.563693643599999,
+                  "status": "filled_proxy",
+                  "spent_usd": 15.563693643599999,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 41301.67,
+                  "side": "C",
+                  "month": "2024-01",
+                  "starting": 81.14778186465,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-01-22",
+                  "instrument": "BTC-26JAN24-37000-P",
+                  "ending": 36.942750362109,
+                  "trade_timestamp": 1705914503953,
+                  "minimum_premium_with_cost_usd": 9.547112619646873,
+                  "status": "filled_proxy",
+                  "spent_usd": 28.64133785894062,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 39936.59,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 65.58408822105,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.30000000000000004
+                }
+              ]
+            },
+            {
+              "month": "2024-02",
+              "start": 36.942750362109,
+              "end": 21.468949615321,
+              "orders": [
+                {
+                  "entry_day": "2024-02-05",
+                  "instrument": "BTC-9FEB24-39000-P",
+                  "ending": 33.025176373415,
+                  "trade_timestamp": 1707128030543,
+                  "minimum_premium_with_cost_usd": 3.91757398869375,
+                  "status": "filled_proxy",
+                  "spent_usd": 3.91757398869375,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 46283.66,
+                  "side": "P",
+                  "month": "2024-02",
+                  "starting": 36.942750362109,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-12",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-16FEB24-52000-C",
+                  "ending": 33.025176373415,
+                  "trade_timestamp": 1707728793507,
+                  "minimum_premium_with_cost_usd": 16.967927794399998,
+                  "month": "2024-02",
+                  "starting": 33.025176373415
+                },
+                {
+                  "entry_day": "2024-02-19",
+                  "instrument": "BTC-23FEB24-48000-P",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1708339732128,
+                  "minimum_premium_with_cost_usd": 11.556226758093747,
+                  "status": "filled_proxy",
+                  "spent_usd": 11.556226758093747,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 51000.34,
+                  "side": "P",
+                  "month": "2024-02",
+                  "starting": 33.025176373415,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                }
+              ]
+            },
+            {
+              "month": "2024-03",
+              "start": 21.468949615321,
+              "end": 21.468949615321,
+              "orders": [
+                {
+                  "entry_day": "2024-03-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8MAR24-70000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1709542857705,
+                  "minimum_premium_with_cost_usd": 118.5762068890625,
+                  "month": "2024-03",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-03-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15MAR24-65000-P",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1710150976905,
+                  "minimum_premium_with_cost_usd": 55.97313397524999,
+                  "month": "2024-03",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-03-18",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-22MAR24-74000-C",
+                  "ending": 21.468949615321,
+                  "month": "2024-03",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-03-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29MAR24-73000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1711361271944,
+                  "minimum_premium_with_cost_usd": 44.723179375624994,
+                  "month": "2024-03",
+                  "starting": 21.468949615321
+                }
+              ]
+            },
+            {
+              "month": "2024-04",
+              "start": 21.468949615321,
+              "end": 21.468949615321,
+              "orders": [
+                {
+                  "entry_day": "2024-04-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5APR24-75000-C",
+                  "ending": 21.468949615321,
+                  "month": "2024-04",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-04-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12APR24-66000-P",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1712568938050,
+                  "minimum_premium_with_cost_usd": 43.859423771625,
+                  "month": "2024-04",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-04-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19APR24-61000-P",
+                  "ending": 21.468949615321,
+                  "month": "2024-04",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-04-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26APR24-60000-P",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1713776451834,
+                  "minimum_premium_with_cost_usd": 39.27601970629999,
+                  "month": "2024-04",
+                  "starting": 21.468949615321
+                }
+              ]
+            },
+            {
+              "month": "2024-05",
+              "start": 21.468949615321,
+              "end": 21.468949615321,
+              "orders": [
+                {
+                  "entry_day": "2024-05-06",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-10MAY24-71000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1714990282588,
+                  "minimum_premium_with_cost_usd": 25.2858188699125,
+                  "month": "2024-05",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-05-13",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-17MAY24-68000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1715592422341,
+                  "minimum_premium_with_cost_usd": 31.026797660249997,
+                  "month": "2024-05",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-05-20",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-24MAY24-72000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1716199621189,
+                  "minimum_premium_with_cost_usd": 29.8450928655,
+                  "month": "2024-05",
+                  "starting": 21.468949615321
+                },
+                {
+                  "entry_day": "2024-05-27",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-31MAY24-74000-C",
+                  "ending": 21.468949615321,
+                  "trade_timestamp": 1716806114971,
+                  "minimum_premium_with_cost_usd": 14.206502787749997,
+                  "month": "2024-05",
+                  "starting": 21.468949615321
+                }
+              ]
+            },
+            {
+              "month": "2024-06",
+              "start": 21.468949615321,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-06-03",
+                  "instrument": "BTC-7JUN24-63000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1717411915662,
+                  "minimum_premium_with_cost_usd": 9.83149382345625,
+                  "status": "filled_proxy",
+                  "spent_usd": 9.83149382345625,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 71101.9,
+                  "side": "P",
+                  "month": "2024-06",
+                  "starting": 21.468949615321,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-06-10",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-14JUN24-75000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1718010480079,
+                  "minimum_premium_with_cost_usd": 18.876788455424997,
+                  "month": "2024-06",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-06-17",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-21JUN24-60000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1718618512603,
+                  "minimum_premium_with_cost_usd": 8.520340412953125,
+                  "month": "2024-06",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-06-24",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-28JUN24-57000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1719221063922,
+                  "minimum_premium_with_cost_usd": 14.5457648478,
+                  "month": "2024-06",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-07",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-07-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5JUL24-68000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-07",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-07-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JUL24-53000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1720430222663,
+                  "minimum_premium_with_cost_usd": 28.287270221,
+                  "month": "2024-07",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-07-15",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-19JUL24-68000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1721035451964,
+                  "minimum_premium_with_cost_usd": 19.248515966699998,
+                  "month": "2024-07",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-07-22",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-26JUL24-61000-P",
+                  "ending": 11.637455791865,
+                  "month": "2024-07",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-08",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-08-05",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-9AUG24-48000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1722848654476,
+                  "minimum_premium_with_cost_usd": 62.481313349,
+                  "month": "2024-08",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-08-12",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-16AUG24-63500-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-08",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-08-19",
+                  "status": "missing_predecision_index",
+                  "ending": 11.637455791865,
+                  "month": "2024-08",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-08-26",
+                  "status": "missing_predecision_index",
+                  "ending": 11.637455791865,
+                  "month": "2024-08",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-09",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-09-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6SEP24-63000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1725270254440,
+                  "minimum_premium_with_cost_usd": 15.060253128468752,
+                  "month": "2024-09",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-09-09",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-13SEP24-51000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1725878828133,
+                  "minimum_premium_with_cost_usd": 36.781159088749995,
+                  "month": "2024-09",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-09-16",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-20SEP24-64000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-09",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-09-23",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-27SEP24-69000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-09",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-10",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-10-07",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-11OCT24-58000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1728292884195,
+                  "minimum_premium_with_cost_usd": 13.941282452906249,
+                  "month": "2024-10",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-10-14",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-18OCT24-59000-P",
+                  "ending": 11.637455791865,
+                  "month": "2024-10",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-10-21",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-25OCT24-74000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-10",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-11",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-11-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8NOV24-63000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1730713736081,
+                  "minimum_premium_with_cost_usd": 69.2999013841875,
+                  "month": "2024-11",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-11-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15NOV24-88000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1731320125119,
+                  "minimum_premium_with_cost_usd": 39.40053266242499,
+                  "month": "2024-11",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-11-18",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-22NOV24-84000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1731920707765,
+                  "minimum_premium_with_cost_usd": 32.40803339839999,
+                  "month": "2024-11",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-11-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29NOV24-106000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1732526559755,
+                  "minimum_premium_with_cost_usd": 71.42398668,
+                  "month": "2024-11",
+                  "starting": 11.637455791865
+                }
+              ]
+            },
+            {
+              "month": "2024-12",
+              "start": 11.637455791865,
+              "end": 11.637455791865,
+              "orders": [
+                {
+                  "entry_day": "2024-12-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6DEC24-103000-C",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1733130415757,
+                  "minimum_premium_with_cost_usd": 43.4908225165,
+                  "month": "2024-12",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-12-09",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-13DEC24-107000-C",
+                  "ending": 11.637455791865,
+                  "month": "2024-12",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-12-16",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-20DEC24-96000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1734341020773,
+                  "minimum_premium_with_cost_usd": 36.94574554879999,
+                  "month": "2024-12",
+                  "starting": 11.637455791865
+                },
+                {
+                  "entry_day": "2024-12-23",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-27DEC24-88000-P",
+                  "ending": 11.637455791865,
+                  "trade_timestamp": 1734949876941,
+                  "minimum_premium_with_cost_usd": 31.638104576399996,
+                  "month": "2024-12",
+                  "starting": 11.637455791865
+                }
+              ]
+            }
+          ],
+          "random_median_end": 15.657539549644,
+          "random_fraction_ge": 0.822
+        },
+        "6x_stress": {
+          "end": 10.018221400865,
+          "hits": 0,
+          "funded_hits": 0,
+          "drawdown_month_end": 0.9318488340077211,
+          "months": [
+            {
+              "month": "2024-01",
+              "start": 147.0,
+              "end": 44.286622203225,
+              "orders": [
+                {
+                  "entry_day": "2024-01-01",
+                  "instrument": "BTC-5JAN24-46000-C",
+                  "ending": 95.9099750139,
+                  "trade_timestamp": 1704105250417,
+                  "minimum_premium_with_cost_usd": 25.54501249305,
+                  "status": "filled_proxy",
+                  "spent_usd": 51.0900249861,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 43832.51,
+                  "side": "C",
+                  "month": "2024-01",
+                  "starting": 147.0,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.2
+                },
+                {
+                  "entry_day": "2024-01-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JAN24-40000-P",
+                  "ending": 95.9099750139,
+                  "trade_timestamp": 1704704782374,
+                  "minimum_premium_with_cost_usd": 87.45144590625002,
+                  "month": "2024-01",
+                  "starting": 95.9099750139
+                },
+                {
+                  "entry_day": "2024-01-15",
+                  "instrument": "BTC-19JAN24-46500-C",
+                  "ending": 77.8629409815,
+                  "trade_timestamp": 1705312888925,
+                  "minimum_premium_with_cost_usd": 18.047034032400003,
+                  "status": "filled_proxy",
+                  "spent_usd": 18.047034032400003,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 41301.67,
+                  "side": "C",
+                  "month": "2024-01",
+                  "starting": 95.9099750139,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-01-22",
+                  "instrument": "BTC-26JAN24-37000-P",
+                  "ending": 44.286622203225,
+                  "trade_timestamp": 1705914503953,
+                  "minimum_premium_with_cost_usd": 11.192106259425001,
+                  "status": "filled_proxy",
+                  "spent_usd": 33.576318778275,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 39936.59,
+                  "side": "P",
+                  "month": "2024-01",
+                  "starting": 77.8629409815,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.30000000000000004
+                }
+              ]
+            },
+            {
+              "month": "2024-02",
+              "start": 44.286622203225,
+              "end": 20.020360146506,
+              "orders": [
+                {
+                  "entry_day": "2024-02-05",
+                  "instrument": "BTC-9FEB24-39000-P",
+                  "ending": 39.687730999106,
+                  "trade_timestamp": 1707128030543,
+                  "minimum_premium_with_cost_usd": 4.5988912041187495,
+                  "status": "filled_proxy",
+                  "spent_usd": 4.5988912041187495,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 46283.66,
+                  "side": "P",
+                  "month": "2024-02",
+                  "starting": 44.286622203225,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-12",
+                  "instrument": "BTC-16FEB24-52000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1707728793507,
+                  "minimum_premium_with_cost_usd": 19.6673708526,
+                  "status": "filled_proxy",
+                  "spent_usd": 19.6673708526,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 51864.41,
+                  "side": "C",
+                  "month": "2024-02",
+                  "starting": 39.687730999106,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-02-19",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-23FEB24-48000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1708339732128,
+                  "minimum_premium_with_cost_usd": 13.566005324718748,
+                  "month": "2024-02",
+                  "starting": 20.020360146506
+                }
+              ]
+            },
+            {
+              "month": "2024-03",
+              "start": 20.020360146506,
+              "end": 20.020360146506,
+              "orders": [
+                {
+                  "entry_day": "2024-03-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8MAR24-70000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1709542857705,
+                  "minimum_premium_with_cost_usd": 138.8568271018125,
+                  "month": "2024-03",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-03-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15MAR24-65000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1710150976905,
+                  "minimum_premium_with_cost_usd": 65.33198595825,
+                  "month": "2024-03",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-03-18",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-22MAR24-74000-C",
+                  "ending": 20.020360146506,
+                  "month": "2024-03",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-03-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29MAR24-73000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1711361271944,
+                  "minimum_premium_with_cost_usd": 52.148914819125,
+                  "month": "2024-03",
+                  "starting": 20.020360146506
+                }
+              ]
+            },
+            {
+              "month": "2024-04",
+              "start": 20.020360146506,
+              "end": 20.020360146506,
+              "orders": [
+                {
+                  "entry_day": "2024-04-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5APR24-75000-C",
+                  "ending": 20.020360146506,
+                  "month": "2024-04",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-04-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12APR24-66000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1712568938050,
+                  "minimum_premium_with_cost_usd": 51.108915304125006,
+                  "month": "2024-04",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-04-15",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-19APR24-61000-P",
+                  "ending": 20.020360146506,
+                  "month": "2024-04",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-04-22",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-26APR24-60000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1713776451834,
+                  "minimum_premium_with_cost_usd": 45.7613607867,
+                  "month": "2024-04",
+                  "starting": 20.020360146506
+                }
+              ]
+            },
+            {
+              "month": "2024-05",
+              "start": 20.020360146506,
+              "end": 20.020360146506,
+              "orders": [
+                {
+                  "entry_day": "2024-05-06",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-10MAY24-71000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1714990282588,
+                  "minimum_premium_with_cost_usd": 29.342017498462504,
+                  "month": "2024-05",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-05-13",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-17MAY24-68000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1715592422341,
+                  "minimum_premium_with_cost_usd": 36.09239727825,
+                  "month": "2024-05",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-05-20",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-24MAY24-72000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1716199621189,
+                  "minimum_premium_with_cost_usd": 34.6848376545,
+                  "month": "2024-05",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-05-27",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-31MAY24-74000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1716806114971,
+                  "minimum_premium_with_cost_usd": 16.677198924750005,
+                  "month": "2024-05",
+                  "starting": 20.020360146506
+                }
+              ]
+            },
+            {
+              "month": "2024-06",
+              "start": 20.020360146506,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-06-03",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-7JUN24-63000-P",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1717411915662,
+                  "minimum_premium_with_cost_usd": 11.541318836231252,
+                  "month": "2024-06",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-06-10",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-14JUN24-75000-C",
+                  "ending": 20.020360146506,
+                  "trade_timestamp": 1718010480079,
+                  "minimum_premium_with_cost_usd": 21.796954625325,
+                  "month": "2024-06",
+                  "starting": 20.020360146506
+                },
+                {
+                  "entry_day": "2024-06-17",
+                  "instrument": "BTC-21JUN24-60000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1718618512603,
+                  "minimum_premium_with_cost_usd": 10.002138745640625,
+                  "status": "filled_proxy",
+                  "spent_usd": 10.002138745640625,
+                  "settled_value_usd": 0.0,
+                  "settlement_index_usd": 64495.11,
+                  "side": "P",
+                  "month": "2024-06",
+                  "starting": 20.020360146506,
+                  "modeled_exit": "expiry",
+                  "contract_units": 0.1
+                },
+                {
+                  "entry_day": "2024-06-24",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-28JUN24-57000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1719221063922,
+                  "minimum_premium_with_cost_usd": 17.0520399504,
+                  "month": "2024-06",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-07",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-07-01",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-5JUL24-68000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-07",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-07-08",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-12JUL24-53000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1720430222663,
+                  "minimum_premium_with_cost_usd": 32.90560005300001,
+                  "month": "2024-07",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-07-15",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-19JUL24-68000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1721035451964,
+                  "minimum_premium_with_cost_usd": 22.2678910203,
+                  "month": "2024-07",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-07-22",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-26JUL24-61000-P",
+                  "ending": 10.018221400865,
+                  "month": "2024-07",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-08",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-08-05",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-9AUG24-48000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1722848654476,
+                  "minimum_premium_with_cost_usd": 73.07136645900002,
+                  "month": "2024-08",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-08-12",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-16AUG24-63500-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-08",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-08-19",
+                  "status": "missing_predecision_index",
+                  "ending": 10.018221400865,
+                  "month": "2024-08",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-08-26",
+                  "status": "missing_predecision_index",
+                  "ending": 10.018221400865,
+                  "month": "2024-08",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-09",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-09-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6SEP24-63000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1725270254440,
+                  "minimum_premium_with_cost_usd": 17.4611630475,
+                  "month": "2024-09",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-09-09",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-13SEP24-51000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1725878828133,
+                  "minimum_premium_with_cost_usd": 42.88821946575,
+                  "month": "2024-09",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-09-16",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-20SEP24-64000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-09",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-09-23",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-27SEP24-69000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-09",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-10",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-10-07",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-11OCT24-58000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1728292884195,
+                  "minimum_premium_with_cost_usd": 16.36585331428125,
+                  "month": "2024-10",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-10-14",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-18OCT24-59000-P",
+                  "ending": 10.018221400865,
+                  "month": "2024-10",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-10-21",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-25OCT24-74000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-10",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-11",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-11-04",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-8NOV24-63000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1730713736081,
+                  "minimum_premium_with_cost_usd": 80.99318499243752,
+                  "month": "2024-11",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-11-11",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-15NOV24-88000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1731320125119,
+                  "minimum_premium_with_cost_usd": 45.823190024324994,
+                  "month": "2024-11",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-11-18",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-22NOV24-84000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1731920707765,
+                  "minimum_premium_with_cost_usd": 37.5638568936,
+                  "month": "2024-11",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-11-25",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-29NOV24-106000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1732526559755,
+                  "minimum_premium_with_cost_usd": 83.32798446000002,
+                  "month": "2024-11",
+                  "starting": 10.018221400865
+                }
+              ]
+            },
+            {
+              "month": "2024-12",
+              "start": 10.018221400865,
+              "end": 10.018221400865,
+              "orders": [
+                {
+                  "entry_day": "2024-12-02",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-6DEC24-103000-C",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1733130415757,
+                  "minimum_premium_with_cost_usd": 50.556290938500005,
+                  "month": "2024-12",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-12-09",
+                  "status": "no_eligible_trade_within_2h",
+                  "instrument": "BTC-13DEC24-107000-C",
+                  "ending": 10.018221400865,
+                  "month": "2024-12",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-12-16",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-20DEC24-96000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1734341020773,
+                  "minimum_premium_with_cost_usd": 42.8234777952,
+                  "month": "2024-12",
+                  "starting": 10.018221400865
+                },
+                {
+                  "entry_day": "2024-12-23",
+                  "status": "minimum_order_over_budget",
+                  "instrument": "BTC-27DEC24-88000-P",
+                  "ending": 10.018221400865,
+                  "trade_timestamp": 1734949876941,
+                  "minimum_premium_with_cost_usd": 36.6386560596,
+                  "month": "2024-12",
+                  "starting": 10.018221400865
+                }
+              ]
+            }
+          ],
+          "random_median_end": 18.095745008435,
+          "random_fraction_ge": 1.0
+        }
+      }
+    }
+  }
+}

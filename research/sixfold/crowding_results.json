@@ -1,0 +1,3087 @@
+{
+  "variants": {
+    "base": {
+      "symbol": "BTCUSDT",
+      "leverage_on_collateral": 20,
+      "fee_per_side": 0.00075,
+      "extra_delay_ms": 0,
+      "uncapturable_signals": 0,
+      "market_snapshot_hash": "fd1018337c4f0c174d63f0060566f24df498e60d120fdae87f2d2d2f8ecc1f6b",
+      "periods": {
+        "reference": {
+          "months": 36,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9606067441243057,
+          "geometric_mean_multiple": 0.9481783162767735,
+          "max_multiple": 1.33177638203672,
+          "min_multiple": 0.650494272939794,
+          "account_multiple_no_top_up_simulation": 0.14724504684134457,
+          "continuous_month_end_drawdown_pct": 86.59688287141513,
+          "worst_individual_month_exit_drawdown_pct": 52.997996454011286,
+          "trades": 121,
+          "trade_outcomes": {
+            "timed": 22,
+            "stop": 82,
+            "limit": 17
+          },
+          "long_signal_count": 47,
+          "short_signal_count": 74
+        },
+        "2024": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9791998282287361,
+          "geometric_mean_multiple": 0.9733029191712778,
+          "max_multiple": 1.1496715654279384,
+          "min_multiple": 0.7854840557844105,
+          "account_multiple_no_top_up_simulation": 0.7227303808206644,
+          "continuous_month_end_drawdown_pct": 37.13592624588876,
+          "worst_individual_month_exit_drawdown_pct": 24.49340445193542,
+          "trades": 20,
+          "trade_outcomes": {
+            "stop": 12,
+            "timed": 7,
+            "limit": 1
+          },
+          "long_signal_count": 1,
+          "short_signal_count": 19
+        },
+        "2025": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9981528310610635,
+          "geometric_mean_multiple": 0.99764901115496,
+          "max_multiple": 1.0608444767092762,
+          "min_multiple": 0.9103332357088825,
+          "account_multiple_no_top_up_simulation": 0.97215008199079,
+          "continuous_month_end_drawdown_pct": 8.966676429111754,
+          "worst_individual_month_exit_drawdown_pct": 8.966676429111754,
+          "trades": 3,
+          "trade_outcomes": {
+            "stop": 1,
+            "timed": 2
+          },
+          "long_signal_count": 3,
+          "short_signal_count": 0
+        },
+        "holdout": {
+          "months": 24,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9886763296448997,
+          "geometric_mean_multiple": 0.9854007788029504,
+          "max_multiple": 1.1496715654279384,
+          "min_multiple": 0.7854840557844105,
+          "account_multiple_no_top_up_simulation": 0.7026023989720438,
+          "continuous_month_end_drawdown_pct": 37.13592624588876,
+          "worst_individual_month_exit_drawdown_pct": 24.49340445193542,
+          "trades": 23,
+          "trade_outcomes": {
+            "stop": 13,
+            "timed": 9,
+            "limit": 1
+          },
+          "long_signal_count": 4,
+          "short_signal_count": 19,
+          "matched_random": {
+            "draws": 1000,
+            "mean_of_random_monthly_medians": 1.0,
+            "p_random_median_at_least_observed": 1.0,
+            "mean_random_6x_months": 0,
+            "p_random_6x_months_at_least_observed": 1.0
+          }
+        }
+      },
+      "months": [
+        {
+          "month": "2021-01",
+          "net_multiple": 0.650494272939794,
+          "max_exit_drawdown_pct": 34.9505727060206,
+          "trades": 9,
+          "outcomes": {
+            "timed": 1,
+            "stop": 7,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-02",
+          "net_multiple": 1.1324434261775318,
+          "max_exit_drawdown_pct": 17.20023718359389,
+          "trades": 6,
+          "outcomes": {
+            "stop": 4,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-03",
+          "net_multiple": 0.6660153238316113,
+          "max_exit_drawdown_pct": 37.66773930154689,
+          "trades": 11,
+          "outcomes": {
+            "stop": 9,
+            "timed": 1,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-04",
+          "net_multiple": 0.9902301381223408,
+          "max_exit_drawdown_pct": 17.200237183593813,
+          "trades": 4,
+          "outcomes": {
+            "timed": 2,
+            "stop": 2
+          }
+        },
+        {
+          "month": "2021-05",
+          "net_multiple": 0.8256172967852445,
+          "max_exit_drawdown_pct": 52.997996454011286,
+          "trades": 13,
+          "outcomes": {
+            "stop": 10,
+            "limit": 3
+          }
+        },
+        {
+          "month": "2021-06",
+          "net_multiple": 1.0303750585809708,
+          "max_exit_drawdown_pct": 24.628924948692998,
+          "trades": 7,
+          "outcomes": {
+            "stop": 5,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-07",
+          "net_multiple": 0.7825221770597565,
+          "max_exit_drawdown_pct": 39.694136322791366,
+          "trades": 13,
+          "outcomes": {
+            "stop": 8,
+            "timed": 4,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-08",
+          "net_multiple": 1.118248350057523,
+          "max_exit_drawdown_pct": 9.005625000000139,
+          "trades": 4,
+          "outcomes": {
+            "timed": 3,
+            "stop": 1
+          }
+        },
+        {
+          "month": "2021-09",
+          "net_multiple": 0.7534312667627109,
+          "max_exit_drawdown_pct": 24.656873323728913,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2021-10",
+          "net_multiple": 0.9695257625758432,
+          "max_exit_drawdown_pct": 31.441992775469018,
+          "trades": 10,
+          "outcomes": {
+            "stop": 5,
+            "limit": 1,
+            "timed": 4
+          }
+        },
+        {
+          "month": "2021-11",
+          "net_multiple": 1.33177638203672,
+          "max_exit_drawdown_pct": 31.441992775468698,
+          "trades": 8,
+          "outcomes": {
+            "stop": 5,
+            "limit": 3
+          }
+        },
+        {
+          "month": "2021-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-01",
+          "net_multiple": 0.8282023781640638,
+          "max_exit_drawdown_pct": 17.179762183593617,
+          "trades": 2,
+          "outcomes": {
+            "stop": 2
+          }
+        },
+        {
+          "month": "2022-02",
+          "net_multiple": 0.9392128965322817,
+          "max_exit_drawdown_pct": 17.149605692531544,
+          "trades": 3,
+          "outcomes": {
+            "stop": 2,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-04",
+          "net_multiple": 0.8023307608645296,
+          "max_exit_drawdown_pct": 24.628924948693044,
+          "trades": 6,
+          "outcomes": {
+            "stop": 5,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-05",
+          "net_multiple": 0.8098851624668255,
+          "max_exit_drawdown_pct": 19.01148375331745,
+          "trades": 3,
+          "outcomes": {
+            "stop": 2,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-06",
+          "net_multiple": 0.7537107505130709,
+          "max_exit_drawdown_pct": 24.62892494869291,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2022-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-08",
+          "net_multiple": 1.1161898025920127,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-09",
+          "net_multiple": 1.2854827734700724,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-11",
+          "net_multiple": 0.8418362006950709,
+          "max_exit_drawdown_pct": 17.17976218359357,
+          "trades": 4,
+          "outcomes": {
+            "stop": 3,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-01",
+          "net_multiple": 1.2852250000000005,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "limit": 1
+          }
+        },
+        {
+          "month": "2023-02",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-04",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-08",
+          "net_multiple": 0.9095682363088797,
+          "max_exit_drawdown_pct": 9.043176369112027,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-10",
+          "net_multiple": 0.9100562500000009,
+          "max_exit_drawdown_pct": 8.99437499999991,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-11",
+          "net_multiple": 0.9099437499999998,
+          "max_exit_drawdown_pct": 9.005625000000016,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-12",
+          "net_multiple": 0.9395193719381476,
+          "max_exit_drawdown_pct": 12.312087953715722,
+          "trades": 6,
+          "outcomes": {
+            "timed": 3,
+            "stop": 3
+          }
+        },
+        {
+          "month": "2024-01",
+          "net_multiple": 0.9099437499999986,
+          "max_exit_drawdown_pct": 9.005625000000139,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2024-02",
+          "net_multiple": 0.8279976281640609,
+          "max_exit_drawdown_pct": 17.200237183593913,
+          "trades": 2,
+          "outcomes": {
+            "stop": 2
+          }
+        },
+        {
+          "month": "2024-03",
+          "net_multiple": 0.8823114165377801,
+          "max_exit_drawdown_pct": 24.49340445193542,
+          "trades": 7,
+          "outcomes": {
+            "timed": 2,
+            "stop": 4,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2024-04",
+          "net_multiple": 1.0736355421524686,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-08",
+          "net_multiple": 1.121353980678176,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-11",
+          "net_multiple": 0.7854840557844105,
+          "max_exit_drawdown_pct": 21.45159442155895,
+          "trades": 5,
+          "outcomes": {
+            "stop": 4,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-12",
+          "net_multiple": 1.1496715654279384,
+          "max_exit_drawdown_pct": 9.005625000000062,
+          "trades": 3,
+          "outcomes": {
+            "stop": 1,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2025-01",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-02",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-04",
+          "net_multiple": 0.9103332357088825,
+          "max_exit_drawdown_pct": 8.966676429111754,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2025-05",
+          "net_multiple": 1.0066562603146025,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2025-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-08",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-10",
+          "net_multiple": 1.0608444767092762,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2025-11",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        }
+      ]
+    },
+    "cost_stress": {
+      "symbol": "BTCUSDT",
+      "leverage_on_collateral": 20,
+      "fee_per_side": 0.0015,
+      "extra_delay_ms": 0,
+      "uncapturable_signals": 0,
+      "market_snapshot_hash": "fd1018337c4f0c174d63f0060566f24df498e60d120fdae87f2d2d2f8ecc1f6b",
+      "periods": {
+        "reference": {
+          "months": 36,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 0.9658296116344645,
+          "mean_multiple": 0.9168514118033229,
+          "geometric_mean_multiple": 0.9000981752663756,
+          "max_multiple": 1.2704500000000003,
+          "min_multiple": 0.5596231795341887,
+          "account_multiple_no_top_up_simulation": 0.0226170379035686,
+          "continuous_month_end_drawdown_pct": 97.73829620964314,
+          "worst_individual_month_exit_drawdown_pct": 58.87105833162612,
+          "trades": 121,
+          "trade_outcomes": {
+            "timed": 22,
+            "stop": 82,
+            "limit": 17
+          },
+          "long_signal_count": 47,
+          "short_signal_count": 74
+        },
+        "2024": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9565202364809023,
+          "geometric_mean_multiple": 0.9485280973955243,
+          "max_multiple": 1.1062522021424226,
+          "min_multiple": 0.7252290466837468,
+          "account_multiple_no_top_up_simulation": 0.5303986396890664,
+          "continuous_month_end_drawdown_pct": 51.814751728732666,
+          "worst_individual_month_exit_drawdown_pct": 29.163977809168994,
+          "trades": 20,
+          "trade_outcomes": {
+            "stop": 12,
+            "timed": 7,
+            "limit": 1
+          },
+          "long_signal_count": 1,
+          "short_signal_count": 19
+        },
+        "2025": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9944015036118972,
+          "geometric_mean_multiple": 0.9938423384059156,
+          "max_multiple": 1.04578784931411,
+          "min_multiple": 0.8953894857088825,
+          "account_multiple_no_top_up_simulation": 0.928559908783197,
+          "continuous_month_end_drawdown_pct": 11.209533616956636,
+          "worst_individual_month_exit_drawdown_pct": 10.461051429111745,
+          "trades": 3,
+          "trade_outcomes": {
+            "stop": 1,
+            "timed": 2
+          },
+          "long_signal_count": 3,
+          "short_signal_count": 0
+        },
+        "holdout": {
+          "months": 24,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9754608700463997,
+          "geometric_mean_multiple": 0.9709208939760654,
+          "max_multiple": 1.1062522021424226,
+          "min_multiple": 0.7252290466837468,
+          "account_multiple_no_top_up_simulation": 0.49250691248841133,
+          "continuous_month_end_drawdown_pct": 52.905657413076014,
+          "worst_individual_month_exit_drawdown_pct": 29.163977809168994,
+          "trades": 23,
+          "trade_outcomes": {
+            "stop": 13,
+            "timed": 9,
+            "limit": 1
+          },
+          "long_signal_count": 4,
+          "short_signal_count": 19
+        }
+      },
+      "months": [
+        {
+          "month": "2021-01",
+          "net_multiple": 0.5633746930263295,
+          "max_exit_drawdown_pct": 43.66253069736705,
+          "trades": 9,
+          "outcomes": {
+            "timed": 1,
+            "stop": 7,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-02",
+          "net_multiple": 1.0351157633496229,
+          "max_exit_drawdown_pct": 19.917636234375124,
+          "trades": 6,
+          "outcomes": {
+            "stop": 4,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-03",
+          "net_multiple": 0.5596231795341887,
+          "max_exit_drawdown_pct": 45.220547722309355,
+          "trades": 11,
+          "outcomes": {
+            "stop": 9,
+            "timed": 1,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-04",
+          "net_multiple": 0.9316592232689288,
+          "max_exit_drawdown_pct": 19.91763623437507,
+          "trades": 4,
+          "outcomes": {
+            "timed": 2,
+            "stop": 2
+          }
+        },
+        {
+          "month": "2021-05",
+          "net_multiple": 0.6744373529057349,
+          "max_exit_drawdown_pct": 58.87105833162612,
+          "trades": 13,
+          "outcomes": {
+            "stop": 10,
+            "limit": 3
+          }
+        },
+        {
+          "month": "2021-06",
+          "net_multiple": 0.9261636450166105,
+          "max_exit_drawdown_pct": 28.281224507904355,
+          "trades": 7,
+          "outcomes": {
+            "stop": 5,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-07",
+          "net_multiple": 0.6397820531239087,
+          "max_exit_drawdown_pct": 49.605604101933096,
+          "trades": 13,
+          "outcomes": {
+            "stop": 8,
+            "timed": 4,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-08",
+          "net_multiple": 1.0542627354839857,
+          "max_exit_drawdown_pct": 10.511250000000128,
+          "trades": 4,
+          "outcomes": {
+            "timed": 3,
+            "stop": 1
+          }
+        },
+        {
+          "month": "2021-09",
+          "net_multiple": 0.7166470630431058,
+          "max_exit_drawdown_pct": 28.335293695689423,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2021-10",
+          "net_multiple": 0.8322635664975395,
+          "max_exit_drawdown_pct": 35.86815013710143,
+          "trades": 10,
+          "outcomes": {
+            "stop": 5,
+            "limit": 1,
+            "timed": 4
+          }
+        },
+        {
+          "month": "2021-11",
+          "net_multiple": 1.1834887695750194,
+          "max_exit_drawdown_pct": 35.86815013710113,
+          "trades": 8,
+          "outcomes": {
+            "stop": 5,
+            "limit": 3
+          }
+        },
+        {
+          "month": "2021-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-01",
+          "net_multiple": 0.8012263876562513,
+          "max_exit_drawdown_pct": 19.877361234374867,
+          "trades": 2,
+          "outcomes": {
+            "stop": 2
+          }
+        },
+        {
+          "month": "2022-02",
+          "net_multiple": 0.8965149147908595,
+          "max_exit_drawdown_pct": 19.847699933652198,
+          "trades": 3,
+          "outcomes": {
+            "stop": 2,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-04",
+          "net_multiple": 0.7298360691604021,
+          "max_exit_drawdown_pct": 28.2812245079044,
+          "trades": 6,
+          "outcomes": {
+            "stop": 5,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-05",
+          "net_multiple": 0.7714917204526863,
+          "max_exit_drawdown_pct": 22.85082795473137,
+          "trades": 3,
+          "outcomes": {
+            "stop": 2,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-06",
+          "net_multiple": 0.7171877549209573,
+          "max_exit_drawdown_pct": 28.28122450790427,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2022-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-08",
+          "net_multiple": 1.1010921037049928,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-09",
+          "net_multiple": 1.2702577734700724,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-11",
+          "net_multiple": 0.7902146272923933,
+          "max_exit_drawdown_pct": 20.97853727076067,
+          "trades": 4,
+          "outcomes": {
+            "stop": 3,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-01",
+          "net_multiple": 1.2704500000000003,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "limit": 1
+          }
+        },
+        {
+          "month": "2023-02",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-04",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-08",
+          "net_multiple": 0.8946244863088797,
+          "max_exit_drawdown_pct": 10.53755136911203,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-10",
+          "net_multiple": 0.895112500000001,
+          "max_exit_drawdown_pct": 10.488749999999902,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-11",
+          "net_multiple": 0.8948874999999998,
+          "max_exit_drawdown_pct": 10.511250000000016,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-12",
+          "net_multiple": 0.8569369423371535,
+          "max_exit_drawdown_pct": 16.38696256482558,
+          "trades": 6,
+          "outcomes": {
+            "timed": 3,
+            "stop": 3
+          }
+        },
+        {
+          "month": "2024-01",
+          "net_multiple": 0.8948874999999986,
+          "max_exit_drawdown_pct": 10.511250000000139,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2024-02",
+          "net_multiple": 0.8008236376562484,
+          "max_exit_drawdown_pct": 19.91763623437516,
+          "trades": 2,
+          "outcomes": {
+            "stop": 2
+          }
+        },
+        {
+          "month": "2024-03",
+          "net_multiple": 0.7916010434374235,
+          "max_exit_drawdown_pct": 29.163977809168994,
+          "trades": 7,
+          "outcomes": {
+            "timed": 2,
+            "stop": 4,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2024-04",
+          "net_multiple": 1.0587004053697844,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-08",
+          "net_multiple": 1.1062522021424226,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-11",
+          "net_multiple": 0.7252290466837468,
+          "max_exit_drawdown_pct": 27.47709533162532,
+          "trades": 5,
+          "outcomes": {
+            "stop": 4,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-12",
+          "net_multiple": 1.1007490024812032,
+          "max_exit_drawdown_pct": 10.51125000000006,
+          "trades": 3,
+          "outcomes": {
+            "stop": 1,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2025-01",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-02",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-04",
+          "net_multiple": 0.8953894857088825,
+          "max_exit_drawdown_pct": 10.461051429111745,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2025-05",
+          "net_multiple": 0.9916407083197731,
+          "max_exit_drawdown_pct": 0.8359291680226866,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2025-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-08",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-10",
+          "net_multiple": 1.04578784931411,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2025-11",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        }
+      ]
+    },
+    "lower_leverage": {
+      "symbol": "BTCUSDT",
+      "leverage_on_collateral": 10,
+      "fee_per_side": 0.00075,
+      "extra_delay_ms": 0,
+      "uncapturable_signals": 0,
+      "market_snapshot_hash": "fd1018337c4f0c174d63f0060566f24df498e60d120fdae87f2d2d2f8ecc1f6b",
+      "periods": {
+        "reference": {
+          "months": 36,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9838331013041617,
+          "geometric_mean_multiple": 0.9806368984809257,
+          "max_multiple": 1.1885358381597357,
+          "min_multiple": 0.8192883192328161,
+          "account_multiple_no_top_up_simulation": 0.4946480437750298,
+          "continuous_month_end_drawdown_pct": 54.263990838303776,
+          "worst_individual_month_exit_drawdown_pct": 30.8289050440149,
+          "trades": 121,
+          "trade_outcomes": {
+            "timed": 22,
+            "stop": 82,
+            "limit": 17
+          },
+          "long_signal_count": 47,
+          "short_signal_count": 74
+        },
+        "2024": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9905749327274412,
+          "geometric_mean_multiple": 0.9891277099384403,
+          "max_multiple": 1.0792781814309034,
+          "min_multiple": 0.8922894321304331,
+          "account_multiple_no_top_up_simulation": 0.8770582195848285,
+          "continuous_month_end_drawdown_pct": 18.736593153210258,
+          "worst_individual_month_exit_drawdown_pct": 12.819283726085306,
+          "trades": 20,
+          "trade_outcomes": {
+            "stop": 12,
+            "timed": 7,
+            "limit": 1
+          },
+          "long_signal_count": 1,
+          "short_signal_count": 19
+        },
+        "2025": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9990764155305317,
+          "geometric_mean_multiple": 0.9989523639722703,
+          "max_multiple": 1.030422238354638,
+          "min_multiple": 0.9551666178544412,
+          "account_multiple_no_top_up_simulation": 0.98750055302357,
+          "continuous_month_end_drawdown_pct": 4.483338214555877,
+          "worst_individual_month_exit_drawdown_pct": 4.483338214555877,
+          "trades": 3,
+          "trade_outcomes": {
+            "stop": 1,
+            "timed": 2
+          },
+          "long_signal_count": 3,
+          "short_signal_count": 0
+        },
+        "holdout": {
+          "months": 24,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9948256741289865,
+          "geometric_mean_multiple": 0.9940278990619342,
+          "max_multiple": 1.0792781814309034,
+          "min_multiple": 0.8922894321304331,
+          "account_multiple_no_top_up_simulation": 0.8660954768738858,
+          "continuous_month_end_drawdown_pct": 18.736593153210258,
+          "worst_individual_month_exit_drawdown_pct": 12.819283726085306,
+          "trades": 23,
+          "trade_outcomes": {
+            "stop": 13,
+            "timed": 9,
+            "limit": 1
+          },
+          "long_signal_count": 4,
+          "short_signal_count": 19
+        }
+      },
+      "months": [
+        {
+          "month": "2021-01",
+          "net_multiple": 0.8192883192328161,
+          "max_exit_drawdown_pct": 18.07116807671839,
+          "trades": 9,
+          "outcomes": {
+            "timed": 1,
+            "stop": 7,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-02",
+          "net_multiple": 1.0858260759555058,
+          "max_exit_drawdown_pct": 8.802871795898515,
+          "trades": 6,
+          "outcomes": {
+            "stop": 4,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-03",
+          "net_multiple": 0.8346922355509186,
+          "max_exit_drawdown_pct": 20.08031030319537,
+          "trades": 11,
+          "outcomes": {
+            "stop": 9,
+            "timed": 1,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-04",
+          "net_multiple": 1.0013100445012464,
+          "max_exit_drawdown_pct": 8.80287179589847,
+          "trades": 4,
+          "outcomes": {
+            "timed": 2,
+            "stop": 2
+          }
+        },
+        {
+          "month": "2021-05",
+          "net_multiple": 0.9406578167394111,
+          "max_exit_drawdown_pct": 30.8289050440149,
+          "trades": 13,
+          "outcomes": {
+            "stop": 10,
+            "limit": 3
+          }
+        },
+        {
+          "month": "2021-06",
+          "net_multiple": 1.036830328244163,
+          "max_exit_drawdown_pct": 12.893917062434202,
+          "trades": 7,
+          "outcomes": {
+            "stop": 5,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-07",
+          "net_multiple": 0.9036445598710422,
+          "max_exit_drawdown_pct": 21.291102078719824,
+          "trades": 13,
+          "outcomes": {
+            "stop": 8,
+            "timed": 4,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-08",
+          "net_multiple": 1.0624001698997165,
+          "max_exit_drawdown_pct": 4.502812500000064,
+          "trades": 4,
+          "outcomes": {
+            "timed": 3,
+            "stop": 1
+          }
+        },
+        {
+          "month": "2021-09",
+          "net_multiple": 0.8709069251568616,
+          "max_exit_drawdown_pct": 12.909307484313837,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2021-10",
+          "net_multiple": 1.0024880138168868,
+          "max_exit_drawdown_pct": 16.830838073246824,
+          "trades": 10,
+          "outcomes": {
+            "stop": 5,
+            "limit": 1,
+            "timed": 4
+          }
+        },
+        {
+          "month": "2021-11",
+          "net_multiple": 1.1885358381597357,
+          "max_exit_drawdown_pct": 16.830838073246657,
+          "trades": 8,
+          "outcomes": {
+            "stop": 5,
+            "limit": 3
+          }
+        },
+        {
+          "month": "2021-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-01",
+          "net_multiple": 0.9120787195410164,
+          "max_exit_drawdown_pct": 8.792128045898362,
+          "trades": 2,
+          "outcomes": {
+            "stop": 2
+          }
+        },
+        {
+          "month": "2022-02",
+          "net_multiple": 0.9731858473793182,
+          "max_exit_drawdown_pct": 8.776304684916237,
+          "trades": 3,
+          "outcomes": {
+            "stop": 2,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-04",
+          "net_multiple": 0.9078171679775504,
+          "max_exit_drawdown_pct": 12.893917062434246,
+          "trades": 6,
+          "outcomes": {
+            "stop": 5,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-05",
+          "net_multiple": 0.9019925720732146,
+          "max_exit_drawdown_pct": 9.800742792678541,
+          "trades": 3,
+          "outcomes": {
+            "stop": 2,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-06",
+          "net_multiple": 0.8710608293756583,
+          "max_exit_drawdown_pct": 12.893917062434168,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2022-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-08",
+          "net_multiple": 1.0580949012960064,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-09",
+          "net_multiple": 1.1427413867350362,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-11",
+          "net_multiple": 0.9219897837098866,
+          "max_exit_drawdown_pct": 8.792128045898352,
+          "trades": 4,
+          "outcomes": {
+            "stop": 3,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-01",
+          "net_multiple": 1.1426125000000003,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "limit": 1
+          }
+        },
+        {
+          "month": "2023-02",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-04",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-08",
+          "net_multiple": 0.9547841181544399,
+          "max_exit_drawdown_pct": 4.5215881845560135,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-10",
+          "net_multiple": 0.9550281250000004,
+          "max_exit_drawdown_pct": 4.497187499999955,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-11",
+          "net_multiple": 0.9549718749999999,
+          "max_exit_drawdown_pct": 4.502812500000008,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-12",
+          "net_multiple": 0.9750534935793876,
+          "max_exit_drawdown_pct": 6.110924640286298,
+          "trades": 6,
+          "outcomes": {
+            "timed": 3,
+            "stop": 3
+          }
+        },
+        {
+          "month": "2024-01",
+          "net_multiple": 0.9549718749999994,
+          "max_exit_drawdown_pct": 4.502812500000064,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2024-02",
+          "net_multiple": 0.9119712820410149,
+          "max_exit_drawdown_pct": 8.802871795898515,
+          "trades": 2,
+          "outcomes": {
+            "stop": 2
+          }
+        },
+        {
+          "month": "2024-03",
+          "net_multiple": 0.9508936607116223,
+          "max_exit_drawdown_pct": 12.819283726085306,
+          "trades": 7,
+          "outcomes": {
+            "timed": 2,
+            "stop": 4,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2024-04",
+          "net_multiple": 1.0368177710762343,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-08",
+          "net_multiple": 1.060676990339088,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-11",
+          "net_multiple": 0.8922894321304331,
+          "max_exit_drawdown_pct": 10.77105678695669,
+          "trades": 5,
+          "outcomes": {
+            "stop": 4,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-12",
+          "net_multiple": 1.0792781814309034,
+          "max_exit_drawdown_pct": 4.502812500000031,
+          "trades": 3,
+          "outcomes": {
+            "stop": 1,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2025-01",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-02",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-04",
+          "net_multiple": 0.9551666178544412,
+          "max_exit_drawdown_pct": 4.483338214555877,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2025-05",
+          "net_multiple": 1.0033281301573014,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2025-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-08",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-10",
+          "net_multiple": 1.030422238354638,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2025-11",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        }
+      ]
+    },
+    "entry_delayed": {
+      "symbol": "BTCUSDT",
+      "leverage_on_collateral": 20,
+      "fee_per_side": 0.00075,
+      "extra_delay_ms": 3600000,
+      "uncapturable_signals": 0,
+      "market_snapshot_hash": "fd1018337c4f0c174d63f0060566f24df498e60d120fdae87f2d2d2f8ecc1f6b",
+      "periods": {
+        "reference": {
+          "months": 36,
+          "months_6x": 0,
+          "months_left_at_most_half": 1,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.944452565639558,
+          "geometric_mean_multiple": 0.9132673848509079,
+          "max_multiple": 1.4578788294455816,
+          "min_multiple": 0.33353777956157243,
+          "account_multiple_no_top_up_simulation": 0.03815277515148298,
+          "continuous_month_end_drawdown_pct": 96.19653722385785,
+          "worst_individual_month_exit_drawdown_pct": 66.64622204384276,
+          "trades": 121,
+          "trade_outcomes": {
+            "stop": 80,
+            "limit": 14,
+            "liquidation": 1,
+            "timed": 26
+          },
+          "long_signal_count": 47,
+          "short_signal_count": 74
+        },
+        "2024": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 1.0145777137160945,
+          "geometric_mean_multiple": 0.9952052675648789,
+          "max_multiple": 1.5324586331964123,
+          "min_multiple": 0.6238393018641694,
+          "account_multiple_no_top_up_simulation": 0.9439565244728064,
+          "continuous_month_end_drawdown_pct": 42.11647447152036,
+          "worst_individual_month_exit_drawdown_pct": 37.61606981358307,
+          "trades": 20,
+          "trade_outcomes": {
+            "stop": 12,
+            "limit": 3,
+            "timed": 5
+          },
+          "long_signal_count": 1,
+          "short_signal_count": 19
+        },
+        "2025": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9915586151623178,
+          "geometric_mean_multiple": 0.99115222434975,
+          "max_multiple": 1.0261980470995082,
+          "min_multiple": 0.9103323633060592,
+          "account_multiple_no_top_up_simulation": 0.8988439910646474,
+          "continuous_month_end_drawdown_pct": 12.410280490673319,
+          "worst_individual_month_exit_drawdown_pct": 8.966763669394084,
+          "trades": 3,
+          "trade_outcomes": {
+            "stop": 1,
+            "timed": 2
+          },
+          "long_signal_count": 3,
+          "short_signal_count": 0
+        },
+        "holdout": {
+          "months": 24,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 1.003068164439206,
+          "geometric_mean_multiple": 0.9931766784573216,
+          "max_multiple": 1.5324586331964123,
+          "min_multiple": 0.6238393018641694,
+          "account_multiple_no_top_up_simulation": 0.8484696498486508,
+          "continuous_month_end_drawdown_pct": 42.11647447152036,
+          "worst_individual_month_exit_drawdown_pct": 37.61606981358307,
+          "trades": 23,
+          "trade_outcomes": {
+            "stop": 13,
+            "limit": 3,
+            "timed": 7
+          },
+          "long_signal_count": 4,
+          "short_signal_count": 19
+        }
+      },
+      "months": [
+        {
+          "month": "2021-01",
+          "net_multiple": 0.33353777956157243,
+          "max_exit_drawdown_pct": 66.64622204384276,
+          "trades": 9,
+          "outcomes": {
+            "stop": 7,
+            "limit": 1,
+            "liquidation": 1
+          }
+        },
+        {
+          "month": "2021-02",
+          "net_multiple": 1.1324434261775314,
+          "max_exit_drawdown_pct": 17.20023718359388,
+          "trades": 6,
+          "outcomes": {
+            "limit": 2,
+            "stop": 4
+          }
+        },
+        {
+          "month": "2021-03",
+          "net_multiple": 1.4199340147256216,
+          "max_exit_drawdown_pct": 24.656873323728956,
+          "trades": 11,
+          "outcomes": {
+            "limit": 3,
+            "stop": 6,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2021-04",
+          "net_multiple": 0.7198149588917238,
+          "max_exit_drawdown_pct": 28.018504110827624,
+          "trades": 4,
+          "outcomes": {
+            "timed": 1,
+            "stop": 3
+          }
+        },
+        {
+          "month": "2021-05",
+          "net_multiple": 0.518089227648147,
+          "max_exit_drawdown_pct": 54.16185148494812,
+          "trades": 13,
+          "outcomes": {
+            "timed": 1,
+            "stop": 11,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-06",
+          "net_multiple": 0.7298494498367898,
+          "max_exit_drawdown_pct": 43.192430593933594,
+          "trades": 7,
+          "outcomes": {
+            "stop": 6,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-07",
+          "net_multiple": 0.5276687072283127,
+          "max_exit_drawdown_pct": 47.23312927716873,
+          "trades": 13,
+          "outcomes": {
+            "stop": 9,
+            "timed": 4
+          }
+        },
+        {
+          "month": "2021-08",
+          "net_multiple": 1.1006451104893362,
+          "max_exit_drawdown_pct": 9.005625000000016,
+          "trades": 4,
+          "outcomes": {
+            "timed": 3,
+            "stop": 1
+          }
+        },
+        {
+          "month": "2021-09",
+          "net_multiple": 0.7534312667627113,
+          "max_exit_drawdown_pct": 24.656873323728867,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2021-10",
+          "net_multiple": 0.8968917481747319,
+          "max_exit_drawdown_pct": 24.656873323728956,
+          "trades": 10,
+          "outcomes": {
+            "timed": 4,
+            "stop": 5,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-11",
+          "net_multiple": 1.4578788294455816,
+          "max_exit_drawdown_pct": 24.94909465002436,
+          "trades": 8,
+          "outcomes": {
+            "stop": 4,
+            "timed": 1,
+            "limit": 3
+          }
+        },
+        {
+          "month": "2021-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-01",
+          "net_multiple": 0.8288917019809829,
+          "max_exit_drawdown_pct": 17.110829801901705,
+          "trades": 2,
+          "outcomes": {
+            "stop": 2
+          }
+        },
+        {
+          "month": "2022-02",
+          "net_multiple": 0.7537107505130684,
+          "max_exit_drawdown_pct": 24.628924948693165,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2022-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-04",
+          "net_multiple": 1.2126818742312986,
+          "max_exit_drawdown_pct": 17.179762183593628,
+          "trades": 6,
+          "outcomes": {
+            "stop": 3,
+            "timed": 2,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-05",
+          "net_multiple": 0.8363208686957067,
+          "max_exit_drawdown_pct": 17.179762183593674,
+          "trades": 3,
+          "outcomes": {
+            "stop": 2,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-06",
+          "net_multiple": 0.7537107505130698,
+          "max_exit_drawdown_pct": 24.62892494869302,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2022-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-08",
+          "net_multiple": 1.1251018767732144,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-09",
+          "net_multiple": 1.2854852411332809,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-11",
+          "net_multiple": 0.8748629074213552,
+          "max_exit_drawdown_pct": 17.179762183593805,
+          "trades": 4,
+          "outcomes": {
+            "stop": 3,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-01",
+          "net_multiple": 0.9099437499999989,
+          "max_exit_drawdown_pct": 9.005625000000105,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-02",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-04",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-08",
+          "net_multiple": 0.9100562500000005,
+          "max_exit_drawdown_pct": 8.994374999999955,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-10",
+          "net_multiple": 0.9100562500000001,
+          "max_exit_drawdown_pct": 8.994374999999987,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-11",
+          "net_multiple": 1.0833883974550094,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2023-12",
+          "net_multiple": 0.9258972253650432,
+          "max_exit_drawdown_pct": 13.343827209295767,
+          "trades": 6,
+          "outcomes": {
+            "timed": 4,
+            "stop": 2
+          }
+        },
+        {
+          "month": "2024-01",
+          "net_multiple": 0.9099437499999992,
+          "max_exit_drawdown_pct": 9.005625000000084,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2024-02",
+          "net_multiple": 1.1694824560937493,
+          "max_exit_drawdown_pct": 9.005625000000073,
+          "trades": 2,
+          "outcomes": {
+            "stop": 1,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2024-03",
+          "net_multiple": 0.9156885802955277,
+          "max_exit_drawdown_pct": 24.456307384772515,
+          "trades": 7,
+          "outcomes": {
+            "timed": 2,
+            "stop": 4,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2024-04",
+          "net_multiple": 0.9099437499999998,
+          "max_exit_drawdown_pct": 9.005625000000016,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2024-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-08",
+          "net_multiple": 1.1135760931432768,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-11",
+          "net_multiple": 0.6238393018641694,
+          "max_exit_drawdown_pct": 37.61606981358307,
+          "trades": 5,
+          "outcomes": {
+            "stop": 5
+          }
+        },
+        {
+          "month": "2024-12",
+          "net_multiple": 1.5324586331964123,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 3,
+          "outcomes": {
+            "limit": 1,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2025-01",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-02",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-04",
+          "net_multiple": 0.9103323633060592,
+          "max_exit_drawdown_pct": 8.966763669394084,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2025-05",
+          "net_multiple": 0.9621729715422465,
+          "max_exit_drawdown_pct": 3.782702845775354,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2025-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-08",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-10",
+          "net_multiple": 1.0261980470995082,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 1,
+          "outcomes": {
+            "timed": 1
+          }
+        },
+        {
+          "month": "2025-11",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        }
+      ]
+    },
+    "eth_transfer": {
+      "symbol": "ETHUSDT",
+      "leverage_on_collateral": 20,
+      "fee_per_side": 0.00075,
+      "extra_delay_ms": 0,
+      "uncapturable_signals": 0,
+      "market_snapshot_hash": "325c9036e48129b40c33f63e1b75d49ab430bccd8e8a068de0f8f66b71554e4d",
+      "periods": {
+        "reference": {
+          "months": 36,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9651855960300323,
+          "geometric_mean_multiple": 0.9366811446713706,
+          "max_multiple": 1.6493484907347935,
+          "min_multiple": 0.5494877241757604,
+          "account_multiple_no_top_up_simulation": 0.09490825926536471,
+          "continuous_month_end_drawdown_pct": 91.70905111841114,
+          "worst_individual_month_exit_drawdown_pct": 57.23082063584985,
+          "trades": 167,
+          "trade_outcomes": {
+            "stop": 117,
+            "limit": 28,
+            "timed": 22
+          },
+          "long_signal_count": 77,
+          "short_signal_count": 90
+        },
+        "2024": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 1,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9207943058566279,
+          "geometric_mean_multiple": 0.9021529992847017,
+          "max_multiple": 1.0686522726073788,
+          "min_multiple": 0.46313833428136497,
+          "account_multiple_no_top_up_simulation": 0.29064467312957726,
+          "continuous_month_end_drawdown_pct": 73.70630034674942,
+          "worst_individual_month_exit_drawdown_pct": 53.6861665718635,
+          "trades": 26,
+          "trade_outcomes": {
+            "stop": 21,
+            "timed": 2,
+            "limit": 3
+          },
+          "long_signal_count": 1,
+          "short_signal_count": 25
+        },
+        "2025": {
+          "months": 12,
+          "months_6x": 0,
+          "months_left_at_most_half": 0,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9850108256067939,
+          "geometric_mean_multiple": 0.9844161538665509,
+          "max_multiple": 1.0,
+          "min_multiple": 0.9100562499999998,
+          "account_multiple_no_top_up_simulation": 0.8282182197694116,
+          "continuous_month_end_drawdown_pct": 17.178178023058845,
+          "worst_individual_month_exit_drawdown_pct": 8.994375000000021,
+          "trades": 2,
+          "trade_outcomes": {
+            "stop": 2
+          },
+          "long_signal_count": 2,
+          "short_signal_count": 0
+        },
+        "holdout": {
+          "months": 24,
+          "months_6x": 0,
+          "months_left_at_most_half": 1,
+          "months_left_at_most_tenth": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.952902565731711,
+          "geometric_mean_multiple": 0.9423873862457091,
+          "max_multiple": 1.0686522726073788,
+          "min_multiple": 0.46313833428136497,
+          "account_multiple_no_top_up_simulation": 0.24071721376484104,
+          "continuous_month_end_drawdown_pct": 75.9282786235159,
+          "worst_individual_month_exit_drawdown_pct": 53.6861665718635,
+          "trades": 28,
+          "trade_outcomes": {
+            "stop": 23,
+            "timed": 2,
+            "limit": 3
+          },
+          "long_signal_count": 3,
+          "short_signal_count": 25
+        }
+      },
+      "months": [
+        {
+          "month": "2021-01",
+          "net_multiple": 0.6040815000739342,
+          "max_exit_drawdown_pct": 48.34625377009431,
+          "trades": 9,
+          "outcomes": {
+            "stop": 8,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-02",
+          "net_multiple": 1.0304598178788285,
+          "max_exit_drawdown_pct": 24.656873323728977,
+          "trades": 7,
+          "outcomes": {
+            "stop": 5,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-03",
+          "net_multiple": 0.6039598223207759,
+          "max_exit_drawdown_pct": 54.05066582996307,
+          "trades": 16,
+          "outcomes": {
+            "stop": 12,
+            "timed": 2,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-04",
+          "net_multiple": 1.2615871121843132,
+          "max_exit_drawdown_pct": 17.20023718359398,
+          "trades": 8,
+          "outcomes": {
+            "stop": 5,
+            "timed": 1,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-05",
+          "net_multiple": 0.5494877241757604,
+          "max_exit_drawdown_pct": 57.23082063584985,
+          "trades": 10,
+          "outcomes": {
+            "stop": 9,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-06",
+          "net_multiple": 1.2441102389310652,
+          "max_exit_drawdown_pct": 17.17976218359375,
+          "trades": 5,
+          "outcomes": {
+            "stop": 3,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2021-07",
+          "net_multiple": 1.0640537104057344,
+          "max_exit_drawdown_pct": 17.179762183593674,
+          "trades": 3,
+          "outcomes": {
+            "stop": 2,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-08",
+          "net_multiple": 0.7597948036626021,
+          "max_exit_drawdown_pct": 31.441992775468886,
+          "trades": 7,
+          "outcomes": {
+            "stop": 5,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2021-09",
+          "net_multiple": 0.9681093322034947,
+          "max_exit_drawdown_pct": 24.64755835041199,
+          "trades": 4,
+          "outcomes": {
+            "stop": 3,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2021-10",
+          "net_multiple": 0.6975354579084212,
+          "max_exit_drawdown_pct": 43.76276400665743,
+          "trades": 13,
+          "outcomes": {
+            "stop": 9,
+            "limit": 2,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2021-11",
+          "net_multiple": 1.074624865422798,
+          "max_exit_drawdown_pct": 20.378125697079142,
+          "trades": 6,
+          "outcomes": {
+            "stop": 3,
+            "limit": 1,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2021-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2022-01",
+          "net_multiple": 0.7300416427024472,
+          "max_exit_drawdown_pct": 43.17747133136562,
+          "trades": 7,
+          "outcomes": {
+            "stop": 6,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-02",
+          "net_multiple": 0.6242250360227455,
+          "max_exit_drawdown_pct": 37.577496397725454,
+          "trades": 5,
+          "outcomes": {
+            "stop": 5
+          }
+        },
+        {
+          "month": "2022-03",
+          "net_multiple": 1.6493484907347935,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 2,
+          "outcomes": {
+            "limit": 2
+          }
+        },
+        {
+          "month": "2022-04",
+          "net_multiple": 0.905437658552201,
+          "max_exit_drawdown_pct": 37.57749639772534,
+          "trades": 11,
+          "outcomes": {
+            "stop": 7,
+            "limit": 2,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2022-05",
+          "net_multiple": 0.8812518134523255,
+          "max_exit_drawdown_pct": 17.179762183593628,
+          "trades": 5,
+          "outcomes": {
+            "stop": 4,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-06",
+          "net_multiple": 0.7267218485346763,
+          "max_exit_drawdown_pct": 31.70252202235457,
+          "trades": 9,
+          "outcomes": {
+            "stop": 7,
+            "limit": 1,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-07",
+          "net_multiple": 1.1692175185937517,
+          "max_exit_drawdown_pct": 8.994374999999943,
+          "trades": 2,
+          "outcomes": {
+            "limit": 1,
+            "stop": 1
+          }
+        },
+        {
+          "month": "2022-08",
+          "net_multiple": 1.5788283999149022,
+          "max_exit_drawdown_pct": 17.084197327660753,
+          "trades": 5,
+          "outcomes": {
+            "stop": 2,
+            "limit": 2,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-09",
+          "net_multiple": 0.9681496754664481,
+          "max_exit_drawdown_pct": 30.26746469710142,
+          "trades": 9,
+          "outcomes": {
+            "stop": 6,
+            "timed": 2,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-10",
+          "net_multiple": 1.1692175185937517,
+          "max_exit_drawdown_pct": 8.994374999999955,
+          "trades": 2,
+          "outcomes": {
+            "stop": 1,
+            "limit": 1
+          }
+        },
+        {
+          "month": "2022-11",
+          "net_multiple": 0.7882421647587361,
+          "max_exit_drawdown_pct": 37.57749639772538,
+          "trades": 6,
+          "outcomes": {
+            "stop": 5,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2022-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-01",
+          "net_multiple": 1.16948245609375,
+          "max_exit_drawdown_pct": 9.00562500000004,
+          "trades": 2,
+          "outcomes": {
+            "limit": 1,
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-02",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-03",
+          "net_multiple": 0.9099437499999995,
+          "max_exit_drawdown_pct": 9.00562500000005,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2023-04",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-08",
+          "net_multiple": 0.8772720041072932,
+          "max_exit_drawdown_pct": 12.272799589270678,
+          "trades": 3,
+          "outcomes": {
+            "stop": 1,
+            "timed": 2
+          }
+        },
+        {
+          "month": "2023-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2023-11",
+          "net_multiple": 0.7534312667627107,
+          "max_exit_drawdown_pct": 24.656873323728934,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2023-12",
+          "net_multiple": 0.9880658276229013,
+          "max_exit_drawdown_pct": 18.571635651261953,
+          "trades": 7,
+          "outcomes": {
+            "timed": 4,
+            "stop": 3
+          }
+        },
+        {
+          "month": "2024-01",
+          "net_multiple": 0.90994375,
+          "max_exit_drawdown_pct": 9.005624999999995,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2024-02",
+          "net_multiple": 0.7534312667627101,
+          "max_exit_drawdown_pct": 24.656873323728988,
+          "trades": 3,
+          "outcomes": {
+            "stop": 3
+          }
+        },
+        {
+          "month": "2024-03",
+          "net_multiple": 0.46313833428136497,
+          "max_exit_drawdown_pct": 53.6861665718635,
+          "trades": 9,
+          "outcomes": {
+            "stop": 8,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2024-04",
+          "net_multiple": 0.9099437499999989,
+          "max_exit_drawdown_pct": 9.005625000000105,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2024-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-08",
+          "net_multiple": 0.910056250000001,
+          "max_exit_drawdown_pct": 8.994374999999899,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2024-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-10",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2024-11",
+          "net_multiple": 1.034366046628081,
+          "max_exit_drawdown_pct": 24.492988166568363,
+          "trades": 7,
+          "outcomes": {
+            "stop": 5,
+            "limit": 2
+          }
+        },
+        {
+          "month": "2024-12",
+          "net_multiple": 1.0686522726073788,
+          "max_exit_drawdown_pct": 9.005625000000084,
+          "trades": 4,
+          "outcomes": {
+            "stop": 2,
+            "limit": 1,
+            "timed": 1
+          }
+        },
+        {
+          "month": "2025-01",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-02",
+          "net_multiple": 0.9100562499999998,
+          "max_exit_drawdown_pct": 8.994375000000021,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2025-03",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-04",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-05",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-06",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-07",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-08",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-09",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-10",
+          "net_multiple": 0.9100736572815271,
+          "max_exit_drawdown_pct": 8.992634271847288,
+          "trades": 1,
+          "outcomes": {
+            "stop": 1
+          }
+        },
+        {
+          "month": "2025-11",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        },
+        {
+          "month": "2025-12",
+          "net_multiple": 1.0,
+          "max_exit_drawdown_pct": -0.0,
+          "trades": 0,
+          "outcomes": {}
+        }
+      ]
+    }
+  },
+  "gates": {
+    "sixfold_both_years": false,
+    "median_profitable": false,
+    "median_beats_random": false,
+    "sixfold_at_stress_cost": false,
+    "hits_more_than_half_loss": false,
+    "eth_median_profitable": false
+  },
+  "qualifies": false
+}

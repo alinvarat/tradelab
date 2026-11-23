@@ -1,0 +1,6 @@
+# Rolling 30-day spot check — scope and outputs fixed before running
+
+Calendar-month outcomes were seen earlier. To answer "within a month" without privileging the first calendar day, replay the existing fixed continuation and reversal selectors with exactly 30-day windows starting at each Monday UTC. Exit at the close of day 30 if the last weekly position is still open. No change to signal thresholds, lineup, liquidity filter, 6× cap, 0.35% all-in friction each side, or 0.25% target crossing buffer in spot_protocol.md. Also evaluate pre-existing Tuesday-entry variant and its 1-day delay without adding more rule variants.
+
+- Score windows wholly within 2021–2023, 2024–2025 and Jan–Oct 2026, respectively. Don't allow capital into a position before the window begins. On the first held-out date, data issued before the window are allowed to form the signal. Report 6× hit, ≥50% loss, ≥95% loss, median, and all hit windows with terminal trade/date. A loss refers to an ending equity multiple. Report unique final target symbol/calendar dates too. Overlapping windows can reuse a single move and are dependent, so the added counts are descriptive and not a second lockbox or independent p-value.
+- Use unchanged input archive. No search on ending day, no later-hindsight selection, no real trades.

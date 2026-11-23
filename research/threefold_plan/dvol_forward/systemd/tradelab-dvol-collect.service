@@ -1,0 +1,8 @@
+[Unit]
+Description=TradeLab research: read-only Deribit DVOL/option snapshot (no orders)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Project/tradelab/research/threefold_plan/dvol_forward
+ExecStart=/usr/bin/python3 collector.py

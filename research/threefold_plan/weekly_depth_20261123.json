@@ -1,0 +1,807 @@
+{
+  "mechanics_only": true,
+  "expiry": "2026-11-27T08:00:00+00:00",
+  "budget_usd": "73.5",
+  "assets": {
+    "BTC": {
+      "index": {
+        "url": "https://www.deribit.com/api/v2/public/get_index_price?index_name=btc_usd",
+        "sent_utc": "2026-11-23T13:01:44.159865+00:00",
+        "received_utc": "2026-11-23T13:01:44.484296+00:00",
+        "payload": {
+          "jsonrpc": "2.0",
+          "result": {
+            "estimated_delivery_price": 61236.56,
+            "index_price": 61236.56
+          },
+          "usIn": 1795438904389029,
+          "usOut": 1795438904389396,
+          "usDiff": 367,
+          "testnet": false
+        }
+      },
+      "choices": {
+        "call": {
+          "instrument": {
+            "state": "open",
+            "price_index": "btc_usd",
+            "kind": "option",
+            "instrument_name": "BTC-27NOV26-66000-C",
+            "maker_commission": 0.0003,
+            "taker_commission": 0.0003,
+            "instrument_type": "reversed",
+            "expiration_timestamp": 1795766400000,
+            "product_group": "BTC",
+            "underlying_type": "crypto",
+            "instrument_id": 683193,
+            "creation_timestamp": 1787817624000,
+            "is_active": true,
+            "contract_size": 1.0,
+            "tick_size": 0.0001,
+            "strike": 66000.0,
+            "counter_currency": "USD",
+            "option_type": "call",
+            "min_trade_amount": 0.1,
+            "block_trade_commission": 0.0003,
+            "block_trade_min_trade_amount": 25,
+            "block_trade_tick_size": 0.0001,
+            "settlement_currency": "BTC",
+            "settlement_period": "month",
+            "base_currency": "BTC",
+            "index_id": 1000033,
+            "quote_currency": "BTC",
+            "tick_size_steps": [
+              {
+                "tick_size": 0.0005,
+                "above_price": 0.005
+              }
+            ],
+            "lot_size": 1,
+            "base_currency_uuid": "5b71fc48-3dd3-540c-809b-f8c94d0e68b5",
+            "quote_currency_uuid": "5b71fc48-3dd3-540c-809b-f8c94d0e68b5"
+          },
+          "distance": 0.07778751778349413,
+          "eligible_strikes": 3,
+          "book": {
+            "url": "https://www.deribit.com/api/v2/public/get_order_book?instrument_name=BTC-27NOV26-66000-C&depth=10",
+            "sent_utc": "2026-11-23T13:01:44.948654+00:00",
+            "received_utc": "2026-11-23T13:01:45.262100+00:00",
+            "payload": {
+              "jsonrpc": "2.0",
+              "result": {
+                "timestamp": 1795438905021,
+                "state": "open",
+                "stats": {
+                  "high": 0.0035,
+                  "low": 0.0018,
+                  "price_change": -40.0,
+                  "volume": 21.5,
+                  "volume_delayed": 0.0,
+                  "volume_realtime": 21.5,
+                  "volume_delayed_usd": 0.0,
+                  "volume_realtime_usd": 3047.78,
+                  "volume_usd": 3047.78
+                },
+                "greeks": {
+                  "delta": 0.07816,
+                  "gamma": 5e-05,
+                  "vega": 9.11608,
+                  "theta": -61.18374,
+                  "rho": 0.48569
+                },
+                "change_id": 184181770846,
+                "index_price": 61236.56,
+                "instrument_name": "BTC-27NOV26-66000-C",
+                "bids": [
+                  [
+                    0.0017,
+                    0.3
+                  ],
+                  [
+                    0.0016,
+                    127.7
+                  ],
+                  [
+                    0.0015,
+                    187.4
+                  ],
+                  [
+                    0.0014,
+                    136.2
+                  ],
+                  [
+                    0.0013,
+                    31.0
+                  ],
+                  [
+                    0.0012,
+                    1.0
+                  ],
+                  [
+                    0.0011,
+                    145.3
+                  ],
+                  [
+                    0.001,
+                    4.9
+                  ],
+                  [
+                    0.0006,
+                    0.5
+                  ],
+                  [
+                    0.0005,
+                    0.4
+                  ]
+                ],
+                "asks": [
+                  [
+                    0.0019,
+                    3.0
+                  ],
+                  [
+                    0.002,
+                    56.0
+                  ],
+                  [
+                    0.0021,
+                    81.4
+                  ],
+                  [
+                    0.0022,
+                    116.2
+                  ],
+                  [
+                    0.0023,
+                    103.4
+                  ],
+                  [
+                    0.0025,
+                    122.9
+                  ],
+                  [
+                    0.0027,
+                    23.0
+                  ],
+                  [
+                    0.0028,
+                    1.4
+                  ],
+                  [
+                    0.0031,
+                    2.4
+                  ],
+                  [
+                    0.0032,
+                    1.5
+                  ]
+                ],
+                "last_price": 0.0018,
+                "settlement_price": 0.00243993,
+                "min_price": 0.0001,
+                "max_price": 0.0195,
+                "open_interest": 1792.2,
+                "mark_price": 0.0018,
+                "interest_rate": 0.0,
+                "best_ask_price": 0.0019,
+                "best_bid_price": 0.0017,
+                "estimated_delivery_price": 61236.56,
+                "mark_iv": 50.88,
+                "bid_iv": 50.25,
+                "ask_iv": 51.59,
+                "underlying_price": 61241.01,
+                "underlying_index": "BTC-27NOV26",
+                "best_ask_amount": 3.0,
+                "best_bid_amount": 0.3
+              },
+              "usIn": 1795438905174885,
+              "usOut": 1795438905175161,
+              "usDiff": 276,
+              "testnet": false
+            }
+          },
+          "quoted_bid_covers_minimum": true,
+          "cases": {
+            "base": {
+              "minimum_cost_usd": "15.0903436847625000",
+              "fits": true
+            },
+            "higher": {
+              "minimum_cost_usd": "17.5881351261000",
+              "fits": true
+            }
+          }
+        },
+        "put": {
+          "instrument": {
+            "state": "open",
+            "price_index": "btc_usd",
+            "kind": "option",
+            "instrument_name": "BTC-27NOV26-56000-P",
+            "maker_commission": 0.0003,
+            "taker_commission": 0.0003,
+            "instrument_type": "reversed",
+            "expiration_timestamp": 1795766400000,
+            "product_group": "BTC",
+            "underlying_type": "crypto",
+            "instrument_id": 734731,
+            "creation_timestamp": 1794735651000,
+            "is_active": true,
+            "contract_size": 1.0,
+            "tick_size": 0.0001,
+            "strike": 56000.0,
+            "counter_currency": "USD",
+            "option_type": "put",
+            "min_trade_amount": 0.1,
+            "block_trade_commission": 0.0003,
+            "block_trade_min_trade_amount": 25,
+            "block_trade_tick_size": 0.0001,
+            "settlement_currency": "BTC",
+            "settlement_period": "month",
+            "base_currency": "BTC",
+            "index_id": 1000033,
+            "quote_currency": "BTC",
+            "tick_size_steps": [
+              {
+                "tick_size": 0.0005,
+                "above_price": 0.005
+              }
+            ],
+            "lot_size": 1,
+            "base_currency_uuid": "5b71fc48-3dd3-540c-809b-f8c94d0e68b5",
+            "quote_currency_uuid": "5b71fc48-3dd3-540c-809b-f8c94d0e68b5"
+          },
+          "distance": 0.08551362127461104,
+          "eligible_strikes": 3,
+          "book": {
+            "url": "https://www.deribit.com/api/v2/public/get_order_book?instrument_name=BTC-27NOV26-56000-P&depth=10",
+            "sent_utc": "2026-11-23T13:01:45.263939+00:00",
+            "received_utc": "2026-11-23T13:01:45.572580+00:00",
+            "payload": {
+              "jsonrpc": "2.0",
+              "result": {
+                "timestamp": 1795438904508,
+                "state": "open",
+                "stats": {
+                  "high": 0.007,
+                  "low": 0.0029,
+                  "price_change": -51.6667,
+                  "volume": 36.2,
+                  "volume_delayed": 0.0,
+                  "volume_realtime": 36.2,
+                  "volume_delayed_usd": 0.0,
+                  "volume_realtime_usd": 10104.4,
+                  "volume_usd": 10104.4
+                },
+                "greeks": {
+                  "delta": -0.09289,
+                  "gamma": 4e-05,
+                  "vega": 10.3744,
+                  "theta": -93.25209,
+                  "rho": -0.61042
+                },
+                "change_id": 184181769649,
+                "index_price": 61236.56,
+                "instrument_name": "BTC-27NOV26-56000-P",
+                "bids": [
+                  [
+                    0.003,
+                    9.2
+                  ],
+                  [
+                    0.0029,
+                    61.2
+                  ],
+                  [
+                    0.0028,
+                    99.9
+                  ],
+                  [
+                    0.0027,
+                    62.0
+                  ],
+                  [
+                    0.0026,
+                    138.4
+                  ],
+                  [
+                    0.0025,
+                    115.0
+                  ],
+                  [
+                    0.0024,
+                    31.5
+                  ],
+                  [
+                    0.0023,
+                    119.1
+                  ],
+                  [
+                    0.0022,
+                    24.4
+                  ],
+                  [
+                    0.0021,
+                    1.4
+                  ]
+                ],
+                "asks": [
+                  [
+                    0.0033,
+                    20.1
+                  ],
+                  [
+                    0.0034,
+                    188.1
+                  ],
+                  [
+                    0.0035,
+                    110.8
+                  ],
+                  [
+                    0.0036,
+                    18.7
+                  ],
+                  [
+                    0.0037,
+                    0.9
+                  ],
+                  [
+                    0.0038,
+                    23.6
+                  ],
+                  [
+                    0.0039,
+                    23.0
+                  ],
+                  [
+                    0.004,
+                    127.9
+                  ],
+                  [
+                    0.0041,
+                    0.8
+                  ],
+                  [
+                    0.0042,
+                    7.6
+                  ]
+                ],
+                "last_price": 0.0029,
+                "settlement_price": 0.00288935,
+                "min_price": 0.0001,
+                "max_price": 0.025,
+                "open_interest": 1263.2,
+                "mark_price": 0.0031,
+                "interest_rate": 0.0,
+                "best_ask_price": 0.0033,
+                "best_bid_price": 0.003,
+                "estimated_delivery_price": 61236.56,
+                "mark_iv": 68.14,
+                "bid_iv": 67.56,
+                "ask_iv": 69.32,
+                "underlying_price": 61241.01,
+                "underlying_index": "BTC-27NOV26",
+                "best_ask_amount": 20.1,
+                "best_bid_amount": 9.2
+              },
+              "usIn": 1795438905488607,
+              "usOut": 1795438905489276,
+              "usDiff": 669,
+              "testnet": false
+            }
+          },
+          "quoted_bid_covers_minimum": true,
+          "cases": {
+            "base": {
+              "minimum_cost_usd": "25.1390622483000",
+              "fits": true
+            },
+            "higher": {
+              "minimum_cost_usd": "29.1907792407000",
+              "fits": true
+            }
+          }
+        }
+      }
+    },
+    "ETH": {
+      "index": {
+        "url": "https://www.deribit.com/api/v2/public/get_index_price?index_name=eth_usd",
+        "sent_utc": "2026-11-23T13:01:44.160689+00:00",
+        "received_utc": "2026-11-23T13:01:44.512396+00:00",
+        "payload": {
+          "jsonrpc": "2.0",
+          "result": {
+            "estimated_delivery_price": 1720.02,
+            "index_price": 1720.02
+          },
+          "usIn": 1795438904425681,
+          "usOut": 1795438904425962,
+          "usDiff": 281,
+          "testnet": false
+        }
+      },
+      "choices": {
+        "call": {
+          "instrument": {
+            "state": "open",
+            "price_index": "eth_usd",
+            "kind": "option",
+            "instrument_name": "ETH-27NOV26-1850-C",
+            "maker_commission": 0.0003,
+            "taker_commission": 0.0003,
+            "instrument_type": "reversed",
+            "expiration_timestamp": 1795766400000,
+            "product_group": "ETH",
+            "underlying_type": "crypto",
+            "instrument_id": 732167,
+            "creation_timestamp": 1794500859000,
+            "is_active": true,
+            "contract_size": 1.0,
+            "tick_size": 0.0001,
+            "strike": 1850.0,
+            "counter_currency": "USD",
+            "option_type": "call",
+            "min_trade_amount": 1,
+            "block_trade_commission": 0.0003,
+            "block_trade_min_trade_amount": 250,
+            "block_trade_tick_size": 0.0001,
+            "settlement_currency": "ETH",
+            "settlement_period": "month",
+            "base_currency": "ETH",
+            "index_id": 2000033,
+            "quote_currency": "ETH",
+            "tick_size_steps": [
+              {
+                "tick_size": 0.0005,
+                "above_price": 0.005
+              }
+            ],
+            "lot_size": 10,
+            "base_currency_uuid": "d85dce9b-5b73-5c3c-8978-522ce1d1c1b4",
+            "quote_currency_uuid": "d85dce9b-5b73-5c3c-8978-522ce1d1c1b4"
+          },
+          "distance": 0.07556888873385192,
+          "eligible_strikes": 2,
+          "book": {
+            "url": "https://www.deribit.com/api/v2/public/get_order_book?instrument_name=ETH-27NOV26-1850-C&depth=10",
+            "sent_utc": "2026-11-23T13:01:44.975406+00:00",
+            "received_utc": "2026-11-23T13:01:45.265873+00:00",
+            "payload": {
+              "jsonrpc": "2.0",
+              "result": {
+                "timestamp": 1795438905138,
+                "state": "open",
+                "stats": {
+                  "high": 0.008,
+                  "low": 0.0045,
+                  "price_change": -18.3333,
+                  "volume": 167.0,
+                  "volume_delayed": 0.0,
+                  "volume_realtime": 167.0,
+                  "volume_delayed_usd": 0.0,
+                  "volume_realtime_usd": 1955.39,
+                  "volume_usd": 1955.39
+                },
+                "greeks": {
+                  "delta": 0.12078,
+                  "gamma": 0.00192,
+                  "vega": 0.35215,
+                  "theta": -2.77259,
+                  "rho": 0.02094
+                },
+                "change_id": 143467842988,
+                "index_price": 1719.89,
+                "instrument_name": "ETH-27NOV26-1850-C",
+                "bids": [
+                  [
+                    0.0032,
+                    794.0
+                  ],
+                  [
+                    0.0031,
+                    2435.0
+                  ],
+                  [
+                    0.003,
+                    1680.0
+                  ],
+                  [
+                    0.0029,
+                    2000.0
+                  ],
+                  [
+                    0.0028,
+                    954.0
+                  ],
+                  [
+                    0.0027,
+                    930.0
+                  ],
+                  [
+                    0.0022,
+                    1942.0
+                  ],
+                  [
+                    0.0009,
+                    6.0
+                  ],
+                  [
+                    0.0005,
+                    6.0
+                  ],
+                  [
+                    0.0001,
+                    13.0
+                  ]
+                ],
+                "asks": [
+                  [
+                    0.0035,
+                    100.0
+                  ],
+                  [
+                    0.0036,
+                    351.0
+                  ],
+                  [
+                    0.0037,
+                    1779.0
+                  ],
+                  [
+                    0.0038,
+                    1809.0
+                  ],
+                  [
+                    0.0039,
+                    1480.0
+                  ],
+                  [
+                    0.004,
+                    111.0
+                  ],
+                  [
+                    0.0042,
+                    79.0
+                  ],
+                  [
+                    0.0044,
+                    79.0
+                  ],
+                  [
+                    0.0045,
+                    2533.0
+                  ],
+                  [
+                    0.0046,
+                    600.0
+                  ]
+                ],
+                "last_price": 0.0049,
+                "settlement_price": 0.004464,
+                "min_price": 0.0001,
+                "max_price": 0.028,
+                "open_interest": 3396.0,
+                "mark_price": 0.0035,
+                "interest_rate": 0.0,
+                "best_ask_price": 0.0035,
+                "best_bid_price": 0.0032,
+                "estimated_delivery_price": 1719.89,
+                "mark_iv": 59.68,
+                "bid_iv": 58.05,
+                "ask_iv": 59.55,
+                "underlying_price": 1719.63,
+                "underlying_index": "ETH-27NOV26",
+                "best_ask_amount": 100.0,
+                "best_bid_amount": 794.0
+              },
+              "usIn": 1795438905181057,
+              "usOut": 1795438905181449,
+              "usDiff": 392,
+              "testnet": false
+            }
+          },
+          "quoted_bid_covers_minimum": true,
+          "cases": {
+            "base": {
+              "minimum_cost_usd": "7.457120560625",
+              "fits": true
+            },
+            "higher": {
+              "minimum_cost_usd": "8.664053368125",
+              "fits": true
+            }
+          }
+        },
+        "put": {
+          "instrument": {
+            "state": "open",
+            "price_index": "eth_usd",
+            "kind": "option",
+            "instrument_name": "ETH-27NOV26-1550-P",
+            "maker_commission": 0.0003,
+            "taker_commission": 0.0003,
+            "instrument_type": "reversed",
+            "expiration_timestamp": 1795766400000,
+            "product_group": "ETH",
+            "underlying_type": "crypto",
+            "instrument_id": 734110,
+            "creation_timestamp": 1794705390000,
+            "is_active": true,
+            "contract_size": 1.0,
+            "tick_size": 0.0001,
+            "strike": 1550.0,
+            "counter_currency": "USD",
+            "option_type": "put",
+            "min_trade_amount": 1,
+            "block_trade_commission": 0.0003,
+            "block_trade_min_trade_amount": 250,
+            "block_trade_tick_size": 0.0001,
+            "settlement_currency": "ETH",
+            "settlement_period": "month",
+            "base_currency": "ETH",
+            "index_id": 2000033,
+            "quote_currency": "ETH",
+            "tick_size_steps": [
+              {
+                "tick_size": 0.0005,
+                "above_price": 0.005
+              }
+            ],
+            "lot_size": 10,
+            "base_currency_uuid": "d85dce9b-5b73-5c3c-8978-522ce1d1c1b4",
+            "quote_currency_uuid": "d85dce9b-5b73-5c3c-8978-522ce1d1c1b4"
+          },
+          "distance": 0.09884768781758346,
+          "eligible_strikes": 2,
+          "book": {
+            "url": "https://www.deribit.com/api/v2/public/get_order_book?instrument_name=ETH-27NOV26-1550-P&depth=10",
+            "sent_utc": "2026-11-23T13:01:45.267064+00:00",
+            "received_utc": "2026-11-23T13:01:45.556397+00:00",
+            "payload": {
+              "jsonrpc": "2.0",
+              "result": {
+                "timestamp": 1795438905290,
+                "state": "open",
+                "stats": {
+                  "high": 0.007,
+                  "low": 0.004,
+                  "price_change": -42.8571,
+                  "volume": 325.0,
+                  "volume_delayed": 0.0,
+                  "volume_realtime": 325.0,
+                  "volume_delayed_usd": 0.0,
+                  "volume_realtime_usd": 3266.85,
+                  "volume_usd": 3266.85
+                },
+                "greeks": {
+                  "delta": -0.09851,
+                  "gamma": 0.00121,
+                  "vega": 0.3042,
+                  "theta": -3.27812,
+                  "rho": -0.01831
+                },
+                "change_id": 143467843314,
+                "index_price": 1719.89,
+                "instrument_name": "ETH-27NOV26-1550-P",
+                "bids": [
+                  [
+                    0.0039,
+                    663.0
+                  ],
+                  [
+                    0.0038,
+                    873.0
+                  ],
+                  [
+                    0.0037,
+                    1205.0
+                  ],
+                  [
+                    0.0036,
+                    1477.0
+                  ],
+                  [
+                    0.0035,
+                    1788.0
+                  ],
+                  [
+                    0.0034,
+                    960.0
+                  ],
+                  [
+                    0.0033,
+                    600.0
+                  ],
+                  [
+                    0.0032,
+                    679.0
+                  ],
+                  [
+                    0.0031,
+                    600.0
+                  ],
+                  [
+                    0.0029,
+                    1971.0
+                  ]
+                ],
+                "asks": [
+                  [
+                    0.0042,
+                    811.0
+                  ],
+                  [
+                    0.0043,
+                    1504.0
+                  ],
+                  [
+                    0.0044,
+                    1802.0
+                  ],
+                  [
+                    0.0045,
+                    1595.0
+                  ],
+                  [
+                    0.0046,
+                    435.0
+                  ],
+                  [
+                    0.0047,
+                    600.0
+                  ],
+                  [
+                    0.0048,
+                    679.0
+                  ],
+                  [
+                    0.0049,
+                    600.0
+                  ],
+                  [
+                    0.005,
+                    2569.0
+                  ]
+                ],
+                "last_price": 0.004,
+                "settlement_price": 0.004127,
+                "min_price": 0.0001,
+                "max_price": 0.0305,
+                "open_interest": 965.0,
+                "mark_price": 0.004,
+                "interest_rate": 0.0,
+                "best_ask_price": 0.0042,
+                "best_bid_price": 0.0039,
+                "estimated_delivery_price": 1719.89,
+                "mark_iv": 81.69,
+                "bid_iv": 81.07,
+                "ask_iv": 82.76,
+                "underlying_price": 1719.76,
+                "underlying_index": "ETH-27NOV26",
+                "best_ask_amount": 811.0,
+                "best_bid_amount": 663.0
+              },
+              "usIn": 1795438905471277,
+              "usOut": 1795438905471625,
+              "usDiff": 348,
+              "testnet": false
+            }
+          },
+          "quoted_bid_covers_minimum": true,
+          "cases": {
+            "base": {
+              "minimum_cost_usd": "8.845093289250",
+              "fits": true
+            },
+            "higher": {
+              "minimum_cost_usd": "10.293412658250",
+              "fits": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

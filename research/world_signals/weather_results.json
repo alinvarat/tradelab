@@ -1,0 +1,3937 @@
+{
+  "protocol": "weather_protocol.md",
+  "weather_coverage": {
+    "USW00094728": {
+      "valid_days": 6221,
+      "flagged_or_partial_rows": 0
+    },
+    "USW00094846": {
+      "valid_days": 6221,
+      "flagged_or_partial_rows": 0
+    },
+    "USW00013874": {
+      "valid_days": 6221,
+      "flagged_or_partial_rows": 0
+    }
+  },
+  "common_observation_days": 6221,
+  "price_coverage": {
+    "UNG": {
+      "sessions": 3018,
+      "dropped_missing": 0
+    },
+    "UNL": {
+      "sessions": 3018,
+      "dropped_missing": 0
+    }
+  },
+  "configured_rule_count": 4,
+  "variants": {
+    "main": {
+      "symbol": "UNG",
+      "cost_per_side": 0.0015,
+      "extra_session_lag": 0,
+      "periods": {
+        "reference": {
+          "n": 50,
+          "mean_pct": -0.025399212806130667,
+          "t": -0.03247506853900016,
+          "win_pct": 40.0,
+          "net_mean_pct": -0.025399212806130667,
+          "win_rate_pct": 40.0,
+          "min_trade_net_pct": -7.60133331925087,
+          "worst_intratrade_close_pct": -8.175953780869726,
+          "frequency_per_year": 7.142857142857143,
+          "random_mean_pct": -0.5810765909822299,
+          "random_middle_95_pct": [
+            -1.7734875879063565,
+            0.618429041872258
+          ],
+          "random_one_tail_p": 0.1835632873425315,
+          "net_excess_pct_points": 0.5556773781760991,
+          "random_draw_attempts": 9352,
+          "filter_counts": {
+            "candidates": 56,
+            "overlapping": 6,
+            "same_entry": 1
+          },
+          "median_entry_volume_shares": 919525,
+          "portfolio_drawdown_pct": 34.47611444695811,
+          "total_net_pct": -7.848111209956443,
+          "months_tested": 84,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.422446663002604,
+          "trades": [
+            {
+              "weather_day": "2014-01-02",
+              "hdd_anomaly": 9.7022,
+              "entered": "2014-01-06",
+              "exited": "2014-01-08",
+              "return_net": -0.0285962353
+            },
+            {
+              "weather_day": "2014-01-21",
+              "hdd_anomaly": 10.9089,
+              "entered": "2014-01-23",
+              "exited": "2014-01-27",
+              "return_net": 0.0117236279
+            },
+            {
+              "weather_day": "2014-01-28",
+              "hdd_anomaly": 20.8267,
+              "entered": "2014-01-30",
+              "exited": "2014-02-03",
+              "return_net": -0.0502673094
+            },
+            {
+              "weather_day": "2014-02-06",
+              "hdd_anomaly": 12.1978,
+              "entered": "2014-02-10",
+              "exited": "2014-02-12",
+              "return_net": 0.0136496617
+            },
+            {
+              "weather_day": "2014-02-15",
+              "hdd_anomaly": 8.3222,
+              "entered": "2014-02-18",
+              "exited": "2014-02-20",
+              "return_net": 0.0284848669
+            },
+            {
+              "weather_day": "2014-02-26",
+              "hdd_anomaly": 13.5822,
+              "entered": "2014-02-28",
+              "exited": "2014-03-04",
+              "return_net": 0.0080385625
+            },
+            {
+              "weather_day": "2014-03-03",
+              "hdd_anomaly": 15.2511,
+              "entered": "2014-03-05",
+              "exited": "2014-03-07",
+              "return_net": 0.001709152
+            },
+            {
+              "weather_day": "2014-03-13",
+              "hdd_anomaly": 17.2156,
+              "entered": "2014-03-17",
+              "exited": "2014-03-19",
+              "return_net": -0.0184745287
+            },
+            {
+              "weather_day": "2014-03-23",
+              "hdd_anomaly": 10.0156,
+              "entered": "2014-03-25",
+              "exited": "2014-03-27",
+              "return_net": 0.0243476401
+            },
+            {
+              "weather_day": "2014-11-01",
+              "hdd_anomaly": 10.2533,
+              "entered": "2014-11-03",
+              "exited": "2014-11-05",
+              "return_net": 0.0425817981
+            },
+            {
+              "weather_day": "2014-11-13",
+              "hdd_anomaly": 13.0444,
+              "entered": "2014-11-17",
+              "exited": "2014-11-19",
+              "return_net": 0.0612385448
+            },
+            {
+              "weather_day": "2014-11-27",
+              "hdd_anomaly": 11.9444,
+              "entered": "2014-12-01",
+              "exited": "2014-12-03",
+              "return_net": -0.0482245096
+            },
+            {
+              "weather_day": "2015-01-06",
+              "hdd_anomaly": 11.1867,
+              "entered": "2015-01-08",
+              "exited": "2015-01-12",
+              "return_net": -0.0229769345
+            },
+            {
+              "weather_day": "2015-01-14",
+              "hdd_anomaly": 9.5867,
+              "entered": "2015-01-16",
+              "exited": "2015-01-21",
+              "return_net": -0.0294875146
+            },
+            {
+              "weather_day": "2015-02-03",
+              "hdd_anomaly": 9.4689,
+              "entered": "2015-02-05",
+              "exited": "2015-02-09",
+              "return_net": -0.0104357964
+            },
+            {
+              "weather_day": "2015-02-13",
+              "hdd_anomaly": 13.3156,
+              "entered": "2015-02-17",
+              "exited": "2015-02-19",
+              "return_net": 0.0159883235
+            },
+            {
+              "weather_day": "2015-02-23",
+              "hdd_anomaly": 15.8867,
+              "entered": "2015-02-25",
+              "exited": "2015-02-27",
+              "return_net": -0.0750276083
+            },
+            {
+              "weather_day": "2015-03-05",
+              "hdd_anomaly": 12.52,
+              "entered": "2015-03-09",
+              "exited": "2015-03-11",
+              "return_net": 0.0436139335
+            },
+            {
+              "weather_day": "2015-03-28",
+              "hdd_anomaly": 13.3089,
+              "entered": "2015-03-30",
+              "exited": "2015-04-01",
+              "return_net": -0.0253164467
+            },
+            {
+              "weather_day": "2016-01-18",
+              "hdd_anomaly": 13.9733,
+              "entered": "2016-01-20",
+              "exited": "2016-01-22",
+              "return_net": 0.0136211881
+            },
+            {
+              "weather_day": "2016-02-13",
+              "hdd_anomaly": 14.0311,
+              "entered": "2016-02-16",
+              "exited": "2016-02-18",
+              "return_net": -0.0244211183
+            },
+            {
+              "weather_day": "2016-12-08",
+              "hdd_anomaly": 9.6844,
+              "entered": "2016-12-12",
+              "exited": "2016-12-14",
+              "return_net": -0.0007675127
+            },
+            {
+              "weather_day": "2016-12-14",
+              "hdd_anomaly": 9.0267,
+              "entered": "2016-12-16",
+              "exited": "2016-12-20",
+              "return_net": -0.0183340513
+            },
+            {
+              "weather_day": "2017-01-06",
+              "hdd_anomaly": 10.0289,
+              "entered": "2017-01-09",
+              "exited": "2017-01-11",
+              "return_net": 0.0375433927
+            },
+            {
+              "weather_day": "2017-03-11",
+              "hdd_anomaly": 14.0667,
+              "entered": "2017-03-13",
+              "exited": "2017-03-15",
+              "return_net": -0.0273456615
+            },
+            {
+              "weather_day": "2017-11-10",
+              "hdd_anomaly": 11.2556,
+              "entered": "2017-11-13",
+              "exited": "2017-11-15",
+              "return_net": -0.030562497
+            },
+            {
+              "weather_day": "2017-12-08",
+              "hdd_anomaly": 8.4133,
+              "entered": "2017-12-11",
+              "exited": "2017-12-13",
+              "return_net": -0.0491202267
+            },
+            {
+              "weather_day": "2017-12-13",
+              "hdd_anomaly": 8.3756,
+              "entered": "2017-12-15",
+              "exited": "2017-12-19",
+              "return_net": 0.0007385888
+            },
+            {
+              "weather_day": "2017-12-25",
+              "hdd_anomaly": 12.9889,
+              "entered": "2017-12-27",
+              "exited": "2017-12-29",
+              "return_net": 0.0724236232
+            },
+            {
+              "weather_day": "2018-01-13",
+              "hdd_anomaly": 8.24,
+              "entered": "2018-01-16",
+              "exited": "2018-01-18",
+              "return_net": 0.0217471032
+            },
+            {
+              "weather_day": "2018-01-17",
+              "hdd_anomaly": 15.1844,
+              "entered": "2018-01-19",
+              "exited": "2018-01-23",
+              "return_net": 0.0344918835
+            },
+            {
+              "weather_day": "2018-03-13",
+              "hdd_anomaly": 8.8111,
+              "entered": "2018-03-15",
+              "exited": "2018-03-19",
+              "return_net": -0.035255453
+            },
+            {
+              "weather_day": "2018-11-10",
+              "hdd_anomaly": 12.7356,
+              "entered": "2018-11-12",
+              "exited": "2018-11-14",
+              "return_net": 0.2736262344
+            },
+            {
+              "weather_day": "2018-11-22",
+              "hdd_anomaly": 8.8911,
+              "entered": "2018-11-26",
+              "exited": "2018-11-28",
+              "return_net": 0.1208505091
+            },
+            {
+              "weather_day": "2018-11-27",
+              "hdd_anomaly": 10.5533,
+              "entered": "2018-11-29",
+              "exited": "2018-12-03",
+              "return_net": -0.0523468724
+            },
+            {
+              "weather_day": "2018-12-05",
+              "hdd_anomaly": 9.6067,
+              "entered": "2018-12-07",
+              "exited": "2018-12-11",
+              "return_net": -0.0094440604
+            },
+            {
+              "weather_day": "2019-01-20",
+              "hdd_anomaly": 8.9978,
+              "entered": "2019-01-22",
+              "exited": "2019-01-24",
+              "return_net": -0.0085120022
+            },
+            {
+              "weather_day": "2019-01-25",
+              "hdd_anomaly": 10.9467,
+              "entered": "2019-01-28",
+              "exited": "2019-01-30",
+              "return_net": -0.0134171742
+            },
+            {
+              "weather_day": "2019-01-29",
+              "hdd_anomaly": 10.1244,
+              "entered": "2019-01-31",
+              "exited": "2019-02-04",
+              "return_net": -0.0760133332
+            },
+            {
+              "weather_day": "2019-03-04",
+              "hdd_anomaly": 15.7244,
+              "entered": "2019-03-06",
+              "exited": "2019-03-08",
+              "return_net": -0.0029955067
+            },
+            {
+              "weather_day": "2019-11-01",
+              "hdd_anomaly": 8.7156,
+              "entered": "2019-11-04",
+              "exited": "2019-11-06",
+              "return_net": 0.0019357479
+            },
+            {
+              "weather_day": "2019-11-08",
+              "hdd_anomaly": 14.06,
+              "entered": "2019-11-11",
+              "exited": "2019-11-13",
+              "return_net": -0.0010983046
+            },
+            {
+              "weather_day": "2019-11-12",
+              "hdd_anomaly": 15.7756,
+              "entered": "2019-11-14",
+              "exited": "2019-11-18",
+              "return_net": -0.0416168895
+            },
+            {
+              "weather_day": "2019-12-18",
+              "hdd_anomaly": 12.3067,
+              "entered": "2019-12-20",
+              "exited": "2019-12-24",
+              "return_net": -0.0525395267
+            },
+            {
+              "weather_day": "2020-01-20",
+              "hdd_anomaly": 8.4289,
+              "entered": "2020-01-22",
+              "exited": "2020-01-24",
+              "return_net": -0.0217437899
+            },
+            {
+              "weather_day": "2020-02-14",
+              "hdd_anomaly": 11.0244,
+              "entered": "2020-02-18",
+              "exited": "2020-02-20",
+              "return_net": -0.0174926153
+            },
+            {
+              "weather_day": "2020-02-20",
+              "hdd_anomaly": 8.6333,
+              "entered": "2020-02-24",
+              "exited": "2020-02-26",
+              "return_net": -0.0291780786
+            },
+            {
+              "weather_day": "2020-11-02",
+              "hdd_anomaly": 10.0556,
+              "entered": "2020-11-04",
+              "exited": "2020-11-06",
+              "return_net": -0.0464190491
+            },
+            {
+              "weather_day": "2020-12-17",
+              "hdd_anomaly": 8.2289,
+              "entered": "2020-12-21",
+              "exited": "2020-12-23",
+              "return_net": -0.0358863459
+            },
+            {
+              "weather_day": "2020-12-25",
+              "hdd_anomaly": 10.6067,
+              "entered": "2020-12-28",
+              "exited": "2020-12-30",
+              "return_net": 0.0622629646
+            }
+          ]
+        },
+        "holdout": {
+          "n": 35,
+          "mean_pct": -0.8435538275540974,
+          "t": -0.7879414970866215,
+          "win_pct": 42.857142857142854,
+          "net_mean_pct": -0.8435538275540974,
+          "win_rate_pct": 42.857142857142854,
+          "min_trade_net_pct": -11.915145866018328,
+          "worst_intratrade_close_pct": -11.915145866018328,
+          "frequency_per_year": 7.0,
+          "random_mean_pct": -0.055928551349170075,
+          "random_middle_95_pct": [
+            -1.8075010356590557,
+            1.7162492651970749
+          ],
+          "random_one_tail_p": 0.8076384723055389,
+          "net_excess_pct_points": -0.7876252762049273,
+          "random_draw_attempts": 6340,
+          "filter_counts": {
+            "candidates": 42,
+            "overlapping": 6,
+            "end_of_period": 1
+          },
+          "median_entry_volume_shares": 3592125,
+          "portfolio_drawdown_pct": 39.906325365937235,
+          "total_net_pct": -30.561370984123627,
+          "months_tested": 60,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.1658283798700138,
+          "trades": [
+            {
+              "weather_day": "2021-01-28",
+              "hdd_anomaly": 9.1956,
+              "entered": "2021-02-01",
+              "exited": "2021-02-03",
+              "return_net": -0.0165733301
+            },
+            {
+              "weather_day": "2021-02-07",
+              "hdd_anomaly": 12.9,
+              "entered": "2021-02-09",
+              "exited": "2021-02-11",
+              "return_net": 0.008597558
+            },
+            {
+              "weather_day": "2021-02-12",
+              "hdd_anomaly": 9.5311,
+              "entered": "2021-02-16",
+              "exited": "2021-02-18",
+              "return_net": -0.0294881143
+            },
+            {
+              "weather_day": "2021-03-02",
+              "hdd_anomaly": 8.9467,
+              "entered": "2021-03-04",
+              "exited": "2021-03-08",
+              "return_net": -0.0434146165
+            },
+            {
+              "weather_day": "2021-11-04",
+              "hdd_anomaly": 8.4311,
+              "entered": "2021-11-08",
+              "exited": "2021-11-10",
+              "return_net": -0.1191514587
+            },
+            {
+              "weather_day": "2022-01-07",
+              "hdd_anomaly": 12.5422,
+              "entered": "2022-01-10",
+              "exited": "2022-01-12",
+              "return_net": 0.1630505852
+            },
+            {
+              "weather_day": "2022-01-11",
+              "hdd_anomaly": 9.46,
+              "entered": "2022-01-13",
+              "exited": "2022-01-18",
+              "return_net": -0.0417790437
+            },
+            {
+              "weather_day": "2022-01-21",
+              "hdd_anomaly": 14.4489,
+              "entered": "2022-01-24",
+              "exited": "2022-01-26",
+              "return_net": 0.0417131719
+            },
+            {
+              "weather_day": "2022-01-26",
+              "hdd_anomaly": 12.9689,
+              "entered": "2022-01-28",
+              "exited": "2022-02-01",
+              "return_net": 0.0196637509
+            },
+            {
+              "weather_day": "2022-02-05",
+              "hdd_anomaly": 12.2556,
+              "entered": "2022-02-07",
+              "exited": "2022-02-09",
+              "return_net": -0.0698596992
+            },
+            {
+              "weather_day": "2022-02-14",
+              "hdd_anomaly": 10.3111,
+              "entered": "2022-02-16",
+              "exited": "2022-02-18",
+              "return_net": -0.009423671
+            },
+            {
+              "weather_day": "2022-02-19",
+              "hdd_anomaly": 10.8711,
+              "entered": "2022-02-22",
+              "exited": "2022-02-24",
+              "return_net": 0.0157100901
+            },
+            {
+              "weather_day": "2022-02-26",
+              "hdd_anomaly": 9.0133,
+              "entered": "2022-02-28",
+              "exited": "2022-03-02",
+              "return_net": 0.0773979004
+            },
+            {
+              "weather_day": "2022-03-12",
+              "hdd_anomaly": 13.0756,
+              "entered": "2022-03-14",
+              "exited": "2022-03-16",
+              "return_net": 0.0103221748
+            },
+            {
+              "weather_day": "2022-03-27",
+              "hdd_anomaly": 9.8044,
+              "entered": "2022-03-29",
+              "exited": "2022-03-31",
+              "return_net": 0.0266803297
+            },
+            {
+              "weather_day": "2022-11-18",
+              "hdd_anomaly": 8.8644,
+              "entered": "2022-11-21",
+              "exited": "2022-11-23",
+              "return_net": 0.1014837927
+            },
+            {
+              "weather_day": "2022-12-18",
+              "hdd_anomaly": 9.9844,
+              "entered": "2022-12-20",
+              "exited": "2022-12-22",
+              "return_net": -0.0634199924
+            },
+            {
+              "weather_day": "2022-12-23",
+              "hdd_anomaly": 20.1578,
+              "entered": "2022-12-27",
+              "exited": "2022-12-29",
+              "return_net": -0.0995996925
+            },
+            {
+              "weather_day": "2023-02-03",
+              "hdd_anomaly": 11.7867,
+              "entered": "2023-02-06",
+              "exited": "2023-02-08",
+              "return_net": -0.0066166712
+            },
+            {
+              "weather_day": "2023-03-14",
+              "hdd_anomaly": 11.5822,
+              "entered": "2023-03-16",
+              "exited": "2023-03-20",
+              "return_net": -0.0885228313
+            },
+            {
+              "weather_day": "2023-11-28",
+              "hdd_anomaly": 11.1667,
+              "entered": "2023-11-30",
+              "exited": "2023-12-04",
+              "return_net": -0.0441644556
+            },
+            {
+              "weather_day": "2024-01-14",
+              "hdd_anomaly": 11.6133,
+              "entered": "2024-01-16",
+              "exited": "2024-01-18",
+              "return_net": -0.074566755
+            },
+            {
+              "weather_day": "2024-01-19",
+              "hdd_anomaly": 10.5867,
+              "entered": "2024-01-22",
+              "exited": "2024-01-24",
+              "return_net": 0.0669163501
+            },
+            {
+              "weather_day": "2024-11-29",
+              "hdd_anomaly": 9.0356,
+              "entered": "2024-12-02",
+              "exited": "2024-12-04",
+              "return_net": -0.0536664598
+            },
+            {
+              "weather_day": "2024-12-12",
+              "hdd_anomaly": 12.9178,
+              "entered": "2024-12-16",
+              "exited": "2024-12-18",
+              "return_net": 0.0474310068
+            },
+            {
+              "weather_day": "2024-12-21",
+              "hdd_anomaly": 11.1156,
+              "entered": "2024-12-23",
+              "exited": "2024-12-26",
+              "return_net": -0.022083033
+            },
+            {
+              "weather_day": "2025-01-04",
+              "hdd_anomaly": 11.3089,
+              "entered": "2025-01-06",
+              "exited": "2025-01-08",
+              "return_net": 0.0028658
+            },
+            {
+              "weather_day": "2025-01-14",
+              "hdd_anomaly": 8.7444,
+              "entered": "2025-01-16",
+              "exited": "2025-01-21",
+              "return_net": -0.0740236214
+            },
+            {
+              "weather_day": "2025-02-14",
+              "hdd_anomaly": 8.9467,
+              "entered": "2025-02-18",
+              "exited": "2025-02-20",
+              "return_net": 0.1042255992
+            },
+            {
+              "weather_day": "2025-03-02",
+              "hdd_anomaly": 12.5467,
+              "entered": "2025-03-04",
+              "exited": "2025-03-06",
+              "return_net": -0.0231586492
+            },
+            {
+              "weather_day": "2025-11-10",
+              "hdd_anomaly": 14.6822,
+              "entered": "2025-11-12",
+              "exited": "2025-11-14",
+              "return_net": -0.0070871441
+            },
+            {
+              "weather_day": "2025-11-28",
+              "hdd_anomaly": 8.8111,
+              "entered": "2025-12-01",
+              "exited": "2025-12-03",
+              "return_net": 0.0268747874
+            },
+            {
+              "weather_day": "2025-12-02",
+              "hdd_anomaly": 10.0333,
+              "entered": "2025-12-04",
+              "exited": "2025-12-08",
+              "return_net": -0.0173409126
+            },
+            {
+              "weather_day": "2025-12-07",
+              "hdd_anomaly": 9.6889,
+              "entered": "2025-12-09",
+              "exited": "2025-12-11",
+              "return_net": -0.1067932634
+            },
+            {
+              "weather_day": "2025-12-11",
+              "hdd_anomaly": 8.1756,
+              "entered": "2025-12-15",
+              "exited": "2025-12-17",
+              "return_net": 0.002556678
+            }
+          ]
+        },
+        "2021-22": {
+          "n": 18,
+          "mean_pct": -0.15605702534723992,
+          "t": -0.09420123737500109,
+          "win_pct": 50.0,
+          "net_mean_pct": -0.15605702534723992,
+          "win_rate_pct": 50.0,
+          "min_trade_net_pct": -11.915145866018328,
+          "worst_intratrade_close_pct": -11.915145866018328,
+          "frequency_per_year": 9.0,
+          "random_mean_pct": 0.06656722100955915,
+          "random_middle_95_pct": [
+            -2.3480816176815775,
+            2.3685302882888375
+          ],
+          "random_one_tail_p": 0.5818836232753449,
+          "net_excess_pct_points": -0.22262424635679906,
+          "random_draw_attempts": 5452,
+          "filter_counts": {
+            "candidates": 20,
+            "overlapping": 2
+          },
+          "median_entry_volume_shares": 2172825,
+          "portfolio_drawdown_pct": 21.314163452809343,
+          "total_net_pct": -6.719429768408569,
+          "months_tested": 24,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.1658283798700138,
+          "trades": [
+            {
+              "weather_day": "2021-01-28",
+              "hdd_anomaly": 9.1956,
+              "entered": "2021-02-01",
+              "exited": "2021-02-03",
+              "return_net": -0.0165733301
+            },
+            {
+              "weather_day": "2021-02-07",
+              "hdd_anomaly": 12.9,
+              "entered": "2021-02-09",
+              "exited": "2021-02-11",
+              "return_net": 0.008597558
+            },
+            {
+              "weather_day": "2021-02-12",
+              "hdd_anomaly": 9.5311,
+              "entered": "2021-02-16",
+              "exited": "2021-02-18",
+              "return_net": -0.0294881143
+            },
+            {
+              "weather_day": "2021-03-02",
+              "hdd_anomaly": 8.9467,
+              "entered": "2021-03-04",
+              "exited": "2021-03-08",
+              "return_net": -0.0434146165
+            },
+            {
+              "weather_day": "2021-11-04",
+              "hdd_anomaly": 8.4311,
+              "entered": "2021-11-08",
+              "exited": "2021-11-10",
+              "return_net": -0.1191514587
+            },
+            {
+              "weather_day": "2022-01-07",
+              "hdd_anomaly": 12.5422,
+              "entered": "2022-01-10",
+              "exited": "2022-01-12",
+              "return_net": 0.1630505852
+            },
+            {
+              "weather_day": "2022-01-11",
+              "hdd_anomaly": 9.46,
+              "entered": "2022-01-13",
+              "exited": "2022-01-18",
+              "return_net": -0.0417790437
+            },
+            {
+              "weather_day": "2022-01-21",
+              "hdd_anomaly": 14.4489,
+              "entered": "2022-01-24",
+              "exited": "2022-01-26",
+              "return_net": 0.0417131719
+            },
+            {
+              "weather_day": "2022-01-26",
+              "hdd_anomaly": 12.9689,
+              "entered": "2022-01-28",
+              "exited": "2022-02-01",
+              "return_net": 0.0196637509
+            },
+            {
+              "weather_day": "2022-02-05",
+              "hdd_anomaly": 12.2556,
+              "entered": "2022-02-07",
+              "exited": "2022-02-09",
+              "return_net": -0.0698596992
+            },
+            {
+              "weather_day": "2022-02-14",
+              "hdd_anomaly": 10.3111,
+              "entered": "2022-02-16",
+              "exited": "2022-02-18",
+              "return_net": -0.009423671
+            },
+            {
+              "weather_day": "2022-02-19",
+              "hdd_anomaly": 10.8711,
+              "entered": "2022-02-22",
+              "exited": "2022-02-24",
+              "return_net": 0.0157100901
+            },
+            {
+              "weather_day": "2022-02-26",
+              "hdd_anomaly": 9.0133,
+              "entered": "2022-02-28",
+              "exited": "2022-03-02",
+              "return_net": 0.0773979004
+            },
+            {
+              "weather_day": "2022-03-12",
+              "hdd_anomaly": 13.0756,
+              "entered": "2022-03-14",
+              "exited": "2022-03-16",
+              "return_net": 0.0103221748
+            },
+            {
+              "weather_day": "2022-03-27",
+              "hdd_anomaly": 9.8044,
+              "entered": "2022-03-29",
+              "exited": "2022-03-31",
+              "return_net": 0.0266803297
+            },
+            {
+              "weather_day": "2022-11-18",
+              "hdd_anomaly": 8.8644,
+              "entered": "2022-11-21",
+              "exited": "2022-11-23",
+              "return_net": 0.1014837927
+            },
+            {
+              "weather_day": "2022-12-18",
+              "hdd_anomaly": 9.9844,
+              "entered": "2022-12-20",
+              "exited": "2022-12-22",
+              "return_net": -0.0634199924
+            },
+            {
+              "weather_day": "2022-12-23",
+              "hdd_anomaly": 20.1578,
+              "entered": "2022-12-27",
+              "exited": "2022-12-29",
+              "return_net": -0.0995996925
+            }
+          ]
+        },
+        "2023-25": {
+          "n": 17,
+          "mean_pct": -1.571491618126064,
+          "t": -1.1515083925337657,
+          "win_pct": 35.294117647058826,
+          "net_mean_pct": -1.571491618126064,
+          "win_rate_pct": 35.294117647058826,
+          "min_trade_net_pct": -10.679326335304784,
+          "worst_intratrade_close_pct": -10.679326335304784,
+          "frequency_per_year": 5.666666666666667,
+          "random_mean_pct": -0.08161045434184774,
+          "random_middle_95_pct": [
+            -2.8156247340077574,
+            2.5356391398917046
+          ],
+          "random_one_tail_p": 0.859628074385123,
+          "net_excess_pct_points": -1.4898811637842164,
+          "random_draw_attempts": 5720,
+          "filter_counts": {
+            "candidates": 22,
+            "overlapping": 4,
+            "end_of_period": 1
+          },
+          "median_entry_volume_shares": 10600500,
+          "portfolio_drawdown_pct": 33.44087972979673,
+          "total_net_pct": -25.55938622214863,
+          "months_tested": 36,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.1375112146057718,
+          "trades": [
+            {
+              "weather_day": "2023-02-03",
+              "hdd_anomaly": 11.7867,
+              "entered": "2023-02-06",
+              "exited": "2023-02-08",
+              "return_net": -0.0066166712
+            },
+            {
+              "weather_day": "2023-03-14",
+              "hdd_anomaly": 11.5822,
+              "entered": "2023-03-16",
+              "exited": "2023-03-20",
+              "return_net": -0.0885228313
+            },
+            {
+              "weather_day": "2023-11-28",
+              "hdd_anomaly": 11.1667,
+              "entered": "2023-11-30",
+              "exited": "2023-12-04",
+              "return_net": -0.0441644556
+            },
+            {
+              "weather_day": "2024-01-14",
+              "hdd_anomaly": 11.6133,
+              "entered": "2024-01-16",
+              "exited": "2024-01-18",
+              "return_net": -0.074566755
+            },
+            {
+              "weather_day": "2024-01-19",
+              "hdd_anomaly": 10.5867,
+              "entered": "2024-01-22",
+              "exited": "2024-01-24",
+              "return_net": 0.0669163501
+            },
+            {
+              "weather_day": "2024-11-29",
+              "hdd_anomaly": 9.0356,
+              "entered": "2024-12-02",
+              "exited": "2024-12-04",
+              "return_net": -0.0536664598
+            },
+            {
+              "weather_day": "2024-12-12",
+              "hdd_anomaly": 12.9178,
+              "entered": "2024-12-16",
+              "exited": "2024-12-18",
+              "return_net": 0.0474310068
+            },
+            {
+              "weather_day": "2024-12-21",
+              "hdd_anomaly": 11.1156,
+              "entered": "2024-12-23",
+              "exited": "2024-12-26",
+              "return_net": -0.022083033
+            },
+            {
+              "weather_day": "2025-01-04",
+              "hdd_anomaly": 11.3089,
+              "entered": "2025-01-06",
+              "exited": "2025-01-08",
+              "return_net": 0.0028658
+            },
+            {
+              "weather_day": "2025-01-14",
+              "hdd_anomaly": 8.7444,
+              "entered": "2025-01-16",
+              "exited": "2025-01-21",
+              "return_net": -0.0740236214
+            },
+            {
+              "weather_day": "2025-02-14",
+              "hdd_anomaly": 8.9467,
+              "entered": "2025-02-18",
+              "exited": "2025-02-20",
+              "return_net": 0.1042255992
+            },
+            {
+              "weather_day": "2025-03-02",
+              "hdd_anomaly": 12.5467,
+              "entered": "2025-03-04",
+              "exited": "2025-03-06",
+              "return_net": -0.0231586492
+            },
+            {
+              "weather_day": "2025-11-10",
+              "hdd_anomaly": 14.6822,
+              "entered": "2025-11-12",
+              "exited": "2025-11-14",
+              "return_net": -0.0070871441
+            },
+            {
+              "weather_day": "2025-11-28",
+              "hdd_anomaly": 8.8111,
+              "entered": "2025-12-01",
+              "exited": "2025-12-03",
+              "return_net": 0.0268747874
+            },
+            {
+              "weather_day": "2025-12-02",
+              "hdd_anomaly": 10.0333,
+              "entered": "2025-12-04",
+              "exited": "2025-12-08",
+              "return_net": -0.0173409126
+            },
+            {
+              "weather_day": "2025-12-07",
+              "hdd_anomaly": 9.6889,
+              "entered": "2025-12-09",
+              "exited": "2025-12-11",
+              "return_net": -0.1067932634
+            },
+            {
+              "weather_day": "2025-12-11",
+              "hdd_anomaly": 8.1756,
+              "entered": "2025-12-15",
+              "exited": "2025-12-17",
+              "return_net": 0.002556678
+            }
+          ]
+        }
+      }
+    },
+    "expensive": {
+      "symbol": "UNG",
+      "cost_per_side": 0.005,
+      "extra_session_lag": 0,
+      "periods": {
+        "reference": {
+          "n": 50,
+          "mean_pct": -0.722785795675803,
+          "t": -0.930635307452539,
+          "win_pct": 34.0,
+          "net_mean_pct": -0.722785795675803,
+          "win_rate_pct": 34.0,
+          "min_trade_net_pct": -8.245872931420607,
+          "worst_intratrade_close_pct": -8.81648504894985,
+          "frequency_per_year": 7.142857142857143,
+          "random_mean_pct": -1.2745869698471584,
+          "random_middle_95_pct": [
+            -2.4586801398035036,
+            -0.08344865356950892
+          ],
+          "random_one_tail_p": 0.1835632873425315,
+          "net_excess_pct_points": 0.5518011741713554,
+          "random_draw_attempts": 9352,
+          "filter_counts": {
+            "candidates": 56,
+            "overlapping": 6,
+            "same_entry": 1
+          },
+          "median_entry_volume_shares": 919525,
+          "portfolio_drawdown_pct": 40.62720739914686,
+          "total_net_pct": -35.06192479893492,
+          "months_tested": 84,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.3936910638546471,
+          "trades": [
+            {
+              "weather_day": "2014-01-02",
+              "hdd_anomaly": 9.7022,
+              "entered": "2014-01-06",
+              "exited": "2014-01-08",
+              "return_net": -0.0353723959
+            },
+            {
+              "weather_day": "2014-01-21",
+              "hdd_anomaly": 10.9089,
+              "entered": "2014-01-23",
+              "exited": "2014-01-27",
+              "return_net": 0.0046662105
+            },
+            {
+              "weather_day": "2014-01-28",
+              "hdd_anomaly": 20.8267,
+              "entered": "2014-01-30",
+              "exited": "2014-02-03",
+              "return_net": -0.0568923005
+            },
+            {
+              "weather_day": "2014-02-06",
+              "hdd_anomaly": 12.1978,
+              "entered": "2014-02-10",
+              "exited": "2014-02-12",
+              "return_net": 0.006578809
+            },
+            {
+              "weather_day": "2014-02-15",
+              "hdd_anomaly": 8.3222,
+              "entered": "2014-02-18",
+              "exited": "2014-02-20",
+              "return_net": 0.0213105292
+            },
+            {
+              "weather_day": "2014-02-26",
+              "hdd_anomaly": 13.5822,
+              "entered": "2014-02-28",
+              "exited": "2014-03-04",
+              "return_net": 0.0010068508
+            },
+            {
+              "weather_day": "2014-03-03",
+              "hdd_anomaly": 15.2511,
+              "entered": "2014-03-05",
+              "exited": "2014-03-07",
+              "return_net": -0.005278408
+            },
+            {
+              "weather_day": "2014-03-13",
+              "hdd_anomaly": 17.2156,
+              "entered": "2014-03-17",
+              "exited": "2014-03-19",
+              "return_net": -0.0253212947
+            },
+            {
+              "weather_day": "2014-03-23",
+              "hdd_anomaly": 10.0156,
+              "entered": "2014-03-25",
+              "exited": "2014-03-27",
+              "return_net": 0.0172021622
+            },
+            {
+              "weather_day": "2014-11-01",
+              "hdd_anomaly": 10.2533,
+              "entered": "2014-11-03",
+              "exited": "2014-11-05",
+              "return_net": 0.0353091253
+            },
+            {
+              "weather_day": "2014-11-13",
+              "hdd_anomaly": 13.0444,
+              "entered": "2014-11-17",
+              "exited": "2014-11-19",
+              "return_net": 0.0538357293
+            },
+            {
+              "weather_day": "2014-11-27",
+              "hdd_anomaly": 11.9444,
+              "entered": "2014-12-01",
+              "exited": "2014-12-03",
+              "return_net": -0.0548637505
+            },
+            {
+              "weather_day": "2015-01-06",
+              "hdd_anomaly": 11.1867,
+              "entered": "2015-01-08",
+              "exited": "2015-01-12",
+              "return_net": -0.0297922933
+            },
+            {
+              "weather_day": "2015-01-14",
+              "hdd_anomaly": 9.5867,
+              "entered": "2015-01-16",
+              "exited": "2015-01-21",
+              "return_net": -0.036257458
+            },
+            {
+              "weather_day": "2015-02-03",
+              "hdd_anomaly": 9.4689,
+              "entered": "2015-02-05",
+              "exited": "2015-02-09",
+              "return_net": -0.0173386377
+            },
+            {
+              "weather_day": "2015-02-13",
+              "hdd_anomaly": 13.3156,
+              "entered": "2015-02-17",
+              "exited": "2015-02-19",
+              "return_net": 0.0089011572
+            },
+            {
+              "weather_day": "2015-02-23",
+              "hdd_anomaly": 15.8867,
+              "entered": "2015-02-25",
+              "exited": "2015-02-27",
+              "return_net": -0.0814798805
+            },
+            {
+              "weather_day": "2015-03-05",
+              "hdd_anomaly": 12.52,
+              "entered": "2015-03-09",
+              "exited": "2015-03-11",
+              "return_net": 0.036334061
+            },
+            {
+              "weather_day": "2015-03-28",
+              "hdd_anomaly": 13.3089,
+              "entered": "2015-03-30",
+              "exited": "2015-04-01",
+              "return_net": -0.032115486
+            },
+            {
+              "weather_day": "2016-01-18",
+              "hdd_anomaly": 13.9733,
+              "entered": "2016-01-20",
+              "exited": "2016-01-22",
+              "return_net": 0.006550534
+            },
+            {
+              "weather_day": "2016-02-13",
+              "hdd_anomaly": 14.0311,
+              "entered": "2016-02-16",
+              "exited": "2016-02-18",
+              "return_net": -0.031226403
+            },
+            {
+              "weather_day": "2016-12-08",
+              "hdd_anomaly": 9.6844,
+              "entered": "2016-12-12",
+              "exited": "2016-12-14",
+              "return_net": -0.0077377964
+            },
+            {
+              "weather_day": "2016-12-14",
+              "hdd_anomaly": 9.0267,
+              "entered": "2016-12-16",
+              "exited": "2016-12-20",
+              "return_net": -0.0251817971
+            },
+            {
+              "weather_day": "2017-01-06",
+              "hdd_anomaly": 10.0289,
+              "entered": "2017-01-09",
+              "exited": "2017-01-11",
+              "return_net": 0.030305866
+            },
+            {
+              "weather_day": "2017-03-11",
+              "hdd_anomaly": 14.0667,
+              "entered": "2017-03-13",
+              "exited": "2017-03-15",
+              "return_net": -0.0341305456
+            },
+            {
+              "weather_day": "2017-11-10",
+              "hdd_anomaly": 11.2556,
+              "entered": "2017-11-13",
+              "exited": "2017-11-15",
+              "return_net": -0.0373249417
+            },
+            {
+              "weather_day": "2017-12-08",
+              "hdd_anomaly": 8.4133,
+              "entered": "2017-12-11",
+              "exited": "2017-12-13",
+              "return_net": -0.0557532194
+            },
+            {
+              "weather_day": "2017-12-13",
+              "hdd_anomaly": 8.3756,
+              "entered": "2017-12-15",
+              "exited": "2017-12-19",
+              "return_net": -0.0062422009
+            },
+            {
+              "weather_day": "2017-12-25",
+              "hdd_anomaly": 12.9889,
+              "entered": "2017-12-27",
+              "exited": "2017-12-29",
+              "return_net": 0.0649427847
+            },
+            {
+              "weather_day": "2018-01-13",
+              "hdd_anomaly": 8.24,
+              "entered": "2018-01-16",
+              "exited": "2018-01-18",
+              "return_net": 0.0146197657
+            },
+            {
+              "weather_day": "2018-01-17",
+              "hdd_anomaly": 15.1844,
+              "entered": "2018-01-19",
+              "exited": "2018-01-23",
+              "return_net": 0.027275643
+            },
+            {
+              "weather_day": "2018-03-13",
+              "hdd_anomaly": 8.8111,
+              "entered": "2018-03-15",
+              "exited": "2018-03-19",
+              "return_net": -0.0419851613
+            },
+            {
+              "weather_day": "2018-11-10",
+              "hdd_anomaly": 12.7356,
+              "entered": "2018-11-12",
+              "exited": "2018-11-14",
+              "return_net": 0.2647418794
+            },
+            {
+              "weather_day": "2018-11-22",
+              "hdd_anomaly": 8.8911,
+              "entered": "2018-11-26",
+              "exited": "2018-11-28",
+              "return_net": 0.1130318622
+            },
+            {
+              "weather_day": "2018-11-27",
+              "hdd_anomaly": 10.5533,
+              "entered": "2018-11-29",
+              "exited": "2018-12-03",
+              "return_net": -0.0589573572
+            },
+            {
+              "weather_day": "2018-12-05",
+              "hdd_anomaly": 9.6067,
+              "entered": "2018-12-07",
+              "exited": "2018-12-11",
+              "return_net": -0.0163538196
+            },
+            {
+              "weather_day": "2019-01-20",
+              "hdd_anomaly": 8.9978,
+              "entered": "2019-01-22",
+              "exited": "2019-01-24",
+              "return_net": -0.0154282631
+            },
+            {
+              "weather_day": "2019-01-25",
+              "hdd_anomaly": 10.9467,
+              "entered": "2019-01-28",
+              "exited": "2019-01-30",
+              "return_net": -0.0202992184
+            },
+            {
+              "weather_day": "2019-01-29",
+              "hdd_anomaly": 10.1244,
+              "entered": "2019-01-31",
+              "exited": "2019-02-04",
+              "return_net": -0.0824587293
+            },
+            {
+              "weather_day": "2019-03-04",
+              "hdd_anomaly": 15.7244,
+              "entered": "2019-03-06",
+              "exited": "2019-03-08",
+              "return_net": -0.0099502488
+            },
+            {
+              "weather_day": "2019-11-01",
+              "hdd_anomaly": 8.7156,
+              "entered": "2019-11-04",
+              "exited": "2019-11-06",
+              "return_net": -0.0050533927
+            },
+            {
+              "weather_day": "2019-11-08",
+              "hdd_anomaly": 14.06,
+              "entered": "2019-11-11",
+              "exited": "2019-11-13",
+              "return_net": -0.0080662808
+            },
+            {
+              "weather_day": "2019-11-12",
+              "hdd_anomaly": 15.7756,
+              "entered": "2019-11-14",
+              "exited": "2019-11-18",
+              "return_net": -0.0483022227
+            },
+            {
+              "weather_day": "2019-12-18",
+              "hdd_anomaly": 12.3067,
+              "entered": "2019-12-20",
+              "exited": "2019-12-24",
+              "return_net": -0.0591486676
+            },
+            {
+              "weather_day": "2020-01-20",
+              "hdd_anomaly": 8.4289,
+              "entered": "2020-01-22",
+              "exited": "2020-01-24",
+              "return_net": -0.0285677507
+            },
+            {
+              "weather_day": "2020-02-14",
+              "hdd_anomaly": 11.0244,
+              "entered": "2020-02-18",
+              "exited": "2020-02-20",
+              "return_net": -0.0243462308
+            },
+            {
+              "weather_day": "2020-02-20",
+              "hdd_anomaly": 8.6333,
+              "entered": "2020-02-24",
+              "exited": "2020-02-26",
+              "return_net": -0.0359501805
+            },
+            {
+              "weather_day": "2020-11-02",
+              "hdd_anomaly": 10.0556,
+              "entered": "2020-11-04",
+              "exited": "2020-11-06",
+              "return_net": -0.0530708842
+            },
+            {
+              "weather_day": "2020-12-17",
+              "hdd_anomaly": 8.2289,
+              "entered": "2020-12-21",
+              "exited": "2020-12-23",
+              "return_net": -0.0426116533
+            },
+            {
+              "weather_day": "2020-12-25",
+              "hdd_anomaly": 10.6067,
+              "entered": "2020-12-28",
+              "exited": "2020-12-30",
+              "return_net": 0.0548530031
+            }
+          ]
+        },
+        "holdout": {
+          "n": 35,
+          "mean_pct": -1.5352332603421968,
+          "t": -1.4440945873958275,
+          "win_pct": 37.142857142857146,
+          "net_mean_pct": -1.5352332603421968,
+          "win_rate_pct": 37.142857142857146,
+          "min_trade_net_pct": -12.529593885249014,
+          "worst_intratrade_close_pct": -12.529593885249014,
+          "frequency_per_year": 7.0,
+          "random_mean_pct": -0.7531021726174364,
+          "random_middle_95_pct": [
+            -2.4924563220716354,
+            1.006713573743109
+          ],
+          "random_one_tail_p": 0.8076384723055389,
+          "net_excess_pct_points": -0.7821310877247603,
+          "random_draw_attempts": 6340,
+          "filter_counts": {
+            "candidates": 42,
+            "overlapping": 6,
+            "end_of_period": 1
+          },
+          "median_entry_volume_shares": 3592125,
+          "portfolio_drawdown_pct": 48.81684156859711,
+          "total_net_pct": -45.65022418270548,
+          "months_tested": 60,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.143445649763182,
+          "trades": [
+            {
+              "weather_day": "2021-01-28",
+              "hdd_anomaly": 9.1956,
+              "entered": "2021-02-01",
+              "exited": "2021-02-03",
+              "return_net": -0.0234333581
+            },
+            {
+              "weather_day": "2021-02-07",
+              "hdd_anomaly": 12.9,
+              "entered": "2021-02-09",
+              "exited": "2021-02-11",
+              "return_net": 0.001561947
+            },
+            {
+              "weather_day": "2021-02-12",
+              "hdd_anomaly": 9.5311,
+              "entered": "2021-02-16",
+              "exited": "2021-02-18",
+              "return_net": -0.0362580535
+            },
+            {
+              "weather_day": "2021-03-02",
+              "hdd_anomaly": 8.9467,
+              "entered": "2021-03-04",
+              "exited": "2021-03-08",
+              "return_net": -0.0500874095
+            },
+            {
+              "weather_day": "2021-11-04",
+              "hdd_anomaly": 8.4311,
+              "entered": "2021-11-08",
+              "exited": "2021-11-10",
+              "return_net": -0.1252959389
+            },
+            {
+              "weather_day": "2022-01-07",
+              "hdd_anomaly": 12.5422,
+              "entered": "2022-01-10",
+              "exited": "2022-01-12",
+              "return_net": 0.1549375658
+            },
+            {
+              "weather_day": "2022-01-11",
+              "hdd_anomaly": 9.46,
+              "entered": "2022-01-13",
+              "exited": "2022-01-18",
+              "return_net": -0.0484632458
+            },
+            {
+              "weather_day": "2022-01-21",
+              "hdd_anomaly": 14.4489,
+              "entered": "2022-01-24",
+              "exited": "2022-01-26",
+              "return_net": 0.0344465584
+            },
+            {
+              "weather_day": "2022-01-26",
+              "hdd_anomaly": 12.9689,
+              "entered": "2022-01-28",
+              "exited": "2022-02-01",
+              "return_net": 0.0125509461
+            },
+            {
+              "weather_day": "2022-02-05",
+              "hdd_anomaly": 12.2556,
+              "entered": "2022-02-07",
+              "exited": "2022-02-09",
+              "return_net": -0.0763480208
+            },
+            {
+              "weather_day": "2022-02-14",
+              "hdd_anomaly": 10.3111,
+              "entered": "2022-02-16",
+              "exited": "2022-02-18",
+              "return_net": -0.0163335725
+            },
+            {
+              "weather_day": "2022-02-19",
+              "hdd_anomaly": 10.8711,
+              "entered": "2022-02-22",
+              "exited": "2022-02-24",
+              "return_net": 0.0086248646
+            },
+            {
+              "weather_day": "2022-02-26",
+              "hdd_anomaly": 9.0133,
+              "entered": "2022-02-28",
+              "exited": "2022-03-02",
+              "return_net": 0.0698823631
+            },
+            {
+              "weather_day": "2022-03-12",
+              "hdd_anomaly": 13.0756,
+              "entered": "2022-03-14",
+              "exited": "2022-03-16",
+              "return_net": 0.0032745334
+            },
+            {
+              "weather_day": "2022-03-27",
+              "hdd_anomaly": 9.8044,
+              "entered": "2022-03-29",
+              "exited": "2022-03-31",
+              "return_net": 0.0195185798
+            },
+            {
+              "weather_day": "2022-11-18",
+              "hdd_anomaly": 8.8644,
+              "entered": "2022-11-21",
+              "exited": "2022-11-23",
+              "return_net": 0.0938002409
+            },
+            {
+              "weather_day": "2022-12-18",
+              "hdd_anomaly": 9.9844,
+              "entered": "2022-12-20",
+              "exited": "2022-12-22",
+              "return_net": -0.0699532351
+            },
+            {
+              "weather_day": "2022-12-23",
+              "hdd_anomaly": 20.1578,
+              "entered": "2022-12-27",
+              "exited": "2022-12-29",
+              "return_net": -0.1058805587
+            },
+            {
+              "weather_day": "2023-02-03",
+              "hdd_anomaly": 11.7867,
+              "entered": "2023-02-06",
+              "exited": "2023-02-08",
+              "return_net": -0.0135461533
+            },
+            {
+              "weather_day": "2023-03-14",
+              "hdd_anomaly": 11.5822,
+              "entered": "2023-03-16",
+              "exited": "2023-03-20",
+              "return_net": -0.0948809657
+            },
+            {
+              "weather_day": "2023-11-28",
+              "hdd_anomaly": 11.1667,
+              "entered": "2023-11-30",
+              "exited": "2023-12-04",
+              "return_net": -0.050832018
+            },
+            {
+              "weather_day": "2024-01-14",
+              "hdd_anomaly": 11.6133,
+              "entered": "2024-01-16",
+              "exited": "2024-01-18",
+              "return_net": -0.081022242
+            },
+            {
+              "weather_day": "2024-01-19",
+              "hdd_anomaly": 10.5867,
+              "entered": "2024-01-22",
+              "exited": "2024-01-24",
+              "return_net": 0.0594739283
+            },
+            {
+              "weather_day": "2024-11-29",
+              "hdd_anomaly": 9.0356,
+              "entered": "2024-12-02",
+              "exited": "2024-12-04",
+              "return_net": -0.0602677396
+            },
+            {
+              "weather_day": "2024-12-12",
+              "hdd_anomaly": 12.9178,
+              "entered": "2024-12-16",
+              "exited": "2024-12-18",
+              "return_net": 0.0401245077
+            },
+            {
+              "weather_day": "2024-12-21",
+              "hdd_anomaly": 11.1156,
+              "entered": "2024-12-23",
+              "exited": "2024-12-26",
+              "return_net": -0.0289046274
+            },
+            {
+              "weather_day": "2025-01-04",
+              "hdd_anomaly": 11.3089,
+              "entered": "2025-01-06",
+              "exited": "2025-01-08",
+              "return_net": -0.0041298283
+            },
+            {
+              "weather_day": "2025-01-14",
+              "hdd_anomaly": 8.7444,
+              "entered": "2025-01-16",
+              "exited": "2025-01-21",
+              "return_net": -0.080482897
+            },
+            {
+              "weather_day": "2025-02-14",
+              "hdd_anomaly": 8.9467,
+              "entered": "2025-02-18",
+              "exited": "2025-02-20",
+              "return_net": 0.0965229216
+            },
+            {
+              "weather_day": "2025-03-02",
+              "hdd_anomaly": 12.5467,
+              "entered": "2025-03-04",
+              "exited": "2025-03-06",
+              "return_net": -0.0299727405
+            },
+            {
+              "weather_day": "2025-11-10",
+              "hdd_anomaly": 14.6822,
+              "entered": "2025-11-12",
+              "exited": "2025-11-14",
+              "return_net": -0.0140133443
+            },
+            {
+              "weather_day": "2025-11-28",
+              "hdd_anomaly": 8.8111,
+              "entered": "2025-12-01",
+              "exited": "2025-12-03",
+              "return_net": 0.019711681
+            },
+            {
+              "weather_day": "2025-12-02",
+              "hdd_anomaly": 10.0333,
+              "entered": "2025-12-04",
+              "exited": "2025-12-08",
+              "return_net": -0.0241955862
+            },
+            {
+              "weather_day": "2025-12-07",
+              "hdd_anomaly": 9.6889,
+              "entered": "2025-12-09",
+              "exited": "2025-12-11",
+              "return_net": -0.1130239498
+            },
+            {
+              "weather_day": "2025-12-11",
+              "hdd_anomaly": 8.1756,
+              "entered": "2025-12-15",
+              "exited": "2025-12-17",
+              "return_net": -0.004436794
+            }
+          ]
+        },
+        "2021-22": {
+          "n": 18,
+          "mean_pct": -0.8525321866688843,
+          "t": -0.5182319255159785,
+          "win_pct": 50.0,
+          "net_mean_pct": -0.8525321866688843,
+          "win_rate_pct": 50.0,
+          "min_trade_net_pct": -12.529593885249014,
+          "worst_intratrade_close_pct": -12.529593885249014,
+          "frequency_per_year": 9.0,
+          "random_mean_pct": -0.6314608863724664,
+          "random_middle_95_pct": [
+            -3.0292660098680853,
+            1.654444520813736
+          ],
+          "random_one_tail_p": 0.5818836232753449,
+          "net_excess_pct_points": -0.2210713002964178,
+          "random_draw_attempts": 5452,
+          "filter_counts": {
+            "candidates": 20,
+            "overlapping": 2
+          },
+          "median_entry_volume_shares": 2172825,
+          "portfolio_drawdown_pct": 23.437415340753965,
+          "total_net_pct": -17.762584394847238,
+          "months_tested": 24,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.143445649763182,
+          "trades": [
+            {
+              "weather_day": "2021-01-28",
+              "hdd_anomaly": 9.1956,
+              "entered": "2021-02-01",
+              "exited": "2021-02-03",
+              "return_net": -0.0234333581
+            },
+            {
+              "weather_day": "2021-02-07",
+              "hdd_anomaly": 12.9,
+              "entered": "2021-02-09",
+              "exited": "2021-02-11",
+              "return_net": 0.001561947
+            },
+            {
+              "weather_day": "2021-02-12",
+              "hdd_anomaly": 9.5311,
+              "entered": "2021-02-16",
+              "exited": "2021-02-18",
+              "return_net": -0.0362580535
+            },
+            {
+              "weather_day": "2021-03-02",
+              "hdd_anomaly": 8.9467,
+              "entered": "2021-03-04",
+              "exited": "2021-03-08",
+              "return_net": -0.0500874095
+            },
+            {
+              "weather_day": "2021-11-04",
+              "hdd_anomaly": 8.4311,
+              "entered": "2021-11-08",
+              "exited": "2021-11-10",
+              "return_net": -0.1252959389
+            },
+            {
+              "weather_day": "2022-01-07",
+              "hdd_anomaly": 12.5422,
+              "entered": "2022-01-10",
+              "exited": "2022-01-12",
+              "return_net": 0.1549375658
+            },
+            {
+              "weather_day": "2022-01-11",
+              "hdd_anomaly": 9.46,
+              "entered": "2022-01-13",
+              "exited": "2022-01-18",
+              "return_net": -0.0484632458
+            },
+            {
+              "weather_day": "2022-01-21",
+              "hdd_anomaly": 14.4489,
+              "entered": "2022-01-24",
+              "exited": "2022-01-26",
+              "return_net": 0.0344465584
+            },
+            {
+              "weather_day": "2022-01-26",
+              "hdd_anomaly": 12.9689,
+              "entered": "2022-01-28",
+              "exited": "2022-02-01",
+              "return_net": 0.0125509461
+            },
+            {
+              "weather_day": "2022-02-05",
+              "hdd_anomaly": 12.2556,
+              "entered": "2022-02-07",
+              "exited": "2022-02-09",
+              "return_net": -0.0763480208
+            },
+            {
+              "weather_day": "2022-02-14",
+              "hdd_anomaly": 10.3111,
+              "entered": "2022-02-16",
+              "exited": "2022-02-18",
+              "return_net": -0.0163335725
+            },
+            {
+              "weather_day": "2022-02-19",
+              "hdd_anomaly": 10.8711,
+              "entered": "2022-02-22",
+              "exited": "2022-02-24",
+              "return_net": 0.0086248646
+            },
+            {
+              "weather_day": "2022-02-26",
+              "hdd_anomaly": 9.0133,
+              "entered": "2022-02-28",
+              "exited": "2022-03-02",
+              "return_net": 0.0698823631
+            },
+            {
+              "weather_day": "2022-03-12",
+              "hdd_anomaly": 13.0756,
+              "entered": "2022-03-14",
+              "exited": "2022-03-16",
+              "return_net": 0.0032745334
+            },
+            {
+              "weather_day": "2022-03-27",
+              "hdd_anomaly": 9.8044,
+              "entered": "2022-03-29",
+              "exited": "2022-03-31",
+              "return_net": 0.0195185798
+            },
+            {
+              "weather_day": "2022-11-18",
+              "hdd_anomaly": 8.8644,
+              "entered": "2022-11-21",
+              "exited": "2022-11-23",
+              "return_net": 0.0938002409
+            },
+            {
+              "weather_day": "2022-12-18",
+              "hdd_anomaly": 9.9844,
+              "entered": "2022-12-20",
+              "exited": "2022-12-22",
+              "return_net": -0.0699532351
+            },
+            {
+              "weather_day": "2022-12-23",
+              "hdd_anomaly": 20.1578,
+              "entered": "2022-12-27",
+              "exited": "2022-12-29",
+              "return_net": -0.1058805587
+            }
+          ]
+        },
+        "2023-25": {
+          "n": 17,
+          "mean_pct": -2.2580932207021744,
+          "t": -1.666237874941964,
+          "win_pct": 23.52941176470588,
+          "net_mean_pct": -2.2580932207021744,
+          "win_rate_pct": 23.529411764705884,
+          "min_trade_net_pct": -11.302394983703113,
+          "worst_intratrade_close_pct": -11.302394983703113,
+          "frequency_per_year": 5.666666666666667,
+          "random_mean_pct": -0.7786049279623247,
+          "random_middle_95_pct": [
+            -3.493547714859068,
+            1.8203876816304465
+          ],
+          "random_one_tail_p": 0.859628074385123,
+          "net_excess_pct_points": -1.4794882927398496,
+          "random_draw_attempts": 5720,
+          "filter_counts": {
+            "candidates": 22,
+            "overlapping": 4,
+            "end_of_period": 1
+          },
+          "median_entry_volume_shares": 10600500,
+          "portfolio_drawdown_pct": 40.493277939440475,
+          "total_net_pct": -33.91113349397482,
+          "months_tested": 36,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.1295763486229768,
+          "trades": [
+            {
+              "weather_day": "2023-02-03",
+              "hdd_anomaly": 11.7867,
+              "entered": "2023-02-06",
+              "exited": "2023-02-08",
+              "return_net": -0.0135461533
+            },
+            {
+              "weather_day": "2023-03-14",
+              "hdd_anomaly": 11.5822,
+              "entered": "2023-03-16",
+              "exited": "2023-03-20",
+              "return_net": -0.0948809657
+            },
+            {
+              "weather_day": "2023-11-28",
+              "hdd_anomaly": 11.1667,
+              "entered": "2023-11-30",
+              "exited": "2023-12-04",
+              "return_net": -0.050832018
+            },
+            {
+              "weather_day": "2024-01-14",
+              "hdd_anomaly": 11.6133,
+              "entered": "2024-01-16",
+              "exited": "2024-01-18",
+              "return_net": -0.081022242
+            },
+            {
+              "weather_day": "2024-01-19",
+              "hdd_anomaly": 10.5867,
+              "entered": "2024-01-22",
+              "exited": "2024-01-24",
+              "return_net": 0.0594739283
+            },
+            {
+              "weather_day": "2024-11-29",
+              "hdd_anomaly": 9.0356,
+              "entered": "2024-12-02",
+              "exited": "2024-12-04",
+              "return_net": -0.0602677396
+            },
+            {
+              "weather_day": "2024-12-12",
+              "hdd_anomaly": 12.9178,
+              "entered": "2024-12-16",
+              "exited": "2024-12-18",
+              "return_net": 0.0401245077
+            },
+            {
+              "weather_day": "2024-12-21",
+              "hdd_anomaly": 11.1156,
+              "entered": "2024-12-23",
+              "exited": "2024-12-26",
+              "return_net": -0.0289046274
+            },
+            {
+              "weather_day": "2025-01-04",
+              "hdd_anomaly": 11.3089,
+              "entered": "2025-01-06",
+              "exited": "2025-01-08",
+              "return_net": -0.0041298283
+            },
+            {
+              "weather_day": "2025-01-14",
+              "hdd_anomaly": 8.7444,
+              "entered": "2025-01-16",
+              "exited": "2025-01-21",
+              "return_net": -0.080482897
+            },
+            {
+              "weather_day": "2025-02-14",
+              "hdd_anomaly": 8.9467,
+              "entered": "2025-02-18",
+              "exited": "2025-02-20",
+              "return_net": 0.0965229216
+            },
+            {
+              "weather_day": "2025-03-02",
+              "hdd_anomaly": 12.5467,
+              "entered": "2025-03-04",
+              "exited": "2025-03-06",
+              "return_net": -0.0299727405
+            },
+            {
+              "weather_day": "2025-11-10",
+              "hdd_anomaly": 14.6822,
+              "entered": "2025-11-12",
+              "exited": "2025-11-14",
+              "return_net": -0.0140133443
+            },
+            {
+              "weather_day": "2025-11-28",
+              "hdd_anomaly": 8.8111,
+              "entered": "2025-12-01",
+              "exited": "2025-12-03",
+              "return_net": 0.019711681
+            },
+            {
+              "weather_day": "2025-12-02",
+              "hdd_anomaly": 10.0333,
+              "entered": "2025-12-04",
+              "exited": "2025-12-08",
+              "return_net": -0.0241955862
+            },
+            {
+              "weather_day": "2025-12-07",
+              "hdd_anomaly": 9.6889,
+              "entered": "2025-12-09",
+              "exited": "2025-12-11",
+              "return_net": -0.1130239498
+            },
+            {
+              "weather_day": "2025-12-11",
+              "hdd_anomaly": 8.1756,
+              "entered": "2025-12-15",
+              "exited": "2025-12-17",
+              "return_net": -0.004436794
+            }
+          ]
+        }
+      }
+    },
+    "late": {
+      "symbol": "UNG",
+      "cost_per_side": 0.0015,
+      "extra_session_lag": 1,
+      "periods": {
+        "reference": {
+          "n": 50,
+          "mean_pct": -0.5280544662465547,
+          "t": -0.8034931910915888,
+          "win_pct": 40.0,
+          "net_mean_pct": -0.5280544662465547,
+          "win_rate_pct": 40.0,
+          "min_trade_net_pct": -8.678891724069238,
+          "worst_intratrade_close_pct": -8.678891724069238,
+          "frequency_per_year": 7.142857142857143,
+          "random_mean_pct": -0.5762233088930286,
+          "random_middle_95_pct": [
+            -1.773765791581528,
+            0.6246975680938154
+          ],
+          "random_one_tail_p": 0.46690661867626476,
+          "net_excess_pct_points": 0.048168842646473864,
+          "random_draw_attempts": 8214,
+          "filter_counts": {
+            "candidates": 56,
+            "overlapping": 6,
+            "same_entry": 1
+          },
+          "median_entry_volume_shares": 941800,
+          "portfolio_drawdown_pct": 49.14187165881584,
+          "total_net_pct": -27.236878407459987,
+          "months_tested": 84,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.211743554330977,
+          "trades": [
+            {
+              "weather_day": "2014-01-02",
+              "hdd_anomaly": 9.7022,
+              "entered": "2014-01-07",
+              "exited": "2014-01-09",
+              "return_net": -0.083946863
+            },
+            {
+              "weather_day": "2014-01-21",
+              "hdd_anomaly": 10.9089,
+              "entered": "2014-01-24",
+              "exited": "2014-01-28",
+              "return_net": 0.0276031497
+            },
+            {
+              "weather_day": "2014-01-28",
+              "hdd_anomaly": 20.8267,
+              "entered": "2014-01-31",
+              "exited": "2014-02-04",
+              "return_net": 0.0720257996
+            },
+            {
+              "weather_day": "2014-02-06",
+              "hdd_anomaly": 12.1978,
+              "entered": "2014-02-11",
+              "exited": "2014-02-13",
+              "return_net": 0.0843553694
+            },
+            {
+              "weather_day": "2014-02-15",
+              "hdd_anomaly": 8.3222,
+              "entered": "2014-02-19",
+              "exited": "2014-02-21",
+              "return_net": 0.0274303717
+            },
+            {
+              "weather_day": "2014-02-26",
+              "hdd_anomaly": 13.5822,
+              "entered": "2014-03-03",
+              "exited": "2014-03-05",
+              "return_net": -0.0177487298
+            },
+            {
+              "weather_day": "2014-03-03",
+              "hdd_anomaly": 15.2511,
+              "entered": "2014-03-06",
+              "exited": "2014-03-10",
+              "return_net": 0.0147587819
+            },
+            {
+              "weather_day": "2014-03-13",
+              "hdd_anomaly": 17.2156,
+              "entered": "2014-03-18",
+              "exited": "2014-03-20",
+              "return_net": -0.0227023989
+            },
+            {
+              "weather_day": "2014-03-23",
+              "hdd_anomaly": 10.0156,
+              "entered": "2014-03-26",
+              "exited": "2014-03-28",
+              "return_net": 0.0206843675
+            },
+            {
+              "weather_day": "2014-11-01",
+              "hdd_anomaly": 10.2533,
+              "entered": "2014-11-04",
+              "exited": "2014-11-06",
+              "return_net": 0.0840668891
+            },
+            {
+              "weather_day": "2014-11-13",
+              "hdd_anomaly": 13.0444,
+              "entered": "2014-11-18",
+              "exited": "2014-11-20",
+              "return_net": 0.0529908187
+            },
+            {
+              "weather_day": "2014-11-27",
+              "hdd_anomaly": 11.9444,
+              "entered": "2014-12-02",
+              "exited": "2014-12-04",
+              "return_net": -0.0743170048
+            },
+            {
+              "weather_day": "2015-01-06",
+              "hdd_anomaly": 11.1867,
+              "entered": "2015-01-09",
+              "exited": "2015-01-13",
+              "return_net": -0.0049935574
+            },
+            {
+              "weather_day": "2015-01-14",
+              "hdd_anomaly": 9.5867,
+              "entered": "2015-01-20",
+              "exited": "2015-01-22",
+              "return_net": -0.0270680271
+            },
+            {
+              "weather_day": "2015-02-03",
+              "hdd_anomaly": 9.4689,
+              "entered": "2015-02-06",
+              "exited": "2015-02-10",
+              "return_net": 0.0308139745
+            },
+            {
+              "weather_day": "2015-02-13",
+              "hdd_anomaly": 13.3156,
+              "entered": "2015-02-18",
+              "exited": "2015-02-20",
+              "return_net": 0.0575142687
+            },
+            {
+              "weather_day": "2015-02-23",
+              "hdd_anomaly": 15.8867,
+              "entered": "2015-02-26",
+              "exited": "2015-03-02",
+              "return_net": -0.0415575778
+            },
+            {
+              "weather_day": "2015-03-05",
+              "hdd_anomaly": 12.52,
+              "entered": "2015-03-10",
+              "exited": "2015-03-12",
+              "return_net": 0.0049573687
+            },
+            {
+              "weather_day": "2015-03-28",
+              "hdd_anomaly": 13.3089,
+              "entered": "2015-03-31",
+              "exited": "2015-04-02",
+              "return_net": 0.0164363818
+            },
+            {
+              "weather_day": "2016-01-18",
+              "hdd_anomaly": 13.9733,
+              "entered": "2016-01-21",
+              "exited": "2016-01-25",
+              "return_net": -0.0042623171
+            },
+            {
+              "weather_day": "2016-02-13",
+              "hdd_anomaly": 14.0311,
+              "entered": "2016-02-17",
+              "exited": "2016-02-19",
+              "return_net": -0.0530602826
+            },
+            {
+              "weather_day": "2016-12-08",
+              "hdd_anomaly": 9.6844,
+              "entered": "2016-12-13",
+              "exited": "2016-12-15",
+              "return_net": -0.0353730269
+            },
+            {
+              "weather_day": "2016-12-14",
+              "hdd_anomaly": 9.0267,
+              "entered": "2016-12-19",
+              "exited": "2016-12-21",
+              "return_net": 0.0325708714
+            },
+            {
+              "weather_day": "2017-01-06",
+              "hdd_anomaly": 10.0289,
+              "entered": "2017-01-10",
+              "exited": "2017-01-12",
+              "return_net": 0.0364897824
+            },
+            {
+              "weather_day": "2017-03-11",
+              "hdd_anomaly": 14.0667,
+              "entered": "2017-03-14",
+              "exited": "2017-03-16",
+              "return_net": -0.0451033173
+            },
+            {
+              "weather_day": "2017-11-10",
+              "hdd_anomaly": 11.2556,
+              "entered": "2017-11-14",
+              "exited": "2017-11-16",
+              "return_net": -0.0045730816
+            },
+            {
+              "weather_day": "2017-12-08",
+              "hdd_anomaly": 8.4133,
+              "entered": "2017-12-12",
+              "exited": "2017-12-14",
+              "return_net": -0.0543509702
+            },
+            {
+              "weather_day": "2017-12-13",
+              "hdd_anomaly": 8.3756,
+              "entered": "2017-12-18",
+              "exited": "2017-12-20",
+              "return_net": -0.0397175537
+            },
+            {
+              "weather_day": "2017-12-25",
+              "hdd_anomaly": 12.9889,
+              "entered": "2017-12-28",
+              "exited": "2018-01-02",
+              "return_net": 0.0567896212
+            },
+            {
+              "weather_day": "2018-01-13",
+              "hdd_anomaly": 8.24,
+              "entered": "2018-01-17",
+              "exited": "2018-01-19",
+              "return_net": -0.0148834475
+            },
+            {
+              "weather_day": "2018-01-17",
+              "hdd_anomaly": 15.1844,
+              "entered": "2018-01-22",
+              "exited": "2018-01-24",
+              "return_net": 0.0402821614
+            },
+            {
+              "weather_day": "2018-03-13",
+              "hdd_anomaly": 8.8111,
+              "entered": "2018-03-16",
+              "exited": "2018-03-20",
+              "return_net": -0.0038892156
+            },
+            {
+              "weather_day": "2018-11-10",
+              "hdd_anomaly": 12.7356,
+              "entered": "2018-11-13",
+              "exited": "2018-11-15",
+              "return_net": -0.0101547508
+            },
+            {
+              "weather_day": "2018-11-22",
+              "hdd_anomaly": 8.8911,
+              "entered": "2018-11-27",
+              "exited": "2018-11-29",
+              "return_net": 0.0888956951
+            },
+            {
+              "weather_day": "2018-11-27",
+              "hdd_anomaly": 10.5533,
+              "entered": "2018-11-30",
+              "exited": "2018-12-04",
+              "return_net": -0.0263187892
+            },
+            {
+              "weather_day": "2018-12-05",
+              "hdd_anomaly": 9.6067,
+              "entered": "2018-12-10",
+              "exited": "2018-12-12",
+              "return_net": -0.0867889172
+            },
+            {
+              "weather_day": "2019-01-20",
+              "hdd_anomaly": 8.9978,
+              "entered": "2019-01-23",
+              "exited": "2019-01-25",
+              "return_net": 0.0114003148
+            },
+            {
+              "weather_day": "2019-01-25",
+              "hdd_anomaly": 10.9467,
+              "entered": "2019-01-29",
+              "exited": "2019-01-31",
+              "return_net": -0.0037835955
+            },
+            {
+              "weather_day": "2019-01-29",
+              "hdd_anomaly": 10.1244,
+              "entered": "2019-02-01",
+              "exited": "2019-02-05",
+              "return_net": -0.0390898568
+            },
+            {
+              "weather_day": "2019-03-04",
+              "hdd_anomaly": 15.7244,
+              "entered": "2019-03-07",
+              "exited": "2019-03-11",
+              "return_net": -0.0280099982
+            },
+            {
+              "weather_day": "2019-11-01",
+              "hdd_anomaly": 8.7156,
+              "entered": "2019-11-05",
+              "exited": "2019-11-07",
+              "return_net": -0.029406239
+            },
+            {
+              "weather_day": "2019-11-08",
+              "hdd_anomaly": 14.06,
+              "entered": "2019-11-12",
+              "exited": "2019-11-14",
+              "return_net": -0.0101237382
+            },
+            {
+              "weather_day": "2019-11-12",
+              "hdd_anomaly": 15.7756,
+              "entered": "2019-11-15",
+              "exited": "2019-11-19",
+              "return_net": -0.0546884871
+            },
+            {
+              "weather_day": "2019-12-18",
+              "hdd_anomaly": 12.3067,
+              "entered": "2019-12-23",
+              "exited": "2019-12-26",
+              "return_net": 0.0173634177
+            },
+            {
+              "weather_day": "2020-01-20",
+              "hdd_anomaly": 8.4289,
+              "entered": "2020-01-23",
+              "exited": "2020-01-27",
+              "return_net": -0.0333678308
+            },
+            {
+              "weather_day": "2020-02-14",
+              "hdd_anomaly": 11.0244,
+              "entered": "2020-02-19",
+              "exited": "2020-02-21",
+              "return_net": -0.0285933444
+            },
+            {
+              "weather_day": "2020-02-20",
+              "hdd_anomaly": 8.6333,
+              "entered": "2020-02-25",
+              "exited": "2020-02-27",
+              "return_net": -0.0725378995
+            },
+            {
+              "weather_day": "2020-11-02",
+              "hdd_anomaly": 10.0556,
+              "entered": "2020-11-05",
+              "exited": "2020-11-09",
+              "return_net": -0.0716361085
+            },
+            {
+              "weather_day": "2020-12-17",
+              "hdd_anomaly": 8.2289,
+              "entered": "2020-12-22",
+              "exited": "2020-12-24",
+              "return_net": -0.0761425256
+            },
+            {
+              "weather_day": "2020-12-25",
+              "hdd_anomaly": 10.6067,
+              "entered": "2020-12-29",
+              "exited": "2020-12-31",
+              "return_net": 0.056732814
+            }
+          ]
+        },
+        "holdout": {
+          "n": 35,
+          "mean_pct": 0.10702554133873031,
+          "t": 0.09779397654365943,
+          "win_pct": 45.714285714285715,
+          "net_mean_pct": 0.10702554133873031,
+          "win_rate_pct": 45.714285714285715,
+          "min_trade_net_pct": -14.124844138047699,
+          "worst_intratrade_close_pct": -14.124844138047699,
+          "frequency_per_year": 7.0,
+          "random_mean_pct": 0.03499504049964686,
+          "random_middle_95_pct": [
+            -1.7912588268167524,
+            1.8827958969029706
+          ],
+          "random_one_tail_p": 0.47490501899620075,
+          "net_excess_pct_points": 0.07203050083908345,
+          "random_draw_attempts": 6478,
+          "filter_counts": {
+            "candidates": 42,
+            "overlapping": 6,
+            "end_of_period": 1
+          },
+          "median_entry_volume_shares": 3702800,
+          "portfolio_drawdown_pct": 33.15650962111108,
+          "total_net_pct": -3.316011679795694,
+          "months_tested": 60,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.1857015281784418,
+          "trades": [
+            {
+              "weather_day": "2021-01-28",
+              "hdd_anomaly": 9.1956,
+              "entered": "2021-02-02",
+              "exited": "2021-02-04",
+              "return_net": -0.0093923914
+            },
+            {
+              "weather_day": "2021-02-07",
+              "hdd_anomaly": 12.9,
+              "entered": "2021-02-10",
+              "exited": "2021-02-12",
+              "return_net": 0.0121824726
+            },
+            {
+              "weather_day": "2021-02-12",
+              "hdd_anomaly": 9.5311,
+              "entered": "2021-02-17",
+              "exited": "2021-02-19",
+              "return_net": 0.0042030748
+            },
+            {
+              "weather_day": "2021-03-02",
+              "hdd_anomaly": 8.9467,
+              "entered": "2021-03-05",
+              "exited": "2021-03-09",
+              "return_net": -0.0321193164
+            },
+            {
+              "weather_day": "2021-11-04",
+              "hdd_anomaly": 8.4311,
+              "entered": "2021-11-09",
+              "exited": "2021-11-11",
+              "return_net": 0.0010978607
+            },
+            {
+              "weather_day": "2022-01-07",
+              "hdd_anomaly": 12.5422,
+              "entered": "2022-01-11",
+              "exited": "2022-01-13",
+              "return_net": 0.0502569803
+            },
+            {
+              "weather_day": "2022-01-11",
+              "hdd_anomaly": 9.46,
+              "entered": "2022-01-14",
+              "exited": "2022-01-19",
+              "return_net": -0.0394190396
+            },
+            {
+              "weather_day": "2022-01-21",
+              "hdd_anomaly": 14.4489,
+              "entered": "2022-01-25",
+              "exited": "2022-01-27",
+              "return_net": 0.1233853495
+            },
+            {
+              "weather_day": "2022-01-26",
+              "hdd_anomaly": 12.9689,
+              "entered": "2022-01-31",
+              "exited": "2022-02-02",
+              "return_net": 0.1170687266
+            },
+            {
+              "weather_day": "2022-02-05",
+              "hdd_anomaly": 12.2556,
+              "entered": "2022-02-08",
+              "exited": "2022-02-10",
+              "return_net": -0.0822801449
+            },
+            {
+              "weather_day": "2022-02-14",
+              "hdd_anomaly": 10.3111,
+              "entered": "2022-02-17",
+              "exited": "2022-02-22",
+              "return_net": -0.0124487493
+            },
+            {
+              "weather_day": "2022-02-19",
+              "hdd_anomaly": 10.8711,
+              "entered": "2022-02-23",
+              "exited": "2022-02-25",
+              "return_net": -0.0148275732
+            },
+            {
+              "weather_day": "2022-02-26",
+              "hdd_anomaly": 9.0133,
+              "entered": "2022-03-01",
+              "exited": "2022-03-03",
+              "return_net": 0.0560250871
+            },
+            {
+              "weather_day": "2022-03-12",
+              "hdd_anomaly": 13.0756,
+              "entered": "2022-03-15",
+              "exited": "2022-03-17",
+              "return_net": 0.095380672
+            },
+            {
+              "weather_day": "2022-03-27",
+              "hdd_anomaly": 9.8044,
+              "entered": "2022-03-30",
+              "exited": "2022-04-01",
+              "return_net": 0.0458309542
+            },
+            {
+              "weather_day": "2022-11-18",
+              "hdd_anomaly": 8.8644,
+              "entered": "2022-11-22",
+              "exited": "2022-11-25",
+              "return_net": 0.0468085976
+            },
+            {
+              "weather_day": "2022-12-18",
+              "hdd_anomaly": 9.9844,
+              "entered": "2022-12-21",
+              "exited": "2022-12-23",
+              "return_net": -0.0729198849
+            },
+            {
+              "weather_day": "2022-12-23",
+              "hdd_anomaly": 20.1578,
+              "entered": "2022-12-28",
+              "exited": "2022-12-30",
+              "return_net": -0.0507924823
+            },
+            {
+              "weather_day": "2023-02-03",
+              "hdd_anomaly": 11.7867,
+              "entered": "2023-02-07",
+              "exited": "2023-02-09",
+              "return_net": -0.0217405787
+            },
+            {
+              "weather_day": "2023-03-14",
+              "hdd_anomaly": 11.5822,
+              "entered": "2023-03-17",
+              "exited": "2023-03-21",
+              "return_net": -0.0330181989
+            },
+            {
+              "weather_day": "2023-11-28",
+              "hdd_anomaly": 11.1667,
+              "entered": "2023-12-01",
+              "exited": "2023-12-05",
+              "return_net": -0.0231184711
+            },
+            {
+              "weather_day": "2024-01-14",
+              "hdd_anomaly": 11.6133,
+              "entered": "2024-01-17",
+              "exited": "2024-01-19",
+              "return_net": -0.0999265679
+            },
+            {
+              "weather_day": "2024-01-19",
+              "hdd_anomaly": 10.5867,
+              "entered": "2024-01-23",
+              "exited": "2024-01-25",
+              "return_net": 0.0308534025
+            },
+            {
+              "weather_day": "2024-11-29",
+              "hdd_anomaly": 9.0356,
+              "entered": "2024-12-03",
+              "exited": "2024-12-05",
+              "return_net": -0.0235221196
+            },
+            {
+              "weather_day": "2024-12-12",
+              "hdd_anomaly": 12.9178,
+              "entered": "2024-12-17",
+              "exited": "2024-12-19",
+              "return_net": 0.1273031531
+            },
+            {
+              "weather_day": "2024-12-21",
+              "hdd_anomaly": 11.1156,
+              "entered": "2024-12-24",
+              "exited": "2024-12-27",
+              "return_net": -0.0179505599
+            },
+            {
+              "weather_day": "2025-01-04",
+              "hdd_anomaly": 11.3089,
+              "entered": "2025-01-07",
+              "exited": "2025-01-10",
+              "return_net": 0.104983268
+            },
+            {
+              "weather_day": "2025-01-14",
+              "hdd_anomaly": 8.7444,
+              "entered": "2025-01-17",
+              "exited": "2025-01-22",
+              "return_net": -0.000839772
+            },
+            {
+              "weather_day": "2025-02-14",
+              "hdd_anomaly": 8.9467,
+              "entered": "2025-02-19",
+              "exited": "2025-02-21",
+              "return_net": 0.0135218533
+            },
+            {
+              "weather_day": "2025-03-02",
+              "hdd_anomaly": 12.5467,
+              "entered": "2025-03-05",
+              "exited": "2025-03-07",
+              "return_net": 0.0180773079
+            },
+            {
+              "weather_day": "2025-11-10",
+              "hdd_anomaly": 14.6822,
+              "entered": "2025-11-13",
+              "exited": "2025-11-17",
+              "return_net": -0.0429841404
+            },
+            {
+              "weather_day": "2025-11-28",
+              "hdd_anomaly": 8.8111,
+              "entered": "2025-12-02",
+              "exited": "2025-12-04",
+              "return_net": 0.0244810004
+            },
+            {
+              "weather_day": "2025-12-02",
+              "hdd_anomaly": 10.0333,
+              "entered": "2025-12-05",
+              "exited": "2025-12-09",
+              "return_net": -0.1412484414
+            },
+            {
+              "weather_day": "2025-12-07",
+              "hdd_anomaly": 9.6889,
+              "entered": "2025-12-10",
+              "exited": "2025-12-12",
+              "return_net": -0.112456883
+            },
+            {
+              "weather_day": "2025-12-11",
+              "hdd_anomaly": 8.1756,
+              "entered": "2025-12-16",
+              "exited": "2025-12-18",
+              "return_net": -0.0029955067
+            }
+          ]
+        },
+        "2021-22": {
+          "n": 18,
+          "mean_pct": 1.3224455213631783,
+          "t": 0.9237266125060812,
+          "win_pct": 55.55555555555556,
+          "net_mean_pct": 1.3224455213631783,
+          "win_rate_pct": 55.55555555555556,
+          "min_trade_net_pct": -8.22801448877193,
+          "worst_intratrade_close_pct": -8.22801448877193,
+          "frequency_per_year": 9.0,
+          "random_mean_pct": 0.04729240825322024,
+          "random_middle_95_pct": [
+            -2.685901327210569,
+            2.638720405613196
+          ],
+          "random_one_tail_p": 0.18056388722255548,
+          "net_excess_pct_points": 1.275153113109958,
+          "random_draw_attempts": 5517,
+          "filter_counts": {
+            "candidates": 20,
+            "overlapping": 2
+          },
+          "median_entry_volume_shares": 1728225,
+          "portfolio_drawdown_pct": 15.032728233243253,
+          "total_net_pct": 22.89864973435405,
+          "months_tested": 24,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.1857015281784418,
+          "trades": [
+            {
+              "weather_day": "2021-01-28",
+              "hdd_anomaly": 9.1956,
+              "entered": "2021-02-02",
+              "exited": "2021-02-04",
+              "return_net": -0.0093923914
+            },
+            {
+              "weather_day": "2021-02-07",
+              "hdd_anomaly": 12.9,
+              "entered": "2021-02-10",
+              "exited": "2021-02-12",
+              "return_net": 0.0121824726
+            },
+            {
+              "weather_day": "2021-02-12",
+              "hdd_anomaly": 9.5311,
+              "entered": "2021-02-17",
+              "exited": "2021-02-19",
+              "return_net": 0.0042030748
+            },
+            {
+              "weather_day": "2021-03-02",
+              "hdd_anomaly": 8.9467,
+              "entered": "2021-03-05",
+              "exited": "2021-03-09",
+              "return_net": -0.0321193164
+            },
+            {
+              "weather_day": "2021-11-04",
+              "hdd_anomaly": 8.4311,
+              "entered": "2021-11-09",
+              "exited": "2021-11-11",
+              "return_net": 0.0010978607
+            },
+            {
+              "weather_day": "2022-01-07",
+              "hdd_anomaly": 12.5422,
+              "entered": "2022-01-11",
+              "exited": "2022-01-13",
+              "return_net": 0.0502569803
+            },
+            {
+              "weather_day": "2022-01-11",
+              "hdd_anomaly": 9.46,
+              "entered": "2022-01-14",
+              "exited": "2022-01-19",
+              "return_net": -0.0394190396
+            },
+            {
+              "weather_day": "2022-01-21",
+              "hdd_anomaly": 14.4489,
+              "entered": "2022-01-25",
+              "exited": "2022-01-27",
+              "return_net": 0.1233853495
+            },
+            {
+              "weather_day": "2022-01-26",
+              "hdd_anomaly": 12.9689,
+              "entered": "2022-01-31",
+              "exited": "2022-02-02",
+              "return_net": 0.1170687266
+            },
+            {
+              "weather_day": "2022-02-05",
+              "hdd_anomaly": 12.2556,
+              "entered": "2022-02-08",
+              "exited": "2022-02-10",
+              "return_net": -0.0822801449
+            },
+            {
+              "weather_day": "2022-02-14",
+              "hdd_anomaly": 10.3111,
+              "entered": "2022-02-17",
+              "exited": "2022-02-22",
+              "return_net": -0.0124487493
+            },
+            {
+              "weather_day": "2022-02-19",
+              "hdd_anomaly": 10.8711,
+              "entered": "2022-02-23",
+              "exited": "2022-02-25",
+              "return_net": -0.0148275732
+            },
+            {
+              "weather_day": "2022-02-26",
+              "hdd_anomaly": 9.0133,
+              "entered": "2022-03-01",
+              "exited": "2022-03-03",
+              "return_net": 0.0560250871
+            },
+            {
+              "weather_day": "2022-03-12",
+              "hdd_anomaly": 13.0756,
+              "entered": "2022-03-15",
+              "exited": "2022-03-17",
+              "return_net": 0.095380672
+            },
+            {
+              "weather_day": "2022-03-27",
+              "hdd_anomaly": 9.8044,
+              "entered": "2022-03-30",
+              "exited": "2022-04-01",
+              "return_net": 0.0458309542
+            },
+            {
+              "weather_day": "2022-11-18",
+              "hdd_anomaly": 8.8644,
+              "entered": "2022-11-22",
+              "exited": "2022-11-25",
+              "return_net": 0.0468085976
+            },
+            {
+              "weather_day": "2022-12-18",
+              "hdd_anomaly": 9.9844,
+              "entered": "2022-12-21",
+              "exited": "2022-12-23",
+              "return_net": -0.0729198849
+            },
+            {
+              "weather_day": "2022-12-23",
+              "hdd_anomaly": 20.1578,
+              "entered": "2022-12-28",
+              "exited": "2022-12-30",
+              "return_net": -0.0507924823
+            }
+          ]
+        },
+        "2023-25": {
+          "n": 17,
+          "mean_pct": -1.1798897316283323,
+          "t": -0.713722383791864,
+          "win_pct": 35.294117647058826,
+          "net_mean_pct": -1.1798897316283323,
+          "win_rate_pct": 35.294117647058826,
+          "min_trade_net_pct": -14.124844138047699,
+          "worst_intratrade_close_pct": -14.124844138047699,
+          "frequency_per_year": 5.666666666666667,
+          "random_mean_pct": 0.12483569062991942,
+          "random_middle_95_pct": [
+            -2.5517728366952377,
+            2.8324842398321457
+          ],
+          "random_one_tail_p": 0.8254349130173965,
+          "net_excess_pct_points": -1.3047254222582518,
+          "random_draw_attempts": 5976,
+          "filter_counts": {
+            "candidates": 22,
+            "overlapping": 4,
+            "end_of_period": 1
+          },
+          "median_entry_volume_shares": 9260500,
+          "portfolio_drawdown_pct": 26.85274926206779,
+          "total_net_pct": -21.330308730659674,
+          "months_tested": 36,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.0960763258127149,
+          "trades": [
+            {
+              "weather_day": "2023-02-03",
+              "hdd_anomaly": 11.7867,
+              "entered": "2023-02-07",
+              "exited": "2023-02-09",
+              "return_net": -0.0217405787
+            },
+            {
+              "weather_day": "2023-03-14",
+              "hdd_anomaly": 11.5822,
+              "entered": "2023-03-17",
+              "exited": "2023-03-21",
+              "return_net": -0.0330181989
+            },
+            {
+              "weather_day": "2023-11-28",
+              "hdd_anomaly": 11.1667,
+              "entered": "2023-12-01",
+              "exited": "2023-12-05",
+              "return_net": -0.0231184711
+            },
+            {
+              "weather_day": "2024-01-14",
+              "hdd_anomaly": 11.6133,
+              "entered": "2024-01-17",
+              "exited": "2024-01-19",
+              "return_net": -0.0999265679
+            },
+            {
+              "weather_day": "2024-01-19",
+              "hdd_anomaly": 10.5867,
+              "entered": "2024-01-23",
+              "exited": "2024-01-25",
+              "return_net": 0.0308534025
+            },
+            {
+              "weather_day": "2024-11-29",
+              "hdd_anomaly": 9.0356,
+              "entered": "2024-12-03",
+              "exited": "2024-12-05",
+              "return_net": -0.0235221196
+            },
+            {
+              "weather_day": "2024-12-12",
+              "hdd_anomaly": 12.9178,
+              "entered": "2024-12-17",
+              "exited": "2024-12-19",
+              "return_net": 0.1273031531
+            },
+            {
+              "weather_day": "2024-12-21",
+              "hdd_anomaly": 11.1156,
+              "entered": "2024-12-24",
+              "exited": "2024-12-27",
+              "return_net": -0.0179505599
+            },
+            {
+              "weather_day": "2025-01-04",
+              "hdd_anomaly": 11.3089,
+              "entered": "2025-01-07",
+              "exited": "2025-01-10",
+              "return_net": 0.104983268
+            },
+            {
+              "weather_day": "2025-01-14",
+              "hdd_anomaly": 8.7444,
+              "entered": "2025-01-17",
+              "exited": "2025-01-22",
+              "return_net": -0.000839772
+            },
+            {
+              "weather_day": "2025-02-14",
+              "hdd_anomaly": 8.9467,
+              "entered": "2025-02-19",
+              "exited": "2025-02-21",
+              "return_net": 0.0135218533
+            },
+            {
+              "weather_day": "2025-03-02",
+              "hdd_anomaly": 12.5467,
+              "entered": "2025-03-05",
+              "exited": "2025-03-07",
+              "return_net": 0.0180773079
+            },
+            {
+              "weather_day": "2025-11-10",
+              "hdd_anomaly": 14.6822,
+              "entered": "2025-11-13",
+              "exited": "2025-11-17",
+              "return_net": -0.0429841404
+            },
+            {
+              "weather_day": "2025-11-28",
+              "hdd_anomaly": 8.8111,
+              "entered": "2025-12-02",
+              "exited": "2025-12-04",
+              "return_net": 0.0244810004
+            },
+            {
+              "weather_day": "2025-12-02",
+              "hdd_anomaly": 10.0333,
+              "entered": "2025-12-05",
+              "exited": "2025-12-09",
+              "return_net": -0.1412484414
+            },
+            {
+              "weather_day": "2025-12-07",
+              "hdd_anomaly": 9.6889,
+              "entered": "2025-12-10",
+              "exited": "2025-12-12",
+              "return_net": -0.112456883
+            },
+            {
+              "weather_day": "2025-12-11",
+              "hdd_anomaly": 8.1756,
+              "entered": "2025-12-16",
+              "exited": "2025-12-18",
+              "return_net": -0.0029955067
+            }
+          ]
+        }
+      }
+    },
+    "transfer": {
+      "symbol": "UNL",
+      "cost_per_side": 0.0015,
+      "extra_session_lag": 0,
+      "periods": {
+        "reference": {
+          "n": 50,
+          "mean_pct": -0.11910363231476473,
+          "t": -0.31968651289345706,
+          "win_pct": 46.0,
+          "net_mean_pct": -0.11910363231476473,
+          "win_rate_pct": 46.0,
+          "min_trade_net_pct": -5.1562796228939,
+          "worst_intratrade_close_pct": -6.14279504207863,
+          "frequency_per_year": 7.142857142857143,
+          "random_mean_pct": -0.39450602427360504,
+          "random_middle_95_pct": [
+            -1.1453145022991902,
+            0.3490570627035794
+          ],
+          "random_one_tail_p": 0.23475304939012198,
+          "net_excess_pct_points": 0.2754023919588403,
+          "random_draw_attempts": 9352,
+          "filter_counts": {
+            "candidates": 56,
+            "overlapping": 6,
+            "same_entry": 1
+          },
+          "median_entry_volume_shares": 7900,
+          "portfolio_drawdown_pct": 15.950488546803765,
+          "total_net_pct": -7.349960994874305,
+          "months_tested": 84,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.1515324878982094,
+          "trades": [
+            {
+              "weather_day": "2014-01-02",
+              "hdd_anomaly": 9.7022,
+              "entered": "2014-01-06",
+              "exited": "2014-01-08",
+              "return_net": -0.033466942
+            },
+            {
+              "weather_day": "2014-01-21",
+              "hdd_anomaly": 10.9089,
+              "entered": "2014-01-23",
+              "exited": "2014-01-27",
+              "return_net": -0.0123424393
+            },
+            {
+              "weather_day": "2014-01-28",
+              "hdd_anomaly": 20.8267,
+              "entered": "2014-01-30",
+              "exited": "2014-02-03",
+              "return_net": 0.0050529579
+            },
+            {
+              "weather_day": "2014-02-06",
+              "hdd_anomaly": 12.1978,
+              "entered": "2014-02-10",
+              "exited": "2014-02-12",
+              "return_net": 0.0079660276
+            },
+            {
+              "weather_day": "2014-02-15",
+              "hdd_anomaly": 8.3222,
+              "entered": "2014-02-18",
+              "exited": "2014-02-20",
+              "return_net": 0.0023256576
+            },
+            {
+              "weather_day": "2014-02-26",
+              "hdd_anomaly": 13.5822,
+              "entered": "2014-02-28",
+              "exited": "2014-03-04",
+              "return_net": -0.0059422919
+            },
+            {
+              "weather_day": "2014-03-03",
+              "hdd_anomaly": 15.2511,
+              "entered": "2014-03-05",
+              "exited": "2014-03-07",
+              "return_net": 0.000457829
+            },
+            {
+              "weather_day": "2014-03-13",
+              "hdd_anomaly": 17.2156,
+              "entered": "2014-03-17",
+              "exited": "2014-03-19",
+              "return_net": -0.0119551227
+            },
+            {
+              "weather_day": "2014-03-23",
+              "hdd_anomaly": 10.0156,
+              "entered": "2014-03-25",
+              "exited": "2014-03-27",
+              "return_net": 0.0239781054
+            },
+            {
+              "weather_day": "2014-11-01",
+              "hdd_anomaly": 10.2533,
+              "entered": "2014-11-03",
+              "exited": "2014-11-05",
+              "return_net": 0.0193769365
+            },
+            {
+              "weather_day": "2014-11-13",
+              "hdd_anomaly": 13.0444,
+              "entered": "2014-11-17",
+              "exited": "2014-11-19",
+              "return_net": 0.0122647925
+            },
+            {
+              "weather_day": "2014-11-27",
+              "hdd_anomaly": 11.9444,
+              "entered": "2014-12-01",
+              "exited": "2014-12-03",
+              "return_net": -0.0399432711
+            },
+            {
+              "weather_day": "2015-01-06",
+              "hdd_anomaly": 11.1867,
+              "entered": "2015-01-08",
+              "exited": "2015-01-12",
+              "return_net": -0.0090015523
+            },
+            {
+              "weather_day": "2015-01-14",
+              "hdd_anomaly": 9.5867,
+              "entered": "2015-01-16",
+              "exited": "2015-01-21",
+              "return_net": -0.0122999357
+            },
+            {
+              "weather_day": "2015-02-03",
+              "hdd_anomaly": 9.4689,
+              "entered": "2015-02-05",
+              "exited": "2015-02-09",
+              "return_net": 0.0056535587
+            },
+            {
+              "weather_day": "2015-02-13",
+              "hdd_anomaly": 13.3156,
+              "entered": "2015-02-17",
+              "exited": "2015-02-19",
+              "return_net": 0.0052318115
+            },
+            {
+              "weather_day": "2015-02-23",
+              "hdd_anomaly": 15.8867,
+              "entered": "2015-02-25",
+              "exited": "2015-02-27",
+              "return_net": -0.0504718846
+            },
+            {
+              "weather_day": "2015-03-05",
+              "hdd_anomaly": 12.52,
+              "entered": "2015-03-09",
+              "exited": "2015-03-11",
+              "return_net": 0.0255564705
+            },
+            {
+              "weather_day": "2015-03-28",
+              "hdd_anomaly": 13.3089,
+              "entered": "2015-03-30",
+              "exited": "2015-04-01",
+              "return_net": -0.0171820813
+            },
+            {
+              "weather_day": "2016-01-18",
+              "hdd_anomaly": 13.9733,
+              "entered": "2016-01-20",
+              "exited": "2016-01-22",
+              "return_net": 0.0175724015
+            },
+            {
+              "weather_day": "2016-02-13",
+              "hdd_anomaly": 14.0311,
+              "entered": "2016-02-16",
+              "exited": "2016-02-18",
+              "return_net": -0.0227037431
+            },
+            {
+              "weather_day": "2016-12-08",
+              "hdd_anomaly": 9.6844,
+              "entered": "2016-12-12",
+              "exited": "2016-12-14",
+              "return_net": 0.009556739
+            },
+            {
+              "weather_day": "2016-12-14",
+              "hdd_anomaly": 9.0267,
+              "entered": "2016-12-16",
+              "exited": "2016-12-20",
+              "return_net": -0.0167157176
+            },
+            {
+              "weather_day": "2017-01-06",
+              "hdd_anomaly": 10.0289,
+              "entered": "2017-01-09",
+              "exited": "2017-01-11",
+              "return_net": 0.0429317194
+            },
+            {
+              "weather_day": "2017-03-11",
+              "hdd_anomaly": 14.0667,
+              "entered": "2017-03-13",
+              "exited": "2017-03-15",
+              "return_net": -0.0307698842
+            },
+            {
+              "weather_day": "2017-11-10",
+              "hdd_anomaly": 11.2556,
+              "entered": "2017-11-13",
+              "exited": "2017-11-15",
+              "return_net": -0.0265699756
+            },
+            {
+              "weather_day": "2017-12-08",
+              "hdd_anomaly": 8.4133,
+              "entered": "2017-12-11",
+              "exited": "2017-12-13",
+              "return_net": -0.0041156554
+            },
+            {
+              "weather_day": "2017-12-13",
+              "hdd_anomaly": 8.3756,
+              "entered": "2017-12-15",
+              "exited": "2017-12-19",
+              "return_net": -0.0063637351
+            },
+            {
+              "weather_day": "2017-12-25",
+              "hdd_anomaly": 12.9889,
+              "entered": "2017-12-27",
+              "exited": "2017-12-29",
+              "return_net": 0.0330137593
+            },
+            {
+              "weather_day": "2018-01-13",
+              "hdd_anomaly": 8.24,
+              "entered": "2018-01-16",
+              "exited": "2018-01-18",
+              "return_net": 0.0087590648
+            },
+            {
+              "weather_day": "2018-01-17",
+              "hdd_anomaly": 15.1844,
+              "entered": "2018-01-19",
+              "exited": "2018-01-23",
+              "return_net": 0.0139207776
+            },
+            {
+              "weather_day": "2018-03-13",
+              "hdd_anomaly": 8.8111,
+              "entered": "2018-03-15",
+              "exited": "2018-03-19",
+              "return_net": -0.0083847408
+            },
+            {
+              "weather_day": "2018-11-10",
+              "hdd_anomaly": 12.7356,
+              "entered": "2018-11-12",
+              "exited": "2018-11-14",
+              "return_net": 0.1008988571
+            },
+            {
+              "weather_day": "2018-11-22",
+              "hdd_anomaly": 8.8911,
+              "entered": "2018-11-26",
+              "exited": "2018-11-28",
+              "return_net": 0.0495260662
+            },
+            {
+              "weather_day": "2018-11-27",
+              "hdd_anomaly": 10.5533,
+              "entered": "2018-11-29",
+              "exited": "2018-12-03",
+              "return_net": -0.0143948647
+            },
+            {
+              "weather_day": "2018-12-05",
+              "hdd_anomaly": 9.6067,
+              "entered": "2018-12-07",
+              "exited": "2018-12-11",
+              "return_net": -0.002134516
+            },
+            {
+              "weather_day": "2019-01-20",
+              "hdd_anomaly": 8.9978,
+              "entered": "2019-01-22",
+              "exited": "2019-01-24",
+              "return_net": 0.0042952828
+            },
+            {
+              "weather_day": "2019-01-25",
+              "hdd_anomaly": 10.9467,
+              "entered": "2019-01-28",
+              "exited": "2019-01-30",
+              "return_net": -0.0066375289
+            },
+            {
+              "weather_day": "2019-01-29",
+              "hdd_anomaly": 10.1244,
+              "entered": "2019-01-31",
+              "exited": "2019-02-04",
+              "return_net": -0.0515627962
+            },
+            {
+              "weather_day": "2019-03-04",
+              "hdd_anomaly": 15.7244,
+              "entered": "2019-03-06",
+              "exited": "2019-03-08",
+              "return_net": 0.0061261654
+            },
+            {
+              "weather_day": "2019-11-01",
+              "hdd_anomaly": 8.7156,
+              "entered": "2019-11-04",
+              "exited": "2019-11-06",
+              "return_net": 0.033119907
+            },
+            {
+              "weather_day": "2019-11-08",
+              "hdd_anomaly": 14.06,
+              "entered": "2019-11-11",
+              "exited": "2019-11-13",
+              "return_net": 0.0057024521
+            },
+            {
+              "weather_day": "2019-11-12",
+              "hdd_anomaly": 15.7756,
+              "entered": "2019-11-14",
+              "exited": "2019-11-18",
+              "return_net": -0.0160709636
+            },
+            {
+              "weather_day": "2019-12-18",
+              "hdd_anomaly": 12.3067,
+              "entered": "2019-12-20",
+              "exited": "2019-12-24",
+              "return_net": -0.0252814403
+            },
+            {
+              "weather_day": "2020-01-20",
+              "hdd_anomaly": 8.4289,
+              "entered": "2020-01-22",
+              "exited": "2020-01-24",
+              "return_net": -0.0131820054
+            },
+            {
+              "weather_day": "2020-02-14",
+              "hdd_anomaly": 11.0244,
+              "entered": "2020-02-18",
+              "exited": "2020-02-20",
+              "return_net": -0.0119430047
+            },
+            {
+              "weather_day": "2020-02-20",
+              "hdd_anomaly": 8.6333,
+              "entered": "2020-02-24",
+              "exited": "2020-02-26",
+              "return_net": -0.0108873554
+            },
+            {
+              "weather_day": "2020-11-02",
+              "hdd_anomaly": 10.0556,
+              "entered": "2020-11-04",
+              "exited": "2020-11-06",
+              "return_net": -0.0304674756
+            },
+            {
+              "weather_day": "2020-12-17",
+              "hdd_anomaly": 8.2289,
+              "entered": "2020-12-21",
+              "exited": "2020-12-23",
+              "return_net": -0.0219259836
+            },
+            {
+              "weather_day": "2020-12-25",
+              "hdd_anomaly": 10.6067,
+              "entered": "2020-12-28",
+              "exited": "2020-12-30",
+              "return_net": 0.0198777515
+            }
+          ]
+        },
+        "holdout": {
+          "n": 35,
+          "mean_pct": -0.29278678171634764,
+          "t": -0.4149993212929701,
+          "win_pct": 42.857142857142854,
+          "net_mean_pct": -0.29278678171634764,
+          "win_rate_pct": 42.857142857142854,
+          "min_trade_net_pct": -7.385581341259506,
+          "worst_intratrade_close_pct": -7.385581341259506,
+          "frequency_per_year": 7.0,
+          "random_mean_pct": -0.11051547341220207,
+          "random_middle_95_pct": [
+            -1.32106709337311,
+            1.067828295962483
+          ],
+          "random_one_tail_p": 0.617876424715057,
+          "net_excess_pct_points": -0.18227130830414556,
+          "random_draw_attempts": 6340,
+          "filter_counts": {
+            "candidates": 42,
+            "overlapping": 6,
+            "end_of_period": 1
+          },
+          "median_entry_volume_shares": 55200,
+          "portfolio_drawdown_pct": 20.35378105069563,
+          "total_net_pct": -12.369148987950195,
+          "months_tested": 60,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.139746268211483,
+          "trades": [
+            {
+              "weather_day": "2021-01-28",
+              "hdd_anomaly": 9.1956,
+              "entered": "2021-02-01",
+              "exited": "2021-02-03",
+              "return_net": 0.0128881576
+            },
+            {
+              "weather_day": "2021-02-07",
+              "hdd_anomaly": 12.9,
+              "entered": "2021-02-09",
+              "exited": "2021-02-11",
+              "return_net": -0.0041754207
+            },
+            {
+              "weather_day": "2021-02-12",
+              "hdd_anomaly": 9.5311,
+              "entered": "2021-02-16",
+              "exited": "2021-02-18",
+              "return_net": -0.0265203371
+            },
+            {
+              "weather_day": "2021-03-02",
+              "hdd_anomaly": 8.9467,
+              "entered": "2021-03-04",
+              "exited": "2021-03-08",
+              "return_net": -0.0440486777
+            },
+            {
+              "weather_day": "2021-11-04",
+              "hdd_anomaly": 8.4311,
+              "entered": "2021-11-08",
+              "exited": "2021-11-10",
+              "return_net": -0.0468043435
+            },
+            {
+              "weather_day": "2022-01-07",
+              "hdd_anomaly": 12.5422,
+              "entered": "2022-01-10",
+              "exited": "2022-01-12",
+              "return_net": 0.0923005493
+            },
+            {
+              "weather_day": "2022-01-11",
+              "hdd_anomaly": 9.46,
+              "entered": "2022-01-13",
+              "exited": "2022-01-18",
+              "return_net": -0.0171321068
+            },
+            {
+              "weather_day": "2022-01-21",
+              "hdd_anomaly": 14.4489,
+              "entered": "2022-01-24",
+              "exited": "2022-01-26",
+              "return_net": 0.0540910457
+            },
+            {
+              "weather_day": "2022-01-26",
+              "hdd_anomaly": 12.9689,
+              "entered": "2022-01-28",
+              "exited": "2022-02-01",
+              "return_net": 0.0233480663
+            },
+            {
+              "weather_day": "2022-02-05",
+              "hdd_anomaly": 12.2556,
+              "entered": "2022-02-07",
+              "exited": "2022-02-09",
+              "return_net": -0.0738558134
+            },
+            {
+              "weather_day": "2022-02-14",
+              "hdd_anomaly": 10.3111,
+              "entered": "2022-02-16",
+              "exited": "2022-02-18",
+              "return_net": -0.0147412334
+            },
+            {
+              "weather_day": "2022-02-19",
+              "hdd_anomaly": 10.8711,
+              "entered": "2022-02-22",
+              "exited": "2022-02-24",
+              "return_net": -0.0294703579
+            },
+            {
+              "weather_day": "2022-02-26",
+              "hdd_anomaly": 9.0133,
+              "entered": "2022-02-28",
+              "exited": "2022-03-02",
+              "return_net": 0.0666105893
+            },
+            {
+              "weather_day": "2022-03-12",
+              "hdd_anomaly": 13.0756,
+              "entered": "2022-03-14",
+              "exited": "2022-03-16",
+              "return_net": -0.0003889616
+            },
+            {
+              "weather_day": "2022-03-27",
+              "hdd_anomaly": 9.8044,
+              "entered": "2022-03-29",
+              "exited": "2022-03-31",
+              "return_net": 0.0314432466
+            },
+            {
+              "weather_day": "2022-11-18",
+              "hdd_anomaly": 8.8644,
+              "entered": "2022-11-21",
+              "exited": "2022-11-23",
+              "return_net": 0.059317312
+            },
+            {
+              "weather_day": "2022-12-18",
+              "hdd_anomaly": 9.9844,
+              "entered": "2022-12-20",
+              "exited": "2022-12-22",
+              "return_net": -0.0605345387
+            },
+            {
+              "weather_day": "2022-12-23",
+              "hdd_anomaly": 20.1578,
+              "entered": "2022-12-27",
+              "exited": "2022-12-29",
+              "return_net": -0.0472218538
+            },
+            {
+              "weather_day": "2023-02-03",
+              "hdd_anomaly": 11.7867,
+              "entered": "2023-02-06",
+              "exited": "2023-02-08",
+              "return_net": 0.0017710061
+            },
+            {
+              "weather_day": "2023-03-14",
+              "hdd_anomaly": 11.5822,
+              "entered": "2023-03-16",
+              "exited": "2023-03-20",
+              "return_net": -0.0480532436
+            },
+            {
+              "weather_day": "2023-11-28",
+              "hdd_anomaly": 11.1667,
+              "entered": "2023-11-30",
+              "exited": "2023-12-04",
+              "return_net": -0.0429988076
+            },
+            {
+              "weather_day": "2024-01-14",
+              "hdd_anomaly": 11.6133,
+              "entered": "2024-01-16",
+              "exited": "2024-01-18",
+              "return_net": -0.0138797732
+            },
+            {
+              "weather_day": "2024-01-19",
+              "hdd_anomaly": 10.5867,
+              "entered": "2024-01-22",
+              "exited": "2024-01-24",
+              "return_net": 0.0492286039
+            },
+            {
+              "weather_day": "2024-11-29",
+              "hdd_anomaly": 9.0356,
+              "entered": "2024-12-02",
+              "exited": "2024-12-04",
+              "return_net": -0.029617765
+            },
+            {
+              "weather_day": "2024-12-12",
+              "hdd_anomaly": 12.9178,
+              "entered": "2024-12-16",
+              "exited": "2024-12-18",
+              "return_net": 0.0146386021
+            },
+            {
+              "weather_day": "2024-12-21",
+              "hdd_anomaly": 11.1156,
+              "entered": "2024-12-23",
+              "exited": "2024-12-26",
+              "return_net": 0.0008688789
+            },
+            {
+              "weather_day": "2025-01-04",
+              "hdd_anomaly": 11.3089,
+              "entered": "2025-01-06",
+              "exited": "2025-01-08",
+              "return_net": 0.0141519152
+            },
+            {
+              "weather_day": "2025-01-14",
+              "hdd_anomaly": 8.7444,
+              "entered": "2025-01-16",
+              "exited": "2025-01-21",
+              "return_net": -0.02750291
+            },
+            {
+              "weather_day": "2025-02-14",
+              "hdd_anomaly": 8.9467,
+              "entered": "2025-02-18",
+              "exited": "2025-02-20",
+              "return_net": 0.0811814588
+            },
+            {
+              "weather_day": "2025-03-02",
+              "hdd_anomaly": 12.5467,
+              "entered": "2025-03-04",
+              "exited": "2025-03-06",
+              "return_net": -0.0162134012
+            },
+            {
+              "weather_day": "2025-11-10",
+              "hdd_anomaly": 14.6822,
+              "entered": "2025-11-12",
+              "exited": "2025-11-14",
+              "return_net": -0.0136776031
+            },
+            {
+              "weather_day": "2025-11-28",
+              "hdd_anomaly": 8.8111,
+              "entered": "2025-12-01",
+              "exited": "2025-12-03",
+              "return_net": 0.0318816062
+            },
+            {
+              "weather_day": "2025-12-02",
+              "hdd_anomaly": 10.0333,
+              "entered": "2025-12-04",
+              "exited": "2025-12-08",
+              "return_net": -0.0355317532
+            },
+            {
+              "weather_day": "2025-12-07",
+              "hdd_anomaly": 9.6889,
+              "entered": "2025-12-09",
+              "exited": "2025-12-11",
+              "return_net": -0.0514525467
+            },
+            {
+              "weather_day": "2025-12-11",
+              "hdd_anomaly": 8.1756,
+              "entered": "2025-12-15",
+              "exited": "2025-12-17",
+              "return_net": 0.0076250367
+            }
+          ]
+        },
+        "2021-22": {
+          "n": 18,
+          "mean_pct": -0.13830376554610874,
+          "t": -0.12306658633654786,
+          "win_pct": 38.88888888888889,
+          "net_mean_pct": -0.13830376554610874,
+          "win_rate_pct": 38.888888888888886,
+          "min_trade_net_pct": -7.385581341259506,
+          "worst_intratrade_close_pct": -7.385581341259506,
+          "frequency_per_year": 9.0,
+          "random_mean_pct": 0.1050817015953609,
+          "random_middle_95_pct": [
+            -1.7481742248821295,
+            1.8096851282725597
+          ],
+          "random_one_tail_p": 0.6122775444911018,
+          "net_excess_pct_points": -0.24338546714146964,
+          "random_draw_attempts": 5452,
+          "filter_counts": {
+            "candidates": 20,
+            "overlapping": 2
+          },
+          "median_entry_volume_shares": 35300,
+          "portfolio_drawdown_pct": 15.0342281801369,
+          "total_net_pct": -4.314415932581916,
+          "months_tested": 24,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.139746268211483,
+          "trades": [
+            {
+              "weather_day": "2021-01-28",
+              "hdd_anomaly": 9.1956,
+              "entered": "2021-02-01",
+              "exited": "2021-02-03",
+              "return_net": 0.0128881576
+            },
+            {
+              "weather_day": "2021-02-07",
+              "hdd_anomaly": 12.9,
+              "entered": "2021-02-09",
+              "exited": "2021-02-11",
+              "return_net": -0.0041754207
+            },
+            {
+              "weather_day": "2021-02-12",
+              "hdd_anomaly": 9.5311,
+              "entered": "2021-02-16",
+              "exited": "2021-02-18",
+              "return_net": -0.0265203371
+            },
+            {
+              "weather_day": "2021-03-02",
+              "hdd_anomaly": 8.9467,
+              "entered": "2021-03-04",
+              "exited": "2021-03-08",
+              "return_net": -0.0440486777
+            },
+            {
+              "weather_day": "2021-11-04",
+              "hdd_anomaly": 8.4311,
+              "entered": "2021-11-08",
+              "exited": "2021-11-10",
+              "return_net": -0.0468043435
+            },
+            {
+              "weather_day": "2022-01-07",
+              "hdd_anomaly": 12.5422,
+              "entered": "2022-01-10",
+              "exited": "2022-01-12",
+              "return_net": 0.0923005493
+            },
+            {
+              "weather_day": "2022-01-11",
+              "hdd_anomaly": 9.46,
+              "entered": "2022-01-13",
+              "exited": "2022-01-18",
+              "return_net": -0.0171321068
+            },
+            {
+              "weather_day": "2022-01-21",
+              "hdd_anomaly": 14.4489,
+              "entered": "2022-01-24",
+              "exited": "2022-01-26",
+              "return_net": 0.0540910457
+            },
+            {
+              "weather_day": "2022-01-26",
+              "hdd_anomaly": 12.9689,
+              "entered": "2022-01-28",
+              "exited": "2022-02-01",
+              "return_net": 0.0233480663
+            },
+            {
+              "weather_day": "2022-02-05",
+              "hdd_anomaly": 12.2556,
+              "entered": "2022-02-07",
+              "exited": "2022-02-09",
+              "return_net": -0.0738558134
+            },
+            {
+              "weather_day": "2022-02-14",
+              "hdd_anomaly": 10.3111,
+              "entered": "2022-02-16",
+              "exited": "2022-02-18",
+              "return_net": -0.0147412334
+            },
+            {
+              "weather_day": "2022-02-19",
+              "hdd_anomaly": 10.8711,
+              "entered": "2022-02-22",
+              "exited": "2022-02-24",
+              "return_net": -0.0294703579
+            },
+            {
+              "weather_day": "2022-02-26",
+              "hdd_anomaly": 9.0133,
+              "entered": "2022-02-28",
+              "exited": "2022-03-02",
+              "return_net": 0.0666105893
+            },
+            {
+              "weather_day": "2022-03-12",
+              "hdd_anomaly": 13.0756,
+              "entered": "2022-03-14",
+              "exited": "2022-03-16",
+              "return_net": -0.0003889616
+            },
+            {
+              "weather_day": "2022-03-27",
+              "hdd_anomaly": 9.8044,
+              "entered": "2022-03-29",
+              "exited": "2022-03-31",
+              "return_net": 0.0314432466
+            },
+            {
+              "weather_day": "2022-11-18",
+              "hdd_anomaly": 8.8644,
+              "entered": "2022-11-21",
+              "exited": "2022-11-23",
+              "return_net": 0.059317312
+            },
+            {
+              "weather_day": "2022-12-18",
+              "hdd_anomaly": 9.9844,
+              "entered": "2022-12-20",
+              "exited": "2022-12-22",
+              "return_net": -0.0605345387
+            },
+            {
+              "weather_day": "2022-12-23",
+              "hdd_anomaly": 20.1578,
+              "entered": "2022-12-27",
+              "exited": "2022-12-29",
+              "return_net": -0.0472218538
+            }
+          ]
+        },
+        "2023-25": {
+          "n": 17,
+          "mean_pct": -0.4563570341318947,
+          "t": -0.5257076387238037,
+          "win_pct": 47.05882352941176,
+          "net_mean_pct": -0.4563570341318947,
+          "win_rate_pct": 47.05882352941177,
+          "min_trade_net_pct": -5.14525467348943,
+          "worst_intratrade_close_pct": -5.14525467348943,
+          "frequency_per_year": 5.666666666666667,
+          "random_mean_pct": -0.2703066167672692,
+          "random_middle_95_pct": [
+            -1.8181806031133148,
+            1.2132113824257698
+          ],
+          "random_one_tail_p": 0.5972805438912218,
+          "net_excess_pct_points": -0.18605041736462552,
+          "random_draw_attempts": 5720,
+          "filter_counts": {
+            "candidates": 22,
+            "overlapping": 4,
+            "end_of_period": 1
+          },
+          "median_entry_volume_shares": 63300,
+          "portfolio_drawdown_pct": 14.407741424175825,
+          "total_net_pct": -8.417917007950827,
+          "months_tested": 36,
+          "months_touched_6x_close": 0,
+          "best_monthly_close_multiple": 1.1028932222623913,
+          "trades": [
+            {
+              "weather_day": "2023-02-03",
+              "hdd_anomaly": 11.7867,
+              "entered": "2023-02-06",
+              "exited": "2023-02-08",
+              "return_net": 0.0017710061
+            },
+            {
+              "weather_day": "2023-03-14",
+              "hdd_anomaly": 11.5822,
+              "entered": "2023-03-16",
+              "exited": "2023-03-20",
+              "return_net": -0.0480532436
+            },
+            {
+              "weather_day": "2023-11-28",
+              "hdd_anomaly": 11.1667,
+              "entered": "2023-11-30",
+              "exited": "2023-12-04",
+              "return_net": -0.0429988076
+            },
+            {
+              "weather_day": "2024-01-14",
+              "hdd_anomaly": 11.6133,
+              "entered": "2024-01-16",
+              "exited": "2024-01-18",
+              "return_net": -0.0138797732
+            },
+            {
+              "weather_day": "2024-01-19",
+              "hdd_anomaly": 10.5867,
+              "entered": "2024-01-22",
+              "exited": "2024-01-24",
+              "return_net": 0.0492286039
+            },
+            {
+              "weather_day": "2024-11-29",
+              "hdd_anomaly": 9.0356,
+              "entered": "2024-12-02",
+              "exited": "2024-12-04",
+              "return_net": -0.029617765
+            },
+            {
+              "weather_day": "2024-12-12",
+              "hdd_anomaly": 12.9178,
+              "entered": "2024-12-16",
+              "exited": "2024-12-18",
+              "return_net": 0.0146386021
+            },
+            {
+              "weather_day": "2024-12-21",
+              "hdd_anomaly": 11.1156,
+              "entered": "2024-12-23",
+              "exited": "2024-12-26",
+              "return_net": 0.0008688789
+            },
+            {
+              "weather_day": "2025-01-04",
+              "hdd_anomaly": 11.3089,
+              "entered": "2025-01-06",
+              "exited": "2025-01-08",
+              "return_net": 0.0141519152
+            },
+            {
+              "weather_day": "2025-01-14",
+              "hdd_anomaly": 8.7444,
+              "entered": "2025-01-16",
+              "exited": "2025-01-21",
+              "return_net": -0.02750291
+            },
+            {
+              "weather_day": "2025-02-14",
+              "hdd_anomaly": 8.9467,
+              "entered": "2025-02-18",
+              "exited": "2025-02-20",
+              "return_net": 0.0811814588
+            },
+            {
+              "weather_day": "2025-03-02",
+              "hdd_anomaly": 12.5467,
+              "entered": "2025-03-04",
+              "exited": "2025-03-06",
+              "return_net": -0.0162134012
+            },
+            {
+              "weather_day": "2025-11-10",
+              "hdd_anomaly": 14.6822,
+              "entered": "2025-11-12",
+              "exited": "2025-11-14",
+              "return_net": -0.0136776031
+            },
+            {
+              "weather_day": "2025-11-28",
+              "hdd_anomaly": 8.8111,
+              "entered": "2025-12-01",
+              "exited": "2025-12-03",
+              "return_net": 0.0318816062
+            },
+            {
+              "weather_day": "2025-12-02",
+              "hdd_anomaly": 10.0333,
+              "entered": "2025-12-04",
+              "exited": "2025-12-08",
+              "return_net": -0.0355317532
+            },
+            {
+              "weather_day": "2025-12-07",
+              "hdd_anomaly": 9.6889,
+              "entered": "2025-12-09",
+              "exited": "2025-12-11",
+              "return_net": -0.0514525467
+            },
+            {
+              "weather_day": "2025-12-11",
+              "hdd_anomaly": 8.1756,
+              "entered": "2025-12-15",
+              "exited": "2025-12-17",
+              "return_net": 0.0076250367
+            }
+          ]
+        }
+      }
+    }
+  },
+  "passing_gates": {
+    "positive_and_beats_random_in_all_holdout_slices": false,
+    "holdout_random_p_le_0_01": false,
+    "robust_positive_and_beats_random": {
+      "expensive": false,
+      "late": true,
+      "transfer": false
+    },
+    "verified_point_in_time_weather_delivery": false
+  }
+}

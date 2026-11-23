@@ -1,0 +1,11 @@
+[Unit]
+Description=TradeLab DVOL forward test snapshots, Mondays 09:00 and 09:05 UTC, 2026-11-30 to 2027-02-22
+
+[Timer]
+OnCalendar=Mon *-*-* 09:00:00 UTC
+OnCalendar=Mon *-*-* 09:05:00 UTC
+AccuracySec=1s
+Persistent=false
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,444 @@
+{
+  "original_input_sha256": "810b3259cd8ab15968abae74fa2cf33b27c837b8ed3d4947196c2dd35e6fcd99",
+  "audit_input_sha256": "33cb0a113f31b711b46ccf01ca7275fde5bea3c62a5b7942648c8bec7fff4b07",
+  "audit_fetched_utc": "2026-11-23T13:12:29.952447+00:00",
+  "source_match": {
+    "stored_bars": 919,
+    "mismatched_bars": [],
+    "missing_hours_that_are_zero_volume_bars": 137,
+    "missing_hours_absent_from_api": 0
+  },
+  "removal_check": {
+    "assumed": "08:00 UTC on STOP day",
+    "last_traded_hour_offset_vs_removal": {
+      "AFC": -1,
+      "AGI": -1,
+      "AO": -1,
+      "ARTY": -1,
+      "CAMP": -1,
+      "CBK": -1,
+      "CMETH": -1,
+      "CTA": -1,
+      "CUDIS": -1,
+      "ELIZAOS": -1,
+      "FLIP": -1,
+      "FUEL": -1,
+      "GODS": -1,
+      "GTAI": -1,
+      "HFT": -1,
+      "HPOS10I": 0,
+      "ICX": -1,
+      "INTER": -1,
+      "L3": -1,
+      "LBTC": -1,
+      "MBOX": -1,
+      "NAKA": -1,
+      "NEON": -1,
+      "OL": -1,
+      "PAAL": -1,
+      "PIRATE": -1,
+      "PRCL": -1,
+      "PUMPBTC": -1,
+      "SAROS": -1,
+      "SCA": -1,
+      "SCOR": -1,
+      "SCRT": -1,
+      "STREAM": -1,
+      "SUNDOG": -1,
+      "SVL": -1,
+      "TAC": -1,
+      "TAI": -1,
+      "TOKEN": -1,
+      "TUSD": -1,
+      "U": -1,
+      "VIC": -1,
+      "WHITEWHALE": -1,
+      "XAVA": -1,
+      "XTER": -1
+    },
+    "pairs_last_trade_in_07_utc_bar": 43,
+    "pairs_trading_at_or_after_removal": {
+      "HPOS10I": 0
+    }
+  },
+  "notice_timing": {
+    "art406557a5a84a": {
+      "publish_utc": "2026-07-28 08:00",
+      "entry_utc": "2026-08-03 08:00",
+      "removal_utc": "2026-08-04 08:00",
+      "hours_notice_to_entry": 143.9975
+    },
+    "art1b7b7449b6c5": {
+      "publish_utc": "2026-10-01 08:30",
+      "entry_utc": "2026-10-07 08:00",
+      "removal_utc": "2026-10-08 08:00",
+      "hours_notice_to_entry": 143.49777777777777
+    },
+    "art81c9cb138ade": {
+      "publish_utc": "2026-07-09 08:00",
+      "entry_utc": "2026-07-15 08:00",
+      "removal_utc": "2026-07-16 08:00",
+      "hours_notice_to_entry": 143.9975
+    },
+    "art29ea635c889e": {
+      "publish_utc": "2026-08-17 08:00",
+      "entry_utc": "2026-08-24 08:00",
+      "removal_utc": "2026-08-25 08:00",
+      "hours_notice_to_entry": 167.9975
+    },
+    "artc357601e1303": {
+      "publish_utc": "2026-07-16 11:30",
+      "entry_utc": "2026-07-22 08:00",
+      "removal_utc": "2026-07-23 08:00",
+      "hours_notice_to_entry": 140.4975
+    },
+    "bltdbc6fb605a3bb8c6": {
+      "publish_utc": "2026-05-12 09:54",
+      "entry_utc": "2026-05-18 08:00",
+      "removal_utc": "2026-05-19 08:00",
+      "hours_notice_to_entry": 142.0986111111111
+    },
+    "art2489b2a8c89e": {
+      "publish_utc": "2026-08-20 11:00",
+      "entry_utc": "2026-08-26 08:00",
+      "removal_utc": "2026-08-27 08:00",
+      "hours_notice_to_entry": 140.9975
+    },
+    "art74f3fc794bf8": {
+      "publish_utc": "2026-08-28 08:50",
+      "entry_utc": "2026-09-03 08:00",
+      "removal_utc": "2026-09-04 08:00",
+      "hours_notice_to_entry": 143.16444444444446
+    },
+    "art0d9083316016": {
+      "publish_utc": "2026-10-21 11:00",
+      "entry_utc": "2026-10-27 08:00",
+      "removal_utc": "2026-10-28 08:00",
+      "hours_notice_to_entry": 140.99777777777777
+    },
+    "art1a1071a0dd4e": {
+      "publish_utc": "2026-09-17 09:30",
+      "entry_utc": "2026-09-23 08:00",
+      "removal_utc": "2026-09-24 08:00",
+      "hours_notice_to_entry": 142.4975
+    },
+    "art6d24cb99655a": {
+      "publish_utc": "2026-09-10 08:10",
+      "entry_utc": "2026-09-16 08:00",
+      "removal_utc": "2026-09-17 08:00",
+      "hours_notice_to_entry": 143.8311111111111
+    }
+  },
+  "neon": {
+    "signal_open_utc": "2026-09-22 20:00",
+    "signal_open": 0.01435,
+    "signal_close_utc": "2026-09-23 07:59",
+    "signal_close": 0.04854,
+    "signal_return": 2.3825783972125434,
+    "entry_open": 0.04854,
+    "exit_close": 0.056,
+    "hourly_equals_15m_aggregate": "24/24",
+    "entry_hour_turnover_usdt": 16479.2812646,
+    "exit_hour_turnover_usdt": 20734.8696033,
+    "position_share_of_entry_hour_turnover": 0.008920291949611804,
+    "note": "turnover is quote-volume in USDT from the kline; no order-book depth at the entry time"
+  },
+  "random_events": [
+    {
+      "entry_utc": "2026-07-22 08:00",
+      "menu": [
+        "CBK",
+        "FLIP",
+        "FUEL",
+        "OL",
+        "SAROS"
+      ],
+      "unverified": [
+        "CBK",
+        "SAROS"
+      ]
+    },
+    {
+      "entry_utc": "2026-09-23 08:00",
+      "menu": [
+        "ICX",
+        "NEON",
+        "SUNDOG",
+        "TAC"
+      ],
+      "unverified": []
+    }
+  ],
+  "base": {
+    "strategy_ending_thb": 5249.8247754343165,
+    "combinations": 20,
+    "share_paths_with_missing_hold_hour": 0.4,
+    "drop": {
+      "paths": 12,
+      "median_thb": 4486.352955997254,
+      "share_at_or_above_strategy": 0.25
+    },
+    "carry": {
+      "paths": 20,
+      "median_thb": 4632.31751575578,
+      "share_at_or_above_strategy": 0.25
+    },
+    "loss": {
+      "paths": 20,
+      "median_thb": 3511.35289058992,
+      "share_at_or_above_strategy": 0.15
+    }
+  },
+  "higher": {
+    "strategy_ending_thb": 5115.0819648946745,
+    "combinations": 20,
+    "share_paths_with_missing_hold_hour": 0.4,
+    "drop": {
+      "paths": 12,
+      "median_thb": 4371.205530659827,
+      "share_at_or_above_strategy": 0.25
+    },
+    "carry": {
+      "paths": 20,
+      "median_thb": 4513.423741566277,
+      "share_at_or_above_strategy": 0.25
+    },
+    "loss": {
+      "paths": 20,
+      "median_thb": 3421.2299669661616,
+      "share_at_or_above_strategy": 0.15
+    }
+  },
+  "oracle_ceiling": {
+    "months_with_any_event": [
+      "2026-05",
+      "2026-07",
+      "2026-08",
+      "2026-09",
+      "2026-10"
+    ],
+    "months_total": 10,
+    "to_removal": {
+      "best_per_event": {
+        "2026-05-18 08:00": {
+          "symbol": "CMETH",
+          "gross_at_high": 1.0235803969568658,
+          "high_utc": "2026-05-18 14:00",
+          "turnover_usdt_entry_to_high": 23951.3769958,
+          "high_bar_turnover_usdt": 1231.6339956
+        },
+        "2026-07-15 08:00": {
+          "symbol": "CTA",
+          "gross_at_high": 1.2864321608040201,
+          "high_utc": "2026-07-15 13:00",
+          "turnover_usdt_entry_to_high": 2994.42529756,
+          "high_bar_turnover_usdt": 1416.77172595
+        },
+        "2026-07-22 08:00": {
+          "symbol": "SAROS",
+          "gross_at_high": 1.0981280193236715,
+          "high_utc": "2026-07-22 20:00",
+          "turnover_usdt_entry_to_high": 7527.91690063,
+          "high_bar_turnover_usdt": 584.94323917
+        },
+        "2026-08-03 08:00": {
+          "symbol": "AO",
+          "gross_at_high": 3.301944728761515,
+          "high_utc": "2026-08-03 19:00",
+          "turnover_usdt_entry_to_high": 103381.88899,
+          "high_bar_turnover_usdt": 64910.513271
+        },
+        "2026-08-24 08:00": {
+          "symbol": "SVL",
+          "gross_at_high": 1.2312312312312312,
+          "high_utc": "2026-08-24 16:00",
+          "turnover_usdt_entry_to_high": 9102.4107691,
+          "high_bar_turnover_usdt": 1891.18905657
+        },
+        "2026-08-26 08:00": {
+          "symbol": "ELIZAOS",
+          "gross_at_high": 1.1816666666666666,
+          "high_utc": "2026-08-26 22:00",
+          "turnover_usdt_entry_to_high": 408905.02471848,
+          "high_bar_turnover_usdt": 57824.93057382
+        },
+        "2026-09-03 08:00": {
+          "symbol": "GODS",
+          "gross_at_high": 1.2497376705141658,
+          "high_utc": "2026-09-04 07:00",
+          "turnover_usdt_entry_to_high": 8512.7863523,
+          "high_bar_turnover_usdt": 2423.2840497
+        },
+        "2026-09-16 08:00": {
+          "symbol": "L3",
+          "gross_at_high": 1.1529336325745432,
+          "high_utc": "2026-09-16 21:00",
+          "turnover_usdt_entry_to_high": 20999.0835191,
+          "high_bar_turnover_usdt": 511.7141737
+        },
+        "2026-09-23 08:00": {
+          "symbol": "NEON",
+          "gross_at_high": 1.6716110424392254,
+          "high_utc": "2026-09-24 00:00",
+          "turnover_usdt_entry_to_high": 351375.5049205,
+          "high_bar_turnover_usdt": 61616.0079272
+        },
+        "2026-10-07 08:00": {
+          "symbol": "AGI",
+          "gross_at_high": 1.0512736236647493,
+          "high_utc": "2026-10-08 00:00",
+          "turnover_usdt_entry_to_high": 23237.5320076,
+          "high_bar_turnover_usdt": 2308.41637595
+        },
+        "2026-10-27 08:00": {
+          "symbol": "HFT",
+          "gross_at_high": 1.0648094408976592,
+          "high_utc": "2026-10-28 07:00",
+          "turnover_usdt_entry_to_high": 19499.87997823,
+          "high_bar_turnover_usdt": 2154.59615812
+        }
+      },
+      "base": {
+        "monthly": {
+          "2026-01": 1.0,
+          "2026-02": 1.0,
+          "2026-03": 1.0,
+          "2026-04": 1.0,
+          "2026-05": 1.0164403244320048,
+          "2026-06": 1.0,
+          "2026-07": 1.3930275778730923,
+          "2026-08": 4.704182760203271,
+          "2026-09": 2.358512482799573,
+          "2026-10": 1.1038435228700314
+        },
+        "3x_months": 1
+      },
+      "higher": {
+        "monthly": {
+          "2026-01": 1.0,
+          "2026-02": 1.0,
+          "2026-03": 1.0,
+          "2026-04": 1.0,
+          "2026-05": 1.0033114782052446,
+          "2026-06": 1.0,
+          "2026-07": 1.357273917697582,
+          "2026-08": 4.524242444500123,
+          "2026-09": 2.268296710501127,
+          "2026-10": 1.0755121051504402
+        },
+        "3x_months": 1
+      }
+    },
+    "hold_12h": {
+      "best_per_event": {
+        "2026-05-18 08:00": {
+          "symbol": "CMETH",
+          "gross_at_high": 1.0235803969568658,
+          "high_utc": "2026-05-18 14:00",
+          "turnover_usdt_entry_to_high": 23951.3769958,
+          "high_bar_turnover_usdt": 1231.6339956
+        },
+        "2026-07-15 08:00": {
+          "symbol": "CTA",
+          "gross_at_high": 1.2864321608040201,
+          "high_utc": "2026-07-15 13:00",
+          "turnover_usdt_entry_to_high": 2994.42529756,
+          "high_bar_turnover_usdt": 1416.77172595
+        },
+        "2026-07-22 08:00": {
+          "symbol": "SAROS",
+          "gross_at_high": 1.060386473429952,
+          "high_utc": "2026-07-22 18:00",
+          "turnover_usdt_entry_to_high": 6942.97366146,
+          "high_bar_turnover_usdt": 30.71201016
+        },
+        "2026-08-03 08:00": {
+          "symbol": "AO",
+          "gross_at_high": 3.301944728761515,
+          "high_utc": "2026-08-03 19:00",
+          "turnover_usdt_entry_to_high": 103381.88899,
+          "high_bar_turnover_usdt": 64910.513271
+        },
+        "2026-08-24 08:00": {
+          "symbol": "SVL",
+          "gross_at_high": 1.2312312312312312,
+          "high_utc": "2026-08-24 16:00",
+          "turnover_usdt_entry_to_high": 9102.4107691,
+          "high_bar_turnover_usdt": 1891.18905657
+        },
+        "2026-08-26 08:00": {
+          "symbol": "ELIZAOS",
+          "gross_at_high": 1.1688888888888889,
+          "high_utc": "2026-08-26 17:00",
+          "turnover_usdt_entry_to_high": 232478.99195672,
+          "high_bar_turnover_usdt": 50205.2431068
+        },
+        "2026-09-03 08:00": {
+          "symbol": "GODS",
+          "gross_at_high": 1.0503672612801678,
+          "high_utc": "2026-09-03 19:00",
+          "turnover_usdt_entry_to_high": 2730.6308375,
+          "high_bar_turnover_usdt": 0.995
+        },
+        "2026-09-16 08:00": {
+          "symbol": "L3",
+          "gross_at_high": 1.0586726514908624,
+          "high_utc": "2026-09-16 13:00",
+          "turnover_usdt_entry_to_high": 12976.312595200001,
+          "high_bar_turnover_usdt": 1595.4709455
+        },
+        "2026-09-23 08:00": {
+          "symbol": "NEON",
+          "gross_at_high": 1.1536876802637002,
+          "high_utc": "2026-09-23 19:00",
+          "turnover_usdt_entry_to_high": 193452.5326622,
+          "high_bar_turnover_usdt": 20734.8696033
+        },
+        "2026-10-07 08:00": {
+          "symbol": "AGI",
+          "gross_at_high": 1.0428923582580114,
+          "high_utc": "2026-10-07 15:00",
+          "turnover_usdt_entry_to_high": 11522.32382429,
+          "high_bar_turnover_usdt": 5890.99897966
+        },
+        "2026-10-27 08:00": {
+          "symbol": "HFT",
+          "gross_at_high": 1.040820274714645,
+          "high_utc": "2026-10-27 19:00",
+          "turnover_usdt_entry_to_high": 14903.981038470001,
+          "high_bar_turnover_usdt": 2061.03155483
+        }
+      },
+      "base": {
+        "monthly": {
+          "2026-01": 1.0,
+          "2026-02": 1.0,
+          "2026-03": 1.0,
+          "2026-04": 1.0,
+          "2026-05": 1.0164403244320048,
+          "2026-06": 1.0,
+          "2026-07": 1.3451506333489966,
+          "2026-08": 4.653314775490213,
+          "2026-09": 1.2562350449278596,
+          "2026-10": 1.0703728412163562
+        },
+        "3x_months": 1
+      },
+      "higher": {
+        "monthly": {
+          "2026-01": 1.0,
+          "2026-02": 1.0,
+          "2026-03": 1.0,
+          "2026-04": 1.0,
+          "2026-05": 1.0033114782052446,
+          "2026-06": 1.0,
+          "2026-07": 1.3106257901990401,
+          "2026-08": 4.475320217784795,
+          "2026-09": 1.2081826324038383,
+          "2026-10": 1.0429004871626228
+        },
+        "3x_months": 1
+      }
+    }
+  }
+}

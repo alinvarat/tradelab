@@ -1,0 +1,2529 @@
+{
+  "snapshot_sha256": "bb98ac8b5049fce51ee3c187f60b201aad1e9302138146fec542c550db0bed59",
+  "assets": {
+    "BTC": {
+      "historical": {
+        "base": {
+          "summary": {
+            "months": 24,
+            "months_at_6x": 1,
+            "months_remaining_half_or_less": 6,
+            "months_remaining_tenth_or_less": 4,
+            "highest_month_multiple": 8.278495061692606,
+            "lowest_month_multiple": 0.020212947433333333,
+            "median_month_multiple": 1.0,
+            "mean_month_multiple": 1.0660193496005952,
+            "continuous_total_multiple": 0.2229067365624966,
+            "continuous_fills": 1,
+            "status_counts": {
+              "filled_proxy": 10,
+              "no_eligible_trade_within_2h": 14
+            },
+            "continuous_months_at_6x_of_initial_balance": 0,
+            "continuous_crossings_of_6x_initial_balance": 0,
+            "continuous_months_at_6x_of_month_start": 0,
+            "random_direction_draws": 3000,
+            "random_direction_mean_6x_months": 0.5176666666666667,
+            "random_direction_p": 0.5178273908697101
+          },
+          "monthly": [
+            {
+              "month": "2024-01",
+              "instrument": "BTC-26JAN24-34000-P",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1704099928099,
+              "minimum_premium_with_cost_usd": 38.0775699084375,
+              "status": "filled_proxy",
+              "spent_usd": 114.23270972531252,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 39936.59,
+              "side": "P",
+              "contract_units": 0.30000000000000004
+            },
+            {
+              "month": "2024-02",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-23FEB24-51000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-03",
+              "instrument": "BTC-29MAR24-75000-C",
+              "ending": 5.326765388063,
+              "trade_timestamp": 1709285392202,
+              "minimum_premium_with_cost_usd": 141.6732346119375,
+              "status": "filled_proxy",
+              "spent_usd": 141.6732346119375,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 69984.45,
+              "side": "C",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2024-04",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26APR24-84000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-05",
+              "instrument": "BTC-31MAY24-46000-P",
+              "ending": 4.42754221125,
+              "trade_timestamp": 1714560538003,
+              "minimum_premium_with_cost_usd": 71.286228894375,
+              "status": "filled_proxy",
+              "spent_usd": 142.57245778875,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 68201.52,
+              "side": "P",
+              "contract_units": 0.2
+            },
+            {
+              "month": "2024-06",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28JUN24-54000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26JUL24-75000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30AUG24-77000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-09",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27SEP24-47000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-10",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25OCT24-77000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-11",
+              "instrument": "BTC-29NOV24-84000-C",
+              "ending": 1216.938774068813,
+              "trade_timestamp": 1730452783396,
+              "minimum_premium_with_cost_usd": 110.04322102256249,
+              "status": "filled_proxy",
+              "spent_usd": 110.04322102256249,
+              "settled_value_usd": 1179.9819950913754,
+              "settlement_index_usd": 95843.77,
+              "side": "C",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2024-12",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27DEC24-78000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-01",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-31JAN25-75000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-02",
+              "instrument": "BTC-28FEB25-80000-P",
+              "ending": 190.637915129962,
+              "trade_timestamp": 1738403760089,
+              "minimum_premium_with_cost_usd": 46.37619948528749,
+              "status": "filled_proxy",
+              "spent_usd": 46.37619948528749,
+              "settled_value_usd": 90.01411461524947,
+              "settlement_index_usd": 79085.74,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2025-03",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28MAR25-70000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-04",
+              "instrument": "BTC-25APR25-65000-P",
+              "ending": 111.459815741575,
+              "trade_timestamp": 1743500183793,
+              "minimum_premium_with_cost_usd": 35.54018425842499,
+              "status": "filled_proxy",
+              "spent_usd": 35.54018425842499,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 93678.25,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2025-05",
+              "instrument": "BTC-30MAY25-115000-C",
+              "ending": 9.567966324,
+              "trade_timestamp": 1746091007022,
+              "minimum_premium_with_cost_usd": 68.716016838,
+              "status": "filled_proxy",
+              "spent_usd": 137.432033676,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 105130.77,
+              "side": "C",
+              "contract_units": 0.2
+            },
+            {
+              "month": "2025-06",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27JUN25-84000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25JUL25-130000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-08",
+              "instrument": "BTC-29AUG25-92000-P",
+              "ending": 113.178744907975,
+              "trade_timestamp": 1754038811710,
+              "minimum_premium_with_cost_usd": 33.821255092025,
+              "status": "filled_proxy",
+              "spent_usd": 33.821255092025,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 110116.23,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2025-09",
+              "instrument": "BTC-26SEP25-90000-P",
+              "ending": 2.9713032727,
+              "trade_timestamp": 1756721773239,
+              "minimum_premium_with_cost_usd": 36.00717418182499,
+              "status": "filled_proxy",
+              "spent_usd": 144.02869672729997,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 109124.7,
+              "side": "P",
+              "contract_units": 0.4
+            },
+            {
+              "month": "2025-10",
+              "instrument": "BTC-31OCT25-140000-C",
+              "ending": 15.640148071875,
+              "trade_timestamp": 1759312540791,
+              "minimum_premium_with_cost_usd": 43.786617309375,
+              "status": "filled_proxy",
+              "spent_usd": 131.359851928125,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 109491.34,
+              "side": "C",
+              "contract_units": 0.30000000000000004
+            },
+            {
+              "month": "2025-11",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28NOV25-90000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-12",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26DEC25-70000-P",
+              "ending": 147.0
+            }
+          ],
+          "continuous": [
+            {
+              "month": "2024-01",
+              "starting": 147.0,
+              "instrument": "BTC-26JAN24-34000-P",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1704099928099,
+              "minimum_premium_with_cost_usd": 38.0775699084375,
+              "status": "filled_proxy",
+              "spent_usd": 114.23270972531252,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 39936.59,
+              "side": "P",
+              "contract_units": 0.30000000000000004
+            },
+            {
+              "month": "2024-02",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-23FEB24-51000-C",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2024-03",
+              "starting": 32.767290274687,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-29MAR24-75000-C",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1709285392202,
+              "minimum_premium_with_cost_usd": 141.6732346119375
+            },
+            {
+              "month": "2024-04",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26APR24-84000-C",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2024-05",
+              "starting": 32.767290274687,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-31MAY24-46000-P",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1714560538003,
+              "minimum_premium_with_cost_usd": 71.286228894375
+            },
+            {
+              "month": "2024-06",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28JUN24-54000-P",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2024-07",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26JUL24-75000-C",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2024-08",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30AUG24-77000-C",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2024-09",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27SEP24-47000-P",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2024-10",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25OCT24-77000-C",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2024-11",
+              "starting": 32.767290274687,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-29NOV24-84000-C",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1730452783396,
+              "minimum_premium_with_cost_usd": 110.04322102256249
+            },
+            {
+              "month": "2024-12",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27DEC24-78000-P",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2025-01",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-31JAN25-75000-P",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2025-02",
+              "starting": 32.767290274687,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-28FEB25-80000-P",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1738403760089,
+              "minimum_premium_with_cost_usd": 46.37619948528749
+            },
+            {
+              "month": "2025-03",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28MAR25-70000-P",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2025-04",
+              "starting": 32.767290274687,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-25APR25-65000-P",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1743500183793,
+              "minimum_premium_with_cost_usd": 35.54018425842499
+            },
+            {
+              "month": "2025-05",
+              "starting": 32.767290274687,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-30MAY25-115000-C",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1746091007022,
+              "minimum_premium_with_cost_usd": 68.716016838
+            },
+            {
+              "month": "2025-06",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27JUN25-84000-P",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2025-07",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25JUL25-130000-C",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2025-08",
+              "starting": 32.767290274687,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-29AUG25-92000-P",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1754038811710,
+              "minimum_premium_with_cost_usd": 33.821255092025
+            },
+            {
+              "month": "2025-09",
+              "starting": 32.767290274687,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-26SEP25-90000-P",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1756721773239,
+              "minimum_premium_with_cost_usd": 36.00717418182499
+            },
+            {
+              "month": "2025-10",
+              "starting": 32.767290274687,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-31OCT25-140000-C",
+              "ending": 32.767290274687,
+              "trade_timestamp": 1759312540791,
+              "minimum_premium_with_cost_usd": 43.786617309375
+            },
+            {
+              "month": "2025-11",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28NOV25-90000-P",
+              "ending": 32.767290274687
+            },
+            {
+              "month": "2025-12",
+              "starting": 32.767290274687,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26DEC25-70000-P",
+              "ending": 32.767290274687
+            }
+          ]
+        },
+        "stress": {
+          "summary": {
+            "months": 24,
+            "months_at_6x": 1,
+            "months_remaining_half_or_less": 5,
+            "months_remaining_tenth_or_less": 1,
+            "highest_month_multiple": 8.150772975197707,
+            "lowest_month_multiple": 0.09230282674106803,
+            "median_month_multiple": 1.0,
+            "mean_month_multiple": 1.1369669511815368,
+            "continuous_total_multiple": 0.09230282674106803,
+            "continuous_fills": 1,
+            "status_counts": {
+              "filled_proxy": 9,
+              "no_eligible_trade_within_2h": 14,
+              "minimum_order_over_budget": 1
+            },
+            "continuous_months_at_6x_of_initial_balance": 0,
+            "continuous_crossings_of_6x_initial_balance": 0,
+            "continuous_months_at_6x_of_month_start": 0,
+            "random_direction_draws": 3000,
+            "random_direction_mean_6x_months": 0.5176666666666667,
+            "random_direction_p": 0.5178273908697101
+          },
+          "monthly": [
+            {
+              "month": "2024-01",
+              "instrument": "BTC-26JAN24-34000-P",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1704099928099,
+              "minimum_premium_with_cost_usd": 44.477161489687504,
+              "status": "filled_proxy",
+              "spent_usd": 133.43148446906253,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 39936.59,
+              "side": "P",
+              "contract_units": 0.30000000000000004
+            },
+            {
+              "month": "2024-02",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-23FEB24-51000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-03",
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-29MAR24-75000-C",
+              "ending": 147.0,
+              "trade_timestamp": 1709285392202,
+              "minimum_premium_with_cost_usd": 165.98679302718753
+            },
+            {
+              "month": "2024-04",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26APR24-84000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-05",
+              "instrument": "BTC-31MAY24-46000-P",
+              "ending": 63.616714081125,
+              "trade_timestamp": 1714560538003,
+              "minimum_premium_with_cost_usd": 83.383285918875,
+              "status": "filled_proxy",
+              "spent_usd": 83.383285918875,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 68201.52,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2024-06",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28JUN24-54000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26JUL24-75000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30AUG24-77000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-09",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27SEP24-47000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-10",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25OCT24-77000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-11",
+              "instrument": "BTC-29NOV24-84000-C",
+              "ending": 1198.163627354063,
+              "trade_timestamp": 1730452783396,
+              "minimum_premium_with_cost_usd": 128.8183677373125,
+              "status": "filled_proxy",
+              "spent_usd": 128.8183677373125,
+              "settled_value_usd": 1179.9819950913754,
+              "settlement_index_usd": 95843.77,
+              "side": "C",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2024-12",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27DEC24-78000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-01",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-31JAN25-75000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-02",
+              "instrument": "BTC-28FEB25-80000-P",
+              "ending": 183.103691722912,
+              "trade_timestamp": 1738403760089,
+              "minimum_premium_with_cost_usd": 53.9104228923375,
+              "status": "filled_proxy",
+              "spent_usd": 53.9104228923375,
+              "settled_value_usd": 90.01411461524947,
+              "settlement_index_usd": 79085.74,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2025-03",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28MAR25-70000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-04",
+              "instrument": "BTC-25APR25-65000-P",
+              "ending": 105.719358426675,
+              "trade_timestamp": 1743500183793,
+              "minimum_premium_with_cost_usd": 41.280641573325,
+              "status": "filled_proxy",
+              "spent_usd": 41.280641573325,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 93678.25,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2025-05",
+              "instrument": "BTC-30MAY25-115000-C",
+              "ending": 66.831313689,
+              "trade_timestamp": 1746091007022,
+              "minimum_premium_with_cost_usd": 80.16868631100002,
+              "status": "filled_proxy",
+              "spent_usd": 80.16868631100002,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 105130.77,
+              "side": "C",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2025-06",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27JUN25-84000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25JUL25-130000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-08",
+              "instrument": "BTC-29AUG25-92000-P",
+              "ending": 107.895968221275,
+              "trade_timestamp": 1754038811710,
+              "minimum_premium_with_cost_usd": 39.104031778725,
+              "status": "filled_proxy",
+              "spent_usd": 39.104031778725,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 110116.23,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2025-09",
+              "instrument": "BTC-26SEP25-90000-P",
+              "ending": 21.905166900225,
+              "trade_timestamp": 1756721773239,
+              "minimum_premium_with_cost_usd": 41.698277699925,
+              "status": "filled_proxy",
+              "spent_usd": 125.09483309977502,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 109124.7,
+              "side": "P",
+              "contract_units": 0.30000000000000004
+            },
+            {
+              "month": "2025-10",
+              "instrument": "BTC-31OCT25-140000-C",
+              "ending": 45.41504784225,
+              "trade_timestamp": 1759312540791,
+              "minimum_premium_with_cost_usd": 50.79247607887501,
+              "status": "filled_proxy",
+              "spent_usd": 101.58495215775002,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 109491.34,
+              "side": "C",
+              "contract_units": 0.2
+            },
+            {
+              "month": "2025-11",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28NOV25-90000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-12",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26DEC25-70000-P",
+              "ending": 147.0
+            }
+          ],
+          "continuous": [
+            {
+              "month": "2024-01",
+              "starting": 147.0,
+              "instrument": "BTC-26JAN24-34000-P",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1704099928099,
+              "minimum_premium_with_cost_usd": 44.477161489687504,
+              "status": "filled_proxy",
+              "spent_usd": 133.43148446906253,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 39936.59,
+              "side": "P",
+              "contract_units": 0.30000000000000004
+            },
+            {
+              "month": "2024-02",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-23FEB24-51000-C",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2024-03",
+              "starting": 13.568515530937,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-29MAR24-75000-C",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1709285392202,
+              "minimum_premium_with_cost_usd": 165.98679302718753
+            },
+            {
+              "month": "2024-04",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26APR24-84000-C",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2024-05",
+              "starting": 13.568515530937,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-31MAY24-46000-P",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1714560538003,
+              "minimum_premium_with_cost_usd": 83.383285918875
+            },
+            {
+              "month": "2024-06",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28JUN24-54000-P",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2024-07",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26JUL24-75000-C",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2024-08",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30AUG24-77000-C",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2024-09",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27SEP24-47000-P",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2024-10",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25OCT24-77000-C",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2024-11",
+              "starting": 13.568515530937,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-29NOV24-84000-C",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1730452783396,
+              "minimum_premium_with_cost_usd": 128.8183677373125
+            },
+            {
+              "month": "2024-12",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27DEC24-78000-P",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2025-01",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-31JAN25-75000-P",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2025-02",
+              "starting": 13.568515530937,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-28FEB25-80000-P",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1738403760089,
+              "minimum_premium_with_cost_usd": 53.9104228923375
+            },
+            {
+              "month": "2025-03",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28MAR25-70000-P",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2025-04",
+              "starting": 13.568515530937,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-25APR25-65000-P",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1743500183793,
+              "minimum_premium_with_cost_usd": 41.280641573325
+            },
+            {
+              "month": "2025-05",
+              "starting": 13.568515530937,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-30MAY25-115000-C",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1746091007022,
+              "minimum_premium_with_cost_usd": 80.16868631100002
+            },
+            {
+              "month": "2025-06",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-27JUN25-84000-P",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2025-07",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25JUL25-130000-C",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2025-08",
+              "starting": 13.568515530937,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-29AUG25-92000-P",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1754038811710,
+              "minimum_premium_with_cost_usd": 39.104031778725
+            },
+            {
+              "month": "2025-09",
+              "starting": 13.568515530937,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-26SEP25-90000-P",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1756721773239,
+              "minimum_premium_with_cost_usd": 41.698277699925
+            },
+            {
+              "month": "2025-10",
+              "starting": 13.568515530937,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-31OCT25-140000-C",
+              "ending": 13.568515530937,
+              "trade_timestamp": 1759312540791,
+              "minimum_premium_with_cost_usd": 50.79247607887501
+            },
+            {
+              "month": "2025-11",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28NOV25-90000-P",
+              "ending": 13.568515530937
+            },
+            {
+              "month": "2025-12",
+              "starting": 13.568515530937,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26DEC25-70000-P",
+              "ending": 13.568515530937
+            }
+          ]
+        }
+      },
+      "new_2026": {
+        "base": {
+          "summary": {
+            "months": 10,
+            "months_at_6x": 0,
+            "months_remaining_half_or_less": 1,
+            "months_remaining_tenth_or_less": 1,
+            "highest_month_multiple": 1.0,
+            "lowest_month_multiple": 0.0371408488622449,
+            "median_month_multiple": 1.0,
+            "mean_month_multiple": 0.8620310821634782,
+            "continuous_total_multiple": 0.10174039720365986,
+            "continuous_fills": 2,
+            "status_counts": {
+              "no_eligible_trade_within_2h": 8,
+              "filled_proxy": 2
+            },
+            "continuous_months_at_6x_of_initial_balance": 0,
+            "continuous_crossings_of_6x_initial_balance": 0,
+            "continuous_months_at_6x_of_month_start": 0,
+            "random_direction_draws": 3000,
+            "random_direction_mean_6x_months": 0,
+            "random_direction_p": 1.0
+          },
+          "monthly": [
+            {
+              "month": "2026-01",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30JAN26-105000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-02",
+              "instrument": "BTC-27FEB26-65000-P",
+              "ending": 85.725985997563,
+              "trade_timestamp": 1769936653744,
+              "minimum_premium_with_cost_usd": 61.2740140024375,
+              "status": "filled_proxy",
+              "spent_usd": 61.2740140024375,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 67610.2,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2026-03",
+              "instrument": "BTC-27MAR26-53000-P",
+              "ending": 5.45970478275,
+              "trade_timestamp": 1772359611830,
+              "minimum_premium_with_cost_usd": 70.770147608625,
+              "status": "filled_proxy",
+              "spent_usd": 141.54029521725,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 68610.02,
+              "side": "P",
+              "contract_units": 0.2
+            },
+            {
+              "month": "2026-04",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-24APR26-55000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-05",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-29MAY26-62000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-06",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26JUN26-58000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-31JUL26-48000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28AUG26-50000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-09",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25SEP26-62000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-10",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30OCT26-67000-P",
+              "ending": 147.0
+            }
+          ],
+          "continuous": [
+            {
+              "month": "2026-01",
+              "starting": 147.0,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30JAN26-105000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-02",
+              "starting": 147.0,
+              "instrument": "BTC-27FEB26-65000-P",
+              "ending": 85.725985997563,
+              "trade_timestamp": 1769936653744,
+              "minimum_premium_with_cost_usd": 61.2740140024375,
+              "status": "filled_proxy",
+              "spent_usd": 61.2740140024375,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 67610.2,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2026-03",
+              "starting": 85.725985997563,
+              "instrument": "BTC-27MAR26-53000-P",
+              "ending": 14.955838388938,
+              "trade_timestamp": 1772359611830,
+              "minimum_premium_with_cost_usd": 70.770147608625,
+              "status": "filled_proxy",
+              "spent_usd": 70.770147608625,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 68610.02,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2026-04",
+              "starting": 14.955838388938,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-24APR26-55000-P",
+              "ending": 14.955838388938
+            },
+            {
+              "month": "2026-05",
+              "starting": 14.955838388938,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-29MAY26-62000-P",
+              "ending": 14.955838388938
+            },
+            {
+              "month": "2026-06",
+              "starting": 14.955838388938,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26JUN26-58000-P",
+              "ending": 14.955838388938
+            },
+            {
+              "month": "2026-07",
+              "starting": 14.955838388938,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-31JUL26-48000-P",
+              "ending": 14.955838388938
+            },
+            {
+              "month": "2026-08",
+              "starting": 14.955838388938,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28AUG26-50000-P",
+              "ending": 14.955838388938
+            },
+            {
+              "month": "2026-09",
+              "starting": 14.955838388938,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25SEP26-62000-P",
+              "ending": 14.955838388938
+            },
+            {
+              "month": "2026-10",
+              "starting": 14.955838388938,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30OCT26-67000-P",
+              "ending": 14.955838388938
+            }
+          ]
+        },
+        "stress": {
+          "summary": {
+            "months": 10,
+            "months_at_6x": 0,
+            "months_remaining_half_or_less": 1,
+            "months_remaining_tenth_or_less": 0,
+            "highest_month_multiple": 1.0,
+            "lowest_month_multiple": 0.43720204546173463,
+            "median_month_multiple": 1.0,
+            "mean_month_multiple": 0.8950676965450252,
+            "continuous_total_multiple": 0.513474919988517,
+            "continuous_fills": 1,
+            "status_counts": {
+              "no_eligible_trade_within_2h": 8,
+              "filled_proxy": 2
+            },
+            "continuous_months_at_6x_of_initial_balance": 0,
+            "continuous_crossings_of_6x_initial_balance": 0,
+            "continuous_months_at_6x_of_month_start": 0,
+            "random_direction_draws": 3000,
+            "random_direction_mean_6x_months": 0,
+            "random_direction_p": 1.0
+          },
+          "monthly": [
+            {
+              "month": "2026-01",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30JAN26-105000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-02",
+              "instrument": "BTC-27FEB26-65000-P",
+              "ending": 75.480813238312,
+              "trade_timestamp": 1769936653744,
+              "minimum_premium_with_cost_usd": 71.51918676168751,
+              "status": "filled_proxy",
+              "spent_usd": 71.51918676168751,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 67610.2,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2026-03",
+              "instrument": "BTC-27MAR26-53000-P",
+              "ending": 64.268700682875,
+              "trade_timestamp": 1772359611830,
+              "minimum_premium_with_cost_usd": 82.731299317125,
+              "status": "filled_proxy",
+              "spent_usd": 82.731299317125,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 68610.02,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2026-04",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-24APR26-55000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-05",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-29MAY26-62000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-06",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26JUN26-58000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-31JUL26-48000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28AUG26-50000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-09",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25SEP26-62000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-10",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30OCT26-67000-P",
+              "ending": 147.0
+            }
+          ],
+          "continuous": [
+            {
+              "month": "2026-01",
+              "starting": 147.0,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30JAN26-105000-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-02",
+              "starting": 147.0,
+              "instrument": "BTC-27FEB26-65000-P",
+              "ending": 75.480813238312,
+              "trade_timestamp": 1769936653744,
+              "minimum_premium_with_cost_usd": 71.51918676168751,
+              "status": "filled_proxy",
+              "spent_usd": 71.51918676168751,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 67610.2,
+              "side": "P",
+              "contract_units": 0.1
+            },
+            {
+              "month": "2026-03",
+              "starting": 75.480813238312,
+              "status": "minimum_order_over_budget",
+              "instrument": "BTC-27MAR26-53000-P",
+              "ending": 75.480813238312,
+              "trade_timestamp": 1772359611830,
+              "minimum_premium_with_cost_usd": 82.731299317125
+            },
+            {
+              "month": "2026-04",
+              "starting": 75.480813238312,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-24APR26-55000-P",
+              "ending": 75.480813238312
+            },
+            {
+              "month": "2026-05",
+              "starting": 75.480813238312,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-29MAY26-62000-P",
+              "ending": 75.480813238312
+            },
+            {
+              "month": "2026-06",
+              "starting": 75.480813238312,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-26JUN26-58000-P",
+              "ending": 75.480813238312
+            },
+            {
+              "month": "2026-07",
+              "starting": 75.480813238312,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-31JUL26-48000-P",
+              "ending": 75.480813238312
+            },
+            {
+              "month": "2026-08",
+              "starting": 75.480813238312,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-28AUG26-50000-P",
+              "ending": 75.480813238312
+            },
+            {
+              "month": "2026-09",
+              "starting": 75.480813238312,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-25SEP26-62000-P",
+              "ending": 75.480813238312
+            },
+            {
+              "month": "2026-10",
+              "starting": 75.480813238312,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "BTC-30OCT26-67000-P",
+              "ending": 75.480813238312
+            }
+          ]
+        }
+      }
+    },
+    "ETH": {
+      "historical": {
+        "base": {
+          "summary": {
+            "months": 24,
+            "months_at_6x": 1,
+            "months_remaining_half_or_less": 4,
+            "months_remaining_tenth_or_less": 1,
+            "highest_month_multiple": 10.419347027653062,
+            "lowest_month_multiple": 0.08960650836734693,
+            "median_month_multiple": 1.0,
+            "mean_month_multiple": 1.5396138626128473,
+            "continuous_total_multiple": 0.0414665344132653,
+            "continuous_fills": 3,
+            "status_counts": {
+              "filled_proxy": 9,
+              "no_eligible_trade_within_2h": 15
+            },
+            "continuous_months_at_6x_of_initial_balance": 2,
+            "continuous_crossings_of_6x_initial_balance": 1,
+            "continuous_months_at_6x_of_month_start": 1,
+            "random_direction_draws": 3000,
+            "random_direction_mean_6x_months": 1.027,
+            "random_direction_p": 0.7634121959346885
+          },
+          "monthly": [
+            {
+              "month": "2024-01",
+              "instrument": "ETH-26JAN24-2700-C",
+              "ending": 86.70839637375,
+              "trade_timestamp": 1704102531312,
+              "minimum_premium_with_cost_usd": 60.291603626249994,
+              "status": "filled_proxy",
+              "spent_usd": 60.291603626249994,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2201.44,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2024-02",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-23FEB24-2700-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-03",
+              "instrument": "ETH-29MAR24-4000-C",
+              "ending": 49.2430099825,
+              "trade_timestamp": 1709283925552,
+              "minimum_premium_with_cost_usd": 97.75699001749999,
+              "status": "filled_proxy",
+              "spent_usd": 97.75699001749999,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 3535.72,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2024-04",
+              "instrument": "ETH-26APR24-4200-C",
+              "ending": 25.24896896875,
+              "trade_timestamp": 1711963453749,
+              "minimum_premium_with_cost_usd": 121.75103103125,
+              "status": "filled_proxy",
+              "spent_usd": 121.75103103125,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 3137.46,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2024-05",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31MAY24-2300-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-06",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28JUN24-4600-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26JUL24-4200-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30AUG24-3800-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-09",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27SEP24-2000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-10",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-25OCT24-2100-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-11",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29NOV24-2000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-12",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27DEC24-4500-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-01",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31JAN25-2700-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-02",
+              "instrument": "ETH-28FEB25-2600-P",
+              "ending": 1531.644013065,
+              "trade_timestamp": 1738403747848,
+              "minimum_premium_with_cost_usd": 34.533330029999995,
+              "status": "filled_proxy",
+              "spent_usd": 103.59999008999998,
+              "settled_value_usd": 1488.2440031549995,
+              "settlement_index_usd": 2102.36,
+              "side": "P",
+              "contract_units": 3
+            },
+            {
+              "month": "2025-03",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28MAR25-1800-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-04",
+              "instrument": "ETH-25APR25-1500-P",
+              "ending": 13.17215673,
+              "trade_timestamp": 1743501651217,
+              "minimum_premium_with_cost_usd": 22.304640544999998,
+              "status": "filled_proxy",
+              "spent_usd": 133.82784327,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 1773.7,
+              "side": "P",
+              "contract_units": 6
+            },
+            {
+              "month": "2025-05",
+              "instrument": "ETH-30MAY25-2200-C",
+              "ending": 537.124438725,
+              "trade_timestamp": 1746090032183,
+              "minimum_premium_with_cost_usd": 35.135738295,
+              "status": "filled_proxy",
+              "spent_usd": 35.135738295,
+              "settled_value_usd": 425.26017701999984,
+              "settlement_index_usd": 2626.72,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2025-06",
+              "instrument": "ETH-27JUN25-3000-C",
+              "ending": 84.058316195,
+              "trade_timestamp": 1748768434683,
+              "minimum_premium_with_cost_usd": 62.941683805,
+              "status": "filled_proxy",
+              "spent_usd": 62.941683805,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2441.98,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2025-07",
+              "instrument": "ETH-25JUL25-2900-C",
+              "ending": 828.151898705625,
+              "trade_timestamp": 1751363833667,
+              "minimum_premium_with_cost_usd": 36.167359666874994,
+              "status": "filled_proxy",
+              "spent_usd": 36.167359666874994,
+              "settled_value_usd": 717.3192583724999,
+              "settlement_index_usd": 3619.66,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2025-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29AUG25-2900-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-09",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26SEP25-3600-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-10",
+              "instrument": "ETH-31OCT25-5200-C",
+              "ending": 71.4065085525,
+              "trade_timestamp": 1759311058050,
+              "minimum_premium_with_cost_usd": 75.5934914475,
+              "status": "filled_proxy",
+              "spent_usd": 75.5934914475,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 3829.79,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2025-11",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28NOV25-3200-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-12",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26DEC25-3400-C",
+              "ending": 147.0
+            }
+          ],
+          "continuous": [
+            {
+              "month": "2024-01",
+              "starting": 147.0,
+              "instrument": "ETH-26JAN24-2700-C",
+              "ending": 86.70839637375,
+              "trade_timestamp": 1704102531312,
+              "minimum_premium_with_cost_usd": 60.291603626249994,
+              "status": "filled_proxy",
+              "spent_usd": 60.291603626249994,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2201.44,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2024-02",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-23FEB24-2700-C",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2024-03",
+              "starting": 86.70839637375,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-29MAR24-4000-C",
+              "ending": 86.70839637375,
+              "trade_timestamp": 1709283925552,
+              "minimum_premium_with_cost_usd": 97.75699001749999
+            },
+            {
+              "month": "2024-04",
+              "starting": 86.70839637375,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-26APR24-4200-C",
+              "ending": 86.70839637375,
+              "trade_timestamp": 1711963453749,
+              "minimum_premium_with_cost_usd": 121.75103103125
+            },
+            {
+              "month": "2024-05",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31MAY24-2300-P",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2024-06",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28JUN24-4600-C",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2024-07",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26JUL24-4200-C",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2024-08",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30AUG24-3800-C",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2024-09",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27SEP24-2000-P",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2024-10",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-25OCT24-2100-P",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2024-11",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29NOV24-2000-P",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2024-12",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27DEC24-4500-C",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2025-01",
+              "starting": 86.70839637375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31JAN25-2700-P",
+              "ending": 86.70839637375
+            },
+            {
+              "month": "2025-02",
+              "starting": 86.70839637375,
+              "instrument": "ETH-28FEB25-2600-P",
+              "ending": 1009.80440508375,
+              "trade_timestamp": 1738403747848,
+              "minimum_premium_with_cost_usd": 34.533330029999995,
+              "status": "filled_proxy",
+              "spent_usd": 69.06666005999999,
+              "settled_value_usd": 992.1626687699998,
+              "settlement_index_usd": 2102.36,
+              "side": "P",
+              "contract_units": 2
+            },
+            {
+              "month": "2025-03",
+              "starting": 1009.80440508375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28MAR25-1800-P",
+              "ending": 1009.80440508375
+            },
+            {
+              "month": "2025-04",
+              "starting": 1009.80440508375,
+              "instrument": "ETH-25APR25-1500-P",
+              "ending": 6.09558055875,
+              "trade_timestamp": 1743501651217,
+              "minimum_premium_with_cost_usd": 22.304640544999998,
+              "status": "filled_proxy",
+              "spent_usd": 1003.708824525,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 1773.7,
+              "side": "P",
+              "contract_units": 45
+            },
+            {
+              "month": "2025-05",
+              "starting": 6.09558055875,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-30MAY25-2200-C",
+              "ending": 6.09558055875,
+              "trade_timestamp": 1746090032183,
+              "minimum_premium_with_cost_usd": 35.135738295
+            },
+            {
+              "month": "2025-06",
+              "starting": 6.09558055875,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-27JUN25-3000-C",
+              "ending": 6.09558055875,
+              "trade_timestamp": 1748768434683,
+              "minimum_premium_with_cost_usd": 62.941683805
+            },
+            {
+              "month": "2025-07",
+              "starting": 6.09558055875,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-25JUL25-2900-C",
+              "ending": 6.09558055875,
+              "trade_timestamp": 1751363833667,
+              "minimum_premium_with_cost_usd": 36.167359666874994
+            },
+            {
+              "month": "2025-08",
+              "starting": 6.09558055875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29AUG25-2900-P",
+              "ending": 6.09558055875
+            },
+            {
+              "month": "2025-09",
+              "starting": 6.09558055875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26SEP25-3600-P",
+              "ending": 6.09558055875
+            },
+            {
+              "month": "2025-10",
+              "starting": 6.09558055875,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-31OCT25-5200-C",
+              "ending": 6.09558055875,
+              "trade_timestamp": 1759311058050,
+              "minimum_premium_with_cost_usd": 75.5934914475
+            },
+            {
+              "month": "2025-11",
+              "starting": 6.09558055875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28NOV25-3200-P",
+              "ending": 6.09558055875
+            },
+            {
+              "month": "2025-12",
+              "starting": 6.09558055875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26DEC25-3400-C",
+              "ending": 6.09558055875
+            }
+          ]
+        },
+        "stress": {
+          "summary": {
+            "months": 24,
+            "months_at_6x": 1,
+            "months_remaining_half_or_less": 5,
+            "months_remaining_tenth_or_less": 1,
+            "highest_month_multiple": 10.30023235091836,
+            "lowest_month_multiple": 0.028982847576530614,
+            "median_month_multiple": 1.0,
+            "mean_month_multiple": 1.5117801528289752,
+            "continuous_total_multiple": 0.07042653737244899,
+            "continuous_fills": 3,
+            "status_counts": {
+              "filled_proxy": 9,
+              "no_eligible_trade_within_2h": 15
+            },
+            "continuous_months_at_6x_of_initial_balance": 0,
+            "continuous_crossings_of_6x_initial_balance": 0,
+            "continuous_months_at_6x_of_month_start": 1,
+            "random_direction_draws": 3000,
+            "random_direction_mean_6x_months": 1.027,
+            "random_direction_p": 0.7634121959346885
+          },
+          "monthly": [
+            {
+              "month": "2024-01",
+              "instrument": "ETH-26JAN24-2700-C",
+              "ending": 76.34307769875,
+              "trade_timestamp": 1704102531312,
+              "minimum_premium_with_cost_usd": 70.65692230125,
+              "status": "filled_proxy",
+              "spent_usd": 70.65692230125,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2201.44,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2024-02",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-23FEB24-2700-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-03",
+              "instrument": "ETH-29MAR24-4000-C",
+              "ending": 32.4209116125,
+              "trade_timestamp": 1709283925552,
+              "minimum_premium_with_cost_usd": 114.5790883875,
+              "status": "filled_proxy",
+              "spent_usd": 114.5790883875,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 3535.72,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2024-04",
+              "instrument": "ETH-26APR24-4200-C",
+              "ending": 4.26047859375,
+              "trade_timestamp": 1711963453749,
+              "minimum_premium_with_cost_usd": 142.73952140625,
+              "status": "filled_proxy",
+              "spent_usd": 142.73952140625,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 3137.46,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2024-05",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31MAY24-2300-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-06",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28JUN24-4600-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26JUL24-4200-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30AUG24-3800-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-09",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27SEP24-2000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-10",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-25OCT24-2100-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-11",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29NOV24-2000-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2024-12",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27DEC24-4500-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-01",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31JAN25-2700-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-02",
+              "instrument": "ETH-28FEB25-2600-P",
+              "ending": 1514.134155584999,
+              "trade_timestamp": 1738403747848,
+              "minimum_premium_with_cost_usd": 40.36994918999999,
+              "status": "filled_proxy",
+              "spent_usd": 121.10984756999997,
+              "settled_value_usd": 1488.2440031549995,
+              "settlement_index_usd": 2102.36,
+              "side": "P",
+              "contract_units": 3
+            },
+            {
+              "month": "2025-03",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28MAR25-1800-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-04",
+              "instrument": "ETH-25APR25-1500-P",
+              "ending": 16.574559525,
+              "trade_timestamp": 1743501651217,
+              "minimum_premium_with_cost_usd": 26.085088095000003,
+              "status": "filled_proxy",
+              "spent_usd": 130.42544047500002,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 1773.7,
+              "side": "P",
+              "contract_units": 5
+            },
+            {
+              "month": "2025-05",
+              "instrument": "ETH-30MAY25-2200-C",
+              "ending": 531.108981585,
+              "trade_timestamp": 1746090032183,
+              "minimum_premium_with_cost_usd": 41.151195435000005,
+              "status": "filled_proxy",
+              "spent_usd": 41.151195435000005,
+              "settled_value_usd": 425.26017701999984,
+              "settlement_index_usd": 2626.72,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2025-06",
+              "instrument": "ETH-27JUN25-3000-C",
+              "ending": 73.243161735,
+              "trade_timestamp": 1748768434683,
+              "minimum_premium_with_cost_usd": 73.756838265,
+              "status": "filled_proxy",
+              "spent_usd": 73.756838265,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2441.98,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2025-07",
+              "instrument": "ETH-25JUL25-2900-C",
+              "ending": 821.990508643125,
+              "trade_timestamp": 1751363833667,
+              "minimum_premium_with_cost_usd": 42.328749729375005,
+              "status": "filled_proxy",
+              "spent_usd": 42.328749729375005,
+              "settled_value_usd": 717.3192583724999,
+              "settlement_index_usd": 3619.66,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2025-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29AUG25-2900-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-09",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26SEP25-3600-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-10",
+              "instrument": "ETH-31OCT25-5200-C",
+              "ending": 58.4845442025,
+              "trade_timestamp": 1759311058050,
+              "minimum_premium_with_cost_usd": 88.51545579750001,
+              "status": "filled_proxy",
+              "spent_usd": 88.51545579750001,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 3829.79,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2025-11",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28NOV25-3200-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2025-12",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26DEC25-3400-C",
+              "ending": 147.0
+            }
+          ],
+          "continuous": [
+            {
+              "month": "2024-01",
+              "starting": 147.0,
+              "instrument": "ETH-26JAN24-2700-C",
+              "ending": 76.34307769875,
+              "trade_timestamp": 1704102531312,
+              "minimum_premium_with_cost_usd": 70.65692230125,
+              "status": "filled_proxy",
+              "spent_usd": 70.65692230125,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2201.44,
+              "side": "C",
+              "contract_units": 1
+            },
+            {
+              "month": "2024-02",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-23FEB24-2700-C",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2024-03",
+              "starting": 76.34307769875,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-29MAR24-4000-C",
+              "ending": 76.34307769875,
+              "trade_timestamp": 1709283925552,
+              "minimum_premium_with_cost_usd": 114.5790883875
+            },
+            {
+              "month": "2024-04",
+              "starting": 76.34307769875,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-26APR24-4200-C",
+              "ending": 76.34307769875,
+              "trade_timestamp": 1711963453749,
+              "minimum_premium_with_cost_usd": 142.73952140625
+            },
+            {
+              "month": "2024-05",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31MAY24-2300-P",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2024-06",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28JUN24-4600-C",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2024-07",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26JUL24-4200-C",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2024-08",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30AUG24-3800-C",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2024-09",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27SEP24-2000-P",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2024-10",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-25OCT24-2100-P",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2024-11",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29NOV24-2000-P",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2024-12",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27DEC24-4500-C",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2025-01",
+              "starting": 76.34307769875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31JAN25-2700-P",
+              "ending": 76.34307769875
+            },
+            {
+              "month": "2025-02",
+              "starting": 76.34307769875,
+              "instrument": "ETH-28FEB25-2600-P",
+              "ending": 532.05446289375,
+              "trade_timestamp": 1738403747848,
+              "minimum_premium_with_cost_usd": 40.36994918999999,
+              "status": "filled_proxy",
+              "spent_usd": 40.36994918999999,
+              "settled_value_usd": 496.0813343849999,
+              "settlement_index_usd": 2102.36,
+              "side": "P",
+              "contract_units": 1
+            },
+            {
+              "month": "2025-03",
+              "starting": 532.05446289375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28MAR25-1800-P",
+              "ending": 532.05446289375
+            },
+            {
+              "month": "2025-04",
+              "starting": 532.05446289375,
+              "instrument": "ETH-25APR25-1500-P",
+              "ending": 10.35270099375,
+              "trade_timestamp": 1743501651217,
+              "minimum_premium_with_cost_usd": 26.085088095000003,
+              "status": "filled_proxy",
+              "spent_usd": 521.7017619000001,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 1773.7,
+              "side": "P",
+              "contract_units": 20
+            },
+            {
+              "month": "2025-05",
+              "starting": 10.35270099375,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-30MAY25-2200-C",
+              "ending": 10.35270099375,
+              "trade_timestamp": 1746090032183,
+              "minimum_premium_with_cost_usd": 41.151195435000005
+            },
+            {
+              "month": "2025-06",
+              "starting": 10.35270099375,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-27JUN25-3000-C",
+              "ending": 10.35270099375,
+              "trade_timestamp": 1748768434683,
+              "minimum_premium_with_cost_usd": 73.756838265
+            },
+            {
+              "month": "2025-07",
+              "starting": 10.35270099375,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-25JUL25-2900-C",
+              "ending": 10.35270099375,
+              "trade_timestamp": 1751363833667,
+              "minimum_premium_with_cost_usd": 42.328749729375005
+            },
+            {
+              "month": "2025-08",
+              "starting": 10.35270099375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29AUG25-2900-P",
+              "ending": 10.35270099375
+            },
+            {
+              "month": "2025-09",
+              "starting": 10.35270099375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26SEP25-3600-P",
+              "ending": 10.35270099375
+            },
+            {
+              "month": "2025-10",
+              "starting": 10.35270099375,
+              "status": "minimum_order_over_budget",
+              "instrument": "ETH-31OCT25-5200-C",
+              "ending": 10.35270099375,
+              "trade_timestamp": 1759311058050,
+              "minimum_premium_with_cost_usd": 88.51545579750001
+            },
+            {
+              "month": "2025-11",
+              "starting": 10.35270099375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28NOV25-3200-P",
+              "ending": 10.35270099375
+            },
+            {
+              "month": "2025-12",
+              "starting": 10.35270099375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-26DEC25-3400-C",
+              "ending": 10.35270099375
+            }
+          ]
+        }
+      },
+      "new_2026": {
+        "base": {
+          "summary": {
+            "months": 10,
+            "months_at_6x": 0,
+            "months_remaining_half_or_less": 1,
+            "months_remaining_tenth_or_less": 0,
+            "highest_month_multiple": 1.0543177785119047,
+            "lowest_month_multiple": 0.46030795768707483,
+            "median_month_multiple": 1.0,
+            "mean_month_multiple": 0.9451710166045918,
+            "continuous_total_multiple": 0.45171016604591835,
+            "continuous_fills": 3,
+            "status_counts": {
+              "no_eligible_trade_within_2h": 7,
+              "filled_proxy": 3
+            },
+            "continuous_months_at_6x_of_initial_balance": 0,
+            "continuous_crossings_of_6x_initial_balance": 0,
+            "continuous_months_at_6x_of_month_start": 0,
+            "random_direction_draws": 3000,
+            "random_direction_mean_6x_months": 0,
+            "random_direction_p": 1.0
+          },
+          "monthly": [
+            {
+              "month": "2026-01",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30JAN26-3600-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-02",
+              "instrument": "ETH-27FEB26-2000-P",
+              "ending": 67.66526978,
+              "trade_timestamp": 1769936685104,
+              "minimum_premium_with_cost_usd": 39.667365110000006,
+              "status": "filled_proxy",
+              "spent_usd": 79.33473022000001,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2028.8,
+              "side": "P",
+              "contract_units": 2
+            },
+            {
+              "month": "2026-03",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27MAR26-2400-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-04",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-24APR26-1700-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-05",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29MAY26-1850-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-06",
+              "instrument": "ETH-26JUN26-1600-P",
+              "ending": 154.98471344125,
+              "trade_timestamp": 1780304559700,
+              "minimum_premium_with_cost_usd": 12.02817394625,
+              "status": "filled_proxy",
+              "spent_usd": 12.02817394625,
+              "settled_value_usd": 20.012887387499955,
+              "settlement_index_usd": 1579.7,
+              "side": "P",
+              "contract_units": 1
+            },
+            {
+              "month": "2026-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31JUL26-1300-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28AUG26-2250-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-09",
+              "instrument": "ETH-25SEP26-1950-P",
+              "ending": 137.7514111875,
+              "trade_timestamp": 1788259498490,
+              "minimum_premium_with_cost_usd": 9.2485888125,
+              "status": "filled_proxy",
+              "spent_usd": 9.2485888125,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2671.41,
+              "side": "P",
+              "contract_units": 1
+            },
+            {
+              "month": "2026-10",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30OCT26-3200-C",
+              "ending": 147.0
+            }
+          ],
+          "continuous": [
+            {
+              "month": "2026-01",
+              "starting": 147.0,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30JAN26-3600-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-02",
+              "starting": 147.0,
+              "instrument": "ETH-27FEB26-2000-P",
+              "ending": 67.66526978,
+              "trade_timestamp": 1769936685104,
+              "minimum_premium_with_cost_usd": 39.667365110000006,
+              "status": "filled_proxy",
+              "spent_usd": 79.33473022000001,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2028.8,
+              "side": "P",
+              "contract_units": 2
+            },
+            {
+              "month": "2026-03",
+              "starting": 67.66526978,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27MAR26-2400-C",
+              "ending": 67.66526978
+            },
+            {
+              "month": "2026-04",
+              "starting": 67.66526978,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-24APR26-1700-P",
+              "ending": 67.66526978
+            },
+            {
+              "month": "2026-05",
+              "starting": 67.66526978,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29MAY26-1850-P",
+              "ending": 67.66526978
+            },
+            {
+              "month": "2026-06",
+              "starting": 67.66526978,
+              "instrument": "ETH-26JUN26-1600-P",
+              "ending": 75.64998322125,
+              "trade_timestamp": 1780304559700,
+              "minimum_premium_with_cost_usd": 12.02817394625,
+              "status": "filled_proxy",
+              "spent_usd": 12.02817394625,
+              "settled_value_usd": 20.012887387499955,
+              "settlement_index_usd": 1579.7,
+              "side": "P",
+              "contract_units": 1
+            },
+            {
+              "month": "2026-07",
+              "starting": 75.64998322125,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31JUL26-1300-P",
+              "ending": 75.64998322125
+            },
+            {
+              "month": "2026-08",
+              "starting": 75.64998322125,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28AUG26-2250-C",
+              "ending": 75.64998322125
+            },
+            {
+              "month": "2026-09",
+              "starting": 75.64998322125,
+              "instrument": "ETH-25SEP26-1950-P",
+              "ending": 66.40139440875,
+              "trade_timestamp": 1788259498490,
+              "minimum_premium_with_cost_usd": 9.2485888125,
+              "status": "filled_proxy",
+              "spent_usd": 9.2485888125,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2671.41,
+              "side": "P",
+              "contract_units": 1
+            },
+            {
+              "month": "2026-10",
+              "starting": 66.40139440875,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30OCT26-3200-C",
+              "ending": 66.40139440875
+            }
+          ]
+        },
+        "stress": {
+          "summary": {
+            "months": 10,
+            "months_at_6x": 0,
+            "months_remaining_half_or_less": 1,
+            "months_remaining_tenth_or_less": 0,
+            "highest_month_multiple": 1.04079309875,
+            "lowest_month_multiple": 0.36816541387755103,
+            "median_month_multiple": 1.0,
+            "mean_month_multiple": 0.933597645125,
+            "continuous_total_multiple": 0.33597645125,
+            "continuous_fills": 3,
+            "status_counts": {
+              "no_eligible_trade_within_2h": 7,
+              "filled_proxy": 3
+            },
+            "continuous_months_at_6x_of_initial_balance": 0,
+            "continuous_crossings_of_6x_initial_balance": 0,
+            "continuous_months_at_6x_of_month_start": 0,
+            "random_direction_draws": 3000,
+            "random_direction_mean_6x_months": 0,
+            "random_direction_p": 1.0
+          },
+          "monthly": [
+            {
+              "month": "2026-01",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30JAN26-3600-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-02",
+              "instrument": "ETH-27FEB26-2000-P",
+              "ending": 54.12031584,
+              "trade_timestamp": 1769936685104,
+              "minimum_premium_with_cost_usd": 46.43984208,
+              "status": "filled_proxy",
+              "spent_usd": 92.87968416,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2028.8,
+              "side": "P",
+              "contract_units": 2
+            },
+            {
+              "month": "2026-03",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27MAR26-2400-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-04",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-24APR26-1700-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-05",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29MAY26-1850-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-06",
+              "instrument": "ETH-26JUN26-1600-P",
+              "ending": 152.99658551625,
+              "trade_timestamp": 1780304559700,
+              "minimum_premium_with_cost_usd": 14.01630187125,
+              "status": "filled_proxy",
+              "spent_usd": 14.01630187125,
+              "settled_value_usd": 20.012887387499955,
+              "settlement_index_usd": 1579.7,
+              "side": "P",
+              "contract_units": 1
+            },
+            {
+              "month": "2026-07",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31JUL26-1300-P",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-08",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28AUG26-2250-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-09",
+              "instrument": "ETH-25SEP26-1950-P",
+              "ending": 136.2716369775,
+              "trade_timestamp": 1788259498490,
+              "minimum_premium_with_cost_usd": 10.7283630225,
+              "status": "filled_proxy",
+              "spent_usd": 10.7283630225,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2671.41,
+              "side": "P",
+              "contract_units": 1
+            },
+            {
+              "month": "2026-10",
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30OCT26-3200-C",
+              "ending": 147.0
+            }
+          ],
+          "continuous": [
+            {
+              "month": "2026-01",
+              "starting": 147.0,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30JAN26-3600-C",
+              "ending": 147.0
+            },
+            {
+              "month": "2026-02",
+              "starting": 147.0,
+              "instrument": "ETH-27FEB26-2000-P",
+              "ending": 54.12031584,
+              "trade_timestamp": 1769936685104,
+              "minimum_premium_with_cost_usd": 46.43984208,
+              "status": "filled_proxy",
+              "spent_usd": 92.87968416,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2028.8,
+              "side": "P",
+              "contract_units": 2
+            },
+            {
+              "month": "2026-03",
+              "starting": 54.12031584,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-27MAR26-2400-C",
+              "ending": 54.12031584
+            },
+            {
+              "month": "2026-04",
+              "starting": 54.12031584,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-24APR26-1700-P",
+              "ending": 54.12031584
+            },
+            {
+              "month": "2026-05",
+              "starting": 54.12031584,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-29MAY26-1850-P",
+              "ending": 54.12031584
+            },
+            {
+              "month": "2026-06",
+              "starting": 54.12031584,
+              "instrument": "ETH-26JUN26-1600-P",
+              "ending": 60.11690135625,
+              "trade_timestamp": 1780304559700,
+              "minimum_premium_with_cost_usd": 14.01630187125,
+              "status": "filled_proxy",
+              "spent_usd": 14.01630187125,
+              "settled_value_usd": 20.012887387499955,
+              "settlement_index_usd": 1579.7,
+              "side": "P",
+              "contract_units": 1
+            },
+            {
+              "month": "2026-07",
+              "starting": 60.11690135625,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-31JUL26-1300-P",
+              "ending": 60.11690135625
+            },
+            {
+              "month": "2026-08",
+              "starting": 60.11690135625,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-28AUG26-2250-C",
+              "ending": 60.11690135625
+            },
+            {
+              "month": "2026-09",
+              "starting": 60.11690135625,
+              "instrument": "ETH-25SEP26-1950-P",
+              "ending": 49.38853833375,
+              "trade_timestamp": 1788259498490,
+              "minimum_premium_with_cost_usd": 10.7283630225,
+              "status": "filled_proxy",
+              "spent_usd": 10.7283630225,
+              "settled_value_usd": 0.0,
+              "settlement_index_usd": 2671.41,
+              "side": "P",
+              "contract_units": 1
+            },
+            {
+              "month": "2026-10",
+              "starting": 49.38853833375,
+              "status": "no_eligible_trade_within_2h",
+              "instrument": "ETH-30OCT26-3200-C",
+              "ending": 49.38853833375
+            }
+          ]
+        }
+      }
+    }
+  },
+  "gates": {
+    "multiple_6x_in_new_period": false,
+    "at_least_one_hit_in_both_assets": false,
+    "cost_and_matched_control": false,
+    "target_more_common_than_half_loss": false
+  },
+  "pass": false
+}

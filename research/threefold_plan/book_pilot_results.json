@@ -1,0 +1,65 @@
+{
+  "snapshot_only": true,
+  "interval_seconds": 2.0,
+  "markets": {
+    "binance": {
+      "usable_ticks": 10,
+      "missing_or_invalid_ticks": [],
+      "max_received_gap_seconds": 2.039443,
+      "gaps_over_twice_interval": 0,
+      "sizing_diagnostic": [
+        {
+          "entry_tick": 0,
+          "exit_tick": 1,
+          "round_trip_net_multiple": 0.9930242524247342
+        },
+        {
+          "entry_tick": 1,
+          "exit_tick": 2,
+          "round_trip_net_multiple": 0.9928867709810603
+        },
+        {
+          "entry_tick": 2,
+          "exit_tick": 3,
+          "round_trip_net_multiple": 0.9927200650191358
+        },
+        {
+          "entry_tick": 3,
+          "exit_tick": 4,
+          "round_trip_net_multiple": 0.9930242523526008
+        },
+        {
+          "entry_tick": 4,
+          "exit_tick": 5,
+          "round_trip_net_multiple": 0.9930242523526008
+        },
+        {
+          "entry_tick": 5,
+          "exit_tick": 6,
+          "round_trip_net_multiple": 0.9930242523526008
+        },
+        {
+          "entry_tick": 6,
+          "exit_tick": 7,
+          "round_trip_net_multiple": 0.9930242523526008
+        },
+        {
+          "entry_tick": 7,
+          "exit_tick": 8,
+          "round_trip_net_multiple": 0.9931898549560524
+        },
+        {
+          "entry_tick": 8,
+          "exit_tick": 9,
+          "round_trip_net_multiple": 0.9930560375885318
+        }
+      ]
+    },
+    "deribit": {
+      "usable_ticks": 10,
+      "missing_or_invalid_ticks": [],
+      "max_received_gap_seconds": 2.072763,
+      "gaps_over_twice_interval": 0
+    }
+  }
+}

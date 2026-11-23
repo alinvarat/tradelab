@@ -1,0 +1,145 @@
+{
+  "input_sha256": "c7cea4e5c8726c02d5d3aa016edcd87c47db0fd40a8649c6f3a7d393ece4dd75",
+  "partial_month": true,
+  "bars": {
+    "AAVEUSDT": 528,
+    "ADAUSDT": 528,
+    "AEROUSDT": 528,
+    "APTUSDT": 528,
+    "ARBUSDT": 528,
+    "ASTERUSDT": 528,
+    "AVAXUSDT": 528,
+    "BCHUSDT": 528,
+    "BNBUSDT": 528,
+    "BTCUSDT": 528,
+    "CRCLBUSDT": 528,
+    "DASHUSDT": 528,
+    "DOGEUSDT": 528,
+    "DOTUSDT": 528,
+    "ENAUSDT": 528,
+    "ERAUSDT": 528,
+    "ETHUSDT": 528,
+    "FETUSDT": 528,
+    "FILUSDT": 528,
+    "GRAMUSDT": 528,
+    "GTCUSDT": 528,
+    "HBARUSDT": 528,
+    "HYPEUSDT": 528,
+    "ICPUSDT": 528,
+    "INJUSDT": 528,
+    "INTCBUSDT": 528,
+    "LINKUSDT": 528,
+    "LTCUSDT": 528,
+    "MARSCOINUSDT": 528,
+    "MSTRBUSDT": 528,
+    "MUBUSDT": 528,
+    "NEARUSDT": 528,
+    "NVDABUSDT": 528,
+    "ONDOUSDT": 528,
+    "OPUSDT": 528,
+    "PENGUUSDT": 528,
+    "PEPEUSDT": 528,
+    "PUMPUSDT": 528,
+    "QNTUSDT": 528,
+    "RLUSDUSDT": 528,
+    "SEIUSDT": 528,
+    "SKHYBUSDT": 528,
+    "SNDKBUSDT": 515,
+    "SOLUSDT": 528,
+    "SOXLBUSDT": 528,
+    "SPCXBUSDT": 528,
+    "STRKUSDT": 528,
+    "SUIUSDT": 528,
+    "TAOUSDT": 528,
+    "TIAUSDT": 528,
+    "TRUMPUSDT": 528,
+    "TRXUSDT": 528,
+    "UNIUSDT": 528,
+    "UUSDT": 528,
+    "WLDUSDT": 528,
+    "XLMUSDT": 528,
+    "XPLUSDT": 528,
+    "XRPUSDT": 528,
+    "ZECUSDT": 528,
+    "ZROUSDT": 528
+  },
+  "failures": {},
+  "cases": {
+    "base": {
+      "3x_months": 0,
+      "ending_thb": 4774.335069691013,
+      "max_close_drawdown": 0.10106624011472676,
+      "months": [
+        [
+          "2026-11",
+          0.9548670139382025
+        ]
+      ],
+      "events": [
+        [
+          "2026-11-06",
+          "INTCBUSDT",
+          1.042868759120814
+        ],
+        [
+          "2026-11-11",
+          "SKHYBUSDT",
+          0.9950322628742785
+        ],
+        [
+          "2026-11-17",
+          "INJUSDT",
+          1.023642667331008
+        ],
+        [
+          "2026-11-20",
+          "GTCUSDT",
+          0.8989337598852732
+        ]
+      ],
+      "random": {
+        "end_median_thb": 4588.91670703414,
+        "fraction_at_least_actual": 0.219,
+        "draws_with_3x": 0
+      }
+    },
+    "stress": {
+      "3x_months": 0,
+      "ending_thb": 4532.402532699781,
+      "max_close_drawdown": 0.11940763234508844,
+      "months": [
+        [
+          "2026-11",
+          0.9064805065399562
+        ]
+      ],
+      "events": [
+        [
+          "2026-11-06",
+          "INTCBUSDT",
+          1.0293985501532188
+        ],
+        [
+          "2026-11-11",
+          "SKHYBUSDT",
+          0.9821799337646069
+        ],
+        [
+          "2026-11-17",
+          "INJUSDT",
+          1.0104207920792079
+        ],
+        [
+          "2026-11-20",
+          "GTCUSDT",
+          0.8873226865955826
+        ]
+      ],
+      "random": {
+        "end_median_thb": 4356.379977883693,
+        "fraction_at_least_actual": 0.219,
+        "draws_with_3x": 0
+      }
+    }
+  }
+}

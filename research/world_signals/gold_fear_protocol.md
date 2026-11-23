@@ -1,0 +1,2 @@
+# Gold volatility transfer
+Before downloading gold observations, freeze the same rule used on oil: buy GLD next session open, close same session, when the previous close-to-close Cboe GVZ increase is at least 20%. Transfer the identical calendar, cost, delay, matched random-date control and $147 account assumptions. Score 2019–22, 2023–Oct 2026, and a single account across both. Report gold separately rather than selecting between oil and gold using realized results.

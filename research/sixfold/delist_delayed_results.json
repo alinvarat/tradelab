@@ -1,0 +1,713 @@
+{
+  "input_sha256": "d608dd8a7c6d86c5065b47f6e07afea49cad2de410a371250599a98accbafae2",
+  "cases": {
+    "base": {
+      "ending_thb": 4059.2873697098853,
+      "months": {
+        "2026-01": 1.0,
+        "2026-02": 1.0,
+        "2026-03": 1.0,
+        "2026-04": 1.0,
+        "2026-05": 0.9556844026093875,
+        "2026-06": 1.0,
+        "2026-07": 0.9921352650023452,
+        "2026-08": 0.9625683118438922,
+        "2026-09": 0.9455515556784867,
+        "2026-10": 0.9407573810517867
+      },
+      "3x_months": 0,
+      "6x_months": 0,
+      "drawdown_day_closes": 0.18814252605802295,
+      "eligible_dates": 11,
+      "trades": {
+        "2026-05-15": [
+          {
+            "symbol": "CMETH",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cmeth-bltdbc6fb605a3bb8c6/",
+            "removal": "2026-05-19",
+            "net_multiple": 0.9556844026093875,
+            "control_multiple": 0.9977836852630045
+          }
+        ],
+        "2026-07-12": [
+          {
+            "symbol": "ARTY",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.9007979677214617,
+            "control_multiple": 0.9483975148429594
+          },
+          {
+            "symbol": "CTA",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.9642577744984095,
+            "control_multiple": 0.9749802408821521
+          },
+          {
+            "symbol": "GTAI",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.8874470946471701,
+            "control_multiple": 0.9245399721663832
+          },
+          {
+            "symbol": "LBTC",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.9697504048330842,
+            "control_multiple": 1.0089128051818634
+          },
+          {
+            "symbol": "MBOX",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 1.093523270961274,
+            "control_multiple": 1.053469378912935
+          },
+          {
+            "symbol": "NAKA",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 1.1539926100892866,
+            "control_multiple": 1.4827463595608492
+          },
+          {
+            "symbol": "U",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.9541127995589106,
+            "control_multiple": 0.9688272263071679
+          }
+        ],
+        "2026-07-19": [
+          {
+            "symbol": "CBK",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 1.0448866022248133,
+            "control_multiple": 0.9854687940035962
+          },
+          {
+            "symbol": "FLIP",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 0.9937116286767939,
+            "control_multiple": 1.0278352335092857
+          },
+          {
+            "symbol": "FUEL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 0.9842314002525987,
+            "control_multiple": 0.9911836449227931
+          },
+          {
+            "symbol": "OL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 1.0249544600329712,
+            "control_multiple": 0.9330552335208453
+          },
+          {
+            "symbol": "PAAL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 0.9992010369960692,
+            "control_multiple": 0.9892283421729172
+          },
+          {
+            "symbol": "SAROS",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 0.9599470598475853,
+            "control_multiple": 0.9964399995566995
+          },
+          {
+            "symbol": "STREAM",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 1.008255558253526,
+            "control_multiple": 1.3020163954787507
+          }
+        ],
+        "2026-07-31": [
+          {
+            "symbol": "AFC",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.023646312795085,
+            "control_multiple": 0.991167136965757
+          },
+          {
+            "symbol": "AO",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.0569506998282878,
+            "control_multiple": 0.9895592246678004
+          },
+          {
+            "symbol": "HPOS10I",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 0.928285806307757,
+            "control_multiple": 1.0175556500863578
+          },
+          {
+            "symbol": "INTER",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.0237860614663779,
+            "control_multiple": 0.9664932279008203
+          },
+          {
+            "symbol": "PUMPBTC",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.0424733442006846,
+            "control_multiple": 0.9794741590587812
+          },
+          {
+            "symbol": "SCA",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.029431125069841,
+            "control_multiple": 0.9515523972361237
+          },
+          {
+            "symbol": "TOKEN",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 0.9475919249945453,
+            "control_multiple": 1.001978647322289
+          },
+          {
+            "symbol": "XAVA",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 0.9700122618693513,
+            "control_multiple": 0.9308721041078841
+          },
+          {
+            "symbol": "XTER",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 0.9856595857637946,
+            "control_multiple": 0.9832046428353666
+          }
+        ],
+        "2026-08-20": [
+          {
+            "symbol": "CAMP",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 1.036624583755788,
+            "control_multiple": 0.991315250324381
+          },
+          {
+            "symbol": "CUDIS",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 0.8592587310176776,
+            "control_multiple": 0.9698062178060243
+          },
+          {
+            "symbol": "PIRATE",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 0.886674703055435,
+            "control_multiple": 1.1431821719559287
+          },
+          {
+            "symbol": "SVL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 1.094168891174313,
+            "control_multiple": 1.004835317924319
+          },
+          {
+            "symbol": "TAI",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 1.0847478318513133,
+            "control_multiple": 1.0262212313383086
+          },
+          {
+            "symbol": "WHITEWHALE",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 1.084202110794039,
+            "control_multiple": 0.9640612024580635
+          }
+        ],
+        "2026-08-23": [
+          {
+            "symbol": "ELIZAOS",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-elizaos-prcl-tusd--art2489b2a8c89e/",
+            "removal": "2026-08-27",
+            "net_multiple": 1.0191988074016358,
+            "control_multiple": 0.9701634208328405
+          },
+          {
+            "symbol": "PRCL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-elizaos-prcl-tusd--art2489b2a8c89e/",
+            "removal": "2026-08-27",
+            "net_multiple": 1.01962025779101,
+            "control_multiple": 0.9634920899528231
+          },
+          {
+            "symbol": "TUSD",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-elizaos-prcl-tusd--art2489b2a8c89e/",
+            "removal": "2026-08-27",
+            "net_multiple": 0.9930244145490782,
+            "control_multiple": 0.9929247233117979
+          }
+        ],
+        "2026-08-31": [
+          {
+            "symbol": "GODS",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-gods-scrt--art74f3fc794bf8/",
+            "removal": "2026-09-04",
+            "net_multiple": 0.9665802382204067,
+            "control_multiple": 1.102540118260191
+          },
+          {
+            "symbol": "SCRT",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-gods-scrt--art74f3fc794bf8/",
+            "removal": "2026-09-04",
+            "net_multiple": 0.9239444552760988,
+            "control_multiple": 1.0181932361159902
+          }
+        ],
+        "2026-09-13": [
+          {
+            "symbol": "L3",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-l3-vic--art6d24cb99655a/",
+            "removal": "2026-09-17",
+            "net_multiple": 0.9737735373688051,
+            "control_multiple": 0.9842200605243282
+          },
+          {
+            "symbol": "VIC",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-l3-vic--art6d24cb99655a/",
+            "removal": "2026-09-17",
+            "net_multiple": 0.9447803134373822,
+            "control_multiple": 0.9946684947056164
+          }
+        ],
+        "2026-09-20": [
+          {
+            "symbol": "ICX",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-4-token-s-on-sep-24-2026--art1a1071a0dd4e/",
+            "removal": "2026-09-24",
+            "net_multiple": 0.9781141380543472,
+            "control_multiple": 0.9378563915185739
+          },
+          {
+            "symbol": "NEON",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-4-token-s-on-sep-24-2026--art1a1071a0dd4e/",
+            "removal": "2026-09-24",
+            "net_multiple": 0.9763476686558876,
+            "control_multiple": 0.9878408419153395
+          },
+          {
+            "symbol": "SUNDOG",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-4-token-s-on-sep-24-2026--art1a1071a0dd4e/",
+            "removal": "2026-09-24",
+            "net_multiple": 1.032581193181999,
+            "control_multiple": 0.9515710589261572
+          },
+          {
+            "symbol": "TAC",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-4-token-s-on-sep-24-2026--art1a1071a0dd4e/",
+            "removal": "2026-09-24",
+            "net_multiple": 0.9557248521799317,
+            "control_multiple": 1.0355826037440388
+          }
+        ],
+        "2026-10-04": [
+          {
+            "symbol": "AGI",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-2-token-s-on-oct-8-2026--art1b7b7449b6c5/",
+            "removal": "2026-10-08",
+            "net_multiple": 0.9555070595611989,
+            "control_multiple": 1.101698773169409
+          },
+          {
+            "symbol": "SCOR",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-2-token-s-on-oct-8-2026--art1b7b7449b6c5/",
+            "removal": "2026-10-08",
+            "net_multiple": 1.0023705266860108,
+            "control_multiple": 0.9941120645102494
+          }
+        ],
+        "2026-10-24": [
+          {
+            "symbol": "HFT",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-1-token-s-on-oct-28-2026--art0d9083316016/",
+            "removal": "2026-10-28",
+            "net_multiple": 0.9609971406383961,
+            "control_multiple": 0.9513814552292782
+          }
+        ]
+      },
+      "paired_control_count": 44,
+      "paired_mean_actual": -0.007935621632958627,
+      "paired_mean_control": 0.010963835022432748
+    },
+    "stress": {
+      "ending_thb": 3518.3791476753254,
+      "months": {
+        "2026-01": 1.0,
+        "2026-02": 1.0,
+        "2026-03": 1.0,
+        "2026-04": 1.0,
+        "2026-05": 0.9433403099346079,
+        "2026-06": 1.0,
+        "2026-07": 0.9541849680208914,
+        "2026-08": 0.9257489842904807,
+        "2026-09": 0.9212828839471124,
+        "2026-10": 0.9166117573441183
+      },
+      "3x_months": 0,
+      "6x_months": 0,
+      "drawdown_day_closes": 0.296324170464935,
+      "eligible_dates": 11,
+      "trades": {
+        "2026-05-15": [
+          {
+            "symbol": "CMETH",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cmeth-bltdbc6fb605a3bb8c6/",
+            "removal": "2026-05-19",
+            "net_multiple": 0.9433403099346079,
+            "control_multiple": 0.9848958174201893
+          }
+        ],
+        "2026-07-12": [
+          {
+            "symbol": "ARTY",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.8891628154008355,
+            "control_multiple": 0.9361475432165656
+          },
+          {
+            "symbol": "CTA",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.9518029439096863,
+            "control_multiple": 0.9623869136114889
+          },
+          {
+            "symbol": "GTAI",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.8759843888099943,
+            "control_multiple": 0.9125981563673609
+          },
+          {
+            "symbol": "LBTC",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.9572246287128713,
+            "control_multiple": 0.9958811881188119
+          },
+          {
+            "symbol": "MBOX",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 1.0793987832518193,
+            "control_multiple": 1.0398622470942744
+          },
+          {
+            "symbol": "NAKA",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 1.1390870704717533,
+            "control_multiple": 1.4635944738278222
+          },
+          {
+            "symbol": "U",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-arty-cta-gtai-lbtc-mbox-naka-u--art81c9cb138ade/",
+            "removal": "2026-07-16",
+            "net_multiple": 0.9417890064868556,
+            "control_multiple": 0.9563133744176404
+          }
+        ],
+        "2026-07-19": [
+          {
+            "symbol": "CBK",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 1.0313903297971356,
+            "control_multiple": 0.9727399913904434
+          },
+          {
+            "symbol": "FLIP",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 0.9808763575319469,
+            "control_multiple": 1.0145592049979906
+          },
+          {
+            "symbol": "FUEL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 0.9715185804294715,
+            "control_multiple": 0.9783810264671128
+          },
+          {
+            "symbol": "OL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 1.011715641017478,
+            "control_multiple": 0.9210034303923004
+          },
+          {
+            "symbol": "PAAL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 0.986294861936878,
+            "control_multiple": 0.9764509793751568
+          },
+          {
+            "symbol": "SAROS",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 0.9475479085824955,
+            "control_multiple": 0.9835694874234041
+          },
+          {
+            "symbol": "STREAM",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-cbk-flip-fuel-ol-paal-saros-stream--artc357601e1303/",
+            "removal": "2026-07-23",
+            "net_multiple": 0.9952324305170464,
+            "control_multiple": 1.2851989073979693
+          }
+        ],
+        "2026-07-31": [
+          {
+            "symbol": "AFC",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.0104243904566668,
+            "control_multiple": 0.9783647317350189
+          },
+          {
+            "symbol": "AO",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.0432986015459156,
+            "control_multiple": 0.9767775880279954
+          },
+          {
+            "symbol": "HPOS10I",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 0.9162956074612986,
+            "control_multiple": 1.0044123977615151
+          },
+          {
+            "symbol": "INTER",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.010562334064965,
+            "control_multiple": 0.9540095230897134
+          },
+          {
+            "symbol": "PUMPBTC",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.0290082426078733,
+            "control_multiple": 0.9668227861170852
+          },
+          {
+            "symbol": "SCA",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 1.0161344832334054,
+            "control_multiple": 0.9392616755875124
+          },
+          {
+            "symbol": "TOKEN",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 0.9353523587652883,
+            "control_multiple": 0.989036595273594
+          },
+          {
+            "symbol": "XAVA",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 0.9574831034740753,
+            "control_multiple": 0.918848499359182
+          },
+          {
+            "symbol": "XTER",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-xter-sca-token-hpos10i-pumpbtc-afc-inter-xava-ao--art406557a5a84a/",
+            "removal": "2026-08-04",
+            "net_multiple": 0.9729283187898519,
+            "control_multiple": 0.9705050851191422
+          }
+        ],
+        "2026-08-20": [
+          {
+            "symbol": "CAMP",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 1.0232350276472046,
+            "control_multiple": 0.9785109319882074
+          },
+          {
+            "symbol": "CUDIS",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 0.8481601200344543,
+            "control_multiple": 0.9572797207778332
+          },
+          {
+            "symbol": "PIRATE",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 0.8752219738102843,
+            "control_multiple": 1.1284162653069871
+          },
+          {
+            "symbol": "SVL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 1.0800360643146945,
+            "control_multiple": 0.9918563677044742
+          },
+          {
+            "symbol": "TAI",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 1.0707366920560228,
+            "control_multiple": 1.01296605007776
+          },
+          {
+            "symbol": "WHITEWHALE",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-camp-whitewhale-cudis-pirate-tai-svl--art29ea635c889e/",
+            "removal": "2026-08-25",
+            "net_multiple": 1.0701980198019803,
+            "control_multiple": 0.9516089108910892
+          }
+        ],
+        "2026-08-23": [
+          {
+            "symbol": "ELIZAOS",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-elizaos-prcl-tusd--art2489b2a8c89e/",
+            "removal": "2026-08-27",
+            "net_multiple": 1.0060343312437752,
+            "control_multiple": 0.9576323099935893
+          },
+          {
+            "symbol": "PRCL",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-elizaos-prcl-tusd--art2489b2a8c89e/",
+            "removal": "2026-08-27",
+            "net_multiple": 1.006450337971361,
+            "control_multiple": 0.9510471493245979
+          },
+          {
+            "symbol": "TUSD",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-elizaos-prcl-tusd--art2489b2a8c89e/",
+            "removal": "2026-08-27",
+            "net_multiple": 0.9801980198019802,
+            "control_multiple": 0.9800996162260539
+          }
+        ],
+        "2026-08-31": [
+          {
+            "symbol": "GODS",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-gods-scrt--art74f3fc794bf8/",
+            "removal": "2026-09-04",
+            "net_multiple": 0.9540954095409541,
+            "control_multiple": 1.0882991644889397
+          },
+          {
+            "symbol": "SCRT",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-gods-scrt--art74f3fc794bf8/",
+            "removal": "2026-09-04",
+            "net_multiple": 0.9120103314679293,
+            "control_multiple": 1.0050417484144727
+          }
+        ],
+        "2026-09-13": [
+          {
+            "symbol": "L3",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-l3-vic--art6d24cb99655a/",
+            "removal": "2026-09-17",
+            "net_multiple": 0.9611957964778706,
+            "control_multiple": 0.9715073871707429
+          },
+          {
+            "symbol": "VIC",
+            "url": "https://announcements.bybit.com/en-US/article/delisting-of-l3-vic--art6d24cb99655a/",
+            "removal": "2026-09-17",
+            "net_multiple": 0.9325770633743538,
+            "control_multiple": 0.9818208642056258
+          }
+        ],
+        "2026-09-20": [
+          {
+            "symbol": "ICX",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-4-token-s-on-sep-24-2026--art1a1071a0dd4e/",
+            "removal": "2026-09-24",
+            "net_multiple": 0.9654803318169654,
+            "control_multiple": 0.9257425742574258
+          },
+          {
+            "symbol": "NEON",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-4-token-s-on-sep-24-2026--art1a1071a0dd4e/",
+            "removal": "2026-09-24",
+            "net_multiple": 0.9637366790114126,
+            "control_multiple": 0.9750814007575254
+          },
+          {
+            "symbol": "SUNDOG",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-4-token-s-on-sep-24-2026--art1a1071a0dd4e/",
+            "removal": "2026-09-24",
+            "net_multiple": 1.019243863506982,
+            "control_multiple": 0.9392800962339225
+          },
+          {
+            "symbol": "TAC",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-4-token-s-on-sep-24-2026--art1a1071a0dd4e/",
+            "removal": "2026-09-24",
+            "net_multiple": 0.9433802370384822,
+            "control_multiple": 1.0222065063649222
+          }
+        ],
+        "2026-10-04": [
+          {
+            "symbol": "AGI",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-2-token-s-on-oct-8-2026--art1b7b7449b6c5/",
+            "removal": "2026-10-08",
+            "net_multiple": 0.9431652575369898,
+            "control_multiple": 1.087468686627699
+          },
+          {
+            "symbol": "SCOR",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-2-token-s-on-oct-8-2026--art1b7b7449b6c5/",
+            "removal": "2026-10-08",
+            "net_multiple": 0.9894234129295283,
+            "control_multiple": 0.9812716211380177
+          }
+        ],
+        "2026-10-24": [
+          {
+            "symbol": "HFT",
+            "url": "https://announcements.bybit.com/en-US/article/bybit-to-delist-1-token-s-on-oct-28-2026--art0d9083316016/",
+            "removal": "2026-10-28",
+            "net_multiple": 0.9485844260101685,
+            "control_multiple": 0.9390929415522198
+          }
+        ]
+      },
+      "paired_control_count": 44,
+      "paired_mean_actual": -0.020749616077645253,
+      "paired_mean_control": -0.00209427415701375
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "snapshot_sha256": "b55b94f19c3c2a291c518ffdab152cfeaa88f64232d2cb37ee20f4ce95dcd204",
+  "cases": {
+    "base": {
+      "coverage": {
+        "listed_pairs": 44,
+        "observed_signal": 37,
+        "missing_signal": 7
+      },
+      "events": [],
+      "ending_thb": 5000.0,
+      "drawdown_trade_closes": 0.0,
+      "months": {
+        "2026-01": 1.0,
+        "2026-02": 1.0,
+        "2026-03": 1.0,
+        "2026-04": 1.0,
+        "2026-05": 1.0,
+        "2026-06": 1.0,
+        "2026-07": 1.0,
+        "2026-08": 1.0,
+        "2026-09": 1.0,
+        "2026-10": 1.0
+      },
+      "3x_months": 0,
+      "6x_months": 0,
+      "paired": 0,
+      "mean_actual_net": null,
+      "mean_control_net": null
+    },
+    "stress": {
+      "coverage": {
+        "listed_pairs": 44,
+        "observed_signal": 37,
+        "missing_signal": 7
+      },
+      "events": [],
+      "ending_thb": 5000.0,
+      "drawdown_trade_closes": 0.0,
+      "months": {
+        "2026-01": 1.0,
+        "2026-02": 1.0,
+        "2026-03": 1.0,
+        "2026-04": 1.0,
+        "2026-05": 1.0,
+        "2026-06": 1.0,
+        "2026-07": 1.0,
+        "2026-08": 1.0,
+        "2026-09": 1.0,
+        "2026-10": 1.0
+      },
+      "3x_months": 0,
+      "6x_months": 0,
+      "paired": 0,
+      "mean_actual_net": null,
+      "mean_control_net": null
+    }
+  }
+}

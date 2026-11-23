@@ -1,0 +1,125 @@
+{
+  "input_sha256": "828f1c008477ff05be60a419502cce30ef3d93ee9b4c9cd2ac02051e6568f791",
+  "partial_month": false,
+  "bars": {
+    "BTCUSDT": 720,
+    "ETHUSDT": 720,
+    "SOLUSDT": 720,
+    "XRPUSDT": 720,
+    "BNBUSDT": 720,
+    "ZECUSDT": 720,
+    "RLUSDUSDT": 720,
+    "SNDKBUSDT": 720,
+    "TUTUSDT": 720,
+    "TRXUSDT": 720,
+    "DOGEUSDT": 720,
+    "ADAUSDT": 720,
+    "UUSDT": 720,
+    "SPCXBUSDT": 720,
+    "PUMPUSDT": 720,
+    "UNIUSDT": 720,
+    "NEARUSDT": 720,
+    "LINKUSDT": 720,
+    "SUIUSDT": 720,
+    "ENAUSDT": 720,
+    "AVAXUSDT": 720,
+    "WLDUSDT": 720,
+    "PEPEUSDT": 720,
+    "TAOUSDT": 720,
+    "XPLUSDT": 720,
+    "MUBUSDT": 720,
+    "ACEUSDT": 720,
+    "LTCUSDT": 720,
+    "CRCLBUSDT": 720,
+    "AAVEUSDT": 720,
+    "ONDOUSDT": 720,
+    "FETUSDT": 720,
+    "SNXXBUSDT": 720,
+    "SKHYBUSDT": 720,
+    "BICOUSDT": 720,
+    "XLMUSDT": 720,
+    "SOXLBUSDT": 720,
+    "HEMIUSDT": 720,
+    "PENGUUSDT": 720,
+    "BANKUSDT": 720,
+    "GIGGLEUSDT": 720,
+    "GRAMUSDT": 720,
+    "HEIUSDT": 720,
+    "FILUSDT": 720,
+    "TRUMPUSDT": 720,
+    "WLFIUSDT": 720,
+    "HOMEUSDT": 720,
+    "KAITOUSDT": 720,
+    "DEXEUSDT": 720,
+    "REUSDT": 720,
+    "BCHUSDT": 720,
+    "ZAMAUSDT": 720,
+    "DOTUSDT": 720,
+    "MSTRBUSDT": 720,
+    "ICPUSDT": 720,
+    "SHIBUSDT": 720,
+    "PROMUSDT": 720,
+    "ARBUSDT": 720,
+    "HBARUSDT": 720,
+    "INJUSDT": 720
+  },
+  "failures": {},
+  "cases": {
+    "base": {
+      "3x_months": 0,
+      "ending_thb": 4872.651950847539,
+      "max_close_drawdown": 0.02804213362486141,
+      "months": [
+        [
+          "2026-09",
+          0.9745303901695078
+        ]
+      ],
+      "events": [
+        [
+          "2026-09-08",
+          "SKHYBUSDT",
+          0.9719578663751386
+        ],
+        [
+          "2026-09-18",
+          "TRUMPUSDT",
+          1.002646744147422
+        ]
+      ],
+      "random": {
+        "end_median_thb": 5059.01779726529,
+        "fraction_at_least_actual": 0.844,
+        "draws_with_3x": 0
+      }
+    },
+    "stress": {
+      "3x_months": 0,
+      "ending_thb": 4747.589716063836,
+      "max_close_drawdown": 0.05048205678723283,
+      "months": [
+        [
+          "2026-09",
+          0.9495179432127672
+        ]
+      ],
+      "events": [
+        [
+          "2026-09-08",
+          "SKHYBUSDT",
+          0.9594035775892625
+        ],
+        [
+          "2026-09-18",
+          "TRUMPUSDT",
+          0.9896960626295188
+        ]
+      ],
+      "random": {
+        "end_median_thb": 4929.172267989087,
+        "fraction_at_least_actual": 0.844,
+        "draws_with_3x": 0
+      }
+    }
+  }
+}

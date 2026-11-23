@@ -1,0 +1,87 @@
+{
+  "notice": "https://announcements.bybit.com/en-US/article/bybit-to-delist-5-token-s-on-nov-27-2026--artf4aaa6a1db57/",
+  "published": "2026-11-20T08:00:03+00:00",
+  "diagnostic_only": true,
+  "pairs": {
+    "DIAMUSDT": {
+      "status": "two_sided",
+      "spread_ratio": "0.0003577817531305903398926654741",
+      "cases": {
+        "base": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "145.8446775009986038671516645"
+        },
+        "higher": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "143.9610462717699613308970382"
+        }
+      },
+      "hours_since_publish": 77.06727537583333,
+      "same_symbol_binance_book": false
+    },
+    "MBXUSDT": {
+      "status": "two_sided",
+      "spread_ratio": "0.0005178663904712584153288451579",
+      "cases": {
+        "base": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "145.5088868677197133198232247"
+        },
+        "higher": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "143.6303051872617567858130176"
+        }
+      },
+      "hours_since_publish": 77.06732880583334,
+      "same_symbol_binance_book": false
+    },
+    "MCRTUSDT": {
+      "status": "two_sided",
+      "spread_ratio": "0.01339904512551979054366240567",
+      "cases": {
+        "base": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "143.8870214550923961883408072"
+        },
+        "higher": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "142.0308157211623693069306930"
+        }
+      },
+      "hours_since_publish": 77.06727452694444,
+      "same_symbol_binance_book": false
+    },
+    "NSUSDT": {
+      "status": "two_sided",
+      "spread_ratio": "0.002853067047075606276747503566",
+      "cases": {
+        "base": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "145.3607587448915919815595488"
+        },
+        "higher": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "143.4846082339387861753365065"
+        }
+      },
+      "hours_since_publish": 77.06736208777778,
+      "same_symbol_binance_book": false
+    },
+    "OBTUSDT": {
+      "status": "two_sided",
+      "spread_ratio": "0.01704545454545454545454545455",
+      "cases": {
+        "base": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "140.4165111702943871449925262"
+        },
+        "higher": {
+          "can_sweep_both_legs": true,
+          "ending_usdt": "138.6108370050250724068894596"
+        }
+      },
+      "hours_since_publish": 77.06736516472222,
+      "same_symbol_binance_book": false
+    }
+  }
+}

@@ -1,0 +1,3503 @@
+{
+  "input_sha256": "4ec8459ae4bc76bfdd4c70a4558e1acf42728d84e4f3c64d3f6a49cad2bfa466",
+  "fit": {
+    "total": 228,
+    "1": 121,
+    "2": 50,
+    "3": 27,
+    "4": 10,
+    "5": 6
+  },
+  "race_audit": [
+    {
+      "date": "2025-03-16",
+      "race": "Formula 1 Louis Vuitton Australian Grand Prix 2025",
+      "start": 1742097600,
+      "qual_start": 1742014800,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "oscar-piastri",
+        "3": "max-verstappen",
+        "4": "george-russell",
+        "5": "yuki-tsunoda"
+      },
+      "winner": "lando-norris",
+      "decision": 1742090400,
+      "status": "matched",
+      "event": "KXF1RACE-AGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 1,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-03-23",
+      "race": "Formula 1 Heineken Chinese Grand Prix 2025",
+      "start": 1742713200,
+      "qual_start": 1742626800,
+      "qualifiers": {
+        "1": "oscar-piastri",
+        "2": "george-russell",
+        "3": "lando-norris",
+        "4": "max-verstappen",
+        "5": "lewis-hamilton"
+      },
+      "winner": "oscar-piastri",
+      "decision": 1742706000,
+      "status": "matched",
+      "event": "KXF1RACE-CGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-CGP25-RUS"
+    },
+    {
+      "date": "2025-04-06",
+      "race": "Formula 1 Lenovo Japanese Grand Prix 2025",
+      "start": 1743915600,
+      "qual_start": 1743832800,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "lando-norris",
+        "3": "oscar-piastri",
+        "4": "charles-leclerc",
+        "5": "george-russell"
+      },
+      "winner": "max-verstappen",
+      "decision": 1743908400,
+      "status": "matched",
+      "event": "KXF1RACE-JGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 1,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-04-13",
+      "race": "Formula 1 Gulf Air Bahrain Grand Prix 2025",
+      "start": 1744556400,
+      "qual_start": 1744473600,
+      "qualifiers": {
+        "1": "oscar-piastri",
+        "2": "george-russell",
+        "3": "charles-leclerc",
+        "4": "kimi-antonelli",
+        "5": "pierre-gasly"
+      },
+      "winner": "oscar-piastri",
+      "decision": 1744549200,
+      "status": "matched",
+      "event": "KXF1RACE-BGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 0,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-04-20",
+      "race": "Formula 1 stc Saudi Arabian Grand Prix 2025",
+      "start": 1745168400,
+      "qual_start": 1745082000,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "oscar-piastri",
+        "3": "george-russell",
+        "4": "charles-leclerc",
+        "5": "kimi-antonelli"
+      },
+      "winner": "oscar-piastri",
+      "decision": 1745161200,
+      "status": "matched",
+      "event": "KXF1RACE-SAGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 1,
+      "signal_selected": "KXF1RACE-SAGP25-RUS"
+    },
+    {
+      "date": "2025-05-04",
+      "race": "Formula 1 Crypto.com Miami Grand Prix 2025",
+      "start": 1746388800,
+      "qual_start": 1746302400,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "lando-norris",
+        "3": "kimi-antonelli",
+        "4": "oscar-piastri",
+        "5": "george-russell"
+      },
+      "winner": "oscar-piastri",
+      "decision": 1746381600,
+      "status": "matched",
+      "event": "KXF1RACE-MGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 3,
+      "signal_selected": "KXF1RACE-MGP25-ANT"
+    },
+    {
+      "date": "2025-05-18",
+      "race": "Formula 1 AWS Gran Premio del Made in Italy e dell'Emilia Romagna 2025",
+      "start": 1747573200,
+      "qual_start": 1747490400,
+      "qualifiers": {
+        "1": "oscar-piastri",
+        "2": "max-verstappen",
+        "3": "george-russell",
+        "4": "lando-norris",
+        "5": "fernando-alonso"
+      },
+      "winner": "max-verstappen",
+      "decision": 1747566000,
+      "status": "matched",
+      "event": "KXF1RACE-ERGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 0,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-05-25",
+      "race": "Formula 1 TAG Heuer Grand Prix de Monaco 2025",
+      "start": 1748178000,
+      "qual_start": 1748095200,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "charles-leclerc",
+        "3": "oscar-piastri",
+        "4": "lewis-hamilton",
+        "5": "max-verstappen"
+      },
+      "winner": "lando-norris",
+      "decision": 1748170800,
+      "status": "matched",
+      "event": "KXF1RACE-MCGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 0,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-06-01",
+      "race": "Formula 1 Aramco Gran Premio de Espa\u00f1a 2025",
+      "start": 1748782800,
+      "qual_start": 1748700000,
+      "qualifiers": {
+        "1": "oscar-piastri",
+        "2": "lando-norris",
+        "3": "max-verstappen",
+        "4": "george-russell",
+        "5": "lewis-hamilton"
+      },
+      "winner": "oscar-piastri",
+      "decision": 1748775600,
+      "status": "matched",
+      "event": "KXF1RACE-SGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 0,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-06-15",
+      "race": "Formula 1 Pirelli Grand Prix du Canada 2025",
+      "start": 1750010400,
+      "qual_start": 1749931200,
+      "qualifiers": {
+        "1": "george-russell",
+        "2": "max-verstappen",
+        "3": "oscar-piastri",
+        "4": "kimi-antonelli",
+        "5": "lewis-hamilton"
+      },
+      "winner": "george-russell",
+      "decision": 1750003200,
+      "status": "matched",
+      "event": "KXF1RACE-CAGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 0,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-06-29",
+      "race": "Formula 1 MSC Cruises Austrian Grand Prix 2025",
+      "start": 1751202000,
+      "qual_start": 1751119200,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "charles-leclerc",
+        "3": "oscar-piastri",
+        "4": "lewis-hamilton",
+        "5": "george-russell"
+      },
+      "winner": "lando-norris",
+      "decision": 1751194800,
+      "status": "matched",
+      "event": "KXF1RACE-AUGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 0,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-07-06",
+      "race": "Formula 1 Qatar Airways British Grand Prix 2025",
+      "start": 1751810400,
+      "qual_start": 1751724000,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "oscar-piastri",
+        "3": "lando-norris",
+        "4": "george-russell",
+        "5": "lewis-hamilton"
+      },
+      "winner": "lando-norris",
+      "decision": 1751803200,
+      "status": "matched",
+      "event": "KXF1RACE-BRGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 0,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-07-27",
+      "race": "Formula 1 Mo\u00ebt & Chandon Belgian Grand Prix 2025",
+      "start": 1753621200,
+      "qual_start": 1753538400,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "oscar-piastri",
+        "3": "charles-leclerc",
+        "4": "max-verstappen",
+        "5": "alexander-albon"
+      },
+      "winner": "oscar-piastri",
+      "decision": 1753614000,
+      "status": "matched",
+      "event": "KXF1RACE-BELGP25",
+      "queried": 5,
+      "quotes": 3,
+      "executable_benchmark": 0,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-08-03",
+      "race": "Formula 1 Lenovo Hungarian Grand Prix 2025",
+      "start": 1754226000,
+      "qual_start": 1754143200,
+      "qualifiers": {
+        "1": "charles-leclerc",
+        "2": "oscar-piastri",
+        "3": "lando-norris",
+        "4": "george-russell",
+        "5": "fernando-alonso"
+      },
+      "winner": "lando-norris",
+      "decision": 1754218800,
+      "status": "matched",
+      "event": "KXF1RACE-HUNGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 0,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-08-31",
+      "race": "Formula 1 Heineken Dutch Grand Prix 2025",
+      "start": 1756645200,
+      "qual_start": 1756558800,
+      "qualifiers": {
+        "1": "oscar-piastri",
+        "2": "lando-norris",
+        "3": "max-verstappen",
+        "4": "isack-hadjar",
+        "5": "george-russell"
+      },
+      "winner": "oscar-piastri",
+      "decision": 1756638000,
+      "status": "matched",
+      "event": "KXF1RACE-DUTGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 1,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-09-07",
+      "race": "Formula 1 Pirelli Gran Premio d'Italia 2025",
+      "start": 1757250000,
+      "qual_start": 1757167200,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "lando-norris",
+        "3": "oscar-piastri",
+        "4": "charles-leclerc",
+        "5": "lewis-hamilton"
+      },
+      "winner": "max-verstappen",
+      "decision": 1757242800,
+      "status": "matched",
+      "event": "KXF1RACE-ITAGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 3,
+      "signal_selected": "KXF1RACE-ITAGP25-VER"
+    },
+    {
+      "date": "2025-09-21",
+      "race": "Formula 1 Qatar Airways Azerbaijan Grand Prix 2025",
+      "start": 1758452400,
+      "qual_start": 1758369600,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "carlos-sainz-jr",
+        "3": "liam-lawson",
+        "4": "kimi-antonelli",
+        "5": "george-russell"
+      },
+      "winner": "max-verstappen",
+      "decision": 1758445200,
+      "status": "matched",
+      "event": "KXF1RACE-AZEGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 1,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-10-05",
+      "race": "Formula 1 Singapore Airlines Singapore Grand Prix 2025",
+      "start": 1759665600,
+      "qual_start": 1759582800,
+      "qualifiers": {
+        "1": "george-russell",
+        "2": "max-verstappen",
+        "3": "oscar-piastri",
+        "4": "kimi-antonelli",
+        "5": "lando-norris"
+      },
+      "winner": "george-russell",
+      "decision": 1759658400,
+      "status": "matched",
+      "event": "KXF1RACE-SINGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 2,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-10-19",
+      "race": "Formula 1 MSC Cruises United States Grand Prix 2025",
+      "start": 1760900400,
+      "qual_start": 1760821200,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "lando-norris",
+        "3": "charles-leclerc",
+        "4": "george-russell",
+        "5": "lewis-hamilton"
+      },
+      "winner": "max-verstappen",
+      "decision": 1760893200,
+      "status": "matched",
+      "event": "KXF1RACE-UNISGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-UNISGP25-LEC"
+    },
+    {
+      "date": "2025-10-26",
+      "race": "Formula 1 Gran Premio de la Ciudad de M\u00e9xico 2025",
+      "start": 1761508800,
+      "qual_start": 1761426000,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "charles-leclerc",
+        "3": "lewis-hamilton",
+        "4": "george-russell",
+        "5": "max-verstappen"
+      },
+      "winner": "lando-norris",
+      "decision": 1761501600,
+      "status": "matched",
+      "event": "KXF1RACE-GRAPDM25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-11-09",
+      "race": "Formula 1 MSC Cruises Grande Pr\u00eamio de S\u00e3o Paulo 2025",
+      "start": 1762707600,
+      "qual_start": 1762624800,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "kimi-antonelli",
+        "3": "charles-leclerc",
+        "4": "oscar-piastri",
+        "5": "isack-hadjar"
+      },
+      "winner": "lando-norris",
+      "decision": 1762700400,
+      "status": "matched",
+      "event": "KXF1RACE-SAOPGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 3,
+      "signal_selected": "KXF1RACE-SAOPGP25-ANT"
+    },
+    {
+      "date": "2025-11-23",
+      "race": "Formula 1 Heineken Las Vegas Grand Prix 2025",
+      "start": 1763870400,
+      "qual_start": 1763784000,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "max-verstappen",
+        "3": "carlos-sainz-jr",
+        "4": "george-russell",
+        "5": "oscar-piastri"
+      },
+      "winner": "max-verstappen",
+      "decision": 1763863200,
+      "status": "matched",
+      "event": "KXF1RACE-LASVGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 3,
+      "signal_selected": "KXF1RACE-LASVGP25-SAI"
+    },
+    {
+      "date": "2025-11-30",
+      "race": "Formula 1 Qatar Airways Qatar Grand Prix 2025",
+      "start": 1764518400,
+      "qual_start": 1764439200,
+      "qualifiers": {
+        "1": "oscar-piastri",
+        "2": "lando-norris",
+        "3": "max-verstappen",
+        "4": "george-russell",
+        "5": "kimi-antonelli"
+      },
+      "winner": "max-verstappen",
+      "decision": 1764511200,
+      "status": "matched",
+      "event": "KXF1RACE-QATGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": null
+    },
+    {
+      "date": "2025-12-07",
+      "race": "Formula 1 Etihad Airways Abu Dhabi Grand Prix 2025",
+      "start": 1765112400,
+      "qual_start": 1765029600,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "lando-norris",
+        "3": "oscar-piastri",
+        "4": "george-russell",
+        "5": "charles-leclerc"
+      },
+      "winner": "max-verstappen",
+      "decision": 1765105200,
+      "status": "matched",
+      "event": "KXF1RACE-ABUDGP25",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 3,
+      "signal_selected": null
+    },
+    {
+      "date": "2026-03-08",
+      "race": "Formula 1 Qatar Airways Australian Grand Prix 2026",
+      "start": 1772942400,
+      "qual_start": 1772859600,
+      "qualifiers": {
+        "1": "george-russell",
+        "2": "kimi-antonelli",
+        "3": "isack-hadjar",
+        "4": "charles-leclerc",
+        "5": "oscar-piastri"
+      },
+      "winner": "george-russell",
+      "decision": 1772935200,
+      "status": "matched",
+      "event": "KXF1RACE-AUSGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-AUSGP26-HAD"
+    },
+    {
+      "date": "2026-03-15",
+      "race": "Formula 1 Heineken Chinese Grand Prix 2026",
+      "start": 1773558000,
+      "qual_start": 1773471600,
+      "qualifiers": {
+        "1": "kimi-antonelli",
+        "2": "george-russell",
+        "3": "lewis-hamilton",
+        "4": "charles-leclerc",
+        "5": "oscar-piastri"
+      },
+      "winner": "kimi-antonelli",
+      "decision": 1773550800,
+      "status": "matched",
+      "event": "KXF1RACE-CHIGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-CHIGP26-ANT"
+    },
+    {
+      "date": "2026-03-29",
+      "race": "Formula 1 Aramco Japanese Grand Prix 2026",
+      "start": 1774760400,
+      "qual_start": 1774677600,
+      "qualifiers": {
+        "1": "kimi-antonelli",
+        "2": "george-russell",
+        "3": "oscar-piastri",
+        "4": "charles-leclerc",
+        "5": "lando-norris"
+      },
+      "winner": "kimi-antonelli",
+      "decision": 1774753200,
+      "status": "matched",
+      "event": "KXF1RACE-JAPGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-JAPGP26-PIA"
+    },
+    {
+      "date": "2026-05-03",
+      "race": "Formula 1 Crypto.com Miami Grand Prix 2026",
+      "start": 1777827600,
+      "qual_start": 1777752000,
+      "qualifiers": {
+        "1": "kimi-antonelli",
+        "2": "max-verstappen",
+        "3": "charles-leclerc",
+        "4": "lando-norris",
+        "5": "george-russell"
+      },
+      "winner": "kimi-antonelli",
+      "decision": 1777820400,
+      "status": "matched",
+      "event": "KXF1RACE-MIAGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": null
+    },
+    {
+      "date": "2026-05-24",
+      "race": "Formula 1 Lenovo Grand Prix du Canada 2026",
+      "start": 1779652800,
+      "qual_start": 1779566400,
+      "qualifiers": {
+        "1": "george-russell",
+        "2": "kimi-antonelli",
+        "3": "lando-norris",
+        "4": "oscar-piastri",
+        "5": "lewis-hamilton"
+      },
+      "winner": "kimi-antonelli",
+      "decision": 1779645600,
+      "status": "matched",
+      "event": "KXF1RACE-CANGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 3,
+      "signal_selected": null
+    },
+    {
+      "date": "2026-06-07",
+      "race": "Formula 1 Louis Vuitton Grand Prix de Monaco 2026",
+      "start": 1780837200,
+      "qual_start": 1780754400,
+      "qualifiers": {
+        "1": "kimi-antonelli",
+        "2": "max-verstappen",
+        "3": "lewis-hamilton",
+        "4": "charles-leclerc",
+        "5": "isack-hadjar"
+      },
+      "winner": "kimi-antonelli",
+      "decision": 1780830000,
+      "status": "matched",
+      "event": "KXF1RACE-MONGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": null
+    },
+    {
+      "date": "2026-06-14",
+      "race": "Formula 1 MSC Cruises Gran Premio de Barcelona-Catalunya 2026",
+      "start": 1781442000,
+      "qual_start": 1781359200,
+      "qualifiers": {
+        "1": "george-russell",
+        "2": "lewis-hamilton",
+        "3": "kimi-antonelli",
+        "4": "lando-norris",
+        "5": "max-verstappen"
+      },
+      "winner": "lewis-hamilton",
+      "decision": 1781434800,
+      "status": "matched",
+      "event": "KXF1RACE-BARGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-BARGP26-HAM"
+    },
+    {
+      "date": "2026-06-28",
+      "race": "Formula 1 Lenovo Austrian Grand Prix 2026",
+      "start": 1782651600,
+      "qual_start": 1782568800,
+      "qualifiers": {
+        "1": "george-russell",
+        "2": "charles-leclerc",
+        "3": "lewis-hamilton",
+        "4": "kimi-antonelli",
+        "5": "max-verstappen"
+      },
+      "winner": "george-russell",
+      "decision": 1782644400,
+      "status": "matched",
+      "event": "KXF1RACE-AUTGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-AUTGP26-LEC"
+    },
+    {
+      "date": "2026-07-05",
+      "race": "Formula 1 Pirelli British Grand Prix 2026",
+      "start": 1783260000,
+      "qual_start": 1783177200,
+      "qualifiers": {
+        "1": "kimi-antonelli",
+        "2": "charles-leclerc",
+        "3": "lewis-hamilton",
+        "4": "george-russell",
+        "5": "isack-hadjar"
+      },
+      "winner": "charles-leclerc",
+      "decision": 1783252800,
+      "status": "matched",
+      "event": "KXF1RACE-BRIGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-BRIGP26-LEC"
+    },
+    {
+      "date": "2026-07-19",
+      "race": "Formula 1 Mo\u00ebt & Chandon Belgian Grand Prix 2026",
+      "start": 1784466000,
+      "qual_start": 1784383200,
+      "qualifiers": {
+        "1": "kimi-antonelli",
+        "2": "max-verstappen",
+        "3": "lando-norris",
+        "4": "george-russell",
+        "5": "charles-leclerc"
+      },
+      "winner": "kimi-antonelli",
+      "decision": 1784458800,
+      "status": "matched",
+      "event": "KXF1RACE-BELGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-BELGP26-NOR"
+    },
+    {
+      "date": "2026-07-26",
+      "race": "Formula 1 AWS Hungarian Grand Prix 2026",
+      "start": 1785070800,
+      "qual_start": 1784988000,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "lewis-hamilton",
+        "3": "charles-leclerc",
+        "4": "kimi-antonelli",
+        "5": "oscar-piastri"
+      },
+      "winner": "lando-norris",
+      "decision": 1785063600,
+      "status": "matched",
+      "event": "KXF1RACE-HUNGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": null
+    },
+    {
+      "date": "2026-08-23",
+      "race": "Formula 1 Heineken Dutch Grand Prix 2026",
+      "start": 1787490000,
+      "qual_start": 1787407200,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "george-russell",
+        "3": "kimi-antonelli",
+        "4": "oscar-piastri",
+        "5": "lewis-hamilton"
+      },
+      "winner": "lando-norris",
+      "decision": 1787482800,
+      "status": "matched",
+      "event": "KXF1RACE-DUTGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": null
+    },
+    {
+      "date": "2026-09-06",
+      "race": "Formula 1 Pirelli Gran Premio d'Italia 2026",
+      "start": 1788699600,
+      "qual_start": 1788616800,
+      "qualifiers": {
+        "1": "pierre-gasly",
+        "2": "george-russell",
+        "3": "oscar-piastri",
+        "4": "charles-leclerc",
+        "5": "lewis-hamilton"
+      },
+      "winner": "kimi-antonelli",
+      "decision": 1788692400,
+      "status": "matched",
+      "event": "KXF1RACE-ITAGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-ITAGP26-GAS"
+    },
+    {
+      "date": "2026-09-13",
+      "race": "Formula 1 TAG Heuer Gran Premio de Espa\u00f1a 2026",
+      "start": 1789304400,
+      "qual_start": 1789221600,
+      "qualifiers": {
+        "1": "lando-norris",
+        "2": "kimi-antonelli",
+        "3": "max-verstappen",
+        "4": "lewis-hamilton",
+        "5": "charles-leclerc"
+      },
+      "winner": "kimi-antonelli",
+      "decision": 1789297200,
+      "status": "matched",
+      "event": "KXF1RACE-SPAGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 3,
+      "signal_selected": null
+    },
+    {
+      "date": "2026-09-26",
+      "race": "Formula 1 Qatar Airways Azerbaijan Grand Prix 2026",
+      "start": 1790420400,
+      "qual_start": 1790337600,
+      "qualifiers": {
+        "1": "george-russell",
+        "2": "charles-leclerc",
+        "3": "oscar-piastri",
+        "4": "isack-hadjar",
+        "5": "lando-norris"
+      },
+      "winner": "george-russell",
+      "decision": 1790413200,
+      "status": "matched",
+      "event": "KXF1RACE-AZEGP26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-AZEGP26-LEC"
+    },
+    {
+      "date": "2026-10-04",
+      "race": "Formula 1 Gulf Air Bahrain Grand Prix in Malaysia 2026",
+      "start": 1791097200,
+      "qual_start": 1791014400,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "lewis-hamilton",
+        "3": "isack-hadjar",
+        "4": "kimi-antonelli",
+        "5": "charles-leclerc"
+      },
+      "winner": "max-verstappen",
+      "decision": 1791090000,
+      "status": "matched",
+      "event": "KXF1RACE-BAH26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-BAH26-HAM"
+    },
+    {
+      "date": "2026-10-11",
+      "race": "Formula 1 Singapore Airlines Singapore Grand Prix 2026",
+      "start": 1791720000,
+      "qual_start": 1791637200,
+      "qualifiers": {
+        "1": "max-verstappen",
+        "2": "charles-leclerc",
+        "3": "lewis-hamilton",
+        "4": "kimi-antonelli",
+        "5": "lando-norris"
+      },
+      "winner": "max-verstappen",
+      "decision": 1791712800,
+      "status": "matched",
+      "event": "KXF1RACE-SIN26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 4,
+      "signal_selected": "KXF1RACE-SIN26-LEC"
+    },
+    {
+      "date": "2026-10-25",
+      "race": "Formula 1 MSC Cruises United States Grand Prix 2026",
+      "start": 1792958400,
+      "qual_start": 1792875600,
+      "qualifiers": {
+        "1": "kimi-antonelli",
+        "2": "max-verstappen",
+        "3": "isack-hadjar",
+        "4": "charles-leclerc",
+        "5": "lewis-hamilton"
+      },
+      "winner": "kimi-antonelli",
+      "decision": 1792951200,
+      "status": "matched",
+      "event": "KXF1RACE-UNIS26",
+      "queried": 5,
+      "quotes": 5,
+      "executable_benchmark": 3,
+      "signal_selected": "KXF1RACE-UNIS26-HAD"
+    }
+  ],
+  "outcomes": {
+    "2025_base_path": {
+      "end": 15.423843750000028,
+      "drawdown_month_end": 0.8950758928571426,
+      "hits_3x": 0,
+      "funded_hits_3x": 0,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 1,
+      "trades": 7,
+      "wins": 1,
+      "mean_trade_net": -0.5739754572817782,
+      "months": [
+        {
+          "month": "2025-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-02",
+          "start": 146.26591875000003,
+          "end": 146.26591875000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-03",
+          "start": 146.26591875000003,
+          "end": 127.58274375000002,
+          "multiple": 0.8722656982592536,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-CGP25-RUS",
+              "units": 147,
+              "spend": 18.73,
+              "payout": 0,
+              "settle": 1742753902
+            }
+          ]
+        },
+        {
+          "month": "2025-04",
+          "start": 127.58274375000002,
+          "end": 124.16131875000004,
+          "multiple": 0.973182697758058,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAGP25-RUS",
+              "units": 46,
+              "spend": 3.4299999999999997,
+              "payout": 0,
+              "settle": 1745186529
+            }
+          ]
+        },
+        {
+          "month": "2025-05",
+          "start": 124.16131875000004,
+          "end": 62.12679375000003,
+          "multiple": 0.500371568017032,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-MGP25-ANT",
+              "units": 834,
+              "spend": 62.19,
+              "payout": 0,
+              "settle": 1746413664
+            }
+          ]
+        },
+        {
+          "month": "2025-06",
+          "start": 62.12679375000003,
+          "end": 62.12679375000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-07",
+          "start": 62.12679375000003,
+          "end": 62.12679375000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-08",
+          "start": 62.12679375000003,
+          "end": 62.12679375000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-09",
+          "start": 62.12679375000003,
+          "end": 123.12391875000004,
+          "multiple": 1.9818167221932321,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP25-VER",
+              "units": 92,
+              "spend": 30.85,
+              "payout": 92,
+              "settle": 1757262760
+            }
+          ]
+        },
+        {
+          "month": "2025-10",
+          "start": 123.12391875000004,
+          "end": 61.56819375000003,
+          "multiple": 0.5000506349624289,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-UNISGP25-LEC",
+              "units": 965,
+              "spend": 61.71000000000001,
+              "payout": 0,
+              "settle": 1760920836
+            }
+          ]
+        },
+        {
+          "month": "2025-11",
+          "start": 61.56819375000003,
+          "end": 15.423843750000028,
+          "multiple": 0.2505164243185228,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAOPGP25-ANT",
+              "units": 264,
+              "spend": 30.849999999999998,
+              "payout": 0,
+              "settle": 1762725883
+            },
+            {
+              "ticker": "KXF1RACE-LASVGP25-SAI",
+              "units": 481,
+              "spend": 15.41,
+              "payout": 0,
+              "settle": 1763900483
+            }
+          ]
+        },
+        {
+          "month": "2025-12",
+          "start": 15.423843750000028,
+          "end": 15.423843750000028,
+          "multiple": 1.0,
+          "trades": []
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 1.0,
+        "p_ge_hits_6x": 1.0,
+        "p_ge_end": 0.016983016983016984
+      }
+    },
+    "2025_base_reset": {
+      "end": 146.26591875000003,
+      "drawdown_month_end": 0.8741092636579572,
+      "hits_3x": 0,
+      "funded_hits_3x": 0,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 2,
+      "trades": 7,
+      "wins": 1,
+      "mean_trade_net": -0.5739108340011336,
+      "months": [
+        {
+          "month": "2025-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-02",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-03",
+          "start": 147,
+          "end": 127.58274375000002,
+          "multiple": 0.8679098214285715,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-CGP25-RUS",
+              "units": 147,
+              "spend": 18.73,
+              "payout": 0,
+              "settle": 1742753902
+            }
+          ]
+        },
+        {
+          "month": "2025-04",
+          "start": 147,
+          "end": 142.84449375000003,
+          "multiple": 0.9717312500000002,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAGP25-RUS",
+              "units": 46,
+              "spend": 3.4299999999999997,
+              "payout": 0,
+              "settle": 1745186529
+            }
+          ]
+        },
+        {
+          "month": "2025-05",
+          "start": 147,
+          "end": 80.22144375000003,
+          "multiple": 0.5457241071428574,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-MGP25-ANT",
+              "units": 888,
+              "spend": 66.21,
+              "payout": 0,
+              "settle": 1746413664
+            }
+          ]
+        },
+        {
+          "month": "2025-06",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-07",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-08",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-09",
+          "start": 147,
+          "end": 290.81364375000004,
+          "multiple": 1.9783241071428574,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP25-VER",
+              "units": 218,
+              "spend": 73.09,
+              "payout": 218,
+              "settle": 1757262760
+            }
+          ]
+        },
+        {
+          "month": "2025-10",
+          "start": 147,
+          "end": 73.15914375000001,
+          "multiple": 0.4976812500000001,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-UNISGP25-LEC",
+              "units": 1146,
+              "spend": 73.29,
+              "payout": 0,
+              "settle": 1760920836
+            }
+          ]
+        },
+        {
+          "month": "2025-11",
+          "start": 147,
+          "end": 36.61074375000003,
+          "multiple": 0.2490526785714288,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAOPGP25-ANT",
+              "units": 627,
+              "spend": 73.27,
+              "payout": 0,
+              "settle": 1762725883
+            },
+            {
+              "ticker": "KXF1RACE-LASVGP25-SAI",
+              "units": 1144,
+              "spend": 36.66,
+              "payout": 0,
+              "settle": 1763900483
+            }
+          ]
+        },
+        {
+          "month": "2025-12",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 1.0,
+        "p_ge_hits_6x": 1.0
+      }
+    },
+    "2025_stress_path": {
+      "end": 14.865243750000015,
+      "drawdown_month_end": 0.8988758928571428,
+      "hits_3x": 0,
+      "funded_hits_3x": 0,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 1,
+      "trades": 7,
+      "wins": 1,
+      "mean_trade_net": -0.5866021515478931,
+      "months": [
+        {
+          "month": "2025-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-02",
+          "start": 146.26591875000003,
+          "end": 146.26591875000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-03",
+          "start": 146.26591875000003,
+          "end": 126.03661875000003,
+          "multiple": 0.8616950539614343,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-CGP25-RUS",
+              "units": 147,
+              "spend": 20.28,
+              "payout": 0,
+              "settle": 1742753902
+            }
+          ]
+        },
+        {
+          "month": "2025-04",
+          "start": 126.03661875000003,
+          "end": 122.12641875000003,
+          "multiple": 0.9689756831087631,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAGP25-RUS",
+              "units": 46,
+              "spend": 3.92,
+              "payout": 0,
+              "settle": 1745186529
+            }
+          ]
+        },
+        {
+          "month": "2025-05",
+          "start": 122.12641875000003,
+          "end": 61.13926875000002,
+          "multiple": 0.500622792150777,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-MGP25-ANT",
+              "units": 718,
+              "spend": 61.14,
+              "payout": 0,
+              "settle": 1746413664
+            }
+          ]
+        },
+        {
+          "month": "2025-06",
+          "start": 61.13926875000002,
+          "end": 61.13926875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-07",
+          "start": 61.13926875000002,
+          "end": 61.13926875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-08",
+          "start": 61.13926875000002,
+          "end": 61.13926875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-09",
+          "start": 61.13926875000002,
+          "end": 118.58529375000003,
+          "multiple": 1.939592935514133,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP25-VER",
+              "units": 88,
+              "spend": 30.410000000000004,
+              "payout": 88,
+              "settle": 1757262760
+            }
+          ]
+        },
+        {
+          "month": "2025-10",
+          "start": 118.58529375000003,
+          "end": 59.30386875000002,
+          "multiple": 0.5000946312535487,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-UNISGP25-LEC",
+              "units": 797,
+              "spend": 59.43000000000001,
+              "payout": 0,
+              "settle": 1760920836
+            }
+          ]
+        },
+        {
+          "month": "2025-11",
+          "start": 59.30386875000002,
+          "end": 14.865243750000015,
+          "multiple": 0.25066229342752633,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAOPGP25-ANT",
+              "units": 233,
+              "spend": 29.69,
+              "payout": 0,
+              "settle": 1762725883
+            },
+            {
+              "ticker": "KXF1RACE-LASVGP25-SAI",
+              "units": 348,
+              "spend": 14.86,
+              "payout": 0,
+              "settle": 1763900483
+            }
+          ]
+        },
+        {
+          "month": "2025-12",
+          "start": 14.865243750000015,
+          "end": 14.865243750000015,
+          "multiple": 1.0,
+          "trades": []
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 1.0,
+        "p_ge_hits_6x": 1.0,
+        "p_ge_end": 0.012987012987012988
+      }
+    },
+    "2025_stress_reset": {
+      "end": 146.26591875000003,
+      "drawdown_month_end": 0.8713919038483439,
+      "hits_3x": 0,
+      "funded_hits_3x": 0,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 3,
+      "trades": 7,
+      "wins": 1,
+      "mean_trade_net": -0.5865431496830815,
+      "months": [
+        {
+          "month": "2025-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-02",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-03",
+          "start": 147,
+          "end": 126.03661875000003,
+          "multiple": 0.8573919642857145,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-CGP25-RUS",
+              "units": 147,
+              "spend": 20.28,
+              "payout": 0,
+              "settle": 1742753902
+            }
+          ]
+        },
+        {
+          "month": "2025-04",
+          "start": 147,
+          "end": 142.35571875000005,
+          "multiple": 0.9684062500000004,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAGP25-RUS",
+              "units": 46,
+              "spend": 3.92,
+              "payout": 0,
+              "settle": 1745186529
+            }
+          ]
+        },
+        {
+          "month": "2025-05",
+          "start": 147,
+          "end": 73.20901875000003,
+          "multiple": 0.4980205357142859,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-MGP25-ANT",
+              "units": 860,
+              "spend": 73.24,
+              "payout": 0,
+              "settle": 1746413664
+            }
+          ]
+        },
+        {
+          "month": "2025-06",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-07",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-08",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-09",
+          "start": 147,
+          "end": 284.66904375,
+          "multiple": 1.9365241071428572,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP25-VER",
+              "units": 212,
+              "spend": 73.25000000000001,
+              "payout": 212,
+              "settle": 1757262760
+            }
+          ]
+        },
+        {
+          "month": "2025-10",
+          "start": 147,
+          "end": 73.15914375000001,
+          "multiple": 0.4976812500000001,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-UNISGP25-LEC",
+              "units": 983,
+              "spend": 73.29,
+              "payout": 0,
+              "settle": 1760920836
+            }
+          ]
+        },
+        {
+          "month": "2025-11",
+          "start": 147,
+          "end": 36.61074375000002,
+          "multiple": 0.2490526785714287,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAOPGP25-ANT",
+              "units": 575,
+              "spend": 73.26,
+              "payout": 0,
+              "settle": 1762725883
+            },
+            {
+              "ticker": "KXF1RACE-LASVGP25-SAI",
+              "units": 859,
+              "spend": 36.67,
+              "payout": 0,
+              "settle": 1763900483
+            }
+          ]
+        },
+        {
+          "month": "2025-12",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 1.0,
+        "p_ge_hits_6x": 1.0
+      }
+    },
+    "2026_base_path": {
+      "end": 17.967468750000055,
+      "drawdown_month_end": 0.9685663553114351,
+      "hits_3x": 1,
+      "funded_hits_3x": 0,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 2,
+      "trades": 12,
+      "wins": 3,
+      "mean_trade_net": 0.5984413531929913,
+      "months": [
+        {
+          "month": "2026-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-02",
+          "start": 146.26591875000003,
+          "end": 146.26591875000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-03",
+          "start": 146.26591875000003,
+          "end": 76.24141875000002,
+          "multiple": 0.521252109866503,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-AUSGP26-HAD",
+              "units": 1374,
+              "spend": 73.27000000000001,
+              "payout": 0,
+              "settle": 1772959448
+            },
+            {
+              "ticker": "KXF1RACE-CHIGP26-ANT",
+              "units": 116,
+              "spend": 36.51,
+              "payout": 116,
+              "settle": 1773588039
+            },
+            {
+              "ticker": "KXF1RACE-JAPGP26-PIA",
+              "units": 1195,
+              "spend": 76.42,
+              "payout": 0,
+              "settle": 1774785928
+            }
+          ]
+        },
+        {
+          "month": "2026-04",
+          "start": 76.24141875000002,
+          "end": 76.24141875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-05",
+          "start": 76.24141875000002,
+          "end": 76.24141875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-06",
+          "start": 76.24141875000002,
+          "end": 124.95931875000001,
+          "multiple": 1.6389951918359333,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BARGP26-HAM",
+              "units": 212,
+              "spend": 38.14,
+              "payout": 212,
+              "settle": 1781464003
+            },
+            {
+              "ticker": "KXF1RACE-AUTGP26-LEC",
+              "units": 695,
+              "spend": 125.02000000000001,
+              "payout": 0,
+              "settle": 1782666784
+            }
+          ]
+        },
+        {
+          "month": "2026-07",
+          "start": 124.95931875000001,
+          "end": 571.59991875,
+          "multiple": 4.574288052046539,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BRIGP26-LEC",
+              "units": 654,
+              "spend": 62.61,
+              "payout": 654,
+              "settle": 1783281824
+            },
+            {
+              "ticker": "KXF1RACE-BELGP26-NOR",
+              "units": 4483,
+              "spend": 143.63,
+              "payout": 0,
+              "settle": 1784501836
+            }
+          ]
+        },
+        {
+          "month": "2026-08",
+          "start": 571.59991875,
+          "end": 571.59991875,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-09",
+          "start": 571.59991875,
+          "end": 142.99411875000007,
+          "multiple": 0.25016469397460017,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP26-GAS",
+              "units": 3364,
+              "spend": 286.46,
+              "payout": 0,
+              "settle": 1788722085
+            },
+            {
+              "ticker": "KXF1RACE-AZEGP26-LEC",
+              "units": 1496,
+              "spend": 143.22,
+              "payout": 0,
+              "settle": 1790441666
+            }
+          ]
+        },
+        {
+          "month": "2026-10",
+          "start": 142.99411875000007,
+          "end": 17.967468750000055,
+          "multiple": 0.1256518023752641,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BAH26-HAM",
+              "units": 562,
+              "spend": 71.6,
+              "payout": 0,
+              "settle": 1791125867
+            },
+            {
+              "ticker": "KXF1RACE-SIN26-LEC",
+              "units": 225,
+              "spend": 35.760000000000005,
+              "payout": 0,
+              "settle": 1791735638
+            },
+            {
+              "ticker": "KXF1RACE-UNIS26-HAD",
+              "units": 561,
+              "spend": 17.979999999999997,
+              "payout": 0,
+              "settle": 1792974383
+            }
+          ]
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 0.000999000999000999,
+        "p_ge_hits_6x": 1.0,
+        "p_ge_end": 0.000999000999000999
+      }
+    },
+    "2026_base_reset": {
+      "end": 18.376443750000007,
+      "drawdown_month_end": 0.9734837444450442,
+      "hits_3x": 1,
+      "funded_hits_3x": 1,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 2,
+      "trades": 12,
+      "wins": 3,
+      "mean_trade_net": 0.5984727915909878,
+      "months": [
+        {
+          "month": "2026-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-02",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-03",
+          "start": 147,
+          "end": 76.24141875000002,
+          "multiple": 0.5186491071428573,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-AUSGP26-HAD",
+              "units": 1374,
+              "spend": 73.27000000000001,
+              "payout": 0,
+              "settle": 1772959448
+            },
+            {
+              "ticker": "KXF1RACE-CHIGP26-ANT",
+              "units": 116,
+              "spend": 36.51,
+              "payout": 116,
+              "settle": 1773588039
+            },
+            {
+              "ticker": "KXF1RACE-JAPGP26-PIA",
+              "units": 1195,
+              "spend": 76.42,
+              "payout": 0,
+              "settle": 1774785928
+            }
+          ]
+        },
+        {
+          "month": "2026-04",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-05",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-06",
+          "start": 147,
+          "end": 239.68179375000003,
+          "multiple": 1.630488392857143,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BARGP26-HAM",
+              "units": 407,
+              "spend": 73.21000000000001,
+              "payout": 407,
+              "settle": 1781464003
+            },
+            {
+              "ticker": "KXF1RACE-AUTGP26-LEC",
+              "units": 1335,
+              "spend": 240.14000000000001,
+              "payout": 0,
+              "settle": 1782666784
+            }
+          ]
+        },
+        {
+          "month": "2026-07",
+          "start": 147,
+          "end": 693.0255937500001,
+          "multiple": 4.714459821428572,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BRIGP26-LEC",
+              "units": 765,
+              "spend": 73.24,
+              "payout": 765,
+              "settle": 1783281824
+            },
+            {
+              "ticker": "KXF1RACE-BELGP26-NOR",
+              "units": 4483,
+              "spend": 143.63,
+              "payout": 0,
+              "settle": 1784501836
+            }
+          ]
+        },
+        {
+          "month": "2026-08",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-09",
+          "start": 147,
+          "end": 36.63069375000003,
+          "multiple": 0.24918839285714303,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP26-GAS",
+              "units": 860,
+              "spend": 73.24,
+              "payout": 0,
+              "settle": 1788722085
+            },
+            {
+              "ticker": "KXF1RACE-AZEGP26-LEC",
+              "units": 383,
+              "spend": 36.67,
+              "payout": 0,
+              "settle": 1790441666
+            }
+          ]
+        },
+        {
+          "month": "2026-10",
+          "start": 147,
+          "end": 18.376443750000007,
+          "multiple": 0.12500982142857148,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BAH26-HAM",
+              "units": 575,
+              "spend": 73.26,
+              "payout": 0,
+              "settle": 1791125867
+            },
+            {
+              "ticker": "KXF1RACE-SIN26-LEC",
+              "units": 230,
+              "spend": 36.56000000000001,
+              "payout": 0,
+              "settle": 1791735638
+            },
+            {
+              "ticker": "KXF1RACE-UNIS26-HAD",
+              "units": 574,
+              "spend": 18.39,
+              "payout": 0,
+              "settle": 1792974383
+            }
+          ]
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 0.000999000999000999,
+        "p_ge_hits_6x": 1.0
+      }
+    },
+    "2026_stress_path": {
+      "end": 12.969993750000034,
+      "drawdown_month_end": 0.9685757269997401,
+      "hits_3x": 1,
+      "funded_hits_3x": 0,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 2,
+      "trades": 12,
+      "wins": 3,
+      "mean_trade_net": 0.47807188569342207,
+      "months": [
+        {
+          "month": "2026-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-02",
+          "start": 146.26591875000003,
+          "end": 146.26591875000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-03",
+          "start": 146.26591875000003,
+          "end": 74.34616875000002,
+          "multiple": 0.5082945458885308,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-AUSGP26-HAD",
+              "units": 1146,
+              "spend": 73.28999999999999,
+              "payout": 0,
+              "settle": 1772959448
+            },
+            {
+              "ticker": "KXF1RACE-CHIGP26-ANT",
+              "units": 112,
+              "spend": 36.4,
+              "payout": 112,
+              "settle": 1773588039
+            },
+            {
+              "ticker": "KXF1RACE-JAPGP26-PIA",
+              "units": 998,
+              "spend": 74.41000000000001,
+              "payout": 0,
+              "settle": 1774785928
+            }
+          ]
+        },
+        {
+          "month": "2026-04",
+          "start": 74.34616875000002,
+          "end": 74.34616875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-05",
+          "start": 74.34616875000002,
+          "end": 74.34616875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-06",
+          "start": 74.34616875000002,
+          "end": 116.01174375000004,
+          "multiple": 1.5604266595109517,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BARGP26-HAM",
+              "units": 195,
+              "spend": 37.120000000000005,
+              "payout": 195,
+              "settle": 1781464003
+            },
+            {
+              "ticker": "KXF1RACE-AUTGP26-LEC",
+              "units": 610,
+              "spend": 116.11,
+              "payout": 0,
+              "settle": 1782666784
+            }
+          ]
+        },
+        {
+          "month": "2026-07",
+          "start": 116.01174375000004,
+          "end": 412.7380687500001,
+          "multiple": 3.557726618086455,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BRIGP26-LEC",
+              "units": 547,
+              "spend": 58.150000000000006,
+              "payout": 547,
+              "settle": 1783281824
+            },
+            {
+              "ticker": "KXF1RACE-BELGP26-NOR",
+              "units": 4483,
+              "spend": 191.38,
+              "payout": 0,
+              "settle": 1784501836
+            }
+          ]
+        },
+        {
+          "month": "2026-08",
+          "start": 412.7380687500001,
+          "end": 412.7380687500001,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-09",
+          "start": 412.7380687500001,
+          "end": 103.20384375000003,
+          "multiple": 0.25004682524817384,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP26-GAS",
+              "units": 2161,
+              "spend": 206.88,
+              "payout": 0,
+              "settle": 1788722085
+            },
+            {
+              "ticker": "KXF1RACE-AZEGP26-LEC",
+              "units": 973,
+              "spend": 103.43,
+              "payout": 0,
+              "settle": 1790441666
+            }
+          ]
+        },
+        {
+          "month": "2026-10",
+          "start": 103.20384375000003,
+          "end": 12.969993750000034,
+          "multiple": 0.1256735532197659,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BAH26-HAM",
+              "units": 375,
+              "spend": 51.72,
+              "payout": 0,
+              "settle": 1791125867
+            },
+            {
+              "ticker": "KXF1RACE-SIN26-LEC",
+              "units": 152,
+              "spend": 25.76,
+              "payout": 0,
+              "settle": 1791735638
+            },
+            {
+              "ticker": "KXF1RACE-UNIS26-HAD",
+              "units": 304,
+              "spend": 12.98,
+              "payout": 0,
+              "settle": 1792974383
+            }
+          ]
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 0.000999000999000999,
+        "p_ge_hits_6x": 1.0,
+        "p_ge_end": 0.000999000999000999
+      }
+    },
+    "2026_stress_reset": {
+      "end": 18.386418750000026,
+      "drawdown_month_end": 0.9677190555207726,
+      "hits_3x": 1,
+      "funded_hits_3x": 1,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 2,
+      "trades": 12,
+      "wins": 3,
+      "mean_trade_net": 0.4780739485276388,
+      "months": [
+        {
+          "month": "2026-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-02",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-03",
+          "start": 147,
+          "end": 74.34616875000002,
+          "multiple": 0.5057562500000001,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-AUSGP26-HAD",
+              "units": 1146,
+              "spend": 73.28999999999999,
+              "payout": 0,
+              "settle": 1772959448
+            },
+            {
+              "ticker": "KXF1RACE-CHIGP26-ANT",
+              "units": 112,
+              "spend": 36.4,
+              "payout": 112,
+              "settle": 1773588039
+            },
+            {
+              "ticker": "KXF1RACE-JAPGP26-PIA",
+              "units": 998,
+              "spend": 74.41000000000001,
+              "payout": 0,
+              "settle": 1774785928
+            }
+          ]
+        },
+        {
+          "month": "2026-04",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-05",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-06",
+          "start": 147,
+          "end": 228.61951875000003,
+          "multiple": 1.5552348214285716,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BARGP26-HAM",
+              "units": 385,
+              "spend": 73.28,
+              "payout": 385,
+              "settle": 1781464003
+            },
+            {
+              "ticker": "KXF1RACE-AUTGP26-LEC",
+              "units": 1204,
+              "spend": 229.16,
+              "payout": 0,
+              "settle": 1782666784
+            }
+          ]
+        },
+        {
+          "month": "2026-07",
+          "start": 147,
+          "end": 569.5749937500001,
+          "multiple": 3.874659821428572,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BRIGP26-LEC",
+              "units": 689,
+              "spend": 73.25,
+              "payout": 689,
+              "settle": 1783281824
+            },
+            {
+              "ticker": "KXF1RACE-BELGP26-NOR",
+              "units": 4483,
+              "spend": 191.38,
+              "payout": 0,
+              "settle": 1784501836
+            }
+          ]
+        },
+        {
+          "month": "2026-08",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-09",
+          "start": 147,
+          "end": 36.620718750000016,
+          "multiple": 0.24912053571428583,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP26-GAS",
+              "units": 765,
+              "spend": 73.24000000000001,
+              "payout": 0,
+              "settle": 1788722085
+            },
+            {
+              "ticker": "KXF1RACE-AZEGP26-LEC",
+              "units": 345,
+              "spend": 36.68,
+              "payout": 0,
+              "settle": 1790441666
+            }
+          ]
+        },
+        {
+          "month": "2026-10",
+          "start": 147,
+          "end": 18.386418750000026,
+          "multiple": 0.12507767857142874,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BAH26-HAM",
+              "units": 531,
+              "spend": 73.24,
+              "payout": 0,
+              "settle": 1791125867
+            },
+            {
+              "ticker": "KXF1RACE-SIN26-LEC",
+              "units": 216,
+              "spend": 36.6,
+              "payout": 0,
+              "settle": 1791735638
+            },
+            {
+              "ticker": "KXF1RACE-UNIS26-HAD",
+              "units": 430,
+              "spend": 18.36,
+              "payout": 0,
+              "settle": 1792974383
+            }
+          ]
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 0.000999000999000999,
+        "p_ge_hits_6x": 1.0
+      }
+    },
+    "continuous_base_path": {
+      "end": 1.1994937500000213,
+      "drawdown_month_end": 0.9918401785714285,
+      "hits_3x": 0,
+      "funded_hits_3x": 0,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 3,
+      "trades": 19,
+      "wins": 4,
+      "mean_trade_net": 0.16619994943004848,
+      "months": [
+        {
+          "month": "2025-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-02",
+          "start": 146.26591875000003,
+          "end": 146.26591875000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-03",
+          "start": 146.26591875000003,
+          "end": 127.58274375000002,
+          "multiple": 0.8722656982592536,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-CGP25-RUS",
+              "units": 147,
+              "spend": 18.73,
+              "payout": 0,
+              "settle": 1742753902
+            }
+          ]
+        },
+        {
+          "month": "2025-04",
+          "start": 127.58274375000002,
+          "end": 124.16131875000004,
+          "multiple": 0.973182697758058,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAGP25-RUS",
+              "units": 46,
+              "spend": 3.4299999999999997,
+              "payout": 0,
+              "settle": 1745186529
+            }
+          ]
+        },
+        {
+          "month": "2025-05",
+          "start": 124.16131875000004,
+          "end": 62.12679375000003,
+          "multiple": 0.500371568017032,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-MGP25-ANT",
+              "units": 834,
+              "spend": 62.19,
+              "payout": 0,
+              "settle": 1746413664
+            }
+          ]
+        },
+        {
+          "month": "2025-06",
+          "start": 62.12679375000003,
+          "end": 62.12679375000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-07",
+          "start": 62.12679375000003,
+          "end": 62.12679375000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-08",
+          "start": 62.12679375000003,
+          "end": 62.12679375000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-09",
+          "start": 62.12679375000003,
+          "end": 123.12391875000004,
+          "multiple": 1.9818167221932321,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP25-VER",
+              "units": 92,
+              "spend": 30.85,
+              "payout": 92,
+              "settle": 1757262760
+            }
+          ]
+        },
+        {
+          "month": "2025-10",
+          "start": 123.12391875000004,
+          "end": 61.56819375000003,
+          "multiple": 0.5000506349624289,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-UNISGP25-LEC",
+              "units": 965,
+              "spend": 61.71000000000001,
+              "payout": 0,
+              "settle": 1760920836
+            }
+          ]
+        },
+        {
+          "month": "2025-11",
+          "start": 61.56819375000003,
+          "end": 15.423843750000028,
+          "multiple": 0.2505164243185228,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAOPGP25-ANT",
+              "units": 264,
+              "spend": 30.849999999999998,
+              "payout": 0,
+              "settle": 1762725883
+            },
+            {
+              "ticker": "KXF1RACE-LASVGP25-SAI",
+              "units": 481,
+              "spend": 15.41,
+              "payout": 0,
+              "settle": 1763900483
+            }
+          ]
+        },
+        {
+          "month": "2025-12",
+          "start": 15.423843750000028,
+          "end": 15.423843750000028,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-01",
+          "start": 15.423843750000028,
+          "end": 15.423843750000028,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-02",
+          "start": 15.423843750000028,
+          "end": 15.423843750000028,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-03",
+          "start": 15.423843750000028,
+          "end": 7.982493750000026,
+          "multiple": 0.5175424413904616,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-AUSGP26-HAD",
+              "units": 144,
+              "spend": 7.68,
+              "payout": 0,
+              "settle": 1772959448
+            },
+            {
+              "ticker": "KXF1RACE-CHIGP26-ANT",
+              "units": 12,
+              "spend": 3.78,
+              "payout": 12,
+              "settle": 1773588039
+            },
+            {
+              "ticker": "KXF1RACE-JAPGP26-PIA",
+              "units": 125,
+              "spend": 8.0,
+              "payout": 0,
+              "settle": 1774785928
+            }
+          ]
+        },
+        {
+          "month": "2026-04",
+          "start": 7.982493750000026,
+          "end": 7.982493750000026,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-05",
+          "start": 7.982493750000026,
+          "end": 7.982493750000026,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-06",
+          "start": 7.982493750000026,
+          "end": 13.049793750000026,
+          "multiple": 1.634801624492344,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BARGP26-HAM",
+              "units": 22,
+              "spend": 3.9600000000000004,
+              "payout": 22,
+              "settle": 1781464003
+            },
+            {
+              "ticker": "KXF1RACE-AUTGP26-LEC",
+              "units": 72,
+              "spend": 12.96,
+              "payout": 0,
+              "settle": 1782666784
+            }
+          ]
+        },
+        {
+          "month": "2026-07",
+          "start": 13.049793750000026,
+          "end": 37.219218750000024,
+          "multiple": 2.85209248996751,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BRIGP26-LEC",
+              "units": 68,
+              "spend": 6.51,
+              "payout": 68,
+              "settle": 1783281824
+            },
+            {
+              "ticker": "KXF1RACE-BELGP26-NOR",
+              "units": 1163,
+              "spend": 37.26,
+              "payout": 0,
+              "settle": 1784501836
+            }
+          ]
+        },
+        {
+          "month": "2026-08",
+          "start": 37.219218750000024,
+          "end": 37.219218750000024,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-09",
+          "start": 37.219218750000024,
+          "end": 9.349068750000022,
+          "multiple": 0.25118927973199373,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP26-GAS",
+              "units": 219,
+              "spend": 18.65,
+              "payout": 0,
+              "settle": 1788722085
+            },
+            {
+              "ticker": "KXF1RACE-AZEGP26-LEC",
+              "units": 97,
+              "spend": 9.290000000000001,
+              "payout": 0,
+              "settle": 1790441666
+            }
+          ]
+        },
+        {
+          "month": "2026-10",
+          "start": 9.349068750000022,
+          "end": 1.1994937500000213,
+          "multiple": 0.12830088023473124,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BAH26-HAM",
+              "units": 36,
+              "spend": 4.59,
+              "payout": 0,
+              "settle": 1791125867
+            },
+            {
+              "ticker": "KXF1RACE-SIN26-LEC",
+              "units": 15,
+              "spend": 2.3900000000000006,
+              "payout": 0,
+              "settle": 1791735638
+            },
+            {
+              "ticker": "KXF1RACE-UNIS26-HAD",
+              "units": 37,
+              "spend": 1.19,
+              "payout": 0,
+              "settle": 1792974383
+            }
+          ]
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 1.0,
+        "p_ge_hits_6x": 1.0,
+        "p_ge_end": 0.000999000999000999
+      }
+    },
+    "continuous_base_reset": {
+      "end": 18.376443750000007,
+      "drawdown_month_end": 0.9734837444450442,
+      "hits_3x": 1,
+      "funded_hits_3x": 1,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 4,
+      "trades": 19,
+      "wins": 4,
+      "mean_trade_net": 0.16654198216231147,
+      "months": [
+        {
+          "month": "2025-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-02",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-03",
+          "start": 147,
+          "end": 127.58274375000002,
+          "multiple": 0.8679098214285715,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-CGP25-RUS",
+              "units": 147,
+              "spend": 18.73,
+              "payout": 0,
+              "settle": 1742753902
+            }
+          ]
+        },
+        {
+          "month": "2025-04",
+          "start": 147,
+          "end": 142.84449375000003,
+          "multiple": 0.9717312500000002,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAGP25-RUS",
+              "units": 46,
+              "spend": 3.4299999999999997,
+              "payout": 0,
+              "settle": 1745186529
+            }
+          ]
+        },
+        {
+          "month": "2025-05",
+          "start": 147,
+          "end": 80.22144375000003,
+          "multiple": 0.5457241071428574,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-MGP25-ANT",
+              "units": 888,
+              "spend": 66.21,
+              "payout": 0,
+              "settle": 1746413664
+            }
+          ]
+        },
+        {
+          "month": "2025-06",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-07",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-08",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-09",
+          "start": 147,
+          "end": 290.81364375000004,
+          "multiple": 1.9783241071428574,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP25-VER",
+              "units": 218,
+              "spend": 73.09,
+              "payout": 218,
+              "settle": 1757262760
+            }
+          ]
+        },
+        {
+          "month": "2025-10",
+          "start": 147,
+          "end": 73.15914375000001,
+          "multiple": 0.4976812500000001,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-UNISGP25-LEC",
+              "units": 1146,
+              "spend": 73.29,
+              "payout": 0,
+              "settle": 1760920836
+            }
+          ]
+        },
+        {
+          "month": "2025-11",
+          "start": 147,
+          "end": 36.61074375000003,
+          "multiple": 0.2490526785714288,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAOPGP25-ANT",
+              "units": 627,
+              "spend": 73.27,
+              "payout": 0,
+              "settle": 1762725883
+            },
+            {
+              "ticker": "KXF1RACE-LASVGP25-SAI",
+              "units": 1144,
+              "spend": 36.66,
+              "payout": 0,
+              "settle": 1763900483
+            }
+          ]
+        },
+        {
+          "month": "2025-12",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-02",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-03",
+          "start": 147,
+          "end": 76.24141875000002,
+          "multiple": 0.5186491071428573,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-AUSGP26-HAD",
+              "units": 1374,
+              "spend": 73.27000000000001,
+              "payout": 0,
+              "settle": 1772959448
+            },
+            {
+              "ticker": "KXF1RACE-CHIGP26-ANT",
+              "units": 116,
+              "spend": 36.51,
+              "payout": 116,
+              "settle": 1773588039
+            },
+            {
+              "ticker": "KXF1RACE-JAPGP26-PIA",
+              "units": 1195,
+              "spend": 76.42,
+              "payout": 0,
+              "settle": 1774785928
+            }
+          ]
+        },
+        {
+          "month": "2026-04",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-05",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-06",
+          "start": 147,
+          "end": 239.68179375000003,
+          "multiple": 1.630488392857143,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BARGP26-HAM",
+              "units": 407,
+              "spend": 73.21000000000001,
+              "payout": 407,
+              "settle": 1781464003
+            },
+            {
+              "ticker": "KXF1RACE-AUTGP26-LEC",
+              "units": 1335,
+              "spend": 240.14000000000001,
+              "payout": 0,
+              "settle": 1782666784
+            }
+          ]
+        },
+        {
+          "month": "2026-07",
+          "start": 147,
+          "end": 693.0255937500001,
+          "multiple": 4.714459821428572,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BRIGP26-LEC",
+              "units": 765,
+              "spend": 73.24,
+              "payout": 765,
+              "settle": 1783281824
+            },
+            {
+              "ticker": "KXF1RACE-BELGP26-NOR",
+              "units": 4483,
+              "spend": 143.63,
+              "payout": 0,
+              "settle": 1784501836
+            }
+          ]
+        },
+        {
+          "month": "2026-08",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-09",
+          "start": 147,
+          "end": 36.63069375000003,
+          "multiple": 0.24918839285714303,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP26-GAS",
+              "units": 860,
+              "spend": 73.24,
+              "payout": 0,
+              "settle": 1788722085
+            },
+            {
+              "ticker": "KXF1RACE-AZEGP26-LEC",
+              "units": 383,
+              "spend": 36.67,
+              "payout": 0,
+              "settle": 1790441666
+            }
+          ]
+        },
+        {
+          "month": "2026-10",
+          "start": 147,
+          "end": 18.376443750000007,
+          "multiple": 0.12500982142857148,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BAH26-HAM",
+              "units": 575,
+              "spend": 73.26,
+              "payout": 0,
+              "settle": 1791125867
+            },
+            {
+              "ticker": "KXF1RACE-SIN26-LEC",
+              "units": 230,
+              "spend": 36.56000000000001,
+              "payout": 0,
+              "settle": 1791735638
+            },
+            {
+              "ticker": "KXF1RACE-UNIS26-HAD",
+              "units": 574,
+              "spend": 18.39,
+              "payout": 0,
+              "settle": 1792974383
+            }
+          ]
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 0.000999000999000999,
+        "p_ge_hits_6x": 1.0
+      }
+    },
+    "continuous_stress_path": {
+      "end": 0.9700687500000059,
+      "drawdown_month_end": 0.9934008928571428,
+      "hits_3x": 0,
+      "funded_hits_3x": 0,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 3,
+      "trades": 19,
+      "wins": 4,
+      "mean_trade_net": 0.08485223908350167,
+      "months": [
+        {
+          "month": "2025-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-02",
+          "start": 146.26591875000003,
+          "end": 146.26591875000003,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-03",
+          "start": 146.26591875000003,
+          "end": 126.03661875000003,
+          "multiple": 0.8616950539614343,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-CGP25-RUS",
+              "units": 147,
+              "spend": 20.28,
+              "payout": 0,
+              "settle": 1742753902
+            }
+          ]
+        },
+        {
+          "month": "2025-04",
+          "start": 126.03661875000003,
+          "end": 122.12641875000003,
+          "multiple": 0.9689756831087631,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAGP25-RUS",
+              "units": 46,
+              "spend": 3.92,
+              "payout": 0,
+              "settle": 1745186529
+            }
+          ]
+        },
+        {
+          "month": "2025-05",
+          "start": 122.12641875000003,
+          "end": 61.13926875000002,
+          "multiple": 0.500622792150777,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-MGP25-ANT",
+              "units": 718,
+              "spend": 61.14,
+              "payout": 0,
+              "settle": 1746413664
+            }
+          ]
+        },
+        {
+          "month": "2025-06",
+          "start": 61.13926875000002,
+          "end": 61.13926875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-07",
+          "start": 61.13926875000002,
+          "end": 61.13926875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-08",
+          "start": 61.13926875000002,
+          "end": 61.13926875000002,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2025-09",
+          "start": 61.13926875000002,
+          "end": 118.58529375000003,
+          "multiple": 1.939592935514133,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP25-VER",
+              "units": 88,
+              "spend": 30.410000000000004,
+              "payout": 88,
+              "settle": 1757262760
+            }
+          ]
+        },
+        {
+          "month": "2025-10",
+          "start": 118.58529375000003,
+          "end": 59.30386875000002,
+          "multiple": 0.5000946312535487,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-UNISGP25-LEC",
+              "units": 797,
+              "spend": 59.43000000000001,
+              "payout": 0,
+              "settle": 1760920836
+            }
+          ]
+        },
+        {
+          "month": "2025-11",
+          "start": 59.30386875000002,
+          "end": 14.865243750000015,
+          "multiple": 0.25066229342752633,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAOPGP25-ANT",
+              "units": 233,
+              "spend": 29.69,
+              "payout": 0,
+              "settle": 1762725883
+            },
+            {
+              "ticker": "KXF1RACE-LASVGP25-SAI",
+              "units": 348,
+              "spend": 14.86,
+              "payout": 0,
+              "settle": 1763900483
+            }
+          ]
+        },
+        {
+          "month": "2025-12",
+          "start": 14.865243750000015,
+          "end": 14.865243750000015,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-01",
+          "start": 14.865243750000015,
+          "end": 14.865243750000015,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-02",
+          "start": 14.865243750000015,
+          "end": 14.865243750000015,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-03",
+          "start": 14.865243750000015,
+          "end": 7.4937187500000135,
+          "multiple": 0.5041100486495559,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-AUSGP26-HAD",
+              "units": 116,
+              "spend": 7.42,
+              "payout": 0,
+              "settle": 1772959448
+            },
+            {
+              "ticker": "KXF1RACE-CHIGP26-ANT",
+              "units": 11,
+              "spend": 3.58,
+              "payout": 11,
+              "settle": 1773588039
+            },
+            {
+              "ticker": "KXF1RACE-JAPGP26-PIA",
+              "units": 99,
+              "spend": 7.390000000000001,
+              "payout": 0,
+              "settle": 1774785928
+            }
+          ]
+        },
+        {
+          "month": "2026-04",
+          "start": 7.4937187500000135,
+          "end": 7.4937187500000135,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-05",
+          "start": 7.4937187500000135,
+          "end": 7.4937187500000135,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-06",
+          "start": 7.4937187500000135,
+          "end": 11.443818750000014,
+          "multiple": 1.5271214642262887,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BARGP26-HAM",
+              "units": 19,
+              "spend": 3.62,
+              "payout": 19,
+              "settle": 1781464003
+            },
+            {
+              "ticker": "KXF1RACE-AUTGP26-LEC",
+              "units": 60,
+              "spend": 11.419999999999998,
+              "payout": 0,
+              "settle": 1782666784
+            }
+          ]
+        },
+        {
+          "month": "2026-07",
+          "start": 11.443818750000014,
+          "end": 29.38884375000001,
+          "multiple": 2.5680976247548464,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BRIGP26-LEC",
+              "units": 53,
+              "spend": 5.640000000000001,
+              "payout": 53,
+              "settle": 1783281824
+            },
+            {
+              "ticker": "KXF1RACE-BELGP26-NOR",
+              "units": 688,
+              "spend": 29.37,
+              "payout": 0,
+              "settle": 1784501836
+            }
+          ]
+        },
+        {
+          "month": "2026-08",
+          "start": 29.38884375000001,
+          "end": 29.38884375000001,
+          "multiple": 1.0,
+          "trades": []
+        },
+        {
+          "month": "2026-09",
+          "start": 29.38884375000001,
+          "end": 7.453818750000007,
+          "multiple": 0.25362749257530776,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP26-GAS",
+              "units": 153,
+              "spend": 14.650000000000002,
+              "payout": 0,
+              "settle": 1788722085
+            },
+            {
+              "ticker": "KXF1RACE-AZEGP26-LEC",
+              "units": 69,
+              "spend": 7.340000000000001,
+              "payout": 0,
+              "settle": 1790441666
+            }
+          ]
+        },
+        {
+          "month": "2026-10",
+          "start": 7.453818750000007,
+          "end": 0.9700687500000059,
+          "multiple": 0.1301438608230184,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BAH26-HAM",
+              "units": 27,
+              "spend": 3.7300000000000004,
+              "payout": 0,
+              "settle": 1791125867
+            },
+            {
+              "ticker": "KXF1RACE-SIN26-LEC",
+              "units": 11,
+              "spend": 1.87,
+              "payout": 0,
+              "settle": 1791735638
+            },
+            {
+              "ticker": "KXF1RACE-UNIS26-HAD",
+              "units": 21,
+              "spend": 0.8999999999999999,
+              "payout": 0,
+              "settle": 1792974383
+            }
+          ]
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 1.0,
+        "p_ge_hits_6x": 1.0,
+        "p_ge_end": 0.000999000999000999
+      }
+    },
+    "continuous_stress_reset": {
+      "end": 18.386418750000026,
+      "drawdown_month_end": 0.9677190555207726,
+      "hits_3x": 1,
+      "funded_hits_3x": 1,
+      "hits_6x": 0,
+      "funded_hits_6x": 0,
+      "half_loss_months": 5,
+      "trades": 19,
+      "wins": 4,
+      "mean_trade_net": 0.08584659655526815,
+      "months": [
+        {
+          "month": "2025-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-02",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-03",
+          "start": 147,
+          "end": 126.03661875000003,
+          "multiple": 0.8573919642857145,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-CGP25-RUS",
+              "units": 147,
+              "spend": 20.28,
+              "payout": 0,
+              "settle": 1742753902
+            }
+          ]
+        },
+        {
+          "month": "2025-04",
+          "start": 147,
+          "end": 142.35571875000005,
+          "multiple": 0.9684062500000004,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAGP25-RUS",
+              "units": 46,
+              "spend": 3.92,
+              "payout": 0,
+              "settle": 1745186529
+            }
+          ]
+        },
+        {
+          "month": "2025-05",
+          "start": 147,
+          "end": 73.20901875000003,
+          "multiple": 0.4980205357142859,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-MGP25-ANT",
+              "units": 860,
+              "spend": 73.24,
+              "payout": 0,
+              "settle": 1746413664
+            }
+          ]
+        },
+        {
+          "month": "2025-06",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-07",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-08",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2025-09",
+          "start": 147,
+          "end": 284.66904375,
+          "multiple": 1.9365241071428572,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP25-VER",
+              "units": 212,
+              "spend": 73.25000000000001,
+              "payout": 212,
+              "settle": 1757262760
+            }
+          ]
+        },
+        {
+          "month": "2025-10",
+          "start": 147,
+          "end": 73.15914375000001,
+          "multiple": 0.4976812500000001,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-UNISGP25-LEC",
+              "units": 983,
+              "spend": 73.29,
+              "payout": 0,
+              "settle": 1760920836
+            }
+          ]
+        },
+        {
+          "month": "2025-11",
+          "start": 147,
+          "end": 36.61074375000002,
+          "multiple": 0.2490526785714287,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-SAOPGP25-ANT",
+              "units": 575,
+              "spend": 73.26,
+              "payout": 0,
+              "settle": 1762725883
+            },
+            {
+              "ticker": "KXF1RACE-LASVGP25-SAI",
+              "units": 859,
+              "spend": 36.67,
+              "payout": 0,
+              "settle": 1763900483
+            }
+          ]
+        },
+        {
+          "month": "2025-12",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-01",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-02",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-03",
+          "start": 147,
+          "end": 74.34616875000002,
+          "multiple": 0.5057562500000001,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-AUSGP26-HAD",
+              "units": 1146,
+              "spend": 73.28999999999999,
+              "payout": 0,
+              "settle": 1772959448
+            },
+            {
+              "ticker": "KXF1RACE-CHIGP26-ANT",
+              "units": 112,
+              "spend": 36.4,
+              "payout": 112,
+              "settle": 1773588039
+            },
+            {
+              "ticker": "KXF1RACE-JAPGP26-PIA",
+              "units": 998,
+              "spend": 74.41000000000001,
+              "payout": 0,
+              "settle": 1774785928
+            }
+          ]
+        },
+        {
+          "month": "2026-04",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-05",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-06",
+          "start": 147,
+          "end": 228.61951875000003,
+          "multiple": 1.5552348214285716,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BARGP26-HAM",
+              "units": 385,
+              "spend": 73.28,
+              "payout": 385,
+              "settle": 1781464003
+            },
+            {
+              "ticker": "KXF1RACE-AUTGP26-LEC",
+              "units": 1204,
+              "spend": 229.16,
+              "payout": 0,
+              "settle": 1782666784
+            }
+          ]
+        },
+        {
+          "month": "2026-07",
+          "start": 147,
+          "end": 569.5749937500001,
+          "multiple": 3.874659821428572,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BRIGP26-LEC",
+              "units": 689,
+              "spend": 73.25,
+              "payout": 689,
+              "settle": 1783281824
+            },
+            {
+              "ticker": "KXF1RACE-BELGP26-NOR",
+              "units": 4483,
+              "spend": 191.38,
+              "payout": 0,
+              "settle": 1784501836
+            }
+          ]
+        },
+        {
+          "month": "2026-08",
+          "start": 147,
+          "end": 146.26591875000003,
+          "multiple": 0.9950062500000002,
+          "trades": []
+        },
+        {
+          "month": "2026-09",
+          "start": 147,
+          "end": 36.620718750000016,
+          "multiple": 0.24912053571428583,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-ITAGP26-GAS",
+              "units": 765,
+              "spend": 73.24000000000001,
+              "payout": 0,
+              "settle": 1788722085
+            },
+            {
+              "ticker": "KXF1RACE-AZEGP26-LEC",
+              "units": 345,
+              "spend": 36.68,
+              "payout": 0,
+              "settle": 1790441666
+            }
+          ]
+        },
+        {
+          "month": "2026-10",
+          "start": 147,
+          "end": 18.386418750000026,
+          "multiple": 0.12507767857142874,
+          "trades": [
+            {
+              "ticker": "KXF1RACE-BAH26-HAM",
+              "units": 531,
+              "spend": 73.24,
+              "payout": 0,
+              "settle": 1791125867
+            },
+            {
+              "ticker": "KXF1RACE-SIN26-LEC",
+              "units": 216,
+              "spend": 36.6,
+              "payout": 0,
+              "settle": 1791735638
+            },
+            {
+              "ticker": "KXF1RACE-UNIS26-HAD",
+              "units": 430,
+              "spend": 18.36,
+              "payout": 0,
+              "settle": 1792974383
+            }
+          ]
+        }
+      ],
+      "control": {
+        "p_ge_hits_3x": 0.000999000999000999,
+        "p_ge_hits_6x": 1.0
+      }
+    }
+  }
+}

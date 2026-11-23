@@ -1,0 +1,18 @@
+{
+  "sha256": "cebcc9da5c849f194c60ab1870e185fd852200594a437724134bccf8e2a98797",
+  "mechanics_only": true,
+  "instrument": "BTC-24NOV26-61000-C",
+  "max_premium_usd": "73.5",
+  "entry": "2026-11-23T13:00:11.008000+00:00",
+  "exit": "2026-11-23T13:00:19.008000+00:00",
+  "cases": {
+    "base": {
+      "status": "minimum_or_visible_size_over_budget",
+      "minimum_cost_usd": "100.766527298000"
+    },
+    "higher": {
+      "status": "minimum_or_visible_size_over_budget",
+      "minimum_cost_usd": "117.970568544000"
+    }
+  }
+}

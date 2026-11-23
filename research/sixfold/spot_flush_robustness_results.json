@@ -1,0 +1,158 @@
+{
+  "source_sha256": "066eefa30d8c6d8744c7d5613e00e927e2816961af2bb81fe4b96550b8740a9d",
+  "bootstrap_assumption": "Observed calendar months are resampled independently; descriptive, does not address regime changes or unseen extremes.",
+  "periods": {
+    "reference": {
+      "base": {
+        "events": 30,
+        "positive_events": 12,
+        "strongest_event": [
+          "2021-09-08",
+          "ALGOUSDT",
+          1.4898087259065202
+        ],
+        "ending_without_strongest_thb": 1203.4163113316301,
+        "leave_one_paths_below_start": 30,
+        "ending_without_best_month_thb": 1203.41631133163,
+        "bootstrap_months": 36,
+        "bootstrap_draws": 10000,
+        "bootstrap_median_thb": 1815.6437927873621,
+        "bootstrap_p05_thb": 460.8225318766015,
+        "bootstrap_p95_thb": 7298.919009104496,
+        "bootstrap_below_start": 0.8839
+      },
+      "stress": {
+        "events": 30,
+        "positive_events": 10,
+        "strongest_event": [
+          "2021-09-08",
+          "ALGOUSDT",
+          1.4705656191548848
+        ],
+        "ending_without_strongest_thb": 825.4273163861599,
+        "leave_one_paths_below_start": 30,
+        "ending_without_best_month_thb": 825.4273163861599,
+        "bootstrap_months": 36,
+        "bootstrap_draws": 10000,
+        "bootstrap_median_thb": 1235.6412857615787,
+        "bootstrap_p05_thb": 286.1582187094603,
+        "bootstrap_p95_thb": 5155.322720296101,
+        "bootstrap_below_start": 0.9458
+      }
+    },
+    "holdout": {
+      "base": {
+        "events": 25,
+        "positive_events": 14,
+        "strongest_event": [
+          "2025-04-30",
+          "ALPACAUSDT",
+          2.938278168894568
+        ],
+        "ending_without_strongest_thb": 2574.5329276679918,
+        "leave_one_paths_below_start": 1,
+        "ending_without_best_month_thb": 2594.831976217513,
+        "bootstrap_months": 24,
+        "bootstrap_draws": 10000,
+        "bootstrap_median_thb": 7690.19131267201,
+        "bootstrap_p05_thb": 456.72151514439986,
+        "bootstrap_p95_thb": 110222.72303190178,
+        "bootstrap_below_start": 0.3824
+      },
+      "stress": {
+        "events": 25,
+        "positive_events": 11,
+        "strongest_event": [
+          "2025-04-30",
+          "ALPACAUSDT",
+          2.9003259140266597
+        ],
+        "ending_without_strongest_thb": 1884.4816858952588,
+        "leave_one_paths_below_start": 4,
+        "ending_without_best_month_thb": 1924.1938265903575,
+        "bootstrap_months": 24,
+        "bootstrap_draws": 10000,
+        "bootstrap_median_thb": 5685.835043233582,
+        "bootstrap_p05_thb": 318.8055836292948,
+        "bootstrap_p95_thb": 79485.30324031343,
+        "bootstrap_below_start": 0.462
+      }
+    },
+    "later": {
+      "base": {
+        "events": 8,
+        "positive_events": 4,
+        "strongest_event": [
+          "2026-07-23",
+          "RIFUSDT",
+          1.6747603246792258
+        ],
+        "ending_without_strongest_thb": 4543.030100182789,
+        "leave_one_paths_below_start": 1,
+        "ending_without_best_month_thb": 5047.523537928125,
+        "bootstrap_months": 10,
+        "bootstrap_draws": 10000,
+        "bootstrap_median_thb": 7372.988460660414,
+        "bootstrap_p05_thb": 4549.941706879863,
+        "bootstrap_p95_thb": 16594.915914829293,
+        "bootstrap_below_start": 0.1586
+      },
+      "stress": {
+        "events": 8,
+        "positive_events": 4,
+        "strongest_event": [
+          "2026-07-23",
+          "RIFUSDT",
+          1.6531282915525598
+        ],
+        "ending_without_strongest_thb": 4147.848414707992,
+        "leave_one_paths_below_start": 1,
+        "ending_without_best_month_thb": 4729.854986850717,
+        "bootstrap_months": 10,
+        "bootstrap_draws": 10000,
+        "bootstrap_median_thb": 6673.655808484394,
+        "bootstrap_p05_thb": 4183.9280354490475,
+        "bootstrap_p95_thb": 14088.087520268791,
+        "bootstrap_below_start": 0.2454
+      }
+    },
+    "continuous": {
+      "base": {
+        "events": 63,
+        "positive_events": 30,
+        "strongest_event": [
+          "2025-04-30",
+          "ALPACAUSDT",
+          2.938278168894568
+        ],
+        "ending_without_strongest_thb": 1404.7632188528648,
+        "leave_one_paths_below_start": 56,
+        "ending_without_best_month_thb": 1415.8391528499124,
+        "bootstrap_months": 70,
+        "bootstrap_draws": 10000,
+        "bootstrap_median_thb": 4256.957501700388,
+        "bootstrap_p05_thb": 167.78952263129534,
+        "bootstrap_p95_thb": 93726.08340675438,
+        "bootstrap_below_start": 0.535
+      },
+      "stress": {
+        "events": 63,
+        "positive_events": 25,
+        "strongest_event": [
+          "2025-04-30",
+          "ALPACAUSDT",
+          2.9003259140266597
+        ],
+        "ending_without_strongest_thb": 627.4001133512621,
+        "leave_one_paths_below_start": 62,
+        "ending_without_best_month_thb": 640.6214684644532,
+        "bootstrap_months": 70,
+        "bootstrap_draws": 10000,
+        "bootstrap_median_thb": 1896.0765367316633,
+        "bootstrap_p05_thb": 69.12041323040461,
+        "bootstrap_p95_thb": 42171.08143469954,
+        "bootstrap_below_start": 0.6919
+      }
+    }
+  }
+}

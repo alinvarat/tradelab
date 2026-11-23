@@ -1,0 +1,2 @@
+# October hourly transfer
+Freeze the November opening-flow rule, execution times, costs and same-date control exactly. Before fetching hourly returns, select 60 pairs with highest September 2026 median quote volume and at least 25 September daily bars in the original spot archive. Score all October UTC dates independently of November. October daily market history is known from other research, but the hourly transfer has not been scored. No threshold changes. Report coverage and performance as a retrospective transfer.

@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+server.log
+# live bot state (personal account, changes constantly)
+data/*.json
+data/*.jsonl
+# large raw downloads; research inputs are kept as .json.gz
+*.zip

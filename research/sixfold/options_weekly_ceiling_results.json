@@ -1,0 +1,2116 @@
+{
+  "hindsight_only": true,
+  "start_each_month": 147.0,
+  "input_sha256": {
+    "historical": "339f080b6f0aa66db4a2f7b84ba8bad99608804059c6db718739e8d4a70408fa",
+    "BTC": "f98e29596a4215797bece392b016e1129911ac825db01e441ff3208cb1055d6e",
+    "ETH": "e3776219c401b9383043291288039ea50970bd978e73f907fc8ed052134bbb15"
+  },
+  "cases": {
+    "3x_base": {
+      "2025-01": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-02": {
+        "end": 459.49426989875,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-02-17",
+            "ETH",
+            "P"
+          ],
+          [
+            "2025-02-24",
+            "ETH",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-02-17",
+            "instrument": "ETH-21FEB25-2500-P",
+            "ending": 85.615547565,
+            "trade_timestamp": 1739786880812,
+            "minimum_premium_with_cost_usd": 12.276890486999998,
+            "status": "filled_proxy",
+            "spent_usd": 61.384452434999986,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 2759.46,
+            "side": "P",
+            "month": "2025-02",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 5
+          },
+          {
+            "entry_day": "2025-02-24",
+            "instrument": "ETH-28FEB25-2500-P",
+            "ending": 459.49426989875,
+            "trade_timestamp": 1740392216150,
+            "minimum_premium_with_cost_usd": 22.45261205125,
+            "status": "filled_proxy",
+            "spent_usd": 22.45261205125,
+            "settled_value_usd": 396.3313343849999,
+            "settlement_index_usd": 2102.36,
+            "side": "P",
+            "month": "2025-02",
+            "starting": 85.615547565,
+            "modeled_exit": "expiry",
+            "contract_units": 1
+          }
+        ]
+      },
+      "2025-03": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-04": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-04-21",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-04-21",
+            "instrument": "ETH-25APR25-1800-C",
+            "ending": 441.0,
+            "trade_timestamp": 1745226302417,
+            "minimum_premium_with_cost_usd": 8.681459224249998,
+            "status": "filled_proxy",
+            "spent_usd": 69.45167379399999,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 1773.7,
+            "side": "C",
+            "month": "2025-04",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 8,
+            "sale_print": {
+              "trade_seq": 4420,
+              "trade_id": "ETH-246116729",
+              "timestamp": 1745384407755,
+              "tick_direction": 1,
+              "price": 0.027,
+              "mark_price": 0.027655,
+              "iv": 76.96,
+              "instrument_name": "ETH-25APR25-1800-C",
+              "index_price": 1813.76,
+              "direction": "sell",
+              "contracts": 25.0,
+              "amount": 25.0
+            },
+            "net_if_sold_on_print": 444.459277886
+          }
+        ]
+      },
+      "2025-05": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-05-05",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-05-05",
+            "instrument": "ETH-9MAY25-2000-C",
+            "ending": 441.0,
+            "trade_timestamp": 1746440625200,
+            "minimum_premium_with_cost_usd": 4.472280976640624,
+            "status": "filled_proxy",
+            "spent_usd": 71.55649562624998,
+            "settled_value_usd": 5430.532179660002,
+            "settlement_index_usd": 2340.61,
+            "side": "C",
+            "month": "2025-05",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 16,
+            "sale_print": {
+              "trade_seq": 2927,
+              "trade_id": "ETH-247770027",
+              "timestamp": 1746715948025,
+              "tick_direction": 0,
+              "price": 0.0135,
+              "mark_price": 0.013426,
+              "iv": 70.14,
+              "instrument_name": "ETH-9MAY25-2000-C",
+              "index_price": 2005.71,
+              "direction": "sell",
+              "contracts": 200.0,
+              "amount": 200.0
+            },
+            "net_if_sold_on_print": 476.38292766375
+          }
+        ]
+      },
+      "2025-06": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-06-09",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-06-09",
+            "instrument": "ETH-13JUN25-2700-C",
+            "ending": 441.0,
+            "trade_timestamp": 1749461466073,
+            "minimum_premium_with_cost_usd": 16.598393753125,
+            "status": "filled_proxy",
+            "spent_usd": 66.3935750125,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 2531.3,
+            "side": "C",
+            "month": "2025-06",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 4,
+            "sale_print": {
+              "trade_seq": 1259,
+              "trade_id": "ETH-253432530",
+              "timestamp": 1749554629601,
+              "tick_direction": 0,
+              "price": 0.0365,
+              "mark_price": 0.036283,
+              "iv": 76.82,
+              "instrument_name": "ETH-13JUN25-2700-C",
+              "index_price": 2745.18,
+              "direction": "sell",
+              "contracts": 55.0,
+              "amount": 55.0
+            },
+            "net_if_sold_on_print": 457.1250193625
+          }
+        ]
+      },
+      "2025-07": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-07-14",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-07-14",
+            "instrument": "ETH-18JUL25-3300-C",
+            "ending": 441.0,
+            "trade_timestamp": 1752489083372,
+            "minimum_premium_with_cost_usd": 27.389155132499994,
+            "status": "filled_proxy",
+            "spent_usd": 54.77831026499999,
+            "settled_value_usd": 657.8820797325,
+            "settlement_index_usd": 3630.31,
+            "side": "C",
+            "month": "2025-07",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 2,
+            "sale_print": {
+              "trade_seq": 748,
+              "trade_id": "ETH-258289040",
+              "timestamp": 1752786953891,
+              "tick_direction": 0,
+              "price": 0.058,
+              "mark_price": 0.056479,
+              "iv": 122.05,
+              "instrument_name": "ETH-18JUL25-3300-C",
+              "index_price": 3496.72,
+              "direction": "sell",
+              "contracts": 3.0,
+              "amount": 3.0
+            },
+            "net_if_sold_on_print": 474.50410045499996
+          }
+        ]
+      },
+      "2025-08": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-08-11",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-08-11",
+            "instrument": "ETH-15AUG25-4600-C",
+            "ending": 441.0,
+            "trade_timestamp": 1754907718435,
+            "minimum_premium_with_cost_usd": 28.249022690624994,
+            "status": "filled_proxy",
+            "spent_usd": 56.49804538124999,
+            "settled_value_usd": 77.71333473749925,
+            "settlement_index_usd": 4639.65,
+            "side": "C",
+            "month": "2025-08",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 2,
+            "sale_print": {
+              "trade_seq": 648,
+              "trade_id": "ETH-262739829",
+              "timestamp": 1755119783195,
+              "tick_direction": 0,
+              "price": 0.04,
+              "mark_price": 0.039365,
+              "iv": 73.83,
+              "instrument_name": "ETH-15AUG25-4600-C",
+              "index_price": 4759.15,
+              "direction": "sell",
+              "contracts": 20.0,
+              "amount": 20.0
+            },
+            "net_if_sold_on_print": 448.44476484375
+          }
+        ]
+      },
+      "2025-09": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-10": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-11": {
+        "end": 573.7258719425,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-11-10",
+            "ETH",
+            "P"
+          ],
+          [
+            "2025-11-17",
+            "ETH",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-11-10",
+            "instrument": "ETH-14NOV25-3300-P",
+            "ending": 259.89264926,
+            "trade_timestamp": 1762766153607,
+            "minimum_premium_with_cost_usd": 27.999801942499996,
+            "status": "filled_proxy",
+            "spent_usd": 55.99960388499999,
+            "settled_value_usd": 168.89225314499976,
+            "settlement_index_usd": 3214.86,
+            "side": "P",
+            "month": "2025-11",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          },
+          {
+            "entry_day": "2025-11-17",
+            "instrument": "ETH-21NOV25-2900-P",
+            "ending": 573.7258719425,
+            "trade_timestamp": 1763373725179,
+            "minimum_premium_with_cost_usd": 24.890133157499996,
+            "status": "filled_proxy",
+            "spent_usd": 49.78026631499999,
+            "settled_value_usd": 363.61348899750016,
+            "settlement_index_usd": 2717.33,
+            "side": "P",
+            "month": "2025-11",
+            "starting": 259.89264926,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          }
+        ]
+      },
+      "2025-12": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-12-01",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-12-01",
+            "instrument": "BTC-5DEC25-94000-C",
+            "ending": 441.0,
+            "trade_timestamp": 1764582840238,
+            "minimum_premium_with_cost_usd": 13.496566224881244,
+            "status": "filled_proxy",
+            "spent_usd": 67.48283112440622,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 92350.1,
+            "side": "C",
+            "month": "2025-12",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 0.5,
+            "sale_print": {
+              "trade_seq": 1248,
+              "trade_id": "402056287",
+              "timestamp": 1764729916402,
+              "tick_direction": 3,
+              "price": 0.009,
+              "mark_price": 0.00902455,
+              "iv": 47.92,
+              "instrument_name": "BTC-5DEC25-94000-C",
+              "index_price": 92656.59,
+              "direction": "sell",
+              "contracts": 1.9,
+              "amount": 1.9
+            },
+            "net_if_sold_on_print": 460.7700815412187
+          }
+        ]
+      },
+      "2026-01": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-01-12",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-01-12",
+            "instrument": "BTC-16JAN26-98000-C",
+            "ending": 441.0,
+            "trade_timestamp": 1768214123490,
+            "minimum_premium_with_cost_usd": 8.213998280610936,
+            "status": "filled_proxy",
+            "spent_usd": 65.71198624488748,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 95533.83,
+            "side": "C",
+            "month": "2026-01",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 0.8,
+            "sale_print": {
+              "trade_seq": 449,
+              "trade_id": "408282736",
+              "timestamp": 1768342475356,
+              "tick_direction": 0,
+              "price": 0.0055,
+              "mark_price": 0.00518056,
+              "iv": 45.36,
+              "instrument_name": "BTC-16JAN26-98000-C",
+              "index_price": 95543.92,
+              "direction": "sell",
+              "contracts": 1.3,
+              "amount": 1.3
+            },
+            "net_if_sold_on_print": 456.7899509431125
+          }
+        ]
+      },
+      "2026-02": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-02-02",
+            "ETH",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-02-02",
+            "instrument": "ETH-6FEB26-2100-P",
+            "ending": 441.0,
+            "trade_timestamp": 1770028329377,
+            "minimum_premium_with_cost_usd": 31.036528576875,
+            "status": "filled_proxy",
+            "spent_usd": 62.07305715375,
+            "settled_value_usd": 393.44317687500006,
+            "settlement_index_usd": 1902.5,
+            "side": "P",
+            "month": "2026-02",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 2,
+            "sale_print": {
+              "trade_seq": 297,
+              "trade_id": "ETH-290862201",
+              "timestamp": 1770335982587,
+              "tick_direction": 0,
+              "price": 0.153,
+              "mark_price": 0.152915,
+              "iv": 236.14,
+              "instrument_name": "ETH-6FEB26-2100-P",
+              "index_price": 1822.04,
+              "direction": "sell",
+              "contracts": 3.0,
+              "amount": 3.0
+            },
+            "net_if_sold_on_print": 612.1793123362498
+          }
+        ]
+      },
+      "2026-03": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-03-02",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-03-02",
+            "instrument": "BTC-6MAR26-72000-C",
+            "ending": 441.0,
+            "trade_timestamp": 1772447296997,
+            "minimum_premium_with_cost_usd": 18.022343149125,
+            "status": "filled_proxy",
+            "spent_usd": 72.0893725965,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 71037.62,
+            "side": "C",
+            "month": "2026-03",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 0.4,
+            "sale_print": {
+              "trade_seq": 1044,
+              "trade_id": "418519107",
+              "timestamp": 1772618430126,
+              "tick_direction": 0,
+              "price": 0.0155,
+              "mark_price": 0.01583285,
+              "iv": 63.37,
+              "instrument_name": "BTC-6MAR26-72000-C",
+              "index_price": 71578.53,
+              "direction": "sell",
+              "contracts": 1.1,
+              "amount": 1.1
+            },
+            "net_if_sold_on_print": 486.88622520825004
+          }
+        ]
+      },
+      "2026-04": {
+        "end": 441.00000000000006,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-04-06",
+            "ETH",
+            "P"
+          ],
+          [
+            "2026-04-13",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-04-06",
+            "instrument": "ETH-10APR26-1950-P",
+            "ending": 78.619488784375,
+            "trade_timestamp": 1775466122493,
+            "minimum_premium_with_cost_usd": 9.768644459374999,
+            "status": "filled_proxy",
+            "spent_usd": 68.38051121562499,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 2183.59,
+            "side": "P",
+            "month": "2026-04",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 7
+          },
+          {
+            "entry_day": "2026-04-13",
+            "instrument": "BTC-17APR26-76000-C",
+            "ending": 441.00000000000006,
+            "trade_timestamp": 1776072591269,
+            "minimum_premium_with_cost_usd": 7.346337393375001,
+            "status": "filled_proxy",
+            "spent_usd": 36.731686966875,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 75002.84,
+            "side": "C",
+            "month": "2026-04",
+            "starting": 78.619488784375,
+            "modeled_exit": "early",
+            "contract_units": 0.5,
+            "sale_print": {
+              "trade_seq": 1057,
+              "trade_id": "425137952",
+              "timestamp": 1776174892241,
+              "tick_direction": 2,
+              "price": 0.0115,
+              "mark_price": 0.01179459,
+              "iv": 42.95,
+              "instrument_name": "BTC-17APR26-76000-C",
+              "index_price": 75444.57,
+              "direction": "sell",
+              "contracts": 1.4,
+              "amount": 1.4
+            },
+            "net_if_sold_on_print": 441.6850817471875
+          }
+        ]
+      },
+      "2026-05": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-06": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-07": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-08": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-08-17",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-08-17",
+            "instrument": "ETH-21AUG26-2050-C",
+            "ending": 441.0,
+            "trade_timestamp": 1786962202068,
+            "minimum_premium_with_cost_usd": 1.2264608496093747,
+            "status": "filled_proxy",
+            "spent_usd": 72.3611901269531,
+            "settled_value_usd": 19204.953666044992,
+            "settlement_index_usd": 2376.68,
+            "side": "C",
+            "month": "2026-08",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 59,
+            "sale_print": {
+              "trade_seq": 309,
+              "trade_id": "ETH-307618033",
+              "timestamp": 1787153252353,
+              "tick_direction": 1,
+              "price": 0.0185,
+              "mark_price": 0.014164,
+              "iv": 62.47,
+              "instrument_name": "ETH-21AUG26-2050-C",
+              "index_price": 2055.46,
+              "direction": "sell",
+              "contracts": 225.0,
+              "amount": 225.0
+            },
+            "net_if_sold_on_print": 2164.3775878267966
+          }
+        ]
+      },
+      "2026-09": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-10": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      }
+    },
+    "3x_stress": {
+      "2025-01": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-02": {
+        "end": 470.69591317125,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-02-03",
+            "ETH",
+            "C"
+          ],
+          [
+            "2025-02-24",
+            "ETH",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-02-03",
+            "instrument": "ETH-7FEB25-2800-C",
+            "ending": 100.5817006425,
+            "trade_timestamp": 1738573935040,
+            "minimum_premium_with_cost_usd": 46.418299357500004,
+            "status": "filled_proxy",
+            "spent_usd": 46.418299357500004,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 2716.53,
+            "side": "C",
+            "month": "2025-02",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 1
+          },
+          {
+            "entry_day": "2025-02-24",
+            "instrument": "ETH-28FEB25-2500-P",
+            "ending": 470.69591317125,
+            "trade_timestamp": 1740392216150,
+            "minimum_premium_with_cost_usd": 26.21712185625,
+            "status": "filled_proxy",
+            "spent_usd": 26.21712185625,
+            "settled_value_usd": 396.3313343849999,
+            "settlement_index_usd": 2102.36,
+            "side": "P",
+            "month": "2025-02",
+            "starting": 100.5817006425,
+            "modeled_exit": "expiry",
+            "contract_units": 1
+          }
+        ]
+      },
+      "2025-03": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-04": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-05": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-05-05",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-05-05",
+            "instrument": "ETH-9MAY25-2000-C",
+            "ending": 441.0,
+            "trade_timestamp": 1746440625200,
+            "minimum_premium_with_cost_usd": 5.212544113124999,
+            "status": "filled_proxy",
+            "spent_usd": 72.97561758375,
+            "settled_value_usd": 4751.7156572025015,
+            "settlement_index_usd": 2340.61,
+            "side": "C",
+            "month": "2025-05",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 14,
+            "sale_print": {
+              "trade_seq": 2968,
+              "trade_id": "ETH-247786547",
+              "timestamp": 1746718825997,
+              "tick_direction": 2,
+              "price": 0.0255,
+              "mark_price": 0.026021,
+              "iv": 71.55,
+              "instrument_name": "ETH-9MAY25-2000-C",
+              "index_price": 2044.2,
+              "direction": "sell",
+              "contracts": 40.0,
+              "amount": 40.0
+            },
+            "net_if_sold_on_print": 684.2219152912498
+          }
+        ]
+      },
+      "2025-06": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-06-09",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-06-09",
+            "instrument": "ETH-13JUN25-2700-C",
+            "ending": 441.0,
+            "trade_timestamp": 1749461466073,
+            "minimum_premium_with_cost_usd": 19.354353470625,
+            "status": "filled_proxy",
+            "spent_usd": 58.063060411875,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 2531.3,
+            "side": "C",
+            "month": "2025-06",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 3,
+            "sale_print": {
+              "trade_seq": 1357,
+              "trade_id": "ETH-253684651",
+              "timestamp": 1749657442061,
+              "tick_direction": 2,
+              "price": 0.0595,
+              "mark_price": 0.06249,
+              "iv": 61.51,
+              "instrument_name": "ETH-13JUN25-2700-C",
+              "index_price": 2864.14,
+              "direction": "sell",
+              "contracts": 5.0,
+              "amount": 5.0
+            },
+            "net_if_sold_on_print": 519.840895299375
+          }
+        ]
+      },
+      "2025-07": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-07-14",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-07-14",
+            "instrument": "ETH-18JUL25-3300-C",
+            "ending": 441.0,
+            "trade_timestamp": 1752489083372,
+            "minimum_premium_with_cost_usd": 31.992374482499997,
+            "status": "filled_proxy",
+            "spent_usd": 63.984748964999994,
+            "settled_value_usd": 657.8820797325,
+            "settlement_index_usd": 3630.31,
+            "side": "C",
+            "month": "2025-07",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 2,
+            "sale_print": {
+              "trade_seq": 761,
+              "trade_id": "ETH-258359618",
+              "timestamp": 1752806441546,
+              "tick_direction": 0,
+              "price": 0.0875,
+              "mark_price": 0.08776,
+              "iv": 0.0,
+              "instrument_name": "ETH-18JUL25-3300-C",
+              "index_price": 3616.06,
+              "direction": "sell",
+              "contracts": 20.0,
+              "amount": 20.0
+            },
+            "net_if_sold_on_print": 617.3952418125
+          }
+        ]
+      },
+      "2025-08": {
+        "end": 158.834481821249,
+        "hit": false,
+        "decisions": [
+          [
+            "2025-08-11",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-08-11",
+            "instrument": "ETH-15AUG25-4600-C",
+            "ending": 158.834481821249,
+            "trade_timestamp": 1754907718435,
+            "minimum_premium_with_cost_usd": 32.939426458125,
+            "status": "filled_proxy",
+            "spent_usd": 65.87885291625,
+            "settled_value_usd": 77.71333473749925,
+            "settlement_index_usd": 4639.65,
+            "side": "C",
+            "month": "2025-08",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          }
+        ]
+      },
+      "2025-09": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-10": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-11": {
+        "end": 556.0392055425,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-11-10",
+            "ETH",
+            "P"
+          ],
+          [
+            "2025-11-17",
+            "ETH",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-11-10",
+            "instrument": "ETH-14NOV25-3300-P",
+            "ending": 250.52937144,
+            "trade_timestamp": 1762766153607,
+            "minimum_premium_with_cost_usd": 32.681440852499996,
+            "status": "filled_proxy",
+            "spent_usd": 65.36288170499999,
+            "settled_value_usd": 168.89225314499976,
+            "settlement_index_usd": 3214.86,
+            "side": "P",
+            "month": "2025-11",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          },
+          {
+            "entry_day": "2025-11-17",
+            "instrument": "ETH-21NOV25-2900-P",
+            "ending": 556.0392055425,
+            "trade_timestamp": 1763373725179,
+            "minimum_premium_with_cost_usd": 29.0518274475,
+            "status": "filled_proxy",
+            "spent_usd": 58.103654895,
+            "settled_value_usd": 363.61348899750016,
+            "settlement_index_usd": 2717.33,
+            "side": "P",
+            "month": "2025-11",
+            "starting": 250.52937144,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          }
+        ]
+      },
+      "2025-12": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-12-01",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-12-01",
+            "instrument": "BTC-5DEC25-94000-C",
+            "ending": 441.0,
+            "trade_timestamp": 1764582840238,
+            "minimum_premium_with_cost_usd": 15.843795133556249,
+            "status": "filled_proxy",
+            "spent_usd": 63.375180534224995,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 92350.1,
+            "side": "C",
+            "month": "2025-12",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 0.4,
+            "sale_print": {
+              "trade_seq": 1274,
+              "trade_id": "402085109",
+              "timestamp": 1764740507941,
+              "tick_direction": 1,
+              "price": 0.0125,
+              "mark_price": 0.01217858,
+              "iv": 47.75,
+              "instrument_name": "BTC-5DEC25-94000-C",
+              "index_price": 93602.27,
+              "direction": "sell",
+              "contracts": 2.4,
+              "amount": 2.4
+            },
+            "net_if_sold_on_print": 469.2357511280251
+          }
+        ]
+      },
+      "2026-01": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-01-12",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-01-12",
+            "instrument": "BTC-16JAN26-98000-C",
+            "ending": 441.0,
+            "trade_timestamp": 1768214123490,
+            "minimum_premium_with_cost_usd": 9.642519720717187,
+            "status": "filled_proxy",
+            "spent_usd": 67.49763804502031,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 95533.83,
+            "side": "C",
+            "month": "2026-01",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 0.7000000000000001,
+            "sale_print": {
+              "trade_seq": 613,
+              "trade_id": "408439915",
+              "timestamp": 1768409831502,
+              "tick_direction": 3,
+              "price": 0.0075,
+              "mark_price": 0.00775212,
+              "iv": 40.41,
+              "instrument_name": "BTC-16JAN26-98000-C",
+              "index_price": 97289.92,
+              "direction": "sell",
+              "contracts": 3.1,
+              "amount": 3.1
+            },
+            "net_if_sold_on_print": 492.1934332929797
+          }
+        ]
+      },
+      "2026-02": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-02-02",
+            "ETH",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-02-02",
+            "instrument": "ETH-6FEB26-2100-P",
+            "ending": 441.0,
+            "trade_timestamp": 1770028329377,
+            "minimum_premium_with_cost_usd": 36.314459499375005,
+            "status": "filled_proxy",
+            "spent_usd": 72.62891899875001,
+            "settled_value_usd": 393.44317687500006,
+            "settlement_index_usd": 1902.5,
+            "side": "P",
+            "month": "2026-02",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 2,
+            "sale_print": {
+              "trade_seq": 297,
+              "trade_id": "ETH-290862201",
+              "timestamp": 1770335982587,
+              "tick_direction": 0,
+              "price": 0.153,
+              "mark_price": 0.152915,
+              "iv": 236.14,
+              "instrument_name": "ETH-6FEB26-2100-P",
+              "index_price": 1822.04,
+              "direction": "sell",
+              "contracts": 3.0,
+              "amount": 3.0
+            },
+            "net_if_sold_on_print": 546.0084125512501
+          }
+        ]
+      },
+      "2026-03": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-03-02",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-03-02",
+            "instrument": "BTC-6MAR26-72000-C",
+            "ending": 441.0,
+            "trade_timestamp": 1772447296997,
+            "minimum_premium_with_cost_usd": 20.810329934625003,
+            "status": "filled_proxy",
+            "spent_usd": 62.43098980387501,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 71037.62,
+            "side": "C",
+            "month": "2026-03",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 0.30000000000000004,
+            "sale_print": {
+              "trade_seq": 1127,
+              "trade_id": "418605330",
+              "timestamp": 1772638284826,
+              "tick_direction": 1,
+              "price": 0.0245,
+              "mark_price": 0.02443288,
+              "iv": 61.03,
+              "instrument_name": "BTC-6MAR26-72000-C",
+              "index_price": 73066.22,
+              "direction": "sell",
+              "contracts": 0.4,
+              "amount": 0.4
+            },
+            "net_if_sold_on_print": 533.349496722
+          }
+        ]
+      },
+      "2026-04": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-04-13",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-04-13",
+            "instrument": "BTC-17APR26-76000-C",
+            "ending": 441.0,
+            "trade_timestamp": 1776072591269,
+            "minimum_premium_with_cost_usd": 8.623961287875003,
+            "status": "filled_proxy",
+            "spent_usd": 68.99169030300003,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 75002.84,
+            "side": "C",
+            "month": "2026-04",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 0.8,
+            "sale_print": {
+              "trade_seq": 977,
+              "trade_id": "425031263",
+              "timestamp": 1776120916755,
+              "tick_direction": 0,
+              "price": 0.009,
+              "mark_price": 0.00889645,
+              "iv": 41.6,
+              "instrument_name": "BTC-17APR26-76000-C",
+              "index_price": 74721.71,
+              "direction": "sell",
+              "contracts": 0.9,
+              "amount": 0.9
+            },
+            "net_if_sold_on_print": 516.27355536
+          }
+        ]
+      },
+      "2026-05": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-06": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-07": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-08": {
+        "end": 441.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-08-17",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-08-17",
+            "instrument": "ETH-21AUG26-2050-C",
+            "ending": 441.0,
+            "trade_timestamp": 1786962202068,
+            "minimum_premium_with_cost_usd": 1.4397583886718752,
+            "status": "filled_proxy",
+            "spent_usd": 73.42767782226564,
+            "settled_value_usd": 16600.89215200499,
+            "settlement_index_usd": 2376.68,
+            "side": "C",
+            "month": "2026-08",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 51,
+            "sale_print": {
+              "trade_seq": 309,
+              "trade_id": "ETH-307618033",
+              "timestamp": 1787153252353,
+              "tick_direction": 1,
+              "price": 0.0185,
+              "mark_price": 0.014164,
+              "iv": 62.47,
+              "instrument_name": "ETH-21AUG26-2050-C",
+              "index_price": 2055.46,
+              "direction": "sell",
+              "contracts": 225.0,
+              "amount": 225.0
+            },
+            "net_if_sold_on_print": 1686.5088701889845
+          }
+        ]
+      },
+      "2026-09": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-10": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      }
+    },
+    "6x_base": {
+      "2025-01": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-02": {
+        "end": 882.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-02-24",
+            "ETH",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-02-24",
+            "instrument": "ETH-28FEB25-2500-P",
+            "ending": 882.0,
+            "trade_timestamp": 1740392216150,
+            "minimum_premium_with_cost_usd": 22.45261205125,
+            "status": "filled_proxy",
+            "spent_usd": 67.35783615375,
+            "settled_value_usd": 1188.9940031549997,
+            "settlement_index_usd": 2102.36,
+            "side": "P",
+            "month": "2025-02",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 3,
+            "sale_print": {
+              "trade_seq": 3188,
+              "trade_id": "ETH-237472334",
+              "timestamp": 1740707823621,
+              "tick_direction": 2,
+              "price": 0.135,
+              "mark_price": 0.133392,
+              "iv": 303.57,
+              "instrument_name": "ETH-28FEB25-2500-P",
+              "index_price": 2207.52,
+              "direction": "sell",
+              "contracts": 3.0,
+              "amount": 3.0
+            },
+            "net_if_sold_on_print": 924.8803244662502
+          }
+        ]
+      },
+      "2025-03": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-04": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-05": {
+        "end": 882.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-05-05",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-05-05",
+            "instrument": "ETH-9MAY25-2000-C",
+            "ending": 882.0,
+            "trade_timestamp": 1746440625200,
+            "minimum_premium_with_cost_usd": 4.472280976640624,
+            "status": "filled_proxy",
+            "spent_usd": 71.55649562624998,
+            "settled_value_usd": 5430.532179660002,
+            "settlement_index_usd": 2340.61,
+            "side": "C",
+            "month": "2025-05",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 16,
+            "sale_print": {
+              "trade_seq": 2987,
+              "trade_id": "ETH-247798598",
+              "timestamp": 1746719890795,
+              "tick_direction": 0,
+              "price": 0.029,
+              "mark_price": 0.027752,
+              "iv": 86.73,
+              "instrument_name": "ETH-9MAY25-2000-C",
+              "index_price": 2049.08,
+              "direction": "sell",
+              "contracts": 100.0,
+              "amount": 100.0
+            },
+            "net_if_sold_on_print": 966.60888717375
+          }
+        ]
+      },
+      "2025-06": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-07": {
+        "end": 750.1037694675,
+        "hit": false,
+        "decisions": [
+          [
+            "2025-07-14",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-07-14",
+            "instrument": "ETH-18JUL25-3300-C",
+            "ending": 750.1037694675,
+            "trade_timestamp": 1752489083372,
+            "minimum_premium_with_cost_usd": 27.389155132499994,
+            "status": "filled_proxy",
+            "spent_usd": 54.77831026499999,
+            "settled_value_usd": 657.8820797325,
+            "settlement_index_usd": 3630.31,
+            "side": "C",
+            "month": "2025-07",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          }
+        ]
+      },
+      "2025-08": {
+        "end": 168.215289356249,
+        "hit": false,
+        "decisions": [
+          [
+            "2025-08-11",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-08-11",
+            "instrument": "ETH-15AUG25-4600-C",
+            "ending": 168.215289356249,
+            "trade_timestamp": 1754907718435,
+            "minimum_premium_with_cost_usd": 28.249022690624994,
+            "status": "filled_proxy",
+            "spent_usd": 56.49804538124999,
+            "settled_value_usd": 77.71333473749925,
+            "settlement_index_usd": 4639.65,
+            "side": "C",
+            "month": "2025-08",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          }
+        ]
+      },
+      "2025-09": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-10": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-11": {
+        "end": 882.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-11-17",
+            "BTC",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-11-17",
+            "instrument": "BTC-21NOV25-87000-P",
+            "ending": 882.0,
+            "trade_timestamp": 1763375302422,
+            "minimum_premium_with_cost_usd": 22.332715329431245,
+            "status": "filled_proxy",
+            "spent_usd": 66.99814598829374,
+            "settled_value_usd": 892.7732916033757,
+            "settlement_index_usd": 84004.03,
+            "side": "P",
+            "month": "2025-11",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 0.30000000000000004,
+            "sale_print": {
+              "trade_seq": 530,
+              "trade_id": "399808234",
+              "timestamp": 1763710470091,
+              "tick_direction": 0,
+              "price": 0.068,
+              "mark_price": 0.06431223,
+              "iv": 848.84,
+              "instrument_name": "BTC-21NOV25-87000-P",
+              "index_price": 81723.59,
+              "direction": "sell",
+              "contracts": 0.4,
+              "amount": 0.4
+            },
+            "net_if_sold_on_print": 1652.5087849839567
+          }
+        ]
+      },
+      "2025-12": {
+        "end": 210.31068586275,
+        "hit": false,
+        "decisions": [
+          [
+            "2025-12-01",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-12-01",
+            "instrument": "ETH-5DEC25-3100-C",
+            "ending": 210.31068586275,
+            "trade_timestamp": 1764579612981,
+            "minimum_premium_with_cost_usd": 12.632488865999997,
+            "status": "filled_proxy",
+            "spent_usd": 12.632488865999997,
+            "settled_value_usd": 75.94317472875014,
+            "settlement_index_usd": 3176.61,
+            "side": "C",
+            "month": "2025-12",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 1
+          }
+        ]
+      },
+      "2026-01": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-02": {
+        "end": 882.0000000000001,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-02-02",
+            "BTC",
+            "P"
+          ],
+          [
+            "2026-02-09",
+            "BTC",
+            "C"
+          ],
+          [
+            "2026-02-16",
+            "ETH",
+            "C"
+          ],
+          [
+            "2026-02-23",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-02-02",
+            "instrument": "BTC-6FEB26-70000-P",
+            "ending": 603.520269063225,
+            "trade_timestamp": 1770022880715,
+            "minimum_premium_with_cost_usd": 39.44244376889999,
+            "status": "filled_proxy",
+            "spent_usd": 39.44244376889999,
+            "settled_value_usd": 495.96271283212485,
+            "settlement_index_usd": 65018.19,
+            "side": "P",
+            "month": "2026-02",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 0.1
+          },
+          {
+            "entry_day": "2026-02-09",
+            "instrument": "BTC-13FEB26-76000-C",
+            "ending": 581.368742849475,
+            "trade_timestamp": 1770629995409,
+            "minimum_premium_with_cost_usd": 22.151526213750003,
+            "status": "filled_proxy",
+            "spent_usd": 22.151526213750003,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 66171.9,
+            "side": "C",
+            "month": "2026-02",
+            "starting": 603.520269063225,
+            "modeled_exit": "expiry",
+            "contract_units": 0.1
+          },
+          {
+            "entry_day": "2026-02-16",
+            "instrument": "ETH-20FEB26-2150-C",
+            "ending": 568.19101944635,
+            "trade_timestamp": 1771232945780,
+            "minimum_premium_with_cost_usd": 13.177723403124997,
+            "status": "filled_proxy",
+            "spent_usd": 13.177723403124997,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 1962.91,
+            "side": "C",
+            "month": "2026-02",
+            "starting": 581.368742849475,
+            "modeled_exit": "expiry",
+            "contract_units": 1
+          },
+          {
+            "entry_day": "2026-02-23",
+            "instrument": "BTC-27FEB26-71000-C",
+            "ending": 882.0000000000001,
+            "trade_timestamp": 1771838651274,
+            "minimum_premium_with_cost_usd": 18.643387267575,
+            "status": "filled_proxy",
+            "spent_usd": 279.650809013625,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 67610.2,
+            "side": "C",
+            "month": "2026-02",
+            "starting": 568.19101944635,
+            "modeled_exit": "early",
+            "contract_units": 1.5,
+            "sale_print": {
+              "trade_seq": 1169,
+              "trade_id": "417122396",
+              "timestamp": 1772055427772,
+              "tick_direction": 1,
+              "price": 0.0075,
+              "mark_price": 0.00727146,
+              "iv": 56.31,
+              "instrument_name": "BTC-27FEB26-71000-C",
+              "index_price": 69890.7,
+              "direction": "sell",
+              "contracts": 2.0,
+              "amount": 2.0
+            },
+            "net_if_sold_on_print": 1002.2574865795999
+          }
+        ]
+      },
+      "2026-03": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-04": {
+        "end": 882.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-04-13",
+            "BTC",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-04-13",
+            "instrument": "BTC-17APR26-76000-C",
+            "ending": 882.0,
+            "trade_timestamp": 1776072591269,
+            "minimum_premium_with_cost_usd": 7.346337393375001,
+            "status": "filled_proxy",
+            "spent_usd": 73.46337393375,
+            "settled_value_usd": 0.0,
+            "settlement_index_usd": 75002.84,
+            "side": "C",
+            "month": "2026-04",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 1.0,
+            "sale_print": {
+              "trade_seq": 1102,
+              "trade_id": "425156193",
+              "timestamp": 1776177191004,
+              "tick_direction": 2,
+              "price": 0.0155,
+              "mark_price": 0.0155648,
+              "iv": 45.53,
+              "instrument_name": "BTC-17APR26-76000-C",
+              "index_price": 76002.67,
+              "direction": "sell",
+              "contracts": 15.0,
+              "amount": 15.0
+            },
+            "net_if_sold_on_print": 1167.1342945293748
+          }
+        ]
+      },
+      "2026-05": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-06": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-07": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-08": {
+        "end": 882.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-08-17",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-08-17",
+            "instrument": "ETH-21AUG26-2050-C",
+            "ending": 882.0,
+            "trade_timestamp": 1786962202068,
+            "minimum_premium_with_cost_usd": 1.2264608496093747,
+            "status": "filled_proxy",
+            "spent_usd": 72.3611901269531,
+            "settled_value_usd": 19204.953666044992,
+            "settlement_index_usd": 2376.68,
+            "side": "C",
+            "month": "2026-08",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 59,
+            "sale_print": {
+              "trade_seq": 309,
+              "trade_id": "ETH-307618033",
+              "timestamp": 1787153252353,
+              "tick_direction": 1,
+              "price": 0.0185,
+              "mark_price": 0.014164,
+              "iv": 62.47,
+              "instrument_name": "ETH-21AUG26-2050-C",
+              "index_price": 2055.46,
+              "direction": "sell",
+              "contracts": 225.0,
+              "amount": 225.0
+            },
+            "net_if_sold_on_print": 2164.3775878267966
+          }
+        ]
+      },
+      "2026-09": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-10": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      }
+    },
+    "6x_stress": {
+      "2025-01": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-02": {
+        "end": 887.2284250575,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-02-24",
+            "ETH",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-02-24",
+            "instrument": "ETH-28FEB25-2500-P",
+            "ending": 887.2284250575,
+            "trade_timestamp": 1740392216150,
+            "minimum_premium_with_cost_usd": 26.21712185625,
+            "status": "filled_proxy",
+            "spent_usd": 52.4342437125,
+            "settled_value_usd": 792.6626687699998,
+            "settlement_index_usd": 2102.36,
+            "side": "P",
+            "month": "2025-02",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          }
+        ]
+      },
+      "2025-03": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-04": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-05": {
+        "end": 882.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-05-05",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-05-05",
+            "instrument": "ETH-9MAY25-2000-C",
+            "ending": 882.0,
+            "trade_timestamp": 1746440625200,
+            "minimum_premium_with_cost_usd": 5.212544113124999,
+            "status": "filled_proxy",
+            "spent_usd": 72.97561758375,
+            "settled_value_usd": 4751.7156572025015,
+            "settlement_index_usd": 2340.61,
+            "side": "C",
+            "month": "2025-05",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 14,
+            "sale_print": {
+              "trade_seq": 3200,
+              "trade_id": "ETH-247921352",
+              "timestamp": 1746754000472,
+              "tick_direction": 0,
+              "price": 0.0925,
+              "mark_price": 0.092643,
+              "iv": 0.0,
+              "instrument_name": "ETH-9MAY25-2000-C",
+              "index_price": 2204.86,
+              "direction": "sell",
+              "contracts": 43.0,
+              "amount": 43.0
+            },
+            "net_if_sold_on_print": 2485.7192673337504
+          }
+        ]
+      },
+      "2025-06": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-07": {
+        "end": 740.8973307675,
+        "hit": false,
+        "decisions": [
+          [
+            "2025-07-14",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-07-14",
+            "instrument": "ETH-18JUL25-3300-C",
+            "ending": 740.8973307675,
+            "trade_timestamp": 1752489083372,
+            "minimum_premium_with_cost_usd": 31.992374482499997,
+            "status": "filled_proxy",
+            "spent_usd": 63.984748964999994,
+            "settled_value_usd": 657.8820797325,
+            "settlement_index_usd": 3630.31,
+            "side": "C",
+            "month": "2025-07",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          }
+        ]
+      },
+      "2025-08": {
+        "end": 158.834481821249,
+        "hit": false,
+        "decisions": [
+          [
+            "2025-08-11",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-08-11",
+            "instrument": "ETH-15AUG25-4600-C",
+            "ending": 158.834481821249,
+            "trade_timestamp": 1754907718435,
+            "minimum_premium_with_cost_usd": 32.939426458125,
+            "status": "filled_proxy",
+            "spent_usd": 65.87885291625,
+            "settled_value_usd": 77.71333473749925,
+            "settlement_index_usd": 4639.65,
+            "side": "C",
+            "month": "2025-08",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 2
+          }
+        ]
+      },
+      "2025-09": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-10": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2025-11": {
+        "end": 882.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2025-11-17",
+            "BTC",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-11-17",
+            "instrument": "BTC-21NOV25-87000-P",
+            "ending": 882.0,
+            "trade_timestamp": 1763375302422,
+            "minimum_premium_with_cost_usd": 26.18070331695,
+            "status": "filled_proxy",
+            "spent_usd": 52.3614066339,
+            "settled_value_usd": 595.1821944022503,
+            "settlement_index_usd": 84004.03,
+            "side": "P",
+            "month": "2025-11",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 0.2,
+            "sale_print": {
+              "trade_seq": 530,
+              "trade_id": "399808234",
+              "timestamp": 1763710470091,
+              "tick_direction": 0,
+              "price": 0.068,
+              "mark_price": 0.06431223,
+              "iv": 848.84,
+              "instrument_name": "BTC-21NOV25-87000-P",
+              "index_price": 81723.59,
+              "direction": "sell",
+              "contracts": 0.4,
+              "amount": 0.4
+            },
+            "net_if_sold_on_print": 1032.1103251536001
+          }
+        ]
+      },
+      "2025-12": {
+        "end": 208.26217415475,
+        "hit": false,
+        "decisions": [
+          [
+            "2025-12-01",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2025-12-01",
+            "instrument": "ETH-5DEC25-3100-C",
+            "ending": 208.26217415475,
+            "trade_timestamp": 1764579612981,
+            "minimum_premium_with_cost_usd": 14.681000574,
+            "status": "filled_proxy",
+            "spent_usd": 14.681000574,
+            "settled_value_usd": 75.94317472875014,
+            "settlement_index_usd": 3176.61,
+            "side": "C",
+            "month": "2025-12",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 1
+          }
+        ]
+      },
+      "2026-01": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-02": {
+        "end": 597.061857218025,
+        "hit": false,
+        "decisions": [
+          [
+            "2026-02-02",
+            "BTC",
+            "P"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-02-02",
+            "instrument": "BTC-6FEB26-70000-P",
+            "ending": 597.061857218025,
+            "trade_timestamp": 1770022880715,
+            "minimum_premium_with_cost_usd": 45.900855614099996,
+            "status": "filled_proxy",
+            "spent_usd": 45.900855614099996,
+            "settled_value_usd": 495.96271283212485,
+            "settlement_index_usd": 65018.19,
+            "side": "P",
+            "month": "2026-02",
+            "starting": 147.0,
+            "modeled_exit": "expiry",
+            "contract_units": 0.1
+          }
+        ]
+      },
+      "2026-03": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-04": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-05": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-06": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-07": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-08": {
+        "end": 882.0,
+        "hit": true,
+        "decisions": [
+          [
+            "2026-08-17",
+            "ETH",
+            "C"
+          ]
+        ],
+        "trades": [
+          {
+            "entry_day": "2026-08-17",
+            "instrument": "ETH-21AUG26-2050-C",
+            "ending": 882.0,
+            "trade_timestamp": 1786962202068,
+            "minimum_premium_with_cost_usd": 1.4397583886718752,
+            "status": "filled_proxy",
+            "spent_usd": 73.42767782226564,
+            "settled_value_usd": 16600.89215200499,
+            "settlement_index_usd": 2376.68,
+            "side": "C",
+            "month": "2026-08",
+            "starting": 147.0,
+            "modeled_exit": "early",
+            "contract_units": 51,
+            "sale_print": {
+              "trade_seq": 309,
+              "trade_id": "ETH-307618033",
+              "timestamp": 1787153252353,
+              "tick_direction": 1,
+              "price": 0.0185,
+              "mark_price": 0.014164,
+              "iv": 62.47,
+              "instrument_name": "ETH-21AUG26-2050-C",
+              "index_price": 2055.46,
+              "direction": "sell",
+              "contracts": 225.0,
+              "amount": 225.0
+            },
+            "net_if_sold_on_print": 1686.5088701889845
+          }
+        ]
+      },
+      "2026-09": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      },
+      "2026-10": {
+        "end": 147.0,
+        "hit": false,
+        "decisions": [],
+        "trades": []
+      }
+    }
+  }
+}

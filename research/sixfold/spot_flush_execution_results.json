@@ -1,0 +1,83 @@
+{
+  "source": "https://data.binance.vision/data/spot/daily/aggTrades/ALPACAUSDT/ALPACAUSDT-aggTrades-2025-04-30.zip",
+  "sha256": "b3e439237fd92ed40f82ebafe4804d1b174297332736c3755d9d710895928d3c",
+  "first_trade": [
+    1745971200011,
+    0.1923,
+    1151.6,
+    true
+  ],
+  "last_trade": [
+    1746057598120,
+    0.569,
+    29.3,
+    true
+  ],
+  "assumptions": "Aggressor trade capacity proxy, no historical quotes or order queue",
+  "cases": {
+    "base_boundary": {
+      "buy": {
+        "base_units": 764.1486409460471,
+        "quote_units": 146.48729446935724,
+        "vwap": 0.1917,
+        "observed_prints": 1
+      },
+      "sell": {
+        "base_units": 764.1486409460471,
+        "quote_units": 434.9543115623955,
+        "vwap": 0.5692011845024083,
+        "observed_prints": 7
+      },
+      "liquidated_fraction": 1.0,
+      "multiple": 2.9485168127341983
+    },
+    "base_buffer": {
+      "buy": {
+        "base_units": 755.4785686918889,
+        "quote_units": 146.48729446935724,
+        "vwap": 0.1939,
+        "observed_prints": 9
+      },
+      "sell": {
+        "base_units": 755.4785686918889,
+        "quote_units": 428.91758344638527,
+        "vwap": 0.5677428867228571,
+        "observed_prints": 4
+      },
+      "liquidated_fraction": 1.0,
+      "multiple": 2.9075943666960744
+    },
+    "stress_boundary": {
+      "buy": {
+        "base_units": 759.230852662731,
+        "quote_units": 145.54455445544554,
+        "vwap": 0.1917,
+        "observed_prints": 1
+      },
+      "sell": {
+        "base_units": 759.230852662731,
+        "quote_units": 432.1555982503603,
+        "vwap": 0.5692018399077552,
+        "observed_prints": 7
+      },
+      "liquidated_fraction": 1.0,
+      "multiple": 2.9104356616861002
+    },
+    "stress_buffer": {
+      "buy": {
+        "base_units": 750.6165779032777,
+        "quote_units": 145.54455445544554,
+        "vwap": 0.19389999999999996,
+        "observed_prints": 9
+      },
+      "sell": {
+        "base_units": 750.6165779032777,
+        "quote_units": 426.1574312756908,
+        "vwap": 0.5677431645142857,
+        "observed_prints": 4
+      },
+      "liquidated_fraction": 1.0,
+      "multiple": 2.8700398432852645
+    }
+  }
+}

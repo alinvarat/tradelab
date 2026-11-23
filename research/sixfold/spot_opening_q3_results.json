@@ -1,0 +1,393 @@
+{
+  "continuous_ending_thb": {
+    "base": 3489.758719325015,
+    "stress": 3186.197285173888
+  },
+  "months": {
+    "2026-07": {
+      "input_sha256": "0ab29f60587816c5f630f15a5cd3c174a5f213f4556326304e234d0d878591c9",
+      "partial_month": false,
+      "bars": {
+        "BTCUSDT": 744,
+        "ETHUSDT": 744,
+        "SOLUSDT": 744,
+        "ZECUSDT": 744,
+        "XRPUSDT": 744,
+        "WLDUSDT": 744,
+        "BNBUSDT": 744,
+        "DOGEUSDT": 744,
+        "NEARUSDT": 744,
+        "TRXUSDT": 744,
+        "TAOUSDT": 744,
+        "SUIUSDT": 744,
+        "XLMUSDT": 744,
+        "ADAUSDT": 744,
+        "ENAUSDT": 744,
+        "RLUSDUSDT": 744,
+        "AVAXUSDT": 744,
+        "PEPEUSDT": 744,
+        "UUSDT": 744,
+        "XPLUSDT": 744,
+        "LINKUSDT": 744,
+        "TONUSDT": 0,
+        "LTCUSDT": 744,
+        "AAVEUSDT": 744,
+        "FETUSDT": 744,
+        "ONDOUSDT": 744,
+        "ALLOUSDT": 744,
+        "INJUSDT": 744,
+        "UNIUSDT": 744,
+        "ASTERUSDT": 744,
+        "BCHUSDT": 744,
+        "TRUMPUSDT": 744,
+        "HBARUSDT": 744,
+        "\u5e01\u5b89\u4eba\u751fUSDT": 744,
+        "PUMPUSDT": 744,
+        "JTOUSDT": 744,
+        "FILUSDT": 744,
+        "PENGUUSDT": 744,
+        "HOMEUSDT": 744,
+        "DASHUSDT": 744,
+        "ICPUSDT": 744,
+        "CHZUSDT": 744,
+        "DOTUSDT": 744,
+        "MEGAUSDT": 744,
+        "OPGUSDT": 744,
+        "RENDERUSDT": 744,
+        "WLFIUSDT": 744,
+        "HEIUSDT": 744,
+        "APTUSDT": 744,
+        "DEXEUSDT": 744,
+        "TIAUSDT": 744,
+        "SAHARAUSDT": 744,
+        "ZROUSDT": 744,
+        "ARBUSDT": 744,
+        "CHIPUSDT": 744,
+        "GENIUSUSDT": 744,
+        "BIOUSDT": 744,
+        "OPNUSDT": 744,
+        "SYNUSDT": 744,
+        "WBTCUSDT": 744
+      },
+      "failures": {},
+      "cases": {
+        "base": {
+          "3x_months": 0,
+          "ending_thb": 4715.086249104753,
+          "max_close_drawdown": 0.06587741384242607,
+          "months": [
+            [
+              "2026-07",
+              0.9430172498209505
+            ]
+          ],
+          "events": [
+            [
+              "2026-07-02",
+              "RENDERUSDT",
+              1.0095219447588393
+            ],
+            [
+              "2026-07-10",
+              "OPGUSDT",
+              0.9341225861575739
+            ]
+          ],
+          "random": {
+            "end_median_thb": 4978.660157449054,
+            "fraction_at_least_actual": 0.907,
+            "draws_with_3x": 0
+          }
+        },
+        "stress": {
+          "3x_months": 0,
+          "ending_thb": 4594.068119868499,
+          "max_close_drawdown": 0.08118637602630019,
+          "months": [
+            [
+              "2026-07",
+              0.9188136239736998
+            ]
+          ],
+          "events": [
+            [
+              "2026-07-02",
+              "RENDERUSDT",
+              0.9964824597475722
+            ],
+            [
+              "2026-07-10",
+              "OPGUSDT",
+              0.9220569965741822
+            ]
+          ],
+          "random": {
+            "end_median_thb": 4850.877099721965,
+            "fraction_at_least_actual": 0.907,
+            "draws_with_3x": 0
+          }
+        }
+      }
+    },
+    "2026-08": {
+      "input_sha256": "d47c072e1b830e61b489c2cb7a69c5d98da16200dddb877b072456545b9ac7be",
+      "partial_month": false,
+      "bars": {
+        "BTCUSDT": 744,
+        "ETHUSDT": 744,
+        "SOLUSDT": 744,
+        "ZECUSDT": 744,
+        "XRPUSDT": 744,
+        "BNBUSDT": 744,
+        "DOGEUSDT": 744,
+        "RLUSDUSDT": 744,
+        "TRXUSDT": 744,
+        "DEXEUSDT": 744,
+        "NEARUSDT": 744,
+        "ADAUSDT": 744,
+        "SPCXBUSDT": 744,
+        "SNDKBUSDT": 744,
+        "WLDUSDT": 744,
+        "UUSDT": 744,
+        "PEPEUSDT": 744,
+        "SUIUSDT": 744,
+        "AAVEUSDT": 744,
+        "LTCUSDT": 744,
+        "XLMUSDT": 744,
+        "UNIUSDT": 744,
+        "REUSDT": 744,
+        "TAOUSDT": 744,
+        "ENAUSDT": 744,
+        "LINKUSDT": 744,
+        "AVAXUSDT": 744,
+        "MUBUSDT": 744,
+        "ONDOUSDT": 744,
+        "PUMPUSDT": 744,
+        "GRAMUSDT": 744,
+        "SYNUSDT": 744,
+        "ALLOUSDT": 744,
+        "XPLUSDT": 744,
+        "BANKUSDT": 744,
+        "CRCLBUSDT": 744,
+        "OPNUSDT": 744,
+        "TRUMPUSDT": 744,
+        "BCHUSDT": 744,
+        "KAITOUSDT": 744,
+        "FETUSDT": 744,
+        "HBARUSDT": 744,
+        "INJUSDT": 744,
+        "DOTUSDT": 744,
+        "FILUSDT": 744,
+        "VANRYUSDT": 387,
+        "SOXLBUSDT": 744,
+        "PENGUUSDT": 744,
+        "ARBUSDT": 744,
+        "KITEUSDT": 744,
+        "ASTERUSDT": 744,
+        "\u5e01\u5b89\u4eba\u751fUSDT": 744,
+        "TLMUSDT": 744,
+        "RIFUSDT": 744,
+        "DASHUSDT": 744,
+        "ICPUSDT": 744,
+        "TIAUSDT": 744,
+        "WLFIUSDT": 744,
+        "EPICUSDT": 744,
+        "APTUSDT": 744
+      },
+      "failures": {},
+      "cases": {
+        "base": {
+          "3x_months": 0,
+          "ending_thb": 3797.347809196513,
+          "max_close_drawdown": 0.2405304381606974,
+          "months": [
+            [
+              "2026-08",
+              0.7594695618393026
+            ]
+          ],
+          "events": [
+            [
+              "2026-08-22",
+              "FILUSDT",
+              0.8930185319504521
+            ],
+            [
+              "2026-08-29",
+              "BANKUSDT",
+              0.9718398937053646
+            ],
+            [
+              "2026-08-30",
+              "DEXEUSDT",
+              0.8750949519735897
+            ]
+          ],
+          "random": {
+            "end_median_thb": 4460.466095308919,
+            "fraction_at_least_actual": 0.99,
+            "draws_with_3x": 0
+          }
+        },
+        "stress": {
+          "3x_months": 0,
+          "ending_thb": 3652.0949569047048,
+          "max_close_drawdown": 0.2695810086190591,
+          "months": [
+            [
+              "2026-08",
+              0.7304189913809409
+            ]
+          ],
+          "events": [
+            [
+              "2026-08-22",
+              "FILUSDT",
+              0.8814838626719816
+            ],
+            [
+              "2026-08-29",
+              "BANKUSDT",
+              0.9592871287128714
+            ],
+            [
+              "2026-08-30",
+              "DEXEUSDT",
+              0.863791792523776
+            ]
+          ],
+          "random": {
+            "end_median_thb": 4289.848217924751,
+            "fraction_at_least_actual": 0.99,
+            "draws_with_3x": 0
+          }
+        }
+      }
+    },
+    "2026-09": {
+      "input_sha256": "828f1c008477ff05be60a419502cce30ef3d93ee9b4c9cd2ac02051e6568f791",
+      "partial_month": false,
+      "bars": {
+        "BTCUSDT": 720,
+        "ETHUSDT": 720,
+        "SOLUSDT": 720,
+        "XRPUSDT": 720,
+        "BNBUSDT": 720,
+        "ZECUSDT": 720,
+        "RLUSDUSDT": 720,
+        "SNDKBUSDT": 720,
+        "TUTUSDT": 720,
+        "TRXUSDT": 720,
+        "DOGEUSDT": 720,
+        "ADAUSDT": 720,
+        "UUSDT": 720,
+        "SPCXBUSDT": 720,
+        "PUMPUSDT": 720,
+        "UNIUSDT": 720,
+        "NEARUSDT": 720,
+        "LINKUSDT": 720,
+        "SUIUSDT": 720,
+        "ENAUSDT": 720,
+        "AVAXUSDT": 720,
+        "WLDUSDT": 720,
+        "PEPEUSDT": 720,
+        "TAOUSDT": 720,
+        "XPLUSDT": 720,
+        "MUBUSDT": 720,
+        "ACEUSDT": 720,
+        "LTCUSDT": 720,
+        "CRCLBUSDT": 720,
+        "AAVEUSDT": 720,
+        "ONDOUSDT": 720,
+        "FETUSDT": 720,
+        "SNXXBUSDT": 720,
+        "SKHYBUSDT": 720,
+        "BICOUSDT": 720,
+        "XLMUSDT": 720,
+        "SOXLBUSDT": 720,
+        "HEMIUSDT": 720,
+        "PENGUUSDT": 720,
+        "BANKUSDT": 720,
+        "GIGGLEUSDT": 720,
+        "GRAMUSDT": 720,
+        "HEIUSDT": 720,
+        "FILUSDT": 720,
+        "TRUMPUSDT": 720,
+        "WLFIUSDT": 720,
+        "HOMEUSDT": 720,
+        "KAITOUSDT": 720,
+        "DEXEUSDT": 720,
+        "REUSDT": 720,
+        "BCHUSDT": 720,
+        "ZAMAUSDT": 720,
+        "DOTUSDT": 720,
+        "MSTRBUSDT": 720,
+        "ICPUSDT": 720,
+        "SHIBUSDT": 720,
+        "PROMUSDT": 720,
+        "ARBUSDT": 720,
+        "HBARUSDT": 720,
+        "INJUSDT": 720
+      },
+      "failures": {},
+      "cases": {
+        "base": {
+          "3x_months": 0,
+          "ending_thb": 4872.651950847539,
+          "max_close_drawdown": 0.02804213362486141,
+          "months": [
+            [
+              "2026-09",
+              0.9745303901695078
+            ]
+          ],
+          "events": [
+            [
+              "2026-09-08",
+              "SKHYBUSDT",
+              0.9719578663751386
+            ],
+            [
+              "2026-09-18",
+              "TRUMPUSDT",
+              1.002646744147422
+            ]
+          ],
+          "random": {
+            "end_median_thb": 5059.01779726529,
+            "fraction_at_least_actual": 0.844,
+            "draws_with_3x": 0
+          }
+        },
+        "stress": {
+          "3x_months": 0,
+          "ending_thb": 4747.589716063836,
+          "max_close_drawdown": 0.05048205678723283,
+          "months": [
+            [
+              "2026-09",
+              0.9495179432127672
+            ]
+          ],
+          "events": [
+            [
+              "2026-09-08",
+              "SKHYBUSDT",
+              0.9594035775892625
+            ],
+            [
+              "2026-09-18",
+              "TRUMPUSDT",
+              0.9896960626295188
+            ]
+          ],
+          "random": {
+            "end_median_thb": 4929.172267989087,
+            "fraction_at_least_actual": 0.844,
+            "draws_with_3x": 0
+          }
+        }
+      }
+    }
+  }
+}

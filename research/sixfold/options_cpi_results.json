@@ -1,0 +1,3510 @@
+{
+  "input_sha256": {
+    "historical": "339f080b6f0aa66db4a2f7b84ba8bad99608804059c6db718739e8d4a70408fa",
+    "BTC": "f98e29596a4215797bece392b016e1129911ac825db01e441ff3208cb1055d6e",
+    "ETH": "e3776219c401b9383043291288039ea50970bd978e73f907fc8ed052134bbb15"
+  },
+  "calendar_sha256": "39223eddcffe1522561ff9dcc8817086d9ba288b9a286625f04df225ebe67d6c",
+  "release_matches": {
+    "2025-01-13": [
+      "2025-01-15T08:30:00-05:00"
+    ],
+    "2025-02-10": [
+      "2025-02-12T08:30:00-05:00"
+    ],
+    "2025-03-10": [
+      "2025-03-12T08:30:00-04:00"
+    ],
+    "2025-04-07": [
+      "2025-04-10T08:30:00-04:00"
+    ],
+    "2025-05-12": [
+      "2025-05-13T08:30:00-04:00"
+    ],
+    "2025-06-09": [
+      "2025-06-11T08:30:00-04:00"
+    ],
+    "2025-07-14": [
+      "2025-07-15T08:30:00-04:00"
+    ],
+    "2025-08-11": [
+      "2025-08-12T08:30:00-04:00"
+    ],
+    "2025-09-08": [
+      "2025-09-11T08:30:00-04:00"
+    ],
+    "2026-01-12": [
+      "2026-01-13T08:30:00-05:00"
+    ],
+    "2026-03-09": [
+      "2026-03-11T08:30:00-04:00"
+    ],
+    "2026-05-11": [
+      "2026-05-12T08:30:00-04:00"
+    ],
+    "2026-06-08": [
+      "2026-06-10T08:30:00-04:00"
+    ],
+    "2026-07-13": [
+      "2026-07-14T08:30:00-04:00"
+    ],
+    "2026-08-10": [
+      "2026-08-12T08:30:00-04:00"
+    ],
+    "2026-10-12": [
+      "2026-10-14T08:30:00-04:00"
+    ]
+  },
+  "periods": {
+    "2025": {
+      "3x_base": {
+        "end": 25.425509065868,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.827037353293415,
+        "months": [
+          {
+            "month": "2025-01",
+            "starting": 147.0,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-01-13",
+                "instrument": "BTC-17JAN25-85000-P",
+                "ending": 110.05230091955,
+                "trade_timestamp": 1736762684048,
+                "minimum_premium_with_cost_usd": 36.94769908045,
+                "status": "filled_proxy",
+                "spent_usd": 36.94769908045,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 101575.67,
+                "side": "P",
+                "month": "2025-01",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-01-13"
+              ]
+            ]
+          },
+          {
+            "month": "2025-02",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-02-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14FEB25-106000-C",
+                "ending": 110.05230091955,
+                "month": "2025-02",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-02-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-03",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-03-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14MAR25-74000-P",
+                "ending": 110.05230091955,
+                "month": "2025-03",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-03-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-04",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-04-07",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-11APR25-70000-P",
+                "ending": 110.05230091955,
+                "trade_timestamp": 1744020091001,
+                "minimum_premium_with_cost_usd": 81.30657784574998,
+                "month": "2025-04",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-04-07"
+              ]
+            ]
+          },
+          {
+            "month": "2025-05",
+            "starting": 110.05230091955,
+            "ending": 96.521751369472,
+            "trades": [
+              {
+                "entry_day": "2025-05-12",
+                "instrument": "BTC-16MAY25-115000-C",
+                "ending": 96.521751369472,
+                "trade_timestamp": 1747044706145,
+                "minimum_premium_with_cost_usd": 13.530549550078124,
+                "status": "filled_proxy",
+                "spent_usd": 13.530549550078124,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 103870.69,
+                "side": "C",
+                "month": "2025-05",
+                "starting": 110.05230091955,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-05-12"
+              ]
+            ]
+          },
+          {
+            "month": "2025-06",
+            "starting": 96.521751369472,
+            "ending": 85.441482080234,
+            "trades": [
+              {
+                "entry_day": "2025-06-09",
+                "instrument": "BTC-13JUN25-115000-C",
+                "ending": 85.441482080234,
+                "trade_timestamp": 1749462396107,
+                "minimum_premium_with_cost_usd": 11.0802692892375,
+                "status": "filled_proxy",
+                "spent_usd": 11.0802692892375,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 104802.72,
+                "side": "C",
+                "month": "2025-06",
+                "starting": 96.521751369472,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-06-09"
+              ]
+            ]
+          },
+          {
+            "month": "2025-07",
+            "starting": 85.441482080234,
+            "ending": 71.184760576278,
+            "trades": [
+              {
+                "entry_day": "2025-07-14",
+                "instrument": "BTC-18JUL25-135000-C",
+                "ending": 71.184760576278,
+                "trade_timestamp": 1752485699514,
+                "minimum_premium_with_cost_usd": 14.25672150395625,
+                "status": "filled_proxy",
+                "spent_usd": 14.25672150395625,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 119753.4,
+                "side": "C",
+                "month": "2025-07",
+                "starting": 85.441482080234,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-07-14"
+              ]
+            ]
+          },
+          {
+            "month": "2025-08",
+            "starting": 71.184760576278,
+            "ending": 42.851324732787,
+            "trades": [
+              {
+                "entry_day": "2025-08-11",
+                "instrument": "BTC-15AUG25-132000-C",
+                "ending": 42.851324732787,
+                "trade_timestamp": 1754905656047,
+                "minimum_premium_with_cost_usd": 9.444478614496871,
+                "status": "filled_proxy",
+                "spent_usd": 28.33343584349062,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 118927.39,
+                "side": "C",
+                "month": "2025-08",
+                "starting": 71.184760576278,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-08-11"
+              ]
+            ]
+          },
+          {
+            "month": "2025-09",
+            "starting": 42.851324732787,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2025-09-08",
+                "instrument": "BTC-12SEP25-122000-C",
+                "ending": 25.425509065868,
+                "trade_timestamp": 1757322847625,
+                "minimum_premium_with_cost_usd": 5.808605222306249,
+                "status": "filled_proxy",
+                "spent_usd": 17.425815666918748,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 115207.02,
+                "side": "C",
+                "month": "2025-09",
+                "starting": 42.851324732787,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-09-08"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 41.771421282979,
+        "random_fraction_ge": 0.792
+      },
+      "3x_stress": {
+        "end": 22.672261658483,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.845766927493313,
+        "months": [
+          {
+            "month": "2025-01",
+            "starting": 147.0,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-01-13",
+                "instrument": "BTC-17JAN25-85000-P",
+                "ending": 104.11096237395,
+                "trade_timestamp": 1736762684048,
+                "minimum_premium_with_cost_usd": 42.88903762605001,
+                "status": "filled_proxy",
+                "spent_usd": 42.88903762605001,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 101575.67,
+                "side": "P",
+                "month": "2025-01",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-01-13"
+              ]
+            ]
+          },
+          {
+            "month": "2025-02",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-02-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14FEB25-106000-C",
+                "ending": 104.11096237395,
+                "month": "2025-02",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-02-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-03",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-03-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14MAR25-74000-P",
+                "ending": 104.11096237395,
+                "month": "2025-03",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-03-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-04",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-04-07",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-11APR25-70000-P",
+                "ending": 104.11096237395,
+                "trade_timestamp": 1744020091001,
+                "minimum_premium_with_cost_usd": 95.04853466475001,
+                "month": "2025-04",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-04-07"
+              ]
+            ]
+          },
+          {
+            "month": "2025-05",
+            "starting": 104.11096237395,
+            "ending": 88.227273771684,
+            "trades": [
+              {
+                "entry_day": "2025-05-12",
+                "instrument": "BTC-16MAY25-115000-C",
+                "ending": 88.227273771684,
+                "trade_timestamp": 1747044706145,
+                "minimum_premium_with_cost_usd": 15.883688602265625,
+                "status": "filled_proxy",
+                "spent_usd": 15.883688602265625,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 103870.69,
+                "side": "C",
+                "month": "2025-05",
+                "starting": 104.11096237395,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-05-12"
+              ]
+            ]
+          },
+          {
+            "month": "2025-06",
+            "starting": 88.227273771684,
+            "ending": 75.220001127796,
+            "trades": [
+              {
+                "entry_day": "2025-06-09",
+                "instrument": "BTC-13JUN25-115000-C",
+                "ending": 75.220001127796,
+                "trade_timestamp": 1749462396107,
+                "minimum_premium_with_cost_usd": 13.007272643887504,
+                "status": "filled_proxy",
+                "spent_usd": 13.007272643887504,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 104802.72,
+                "side": "C",
+                "month": "2025-06",
+                "starting": 88.227273771684,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-06-09"
+              ]
+            ]
+          },
+          {
+            "month": "2025-07",
+            "starting": 75.220001127796,
+            "ending": 58.483849797065,
+            "trades": [
+              {
+                "entry_day": "2025-07-14",
+                "instrument": "BTC-18JUL25-135000-C",
+                "ending": 58.483849797065,
+                "trade_timestamp": 1752485699514,
+                "minimum_premium_with_cost_usd": 16.736151330731253,
+                "status": "filled_proxy",
+                "spent_usd": 16.736151330731253,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 119753.4,
+                "side": "C",
+                "month": "2025-07",
+                "starting": 75.220001127796,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-07-14"
+              ]
+            ]
+          },
+          {
+            "month": "2025-08",
+            "starting": 58.483849797065,
+            "ending": 36.309856528246,
+            "trades": [
+              {
+                "entry_day": "2025-08-11",
+                "instrument": "BTC-15AUG25-132000-C",
+                "ending": 36.309856528246,
+                "trade_timestamp": 1754905656047,
+                "minimum_premium_with_cost_usd": 11.086996634409374,
+                "status": "filled_proxy",
+                "spent_usd": 22.173993268818748,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 118927.39,
+                "side": "C",
+                "month": "2025-08",
+                "starting": 58.483849797065,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-08-11"
+              ]
+            ]
+          },
+          {
+            "month": "2025-09",
+            "starting": 36.309856528246,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2025-09-08",
+                "instrument": "BTC-12SEP25-122000-C",
+                "ending": 22.672261658483,
+                "trade_timestamp": 1757322847625,
+                "minimum_premium_with_cost_usd": 6.818797434881252,
+                "status": "filled_proxy",
+                "spent_usd": 13.637594869762504,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 115207.02,
+                "side": "C",
+                "month": "2025-09",
+                "starting": 36.309856528246,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-09-08"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 34.071328528533,
+        "random_fraction_ge": 0.77
+      },
+      "6x_base": {
+        "end": 25.425509065868,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.827037353293415,
+        "months": [
+          {
+            "month": "2025-01",
+            "starting": 147.0,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-01-13",
+                "instrument": "BTC-17JAN25-85000-P",
+                "ending": 110.05230091955,
+                "trade_timestamp": 1736762684048,
+                "minimum_premium_with_cost_usd": 36.94769908045,
+                "status": "filled_proxy",
+                "spent_usd": 36.94769908045,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 101575.67,
+                "side": "P",
+                "month": "2025-01",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-01-13"
+              ]
+            ]
+          },
+          {
+            "month": "2025-02",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-02-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14FEB25-106000-C",
+                "ending": 110.05230091955,
+                "month": "2025-02",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-02-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-03",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-03-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14MAR25-74000-P",
+                "ending": 110.05230091955,
+                "month": "2025-03",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-03-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-04",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-04-07",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-11APR25-70000-P",
+                "ending": 110.05230091955,
+                "trade_timestamp": 1744020091001,
+                "minimum_premium_with_cost_usd": 81.30657784574998,
+                "month": "2025-04",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-04-07"
+              ]
+            ]
+          },
+          {
+            "month": "2025-05",
+            "starting": 110.05230091955,
+            "ending": 96.521751369472,
+            "trades": [
+              {
+                "entry_day": "2025-05-12",
+                "instrument": "BTC-16MAY25-115000-C",
+                "ending": 96.521751369472,
+                "trade_timestamp": 1747044706145,
+                "minimum_premium_with_cost_usd": 13.530549550078124,
+                "status": "filled_proxy",
+                "spent_usd": 13.530549550078124,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 103870.69,
+                "side": "C",
+                "month": "2025-05",
+                "starting": 110.05230091955,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-05-12"
+              ]
+            ]
+          },
+          {
+            "month": "2025-06",
+            "starting": 96.521751369472,
+            "ending": 85.441482080234,
+            "trades": [
+              {
+                "entry_day": "2025-06-09",
+                "instrument": "BTC-13JUN25-115000-C",
+                "ending": 85.441482080234,
+                "trade_timestamp": 1749462396107,
+                "minimum_premium_with_cost_usd": 11.0802692892375,
+                "status": "filled_proxy",
+                "spent_usd": 11.0802692892375,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 104802.72,
+                "side": "C",
+                "month": "2025-06",
+                "starting": 96.521751369472,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-06-09"
+              ]
+            ]
+          },
+          {
+            "month": "2025-07",
+            "starting": 85.441482080234,
+            "ending": 71.184760576278,
+            "trades": [
+              {
+                "entry_day": "2025-07-14",
+                "instrument": "BTC-18JUL25-135000-C",
+                "ending": 71.184760576278,
+                "trade_timestamp": 1752485699514,
+                "minimum_premium_with_cost_usd": 14.25672150395625,
+                "status": "filled_proxy",
+                "spent_usd": 14.25672150395625,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 119753.4,
+                "side": "C",
+                "month": "2025-07",
+                "starting": 85.441482080234,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-07-14"
+              ]
+            ]
+          },
+          {
+            "month": "2025-08",
+            "starting": 71.184760576278,
+            "ending": 42.851324732787,
+            "trades": [
+              {
+                "entry_day": "2025-08-11",
+                "instrument": "BTC-15AUG25-132000-C",
+                "ending": 42.851324732787,
+                "trade_timestamp": 1754905656047,
+                "minimum_premium_with_cost_usd": 9.444478614496871,
+                "status": "filled_proxy",
+                "spent_usd": 28.33343584349062,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 118927.39,
+                "side": "C",
+                "month": "2025-08",
+                "starting": 71.184760576278,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-08-11"
+              ]
+            ]
+          },
+          {
+            "month": "2025-09",
+            "starting": 42.851324732787,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2025-09-08",
+                "instrument": "BTC-12SEP25-122000-C",
+                "ending": 25.425509065868,
+                "trade_timestamp": 1757322847625,
+                "minimum_premium_with_cost_usd": 5.808605222306249,
+                "status": "filled_proxy",
+                "spent_usd": 17.425815666918748,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 115207.02,
+                "side": "C",
+                "month": "2025-09",
+                "starting": 42.851324732787,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-09-08"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 34.8378877926455,
+        "random_fraction_ge": 0.682
+      },
+      "6x_stress": {
+        "end": 22.672261658483,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.845766927493313,
+        "months": [
+          {
+            "month": "2025-01",
+            "starting": 147.0,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-01-13",
+                "instrument": "BTC-17JAN25-85000-P",
+                "ending": 104.11096237395,
+                "trade_timestamp": 1736762684048,
+                "minimum_premium_with_cost_usd": 42.88903762605001,
+                "status": "filled_proxy",
+                "spent_usd": 42.88903762605001,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 101575.67,
+                "side": "P",
+                "month": "2025-01",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-01-13"
+              ]
+            ]
+          },
+          {
+            "month": "2025-02",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-02-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14FEB25-106000-C",
+                "ending": 104.11096237395,
+                "month": "2025-02",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-02-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-03",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-03-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14MAR25-74000-P",
+                "ending": 104.11096237395,
+                "month": "2025-03",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-03-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-04",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-04-07",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-11APR25-70000-P",
+                "ending": 104.11096237395,
+                "trade_timestamp": 1744020091001,
+                "minimum_premium_with_cost_usd": 95.04853466475001,
+                "month": "2025-04",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-04-07"
+              ]
+            ]
+          },
+          {
+            "month": "2025-05",
+            "starting": 104.11096237395,
+            "ending": 88.227273771684,
+            "trades": [
+              {
+                "entry_day": "2025-05-12",
+                "instrument": "BTC-16MAY25-115000-C",
+                "ending": 88.227273771684,
+                "trade_timestamp": 1747044706145,
+                "minimum_premium_with_cost_usd": 15.883688602265625,
+                "status": "filled_proxy",
+                "spent_usd": 15.883688602265625,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 103870.69,
+                "side": "C",
+                "month": "2025-05",
+                "starting": 104.11096237395,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-05-12"
+              ]
+            ]
+          },
+          {
+            "month": "2025-06",
+            "starting": 88.227273771684,
+            "ending": 75.220001127796,
+            "trades": [
+              {
+                "entry_day": "2025-06-09",
+                "instrument": "BTC-13JUN25-115000-C",
+                "ending": 75.220001127796,
+                "trade_timestamp": 1749462396107,
+                "minimum_premium_with_cost_usd": 13.007272643887504,
+                "status": "filled_proxy",
+                "spent_usd": 13.007272643887504,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 104802.72,
+                "side": "C",
+                "month": "2025-06",
+                "starting": 88.227273771684,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-06-09"
+              ]
+            ]
+          },
+          {
+            "month": "2025-07",
+            "starting": 75.220001127796,
+            "ending": 58.483849797065,
+            "trades": [
+              {
+                "entry_day": "2025-07-14",
+                "instrument": "BTC-18JUL25-135000-C",
+                "ending": 58.483849797065,
+                "trade_timestamp": 1752485699514,
+                "minimum_premium_with_cost_usd": 16.736151330731253,
+                "status": "filled_proxy",
+                "spent_usd": 16.736151330731253,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 119753.4,
+                "side": "C",
+                "month": "2025-07",
+                "starting": 75.220001127796,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-07-14"
+              ]
+            ]
+          },
+          {
+            "month": "2025-08",
+            "starting": 58.483849797065,
+            "ending": 36.309856528246,
+            "trades": [
+              {
+                "entry_day": "2025-08-11",
+                "instrument": "BTC-15AUG25-132000-C",
+                "ending": 36.309856528246,
+                "trade_timestamp": 1754905656047,
+                "minimum_premium_with_cost_usd": 11.086996634409374,
+                "status": "filled_proxy",
+                "spent_usd": 22.173993268818748,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 118927.39,
+                "side": "C",
+                "month": "2025-08",
+                "starting": 58.483849797065,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-08-11"
+              ]
+            ]
+          },
+          {
+            "month": "2025-09",
+            "starting": 36.309856528246,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2025-09-08",
+                "instrument": "BTC-12SEP25-122000-C",
+                "ending": 22.672261658483,
+                "trade_timestamp": 1757322847625,
+                "minimum_premium_with_cost_usd": 6.818797434881252,
+                "status": "filled_proxy",
+                "spent_usd": 13.637594869762504,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 115207.02,
+                "side": "C",
+                "month": "2025-09",
+                "starting": 36.309856528246,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-09-08"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 34.071328528533,
+        "random_fraction_ge": 0.77
+      }
+    },
+    "2026": {
+      "3x_base": {
+        "end": 74.9387139648,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.4902128301714286,
+        "months": [
+          {
+            "month": "2026-01",
+            "starting": 147.0,
+            "ending": 147.0,
+            "trades": [
+              {
+                "entry_day": "2026-01-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16JAN26-82000-P",
+                "ending": 147.0,
+                "month": "2026-01",
+                "starting": 147.0
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-01-12"
+              ]
+            ]
+          },
+          {
+            "month": "2026-02",
+            "starting": 147.0,
+            "ending": 147.0,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-03",
+            "starting": 147.0,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-03-09",
+                "instrument": "BTC-13MAR26-74000-C",
+                "ending": 74.9387139648,
+                "trade_timestamp": 1773048759137,
+                "minimum_premium_with_cost_usd": 24.020428678399995,
+                "status": "filled_proxy",
+                "spent_usd": 72.0612860352,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 71556.31,
+                "side": "C",
+                "month": "2026-03",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-03-09"
+              ]
+            ]
+          },
+          {
+            "month": "2026-04",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-05",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-05-11",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-15MAY26-88000-C",
+                "ending": 74.9387139648,
+                "month": "2026-05",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-05-11"
+              ]
+            ]
+          },
+          {
+            "month": "2026-06",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-06-08",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-12JUN26-58000-P",
+                "ending": 74.9387139648,
+                "trade_timestamp": 1780914533122,
+                "minimum_premium_with_cost_usd": 38.253186129125,
+                "month": "2026-06",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-06-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-07",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-07-13",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-17JUL26-69000-C",
+                "ending": 74.9387139648,
+                "month": "2026-07",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-07-13"
+              ]
+            ]
+          },
+          {
+            "month": "2026-08",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-08-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14AUG26-70000-C",
+                "ending": 74.9387139648,
+                "month": "2026-08",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-08-10"
+              ]
+            ]
+          },
+          {
+            "month": "2026-09",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-10",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-10-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16OCT26-76000-P",
+                "ending": 74.9387139648,
+                "month": "2026-10",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-10-12"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 47.996334009862,
+        "random_fraction_ge": 0.298
+      },
+      "3x_stress": {
+        "end": 46.740252161175,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.6820391009443878,
+        "months": [
+          {
+            "month": "2026-01",
+            "starting": 147.0,
+            "ending": 147.0,
+            "trades": [
+              {
+                "entry_day": "2026-01-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16JAN26-82000-P",
+                "ending": 147.0,
+                "month": "2026-01",
+                "starting": 147.0
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-01-12"
+              ]
+            ]
+          },
+          {
+            "month": "2026-02",
+            "starting": 147.0,
+            "ending": 147.0,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-03",
+            "starting": 147.0,
+            "ending": 91.3162789728,
+            "trades": [
+              {
+                "entry_day": "2026-03-09",
+                "instrument": "BTC-13MAR26-74000-C",
+                "ending": 91.3162789728,
+                "trade_timestamp": 1773048759137,
+                "minimum_premium_with_cost_usd": 27.8418605136,
+                "status": "filled_proxy",
+                "spent_usd": 55.6837210272,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 71556.31,
+                "side": "C",
+                "month": "2026-03",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-03-09"
+              ]
+            ]
+          },
+          {
+            "month": "2026-04",
+            "starting": 91.3162789728,
+            "ending": 91.3162789728,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-05",
+            "starting": 91.3162789728,
+            "ending": 91.3162789728,
+            "trades": [
+              {
+                "entry_day": "2026-05-11",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-15MAY26-88000-C",
+                "ending": 91.3162789728,
+                "month": "2026-05",
+                "starting": 91.3162789728
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-05-11"
+              ]
+            ]
+          },
+          {
+            "month": "2026-06",
+            "starting": 91.3162789728,
+            "ending": 46.740252161175,
+            "trades": [
+              {
+                "entry_day": "2026-06-08",
+                "instrument": "BTC-12JUN26-58000-P",
+                "ending": 46.740252161175,
+                "trade_timestamp": 1780914533122,
+                "minimum_premium_with_cost_usd": 44.576026811625006,
+                "status": "filled_proxy",
+                "spent_usd": 44.576026811625006,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 62970.32,
+                "side": "P",
+                "month": "2026-06",
+                "starting": 91.3162789728,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-06-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-07",
+            "starting": 46.740252161175,
+            "ending": 46.740252161175,
+            "trades": [
+              {
+                "entry_day": "2026-07-13",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-17JUL26-69000-C",
+                "ending": 46.740252161175,
+                "month": "2026-07",
+                "starting": 46.740252161175
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-07-13"
+              ]
+            ]
+          },
+          {
+            "month": "2026-08",
+            "starting": 46.740252161175,
+            "ending": 46.740252161175,
+            "trades": [
+              {
+                "entry_day": "2026-08-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14AUG26-70000-C",
+                "ending": 46.740252161175,
+                "month": "2026-08",
+                "starting": 46.740252161175
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-08-10"
+              ]
+            ]
+          },
+          {
+            "month": "2026-09",
+            "starting": 46.740252161175,
+            "ending": 46.740252161175,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-10",
+            "starting": 46.740252161175,
+            "ending": 46.740252161175,
+            "trades": [
+              {
+                "entry_day": "2026-10-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16OCT26-76000-P",
+                "ending": 46.740252161175,
+                "month": "2026-10",
+                "starting": 46.740252161175
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-10-12"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 51.250536501797,
+        "random_fraction_ge": 0.558
+      },
+      "6x_base": {
+        "end": 74.9387139648,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.4902128301714286,
+        "months": [
+          {
+            "month": "2026-01",
+            "starting": 147.0,
+            "ending": 147.0,
+            "trades": [
+              {
+                "entry_day": "2026-01-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16JAN26-82000-P",
+                "ending": 147.0,
+                "month": "2026-01",
+                "starting": 147.0
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-01-12"
+              ]
+            ]
+          },
+          {
+            "month": "2026-02",
+            "starting": 147.0,
+            "ending": 147.0,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-03",
+            "starting": 147.0,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-03-09",
+                "instrument": "BTC-13MAR26-74000-C",
+                "ending": 74.9387139648,
+                "trade_timestamp": 1773048759137,
+                "minimum_premium_with_cost_usd": 24.020428678399995,
+                "status": "filled_proxy",
+                "spent_usd": 72.0612860352,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 71556.31,
+                "side": "C",
+                "month": "2026-03",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-03-09"
+              ]
+            ]
+          },
+          {
+            "month": "2026-04",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-05",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-05-11",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-15MAY26-88000-C",
+                "ending": 74.9387139648,
+                "month": "2026-05",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-05-11"
+              ]
+            ]
+          },
+          {
+            "month": "2026-06",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-06-08",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-12JUN26-58000-P",
+                "ending": 74.9387139648,
+                "trade_timestamp": 1780914533122,
+                "minimum_premium_with_cost_usd": 38.253186129125,
+                "month": "2026-06",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-06-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-07",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-07-13",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-17JUL26-69000-C",
+                "ending": 74.9387139648,
+                "month": "2026-07",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-07-13"
+              ]
+            ]
+          },
+          {
+            "month": "2026-08",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-08-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14AUG26-70000-C",
+                "ending": 74.9387139648,
+                "month": "2026-08",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-08-10"
+              ]
+            ]
+          },
+          {
+            "month": "2026-09",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-10",
+            "starting": 74.9387139648,
+            "ending": 74.9387139648,
+            "trades": [
+              {
+                "entry_day": "2026-10-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16OCT26-76000-P",
+                "ending": 74.9387139648,
+                "month": "2026-10",
+                "starting": 74.9387139648
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-10-12"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 41.8607238783425,
+        "random_fraction_ge": 0.072
+      },
+      "6x_stress": {
+        "end": 46.740252161175,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.6820391009443878,
+        "months": [
+          {
+            "month": "2026-01",
+            "starting": 147.0,
+            "ending": 147.0,
+            "trades": [
+              {
+                "entry_day": "2026-01-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16JAN26-82000-P",
+                "ending": 147.0,
+                "month": "2026-01",
+                "starting": 147.0
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-01-12"
+              ]
+            ]
+          },
+          {
+            "month": "2026-02",
+            "starting": 147.0,
+            "ending": 147.0,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-03",
+            "starting": 147.0,
+            "ending": 91.3162789728,
+            "trades": [
+              {
+                "entry_day": "2026-03-09",
+                "instrument": "BTC-13MAR26-74000-C",
+                "ending": 91.3162789728,
+                "trade_timestamp": 1773048759137,
+                "minimum_premium_with_cost_usd": 27.8418605136,
+                "status": "filled_proxy",
+                "spent_usd": 55.6837210272,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 71556.31,
+                "side": "C",
+                "month": "2026-03",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-03-09"
+              ]
+            ]
+          },
+          {
+            "month": "2026-04",
+            "starting": 91.3162789728,
+            "ending": 91.3162789728,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-05",
+            "starting": 91.3162789728,
+            "ending": 91.3162789728,
+            "trades": [
+              {
+                "entry_day": "2026-05-11",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-15MAY26-88000-C",
+                "ending": 91.3162789728,
+                "month": "2026-05",
+                "starting": 91.3162789728
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-05-11"
+              ]
+            ]
+          },
+          {
+            "month": "2026-06",
+            "starting": 91.3162789728,
+            "ending": 46.740252161175,
+            "trades": [
+              {
+                "entry_day": "2026-06-08",
+                "instrument": "BTC-12JUN26-58000-P",
+                "ending": 46.740252161175,
+                "trade_timestamp": 1780914533122,
+                "minimum_premium_with_cost_usd": 44.576026811625006,
+                "status": "filled_proxy",
+                "spent_usd": 44.576026811625006,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 62970.32,
+                "side": "P",
+                "month": "2026-06",
+                "starting": 91.3162789728,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-06-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-07",
+            "starting": 46.740252161175,
+            "ending": 46.740252161175,
+            "trades": [
+              {
+                "entry_day": "2026-07-13",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-17JUL26-69000-C",
+                "ending": 46.740252161175,
+                "month": "2026-07",
+                "starting": 46.740252161175
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-07-13"
+              ]
+            ]
+          },
+          {
+            "month": "2026-08",
+            "starting": 46.740252161175,
+            "ending": 46.740252161175,
+            "trades": [
+              {
+                "entry_day": "2026-08-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14AUG26-70000-C",
+                "ending": 46.740252161175,
+                "month": "2026-08",
+                "starting": 46.740252161175
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-08-10"
+              ]
+            ]
+          },
+          {
+            "month": "2026-09",
+            "starting": 46.740252161175,
+            "ending": 46.740252161175,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-10",
+            "starting": 46.740252161175,
+            "ending": 46.740252161175,
+            "trades": [
+              {
+                "entry_day": "2026-10-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16OCT26-76000-P",
+                "ending": 46.740252161175,
+                "month": "2026-10",
+                "starting": 46.740252161175
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-10-12"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 44.262197081447,
+        "random_fraction_ge": 0.442
+      }
+    },
+    "continuous": {
+      "3x_base": {
+        "end": 25.425509065868,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.827037353293415,
+        "months": [
+          {
+            "month": "2025-01",
+            "starting": 147.0,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-01-13",
+                "instrument": "BTC-17JAN25-85000-P",
+                "ending": 110.05230091955,
+                "trade_timestamp": 1736762684048,
+                "minimum_premium_with_cost_usd": 36.94769908045,
+                "status": "filled_proxy",
+                "spent_usd": 36.94769908045,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 101575.67,
+                "side": "P",
+                "month": "2025-01",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-01-13"
+              ]
+            ]
+          },
+          {
+            "month": "2025-02",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-02-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14FEB25-106000-C",
+                "ending": 110.05230091955,
+                "month": "2025-02",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-02-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-03",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-03-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14MAR25-74000-P",
+                "ending": 110.05230091955,
+                "month": "2025-03",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-03-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-04",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-04-07",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-11APR25-70000-P",
+                "ending": 110.05230091955,
+                "trade_timestamp": 1744020091001,
+                "minimum_premium_with_cost_usd": 81.30657784574998,
+                "month": "2025-04",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-04-07"
+              ]
+            ]
+          },
+          {
+            "month": "2025-05",
+            "starting": 110.05230091955,
+            "ending": 96.521751369472,
+            "trades": [
+              {
+                "entry_day": "2025-05-12",
+                "instrument": "BTC-16MAY25-115000-C",
+                "ending": 96.521751369472,
+                "trade_timestamp": 1747044706145,
+                "minimum_premium_with_cost_usd": 13.530549550078124,
+                "status": "filled_proxy",
+                "spent_usd": 13.530549550078124,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 103870.69,
+                "side": "C",
+                "month": "2025-05",
+                "starting": 110.05230091955,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-05-12"
+              ]
+            ]
+          },
+          {
+            "month": "2025-06",
+            "starting": 96.521751369472,
+            "ending": 85.441482080234,
+            "trades": [
+              {
+                "entry_day": "2025-06-09",
+                "instrument": "BTC-13JUN25-115000-C",
+                "ending": 85.441482080234,
+                "trade_timestamp": 1749462396107,
+                "minimum_premium_with_cost_usd": 11.0802692892375,
+                "status": "filled_proxy",
+                "spent_usd": 11.0802692892375,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 104802.72,
+                "side": "C",
+                "month": "2025-06",
+                "starting": 96.521751369472,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-06-09"
+              ]
+            ]
+          },
+          {
+            "month": "2025-07",
+            "starting": 85.441482080234,
+            "ending": 71.184760576278,
+            "trades": [
+              {
+                "entry_day": "2025-07-14",
+                "instrument": "BTC-18JUL25-135000-C",
+                "ending": 71.184760576278,
+                "trade_timestamp": 1752485699514,
+                "minimum_premium_with_cost_usd": 14.25672150395625,
+                "status": "filled_proxy",
+                "spent_usd": 14.25672150395625,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 119753.4,
+                "side": "C",
+                "month": "2025-07",
+                "starting": 85.441482080234,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-07-14"
+              ]
+            ]
+          },
+          {
+            "month": "2025-08",
+            "starting": 71.184760576278,
+            "ending": 42.851324732787,
+            "trades": [
+              {
+                "entry_day": "2025-08-11",
+                "instrument": "BTC-15AUG25-132000-C",
+                "ending": 42.851324732787,
+                "trade_timestamp": 1754905656047,
+                "minimum_premium_with_cost_usd": 9.444478614496871,
+                "status": "filled_proxy",
+                "spent_usd": 28.33343584349062,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 118927.39,
+                "side": "C",
+                "month": "2025-08",
+                "starting": 71.184760576278,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-08-11"
+              ]
+            ]
+          },
+          {
+            "month": "2025-09",
+            "starting": 42.851324732787,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2025-09-08",
+                "instrument": "BTC-12SEP25-122000-C",
+                "ending": 25.425509065868,
+                "trade_timestamp": 1757322847625,
+                "minimum_premium_with_cost_usd": 5.808605222306249,
+                "status": "filled_proxy",
+                "spent_usd": 17.425815666918748,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 115207.02,
+                "side": "C",
+                "month": "2025-09",
+                "starting": 42.851324732787,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-09-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-01",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-01-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16JAN26-82000-P",
+                "ending": 25.425509065868,
+                "month": "2026-01",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-01-12"
+              ]
+            ]
+          },
+          {
+            "month": "2026-02",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-03",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-03-09",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-13MAR26-74000-C",
+                "ending": 25.425509065868,
+                "trade_timestamp": 1773048759137,
+                "minimum_premium_with_cost_usd": 24.020428678399995,
+                "month": "2026-03",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-03-09"
+              ]
+            ]
+          },
+          {
+            "month": "2026-04",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-05",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-05-11",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-15MAY26-88000-C",
+                "ending": 25.425509065868,
+                "month": "2026-05",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-05-11"
+              ]
+            ]
+          },
+          {
+            "month": "2026-06",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-06-08",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-12JUN26-58000-P",
+                "ending": 25.425509065868,
+                "trade_timestamp": 1780914533122,
+                "minimum_premium_with_cost_usd": 38.253186129125,
+                "month": "2026-06",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-06-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-07",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-07-13",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-17JUL26-69000-C",
+                "ending": 25.425509065868,
+                "month": "2026-07",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-07-13"
+              ]
+            ]
+          },
+          {
+            "month": "2026-08",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-08-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14AUG26-70000-C",
+                "ending": 25.425509065868,
+                "month": "2026-08",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-08-10"
+              ]
+            ]
+          },
+          {
+            "month": "2026-09",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-10",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-10-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16OCT26-76000-P",
+                "ending": 25.425509065868,
+                "month": "2026-10",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-10-12"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 21.0116455314485,
+        "random_fraction_ge": 0.408
+      },
+      "3x_stress": {
+        "end": 22.672261658483,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.845766927493313,
+        "months": [
+          {
+            "month": "2025-01",
+            "starting": 147.0,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-01-13",
+                "instrument": "BTC-17JAN25-85000-P",
+                "ending": 104.11096237395,
+                "trade_timestamp": 1736762684048,
+                "minimum_premium_with_cost_usd": 42.88903762605001,
+                "status": "filled_proxy",
+                "spent_usd": 42.88903762605001,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 101575.67,
+                "side": "P",
+                "month": "2025-01",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-01-13"
+              ]
+            ]
+          },
+          {
+            "month": "2025-02",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-02-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14FEB25-106000-C",
+                "ending": 104.11096237395,
+                "month": "2025-02",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-02-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-03",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-03-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14MAR25-74000-P",
+                "ending": 104.11096237395,
+                "month": "2025-03",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-03-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-04",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-04-07",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-11APR25-70000-P",
+                "ending": 104.11096237395,
+                "trade_timestamp": 1744020091001,
+                "minimum_premium_with_cost_usd": 95.04853466475001,
+                "month": "2025-04",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-04-07"
+              ]
+            ]
+          },
+          {
+            "month": "2025-05",
+            "starting": 104.11096237395,
+            "ending": 88.227273771684,
+            "trades": [
+              {
+                "entry_day": "2025-05-12",
+                "instrument": "BTC-16MAY25-115000-C",
+                "ending": 88.227273771684,
+                "trade_timestamp": 1747044706145,
+                "minimum_premium_with_cost_usd": 15.883688602265625,
+                "status": "filled_proxy",
+                "spent_usd": 15.883688602265625,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 103870.69,
+                "side": "C",
+                "month": "2025-05",
+                "starting": 104.11096237395,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-05-12"
+              ]
+            ]
+          },
+          {
+            "month": "2025-06",
+            "starting": 88.227273771684,
+            "ending": 75.220001127796,
+            "trades": [
+              {
+                "entry_day": "2025-06-09",
+                "instrument": "BTC-13JUN25-115000-C",
+                "ending": 75.220001127796,
+                "trade_timestamp": 1749462396107,
+                "minimum_premium_with_cost_usd": 13.007272643887504,
+                "status": "filled_proxy",
+                "spent_usd": 13.007272643887504,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 104802.72,
+                "side": "C",
+                "month": "2025-06",
+                "starting": 88.227273771684,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-06-09"
+              ]
+            ]
+          },
+          {
+            "month": "2025-07",
+            "starting": 75.220001127796,
+            "ending": 58.483849797065,
+            "trades": [
+              {
+                "entry_day": "2025-07-14",
+                "instrument": "BTC-18JUL25-135000-C",
+                "ending": 58.483849797065,
+                "trade_timestamp": 1752485699514,
+                "minimum_premium_with_cost_usd": 16.736151330731253,
+                "status": "filled_proxy",
+                "spent_usd": 16.736151330731253,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 119753.4,
+                "side": "C",
+                "month": "2025-07",
+                "starting": 75.220001127796,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-07-14"
+              ]
+            ]
+          },
+          {
+            "month": "2025-08",
+            "starting": 58.483849797065,
+            "ending": 36.309856528246,
+            "trades": [
+              {
+                "entry_day": "2025-08-11",
+                "instrument": "BTC-15AUG25-132000-C",
+                "ending": 36.309856528246,
+                "trade_timestamp": 1754905656047,
+                "minimum_premium_with_cost_usd": 11.086996634409374,
+                "status": "filled_proxy",
+                "spent_usd": 22.173993268818748,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 118927.39,
+                "side": "C",
+                "month": "2025-08",
+                "starting": 58.483849797065,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-08-11"
+              ]
+            ]
+          },
+          {
+            "month": "2025-09",
+            "starting": 36.309856528246,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2025-09-08",
+                "instrument": "BTC-12SEP25-122000-C",
+                "ending": 22.672261658483,
+                "trade_timestamp": 1757322847625,
+                "minimum_premium_with_cost_usd": 6.818797434881252,
+                "status": "filled_proxy",
+                "spent_usd": 13.637594869762504,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 115207.02,
+                "side": "C",
+                "month": "2025-09",
+                "starting": 36.309856528246,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-09-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-01",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-01-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16JAN26-82000-P",
+                "ending": 22.672261658483,
+                "month": "2026-01",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-01-12"
+              ]
+            ]
+          },
+          {
+            "month": "2026-02",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-03",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-03-09",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-13MAR26-74000-C",
+                "ending": 22.672261658483,
+                "trade_timestamp": 1773048759137,
+                "minimum_premium_with_cost_usd": 27.8418605136,
+                "month": "2026-03",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-03-09"
+              ]
+            ]
+          },
+          {
+            "month": "2026-04",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-05",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-05-11",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-15MAY26-88000-C",
+                "ending": 22.672261658483,
+                "month": "2026-05",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-05-11"
+              ]
+            ]
+          },
+          {
+            "month": "2026-06",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-06-08",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-12JUN26-58000-P",
+                "ending": 22.672261658483,
+                "trade_timestamp": 1780914533122,
+                "minimum_premium_with_cost_usd": 44.576026811625006,
+                "month": "2026-06",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-06-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-07",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-07-13",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-17JUL26-69000-C",
+                "ending": 22.672261658483,
+                "month": "2026-07",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-07-13"
+              ]
+            ]
+          },
+          {
+            "month": "2026-08",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-08-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14AUG26-70000-C",
+                "ending": 22.672261658483,
+                "month": "2026-08",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-08-10"
+              ]
+            ]
+          },
+          {
+            "month": "2026-09",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-10",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-10-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16OCT26-76000-P",
+                "ending": 22.672261658483,
+                "month": "2026-10",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-10-12"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 16.767020743162,
+        "random_fraction_ge": 0.344
+      },
+      "6x_base": {
+        "end": 25.425509065868,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.827037353293415,
+        "months": [
+          {
+            "month": "2025-01",
+            "starting": 147.0,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-01-13",
+                "instrument": "BTC-17JAN25-85000-P",
+                "ending": 110.05230091955,
+                "trade_timestamp": 1736762684048,
+                "minimum_premium_with_cost_usd": 36.94769908045,
+                "status": "filled_proxy",
+                "spent_usd": 36.94769908045,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 101575.67,
+                "side": "P",
+                "month": "2025-01",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-01-13"
+              ]
+            ]
+          },
+          {
+            "month": "2025-02",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-02-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14FEB25-106000-C",
+                "ending": 110.05230091955,
+                "month": "2025-02",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-02-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-03",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-03-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14MAR25-74000-P",
+                "ending": 110.05230091955,
+                "month": "2025-03",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-03-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-04",
+            "starting": 110.05230091955,
+            "ending": 110.05230091955,
+            "trades": [
+              {
+                "entry_day": "2025-04-07",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-11APR25-70000-P",
+                "ending": 110.05230091955,
+                "trade_timestamp": 1744020091001,
+                "minimum_premium_with_cost_usd": 81.30657784574998,
+                "month": "2025-04",
+                "starting": 110.05230091955
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-04-07"
+              ]
+            ]
+          },
+          {
+            "month": "2025-05",
+            "starting": 110.05230091955,
+            "ending": 96.521751369472,
+            "trades": [
+              {
+                "entry_day": "2025-05-12",
+                "instrument": "BTC-16MAY25-115000-C",
+                "ending": 96.521751369472,
+                "trade_timestamp": 1747044706145,
+                "minimum_premium_with_cost_usd": 13.530549550078124,
+                "status": "filled_proxy",
+                "spent_usd": 13.530549550078124,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 103870.69,
+                "side": "C",
+                "month": "2025-05",
+                "starting": 110.05230091955,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-05-12"
+              ]
+            ]
+          },
+          {
+            "month": "2025-06",
+            "starting": 96.521751369472,
+            "ending": 85.441482080234,
+            "trades": [
+              {
+                "entry_day": "2025-06-09",
+                "instrument": "BTC-13JUN25-115000-C",
+                "ending": 85.441482080234,
+                "trade_timestamp": 1749462396107,
+                "minimum_premium_with_cost_usd": 11.0802692892375,
+                "status": "filled_proxy",
+                "spent_usd": 11.0802692892375,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 104802.72,
+                "side": "C",
+                "month": "2025-06",
+                "starting": 96.521751369472,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-06-09"
+              ]
+            ]
+          },
+          {
+            "month": "2025-07",
+            "starting": 85.441482080234,
+            "ending": 71.184760576278,
+            "trades": [
+              {
+                "entry_day": "2025-07-14",
+                "instrument": "BTC-18JUL25-135000-C",
+                "ending": 71.184760576278,
+                "trade_timestamp": 1752485699514,
+                "minimum_premium_with_cost_usd": 14.25672150395625,
+                "status": "filled_proxy",
+                "spent_usd": 14.25672150395625,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 119753.4,
+                "side": "C",
+                "month": "2025-07",
+                "starting": 85.441482080234,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-07-14"
+              ]
+            ]
+          },
+          {
+            "month": "2025-08",
+            "starting": 71.184760576278,
+            "ending": 42.851324732787,
+            "trades": [
+              {
+                "entry_day": "2025-08-11",
+                "instrument": "BTC-15AUG25-132000-C",
+                "ending": 42.851324732787,
+                "trade_timestamp": 1754905656047,
+                "minimum_premium_with_cost_usd": 9.444478614496871,
+                "status": "filled_proxy",
+                "spent_usd": 28.33343584349062,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 118927.39,
+                "side": "C",
+                "month": "2025-08",
+                "starting": 71.184760576278,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-08-11"
+              ]
+            ]
+          },
+          {
+            "month": "2025-09",
+            "starting": 42.851324732787,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2025-09-08",
+                "instrument": "BTC-12SEP25-122000-C",
+                "ending": 25.425509065868,
+                "trade_timestamp": 1757322847625,
+                "minimum_premium_with_cost_usd": 5.808605222306249,
+                "status": "filled_proxy",
+                "spent_usd": 17.425815666918748,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 115207.02,
+                "side": "C",
+                "month": "2025-09",
+                "starting": 42.851324732787,
+                "modeled_exit": "expiry",
+                "contract_units": 0.30000000000000004
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-09-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-01",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-01-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16JAN26-82000-P",
+                "ending": 25.425509065868,
+                "month": "2026-01",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-01-12"
+              ]
+            ]
+          },
+          {
+            "month": "2026-02",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-03",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-03-09",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-13MAR26-74000-C",
+                "ending": 25.425509065868,
+                "trade_timestamp": 1773048759137,
+                "minimum_premium_with_cost_usd": 24.020428678399995,
+                "month": "2026-03",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-03-09"
+              ]
+            ]
+          },
+          {
+            "month": "2026-04",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-05",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-05-11",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-15MAY26-88000-C",
+                "ending": 25.425509065868,
+                "month": "2026-05",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-05-11"
+              ]
+            ]
+          },
+          {
+            "month": "2026-06",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-06-08",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-12JUN26-58000-P",
+                "ending": 25.425509065868,
+                "trade_timestamp": 1780914533122,
+                "minimum_premium_with_cost_usd": 38.253186129125,
+                "month": "2026-06",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-06-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-07",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-07-13",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-17JUL26-69000-C",
+                "ending": 25.425509065868,
+                "month": "2026-07",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-07-13"
+              ]
+            ]
+          },
+          {
+            "month": "2026-08",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-08-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14AUG26-70000-C",
+                "ending": 25.425509065868,
+                "month": "2026-08",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-08-10"
+              ]
+            ]
+          },
+          {
+            "month": "2026-09",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-10",
+            "starting": 25.425509065868,
+            "ending": 25.425509065868,
+            "trades": [
+              {
+                "entry_day": "2026-10-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16OCT26-76000-P",
+                "ending": 25.425509065868,
+                "month": "2026-10",
+                "starting": 25.425509065868
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-10-12"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 15.628566362619502,
+        "random_fraction_ge": 0.218
+      },
+      "6x_stress": {
+        "end": 22.672261658483,
+        "hits_complete_months": 0,
+        "funded_hits_complete_months": 0,
+        "drawdown_month_end": 0.845766927493313,
+        "months": [
+          {
+            "month": "2025-01",
+            "starting": 147.0,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-01-13",
+                "instrument": "BTC-17JAN25-85000-P",
+                "ending": 104.11096237395,
+                "trade_timestamp": 1736762684048,
+                "minimum_premium_with_cost_usd": 42.88903762605001,
+                "status": "filled_proxy",
+                "spent_usd": 42.88903762605001,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 101575.67,
+                "side": "P",
+                "month": "2025-01",
+                "starting": 147.0,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-01-13"
+              ]
+            ]
+          },
+          {
+            "month": "2025-02",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-02-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14FEB25-106000-C",
+                "ending": 104.11096237395,
+                "month": "2025-02",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-02-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-03",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-03-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14MAR25-74000-P",
+                "ending": 104.11096237395,
+                "month": "2025-03",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-03-10"
+              ]
+            ]
+          },
+          {
+            "month": "2025-04",
+            "starting": 104.11096237395,
+            "ending": 104.11096237395,
+            "trades": [
+              {
+                "entry_day": "2025-04-07",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-11APR25-70000-P",
+                "ending": 104.11096237395,
+                "trade_timestamp": 1744020091001,
+                "minimum_premium_with_cost_usd": 95.04853466475001,
+                "month": "2025-04",
+                "starting": 104.11096237395
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-04-07"
+              ]
+            ]
+          },
+          {
+            "month": "2025-05",
+            "starting": 104.11096237395,
+            "ending": 88.227273771684,
+            "trades": [
+              {
+                "entry_day": "2025-05-12",
+                "instrument": "BTC-16MAY25-115000-C",
+                "ending": 88.227273771684,
+                "trade_timestamp": 1747044706145,
+                "minimum_premium_with_cost_usd": 15.883688602265625,
+                "status": "filled_proxy",
+                "spent_usd": 15.883688602265625,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 103870.69,
+                "side": "C",
+                "month": "2025-05",
+                "starting": 104.11096237395,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-05-12"
+              ]
+            ]
+          },
+          {
+            "month": "2025-06",
+            "starting": 88.227273771684,
+            "ending": 75.220001127796,
+            "trades": [
+              {
+                "entry_day": "2025-06-09",
+                "instrument": "BTC-13JUN25-115000-C",
+                "ending": 75.220001127796,
+                "trade_timestamp": 1749462396107,
+                "minimum_premium_with_cost_usd": 13.007272643887504,
+                "status": "filled_proxy",
+                "spent_usd": 13.007272643887504,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 104802.72,
+                "side": "C",
+                "month": "2025-06",
+                "starting": 88.227273771684,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-06-09"
+              ]
+            ]
+          },
+          {
+            "month": "2025-07",
+            "starting": 75.220001127796,
+            "ending": 58.483849797065,
+            "trades": [
+              {
+                "entry_day": "2025-07-14",
+                "instrument": "BTC-18JUL25-135000-C",
+                "ending": 58.483849797065,
+                "trade_timestamp": 1752485699514,
+                "minimum_premium_with_cost_usd": 16.736151330731253,
+                "status": "filled_proxy",
+                "spent_usd": 16.736151330731253,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 119753.4,
+                "side": "C",
+                "month": "2025-07",
+                "starting": 75.220001127796,
+                "modeled_exit": "expiry",
+                "contract_units": 0.1
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-07-14"
+              ]
+            ]
+          },
+          {
+            "month": "2025-08",
+            "starting": 58.483849797065,
+            "ending": 36.309856528246,
+            "trades": [
+              {
+                "entry_day": "2025-08-11",
+                "instrument": "BTC-15AUG25-132000-C",
+                "ending": 36.309856528246,
+                "trade_timestamp": 1754905656047,
+                "minimum_premium_with_cost_usd": 11.086996634409374,
+                "status": "filled_proxy",
+                "spent_usd": 22.173993268818748,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 118927.39,
+                "side": "C",
+                "month": "2025-08",
+                "starting": 58.483849797065,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-08-11"
+              ]
+            ]
+          },
+          {
+            "month": "2025-09",
+            "starting": 36.309856528246,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2025-09-08",
+                "instrument": "BTC-12SEP25-122000-C",
+                "ending": 22.672261658483,
+                "trade_timestamp": 1757322847625,
+                "minimum_premium_with_cost_usd": 6.818797434881252,
+                "status": "filled_proxy",
+                "spent_usd": 13.637594869762504,
+                "settled_value_usd": 0.0,
+                "settlement_index_usd": 115207.02,
+                "side": "C",
+                "month": "2025-09",
+                "starting": 36.309856528246,
+                "modeled_exit": "expiry",
+                "contract_units": 0.2
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2025-09-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-01",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-01-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16JAN26-82000-P",
+                "ending": 22.672261658483,
+                "month": "2026-01",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-01-12"
+              ]
+            ]
+          },
+          {
+            "month": "2026-02",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-03",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-03-09",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-13MAR26-74000-C",
+                "ending": 22.672261658483,
+                "trade_timestamp": 1773048759137,
+                "minimum_premium_with_cost_usd": 27.8418605136,
+                "month": "2026-03",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-03-09"
+              ]
+            ]
+          },
+          {
+            "month": "2026-04",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-05",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-05-11",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-15MAY26-88000-C",
+                "ending": 22.672261658483,
+                "month": "2026-05",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-05-11"
+              ]
+            ]
+          },
+          {
+            "month": "2026-06",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-06-08",
+                "status": "minimum_order_over_budget",
+                "instrument": "BTC-12JUN26-58000-P",
+                "ending": 22.672261658483,
+                "trade_timestamp": 1780914533122,
+                "minimum_premium_with_cost_usd": 44.576026811625006,
+                "month": "2026-06",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-06-08"
+              ]
+            ]
+          },
+          {
+            "month": "2026-07",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-07-13",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-17JUL26-69000-C",
+                "ending": 22.672261658483,
+                "month": "2026-07",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-07-13"
+              ]
+            ]
+          },
+          {
+            "month": "2026-08",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-08-10",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-14AUG26-70000-C",
+                "ending": 22.672261658483,
+                "month": "2026-08",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-08-10"
+              ]
+            ]
+          },
+          {
+            "month": "2026-09",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [],
+            "selection": []
+          },
+          {
+            "month": "2026-10",
+            "starting": 22.672261658483,
+            "ending": 22.672261658483,
+            "trades": [
+              {
+                "entry_day": "2026-10-12",
+                "status": "no_eligible_trade_within_2h",
+                "instrument": "BTC-16OCT26-76000-P",
+                "ending": 22.672261658483,
+                "month": "2026-10",
+                "starting": 22.672261658483
+              }
+            ],
+            "selection": [
+              [
+                "BTC",
+                "2026-10-12"
+              ]
+            ]
+          }
+        ],
+        "random_median_end": 16.4135550312845,
+        "random_fraction_ge": 0.312
+      }
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "mechanics_only": true,
+  "quote_sha256": "0140874540513cde1bf16069b0f7d98add4ddce07188daeff1963f15d5cf93a7",
+  "spot_sha256": "5c62d755af3e53a8091d9c97367c3b75b7a8d2acc5474ef72f892264bf02b100",
+  "assets": {
+    "BTC": {
+      "historical_windows": 130,
+      "sides": {
+        "call": {
+          "base_3x": {
+            "size": "0.4",
+            "spent_usd": "60.3613747390500000",
+            "settlement": "66898.1584699836554430537611",
+            "move_from_book_index": "0.092454547903795631940359829",
+            "historical_move_count": 5
+          },
+          "base_6x": {
+            "size": "0.4",
+            "spent_usd": "60.3613747390500000",
+            "settlement": "68003.5874422242283710979758",
+            "move_from_book_index": "0.110506328935267238576072461",
+            "historical_move_count": 1
+          },
+          "higher_3x": {
+            "size": "0.4",
+            "spent_usd": "70.3525405044000",
+            "settlement": "66923.2027423271385444661963",
+            "move_from_book_index": "0.092863523723852851049539626",
+            "historical_move_count": 5
+          },
+          "higher_6x": {
+            "size": "0.4",
+            "spent_usd": "70.3525405044000",
+            "settlement": "68028.6317145677114725104111",
+            "move_from_book_index": "0.110915304755324457685252259",
+            "historical_move_count": 1
+          }
+        },
+        "put": {
+          "base_3x": {
+            "size": "0.2",
+            "spent_usd": "50.2781244966000",
+            "settlement": "54266.1551920264591890161669",
+            "move_from_book_index": "-0.1138275044838171969650782653",
+            "historical_move_count": 3
+          },
+          "base_6x": {
+            "size": "0.2",
+            "spent_usd": "50.2781244966000",
+            "settlement": "52055.9604054549712279993683",
+            "move_from_book_index": "-0.1499202371025581576104312799",
+            "historical_move_count": 1
+          },
+          "higher_3x": {
+            "size": "0.2",
+            "spent_usd": "58.3815584814000",
+            "settlement": "54225.5425672043930252556776",
+            "move_from_book_index": "-0.1144907132731754849512174165",
+            "historical_move_count": 3
+          },
+          "higher_6x": {
+            "size": "0.2",
+            "spent_usd": "58.3815584814000",
+            "settlement": "52015.3477806329050642403611",
+            "move_from_book_index": "-0.1505834458919164455965462283",
+            "historical_move_count": 1
+          }
+        }
+      }
+    },
+    "ETH": {
+      "historical_windows": 130,
+      "sides": {
+        "call": {
+          "base_3x": {
+            "size": "9",
+            "spent_usd": "67.114085045625",
+            "settlement": "1890.507924286178432195087306",
+            "move_from_book_index": "0.099202811974125340687536590",
+            "historical_move_count": 11
+          },
+          "base_6x": {
+            "size": "9",
+            "spent_usd": "67.114085045625",
+            "settlement": "1939.638100830203895663730538",
+            "move_from_book_index": "0.127768694992240140743728109",
+            "historical_move_count": 7
+          },
+          "higher_3x": {
+            "size": "8",
+            "spent_usd": "69.312426945000",
+            "settlement": "1895.812244887485002449629262",
+            "move_from_book_index": "0.102286916539711843460703453",
+            "historical_move_count": 11
+          },
+          "higher_6x": {
+            "size": "8",
+            "spent_usd": "69.312426945000",
+            "settlement": "1951.083693499513648851865143",
+            "move_from_book_index": "0.134423534935090993523926032",
+            "historical_move_count": 7
+          }
+        },
+        "put": {
+          "base_3x": {
+            "size": "8",
+            "spent_usd": "70.760746314000",
+            "settlement": "1504.065023540453894321831872",
+            "move_from_book_index": "-0.1254876628502672296938572397",
+            "historical_move_count": 5
+          },
+          "base_6x": {
+            "size": "8",
+            "spent_usd": "70.760746314000",
+            "settlement": "1448.810153876166695296427784",
+            "move_from_book_index": "-0.1576146417060587041633896447",
+            "historical_move_count": 2
+          },
+          "higher_3x": {
+            "size": "7",
+            "spent_usd": "72.053888607750",
+            "settlement": "1497.350923518615064883097486",
+            "move_from_book_index": "-0.1293914590359761002836823948",
+            "historical_move_count": 4
+          },
+          "higher_6x": {
+            "size": "7",
+            "spent_usd": "72.053888607750",
+            "settlement": "1434.202501045143980282653252",
+            "move_from_book_index": "-0.1661080062997377853917092070",
+            "historical_move_count": 2
+          }
+        }
+      }
+    }
+  }
+}

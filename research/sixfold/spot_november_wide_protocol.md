@@ -1,0 +1,2 @@
+# November coverage expansion
+Predeclare before requesting any additional November pair. Keep November 1–22 UTC and all three frozen rules. Include every snapshot pair with at least 25 October candles and October median quote volume >= 1 million USDT. This threshold was already in the frozen signals; compare to the completed top-60 result as a universe coverage check, not independent replication of the overlapping 60. Retain failed requests and report affected coverage. No signal tuning.

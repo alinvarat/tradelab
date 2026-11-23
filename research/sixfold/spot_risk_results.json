@@ -1,0 +1,2850 @@
+{
+  "continuation": {
+    "half_cash": {
+      "monthly": [
+        {
+          "month": "2021-01",
+          "multiple": 1.0748514420871293,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.21599774486707557
+        },
+        {
+          "month": "2021-02",
+          "multiple": 1.0690965460766,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.25145698525819227
+        },
+        {
+          "month": "2021-03",
+          "multiple": 2.6641997615186694,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.18317937789103977
+        },
+        {
+          "month": "2021-04",
+          "multiple": 0.6001074569340872,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.40701524358807095
+        },
+        {
+          "month": "2021-05",
+          "multiple": 0.6684417258941027,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.33155827410589733
+        },
+        {
+          "month": "2021-06",
+          "multiple": 1.120962009472542,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.14797825791230645
+        },
+        {
+          "month": "2021-07",
+          "multiple": 1.9033070738588767,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.18713088659897736
+        },
+        {
+          "month": "2021-08",
+          "multiple": 0.9944933686867768,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.21803038268603403
+        },
+        {
+          "month": "2021-09",
+          "multiple": 0.8721034049305861,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2901706774778049
+        },
+        {
+          "month": "2021-10",
+          "multiple": 0.9356366787550554,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.15155903332831056
+        },
+        {
+          "month": "2021-11",
+          "multiple": 1.95678515306474,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.17845754051197393
+        },
+        {
+          "month": "2021-12",
+          "multiple": 0.9759037082482019,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.20310547821904024
+        },
+        {
+          "month": "2022-01",
+          "multiple": 0.8597505362331612,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.17675802278775077
+        },
+        {
+          "month": "2022-02",
+          "multiple": 0.7396322708214372,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.26036772917856277
+        },
+        {
+          "month": "2022-03",
+          "multiple": 1.1713145807414866,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.17201323959665626
+        },
+        {
+          "month": "2022-04",
+          "multiple": 0.7917128912221654,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.28899407775148955
+        },
+        {
+          "month": "2022-05",
+          "multiple": 0.7230629526327421,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.29940168553974655
+        },
+        {
+          "month": "2022-06",
+          "multiple": 0.8732994098908378,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.19920837235650324
+        },
+        {
+          "month": "2022-07",
+          "multiple": 0.5345164115502808,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.4961881953621743
+        },
+        {
+          "month": "2022-08",
+          "multiple": 0.5762310729033384,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.4237689270966616
+        },
+        {
+          "month": "2022-09",
+          "multiple": 0.9195902319449399,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.08040976805506006
+        },
+        {
+          "month": "2022-10",
+          "multiple": 0.8850712097517253,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.1317023860898754
+        },
+        {
+          "month": "2022-11",
+          "multiple": 0.7686811351417573,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.27686839695064047
+        },
+        {
+          "month": "2022-12",
+          "multiple": 0.8706747649117917,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.19310819593607154
+        },
+        {
+          "month": "2023-01",
+          "multiple": 2.151756523349844,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.04326632641199746
+        },
+        {
+          "month": "2023-02",
+          "multiple": 0.44017738383317284,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.5785871486594778
+        },
+        {
+          "month": "2023-03",
+          "multiple": 0.9625025026372953,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.20287433586445036
+        },
+        {
+          "month": "2023-04",
+          "multiple": 0.9386463131773868,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.1463823345752736
+        },
+        {
+          "month": "2023-05",
+          "multiple": 1.1051329024381495,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.24911946150817543
+        },
+        {
+          "month": "2023-06",
+          "multiple": 1.1324039902392233,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.11098886356667637
+        },
+        {
+          "month": "2023-07",
+          "multiple": 0.8017720352060911,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.19822796479390892
+        },
+        {
+          "month": "2023-08",
+          "multiple": 0.9105177127178568,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.20517592248552075
+        },
+        {
+          "month": "2023-09",
+          "multiple": 0.8972128469537076,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.22889526093298118
+        },
+        {
+          "month": "2023-10",
+          "multiple": 0.773552401690142,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3063520620561818
+        },
+        {
+          "month": "2023-11",
+          "multiple": 0.6900298416967734,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3224542515646045
+        },
+        {
+          "month": "2023-12",
+          "multiple": 0.9104348394124848,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3540731888041625
+        },
+        {
+          "month": "2024-01",
+          "multiple": 0.7951198993542635,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.31199716908457964
+        },
+        {
+          "month": "2024-02",
+          "multiple": 1.9306727152652134,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.12028065552821354
+        },
+        {
+          "month": "2024-03",
+          "multiple": 0.9744343568621194,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3007997611575306
+        },
+        {
+          "month": "2024-04",
+          "multiple": 0.6134701102893058,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.4113168451934681
+        },
+        {
+          "month": "2024-05",
+          "multiple": 1.0427789329223796,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.21928694565577544
+        },
+        {
+          "month": "2024-06",
+          "multiple": 0.6669082660756688,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3709149263191752
+        },
+        {
+          "month": "2024-07",
+          "multiple": 0.9857452781644389,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.09468013361030536
+        },
+        {
+          "month": "2024-08",
+          "multiple": 0.7237124793636126,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.4486019605154734
+        },
+        {
+          "month": "2024-09",
+          "multiple": 0.9234391362305744,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.14111102125091357
+        },
+        {
+          "month": "2024-10",
+          "multiple": 0.7613320542374328,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2545020118585488
+        },
+        {
+          "month": "2024-11",
+          "multiple": 0.8390174923223446,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2290642453240801
+        },
+        {
+          "month": "2024-12",
+          "multiple": 0.7827471492729172,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.25138376511528027
+        },
+        {
+          "month": "2025-01",
+          "multiple": 0.8983506249488589,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.18791227548204903
+        },
+        {
+          "month": "2025-02",
+          "multiple": 1.5111161140810077,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.1451645202247055
+        },
+        {
+          "month": "2025-03",
+          "multiple": 0.8782719226801684,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.4253211171382072
+        },
+        {
+          "month": "2025-04",
+          "multiple": 0.8337349508300831,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.16710012371076033
+        },
+        {
+          "month": "2025-05",
+          "multiple": 0.7646094398567388,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.29232520518662564
+        },
+        {
+          "month": "2025-06",
+          "multiple": 0.9476293708037564,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.21299916802573438
+        },
+        {
+          "month": "2025-07",
+          "multiple": 0.7836539564787988,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.21634604352120124
+        },
+        {
+          "month": "2025-08",
+          "multiple": 0.9654418064439108,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.15771103907742234
+        },
+        {
+          "month": "2025-09",
+          "multiple": 0.7665292572156219,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.28153490868656683
+        },
+        {
+          "month": "2025-10",
+          "multiple": 1.1581920670874324,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.25369309327172185
+        },
+        {
+          "month": "2025-11",
+          "multiple": 1.0904673506462292,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.20491340386849632
+        },
+        {
+          "month": "2025-12",
+          "multiple": 0.9260344756833951,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.07396552431660486
+        },
+        {
+          "month": "2026-01",
+          "multiple": 0.6483361351621277,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.4600145900348632
+        },
+        {
+          "month": "2026-02",
+          "multiple": 0.7918656132250739,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.26598202096373225
+        },
+        {
+          "month": "2026-03",
+          "multiple": 0.8541011544275652,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3618319281263357
+        },
+        {
+          "month": "2026-04",
+          "multiple": 2.723854568533959,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.15350175488383777
+        },
+        {
+          "month": "2026-05",
+          "multiple": 0.8850264260110036,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.1298727182135253
+        },
+        {
+          "month": "2026-06",
+          "multiple": 1.144883980725161,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.307596012682396
+        },
+        {
+          "month": "2026-07",
+          "multiple": 0.551643312610691,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.450900519239152
+        },
+        {
+          "month": "2026-08",
+          "multiple": 1.0282066484536778,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0660987833548532
+        },
+        {
+          "month": "2026-09",
+          "multiple": 0.6954115544185158,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.44466737657946553
+        },
+        {
+          "month": "2026-10",
+          "multiple": 0.6484742292311874,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3758757584992479
+        }
+      ],
+      "metrics": {
+        "reference": {
+          "months": 36,
+          "hits_6x": 0,
+          "loss_50pct": 1,
+          "loss_95pct": 0,
+          "median_multiple": 0.9038238431830963,
+          "mean_multiple": 1.0073212525173656,
+          "best_multiple": 2.6641997615186694,
+          "worst_multiple": 0.44017738383317284,
+          "total_entries": 121,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.5785871486594778,
+          "chained_multiple_no_redeposit": 0.08646391356216442,
+          "chained_months_until_6x": null
+        },
+        "holdout": {
+          "months": 24,
+          "hits_6x": 0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "median_multiple": 0.8883112738145136,
+          "mean_multiple": 0.9401420502965113,
+          "best_multiple": 1.9306727152652134,
+          "worst_multiple": 0.6134701102893058,
+          "total_entries": 84,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.4486019605154734,
+          "chained_multiple_no_redeposit": 0.1026903791105827,
+          "chained_months_until_6x": null
+        },
+        "holdout_2024": {
+          "months": 12,
+          "hits_6x": 0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "median_multiple": 0.817068695838304,
+          "mean_multiple": 0.9199481558633559,
+          "best_multiple": 1.9306727152652134,
+          "worst_multiple": 0.6134701102893058,
+          "total_entries": 44,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.4486019605154734,
+          "chained_multiple_no_redeposit": 0.21020899452903002,
+          "chained_months_until_6x": null
+        },
+        "holdout_2025": {
+          "months": 12,
+          "hits_6x": 0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "median_multiple": 0.912192550316127,
+          "mean_multiple": 0.9603359447296668,
+          "best_multiple": 1.5111161140810077,
+          "worst_multiple": 0.7646094398567388,
+          "total_entries": 40,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.4253211171382072,
+          "chained_multiple_no_redeposit": 0.4885156286516611,
+          "chained_months_until_6x": null
+        },
+        "later_2026": {
+          "months": 10,
+          "hits_6x": 0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "median_multiple": 0.8229833838263195,
+          "mean_multiple": 0.9971803622798963,
+          "best_multiple": 2.723854568533959,
+          "worst_multiple": 0.551643312610691,
+          "total_entries": 33,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.4600145900348632,
+          "chained_multiple_no_redeposit": 0.3095537314653067,
+          "chained_months_until_6x": null
+        }
+      }
+    },
+    "stop_at_25pct": {
+      "monthly": [
+        {
+          "month": "2021-01",
+          "multiple": 0.3719597686948572,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 3,
+          "within_month_close_drawdown": 0.6280402313051427
+        },
+        {
+          "month": "2021-02",
+          "multiple": 1.0197095136577958,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.4503675094432852
+        },
+        {
+          "month": "2021-03",
+          "multiple": 6.0,
+          "6x": true,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2052379048380648
+        },
+        {
+          "month": "2021-04",
+          "multiple": 0.3675124504276983,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 3,
+          "within_month_close_drawdown": 0.6393770427219225
+        },
+        {
+          "month": "2021-05",
+          "multiple": 0.4720043184960936,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.5279956815039064
+        },
+        {
+          "month": "2021-06",
+          "multiple": 1.2419240189450842,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2664415584415585
+        },
+        {
+          "month": "2021-07",
+          "multiple": 1.4943141405946954,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.46800992245763373
+        },
+        {
+          "month": "2021-08",
+          "multiple": 0.9284893936751004,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3919377358995433
+        },
+        {
+          "month": "2021-09",
+          "multiple": 0.6163771269102482,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.5478409809550897
+        },
+        {
+          "month": "2021-10",
+          "multiple": 0.8498110947699962,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2961160629177808
+        },
+        {
+          "month": "2021-11",
+          "multiple": 2.565562258456791,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.29377214559579146
+        },
+        {
+          "month": "2021-12",
+          "multiple": 0.9518849226076144,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3511232936778842
+        },
+        {
+          "month": "2022-01",
+          "multiple": 0.635050362430976,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.364949637569024
+        },
+        {
+          "month": "2022-02",
+          "multiple": 0.6260516335988359,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.37394836640116413
+        },
+        {
+          "month": "2022-03",
+          "multiple": 1.2397579928724383,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.33881995649638497
+        },
+        {
+          "month": "2022-04",
+          "multiple": 0.6072723252218316,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.5078761234142475
+        },
+        {
+          "month": "2022-05",
+          "multiple": 0.48337458297599967,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.545756022630709
+        },
+        {
+          "month": "2022-06",
+          "multiple": 0.7973453046234943,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.25783837817638267
+        },
+        {
+          "month": "2022-07",
+          "multiple": 0.44651242625725746,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.5534875737427425
+        },
+        {
+          "month": "2022-08",
+          "multiple": 0.3776434103708607,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 3,
+          "within_month_close_drawdown": 0.6223565896291393
+        },
+        {
+          "month": "2022-09",
+          "multiple": 0.8391804638898799,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.16081953611012012
+        },
+        {
+          "month": "2022-10",
+          "multiple": 0.7726563554254028,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.25665169250431097
+        },
+        {
+          "month": "2022-11",
+          "multiple": 0.7652310286748232,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.32403962024621413
+        },
+        {
+          "month": "2022-12",
+          "multiple": 0.7421616218236173,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.27694388931591085
+        },
+        {
+          "month": "2023-01",
+          "multiple": 4.057811319181956,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.07930785868781554
+        },
+        {
+          "month": "2023-02",
+          "multiple": 0.0,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 1.0
+        },
+        {
+          "month": "2023-03",
+          "multiple": 0.6932914075136238,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.46739032471974207
+        },
+        {
+          "month": "2023-04",
+          "multiple": 0.8790032446388893,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2639323731997496
+        },
+        {
+          "month": "2023-05",
+          "multiple": 1.1990995294649847,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3893836208123034
+        },
+        {
+          "month": "2023-06",
+          "multiple": 1.1396439812522967,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.2721944290123153
+        },
+        {
+          "month": "2023-07",
+          "multiple": 0.6185423333482979,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.3814576666517021
+        },
+        {
+          "month": "2023-08",
+          "multiple": 0.9422875802738329,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.25968342415132073
+        },
+        {
+          "month": "2023-09",
+          "multiple": 0.7878101564623239,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.39023989484061794
+        },
+        {
+          "month": "2023-10",
+          "multiple": 0.7587675862115166,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.38632986627043087
+        },
+        {
+          "month": "2023-11",
+          "multiple": 0.5282389753987249,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.4717610246012751
+        },
+        {
+          "month": "2023-12",
+          "multiple": 0.8042773188168802,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.5192238872392787
+        },
+        {
+          "month": "2024-01",
+          "multiple": 0.5361570641471758,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.5964613000586467
+        },
+        {
+          "month": "2024-02",
+          "multiple": 3.258024741333913,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.21774313288789893
+        },
+        {
+          "month": "2024-03",
+          "multiple": 1.273137397823016,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.31294590625548513
+        },
+        {
+          "month": "2024-04",
+          "multiple": 0.4752707230738249,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.5661873119730809
+        },
+        {
+          "month": "2024-05",
+          "multiple": 0.8433213855644939,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.4460652137362974
+        },
+        {
+          "month": "2024-06",
+          "multiple": 0.5078488776919041,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.5472286000214429
+        },
+        {
+          "month": "2024-07",
+          "multiple": 0.9669266876067787,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.18936026722061083
+        },
+        {
+          "month": "2024-08",
+          "multiple": 0.525987340207997,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.676706561320862
+        },
+        {
+          "month": "2024-09",
+          "multiple": 0.8359581578958168,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2660322399261028
+        },
+        {
+          "month": "2024-10",
+          "multiple": 0.5531018817042482,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.47091619008191643
+        },
+        {
+          "month": "2024-11",
+          "multiple": 0.6151880051785136,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.4860736516083479
+        },
+        {
+          "month": "2024-12",
+          "multiple": 0.5344008413094746,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.47925387795852037
+        },
+        {
+          "month": "2025-01",
+          "multiple": 0.8012205206060374,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.3487813980858886
+        },
+        {
+          "month": "2025-02",
+          "multiple": 2.076508356231326,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.25480994732265283
+        },
+        {
+          "month": "2025-03",
+          "multiple": 0.8778789218486707,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.6045688402168475
+        },
+        {
+          "month": "2025-04",
+          "multiple": 0.6438565021619738,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.35753174292399226
+        },
+        {
+          "month": "2025-05",
+          "multiple": 0.5139907430748736,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.5497396721679149
+        },
+        {
+          "month": "2025-06",
+          "multiple": 0.9841395767276587,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.3072242609582059
+        },
+        {
+          "month": "2025-07",
+          "multiple": 0.598915988319151,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.40108401168084895
+        },
+        {
+          "month": "2025-08",
+          "multiple": 0.9177227785428695,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2922405810577503
+        },
+        {
+          "month": "2025-09",
+          "multiple": 0.5390385753621199,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.46101627958955527
+        },
+        {
+          "month": "2025-10",
+          "multiple": 0.6028721849013875,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.443420736622373
+        },
+        {
+          "month": "2025-11",
+          "multiple": 0.9750211540706226,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.30993002792538626
+        },
+        {
+          "month": "2025-12",
+          "multiple": 0.8520689513667903,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.14793104863320972
+        },
+        {
+          "month": "2026-01",
+          "multiple": 0.4292338331674617,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.6936909843209942
+        },
+        {
+          "month": "2026-02",
+          "multiple": 0.6060551096986708,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.4764641505124835
+        },
+        {
+          "month": "2026-03",
+          "multiple": 0.4417161060567725,
+          "6x": false,
+          "buy_count": 5,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.6517711329652287
+        },
+        {
+          "month": "2026-04",
+          "multiple": 6.0,
+          "6x": true,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.024691358024691357
+        },
+        {
+          "month": "2026-05",
+          "multiple": 0.6765851194172079,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.3274784548735863
+        },
+        {
+          "month": "2026-06",
+          "multiple": 0.7588426729333052,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.5179066196316113
+        },
+        {
+          "month": "2026-07",
+          "multiple": 0.6737486656126126,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.3324366215471717
+        },
+        {
+          "month": "2026-08",
+          "multiple": 1.0495228432185648,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.12933568489124037
+        },
+        {
+          "month": "2026-09",
+          "multiple": 0.5091041651068468,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.648518290787709
+        },
+        {
+          "month": "2026-10",
+          "multiple": 0.5583661657019784,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.4856184012830945
+        }
+      ],
+      "metrics": {
+        "reference": {
+          "months": 36,
+          "hits_6x": 1,
+          "loss_50pct": 7,
+          "loss_95pct": 1,
+          "median_multiple": 0.7802332559438634,
+          "mean_multiple": 1.0450155541101311,
+          "best_multiple": 6.0,
+          "worst_multiple": 0.0,
+          "total_entries": 116,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 1.0,
+          "chained_multiple_no_redeposit": 0.0,
+          "chained_months_until_6x": null
+        },
+        "holdout": {
+          "months": 24,
+          "hits_6x": 0,
+          "loss_50pct": 1,
+          "loss_95pct": 0,
+          "median_multiple": 0.7225385113840056,
+          "mean_multiple": 0.8878565565312766,
+          "best_multiple": 3.258024741333913,
+          "worst_multiple": 0.4752707230738249,
+          "total_entries": 84,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.676706561320862,
+          "chained_multiple_no_redeposit": 0.002470339283712475,
+          "chained_months_until_6x": null
+        },
+        "holdout_2024": {
+          "months": 12,
+          "hits_6x": 0,
+          "loss_50pct": 1,
+          "loss_95pct": 0,
+          "median_multiple": 0.5841449434413809,
+          "mean_multiple": 0.9104435919614298,
+          "best_multiple": 3.258024741333913,
+          "worst_multiple": 0.4752707230738249,
+          "total_entries": 44,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.676706561320862,
+          "chained_multiple_no_redeposit": 0.034996439828742294,
+          "chained_months_until_6x": null
+        },
+        "holdout_2025": {
+          "months": 12,
+          "hits_6x": 0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "median_multiple": 0.8266447359864139,
+          "mean_multiple": 0.8652695211011234,
+          "best_multiple": 2.076508356231326,
+          "worst_multiple": 0.5139907430748736,
+          "total_entries": 40,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.6045688402168475,
+          "chained_multiple_no_redeposit": 0.07058830257595534,
+          "chained_months_until_6x": null
+        },
+        "later_2026": {
+          "months": 10,
+          "hits_6x": 1,
+          "loss_50pct": 2,
+          "loss_95pct": 0,
+          "median_multiple": 0.6399018876556417,
+          "mean_multiple": 1.170317468091342,
+          "best_multiple": 6.0,
+          "worst_multiple": 0.4292338331674617,
+          "total_entries": 31,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.6936909843209942,
+          "chained_multiple_no_redeposit": 0.07115252133741318,
+          "chained_months_until_6x": null
+        }
+      }
+    }
+  },
+  "reversal": {
+    "half_cash": {
+      "monthly": [
+        {
+          "month": "2021-01",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2021-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2021-03",
+          "multiple": 1.0075352847811947,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.14420161291939204
+        },
+        {
+          "month": "2021-04",
+          "multiple": 0.9112644424844959,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0888960390004252
+        },
+        {
+          "month": "2021-05",
+          "multiple": 0.9600838287914197,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.16020212768131503
+        },
+        {
+          "month": "2021-06",
+          "multiple": 1.0600822294401542,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.06726785778433753
+        },
+        {
+          "month": "2021-07",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2021-08",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2021-09",
+          "multiple": 1.0119758804922758,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.04219740777368097
+        },
+        {
+          "month": "2021-10",
+          "multiple": 1.0115433857484397,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.03254262824947152
+        },
+        {
+          "month": "2021-11",
+          "multiple": 0.9581137763358945,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.04188622366410555
+        },
+        {
+          "month": "2021-12",
+          "multiple": 0.9770310881455432,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.08425276915663793
+        },
+        {
+          "month": "2022-01",
+          "multiple": 0.9971541566877657,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.05726888801133967
+        },
+        {
+          "month": "2022-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2022-03",
+          "multiple": 0.9888809728964318,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0455129822121807
+        },
+        {
+          "month": "2022-04",
+          "multiple": 0.9799855169149974,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.07607291692541174
+        },
+        {
+          "month": "2022-05",
+          "multiple": 0.9134286839998808,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.12867037896703548
+        },
+        {
+          "month": "2022-06",
+          "multiple": 1.0954305000197566,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.02911805057095085
+        },
+        {
+          "month": "2022-07",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2022-08",
+          "multiple": 0.7839747831279291,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.229407107725753
+        },
+        {
+          "month": "2022-09",
+          "multiple": 1.093755381510336,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.11331537774471379
+        },
+        {
+          "month": "2022-10",
+          "multiple": 0.9769526354728149,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0441040702593849
+        },
+        {
+          "month": "2022-11",
+          "multiple": 1.1082986732272242,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.05454256301238747
+        },
+        {
+          "month": "2022-12",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-01",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-03",
+          "multiple": 0.9480923035101356,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.10505098468104057
+        },
+        {
+          "month": "2023-04",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-05",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-06",
+          "multiple": 1.0164257984753897,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.04097703394535024
+        },
+        {
+          "month": "2023-07",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-08",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-09",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-10",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-11",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-12",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-01",
+          "multiple": 0.9591125864668466,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.051104857269236525
+        },
+        {
+          "month": "2024-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-03",
+          "multiple": 0.9314420234184029,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.10863509875629473
+        },
+        {
+          "month": "2024-04",
+          "multiple": 0.4380702038297186,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.5884832463414147
+        },
+        {
+          "month": "2024-05",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-06",
+          "multiple": 0.9153131599722686,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.08468684002773141
+        },
+        {
+          "month": "2024-07",
+          "multiple": 1.058561317532352,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.03178174946608925
+        },
+        {
+          "month": "2024-08",
+          "multiple": 0.5,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.5010433164894286
+        },
+        {
+          "month": "2024-09",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-10",
+          "multiple": 0.9398307252051448,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.06016927479485523
+        },
+        {
+          "month": "2024-11",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-12",
+          "multiple": 1.0338496235450894,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.050238617573273525
+        },
+        {
+          "month": "2025-01",
+          "multiple": 0.9030248989841243,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.10420878226045827
+        },
+        {
+          "month": "2025-02",
+          "multiple": 0.9667363627603238,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.10432193079251906
+        },
+        {
+          "month": "2025-03",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2025-04",
+          "multiple": 0.5,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.5
+        },
+        {
+          "month": "2025-05",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2025-06",
+          "multiple": 0.9705876198345518,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.04597857377726744
+        },
+        {
+          "month": "2025-07",
+          "multiple": 0.9572556741826768,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.04882632390197783
+        },
+        {
+          "month": "2025-08",
+          "multiple": 0.8229241110458829,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.17707588895411708
+        },
+        {
+          "month": "2025-09",
+          "multiple": 1.7089503801123267,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.21040182229158422
+        },
+        {
+          "month": "2025-10",
+          "multiple": 0.6572665034002693,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.4066613727489977
+        },
+        {
+          "month": "2025-11",
+          "multiple": 0.9071334379967928,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0928665620032072
+        },
+        {
+          "month": "2025-12",
+          "multiple": 0.9201909456951907,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.07980905430480933
+        },
+        {
+          "month": "2026-01",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-03",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-04",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-05",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-06",
+          "multiple": 0.7600620261079173,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2463017303344417
+        },
+        {
+          "month": "2026-07",
+          "multiple": 1.0070208664789082,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.13643082981264676
+        },
+        {
+          "month": "2026-08",
+          "multiple": 1.421183675106788,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.16998224176764287
+        },
+        {
+          "month": "2026-09",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-10",
+          "multiple": 0.9914173991775055,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.08510524962668697
+        }
+      ],
+      "metrics": {
+        "reference": {
+          "months": 36,
+          "hits_6x": 0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9944447033906133,
+          "best_multiple": 1.1082986732272242,
+          "worst_multiple": 0.7839747831279291,
+          "total_entries": 27,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.229407107725753,
+          "chained_multiple_no_redeposit": 0.7746364298609433,
+          "chained_months_until_6x": null
+        },
+        "holdout": {
+          "months": 24,
+          "hits_6x": 0,
+          "loss_50pct": 3,
+          "loss_95pct": 0,
+          "median_multiple": 0.9581841303247617,
+          "mean_multiple": 0.9204270655825817,
+          "best_multiple": 1.7089503801123267,
+          "worst_multiple": 0.4380702038297186,
+          "total_entries": 25,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.5884832463414147,
+          "chained_multiple_no_redeposit": 0.057643750336377184,
+          "chained_months_until_6x": null
+        },
+        "holdout_2024": {
+          "months": 12,
+          "hits_6x": 0,
+          "loss_50pct": 2,
+          "loss_95pct": 0,
+          "median_multiple": 0.9795562932334233,
+          "mean_multiple": 0.8980149699974852,
+          "best_multiple": 1.058561317532352,
+          "worst_multiple": 0.4380702038297186,
+          "total_entries": 11,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.5884832463414147,
+          "chained_multiple_no_redeposit": 0.18421792090933797,
+          "chained_months_until_6x": null
+        },
+        "holdout_2025": {
+          "months": 12,
+          "hits_6x": 0,
+          "loss_50pct": 1,
+          "loss_95pct": 0,
+          "median_multiple": 0.9387233099389337,
+          "mean_multiple": 0.9428391611676783,
+          "best_multiple": 1.7089503801123267,
+          "worst_multiple": 0.5,
+          "total_entries": 14,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.5,
+          "chained_multiple_no_redeposit": 0.3129106552274374,
+          "chained_months_until_6x": null
+        },
+        "later_2026": {
+          "months": 10,
+          "hits_6x": 0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 1.0179683966871118,
+          "best_multiple": 1.421183675106788,
+          "worst_multiple": 0.7600620261079173,
+          "total_entries": 8,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.2463017303344417,
+          "chained_multiple_no_redeposit": 1.0784356880856125,
+          "chained_months_until_6x": null
+        }
+      }
+    },
+    "stop_at_25pct": {
+      "monthly": [
+        {
+          "month": "2021-01",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2021-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2021-03",
+          "multiple": 0.7960029701671101,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.2578383781763828
+        },
+        {
+          "month": "2021-04",
+          "multiple": 0.8225288849689918,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.17779207800085028
+        },
+        {
+          "month": "2021-05",
+          "multiple": 0.6230172175506254,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.39776587070517866
+        },
+        {
+          "month": "2021-06",
+          "multiple": 1.117524714094932,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.13010087116001845
+        },
+        {
+          "month": "2021-07",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2021-08",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2021-09",
+          "multiple": 1.0232757285097989,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0805130032062702
+        },
+        {
+          "month": "2021-10",
+          "multiple": 1.0230867714968794,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.062367115520907346
+        },
+        {
+          "month": "2021-11",
+          "multiple": 0.9162275526717889,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0837724473282111
+        },
+        {
+          "month": "2021-12",
+          "multiple": 0.9540621762910864,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.16353111432706224
+        },
+        {
+          "month": "2022-01",
+          "multiple": 0.9943083133755316,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.11453777602267934
+        },
+        {
+          "month": "2022-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2022-03",
+          "multiple": 0.9777619457928638,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.08796643188970465
+        },
+        {
+          "month": "2022-04",
+          "multiple": 0.9599710338299948,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.15214583385082348
+        },
+        {
+          "month": "2022-05",
+          "multiple": 0.8264563651433118,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2443670344994816
+        },
+        {
+          "month": "2022-06",
+          "multiple": 1.1908610000395135,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.05698529411764708
+        },
+        {
+          "month": "2022-07",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2022-08",
+          "multiple": 0.6433830377875407,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.3566169622124593
+        },
+        {
+          "month": "2022-09",
+          "multiple": 0.7421616218236173,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.25783837817638267
+        },
+        {
+          "month": "2022-10",
+          "multiple": 0.9539052709456296,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.08716944172379992
+        },
+        {
+          "month": "2022-11",
+          "multiple": 1.1982051745154108,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.10879047629163319
+        },
+        {
+          "month": "2022-12",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-01",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-03",
+          "multiple": 0.8961846070202714,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.20858248329229678
+        },
+        {
+          "month": "2023-04",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-05",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-06",
+          "multiple": 1.0328515969507792,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.078031212484994
+        },
+        {
+          "month": "2023-07",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-08",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-09",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-10",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-11",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2023-12",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-01",
+          "multiple": 0.9182251729336931,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.10126582278481033
+        },
+        {
+          "month": "2024-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-03",
+          "multiple": 0.8631417103528798,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.21727019751258947
+        },
+        {
+          "month": "2024-04",
+          "multiple": 0.5646854389885683,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.5029294994412257
+        },
+        {
+          "month": "2024-05",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-06",
+          "multiple": 0.8306263199445373,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.16937368005546272
+        },
+        {
+          "month": "2024-07",
+          "multiple": 1.117122635064704,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.061415220293724926
+        },
+        {
+          "month": "2024-08",
+          "multiple": 0.0,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 1.0
+        },
+        {
+          "month": "2024-09",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-10",
+          "multiple": 0.8796614504102895,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.12033854958971046
+        },
+        {
+          "month": "2024-11",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2024-12",
+          "multiple": 1.0676992470901785,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.09750212886744247
+        },
+        {
+          "month": "2025-01",
+          "multiple": 0.8060497979682487,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.20679265954533
+        },
+        {
+          "month": "2025-02",
+          "multiple": 0.9334727255206478,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.19812583668005357
+        },
+        {
+          "month": "2025-03",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2025-04",
+          "multiple": 0.7421616218236173,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.25783837817638267
+        },
+        {
+          "month": "2025-05",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2025-06",
+          "multiple": 0.9411752396691037,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.09041394335511976
+        },
+        {
+          "month": "2025-07",
+          "multiple": 0.9145113483653536,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.09765264780395566
+        },
+        {
+          "month": "2025-08",
+          "multiple": 0.7421616218236174,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 1,
+          "within_month_close_drawdown": 0.25783837817638255
+        },
+        {
+          "month": "2025-09",
+          "multiple": 2.3632559401843167,
+          "6x": false,
+          "buy_count": 2,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.29002748913267584
+        },
+        {
+          "month": "2025-10",
+          "multiple": 0.4290828845810629,
+          "6x": false,
+          "buy_count": 4,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.646986364656297
+        },
+        {
+          "month": "2025-11",
+          "multiple": 0.8142668759935856,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.1857331240064144
+        },
+        {
+          "month": "2025-12",
+          "multiple": 0.8403818913903813,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.15961810860961867
+        },
+        {
+          "month": "2026-01",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-02",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-03",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-04",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-05",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-06",
+          "multiple": 0.5015509952106739,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.5072600357862702
+        },
+        {
+          "month": "2026-07",
+          "multiple": 0.4398999505048198,
+          "6x": false,
+          "buy_count": 3,
+          "entry_no_fill": 0,
+          "total_stops": 2,
+          "within_month_close_drawdown": 0.5601000494951802
+        },
+        {
+          "month": "2026-08",
+          "multiple": 1.842367350213576,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.2965279275393574
+        },
+        {
+          "month": "2026-09",
+          "multiple": 1.0,
+          "6x": false,
+          "buy_count": 0,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.0
+        },
+        {
+          "month": "2026-10",
+          "multiple": 0.9828347983550111,
+          "6x": false,
+          "buy_count": 1,
+          "entry_no_fill": 0,
+          "total_stops": 0,
+          "within_month_close_drawdown": 0.16166666666666663
+        }
+      ],
+      "metrics": {
+        "reference": {
+          "months": 36,
+          "hits_6x": 0,
+          "loss_50pct": 0,
+          "loss_95pct": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9636604439715466,
+          "best_multiple": 1.1982051745154108,
+          "worst_multiple": 0.6230172175506254,
+          "total_entries": 27,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.39776587070517866,
+          "chained_multiple_no_redeposit": 0.19357152703284464,
+          "chained_months_until_6x": null
+        },
+        "holdout": {
+          "months": 24,
+          "hits_6x": 0,
+          "loss_50pct": 2,
+          "loss_95pct": 1,
+          "median_multiple": 0.9163682606495234,
+          "mean_multiple": 0.9069867467543661,
+          "best_multiple": 2.3632559401843167,
+          "worst_multiple": 0.0,
+          "total_entries": 25,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 1.0,
+          "chained_multiple_no_redeposit": 0.0,
+          "chained_months_until_6x": null
+        },
+        "holdout_2024": {
+          "months": 12,
+          "hits_6x": 0,
+          "loss_50pct": 1,
+          "loss_95pct": 1,
+          "median_multiple": 0.9591125864668466,
+          "mean_multiple": 0.8534301645654042,
+          "best_multiple": 1.117122635064704,
+          "worst_multiple": 0.0,
+          "total_entries": 11,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 1.0,
+          "chained_multiple_no_redeposit": 0.0,
+          "chained_months_until_6x": null
+        },
+        "holdout_2025": {
+          "months": 12,
+          "hits_6x": 0,
+          "loss_50pct": 1,
+          "loss_95pct": 0,
+          "median_multiple": 0.8774466198778674,
+          "mean_multiple": 0.960543328943328,
+          "best_multiple": 2.3632559401843167,
+          "worst_multiple": 0.4290828845810629,
+          "total_entries": 14,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.646986364656297,
+          "chained_multiple_no_redeposit": 0.24752295886439396,
+          "chained_months_until_6x": null
+        },
+        "later_2026": {
+          "months": 10,
+          "hits_6x": 0,
+          "loss_50pct": 1,
+          "loss_95pct": 0,
+          "median_multiple": 1.0,
+          "mean_multiple": 0.9766653094284081,
+          "best_multiple": 1.842367350213576,
+          "worst_multiple": 0.4398999505048198,
+          "total_entries": 8,
+          "total_entries_without_fill": 0,
+          "worst_monthly_close_drawdown": 0.5601000494951802,
+          "chained_multiple_no_redeposit": 0.39950826002029605,
+          "chained_months_until_6x": null
+        }
+      }
+    }
+  }
+}

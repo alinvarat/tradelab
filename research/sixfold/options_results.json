@@ -1,0 +1,2126 @@
+{
+  "qualifies": false,
+  "gates": {
+    "6x_both_years": false,
+    "6x_in_stress": true,
+    "sixfold_more_than_half_losses": false,
+    "median_profitable": false,
+    "sixfold_outperforms_random": false
+  },
+  "snapshot_sha256": "b077d1cab51ecf748c26993b95b581e6eac4cd5e49cf08a31508a4d90b176f18",
+  "control": {
+    "draws": 1000,
+    "mean_months_at_6x": 0.51,
+    "mean_of_median_multiple": 1.0,
+    "p_months_at_6x_at_least_observed": 0.5104895104895105
+  },
+  "variants": {
+    "main_otm20": {
+      "summary": {
+        "reference": {
+          "months": 36,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 7,
+          "months_remaining_tenth_or_less": 3,
+          "highest_month_multiple": 1.8154327000493198,
+          "lowest_month_multiple": 0.0106325495,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 0.8547819539939412,
+          "continuous_total_multiple": 0.06087287553146258,
+          "continuous_fills": 1,
+          "status_counts": {
+            "instrument_not_listed_yet": 12,
+            "filled_proxy": 9,
+            "missing_predecision_index": 5,
+            "no_eligible_trade_within_2h": 10
+          }
+        },
+        "holdout": {
+          "months": 24,
+          "months_at_6x": 1,
+          "months_remaining_half_or_less": 4,
+          "months_remaining_tenth_or_less": 2,
+          "highest_month_multiple": 8.278495061692606,
+          "lowest_month_multiple": 0.03623649923852381,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 1.1503362295769561,
+          "continuous_total_multiple": 0.03623649923852381,
+          "continuous_fills": 1,
+          "status_counts": {
+            "missing_predecision_index": 2,
+            "no_eligible_trade_within_2h": 7,
+            "filled_proxy": 5,
+            "instrument_not_listed_yet": 10
+          }
+        },
+        "2024": {
+          "months": 12,
+          "months_at_6x": 1,
+          "months_remaining_half_or_less": 2,
+          "months_remaining_tenth_or_less": 1,
+          "highest_month_multiple": 8.278495061692606,
+          "lowest_month_multiple": 0.03623649923852381,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 1.4530488115372031,
+          "continuous_total_multiple": 0.03623649923852381,
+          "continuous_fills": 1,
+          "status_counts": {
+            "missing_predecision_index": 2,
+            "no_eligible_trade_within_2h": 6,
+            "filled_proxy": 3,
+            "instrument_not_listed_yet": 1
+          }
+        },
+        "2025": {
+          "months": 12,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 2,
+          "months_remaining_tenth_or_less": 1,
+          "highest_month_multiple": 1.0,
+          "lowest_month_multiple": 0.06508820628571428,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 0.8476236476167092,
+          "continuous_total_multiple": 0.06508820628571428,
+          "continuous_fills": 1,
+          "status_counts": {
+            "no_eligible_trade_within_2h": 1,
+            "instrument_not_listed_yet": 9,
+            "filled_proxy": 2
+          }
+        }
+      },
+      "monthly": [
+        {
+          "month": "2021-01",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29JAN21-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26FEB21-42000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26MAR21-37000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-04",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-30APR21-71000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-05",
+          "instrument": "BTC-28MAY21-70000-C",
+          "ending": 8.948312703125,
+          "trade_timestamp": 1619861520329,
+          "minimum_premium_with_cost_usd": 138.051687296875,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 138.051687296875,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 36828.41,
+          "side": "C"
+        },
+        {
+          "month": "2021-06",
+          "instrument": "BTC-25JUN21-28000-P",
+          "ending": 37.3373857465,
+          "trade_timestamp": 1622541485163,
+          "minimum_premium_with_cost_usd": 109.6626142535,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 109.6626142535,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 34140.41,
+          "side": "P"
+        },
+        {
+          "month": "2021-07",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-30JUL21-41000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-08",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-09",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-24SEP21-57000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-10",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29OCT21-54000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-11",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26NOV21-49000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-31DEC21-69000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-01",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28JAN22-37000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25FEB22-47000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25MAR22-53000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-04",
+          "instrument": "BTC-29APR22-55000-C",
+          "ending": 45.425064070375,
+          "trade_timestamp": 1648807937282,
+          "minimum_premium_with_cost_usd": 50.78746796481249,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 101.57493592962498,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 39569.85,
+          "side": "C"
+        },
+        {
+          "month": "2022-05",
+          "instrument": "BTC-27MAY22-30000-P",
+          "ending": 266.86860690725,
+          "trade_timestamp": 1651399411719,
+          "minimum_premium_with_cost_usd": 36.17633580125,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 72.3526716025,
+          "settled_value_usd": 192.2212785097498,
+          "settlement_index_usd": 29032.13,
+          "side": "P"
+        },
+        {
+          "month": "2022-06",
+          "instrument": "BTC-24JUN22-38000-C",
+          "ending": 29.396588033437,
+          "trade_timestamp": 1654075167609,
+          "minimum_premium_with_cost_usd": 39.2011373221875,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.30000000000000004,
+          "spent_usd": 117.6034119665625,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 20902.87,
+          "side": "C"
+        },
+        {
+          "month": "2022-07",
+          "instrument": "BTC-29JUL22-15000-P",
+          "ending": 29.095556907375,
+          "trade_timestamp": 1656672607829,
+          "minimum_premium_with_cost_usd": 58.9522215463125,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 117.904443092625,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 23928.4,
+          "side": "P"
+        },
+        {
+          "month": "2022-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26AUG22-28000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-30SEP22-15000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28OCT22-24000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-11",
+          "instrument": "BTC-25NOV22-25000-C",
+          "ending": 8.823506616,
+          "trade_timestamp": 1667300186258,
+          "minimum_premium_with_cost_usd": 17.272061673,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.8,
+          "spent_usd": 138.176493384,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 16443.43,
+          "side": "C"
+        },
+        {
+          "month": "2022-12",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-01",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-02",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-24FEB23-28000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-03",
+          "instrument": "BTC-31MAR23-19000-P",
+          "ending": 127.048094775375,
+          "trade_timestamp": 1677661902003,
+          "minimum_premium_with_cost_usd": 19.951905224625,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 19.951905224625,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 27706.39,
+          "side": "P"
+        },
+        {
+          "month": "2023-04",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28APR23-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-05",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26MAY23-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-06",
+          "instrument": "BTC-30JUN23-33000-C",
+          "ending": 1.5629847765,
+          "trade_timestamp": 1685613760252,
+          "minimum_premium_with_cost_usd": 13.221546838499998,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 1.1,
+          "spent_usd": 145.4370152235,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 30753.15,
+          "side": "C"
+        },
+        {
+          "month": "2023-07",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28JUL23-24000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-25AUG23-23000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-29SEP23-20000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-27OCT23-33000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-11",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-12",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-01",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-02",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-23FEB24-51000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-03",
+          "instrument": "BTC-29MAR24-75000-C",
+          "ending": 5.326765388063,
+          "trade_timestamp": 1709285392202,
+          "minimum_premium_with_cost_usd": 141.6732346119375,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 141.6732346119375,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 69984.45,
+          "side": "C"
+        },
+        {
+          "month": "2024-04",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26APR24-84000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-05",
+          "instrument": "BTC-31MAY24-45000-P",
+          "ending": 17.91256409475,
+          "trade_timestamp": 1714555597679,
+          "minimum_premium_with_cost_usd": 64.54371795262499,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 129.08743590524998,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 68201.52,
+          "side": "P"
+        },
+        {
+          "month": "2024-06",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-07",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26JUL24-76000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-30AUG24-78000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-27SEP24-46000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-25OCT24-77000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-11",
+          "instrument": "BTC-29NOV24-84000-C",
+          "ending": 1216.938774068813,
+          "trade_timestamp": 1730452783396,
+          "minimum_premium_with_cost_usd": 110.04322102256249,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 110.04322102256249,
+          "settled_value_usd": 1179.9819950913754,
+          "settlement_index_usd": 95843.77,
+          "side": "C"
+        },
+        {
+          "month": "2024-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-27DEC24-77000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-01",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-31JAN25-74000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28FEB25-81000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28MAR25-68000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-04",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25APR25-67000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-05",
+          "instrument": "BTC-30MAY25-115000-C",
+          "ending": 9.567966324,
+          "trade_timestamp": 1746091007022,
+          "minimum_premium_with_cost_usd": 68.716016838,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 137.432033676,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 105130.77,
+          "side": "C"
+        },
+        {
+          "month": "2025-06",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-27JUN25-83000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-07",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25JUL25-129000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-08",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29AUG25-91000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-09",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26SEP25-87000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-10",
+          "instrument": "BTC-31OCT25-140000-C",
+          "ending": 15.640148071875,
+          "trade_timestamp": 1759312540791,
+          "minimum_premium_with_cost_usd": 43.786617309375,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.30000000000000004,
+          "spent_usd": 131.359851928125,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 109491.34,
+          "side": "C"
+        },
+        {
+          "month": "2025-11",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28NOV25-88000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26DEC25-69000-P",
+          "ending": 147.0
+        }
+      ]
+    },
+    "stress_price_uplift": {
+      "summary": {
+        "reference": {
+          "months": 36,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 6,
+          "months_remaining_tenth_or_less": 4,
+          "highest_month_multiple": 1.7325366924846939,
+          "lowest_month_multiple": 0.03962018071428571,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 0.8642678485652989,
+          "continuous_total_multiple": 0.0209177862244898,
+          "continuous_fills": 2,
+          "status_counts": {
+            "instrument_not_listed_yet": 12,
+            "minimum_order_over_budget": 1,
+            "filled_proxy": 8,
+            "missing_predecision_index": 5,
+            "no_eligible_trade_within_2h": 10
+          }
+        },
+        "holdout": {
+          "months": 24,
+          "months_at_6x": 1,
+          "months_remaining_half_or_less": 3,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 8.150772975197707,
+          "lowest_month_multiple": 0.3089459036887755,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 1.2250400443189309,
+          "continuous_total_multiple": 0.1410803496122449,
+          "continuous_fills": 2,
+          "status_counts": {
+            "missing_predecision_index": 2,
+            "no_eligible_trade_within_2h": 7,
+            "minimum_order_over_budget": 1,
+            "filled_proxy": 4,
+            "instrument_not_listed_yet": 10
+          }
+        },
+        "2024": {
+          "months": 12,
+          "months_at_6x": 1,
+          "months_remaining_half_or_less": 1,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 8.150772975197707,
+          "lowest_month_multiple": 0.48660739776785716,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 1.5531150310804638,
+          "continuous_total_multiple": 0.48660739776785716,
+          "continuous_fills": 1,
+          "status_counts": {
+            "missing_predecision_index": 2,
+            "no_eligible_trade_within_2h": 6,
+            "minimum_order_over_budget": 1,
+            "filled_proxy": 2,
+            "instrument_not_listed_yet": 1
+          }
+        },
+        "2025": {
+          "months": 12,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 2,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 1.0,
+          "lowest_month_multiple": 0.3089459036887755,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 0.896965057557398,
+          "continuous_total_multiple": 0.10910773884438776,
+          "continuous_fills": 2,
+          "status_counts": {
+            "no_eligible_trade_within_2h": 1,
+            "instrument_not_listed_yet": 9,
+            "filled_proxy": 2
+          }
+        }
+      },
+      "monthly": [
+        {
+          "month": "2021-01",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29JAN21-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26FEB21-42000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26MAR21-37000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-04",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-30APR21-71000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-05",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-28MAY21-70000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1619861520329,
+          "minimum_premium_with_cost_usd": 161.75899275937502
+        },
+        {
+          "month": "2021-06",
+          "instrument": "BTC-25JUN21-28000-P",
+          "ending": 18.4550813055,
+          "trade_timestamp": 1622541485163,
+          "minimum_premium_with_cost_usd": 128.5449186945,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 128.5449186945,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 34140.41,
+          "side": "P"
+        },
+        {
+          "month": "2021-07",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-30JUL21-41000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-08",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-09",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-24SEP21-57000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-10",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29OCT21-54000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-11",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26NOV21-49000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-31DEC21-69000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-01",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28JAN22-37000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25FEB22-47000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25MAR22-53000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-04",
+          "instrument": "BTC-29APR22-55000-C",
+          "ending": 28.231979146875,
+          "trade_timestamp": 1648807937282,
+          "minimum_premium_with_cost_usd": 59.3840104265625,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 118.768020853125,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 39569.85,
+          "side": "C"
+        },
+        {
+          "month": "2022-05",
+          "instrument": "BTC-27MAY22-30000-P",
+          "ending": 254.68289379525,
+          "trade_timestamp": 1651399411719,
+          "minimum_premium_with_cost_usd": 42.269192357250006,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 84.53838471450001,
+          "settled_value_usd": 192.2212785097498,
+          "settlement_index_usd": 29032.13,
+          "side": "P"
+        },
+        {
+          "month": "2022-06",
+          "instrument": "BTC-24JUN22-38000-C",
+          "ending": 9.439645396687,
+          "trade_timestamp": 1654075167609,
+          "minimum_premium_with_cost_usd": 45.853451534437504,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.30000000000000004,
+          "spent_usd": 137.56035460331253,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 20902.87,
+          "side": "C"
+        },
+        {
+          "month": "2022-07",
+          "instrument": "BTC-29JUL22-15000-P",
+          "ending": 8.790323815875,
+          "trade_timestamp": 1656672607829,
+          "minimum_premium_with_cost_usd": 69.10483809206251,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 138.20967618412502,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 23928.4,
+          "side": "P"
+        },
+        {
+          "month": "2022-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26AUG22-28000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-30SEP22-15000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28OCT22-24000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-11",
+          "instrument": "BTC-25NOV22-25000-C",
+          "ending": 5.824166565,
+          "trade_timestamp": 1667300186258,
+          "minimum_premium_with_cost_usd": 20.167976205000002,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.7000000000000001,
+          "spent_usd": 141.17583343500002,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 16443.43,
+          "side": "C"
+        },
+        {
+          "month": "2022-12",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-01",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-02",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-24FEB23-28000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-03",
+          "instrument": "BTC-31MAR23-19000-P",
+          "ending": 123.702865156875,
+          "trade_timestamp": 1677661902003,
+          "minimum_premium_with_cost_usd": 23.297134843125,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 23.297134843125,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 27706.39,
+          "side": "P"
+        },
+        {
+          "month": "2023-04",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28APR23-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-05",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26MAY23-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-06",
+          "instrument": "BTC-30JUN23-33000-C",
+          "ending": 8.5784994255,
+          "trade_timestamp": 1685613760252,
+          "minimum_premium_with_cost_usd": 15.380166730500001,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.9,
+          "spent_usd": 138.4215005745,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 30753.15,
+          "side": "C"
+        },
+        {
+          "month": "2023-07",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28JUL23-24000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-25AUG23-23000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-29SEP23-20000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-27OCT23-33000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-11",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-12",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-01",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-02",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-23FEB24-51000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-03",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-29MAR24-75000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1709285392202,
+          "minimum_premium_with_cost_usd": 165.98679302718753
+        },
+        {
+          "month": "2024-04",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26APR24-84000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-05",
+          "instrument": "BTC-31MAY24-45000-P",
+          "ending": 71.531287471875,
+          "trade_timestamp": 1714555597679,
+          "minimum_premium_with_cost_usd": 75.46871252812501,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 75.46871252812501,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 68201.52,
+          "side": "P"
+        },
+        {
+          "month": "2024-06",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-07",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26JUL24-76000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-30AUG24-78000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-27SEP24-46000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-25OCT24-77000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-11",
+          "instrument": "BTC-29NOV24-84000-C",
+          "ending": 1198.163627354063,
+          "trade_timestamp": 1730452783396,
+          "minimum_premium_with_cost_usd": 128.8183677373125,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 128.8183677373125,
+          "settled_value_usd": 1179.9819950913754,
+          "settlement_index_usd": 95843.77,
+          "side": "C"
+        },
+        {
+          "month": "2024-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-27DEC24-77000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-01",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-31JAN25-74000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28FEB25-81000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28MAR25-68000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-04",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25APR25-67000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-05",
+          "instrument": "BTC-30MAY25-115000-C",
+          "ending": 66.831313689,
+          "trade_timestamp": 1746091007022,
+          "minimum_premium_with_cost_usd": 80.16868631100002,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 80.16868631100002,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 105130.77,
+          "side": "C"
+        },
+        {
+          "month": "2025-06",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-27JUN25-83000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-07",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25JUL25-129000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-08",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29AUG25-91000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-09",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26SEP25-87000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-10",
+          "instrument": "BTC-31OCT25-140000-C",
+          "ending": 45.41504784225,
+          "trade_timestamp": 1759312540791,
+          "minimum_premium_with_cost_usd": 50.79247607887501,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 101.58495215775002,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 109491.34,
+          "side": "C"
+        },
+        {
+          "month": "2025-11",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28NOV25-88000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26DEC25-69000-P",
+          "ending": 147.0
+        }
+      ]
+    },
+    "closer_otm10": {
+      "summary": {
+        "reference": {
+          "months": 36,
+          "months_at_6x": 1,
+          "months_remaining_half_or_less": 3,
+          "months_remaining_tenth_or_less": 1,
+          "highest_month_multiple": 13.79459054866921,
+          "lowest_month_multiple": 0.012058591428571429,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 1.3045827338733702,
+          "continuous_total_multiple": 5.559341070111394,
+          "continuous_fills": 4,
+          "status_counts": {
+            "no_eligible_trade_within_2h": 13,
+            "minimum_order_over_budget": 5,
+            "instrument_not_listed_yet": 6,
+            "missing_predecision_index": 5,
+            "filled_proxy": 7
+          }
+        },
+        "holdout": {
+          "months": 24,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 5,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 5.705604955862238,
+          "lowest_month_multiple": 0.1605886415765306,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 1.052600110499805,
+          "continuous_total_multiple": 0.08660101479123129,
+          "continuous_fills": 3,
+          "status_counts": {
+            "missing_predecision_index": 2,
+            "filled_proxy": 6,
+            "instrument_not_listed_yet": 7,
+            "minimum_order_over_budget": 6,
+            "no_eligible_trade_within_2h": 3
+          }
+        },
+        "2024": {
+          "months": 12,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 3,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 5.705604955862238,
+          "lowest_month_multiple": 0.1605886415765306,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 1.2178793159086236,
+          "continuous_total_multiple": 0.08660101479123129,
+          "continuous_fills": 3,
+          "status_counts": {
+            "missing_predecision_index": 2,
+            "filled_proxy": 4,
+            "instrument_not_listed_yet": 2,
+            "minimum_order_over_budget": 3,
+            "no_eligible_trade_within_2h": 1
+          }
+        },
+        "2025": {
+          "months": 12,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 2,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 1.0,
+          "lowest_month_multiple": 0.2546394175391157,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 0.8873209050909864,
+          "continuous_total_multiple": 0.3932114435527211,
+          "continuous_fills": 1,
+          "status_counts": {
+            "minimum_order_over_budget": 3,
+            "instrument_not_listed_yet": 5,
+            "no_eligible_trade_within_2h": 2,
+            "filled_proxy": 2
+          }
+        }
+      },
+      "monthly": [
+        {
+          "month": "2021-01",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-29JAN21-32000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-02",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-26FEB21-38000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1612172122611,
+          "minimum_premium_with_cost_usd": 339.0281429155
+        },
+        {
+          "month": "2021-03",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-26MAR21-42000-P",
+          "ending": 147.0,
+          "trade_timestamp": 1614589739219,
+          "minimum_premium_with_cost_usd": 288.0663721303125
+        },
+        {
+          "month": "2021-04",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-30APR21-65000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-05",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28MAY21-64000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-06",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-25JUN21-32000-P",
+          "ending": 147.0,
+          "trade_timestamp": 1622541485159,
+          "minimum_premium_with_cost_usd": 209.88407628649998
+        },
+        {
+          "month": "2021-07",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-30JUL21-37000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-08",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-09",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-24SEP21-53000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-10",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-29OCT21-50000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1633080960927,
+          "minimum_premium_with_cost_usd": 257.83949480887503
+        },
+        {
+          "month": "2021-11",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26NOV21-55000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-31DEC21-63000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-01",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28JAN22-42000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25FEB22-43000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-03",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-25MAR22-48000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1646132027309,
+          "minimum_premium_with_cost_usd": 166.723901578125
+        },
+        {
+          "month": "2022-04",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-29APR22-50000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-05",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-27MAY22-34000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-06",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-24JUN22-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-07",
+          "instrument": "BTC-29JUL22-17000-P",
+          "ending": 46.962329901,
+          "trade_timestamp": 1656671501362,
+          "minimum_premium_with_cost_usd": 100.03767009899997,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 100.03767009899997,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 23928.4,
+          "side": "P"
+        },
+        {
+          "month": "2022-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26AUG22-26000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-30SEP22-17000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28OCT22-22000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-11",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-25NOV22-23000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-12",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-01",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-02",
+          "instrument": "BTC-24FEB23-26000-C",
+          "ending": 1.77261294,
+          "trade_timestamp": 1675245794463,
+          "minimum_premium_with_cost_usd": 48.409129019999995,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.30000000000000004,
+          "spent_usd": 145.22738705999998,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 23837.39,
+          "side": "C"
+        },
+        {
+          "month": "2023-03",
+          "instrument": "BTC-31MAR23-21000-P",
+          "ending": 99.701317623625,
+          "trade_timestamp": 1677664704465,
+          "minimum_premium_with_cost_usd": 47.29868237637501,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 47.29868237637501,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 27706.39,
+          "side": "P"
+        },
+        {
+          "month": "2023-04",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28APR23-32000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-05",
+          "instrument": "BTC-26MAY23-32000-C",
+          "ending": 33.5731722805,
+          "trade_timestamp": 1682937660015,
+          "minimum_premium_with_cost_usd": 56.713413859750005,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 113.42682771950001,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 26479.06,
+          "side": "C"
+        },
+        {
+          "month": "2023-06",
+          "instrument": "BTC-30JUN23-30000-C",
+          "ending": 305.798268153001,
+          "trade_timestamp": 1685610293538,
+          "minimum_premium_with_cost_usd": 34.967001454874996,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.4,
+          "spent_usd": 139.86800581949998,
+          "settled_value_usd": 298.6662739725006,
+          "settlement_index_usd": 30753.15,
+          "side": "C"
+        },
+        {
+          "month": "2023-07",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28JUL23-27000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-25AUG23-26000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-09",
+          "instrument": "BTC-29SEP23-23000-P",
+          "ending": 125.239316105375,
+          "trade_timestamp": 1693561261285,
+          "minimum_premium_with_cost_usd": 21.760683894625,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 21.760683894625,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 27149.83,
+          "side": "P"
+        },
+        {
+          "month": "2023-10",
+          "instrument": "BTC-27OCT23-30000-C",
+          "ending": 2027.804810654374,
+          "trade_timestamp": 1696156556375,
+          "minimum_premium_with_cost_usd": 27.472651402624997,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.5,
+          "spent_usd": 137.36325701312498,
+          "settled_value_usd": 2018.1680676674991,
+          "settlement_index_usd": 34051.56,
+          "side": "C"
+        },
+        {
+          "month": "2023-11",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-12",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-01",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-02",
+          "instrument": "BTC-23FEB24-47000-C",
+          "ending": 838.723928511749,
+          "trade_timestamp": 1706783084247,
+          "minimum_premium_with_cost_usd": 52.408858156875,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 104.81771631375,
+          "settled_value_usd": 796.5416448254994,
+          "settlement_index_usd": 51000.34,
+          "side": "C"
+        },
+        {
+          "month": "2024-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29MAR24-69000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-04",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-26APR24-77000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1711965366468,
+          "minimum_premium_with_cost_usd": 370.397258336
+        },
+        {
+          "month": "2024-05",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-31MAY24-51000-P",
+          "ending": 147.0,
+          "trade_timestamp": 1714558590787,
+          "minimum_premium_with_cost_usd": 178.76949982649998
+        },
+        {
+          "month": "2024-06",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-07",
+          "instrument": "BTC-26JUL24-70000-C",
+          "ending": 61.800937334563,
+          "trade_timestamp": 1719829161731,
+          "minimum_premium_with_cost_usd": 85.1990626654375,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 85.1990626654375,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 66987.01,
+          "side": "C"
+        },
+        {
+          "month": "2024-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-30AUG24-71000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-09",
+          "instrument": "BTC-27SEP24-52000-P",
+          "ending": 48.20771710475,
+          "trade_timestamp": 1725185348186,
+          "minimum_premium_with_cost_usd": 98.79228289525,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 98.79228289525,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 65460.66,
+          "side": "P"
+        },
+        {
+          "month": "2024-10",
+          "instrument": "BTC-25OCT24-71000-C",
+          "ending": 23.60653031175,
+          "trade_timestamp": 1727777226131,
+          "minimum_premium_with_cost_usd": 123.39346968825001,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 123.39346968825001,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 67382.03,
+          "side": "C"
+        },
+        {
+          "month": "2024-11",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-29NOV24-77000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1730452733991,
+          "minimum_premium_with_cost_usd": 238.01772451024996
+        },
+        {
+          "month": "2024-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-27DEC24-87000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-01",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-31JAN25-83000-P",
+          "ending": 147.0,
+          "trade_timestamp": 1735723453333,
+          "minimum_premium_with_cost_usd": 222.48874114093752
+        },
+        {
+          "month": "2025-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28FEB25-91000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-03",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28MAR25-76000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-04",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-25APR25-75000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-05",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-30MAY25-105000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1746094597316,
+          "minimum_premium_with_cost_usd": 223.81534119549997
+        },
+        {
+          "month": "2025-06",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-27JUN25-93000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-07",
+          "instrument": "BTC-25JUL25-118000-C",
+          "ending": 57.80208220225,
+          "trade_timestamp": 1751365150829,
+          "minimum_premium_with_cost_usd": 89.19791779775001,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 89.19791779775001,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 115229.65,
+          "side": "C"
+        },
+        {
+          "month": "2025-08",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29AUG25-103000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-09",
+          "instrument": "BTC-26SEP25-98000-P",
+          "ending": 37.43199437825,
+          "trade_timestamp": 1756723026690,
+          "minimum_premium_with_cost_usd": 109.56800562175002,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 109.56800562175002,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 109124.7,
+          "side": "P"
+        },
+        {
+          "month": "2025-10",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-31OCT25-128000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1759313317256,
+          "minimum_premium_with_cost_usd": 151.18526140199998
+        },
+        {
+          "month": "2025-11",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28NOV25-99000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26DEC25-78000-P",
+          "ending": 147.0
+        }
+      ]
+    },
+    "at_most_half_cash": {
+      "summary": {
+        "reference": {
+          "months": 36,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 0,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 1.8154327000493198,
+          "lowest_month_multiple": 0.5300119272653061,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 0.9651889444377953,
+          "continuous_total_multiple": 0.21738817064286392,
+          "continuous_fills": 6,
+          "status_counts": {
+            "instrument_not_listed_yet": 12,
+            "minimum_order_over_budget": 2,
+            "missing_predecision_index": 5,
+            "filled_proxy": 7,
+            "no_eligible_trade_within_2h": 10
+          }
+        },
+        "holdout": {
+          "months": 24,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 0,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 1.0,
+          "lowest_month_multiple": 0.5325441031428572,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 0.949816793622449,
+          "continuous_total_multiple": 0.5609270887576531,
+          "continuous_fills": 1,
+          "status_counts": {
+            "missing_predecision_index": 2,
+            "no_eligible_trade_within_2h": 7,
+            "minimum_order_over_budget": 2,
+            "filled_proxy": 3,
+            "instrument_not_listed_yet": 10
+          }
+        },
+        "2024": {
+          "months": 12,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 0,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 1.0,
+          "lowest_month_multiple": 0.5609270887576531,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 0.9634105907298044,
+          "continuous_total_multiple": 0.5609270887576531,
+          "continuous_fills": 1,
+          "status_counts": {
+            "missing_predecision_index": 2,
+            "no_eligible_trade_within_2h": 6,
+            "minimum_order_over_budget": 2,
+            "filled_proxy": 1,
+            "instrument_not_listed_yet": 1
+          }
+        },
+        "2025": {
+          "months": 12,
+          "months_at_6x": 0,
+          "months_remaining_half_or_less": 0,
+          "months_remaining_tenth_or_less": 0,
+          "highest_month_multiple": 1.0,
+          "lowest_month_multiple": 0.5325441031428572,
+          "median_month_multiple": 1.0,
+          "mean_month_multiple": 0.9362229965150936,
+          "continuous_total_multiple": 0.5325441031428572,
+          "continuous_fills": 1,
+          "status_counts": {
+            "no_eligible_trade_within_2h": 1,
+            "instrument_not_listed_yet": 9,
+            "filled_proxy": 2
+          }
+        }
+      },
+      "monthly": [
+        {
+          "month": "2021-01",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29JAN21-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26FEB21-42000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26MAR21-37000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-04",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-30APR21-71000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-05",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-28MAY21-70000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1619861520329,
+          "minimum_premium_with_cost_usd": 138.051687296875
+        },
+        {
+          "month": "2021-06",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-25JUN21-28000-P",
+          "ending": 147.0,
+          "trade_timestamp": 1622541485163,
+          "minimum_premium_with_cost_usd": 109.6626142535
+        },
+        {
+          "month": "2021-07",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-30JUL21-41000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-08",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-09",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-24SEP21-57000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-10",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29OCT21-54000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-11",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26NOV21-49000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2021-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-31DEC21-69000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-01",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28JAN22-37000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25FEB22-47000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25MAR22-53000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-04",
+          "instrument": "BTC-29APR22-55000-C",
+          "ending": 96.212532035188,
+          "trade_timestamp": 1648807937282,
+          "minimum_premium_with_cost_usd": 50.78746796481249,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 50.78746796481249,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 39569.85,
+          "side": "C"
+        },
+        {
+          "month": "2022-05",
+          "instrument": "BTC-27MAY22-30000-P",
+          "ending": 266.86860690725,
+          "trade_timestamp": 1651399411719,
+          "minimum_premium_with_cost_usd": 36.17633580125,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.2,
+          "spent_usd": 72.3526716025,
+          "settled_value_usd": 192.2212785097498,
+          "settlement_index_usd": 29032.13,
+          "side": "P"
+        },
+        {
+          "month": "2022-06",
+          "instrument": "BTC-24JUN22-38000-C",
+          "ending": 107.798862677813,
+          "trade_timestamp": 1654075167609,
+          "minimum_premium_with_cost_usd": 39.2011373221875,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 39.2011373221875,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 20902.87,
+          "side": "C"
+        },
+        {
+          "month": "2022-07",
+          "instrument": "BTC-29JUL22-15000-P",
+          "ending": 88.047778453687,
+          "trade_timestamp": 1656672607829,
+          "minimum_premium_with_cost_usd": 58.9522215463125,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 58.9522215463125,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 23928.4,
+          "side": "P"
+        },
+        {
+          "month": "2022-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26AUG22-28000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-30SEP22-15000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28OCT22-24000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2022-11",
+          "instrument": "BTC-25NOV22-25000-C",
+          "ending": 77.911753308,
+          "trade_timestamp": 1667300186258,
+          "minimum_premium_with_cost_usd": 17.272061673,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.4,
+          "spent_usd": 69.088246692,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 16443.43,
+          "side": "C"
+        },
+        {
+          "month": "2022-12",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-01",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-02",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-24FEB23-28000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-03",
+          "instrument": "BTC-31MAR23-19000-P",
+          "ending": 127.048094775375,
+          "trade_timestamp": 1677661902003,
+          "minimum_premium_with_cost_usd": 19.951905224625,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 19.951905224625,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 27706.39,
+          "side": "P"
+        },
+        {
+          "month": "2023-04",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28APR23-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-05",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26MAY23-35000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-06",
+          "instrument": "BTC-30JUN23-33000-C",
+          "ending": 80.8922658075,
+          "trade_timestamp": 1685613760252,
+          "minimum_premium_with_cost_usd": 13.221546838499998,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.5,
+          "spent_usd": 66.10773419249999,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 30753.15,
+          "side": "C"
+        },
+        {
+          "month": "2023-07",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-28JUL23-24000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-25AUG23-23000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-29SEP23-20000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-27OCT23-33000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-11",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2023-12",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-01",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-02",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-23FEB24-51000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-03",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-29MAR24-75000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1709285392202,
+          "minimum_premium_with_cost_usd": 141.6732346119375
+        },
+        {
+          "month": "2024-04",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26APR24-84000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-05",
+          "instrument": "BTC-31MAY24-45000-P",
+          "ending": 82.456282047375,
+          "trade_timestamp": 1714555597679,
+          "minimum_premium_with_cost_usd": 64.54371795262499,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 64.54371795262499,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 68201.52,
+          "side": "P"
+        },
+        {
+          "month": "2024-06",
+          "status": "missing_predecision_index",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-07",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-26JUL24-76000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-08",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-30AUG24-78000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-09",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-27SEP24-46000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-10",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-25OCT24-77000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2024-11",
+          "status": "minimum_order_over_budget",
+          "instrument": "BTC-29NOV24-84000-C",
+          "ending": 147.0,
+          "trade_timestamp": 1730452783396,
+          "minimum_premium_with_cost_usd": 110.04322102256249
+        },
+        {
+          "month": "2024-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-27DEC24-77000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-01",
+          "status": "no_eligible_trade_within_2h",
+          "instrument": "BTC-31JAN25-74000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-02",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28FEB25-81000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-03",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28MAR25-68000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-04",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25APR25-67000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-05",
+          "instrument": "BTC-30MAY25-115000-C",
+          "ending": 78.283983162,
+          "trade_timestamp": 1746091007022,
+          "minimum_premium_with_cost_usd": 68.716016838,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 68.716016838,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 105130.77,
+          "side": "C"
+        },
+        {
+          "month": "2025-06",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-27JUN25-83000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-07",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-25JUL25-129000-C",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-08",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-29AUG25-91000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-09",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26SEP25-87000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-10",
+          "instrument": "BTC-31OCT25-140000-C",
+          "ending": 103.213382690625,
+          "trade_timestamp": 1759312540791,
+          "minimum_premium_with_cost_usd": 43.786617309375,
+          "status": "filled_proxy",
+          "amount_btc_contracts": 0.1,
+          "spent_usd": 43.786617309375,
+          "settled_value_usd": 0.0,
+          "settlement_index_usd": 109491.34,
+          "side": "C"
+        },
+        {
+          "month": "2025-11",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-28NOV25-88000-P",
+          "ending": 147.0
+        },
+        {
+          "month": "2025-12",
+          "status": "instrument_not_listed_yet",
+          "instrument": "BTC-26DEC25-69000-P",
+          "ending": 147.0
+        }
+      ]
+    }
+  }
+}

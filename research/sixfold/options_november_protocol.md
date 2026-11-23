@@ -1,0 +1,2 @@
+# November BTC weekly checkpoint
+Frozen before obtaining November option prints. Apply the existing BTC weekly trend rule with the 50% cap and no changes to costs, order size, entry, settlement or exit. Start with $147, test separate 3× and 6× accounts, and compare all equally weighted direction permutations on the same closed weeks. November 2026 is partial as of 23 November before Friday settlement. Keep it separate from prior research and do not treat it as a monthly result.
