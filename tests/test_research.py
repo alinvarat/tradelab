@@ -135,3 +135,40 @@ class Watchdog(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class NewsData(unittest.TestCase):
+    def test_entity_linking(self):
+        from core import entities
+        self.assertEqual(entities.link("Nvidia skyrockets 30% on Huang's return as CEO"), ["NVDA"])
+        self.assertEqual(entities.link("Apple and Microsoft slide as Amazon jumps"), ["AAPL", "MSFT", "AMZN"])
+        self.assertEqual(entities.link("Oil rises as stocks fall"), [])
+        self.assertEqual(entities.link("Shares of $TSLA fall"), ["TSLA"])
+
+    def test_labels_open_settle_and_drop_late(self):
+        from research.news_archive import collector as c
+        with tempfile.TemporaryDirectory() as d:
+            c.OPEN, c.LABELS = Path(d) / "o.json", Path(d) / "l.jsonl"
+            now = 1_000_000.0
+            fresh = [{"key": "k1", "symbols": ["NVDA"], "title": "t", "source": "s", "sentiment": 0.3}]
+            c.open_labels(fresh, now, price_fn=lambda s: {"NVDA": 100.0, "SPY": 500.0})
+            self.assertEqual(c.settle_labels(now + 600, price_fn=lambda s: {}), 0)        # nothing due yet
+            n = c.settle_labels(now + 3700, price_fn=lambda s: {"NVDA": 110.0, "SPY": 505.0})
+            row = json.loads(c.LABELS.read_text().splitlines()[0])
+            self.assertEqual((n, row["horizon"], row["symbol"]), (1, "1h", "NVDA"))
+            self.assertAlmostEqual(row["abnormal"], 0.10 - 0.01, places=4)
+            # a 1d horizon reached 10 hours late is dropped, not labelled with a stale price
+            self.assertEqual(c.settle_labels(now + 86400 + 10 * 3600, price_fn=lambda s: {"NVDA": 90.0, "SPY": 500.0}), 0)
+
+    def test_watchdog_flags_dead_feeds(self):
+        with tempfile.TemporaryDirectory() as d:
+            old = watchdog.NEWS
+            try:
+                watchdog.NEWS = Path(d)
+                feeds = {n: {"items": 0, "newest_age_h": None, "error": "no items"} for n in ("A", "B", "C", "D")}
+                (Path(d) / "feed_health.json").write_text(json.dumps({"feeds": feeds}))
+                (Path(d) / "2026-11-23.jsonl").write_text(json.dumps({"first_seen_utc": datetime.now(timezone.utc).isoformat()}) + "\n")
+                problems, _ = watchdog.check(datetime.now(timezone.utc))
+                self.assertTrue(any("feeds dead or stale" in p for p in problems))
+            finally:
+                watchdog.NEWS = old

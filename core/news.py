@@ -12,11 +12,28 @@ from . import data
 GENERAL_FEEDS = {
     "CNBC Top News": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114",
     "CNBC Markets": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258",
+    "CNBC Tech": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=19854910",
+    "CNBC World": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100727362",
+    "CNBC Earnings": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=15839135",
     "MarketWatch": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
-    "Yahoo Finance": "https://finance.yahoo.com/news/rssindex",
+    "Seeking Alpha": "https://seekingalpha.com/market_currents.xml",
+    "Benzinga": "https://www.benzinga.com/feed",
+    "Nasdaq": "https://www.nasdaq.com/feed/rssoutbound?category=Markets",
+    "PR Newswire": "https://www.prnewswire.com/rss/news-releases-list.rss",
+    "BBC Business": "http://feeds.bbci.co.uk/news/business/rss.xml",
+    "Guardian Business": "https://www.theguardian.com/business/rss",
+    "Fed press": "https://www.federalreserve.gov/feeds/press_all.xml",
+    "SEC press": "https://www.sec.gov/news/pressreleases.rss",
+    "EIA energy": "https://www.eia.gov/rss/todayinenergy.xml",
     "CoinDesk": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+    "CoinTelegraph": "https://cointelegraph.com/rss",
+    "Decrypt": "https://decrypt.co/feed",
     "Google News Business": "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=en-US&gl=US&ceid=US:en",
 }
+# Sources that legitimately publish only a few items per week; the others should show something within hours.
+LOW_FREQUENCY = {"CNBC Markets", "CNBC Earnings", "Fed press", "SEC press", "EIA energy"}
+# Checked 2026-11-23 and removed: Yahoo Finance rssindex (0 items), MarketWatch marketpulse (stale since 2025),
+# Investing.com (stale).
 
 POS = {"beat", "surge", "soar", "skyrocket", "jump", "rally", "gain", "record", "upgrade", "outperform", "bullish",
        "growth", "profit", "rise", "rising", "strong", "stronger", "boost", "approval", "approve", "buyback",
