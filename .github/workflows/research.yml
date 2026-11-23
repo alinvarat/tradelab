@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       study:
-        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward or all"
+        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other or all"
         default: all
   push:
     branches:
@@ -73,7 +73,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide]
+        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_8k_other]
     steps:
       - name: Check out repository
         if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
@@ -102,4 +102,5 @@ jobs:
           path: |
             out/
             research/studies/llm_earnings_calls.json
+            research/studies/llm_8k_other_calls.json
           if-no-files-found: warn

@@ -210,6 +210,10 @@ LLM_SYSTEM = ("You are an equity analyst. You will read one company's earnings p
               "or skip it. Use only the text. Reply with JSON only: "
               '{"direction": "long"|"short"|"skip", "confidence": 0-100, "reason": "<one sentence>"}')
 LLM_FIRST_DAY = "2026-10-20"
+LLM_SYSTEM_8K = ("You are an equity analyst. You will read one company's 8-K current report (a material event filing), "
+                 "published just now. Decide whether a trader should be long or short this stock for the next 1-5 "
+                 "trading sessions, or skip it when the filing is routine or unclear. Use only the text. Reply with "
+                 'JSON only: {"direction": "long"|"short"|"skip", "confidence": 0-100, "reason": "<one sentence>"}')
 
 
 def html_text(raw: str, limit: int = 15000) -> str:
