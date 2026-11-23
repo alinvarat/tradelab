@@ -18,18 +18,31 @@ GENERAL_FEEDS = {
     "Google News Business": "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=en-US&gl=US&ceid=US:en",
 }
 
-POS = {"beat", "beats", "surge", "surges", "soar", "soars", "jump", "jumps", "rally", "rallies", "gain", "gains",
-       "record", "upgrade", "upgrades", "upgraded", "outperform", "bullish", "growth", "profit", "profits", "rise",
-       "rises", "rising", "strong", "stronger", "boost", "boosts", "approval", "approved", "buyback", "dividend",
-       "raise", "raises", "raised", "tops", "exceeds", "optimism", "recover", "recovers", "rebound", "rebounds",
-       "high", "highs", "breakthrough", "expands", "wins", "partnership", "climbs", "climb", "upbeat", "positive"}
-NEG = {"miss", "misses", "missed", "plunge", "plunges", "drop", "drops", "fall", "falls", "falling", "slump",
-       "slumps", "tumble", "tumbles", "sink", "sinks", "downgrade", "downgrades", "downgraded", "bearish", "loss",
-       "losses", "weak", "weaker", "cut", "cuts", "lawsuit", "probe", "investigation", "fraud", "recall", "warning",
-       "warns", "layoffs", "layoff", "bankruptcy", "default", "crash", "fears", "fear", "recession", "decline",
-       "declines", "lower", "low", "lows", "selloff", "sell-off", "risk", "risks", "slide", "slides", "hack",
-       "fine", "fined", "tariff", "tariffs", "inflation", "concern", "concerns", "negative", "plummets", "slashes"}
+POS = {"beat", "surge", "soar", "skyrocket", "jump", "rally", "gain", "record", "upgrade", "outperform", "bullish",
+       "growth", "profit", "rise", "rising", "strong", "stronger", "boost", "approval", "approve", "buyback",
+       "dividend", "raise", "top", "exceed", "optimism", "recover", "recovery", "rebound", "high", "breakthrough",
+       "expand", "win", "partnership", "climb", "upbeat", "positive", "spike", "boom", "lift", "advance", "extend",
+       "reinstate", "rescue", "relieve", "relief", "bounce", "accelerate", "ahead", "best", "momentum", "deal",
+       "wins", "thrive", "improve", "easing", "ease", "cheer", "stellar", "blowout", "outpace", "robust"}
+NEG = {"miss", "plunge", "drop", "fall", "falling", "slump", "tumble", "sink", "downgrade", "bearish", "loss",
+       "weak", "weaker", "cut", "lawsuit", "probe", "investigation", "fraud", "recall", "warning", "warn",
+       "layoff", "bankruptcy", "default", "crash", "fear", "recession", "decline", "lower", "low", "selloff",
+       "sell-off", "risk", "slide", "hack", "fine", "tariff", "inflation", "concern", "negative", "plummet",
+       "slash", "rout", "turmoil", "crisis", "sue", "ban", "halt", "delay", "shortfall", "struggle", "dive",
+       "collapse", "scandal", "charge", "slowdown", "worry", "pressure", "sanction", "breach", "outage", "tank"}
 NEGATORS = {"not", "no", "never", "without", "despite"}
+
+
+def _stem_hit(w: str, vocab: set) -> bool:
+    """Match a word or a simple inflection of a vocabulary word (soars, soared, soaring, plunges, losses...)."""
+    if w in vocab:
+        return True
+    for suf in ("ing", "ed", "es", "s", "d"):
+        if w.endswith(suf) and len(w) - len(suf) >= 3:
+            base = w[: -len(suf)]
+            if base in vocab or base + "e" in vocab or (len(base) > 3 and base[-1] == base[-2] and base[:-1] in vocab):
+                return True
+    return False
 
 
 def sentiment(text: str) -> float:
@@ -40,7 +53,7 @@ def sentiment(text: str) -> float:
         if w in NEGATORS:
             flip = True
             continue
-        v = 1 if w in POS else -1 if w in NEG else 0
+        v = 1 if _stem_hit(w, POS) else -1 if _stem_hit(w, NEG) else 0
         if v:
             s += -v if flip else v
             n += 1

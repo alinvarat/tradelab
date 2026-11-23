@@ -16,6 +16,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from core.universe import TICKERS
+from core import event_trader
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 
@@ -54,6 +55,7 @@ quotes: dict = {}
 status = {"last_poll": 0, "errors": {}}
 auto: autotrader.AutoTrader | None = None
 hunt: hunter.Hunter | None = None
+evt: event_trader.EventTrader | None = None
 
 
 def load():
@@ -314,6 +316,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200, auto.view())
             if p == "hunter":
                 return self._send(200, hunt.view())
+            if p == "events":
+                return self._send(200, evt.view())
             if p == "strategies":
                 return self._send(200, backtest.STRATEGIES)
             return self._send(404, {"error": "not found"})
@@ -428,6 +432,15 @@ class Handler(BaseHTTPRequestHandler):
                     hunt.save()
                     threading.Thread(target=hunt.cycle, daemon=True).start()
                 return self._send(200, {"ok": True})
+            if p == "events":
+                act = b.get("action")
+                with evt.lock:
+                    if act == "pause":
+                        evt.paused = True
+                    elif act == "resume":
+                        evt.paused = False
+                evt.save()
+                return self._send(200, {"ok": True, "paused": evt.paused})
             if p == "ai":
                 sym = b["symbol"]
                 a = analysis.analyze(sym)
@@ -488,8 +501,8 @@ def backup_loop(keep=14):
             target = ROOT / "data" / "backups" / time.strftime("%Y-%m-%d", time.gmtime())
             if not target.exists():
                 target.mkdir(parents=True)
-                for src in [ROOT / "data" / n for n in ("state.json", "auto.json", "hunter.json", "ai_log.jsonl")] + \
-                        sorted((ROOT / "data").glob("history-*.jsonl"))[-2:]:
+                for src in [ROOT / "data" / n for n in ("state.json", "auto.json", "hunter.json", "event_trader.json", "ai_log.jsonl")] + \
+                        sorted((ROOT / "data").glob("history-*.jsonl"))[-2:] + [ROOT / "data" / "event_trader_log.jsonl"]:
                     if src.exists():
                         shutil.copy2(src, target / src.name)
                 for old in sorted((ROOT / "data" / "backups").iterdir())[:-keep]:
@@ -501,7 +514,8 @@ def backup_loop(keep=14):
 
 def shutdown(signum, _frame):
     """SIGTERM/SIGINT: persist every account once, then exit (systemd restarts it when wanted)."""
-    for name, fn in (("server", save), ("auto", getattr(auto, "save", None)), ("hunter", getattr(hunt, "save", None))):
+    for name, fn in (("server", save), ("auto", getattr(auto, "save", None)), ("hunter", getattr(hunt, "save", None)),
+                     ("events", getattr(evt, "save", None))):
         try:
             if fn:
                 fn()
@@ -517,6 +531,8 @@ if __name__ == "__main__":
     threading.Thread(target=autotrader.loop, args=(auto,), daemon=True).start()
     hunt = hunter.Hunter()
     threading.Thread(target=hunter.loop, args=(hunt,), daemon=True).start()
+    evt = event_trader.EventTrader()
+    threading.Thread(target=event_trader.loop, args=(evt,), daemon=True).start()
     threading.Thread(target=poller, daemon=True).start()
     threading.Thread(target=backup_loop, daemon=True).start()
     threading.Thread(target=shock_warm_loop, daemon=True).start()
