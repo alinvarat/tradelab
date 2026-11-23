@@ -32,7 +32,7 @@ def check_log_refresh():
         return route.fulfill(path=UI / (url.path.lstrip("/") or "index.html"))
 
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch()
+        browser = playwright.chromium.launch(channel="chrome")
         page = browser.new_page(viewport={"width": 390, "height": 844})
         page.route("**/*", offline)
         page.add_init_script("""() => {
