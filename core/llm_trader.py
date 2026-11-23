@@ -773,7 +773,7 @@ class LlmTrader:
             buz = {s: r for s, r in buzz_symbols(now).items() if f"{day}:{s}" not in self.seen}
             movers = self.top_movers(quotes)
             cands = [{"symbol": s, "ratio": ratio, "why": "new shock"} for s, ratio in fresh]
-            cands += [{"symbol": s, "ratio": None, "why": f"recent news: {r['title']}"} for s, r in news.items() if s in quotes]
+            cands += [{"symbol": s, "ratio": None, "why": "recent linked headline"} for s, r in news.items() if s in quotes]
             cands += [{"symbol": s, "ratio": None, "why": f"social buzz: {r.get('mentions')} mentions"}
                       for s, r in buz.items() if s in quotes and s not in {c['symbol'] for c in cands}]
             for s, _ in movers:                     # fill the remaining slots with the biggest move in each class

@@ -228,7 +228,7 @@ class WholeMarket(Base):
         call = next(json.loads(l) for l in (Path(self.tmp.name) / "l.jsonl").read_text().splitlines() if '"kind": "call"' in l)
         self.assertEqual(call["trigger"], "new signals")
         cand = next(c for c in call["context"]["candidates"] if c["symbol"] == "BBB")
-        self.assertIn("BBB wins contract", cand["why"])
+        self.assertEqual(cand["why"], "recent linked headline")
 
     def test_macro_headline_words_map_to_tradable_symbols(self):
         self.assertIn("GC=F", lt._macro_symbols("Gold hits a record as the dollar falls"))
