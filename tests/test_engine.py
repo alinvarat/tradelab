@@ -119,6 +119,23 @@ class Orders(unittest.TestCase):
             row.pop("ref")
         self.assertIsNone(Account.from_dict(d).trades[-1].ref)
 
+    def test_per_trade_leverage_is_the_margin_requirement(self):
+        a = acct()
+        a.place("X", 1, 50, leverage=20)
+        self.assertAlmostEqual(a.used_margin(), 101 * 50 / 20, places=6)
+        a.close("X")
+        a.place("X", 1, 50, leverage=1)
+        self.assertAlmostEqual(a.used_margin(), 101 * 50, places=6)
+
+    def test_financing_already_charged_to_the_balance_is_booked_into_the_trade_result(self):
+        a = acct()
+        a.place("X", 1, 10)
+        a.balance -= 1.5
+        a.positions["X"].financing += 1.5
+        t, _ = a.close("X")
+        self.assertAlmostEqual(t.pnl, (99 - 101) * 10 - 1.01 - 0.99 - 1.5, places=6)
+        self.assertAlmostEqual(a.balance, a.initial + t.pnl, places=6)     # the trade result reconciles with the balance
+
 
 if __name__ == "__main__":
     unittest.main()

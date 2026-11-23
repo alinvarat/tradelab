@@ -280,6 +280,55 @@ class Pairing(Base):
         self.assertEqual(self.t.pairs, [])
 
 
+class LimitOrderStatus(Base):
+    def pending_buy(self, limit=98):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "entry": "limit", "limit_price": limit, "valid_min": 30,
+                    "stop_pct": 6, "review_in_min": 60, "reason": "buy the dip"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        return self.t.pending["AAA"]
+
+    def test_pending_scale_in_does_not_open_a_control_before_it_fills(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "stop_pct": 6, "review_in_min": 60, "reason": "first"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        link_id = self.t.links["AAA"]["id"]
+        ctrl_before = set(self.t.ctrl.positions)
+        self.t.calls["last_ts"] = 0
+        self.t.seen.clear()
+        self.pending_buy()
+        self.assertIn("AAA", self.t.pending)
+        self.assertEqual(set(self.t.ctrl.positions), ctrl_before)      # no second control for an unfilled add-on
+        self.assertEqual(self.t.links["AAA"]["id"], link_id)
+        self.assertNotIn("limit_filled", self.log_kinds())
+        self.t.scan(self.market(AAA=quote("AAA", px=100)))
+        self.assertIn("AAA", self.t.pending)
+        self.assertEqual(set(self.t.ctrl.positions), ctrl_before)
+
+    def test_a_price_after_the_validity_window_does_not_fill(self):
+        meta = self.pending_buy()
+        meta["expires"] = time.time() - 1
+        self.t.scan(self.market(AAA=quote("AAA", px=97.5)))            # through the limit, but too late
+        self.assertNotIn("AAA", self.t.acct.positions)
+        self.assertNotIn("AAA", self.t.pending)
+        self.assertIn("limit_expired", self.log_kinds())
+        self.assertNotIn("limit_filled", self.log_kinds())
+
+    def test_a_rejected_limit_order_is_logged_and_cleared(self):
+        meta = self.pending_buy()
+        order = next(o for o in self.t.acct.orders if o.id == meta["order_id"])
+        order.status = "rejected"
+        self.t.scan(self.market(AAA=quote("AAA", px=100)))
+        self.assertNotIn("AAA", self.t.pending)
+        self.assertIn("limit_rejected", self.log_kinds())
+
+    def test_log_api_attaches_the_fill_to_the_cycle_that_placed_the_order(self):
+        meta = self.pending_buy()
+        self.t.scan(self.market(AAA=quote("AAA", px=97.5)))
+        cycles = lt.build_cycles(lt.read_log_tail(self.t.log_path))["cycles"]
+        events = [a for c in cycles for a in c["actions"] if a["kind"] == "limit_filled"]
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]["order_id"], meta["order_id"])
+
+
 class HorizonFreedom(Base):
     def test_model_chooses_stop_target_horizon_and_review_time(self):
         self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "horizon": "long_term", "stop_pct": 20,
@@ -412,6 +461,18 @@ class LeverageAndEntry(Base):
         self.assertEqual((v["leverage"], v["entry_type"]), (5.0, "market"))
         self.assertAlmostEqual(v["notional_usd"], ex["notional_usd"], delta=0.3)
 
+    def test_each_position_uses_the_leverage_the_model_chose_for_margin(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "leverage": 1, "stop_pct": 6, "review_in_min": 60, "reason": "low lev"},
+                   {"symbol": "BBB", "action": "buy", "size_pct": 5, "leverage": 20, "stop_pct": 6, "review_in_min": 60, "reason": "high lev"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12), BBB=quote("BBB", px=50, move=9)))
+        a, b = self.t.acct.positions["AAA"], self.t.acct.positions["BBB"]
+        self.assertEqual((a.leverage, b.leverage), (1.0, 20.0))
+        expected = a.qty * a.entry + b.qty * b.entry / 20
+        self.assertAlmostEqual(self.t.acct.used_margin(), expected, delta=0.05)
+        margins = {p["symbol"]: p["margin_usd"] for p in self.t.view()["positions"]}
+        self.assertAlmostEqual(margins["AAA"], a.qty * a.entry, delta=0.1)
+        self.assertAlmostEqual(margins["BBB"], b.qty * b.entry / 20, delta=0.1)
+
     def test_only_margin_limits_size_and_it_is_reported(self):
         self.reply({"symbol": "AAA", "action": "buy", "size_pct": 100, "leverage": 20, "stop_pct": 5, "review_in_min": 60, "reason": "all in"})
         eq = self.t.acct.equity()
@@ -493,7 +554,32 @@ class LeverageAndEntry(Base):
         expected = notional * 0.8 * lt.FINANCING_APR / 8760
         self.assertAlmostEqual(a0 - self.t.acct.balance, expected, delta=expected * 0.05)
         self.assertAlmostEqual(c0 - self.t.ctrl.balance, expected, delta=expected * 0.05)
+        self.assertAlmostEqual(self.t.acct.positions["AAA"].financing, expected, delta=expected * 0.05)
         self.assertIn("financing", self.log_kinds())
+
+    def test_pair_returns_include_financing_and_reconcile_with_the_balance(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "leverage": 5, "stop_pct": 30, "review_in_min": 60, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        self.t.last_fin = time.time() - 6 * 3600
+        self.t._charge_financing(time.time())
+        self.assertGreater(self.t.acct.positions["AAA"].financing, 0)
+        self.t.calls["last_ts"] = 0
+        self.t.links["AAA"]["review_at"] = 0
+        self.reply({"symbol": "AAA", "action": "sell", "reason": "exit"})
+        m = self.market(AAA=quote("AAA", px=101, move=2))
+        m[self.t.links["AAA"]["ctrl"]] = quote(self.t.links["AAA"]["ctrl"], px=99)
+        self.t.scan(m)
+        self.t.scan(m)
+        self.assertEqual(len(self.t.pairs), 1)
+        self.assertAlmostEqual(self.t.acct.balance, self.t.acct.initial + sum(t.pnl for t in self.t.acct.trades), places=6)
+        last = self.t.acct.trades[-1]
+        self.assertAlmostEqual(self.t.pairs[0]["s1"], last.pnl / (last.qty * last.entry), places=9)
+
+    def test_a_rejected_control_order_is_logged(self):
+        self.t.ctrl.balance = 0
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 4, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.assertIn("control_rejected", self.log_kinds())
 
     def test_accounts_saved_without_leverage_are_upgraded_on_load(self):
         self.t.acct.leverage = self.t.ctrl.leverage = 1.0

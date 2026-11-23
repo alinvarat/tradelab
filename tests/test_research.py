@@ -1,6 +1,7 @@
 """Offline tests for the research scripts (synthetic data, no network)."""
 from datetime import datetime, timezone
 from decimal import Decimal as D
+import gzip
 import json
 import tempfile
 import unittest
@@ -54,6 +55,25 @@ class DvolForward(unittest.TestCase):
         self.assertEqual(ev.settle(leg, "C", 60000, ev.COSTS["base"]), 0)
         self.assertGreater(ev.settle(leg, "C", 70000, ev.COSTS["base"]), 0)
         self.assertEqual(ev.settle(leg, "P", 70000, ev.COSTS["base"]), 0)
+
+    def test_a_week_needs_both_slots_and_books_before_any_arm_trades(self):
+        def write(folder, t, books=True):
+            s = snap()
+            s["started_utc"], s["finished_utc"] = t.isoformat(), t.replace(second=40).isoformat()
+            if not books:
+                s["books"] = {}
+            (Path(folder) / f"{t:%Y%m%dT%H%M%SZ}.json.gz").write_bytes(gzip.compress(json.dumps(s).encode()))
+        with tempfile.TemporaryDirectory() as d:
+            write(d, datetime(2026, 11, 30, 9, 0, 1, tzinfo=timezone.utc))
+            write(d, datetime(2026, 11, 30, 9, 5, 1, tzinfo=timezone.utc))
+            write(d, datetime(2026, 12, 7, 9, 0, 1, tzinfo=timezone.utc))
+            write(d, datetime(2026, 12, 14, 9, 0, 1, tzinfo=timezone.utc))
+            write(d, datetime(2026, 12, 14, 9, 5, 1, tzinfo=timezone.utc), books=False)
+            w = ev.load_snapshots(Path(d))
+            self.assertTrue(ev.is_complete(w, datetime(2026, 11, 30).date()))
+            self.assertFalse(ev.is_complete(w, datetime(2026, 12, 7).date()))     # only the 09:00 slot
+            self.assertFalse(ev.is_complete(w, datetime(2026, 12, 14).date()))    # 09:05 present but empty
+            self.assertEqual(set(w[datetime(2026, 12, 7).date()]), {0})
 
     def test_week_never_creates_money_when_flat(self):
         end, _ = ev.week(snap(), D(147), ev.COSTS["base"], 60000)
@@ -220,6 +240,21 @@ class AiNewsScores(unittest.TestCase):
             self.assertEqual(c.ai_score_new(fresh, "2026-11-23", {"m1": fake}), 1)    # per-day cap leaves room for 1
             self.assertEqual(c.ai_score_new(fresh, "2026-11-23", {"m1": fake, "m2": fake}), 5)  # m1 is at its cap (0 more); m2 is fresh and scores all 5 linked
             c.AI_PER_DAY = 600
+
+    def test_evaluation_uses_only_the_first_linked_symbol(self):
+        from research.news_archive import evaluate_scores as ev
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "ai_scores.jsonl").write_text(json.dumps(
+                {"key": "k1", "confidence": 0.5, "model": "m", "score": 0.7, "lexicon": 0.1, "symbols": ["AAA", "BBB"]}) + "\n")
+            (d / "labels.jsonl").write_text(json.dumps(
+                {"key": "k1", "horizon": "1d", "symbol": "BBB", "abnormal": 0.02}) + "\n")
+            self.assertEqual(ev.load(d), [])                     # AAA is the locked first symbol and has no label
+            with (d / "labels.jsonl").open("a") as f:
+                f.write(json.dumps({"key": "k1", "horizon": "1d", "symbol": "AAA", "abnormal": 0.01}) + "\n")
+            rows = ev.load(d)
+            self.assertEqual(len(rows), 1)
+            self.assertAlmostEqual(rows[0][2], 0.01)              # AAA's return, not BBB's, and only once
 
     def test_evaluation_waits_for_enough_pairs_and_detects_signal(self):
         from research.news_archive import evaluate_scores as ev

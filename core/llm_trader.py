@@ -440,7 +440,7 @@ class LlmTrader:
         room = max(0.0, (MAX_EXPOSURE - self.exposure()) * eq)
         if notional > room:
             notional, _ = room, clipped.append("total exposure cap (3x equity)")
-        free = self.acct.free_margin() / (1 / LEV_MAX + self.acct.fee_rate + self.acct.slippage + 0.0003)   # margin + fee + slippage must fit
+        free = self.acct.free_margin() / (1 / lev + self.acct.fee_rate + self.acct.slippage + 0.0003)   # margin + fee + slippage must fit
         if notional > free:
             notional, _ = free, clipped.append("free margin")
         if notional < 1:
@@ -452,13 +452,13 @@ class LlmTrader:
         self.acct.on_quote(self._q(q))                  # a market order must fill on today's quote, not the last one the account saw
         adding = sym in self.links and sym in self.acct.positions     # buying more of a stock already held scales the position in
         link_id = self.links[sym]["id"] if adding else f"{_day(now)}-{sym}-{int(now)}"
-        o = self.acct.place(sym, 1, qty, "limit" if limit else "market", limit, stop_px, target_px, ref=link_id)
+        o = self.acct.place(sym, 1, qty, "limit" if limit else "market", limit, stop_px, target_px, ref=link_id, leverage=lev)
         meta = {"decision": {k: d.get(k) for k in ("reason", "horizon", "review_in_min")}, "notional": notional, "margin": margin,
                 "leverage": lev, "entry_type": "limit" if limit else "market", "limit_price": limit, "stop_pct": stop * 100,
                 "target_pct": target, "stop_price": stop_px, "target_price": target_px, "clipped_by": clipped,
                 "risk_pct_equity": notional * stop / eq * 100, "order_id": o.id, "link_id": link_id,
                 "expires": now + d.get("valid_min", 60) * 60}
-        out = {"status": o.status, "usd": round(notional, 2), "notional_usd": round(notional, 2), "margin_usd": round(margin, 2),
+        out = {"status": o.status, "order_id": o.id, "usd": round(notional, 2), "notional_usd": round(notional, 2), "margin_usd": round(margin, 2),
                "leverage": lev, "entry": meta["entry_type"], "limit_price": limit, "stop_price": round(stop_px, 4),
                "target_price": round(target_px, 4) if target_px else None, "risk_pct_equity": round(meta["risk_pct_equity"], 2),
                "clipped_by": clipped}
@@ -483,8 +483,11 @@ class LlmTrader:
             ctrl_sym = self.rng.choice(sorted(pool))
             cq = quotes[ctrl_sym]
             self.ctrl.on_quote(self._q(cq))             # fresh quote before the fill (the control may have traded it before)
-            self.ctrl.place(ctrl_sym, 1, meta["notional"] / cq["ask"], "market", None, cq["ask"] * (1 - meta["stop_pct"] / 100),
-                            cq["ask"] * (1 + meta["target_pct"] / 100) if meta["target_pct"] else None, ref=link_id)
+            co = self.ctrl.place(ctrl_sym, 1, meta["notional"] / cq["ask"], "market", None, cq["ask"] * (1 - meta["stop_pct"] / 100),
+                                 cq["ask"] * (1 + meta["target_pct"] / 100) if meta["target_pct"] else None, ref=link_id,
+                                 leverage=meta["leverage"])
+            if co.status != "filled" or ctrl_sym not in self.ctrl.positions:
+                self.record("control_rejected", symbol=sym, control=ctrl_sym, order_id=co.id, status=co.status, why=co.note)
         d = meta["decision"]
         self.links[sym] = {"id": link_id, "symbol": sym, "ctrl": ctrl_sym, "ts": now,
                            "reason": d.get("reason", ""), "usd": round(meta["notional"], 2), "horizon": d.get("horizon", ""),
@@ -504,30 +507,55 @@ class LlmTrader:
         if cs and cs in self.ctrl.positions and cs in quotes:
             cq = quotes[cs]
             self.ctrl.on_quote(self._q(cq))
-            self.ctrl.place(cs, 1, meta["notional"] / cq["ask"], "market", None, None, None, ref=link["id"])
+            co = self.ctrl.place(cs, 1, meta["notional"] / cq["ask"], "market", None, None, None, ref=link["id"],
+                                 leverage=meta["leverage"])
+            if co.status != "filled":
+                self.record("control_rejected", symbol=sym, control=cs, order_id=co.id, status=co.status, why=co.note,
+                            scaled_in=True)
             cp = self.ctrl.positions.get(cs)
             if cp:
                 cp.sl = cq["ask"] * (1 - meta["stop_pct"] / 100)
                 cp.tp = cq["ask"] * (1 + meta["target_pct"] / 100) if meta["target_pct"] else None
         link["notional"] += meta["notional"]
-        link["margin"] += meta["margin"]
-        link["leverage"] = link["notional"] / link["margin"] if link["margin"] else 1.0
+        link["leverage"] = meta["leverage"]
+        link["margin"] = link["notional"] / link["leverage"] if link["leverage"] else link["notional"]
         link.update(stop_pct=meta["stop_pct"], target_pct=meta["target_pct"],
                     review_at=now + (meta["decision"].get("review_in_min") or DEFAULT_REVIEW_MIN) * 60)
         return cs
 
-    def _check_pending(self, now, quotes):
-        """Limit entries: activate when filled, cancel when the validity window ends."""
+    def _expire_pending(self, now):
+        """Cancel limit entries whose validity window ended BEFORE any new quote can fill them, so a price that arrives
+        after the deadline does not count as a fill."""
         for sym, meta in list(self.pending.items()):
-            if sym in self.acct.positions:
-                ctrl = self._activate(sym, meta, quotes, now)
-                self.record("limit_filled", symbol=sym, control=ctrl, leverage=meta["leverage"], notional=round(meta["notional"], 2))
+            order = next((o for o in self.acct.orders if o.id == meta.get("order_id")), None)
+            if order is not None and order.status == "pending" and now >= meta["expires"]:
+                self.acct.cancel(order.id)
+                self.record("limit_expired", symbol=sym, order_id=order.id, limit_price=meta["limit_price"],
+                            status="expired", valid_until=round(meta["expires"]))
                 del self.pending[sym]
-            elif now >= meta["expires"]:
-                for o in self.acct.orders:
-                    if o.id == meta["order_id"] and o.status == "pending":
-                        self.acct.cancel(o.id)
-                self.record("limit_expired", symbol=sym, limit_price=meta["limit_price"])
+
+    def _check_pending(self, now, quotes):
+        """Limit entries follow the order's own status, not whether the stock happens to be held (a scale-in entry on a
+        held stock used to activate a control before it ever filled). A filled order activates the pair; a rejected or
+        lost one is logged so the Logs table can follow the order id."""
+        for sym, meta in list(self.pending.items()):
+            order = next((o for o in self.acct.orders if o.id == meta.get("order_id")), None)
+            if order is not None and order.status == "filled":
+                if sym not in self.acct.positions:
+                    self.record("limit_unpaired", symbol=sym, order_id=meta.get("order_id"),
+                                why="position closed before the pair was activated")
+                    del self.pending[sym]
+                    continue
+                ctrl = self._activate(sym, meta, quotes, now)
+                self.record("limit_filled", symbol=sym, order_id=meta.get("order_id"), control=ctrl,
+                            leverage=meta["leverage"], notional=round(meta["notional"], 2))
+                del self.pending[sym]
+            elif order is not None and order.status == "pending":
+                continue
+            else:
+                status = order.status if order is not None else "missing"
+                self.record("limit_rejected", symbol=sym, order_id=meta.get("order_id"), limit_price=meta["limit_price"],
+                            status=status, valid_until=round(meta["expires"]))
                 del self.pending[sym]
 
     def _charge_financing(self, now):
@@ -545,9 +573,11 @@ class LlmTrader:
             cost = borrowed * FINANCING_APR * dt / (365 * 86400)
             if sym in self.acct.positions:
                 self.acct.balance -= cost
+                self.acct.positions[sym].financing += cost
                 total += cost
             if link.get("ctrl") in self.ctrl.positions:
                 self.ctrl.balance -= cost
+                self.ctrl.positions[link["ctrl"]].financing += cost
         if total > 0:
             self.record("financing", cost_usd=round(total, 6), seconds=round(dt))
 
@@ -579,6 +609,7 @@ class LlmTrader:
         quotes = quotes if quotes is not None else self.fetch()
         self.last_quotes.update(quotes)
         with self.lock:
+            self._expire_pending(now)
             for acct in (self.acct, self.ctrl):
                 for s in set(acct.positions) | {o.symbol for o in acct.orders if o.status == "pending"}:
                     if s in quotes:
@@ -700,6 +731,8 @@ class LlmTrader:
 
     def watch(self):
         """Fast tier: re-quote only open positions/pending orders so stops and targets react within seconds."""
+        with self.lock:
+            self._expire_pending(time.time())
         syms = set(self.acct.positions) | set(self.ctrl.positions)
         hot_quotes = {}
         for s in sorted(syms | set(self.hot())):
@@ -774,6 +807,8 @@ def build_cycles(lines, limit=40):
             cur["actions"].append({x: v for x, v in e.items() if x not in ("ts",)} | {"at": e["ts"]})
         elif k == "candidate_outcome":
             loose.append(e)
+        elif k in ("limit_filled", "limit_expired", "limit_rejected"):
+            loose.append(e)
         elif k in ("trade_closed", "pair", "error"):
             loose.append(e)
     for e in loose:
@@ -782,6 +817,14 @@ def build_cycles(lines, limit=40):
                 if c["ts"] <= e["ts"] and any(x["symbol"] == e["symbol"] for x in c.get("candidates", [])):
                     c["outcomes"].append({"symbol": e["symbol"], "horizon_s": e["horizon_s"], "abnormal": e["abnormal"],
                                           "action": e.get("action")})
+                    break
+        elif e["kind"].startswith("limit_"):
+            for c in reversed(cycles):      # attach the order's later outcome to the cycle that placed it
+                if any(a.get("kind") == "order" and a.get("order_id") == e.get("order_id") and a.get("symbol") == e.get("symbol")
+                       for a in c["actions"]):
+                    c["actions"].append({"kind": e["kind"], "at": e["ts"],
+                                         **{x: e[x] for x in ("symbol", "order_id", "status", "control", "limit_price",
+                                                              "notional", "leverage", "valid_until") if x in e}})
                     break
     closed = [e for e in loose if e["kind"] in ("trade_closed", "error")]
     for c in cycles:

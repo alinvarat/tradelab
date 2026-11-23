@@ -11,3 +11,8 @@ Not done here, by design: trading on these events, sentiment scoring of posts (t
 Limits: ApeWisdom is a third-party summary of Reddit and may change or vanish; counts include bots and repeated posts; Yahoo quotes can lag ~15 minutes; the first weeks will fall in one market regime.
 
 Addendum 2026-11-24 (before any +1d result): a control may never be another share class of the same company (the first live event GOOGL was matched with GOOG). Fixed in code by comparing the first word of the company names; events already recorded before the fix keep their original control. Everything else is unchanged.
+
+Addendum 2026-11-24B (written before any event had a +1d result; six events recorded):
+- Scan cadence: the collector has scanned every 120 s since the first event (the code default), not the 600 s written above. All events so far and future events use 120 s; no threshold changed, and the earlier events are not re-timed.
+- Counting: the 100-event gate counts COMPLETE pairs (event and its control both priced at +1d). The API reports `events` (single side), `complete_pairs` and `missing_control` separately. Single-sided events are never used for the confidence interval; if a control price was missed at the stock's reading, the collector retries the control in later scans while it is still inside the +1d window and reports it as a separate `control_outcome` log line.
+- Reason: the locked criterion is a paired difference against a matched control. Counting stock-only events for the gate while the interval uses a smaller paired set would overstate how much evidence exists. Nothing here changes the mention thresholds, the control-matching rule or the horizons.

@@ -33,6 +33,8 @@ class Position:
     opened_ts: float = 0.0
     fees: float = 0.0        # USD fees paid on the open part, not yet booked to a trade
     ref: str | None = None   # caller's reference (e.g. the LLM trader's pair id); copied to the trade on close
+    financing: float = 0.0   # cost already deducted from the balance; booked into the trade's P&L at close
+    leverage: float | None = None   # margin requirement of this position; None means the account's leverage
 
 
 @dataclass
@@ -51,6 +53,7 @@ class Order:
     fill_px: float | None = None
     note: str = ""
     ref: str | None = None
+    leverage: float | None = None
 
 
 @dataclass
@@ -102,7 +105,7 @@ class Account:
         return self.balance + self.unrealized()
 
     def used_margin(self) -> float:
-        return sum(p.entry * p.qty * self._fx(s) / self.leverage for s, p in self.positions.items())
+        return sum(p.entry * p.qty * self._fx(s) / (p.leverage or self.leverage) for s, p in self.positions.items())
 
     def free_margin(self) -> float:
         return self.equity() - self.used_margin()
@@ -111,8 +114,8 @@ class Account:
         return max(notional_usd * self.fee_rate, self.min_fee) if notional_usd > 0 else 0.0
 
     # ---- orders ----------------------------------------------------------
-    def place(self, symbol, side, qty, type="market", price=None, sl=None, tp=None, ref=None) -> Order:
-        o = Order(next(self._ids), symbol, 1 if side > 0 else -1, float(qty), type, price, sl, tp, ref=ref)
+    def place(self, symbol, side, qty, type="market", price=None, sl=None, tp=None, ref=None, leverage=None) -> Order:
+        o = Order(next(self._ids), symbol, 1 if side > 0 else -1, float(qty), type, price, sl, tp, ref=ref, leverage=leverage)
         finite = all(v is None or math.isfinite(v) for v in (qty, price, sl, tp))
         if not finite or qty <= 0 or type not in ("market", "limit", "stop") or (type != "market" and not price):
             o.status, o.note = "rejected", "invalid quantity, type or price"
@@ -153,13 +156,13 @@ class Account:
             else:
                 return
         px *= (1 + o.side * self.slippage) if o.type != "limit" else 1
-        err = self._execute(o.symbol, o.side, o.qty, px, q, o.sl, o.tp, ref=o.ref)
+        err = self._execute(o.symbol, o.side, o.qty, px, q, o.sl, o.tp, ref=o.ref, leverage=o.leverage)
         if err:
             o.status, o.note = "rejected", err
         else:
             o.status, o.fill_px, o.filled_ts, o.note = "filled", px, q.ts, ""
 
-    def _execute(self, sym, side, qty, px, q: Quote, sl=None, tp=None, reason="order", ref=None):
+    def _execute(self, sym, side, qty, px, q: Quote, sl=None, tp=None, reason="order", ref=None, leverage=None):
         p = self.positions.get(sym)
         fx = q.fx
         if p and p.side != side:  # reduce, close or flip
@@ -171,7 +174,8 @@ class Account:
             p = None
         if side < 0 and not p and not self.allow_short:
             return "short selling is disabled"
-        need = px * qty * fx / self.leverage
+        eff_lev = leverage or (p.leverage if p else None) or self.leverage
+        need = px * qty * fx / eff_lev
         fee = self._fee(px * qty * fx)
         if need + fee > self.free_margin() + 1e-9:
             return f"insufficient buying power (need {need + fee:,.2f} USD, free {self.free_margin():,.2f})"
@@ -180,12 +184,14 @@ class Account:
             tot = p.qty + qty
             p.entry = (p.entry * p.qty + px * qty) / tot
             p.qty, p.fees = tot, p.fees + fee
+            if leverage is not None:
+                p.leverage = leverage
             if sl is not None:
                 p.sl = sl
             if tp is not None:
                 p.tp = tp
         else:
-            self.positions[sym] = Position(sym, side, qty, px, sl, tp, q.ts, fee, ref)
+            self.positions[sym] = Position(sym, side, qty, px, sl, tp, q.ts, fee, ref, leverage=leverage)
         return None
 
     def _close_part(self, sym, qty, px, q: Quote, reason):
@@ -195,8 +201,10 @@ class Account:
         fee = self._fee(px * qty * q.fx)
         share = qty / p.qty
         open_fee = p.fees * share
+        fin = p.financing * share
+        p.financing -= fin
         self.balance += gross - fee
-        t = Trade(sym, p.side, qty, p.entry, px, gross - fee - open_fee, fee + open_fee, reason, p.opened_ts, q.ts, p.ref)
+        t = Trade(sym, p.side, qty, p.entry, px, gross - fee - open_fee - fin, fee + open_fee, reason, p.opened_ts, q.ts, p.ref)
         self.trades.append(t)
         p.qty -= qty
         p.fees -= open_fee

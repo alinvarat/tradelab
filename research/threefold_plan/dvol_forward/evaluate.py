@@ -133,6 +133,13 @@ def week(snap, equity, cost, s):
     return equity - spent + back, trades
 
 
+def is_complete(weeks, day):
+    """Both locked slots (09:00 base, 09:05 high-cost delay) must exist with books; the protocol makes a week with a
+    missing or partial snapshot cash for EVERY arm, so one arm may never trade on data the other arm cannot see."""
+    both = weeks.get(day, {})
+    return 0 in both and 5 in both and bool(both[0].get("books")) and bool(both[5].get("books"))
+
+
 def run(plan, weeks, cost_name, settlements):
     cost = COSTS[cost_name]
     equity, peak, dd = WALLET, WALLET, D(0)
@@ -155,7 +162,7 @@ def run(plan, weeks, cost_name, settlements):
 
 def main(folder=RAW):
     weeks = load_snapshots(folder)
-    valid = [d for d in MONDAYS if 0 in weeks.get(d, {}) and (datetime.now(timezone.utc).date() > d + timedelta(days=4))]
+    valid = [d for d in MONDAYS if is_complete(weeks, d) and (datetime.now(timezone.utc).date() > d + timedelta(days=4))]
     settlements = {d: delivery(d) for d in valid}
     signals = {d: signal(weeks[d][0]) for d in valid}
     chosen = [d for d in valid if signals[d] and signals[d]["trade"]]

@@ -311,14 +311,15 @@ async function loadChart() {
     drawOverlays();
     [s.main, s.rsi, s.macd].forEach((c) => c.timeScale().fitContent());
     s.main.applyOptions({ timeScale: { timeVisible: ["5m", "15m", "1h", "1m"].includes(d.interval) } });
-    await renderQuoteHead(d.meta);
+    await renderQuoteHead(d.meta, sym);
   } catch (e) {
     $("#qhead").innerHTML = errBox(e);
   }
 }
-async function renderQuoteHead(meta) {
+async function renderQuoteHead(meta, sym) {
   let q = null;
-  try { q = await api("quote?symbol=" + encodeURIComponent(route.symbol)); } catch (e) { /* header falls back to chart meta */ }
+  try { q = await api("quote?symbol=" + encodeURIComponent(sym)); } catch (e) { /* header falls back to chart meta */ }
+  if (sym !== route.symbol) return;                 // the user switched while this quote was loading
   lastQuote = q;
   const px = q?.price ?? meta.regularMarketPrice, ch = q?.change_pct;
   $("#qhead").innerHTML = `<h1>${esc(route.symbol)}</h1><span class="muted">${esc(meta.longName || meta.shortName || "")}${meta.fullExchangeName ? ", " + esc(meta.fullExchangeName) : ""}</span>
@@ -391,6 +392,12 @@ let side = 1;
 function renderTicket() {
   const t = $("#ticket");
   if (!t) return;
+  const orderPrice = () => {
+    const f = $("#order-form");
+    if (!f) return null;
+    if (f.type.value !== "market" && +f.price.value > 0) return +f.price.value;   // the user's limit/stop price
+    return side > 0 ? lastQuote?.ask : lastQuote?.bid;
+  };
   if (!t.dataset.built) {
     t.innerHTML = `<h2>Order ticket</h2>
       <div class="sides" role="group" aria-label="Side"><button type="button" class="buy" data-side="1" aria-pressed="true">Buy</button><button type="button" data-side="-1" aria-pressed="false">Sell</button></div>
@@ -411,7 +418,11 @@ function renderTicket() {
     }));
     const f = $("#order-form");
     f.type.addEventListener("change", () => { $("[data-px]", f).hidden = f.type.value === "market"; renderTicket(); });
-    f.usd.addEventListener("input", () => { const p = lastQuote?.price; if (p && f.usd.value) f.qty.value = +(f.usd.value / p / (lastQuote.fx || 1)).toPrecision(6); renderTicket(); });
+    f.usd.addEventListener("input", () => { const p = orderPrice(); if (p && f.usd.value) f.qty.value = +(f.usd.value / p / (lastQuote?.fx || 1)).toPrecision(6); renderTicket(); });
+    f.price.addEventListener("input", () => {
+      if (f.usd.value) { const p = orderPrice(); if (p) f.qty.value = +(f.usd.value / p / (lastQuote?.fx || 1)).toPrecision(6); }
+      renderTicket();
+    });
     f.qty.addEventListener("input", renderTicket);
     f.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -427,8 +438,9 @@ function renderTicket() {
   $("#place").textContent = `${side > 0 ? "Buy" : "Sell"} ${route.symbol}`;
   $("#place").className = side > 0 ? "buy" : "sell";
   if (q) {
-    const px = side > 0 ? q.ask : q.bid, n = +f.qty.value || 0, val = n * px * (q.fx || 1);
-    $("#est").innerHTML = `Bid ${fmt(q.bid)}, ask ${fmt(q.ask)}. Estimated value <b class="mono">${usd(val)}</b>${q.currency !== "USD" ? ` (${esc(q.currency)} converted at ${fmt(q.fx, 6)})` : ""}.${q.open ? "" : " Market closed: a market order waits for the next open."}`;
+    const px = orderPrice() ?? (side > 0 ? q.ask : q.bid), n = +f.qty.value || 0, val = n * px * (q.fx || 1);
+    const limit = f.type.value !== "market" && +f.price.value > 0 ? ` at your limit ${fmt(px)}` : "";
+    $("#est").innerHTML = `Bid ${fmt(q.bid)}, ask ${fmt(q.ask)}. Estimated value${limit} <b class="mono">${usd(val)}</b>${q.currency !== "USD" ? ` (${esc(q.currency)} converted at ${fmt(q.fx, 6)})` : ""}.${q.open ? "" : " Market closed: a market order waits for the next open."}`;
   }
 }
 
@@ -723,7 +735,7 @@ function cycleCard(c) {
     const d = byDec[x.symbol], a = acts[x.symbol] || [], o = outs[x.symbol] || [];
     const heads = (x.headlines || []).map((h) => `${esc(h.title)} <span class="muted">[${esc(h.source)}, lexicon ${h.lexicon ?? "-"}${h.ai_scores && Object.keys(h.ai_scores).length ? ", AI " + Object.values(h.ai_scores).join("/") : ""}]</span>`).join("<br>") || "-";
     const decision = d ? `<b>${badge(d)}</b>${d.action === "buy" ? ` margin ${fmt(d.size_pct, 1)}% x ${fmt(d.leverage || 1, 1)} | ${esc(d.entry || "market")}${d.limit_price ? " @ " + fmt(d.limit_price) : ""} | ${esc(d.horizon || "")} | stop ${fmt(d.stop_pct, 0)}%${d.target_pct ? " target " + fmt(d.target_pct, 0) + "%" : ""} | look again in ${d.review_in_min} min` : ""}<br>${esc(d.reason || "")}` : "<b>No model decision</b>";
-    const did = a.map((z) => z.kind === "skip" ? `<span class="muted">not executed: ${esc(z.why)}</span>` : z.kind === "order" ? execHtml({ status: z.status, notional_usd: z.notional_usd, margin_usd: z.margin_usd, leverage: z.leverage, entry: z.entry, limit_price: z.limit_price, valid_until: z.valid_until, stop_price: z.stop_price, target_price: z.target_price, risk_pct_equity: z.risk_pct_equity, clipped_by: z.clipped_by, control: z.control, scaled_in: z.scaled_in }) : esc(z.kind + " " + (z.status || ""))).join("<br>");
+    const did = a.map((z) => z.kind === "skip" ? `<span class="muted">not executed: ${esc(z.why)}</span>` : z.kind === "order" ? execHtml({ status: z.status, notional_usd: z.notional_usd, margin_usd: z.margin_usd, leverage: z.leverage, entry: z.entry, limit_price: z.limit_price, valid_until: z.valid_until, stop_price: z.stop_price, target_price: z.target_price, risk_pct_equity: z.risk_pct_equity, clipped_by: z.clipped_by, control: z.control, scaled_in: z.scaled_in }) : z.kind.startsWith("limit_") ? esc(z.kind.replace("limit_", "limit order ") + (z.order_id != null ? " #" + z.order_id : "") + (z.status ? " (" + z.status + ")" : "")) : esc(z.kind + " " + (z.status || ""))).join("<br>");
     const res = o.map((z) => `+${hmin(z.horizon_s)} vs SPY ${pct(z.abnormal * 100)}`).join("<br>");
     return `<tr><td>${symCell(x.symbol, x.name)}</td><td class="num">${pct(x.move_pct)}<br><span class="muted">vs SPY ${x.abnormal_pct != null ? pct(x.abnormal_pct) : "-"}</span></td><td class="num">${fmt(x.volume_ratio, 1)}x</td>
       <td>${decision}${did ? "<br>" + did : ""}</td><td>${heads}</td>
@@ -862,7 +874,9 @@ views.buzz = async () => {
   $("#bz-sub").textContent = `scans every ${d.scan_every_s}s, last ${d.last_scan_age_s ?? "never"}s ago | universe ${d.universe} stocks${d.error ? " | error: " + d.error : ""}`;
   figs.innerHTML = `<div class="figures">
     <div class="figure hot"><b>${d.n_events}</b><span>buzz events</span></div>
-    <div class="figure"><b>${e1.events ?? 0} / ${e1.needed ?? 100}</b><span>events with a +1d result</span></div>
+    <div class="figure hot"><b>${e1.complete_pairs ?? 0} / ${e1.needed ?? 100}</b><span>complete pairs with +1d</span></div>
+    <div class="figure"><b>${e1.events ?? 0}</b><span>events with a +1d result</span></div>
+    <div class="figure"><b>${e1.missing_control ?? 0}</b><span>events without a control result</span></div>
     <div class="figure"><b>${e1.mean != null ? pct(e1.mean * 100) : "-"}</b><span>mean +1d return vs SPY</span></div>
     <div class="figure"><b>${e1.control_mean != null ? pct(e1.control_mean * 100) : "-"}</b><span>matched controls</span></div></div>
     <p class="small muted">${esc(d.rule)}</p><p><b>Verdict:</b> ${esc(e1.verdict || "")}</p>`;
@@ -1054,6 +1068,7 @@ const TH = {
   "No decisions yet; the model is asked when new shocks appear.": "ยังไม่มีคำตัดสิน ระบบจะถามโมเดลเมื่อพบหุ้นที่เคลื่อนไหวแรง",
   "+1h / +1d": "+1 ชม. / +1 วัน",
   "events with a +1d result": "เหตุการณ์ที่มีผล +1 วัน", "buzz events": "เหตุการณ์กระแส", "mean +1d return vs SPY": "ผลตอบแทน +1 วันเฉลี่ย เทียบ SPY",
+  "complete pairs with +1d": "คู่ครบ (หุ้นกับหุ้นสุ่ม) ที่มีผล +1 วัน", "events without a control result": "เหตุการณ์ที่หุ้นสุ่มยังไม่มีผล",
   "matched controls": "หุ้นสุ่มที่เทียบ", "Verdict:": "ข้อสรุป:", "Refresh": "รีเฟรช", "Reset account": "รีเซ็ตบัญชี", "Pause": "หยุดชั่วคราว",
   "Restart": "เริ่มใหม่", "Learn now": "เรียนรู้ใหม่", "Equity": "มูลค่าบัญชี", "Profit or loss": "กำไรหรือขาดทุน", "Months completed": "เดือนที่ครบ",
   "Max drawdown": "ขาดทุนสูงสุดจากจุดสูงสุด", "Equity in USD": "มูลค่าเป็น USD", "Return in USD": "ผลตอบแทนเป็น USD", "Current model": "โมเดลปัจจุบัน",
@@ -1082,6 +1097,10 @@ const NOTE_TH = [
   [/^move >= ([\d.]+)% vs previous close, day volume >= ([\d.]+)x 50-day average$/, "ราคาขยับอย่างน้อย $1% เทียบราคาปิดก่อนหน้า และปริมาณซื้อขายวันนี้อย่างน้อย $2 เท่าของค่าเฉลี่ย 50 วัน"],
   [/^long ([\d.]+)% of equity at first sight of an UP shock, hold (\d+) h, stop ([\d.]+)%, max (\d+) open; control = random non-shock stock, same time and rules$/, "ซื้อด้วย $1% ของมูลค่าบัญชีเมื่อพบหุ้นขึ้นแรงครั้งแรก ถือ $2 ชม. ตัดขาดทุน $3% ถือพร้อมกันได้สูงสุด $4 ตัว บัญชีเทียบสุ่มหุ้นที่ไม่ได้ขยับแรงและใช้เวลาและกติกาเดียวกัน"],
   [/^too early \((\d+\/\d+) closed pairs\): no conclusion allowed$/, "มีคู่ปิด $1 คู่ ยังสรุปไม่ได้"],
+  [/^too early \((\d+\/\d+) complete pairs\): no conclusion allowed$/, "มีคู่ครบ (หุ้นกับหุ้นสุ่ม) $1 คู่ ยังสรุปไม่ได้"],
+  [/^limit order filled #(\d+)$/, "คำสั่ง limit จับคู่แล้ว #$1"],
+  [/^limit order expired #(\d+) \(expired\)$/, "คำสั่ง limit หมดอายุ #$1"],
+  [/^limit order rejected #(\d+) \((.+)\)$/, "คำสั่ง limit ถูกปฏิเสธ #$1 ($2)"],
   [/^first sight of a ([+\-\d.]+)% move on ([\d.]+)x volume \(SPY unavailable at entry\)$/, "ซื้อเมื่อพบว่าราคาขยับ $1% ครั้งแรก ปริมาณซื้อขาย $2 เท่าของค่าเฉลี่ย ตอนเข้าไม่มีข้อมูล SPY"],
   [/^first sight of a ([+\-\d.]+)% move on ([\d.]+)x volume \(SPY ([+\-\d.]+)%\)$/, "ซื้อเมื่อพบว่าราคาขยับ $1% ครั้งแรก ปริมาณซื้อขาย $2 เท่าของค่าเฉลี่ย (SPY $3%)"],
   [/^long ([\d,.]+) USD vs (.+)$/, "ซื้อ $1 USD เทียบกับ $2"],
