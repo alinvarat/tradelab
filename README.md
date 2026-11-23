@@ -21,7 +21,7 @@ analysis tools, news, backtests, an AI analyst, and an auto trader that reviews 
 | News | CNBC, MarketWatch, Yahoo Finance, CoinDesk, Google News with headline sentiment |
 | Screener | ~40 symbols scored and sortable |
 | Backtest | 8 strategies, costs, stops, shorts, vs buy and hold |
-| Calendar and alerts | FOMC/CPI/NFP dates (`data/events.csv`), price alerts |
+| Calendar and alerts | FOMC/CPI/NFP dates (`core/events.csv`), price alerts |
 | Risk tools | Position size calculator, Monte Carlo risk of ruin |
 
 ## Data sources and limits
