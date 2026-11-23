@@ -19,7 +19,7 @@ TEST_START, TEST_END = datetime(2026, 11, 30, tzinfo=timezone.utc), datetime(202
 
 
 def newest_news(now):
-    files = sorted(NEWS.glob("*.jsonl"))
+    files = sorted(NEWS.glob("20*.jsonl"))
     for path in reversed(files):
         lines = path.read_text().splitlines()
         if lines:
