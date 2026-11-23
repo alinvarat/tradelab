@@ -33,6 +33,16 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class AiAvailability(unittest.TestCase):
+    def test_missing_cli_gives_clear_error_without_logging(self):
+        from unittest import mock
+        from core import ai
+        with mock.patch("core.ai.shutil.which", return_value=None):
+            out = ai.analyst("AAPL", {}, {}, "")
+        self.assertIn("not available", out["error"])
+        self.assertEqual(out["text"], "")
+
+
 class Calendar(unittest.TestCase):
     def test_calendar_lives_in_core_so_a_data_volume_cannot_hide_it(self):
         from core import econ_calendar

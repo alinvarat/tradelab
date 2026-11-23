@@ -450,6 +450,17 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, f.read_bytes(), ct)
 
 
+def shock_warm_loop():
+    """Keep the news-shock scan cached so the button answers instantly instead of taking ~8 s."""
+    time.sleep(20)
+    while True:
+        try:
+            shocks()
+        except Exception:  # noqa: BLE001
+            traceback.print_exc()
+        time.sleep(1700)  # cache lifetime is 1800 s
+
+
 def backup_loop(keep=14):
     """Once a day copy the account files to data/backups/YYYY-MM-DD/ (inside the data volume; keeps `keep` days)."""
     while True:
@@ -487,6 +498,7 @@ if __name__ == "__main__":
     threading.Thread(target=hunter.loop, args=(hunt,), daemon=True).start()
     threading.Thread(target=poller, daemon=True).start()
     threading.Thread(target=backup_loop, daemon=True).start()
+    threading.Thread(target=shock_warm_loop, daemon=True).start()
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)
     print(f"TradeLab on http://{HOST}:{PORT}", flush=True)
