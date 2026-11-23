@@ -30,3 +30,11 @@ Locked 2026-11-24. No code for (a)–(c) has been run, and no result exists. Sim
 
 ## Order
 Run (d) first: if the harness fails it, stop. Then (a), then (c). Run (b) last, and only together with the microcap protocol if the large-cap count is under 300.
+
+## Addendum 2026-11-24: implementation details fixed before the first run
+Code: `core/studies.py` (pure, tested in `tests/test_studies.py`) and `research/studies/run.py`, run on GitHub Actions (`.github/workflows/research.yml`). None of these rules adds a filter.
+- (a) Item codes come from the `items` field of the SEC submissions API. That field is EDGAR's parsed copy of the filing header and needs no per-filing download. Form type is `8-K` only, as in the pilot code. The universe is every universe stock; the 40 pilot symbols are also reported, descriptively.
+- (b) Source: the SEC "Insider Transactions Data Sets" (quarterly `form345.zip`, tables SUBMISSION / REPORTINGOWNER / NONDERIV_TRANS), from 2018Q1 onward. Document type `4` only. Relationship must contain Director or Officer. Code P and acquired, summed per accession, ≥ 50,000 USD. Timestamp: the EDGAR acceptance time when the issuer's recent-filings list has that accession. Otherwise 04:00 UTC on the day after the filing date, which is never earlier than the real acceptance, since Section 16 filings accepted up to 22:00 ET keep their date. The universe is the 148 universe stocks; ETFs, FX, commodities and crypto have no Form 4.
+- (c) Formation uses month-end closes. The basket is every stock that has a score that month, and fewer than 10 stocks means no position. Both portfolios pay a full round trip each month, because the rule exits at the close and re-enters at the next open.
+- (d) The control window may come from any non-turn-of-month session of the same stock in the data, before or after the event. The placebo shift goes forward. A placebo window past the end of the data is skipped.
+- The SEC timestamp (`acceptanceDateTime`, suffix Z) was confirmed to be UTC: Apple's 2.02 8-Ks are stamped 20:30Z in summer and 21:30Z in winter, which is 16:30 ET in both cases.

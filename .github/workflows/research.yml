@@ -1,0 +1,52 @@
+name: Research studies
+
+# Runs the locked studies in research/news_backtest/protocol_next.md on GitHub's machines (not the owner's).
+# Results are uploaded as an artifact; commit them through a PR.
+on:
+  workflow_dispatch:
+    inputs:
+      study:
+        description: "tom, momentum, items, form4 or all"
+        default: all
+  push:
+    branches:
+      - "research-run/**"
+
+permissions:
+  contents: read
+
+jobs:
+  study:
+    name: ${{ matrix.study }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      matrix:
+        study: [tom, momentum, items, form4]
+    steps:
+      - name: Check out repository
+        if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Run study
+        if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
+        env:
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+        run: |
+          mkdir -p out
+          python research/studies/run.py ${{ matrix.study }} --out out/${{ matrix.study }}.json > out/${{ matrix.study }}_summary.json
+
+      - name: Upload result
+        if: always() && (github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study)
+        uses: actions/upload-artifact@v4
+        with:
+          name: study-${{ matrix.study }}
+          path: out/
+          if-no-files-found: warn
