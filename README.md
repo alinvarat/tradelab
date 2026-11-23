@@ -21,6 +21,7 @@ analysis tools, news, backtests, an AI analyst, and an auto trader that reviews 
 | News | CNBC, MarketWatch, Yahoo Finance, CoinDesk, Google News with headline sentiment |
 | Screener | ~40 symbols scored and sortable |
 | Backtest | 8 strategies, costs, stops, shorts, vs buy and hold |
+| Events | Event trader (paper): logs every >=5% large-cap move with headlines, trades one locked rule against a random control (`research/event_trader/protocol.md`) |
 | Calendar and alerts | FOMC/CPI/NFP dates (`core/events.csv`), price alerts |
 | Risk tools | Position size calculator, Monte Carlo risk of ruin |
 

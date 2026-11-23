@@ -60,6 +60,20 @@ class FastChecks(unittest.TestCase):
         self.assertLessEqual(hunter.EVERY_S, 60)
 
 
+class SentimentLexicon(unittest.TestCase):
+    def test_inflections_and_recovery_headline(self):
+        from core import news
+        self.assertGreater(news.sentiment("Nvidia skyrockets 30% on Huang's return, recovering nearly all the losses"), 0)
+        self.assertGreater(news.sentiment("Dow jumps 1,300 points, Nasdaq surges"), 0.5)
+        self.assertLess(news.sentiment("Stocks plunge as recession fears grow"), -0.5)
+        self.assertLess(news.sentiment("Oil slides on weak demand"), 0)
+        self.assertEqual(news.sentiment("Fed holds rates steady"), 0)
+
+    def test_negation_still_flips(self):
+        from core import news
+        self.assertLess(news.sentiment("Company does not beat estimates"), 0)
+
+
 class AiAvailability(unittest.TestCase):
     def test_missing_cli_gives_clear_error_without_logging(self):
         from unittest import mock

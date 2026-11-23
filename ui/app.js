@@ -685,6 +685,31 @@ function rorCalc() {
 ["#size-form", "#ror-form"].forEach((id) => $(id).addEventListener("input", id === "#size-form" ? sizeCalc : rorCalc));
 views.tools = () => { sizeCalc(); rorCalc(); };
 
+/* ---------- event trader ---------- */
+views.events = async () => {
+  const figs = $("#ev-figs"), list = $("#ev-list");
+  let d;
+  try { d = await api("events"); } catch (e) { figs.innerHTML = errBox(e, "events"); return; }
+  const ev = d.evaluation || {};
+  $("#ev-sub").textContent = `scans every ${d.scan_every_s}s, last scan ${d.last_scan_age_s ?? "never"}s ago${d.error ? " | error: " + d.error : ""}`;
+  figs.innerHTML = `<div class="figures">
+    <div class="figure hot"><b>${fmt(d.equity_thb, 0)} THB</b><span>Rule account, from ${fmt(d.capital_usd / (d.equity_usd / d.equity_thb), 0)} THB</span></div>
+    <div class="figure"><b>${fmt(d.control_equity_usd, 2)} USD</b><span>Random control account</span></div>
+    <div class="figure"><b>${d.n_events}</b><span>events (${d.n_up} up-shocks)</span></div>
+    <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
+    <div class="figure"><b>${d.paused ? "Paused" : "Running"}</b><span>${esc(d.rules.shock)}</span></div></div>
+    <p class="small muted">${esc(d.rules.trade)}</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
+  list.innerHTML = table([
+    { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
+    { h: "Stock", f: (r) => symCell(r.symbol, "") },
+    { h: "Move", num: 1, f: (r) => pct(r.move_pct), cls: (r) => cls(r.move_pct) },
+    { h: "Volume x", num: 1, f: (r) => fmt(r.vol_ratio, 1) },
+    { h: "Traded", f: (r) => (r.entry ? `long ${fmt(r.entry.usd, 2)} USD vs ${esc(r.control ? r.control.symbol : "-")}` : esc(r.skipped || (r.direction === "down" ? "data only" : "-"))) },
+    { h: "+1h / +1d", f: (r) => `${r.out["3600"] != null ? pct(r.out["3600"] * 100) : "-"} / ${r.out["86400"] != null ? pct(r.out["86400"] * 100) : "-"}` },
+    { h: "Headlines", f: (r) => (r.headlines || []).map((x) => esc(x.title)).join("<br>") || "-" },
+  ], d.events, { empty: "No events yet." });
+};
+
 /* ---------- auto trader ---------- */
 let autoChart = null;
 const TAGN = { below_sma200: "below its 200-day average", vol_spike: "volatility spike" };

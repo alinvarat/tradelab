@@ -20,6 +20,7 @@
       <a href="#markets" data-view="markets">Markets</a>
       <a href="#chart" data-view="chart">Chart and analysis</a>
       <a href="#portfolio" data-view="portfolio">Portfolio</a>
+      <a href="#events" data-view="events">Events</a>
       <a href="#news" data-view="news">News</a>
       <a href="#screener" data-view="screener">Screener</a>
       <a href="#backtest" data-view="backtest">Backtest</a>
@@ -145,6 +146,11 @@
 </section>
 
 <!-- NEWS -->
+<section class="view" id="v-events" hidden>
+  <div class="panel"><div class="row spread"><h2>Event trader (paper)</h2><span class="small muted" id="ev-sub"></span></div>
+    <div id="ev-figs"></div></div>
+  <div class="panel"><h2>Large single-stock moves with headlines</h2><div id="ev-list"><div class="empty">No events yet.</div></div></div>
+</section>
 <section class="view" id="v-news" hidden>
   <div class="view-head"><div><h1>News</h1><p>CNBC, MarketWatch, Yahoo Finance, CoinDesk and Google News, with a headline sentiment score.</p></div>
     <div class="row"><div class="seg" id="news-filter" role="group" aria-label="Sentiment filter"></div><button class="sm" data-refresh="news">Refresh</button></div></div>
