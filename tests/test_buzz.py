@@ -108,6 +108,21 @@ class Monitor(Base):
         m.scan(1_000_000.0 + H + 7 * H)                                  # far past the 6 h grace window
         self.assertNotIn(str(H), m.events[0]["out"])
 
+    def test_control_outcome_is_retried_when_the_stock_reading_came_first(self):
+        m = self.mon([row("HYP", 80, 10)])
+        m.scan(1_000_000.0)
+        ctrl = m.events[0]["control"]["symbol"]
+        saved = self.px.pop(ctrl)                                        # control quote unavailable at the stock reading
+        self.px["HYP"] = 11.0
+        self.px["SPY"] = 505.0
+        m.scan(1_000_000.0 + H + 120)
+        self.assertIn(str(H), m.events[0]["out"])
+        self.assertNotIn(str(H), m.events[0]["out_ctrl"])
+        self.px[ctrl] = saved * 1.02
+        m.scan(1_000_000.0 + H + 300)                                    # still inside the grace window
+        self.assertAlmostEqual(m.events[0]["out_ctrl"][str(H)], 0.02 - (505.0 / 500.0 - 1), places=4)
+        self.assertIn("control_outcome", self.kinds())
+
     def test_state_round_trip(self):
         m = self.mon([row("HYP", 80, 10)])
         m.scan(1_000_000.0)
@@ -118,6 +133,19 @@ class Monitor(Base):
 
 
 class Evaluation(Base):
+    def test_the_gate_counts_complete_pairs_and_reports_missing_controls(self):
+        m = self.mon([])
+        h = str(24 * H)
+        m.events = [{"out": {h: 0.0}, "out_ctrl": {h: 0.0}} for _ in range(99)]
+        m.events += [{"out": {h: 0.01}, "out_ctrl": {}} for _ in range(50)]
+        out = m.evaluate()
+        self.assertEqual((out["events"], out["complete_pairs"], out["missing_control"]), (149, 99, 50))
+        self.assertIn("too early (99/100 complete pairs)", out["verdict"])
+        m.events.append({"out": {h: 0.0}, "out_ctrl": {h: 0.0}})
+        out = m.evaluate()
+        self.assertEqual(out["complete_pairs"], 100)
+        self.assertIn("no difference", out["verdict"])
+
     def test_no_conclusion_before_enough_events_then_verdicts(self):
         m = self.mon([])
         m.events = [{"out": {str(24 * H): 0.01}, "out_ctrl": {str(24 * H): 0.0}} for _ in range(50)]

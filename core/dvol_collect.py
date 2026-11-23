@@ -77,11 +77,22 @@ def main():
     path = RAW / (started.strftime("%Y%m%dT%H%M%SZ") + ".json.gz")
     path.write_bytes(gzip.compress(json.dumps(out).encode()))
     print(path, len(out.get("books", {})), "books", len(out["errors"]), "errors")
+    return {"path": str(path), "books": len(out.get("books", {})), "errors": len(out["errors"])}
 
 
 WINDOW_START = datetime(2026, 11, 30, tzinfo=timezone.utc)
 SLOTS = ((9, 0), (9, 5))          # Monday UTC hh:mm of the two snapshots (protocol)
 STATUS: dict = {"taken": [], "last_error": None, "next_slot": None}
+
+
+def mark_taken(slot, info):
+    """A slot counts as taken only when the snapshot has books and no errors; a partial file is kept for audit but the
+    week must stay cash for every arm, and the collector retries inside the same 45-second slot."""
+    if info and not info.get("errors") and info.get("books"):
+        STATUS["taken"].append(slot)
+        return True
+    STATUS["last_error"] = f"{slot}: incomplete snapshot (books={(info or {}).get('books', 0)}, errors={(info or {}).get('errors', 'raised')})"
+    return False
 
 
 def due_slot(now):
@@ -103,8 +114,8 @@ def loop(take=main):
             now = datetime.now(timezone.utc)
             slot = due_slot(now)
             if slot and slot not in STATUS["taken"]:
-                STATUS["taken"].append(slot)
-                take()
+                info = take()
+                mark_taken(slot, info)
         except Exception as exc:  # noqa: BLE001
             STATUS["last_error"] = repr(exc)[:200]
             traceback.print_exc()

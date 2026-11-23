@@ -181,38 +181,42 @@ class BuzzMonitor:
         for ev in self.events[-600:]:
             for h in HORIZONS:
                 age = now - ev["ts"]
-                if str(h) in ev["out"] or not (h <= age < h + GRACE):
+                if not (h <= age < h + GRACE) or not ev.get("spy_price"):
                     continue
-                try:
-                    q = self.quote(ev["ticker"])
-                except Exception:  # noqa: BLE001
-                    continue
-                if not q.get("price") or not ev.get("spy_price") or not q.get("open"):   # closed market = stale price
-                    continue
+                if str(h) in ev["out"] and (str(h) in ev["out_ctrl"] or not ev.get("control")):
+                    continue                       # both sides priced: nothing left to fill
                 market = spy["price"] / ev["spy_price"] - 1
-                ev["out"][str(h)] = round(q["price"] / ev["price"] - 1 - market, 5)
-                if ev["control"]:
+                if ev.get("control") and str(h) not in ev["out_ctrl"]:
                     try:
                         cq = self.quote(ev["control"]["symbol"])
-                        if cq.get("price"):
-                            ev["out_ctrl"][str(h)] = round(cq["price"] / ev["control"]["price"] - 1 - market, 5)
                     except Exception:  # noqa: BLE001
-                        pass
-                self.record("outcome", id=ev["id"], horizon_s=h, abnormal=ev["out"][str(h)],
-                            control=ev["out_ctrl"].get(str(h)))
+                        cq = None
+                    if cq and cq.get("price") and cq.get("open"):             # retry until the control has its own price
+                        ev["out_ctrl"][str(h)] = round(cq["price"] / ev["control"]["price"] - 1 - market, 5)
+                        self.record("control_outcome", id=ev["id"], horizon_s=h, control=ev["out_ctrl"][str(h)])
+                if str(h) not in ev["out"]:
+                    try:
+                        q = self.quote(ev["ticker"])
+                    except Exception:  # noqa: BLE001
+                        q = None
+                    if q and q.get("price") and q.get("open"):               # closed market = stale price
+                        ev["out"][str(h)] = round(q["price"] / ev["price"] - 1 - market, 5)
+                        self.record("outcome", id=ev["id"], horizon_s=h, abnormal=ev["out"][str(h)],
+                                    control=ev["out_ctrl"].get(str(h)))
 
     # ---------- evaluation ----------
     def evaluate(self, horizon=24 * 3600):
         rows = [(e["out"][str(horizon)], e["out_ctrl"].get(str(horizon))) for e in self.events if str(horizon) in e["out"]]
-        out = {"events": len(rows), "needed": MIN_EVENTS, "horizon_h": horizon // 3600}
+        paired = [(a, c) for a, c in rows if c is not None]
+        out = {"events": len(rows), "complete_pairs": len(paired), "missing_control": len(rows) - len(paired),
+               "needed": MIN_EVENTS, "horizon_h": horizon // 3600}
         if rows:
             v = [r[0] for r in rows]
             out |= {"mean": mean(v), "median": median(v), "share_positive": sum(x > 0 for x in v) / len(v)}
-        paired = [(a, c) for a, c in rows if c is not None]
         if paired:
             out["control_mean"] = mean(c for _, c in paired)
-        if len(rows) < MIN_EVENTS:
-            out["verdict"] = f"too early ({len(rows)}/{MIN_EVENTS} events with a +{horizon // 3600}h result): no conclusion allowed"
+        if len(paired) < MIN_EVENTS:
+            out["verdict"] = f"too early ({len(paired)}/{MIN_EVENTS} complete pairs): no conclusion allowed"
             return out
         diff = [a - c for a, c in paired]
         rng = random.Random(20261123)

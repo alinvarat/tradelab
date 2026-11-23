@@ -24,6 +24,19 @@ class DvolSchedule(unittest.TestCase):
         self.assertIsNone(dvol_collect.due_slot(at(2027, 3, 1, 9, 0, 5)))        # after the window
         self.assertEqual(dvol_collect.due_slot(at(2027, 2, 22, 9, 0, 1)), "2027-02-22 09:00")
 
+    def test_a_slot_is_taken_only_when_the_snapshot_has_books_and_no_errors(self):
+        old = list(dvol_collect.STATUS["taken"])
+        try:
+            dvol_collect.STATUS["taken"].clear()
+            self.assertFalse(dvol_collect.mark_taken("x", {"books": 0, "errors": 0}))
+            self.assertFalse(dvol_collect.mark_taken("x", {"books": 20, "errors": 1}))
+            self.assertFalse(dvol_collect.mark_taken("x", None))
+            self.assertIn("incomplete", dvol_collect.STATUS["last_error"])
+            self.assertTrue(dvol_collect.mark_taken("x", {"books": 20, "errors": 0}))
+            self.assertEqual(dvol_collect.STATUS["taken"], ["x"])
+        finally:
+            dvol_collect.STATUS["taken"][:] = old
+
 
 class Steward(unittest.TestCase):
     def test_review_parses_clips_and_logs_without_any_action(self):

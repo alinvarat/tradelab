@@ -42,7 +42,10 @@ def load(data=DATA, horizon="1d", model=None):
     for line in path.read_text().splitlines() if path.exists() else []:
         r = json.loads(line)
         if r["horizon"] == horizon and r["key"] in scores and r["key"] not in seen:
-            seen.add(r["key"])  # first symbol only
+            first = (scores[r["key"]].get("symbols") or [None])[0]
+            if not first or r["symbol"] != first:
+                continue          # locked: the first linked symbol only; a label for another symbol does not count
+            seen.add(r["key"])
             rows.append((scores[r["key"]]["score"], scores[r["key"]]["lexicon"], r["abnormal"]))
     return rows
 
