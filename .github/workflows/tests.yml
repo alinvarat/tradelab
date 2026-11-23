@@ -1,0 +1,21 @@
+name: Tests
+
+on:
+  push:
+    branches-ignore:
+      - main   # main is tested by the deploy workflow when app files change; this covers all branches and PRs
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Run tests
+        run: python -m unittest tests.test_engine tests.test_research tests.test_protocol_lock
