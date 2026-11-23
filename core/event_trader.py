@@ -45,6 +45,7 @@ class EventTrader:
         self.pool = ThreadPoolExecutor(10)
         self.avg_vol: dict[str, tuple[float, float]] = {}
         self.last_scan, self.last_error = 0.0, None
+        self.context: dict[str, dict] = {}
         self.paused = False
         if self.state_path.exists():
             d = json.loads(self.state_path.read_text())
@@ -137,6 +138,10 @@ class EventTrader:
                 except Exception:  # noqa: BLE001
                     return None
             quotes = {s: q for s, q in zip(TICKERS, self.pool.map(get, TICKERS)) if q}
+            for extra in ("SPY", "^VIX"):  # market context only; never traded, never counted as shocks
+                q = get(extra)
+                if q:
+                    self.context[extra] = q
         with self.lock:
             for s in set(self.acct.positions) | {o.symbol for o in self.acct.orders if o.status == "pending"}:
                 if s in quotes:
@@ -164,7 +169,13 @@ class EventTrader:
                      for x in news.symbol_news(q["symbol"], q.get("name") or "")["items"][:3]]
         except Exception:  # noqa: BLE001
             heads = []
+        spy, vix = self.context.get("SPY"), self.context.get("^VIX")
+        spy_move = round(spy["change_pct"], 2) if spy and spy.get("change_pct") is not None else None
+        same_day = sum(1 for k in self.seen if k.startswith(_day(now)))
         ev = {"id": f"{_day(now)}-{q['symbol']}", "ts": now, "symbol": q["symbol"], "price": q["price"],
+              "spy_price": spy["price"] if spy else None, "spy_move_pct": spy_move,
+              "abnormal_move_pct": round(q["change_pct"] - spy_move, 2) if spy_move is not None else None,
+              "vix": vix["price"] if vix else None, "shocks_today": same_day,
               "move_pct": round(q["change_pct"], 2), "vol_ratio": round(ratio, 2), "headlines": heads,
               "direction": "up" if q["change_pct"] > 0 else "down", "out": {}, "entry": None, "control": None}
         if ev["direction"] == "up":
@@ -195,7 +206,12 @@ class EventTrader:
             for h in HORIZONS:
                 if str(h) not in ev["out"] and now - ev["ts"] >= h and now - ev["ts"] < h + 3 * SCAN_S + 3600:
                     ev["out"][str(h)] = round(q["price"] / ev["price"] - 1, 5)
-                    self.record("outcome", id=ev["id"], horizon_s=h, ret=ev["out"][str(h)])
+                    spy = self.context.get("SPY")
+                    rel = None
+                    if spy and spy.get("price") and ev.get("spy_price"):
+                        rel = round(ev["out"][str(h)] - (spy["price"] / ev["spy_price"] - 1), 5)
+                        ev.setdefault("out_vs_spy", {})[str(h)] = rel
+                    self.record("outcome", id=ev["id"], horizon_s=h, ret=ev["out"][str(h)], vs_spy=rel)
 
     def _book_trades(self):
         done = {p["id"] for p in self.pairs}
