@@ -1,0 +1,6 @@
+[Unit]
+Description=TradeLab: back up DVOL snapshots to private GitHub
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Project/tradelab
+ExecStart=/bin/bash research/ops/backup_dvol.sh

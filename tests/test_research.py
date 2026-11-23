@@ -1,0 +1,116 @@
+"""Offline tests for the research scripts (synthetic data, no network)."""
+from datetime import datetime, timezone
+from decimal import Decimal as D
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+from research.news_archive import collector
+from research.ops import watchdog
+from research.threefold_plan import pre_removal as pr
+from research.threefold_plan.dvol_forward import evaluate as ev
+
+H = pr.HOUR
+ENTRY = int(datetime(2026, 7, 22, 8, tzinfo=timezone.utc).timestamp() * 1000)
+
+
+def snap(dvol_last=30.0, price=60000.0):
+    t = datetime(2026, 11, 30, 9, 0, 1, tzinfo=timezone.utc)
+    ms = int(t.timestamp() * 1000)
+    day0 = ms - ms % 86400000
+    daily = [[day0 - (i + 1) * 86400000, 0, 0, 0, 40.0 + i % 10] for i in range(95)]
+    inst = lambda n, k, ot: {"instrument_name": n, "strike": k, "option_type": ot, "min_trade_amount": 0.1}
+    return {"started_utc": t.isoformat(), "finished_utc": (t.replace(second=40)).isoformat(), "errors": [],
+            "dvol_hourly": {"data": [[ms - 7200000, 0, 0, 0, 35.0], [ms - 3600000, 0, 0, 0, dvol_last],
+                                     [ms, 0, 0, 0, 99.0]]},  # the open hour (ms) must not be used
+            "dvol_daily": {"data": daily}, "index": {"index_price": price},
+            "instruments": [inst("C", 65100, "call"), inst("C2", 70000, "call"),
+                            inst("P", 54900, "put"), inst("P2", 50000, "put")],
+            "books": {"C": {"asks": [[0.002, 1.0]]}, "P": {"asks": [[0.003, 1.0]]},
+                      "C2": {"asks": [[0.001, 1.0]]}, "P2": {"asks": [[0.001, 1.0]]}}}
+
+
+class DvolForward(unittest.TestCase):
+    def test_signal_ignores_open_hour_and_uses_percentile(self):
+        s = ev.signal(snap(dvol_last=30.0))
+        self.assertEqual(s["dvol_now"], 30.0)
+        self.assertTrue(s["trade"])
+        self.assertFalse(ev.signal(snap(dvol_last=60.0))["trade"])
+
+    def test_strike_pick_is_nearest_to_8_5_percent_otm(self):
+        s = snap()
+        self.assertEqual(ev.pick(s, "C")["instrument_name"], "C")
+        self.assertEqual(ev.pick(s, "P")["instrument_name"], "P")
+
+    def test_buy_respects_budget_and_step(self):
+        leg = ev.buy(snap(), ev.pick(snap(), "C"), D("36.75"), ev.COSTS["base"])
+        self.assertLessEqual(leg["spent_usd"], D("36.75"))
+        self.assertEqual(leg["size"] % D("0.1"), 0)
+        self.assertIsNone(ev.buy(snap(), ev.pick(snap(), "C"), D("1"), ev.COSTS["base"]))
+
+    def test_settlement_pays_only_in_the_money(self):
+        leg = {"size": D("0.2"), "strike": D("65100")}
+        self.assertEqual(ev.settle(leg, "C", 60000, ev.COSTS["base"]), 0)
+        self.assertGreater(ev.settle(leg, "C", 70000, ev.COSTS["base"]), 0)
+        self.assertEqual(ev.settle(leg, "P", 70000, ev.COSTS["base"]), 0)
+
+    def test_week_never_creates_money_when_flat(self):
+        end, _ = ev.week(snap(), D(147), ev.COSTS["base"], 60000)
+        self.assertLess(end, D(147))
+
+
+class PreRemoval(unittest.TestCase):
+    def rows(self, strengths):
+        entry = ENTRY
+        out = []
+        for name, up in strengths.items():
+            bars = {entry + i * H: [100.0 * (1 + up) ** ((i + 12) / 12), 100.0 * (1 + up) ** ((i + 13) / 12)]
+                    for i in range(-12, 12)}
+            out.append((name, entry, bars, None))
+        return out
+
+    def test_signal_needs_consecutive_history(self):
+        rows = self.rows({"A": 0.2})
+        del rows[0][2][ENTRY - 5 * H]
+        dates, cov = pr.opportunities(rows)
+        self.assertEqual(cov["signal_history"], 0)
+        self.assertEqual(dates, {})
+
+    def test_strongest_qualifying_pair_is_traded(self):
+        dates, _ = pr.opportunities(self.rows({"A": 0.2, "B": 0.4}))
+        out = pr.replay(dates, 0.0035)
+        self.assertEqual(out["trades"][0]["symbol"], "B")
+
+    def test_missing_hold_hour_is_unverified_not_dropped(self):
+        rows = self.rows({"A": 0.2})
+        del rows[0][2][ENTRY + 3 * H]
+        out = pr.replay(pr.opportunities(rows)[0], 0.0035)
+        self.assertIsNone(out["ending_thb"])
+
+
+class News(unittest.TestCase):
+    def test_key_ignores_whitespace_and_case(self):
+        self.assertEqual(collector.key("S", "Stocks  Rally"), collector.key("S", "stocks rally"))
+
+    def test_sentiment_negator_flips(self):
+        from core import news
+        self.assertGreater(news.sentiment("Stocks surge"), 0)
+        self.assertLess(news.sentiment("Stocks do not surge"), 0)
+
+
+class Watchdog(unittest.TestCase):
+    def test_stale_news_is_reported(self):
+        with tempfile.TemporaryDirectory() as d:
+            old = watchdog.NEWS
+            try:
+                watchdog.NEWS = Path(d)
+                (Path(d) / "2026-11-23.jsonl").write_text(json.dumps({"first_seen_utc": "2026-11-23T00:00:00+00:00"}) + "\n")
+                problems, _ = watchdog.check(datetime(2026, 11, 23, 12, tzinfo=timezone.utc))
+                self.assertTrue(any("news archive" in p for p in problems))
+            finally:
+                watchdog.NEWS = old
+
+
+if __name__ == "__main__":
+    unittest.main()
