@@ -106,9 +106,9 @@ def refresh(symbol: str) -> dict | None:
         quotes[symbol] = q
         acct.on_quote(to_quote(q))
         check_alerts(q)
-    if auto and symbol in auto.acct.positions:
+    if auto and (symbol in auto.acct.positions or any(o.symbol == symbol and o.status == "pending" for o in auto.acct.orders)):
         auto.on_quote(to_quote(q))
-    if hunt and symbol in hunt.acct.positions:
+    if hunt and (symbol in hunt.acct.positions or any(o.symbol == symbol and o.status == "pending" for o in hunt.acct.orders)):
         hunt.on_quote(to_quote(q))
     return q
 
@@ -129,9 +129,9 @@ def tracked() -> list:
         s = set(state["watchlist"]) | set(acct.positions) | {o.symbol for o in acct.orders if o.status == "pending"}
         s |= {a["symbol"] for a in state["alerts"] if not a.get("hit")}
     if auto:
-        s |= set(auto.acct.positions)
+        s |= set(auto.acct.positions) | {o.symbol for o in auto.acct.orders if o.status == "pending"}
     if hunt:
-        s |= set(hunt.acct.positions)
+        s |= set(hunt.acct.positions) | {o.symbol for o in hunt.acct.orders if o.status == "pending"}
     return sorted(s)
 
 
@@ -450,6 +450,26 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, f.read_bytes(), ct)
 
 
+def history_loop(every=300):
+    """Append-only long-term record (data/history-YYYY-MM.jsonl): both bot equities and SPY every 5 minutes."""
+    time.sleep(30)
+    while True:
+        try:
+            if auto and hunt:
+                with auto.lock:
+                    auto_eq = auto.acct.equity()
+                with hunt.lock:
+                    hunt_eq = hunt.acct.equity()
+                spy = (quotes.get("SPY") or {}).get("price")
+                path = ROOT / "data" / ("history-" + time.strftime("%Y-%m", time.gmtime()) + ".jsonl")
+                with path.open("a") as f:
+                    f.write(json.dumps({"ts": round(time.time()), "auto_usd": round(auto_eq, 4),
+                                        "hunter_usd": round(hunt_eq, 4), "spy": spy}) + "\n")
+        except Exception:  # noqa: BLE001
+            traceback.print_exc()
+        time.sleep(every)
+
+
 def shock_warm_loop():
     """Keep the news-shock scan cached so the button answers instantly instead of taking ~8 s."""
     time.sleep(20)
@@ -468,9 +488,10 @@ def backup_loop(keep=14):
             target = ROOT / "data" / "backups" / time.strftime("%Y-%m-%d", time.gmtime())
             if not target.exists():
                 target.mkdir(parents=True)
-                for name in ("state.json", "auto.json", "hunter.json", "ai_log.jsonl"):
-                    if (ROOT / "data" / name).exists():
-                        shutil.copy2(ROOT / "data" / name, target / name)
+                for src in [ROOT / "data" / n for n in ("state.json", "auto.json", "hunter.json", "ai_log.jsonl")] + \
+                        sorted((ROOT / "data").glob("history-*.jsonl"))[-2:]:
+                    if src.exists():
+                        shutil.copy2(src, target / src.name)
                 for old in sorted((ROOT / "data" / "backups").iterdir())[:-keep]:
                     shutil.rmtree(old, ignore_errors=True)
         except Exception:  # noqa: BLE001
@@ -499,6 +520,7 @@ if __name__ == "__main__":
     threading.Thread(target=poller, daemon=True).start()
     threading.Thread(target=backup_loop, daemon=True).start()
     threading.Thread(target=shock_warm_loop, daemon=True).start()
+    threading.Thread(target=history_loop, daemon=True).start()
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)
     print(f"TradeLab on http://{HOST}:{PORT}", flush=True)

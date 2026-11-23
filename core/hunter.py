@@ -8,6 +8,7 @@ leverage LEV. Funding 0.01% per 8h is charged daily on notional. If month equity
 equity, everything is closed and the account waits for the next month. Engine stop-out closes positions when
 equity falls under half of the used margin (exchange-style liquidation)."""
 import json
+import os
 import threading
 import time
 from pathlib import Path
@@ -128,7 +129,10 @@ class Hunter:
                     "target_done": self.done_month == time.strftime("%Y-%m", time.gmtime())}
 
 
-def loop(h: Hunter, every=300):
+EVERY_S = int(os.environ.get("TRADELAB_HUNTER_EVERY", "60"))
+
+
+def loop(h: Hunter, every=EVERY_S):
     while True:
         try:
             h.cycle()

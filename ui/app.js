@@ -701,7 +701,7 @@ views.auto = async () => {
     <div class="figure"><b>${usd(s.equity)}</b><span>Equity in USD</span></div>
     <div class="figure"><b>${d.months.length}</b><span>Months completed</span></div>
     <div class="figure"><b>${fmt(s.max_drawdown_pct, 1)}%</b><span>Max drawdown</span></div>
-    <div class="figure"><b>${d.paused ? "Paused" : d.learning ? "Learning" : "Running"}</b><span>rebalances monthly, checks every 15 min</span></div></div>`;
+    <div class="figure"><b>${d.paused ? "Paused" : d.learning ? "Learning" : "Running"}</b><span>rebalances monthly, checks every ${d.check_every_s || 900} s</span></div></div>`;
   $("#auto-pause").textContent = d.paused ? "Resume" : "Pause";
   $("#auto-pause").dataset.auto = d.paused ? "resume" : "pause";
   const v = m.valid, sv = m.spy_valid;
