@@ -345,6 +345,22 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200, hunt.view())
             if p == "events":
                 return self._send(200, evt.view())
+            if p == "llm_log":
+                lines = llm_trader.read_log_tail(llm_trader.LOG)
+                return self._send(200, llm_trader.build_cycles(lines, int(q.get("n", 40))))
+            if p == "event_log":
+                lines = llm_trader.read_log_tail(event_trader.LOG, 2500)
+                rows = []
+                for line in lines[::-1]:
+                    try:
+                        r = json.loads(line)
+                    except ValueError:
+                        continue
+                    if r["kind"] in ("event", "pair", "error", "reset"):
+                        rows.append(r)
+                    if len(rows) >= int(q.get("n", 60)):
+                        break
+                return self._send(200, {"rows": rows})
             if p == "accounts":
                 return self._send(200, accounts_summary())
             if p == "steward":

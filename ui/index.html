@@ -22,6 +22,7 @@
       <a href="#chart" data-view="chart">Chart and analysis</a>
       <a href="#portfolio" data-view="portfolio">Portfolio</a>
       <a href="#llm" data-view="llm">DeepSeek</a>
+      <a href="#logs" data-view="logs">Logs</a>
       <a href="#events" data-view="events">Events</a>
       <a href="#buzz" data-view="buzz">Buzz</a>
       <a href="#news" data-view="news">News</a>
@@ -159,6 +160,12 @@
     <div id="llm-figs"></div></div>
   <div class="panel"><h2>Open positions</h2><div id="llm-pos"><div class="empty">No open positions.</div></div></div>
   <div class="panel"><h2>Decisions and the model's reasons</h2><div id="llm-list"><div class="empty">No decisions yet.</div></div></div>
+</section>
+<section class="view" id="v-logs" hidden>
+  <div class="panel"><div class="row spread"><h2>Decision log: why it bought, why it passed</h2>
+    <span><button class="sm" id="lg-llm">DeepSeek trader</button> <button class="sm" id="lg-evt">Event trader</button></span></div>
+    <p class="small muted" id="lg-note"></p><div id="lg-cycles"><div class="empty">Loading...</div></div></div>
+  <div class="panel" id="lg-closed-panel"><h2>Closed trades (stops, targets, sells) and errors</h2><div id="lg-closed"></div></div>
 </section>
 <section class="view" id="v-events" hidden>
   <div class="panel"><div class="row spread"><h2>Event trader (paper)</h2><span class="small muted" id="ev-sub"></span></div>
