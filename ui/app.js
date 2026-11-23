@@ -846,10 +846,12 @@ setInterval(() => {
   if (document.hidden) return;
   if (route.view === "markets") views.markets();
   else if (route.view === "auto") views.auto();
+  else if (route.view === "events") views.events();
+  else if (route.view === "buzz") views.buzz();
   else if (route.view === "portfolio" || route.view === "chart") refreshAccount();
   if (route.view === "chart" && curSym) api("quote?symbol=" + encodeURIComponent(curSym)).then((q) => { if (q && !q.error && curSym === route.symbol) { lastQuote = q; const el = $("#qhead .px"); if (el) el.textContent = fmt(q.price); renderTicket(); } }).catch(() => {});
   renderAlerts();
-}, 15000);
+}, 5000);
 
 show();
 refreshAccount();
