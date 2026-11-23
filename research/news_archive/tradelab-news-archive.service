@@ -1,0 +1,8 @@
+[Unit]
+Description=TradeLab research: read-only news archiver (no orders)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Project/tradelab
+ExecStart=/usr/bin/python3 research/news_archive/collector.py
