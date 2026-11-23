@@ -320,7 +320,7 @@ class Handler(BaseHTTPRequestHandler):
             if p == "news":
                 if q.get("symbol"):
                     return self._send(200, news.symbol_news(q["symbol"], q.get("name", "")))
-                return self._send(200, news.market_news())
+                return self._send(200, {**news.market_news(), "archive": news_archive.STATUS})
             if p == "search":
                 if not q.get("q", "").strip():
                     return self._send(200, [])
@@ -555,8 +555,8 @@ def backup_loop(keep=14):
             target = ROOT / "data" / "backups" / time.strftime("%Y-%m-%d", time.gmtime())
             if not target.exists():
                 target.mkdir(parents=True)
-                for src in [ROOT / "data" / n for n in ("state.json", "auto.json", "hunter.json", "event_trader.json", "llm_trader.json", "ai_log.jsonl")] + \
-                        sorted((ROOT / "data").glob("history-*.jsonl"))[-2:] + [ROOT / "data" / "event_trader_log.jsonl", ROOT / "data" / "llm_trader_log.jsonl"]:
+                for src in [ROOT / "data" / n for n in ("state.json", "auto.json", "hunter.json", "event_trader.json", "llm_trader.json", "llm_trader_v4.json", "ai_log.jsonl")] + \
+                        sorted((ROOT / "data").glob("history-*.jsonl"))[-2:] + [ROOT / "data" / "event_trader_log.jsonl", ROOT / "data" / "llm_trader_log.jsonl", ROOT / "data" / "llm_trader_log_v4.jsonl"]:
                     if src.exists():
                         shutil.copy2(src, target / src.name)
                 for old in sorted((ROOT / "data" / "backups").iterdir())[:-keep]:

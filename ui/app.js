@@ -201,8 +201,9 @@ views.news = async (force) => {
   load(el, async () => { NEWS = await api("news"); renderNews(); }, "news");
 };
 function renderNews() {
-  const s = NEWS.summary;
-  $("#news-sum").innerHTML = `<div class="figures"><div class="figure"><b>${s.count}</b><span>Headlines</span></div><div class="figure"><b class="up">${s.positive}</b><span>Positive</span></div><div class="figure"><b class="down">${s.negative}</b><span>Negative</span></div><div class="figure"><b>${s.avg > 0 ? "+" : ""}${s.avg.toFixed(2)}</b><span>Average, ${esc(s.label.toLowerCase())}</span></div></div>`;
+  const s = NEWS.summary, a = NEWS.archive || {};
+  $("#news-sum").innerHTML = `<div class="figures"><div class="figure"><b>${s.count}</b><span>Headlines</span></div><div class="figure"><b class="up">${s.positive}</b><span>Positive</span></div><div class="figure"><b class="down">${s.negative}</b><span>Negative</span></div><div class="figure"><b>${s.avg > 0 ? "+" : ""}${s.avg.toFixed(2)}</b><span>Average, ${esc(s.label.toLowerCase())}</span></div></div>
+    <p class="small muted">Archive: ${a.linked ?? 0} linked headlines in the last scan, ${a.ai_scored ?? 0} AI-scored, ${a.labels ?? 0} return labels written, ${a.feeds_ok ?? 0}/${a.feeds ?? 0} sources healthy. The DeepSeek trader reads this archive, not only the live list below.</p>`;
   const it = NEWS.items.filter((n) => newsFilter === "all" || (newsFilter === "pos" ? n.sentiment > 0.1 : newsFilter === "neg" ? n.sentiment < -0.1 : Math.abs(n.sentiment) <= 0.1));
   $("#news-list").innerHTML = newsList(it);
 }
@@ -780,7 +781,7 @@ views.logs = async () => {
       const d = await api("llm_log?n=30");
       if (!current()) return;
       updateLogMarkup($("#lg-note"), "Each card is one decision cycle of the DeepSeek trader: what it was shown, the bull and bear cases, its decision and reason for every stock (including why it passed), what the system did, and the result afterwards. Newest first.");
-      updateLogMarkup(box, d.cycles.length ? d.cycles.map(cycleCard).join("") : `<div class="empty">No decision cycles yet. The model is asked when a stock moves 5%+ on real volume, and to review open positions.</div>`);
+      updateLogMarkup(box, d.cycles.length ? d.cycles.map(cycleCard).join("") : `<div class="empty">No decision cycles yet. The model is asked on new shocks, linked news, social buzz, and at least every 15 minutes.</div>`);
       updateLogMarkup($("#lg-closed"), table([
         { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
         { h: "Account", f: (r) => esc(r.account || r.kind) }, { h: "Stock", f: (r) => symCell(r.symbol || "", "") },
@@ -833,17 +834,21 @@ views.llm = async () => {
   let l;
   try { l = await api("llm_trader"); } catch (e) { figs.innerHTML = errBox(e, "llm"); return; }
   if (l.disabled) { figs.innerHTML = `<div class="empty">The DeepSeek trader is off on this server (needs the OPENROUTER_API_KEY secret).</div>`; return; }
-  const ev = l.evaluation || {}, dis = ev.discrimination || {};
-  $("#llm-sub").textContent = `${l.model} | calls today ${l.calls_today}/${l.max_calls_day}${l.error ? " | " + l.error : ""}`;
+  const ev = l.evaluation || {}, dis = ev.discrimination || {}, cl = l.classes || {};
+  const classes = Object.entries(cl).map(([k, v]) => `${v} ${k}`).join(", ");
+  $("#llm-sub").textContent = `${l.model} | ${l.universe_size} symbols (${classes}) | calls today ${l.calls_today}/${l.max_calls_day} | next scheduled scan in ${l.next_scan_in_s ?? "?"} s${l.error ? " | " + l.error : ""}`;
   figs.innerHTML = `<div class="figures">
     ${accountComparison(l, "DeepSeek account")}
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
     <div class="figure"><b>${l.paused ? "Paused" : "Running"}</b><span>last scan ${l.last_scan_age_s ?? "never"} s ago</span></div></div>
-    ${accountBasis(l)}<p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>
-    <p class="small muted">Every stock shown to the model is also scored +1 day vs SPY. Bought: ${dis.bought ? dis.bought.n : 0} scored${dis.bought && dis.bought.mean_abnormal_1d != null ? ", mean " + pct(dis.bought.mean_abnormal_1d * 100) : ""}.
+    ${accountBasis(l)}
+    <p class="small muted">Protocol v4: the model sees US stocks, ETFs, commodity futures, FX and crypto; v4 starts a new paper account (the old v3 account and log stay archived and are not mixed into these results). It chooses whether to trade, the margin (0-100% of equity), leverage (1-20x, margin = notional / leverage), entry, stop, target and when to look again; it is called on new shocks, linked news, social buzz, and at least every 15 minutes. The control account buys a random symbol in the same asset class with the same notional and leverage.</p>
+    <p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>
+    <p class="small muted">Every symbol shown to the model is also scored +1 day vs SPY. Bought: ${dis.bought ? dis.bought.n : 0} scored${dis.bought && dis.bought.mean_abnormal_1d != null ? ", mean " + pct(dis.bought.mean_abnormal_1d * 100) : ""}.
     Passed: ${dis.passed ? dis.passed.n : 0} scored${dis.passed && dis.passed.mean_abnormal_1d != null ? ", mean " + pct(dis.passed.mean_abnormal_1d * 100) : ""}. Rules: research/llm_trader/protocol.md</p>`;
   $("#llm-pos").innerHTML = table([
-    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
+    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Class", f: (r) => esc(r.asset_class || "-") },
+    { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
     { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) },
     { h: "Leverage", num: 1, f: (r) => fmt(r.leverage, 1) + "x" },
     { h: "Notional (USD)", num: 1, f: (r) => fmt(r.notional_usd, 2) }, { h: "Margin (USD)", num: 1, f: (r) => fmt(r.margin_usd, 2) },
@@ -853,7 +858,8 @@ views.llm = async () => {
   ], l.positions, { empty: "No open positions." });
   $("#llm-list").innerHTML = table([
     { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" }) },
-    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Action", f: (r) => esc(r.action) },
+    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Class", f: (r) => esc(r.asset_class || "-") },
+    { h: "Action", f: (r) => esc(r.action) },
     { h: "Size % (margin)", num: 1, f: (r) => (r.action === "buy" ? fmt(r.size_pct, 1) : "-") }, { h: "Leverage", num: 1, f: (r) => (r.action === "buy" ? fmt(r.leverage, 1) + "x" : "-") },
     { h: "Entry", f: (r) => (r.action === "buy" ? esc(r.entry || "market") + (r.limit_price ? " @ " + fmt(r.limit_price) : "") : "-") },
     { h: "Horizon", f: (r) => esc(r.horizon || "-") },
@@ -908,11 +914,13 @@ views.events = async () => {
     <div class="figure"><b>${d.n_events}</b><span>events (${d.n_up} up-shocks)</span></div>
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
     <div class="figure"><b>${d.paused ? "Paused" : "Running"}</b><span>${esc(d.rules.shock)}</span></div></div>
-    ${accountBasis(d)}<p class="small muted">${esc(d.rules.trade)}</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
+    ${accountBasis(d)}<p class="small muted"><b>Fixed rule, not the AI. No leverage (1x).</b> ${esc(d.rules.trade)}. A pair is counted only after both the stock and its random control have closed, so 0/30 with positions still open is normal.</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
   $("#ev-pos").innerHTML = table([
     { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
-    { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) }, { h: "Notional (USD)", num: 1, f: (r) => fmt(r.notional_usd, 2) },
-    { h: "Stop", num: 1, f: (r) => fmt(r.stop) },
+    { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) },
+    { h: "Leverage", f: () => "1x (none)" },
+    { h: "Position size (USD)", num: 1, f: (r) => fmt(r.notional_usd, 2) },
+    { h: "Stop price", num: 1, f: (r) => fmt(r.stop) },
     { h: "Eligible to exit after", f: (r) => dt(r.exit_at) },
     { h: "Why it bought", f: (r) => esc(r.why || "") },
     { h: "Random control", f: (r) => (r.control ? `${esc(r.control.symbol)} ${r.control.pnl_pct != null ? pct(r.control.pnl_pct) : ""}` : "-") },
@@ -1043,9 +1051,10 @@ const TH = {
   "Event trader": "Event trader", "Closed trades (stops, targets, sells) and errors": "การปิดสถานะ (ตัดขาดทุน เป้า ขาย) และข้อผิดพลาด",
   "Social buzz, whole US market (analysis only)": "กระแสโซเชียลทั้งตลาดสหรัฐ (วิเคราะห์เท่านั้น)", "Most mentioned right now": "ถูกพูดถึงมากที่สุดตอนนี้",
   "Buzz events (surges in mentions) and what happened next": "เหตุการณ์กระแสพุ่ง (คนพูดถึงเพิ่มกะทันหัน) และผลหลังจากนั้น",
-  "Stock": "หุ้น", "Entry": "ราคาเข้า", "Mark": "ราคาตอนนี้", "P/L": "กำไร/ขาดทุน", "Stop": "ตัดขาดทุน", "Target": "เป้ากำไร",
+  "Stock": "หุ้น", "Class": "ประเภทสินทรัพย์", "Entry": "ราคาเข้า", "Mark": "ราคาตอนนี้", "P/L": "กำไร/ขาดทุน", "Stop": "ตัดขาดทุน", "Stop price": "ราคาตัดขาดทุน", "Target": "เป้ากำไร",
   "Horizon": "ระยะถือ", "Held (h)": "ถือมา (ชม.)", "Why": "เหตุผล", "When": "เวลา", "Action": "การตัดสินใจ", "Size %": "ขนาด %",
   "Size % (margin)": "ขนาด % (เงินประกัน)", "Leverage": "เลเวอเรจ", "Notional (USD)": "มูลค่าสถานะ (USD)", "Margin (USD)": "เงินประกัน (USD)",
+  "Position size (USD)": "ขนาดสถานะ (USD)", "1x (none)": "1 เท่า (ไม่ใช้เลเวอเรจ)",
   "Result": "ผล", "Reason (model)": "เหตุผล (โมเดล)", "Stop / target %": "ตัดขาดทุน / เป้า %", "Look again (min)": "กลับมาดูอีก (นาที)",
   "Move": "ขยับ", "Volume": "ปริมาณ", "Volume x": "ปริมาณ x", "Traded": "ผลการเทรด", "Headlines": "พาดหัวข่าว", "Debate": "โต้แย้ง",
   "Decision and reason": "การตัดสินใจและเหตุผล", "Headlines the model saw": "ข่าวที่โมเดลเห็น", "What happened next": "หลังจากนั้น",
@@ -1101,6 +1110,9 @@ const NOTE_TH = [
   [/^limit order filled #(\d+)$/, "คำสั่ง limit จับคู่แล้ว #$1"],
   [/^limit order expired #(\d+) \(expired\)$/, "คำสั่ง limit หมดอายุ #$1"],
   [/^limit order rejected #(\d+) \((.+)\)$/, "คำสั่ง limit ถูกปฏิเสธ #$1 ($2)"],
+  [/^Protocol v4: the model sees.*$/, "กติกา v4: โมเดลเห็นหุ้นสหรัฐ ETF สินค้าโภคภัณฑ์ ฟอเร็กซ์ และคริปโต เริ่มบัญชีใหม่ (บัญชี v3 เดิมและ log เก็บแยก ไม่นำมาปนกับผลชุดนี้) เลือกเองว่าจะเทรดไหม ใช้เงินประกันกี่เปอร์เซ็นต์ของมูลค่าบัญชี เลเวอเรจ 1-20 เท่า (เงินประกัน = มูลค่าสถานะ ÷ เลเวอเรจ) ราคาเข้า จุดตัดขาดทุน เป้ากำไร และเวลากลับมาดู ระบบเรียกเมื่อมีข่าว การพุ่งของกระแสสังคม หรืออย่างน้อยทุก 15 นาที บัญชีเทียบซื้อสินทรัพย์สุ่มประเภทเดียวกันด้วยมูลค่าและเลเวอเรจเท่ากัน"],
+  [/^Fixed rule, not the AI\..*$/, "กติกาตายตัว ไม่ใช่ AI และไม่ใช้เลเวอเรจ (1 เท่า) ซื้อ 5% ของมูลค่าบัญชีต่อครั้ง ถือได้สูงสุด 3 ตัว ตัดขาดทุน 8% และขายเมื่อครบ 20 ชั่วโมง บัญชีเทียบสุ่มหุ้นที่ไม่ได้ขยับแรงด้วยเวลาและกติกาเดียวกัน คู่จะนับเมื่อทั้งหุ้นและหุ้นสุ่มปิดสถานะแล้ว ดังนั้น 0/30 ขณะยังถือสถานะอยู่เป็นเรื่องปกติ"],
+  [/^Archive: (\d+) linked headlines.*$/, "คลังข่าว: รอบล่าสุดเชื่อมข่าวกับหุ้นได้ $1 พาดหัว ให้คะแนนด้วย AI แล้ว และเขียนป้ายผลตอบแทนแล้ว ระบบ DeepSeek อ่านคลังนี้ ไม่ได้อ่านเฉพาะรายการสดด้านล่าง"],
   [/^first sight of a ([+\-\d.]+)% move on ([\d.]+)x volume \(SPY unavailable at entry\)$/, "ซื้อเมื่อพบว่าราคาขยับ $1% ครั้งแรก ปริมาณซื้อขาย $2 เท่าของค่าเฉลี่ย ตอนเข้าไม่มีข้อมูล SPY"],
   [/^first sight of a ([+\-\d.]+)% move on ([\d.]+)x volume \(SPY ([+\-\d.]+)%\)$/, "ซื้อเมื่อพบว่าราคาขยับ $1% ครั้งแรก ปริมาณซื้อขาย $2 เท่าของค่าเฉลี่ย (SPY $3%)"],
   [/^long ([\d,.]+) USD vs (.+)$/, "ซื้อ $1 USD เทียบกับ $2"],
