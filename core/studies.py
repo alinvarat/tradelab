@@ -7,6 +7,7 @@ pass rule. Network loaders live at the bottom and are not used in tests.
 import calendar
 import csv
 import io
+import json
 import random
 import time
 import zipfile
@@ -201,6 +202,89 @@ def insider_purchases(submissions: list, owners: list, trans: list, symbols: set
         if day:
             out.append({"symbol": sym, "accession": acc, "date": day, "value": value[acc]})
     return out
+
+
+# ------------------------------------------------------------------ DeepSeek reads earnings releases
+LLM_SYSTEM = ("You are an equity analyst. You will read one company's earnings press release, published just now. "
+              "Decide whether a trader should be long or short this stock for the next 1-5 trading sessions, "
+              "or skip it. Use only the text. Reply with JSON only: "
+              '{"direction": "long"|"short"|"skip", "confidence": 0-100, "reason": "<one sentence>"}')
+LLM_FIRST_DAY = "2026-10-20"
+
+
+def html_text(raw: str, limit: int = 15000) -> str:
+    """Visible text of an HTML/XBRL document, whitespace collapsed."""
+    import html as _html
+    import re
+    t = re.sub(r"(?is)<(script|style|head)[^>]*>.*?</\1>", " ", raw)
+    t = re.sub(r"(?s)<[^>]+>", " ", t)
+    t = _html.unescape(t)
+    return re.sub(r"\s+", " ", t).strip()[:limit]
+
+
+def pick_exhibit(names: list, primary: str) -> str:
+    """The press release of an 8-K: the first EX-99 style .htm file, else the primary document."""
+    import re
+    hits = [n for n in names if re.search(r"(?i)ex-?99|exhibit99|ex991|dex99", n) and n.lower().endswith((".htm", ".html"))]
+    return sorted(hits)[0] if hits else primary
+
+
+def parse_direction(text: str) -> dict:
+    """Model reply -> {'direction','confidence','reason'}; anything unparseable is a skip."""
+    import re
+    m = re.search(r"\{.*\}", text or "", re.S)
+    try:
+        d = json.loads(m.group(0)) if m else {}
+    except ValueError:
+        d = {}
+    direction = str(d.get("direction", "skip")).strip().lower()
+    if direction not in ("long", "short", "skip"):
+        direction = "skip"
+    try:
+        conf = max(0, min(100, int(float(d.get("confidence", 0)))))
+    except (TypeError, ValueError):
+        conf = 0
+    return {"direction": direction, "confidence": conf, "reason": str(d.get("reason", ""))[:300]}
+
+
+def sign_of(direction: str) -> int:
+    return {"long": 1, "short": -1}.get(direction, 0)
+
+
+def signed_net(gross: float, sign: int, cost_mult: float = 1.0) -> float:
+    """Net of a long (sign 1) or short (sign -1) held from open to close; the short gains -gross."""
+    return nb.net_return(sign * gross, "stock", cost_mult) if sign else 0.0
+
+
+def llm_summary(rows: list, horizon: int, min_conf: int = 0) -> dict:
+    """rows: {'symbol','ts','horizon','gross','direction','confidence','rand_sign'} -> protocol statistics."""
+    import random as _r
+    sub = [r for r in rows if r["horizon"] == horizon]
+    taken = [r for r in sub if r["direction"] != "skip" and r["confidence"] >= min_conf]
+    if not taken:
+        return {"n_events": len(sub), "n": 0}
+    mine = [signed_net(r["gross"], sign_of(r["direction"])) for r in taken]
+    rand = [signed_net(r["gross"], r["rand_sign"]) for r in taken]
+    diff = [a - b for a, b in zip(mine, rand)]
+    keys = [nb.cluster_key(r) for r in taken]
+    rng = _r.Random(20261124)
+    k = len(taken)
+    return {"n_events": len(sub), "n": k, "skip_rate": 1 - k / len(sub),
+            "hit": sum(1 for r in taken if sign_of(r["direction"]) * r["gross"] > 0) / k,
+            "mean_gross_signed": sum(sign_of(r["direction"]) * r["gross"] for r in taken) / k,
+            "mean_net": sum(mine) / k, "mean_net_2x": sum(signed_net(r["gross"], sign_of(r["direction"]), 2.0)
+                                                         for r in taken) / k,
+            "mean_random_dir": sum(rand) / k, "mean_diff": sum(diff) / k,
+            "mean_always_long": sum(nb.net_return(r["gross"]) for r in sub) / len(sub),
+            "p_diff_block": nb.block_bootstrap_p(diff, keys, rng), "p_net_block": nb.block_bootstrap_p(mine, keys, rng)}
+
+
+def llm_verdict(rows: list) -> str:
+    h1, h3 = llm_summary(rows, 1), llm_summary(rows, 3)
+    if h1.get("n", 0) < 60:
+        return "too few, keep collecting"
+    ok = (h1["mean_net"] > 0 and h3.get("mean_net", 0) > 0 and h1["p_diff_block"] < 0.05 and h1["mean_net_2x"] > 0)
+    return "edge candidate" if ok else "no edge shown"
 
 
 # ------------------------------------------------------------------ pass rule
