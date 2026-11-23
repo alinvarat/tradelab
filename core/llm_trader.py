@@ -658,8 +658,11 @@ class LlmTrader:
     def view(self):
         with self.lock:
             a = self.acct
+            control_equity = self.ctrl.equity()
             return {"equity_usd": a.equity(), "equity_thb": data.thb_at_open(a.equity(), self.capital_usd, CAPITAL_THB), "capital_thb": CAPITAL_THB,
-                    "control_equity_usd": self.ctrl.equity(), "capital_usd": self.capital_usd, "paused": self.paused,
+                    "control_equity_usd": control_equity,
+                    "control_equity_thb": data.thb_at_open(control_equity, self.capital_usd, CAPITAL_THB),
+                    "capital_usd": self.capital_usd, "paused": self.paused,
                     "calls_today": self.calls["n"], "max_calls_day": MAX_CALLS_DAY, "error": self.last_error,
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
                     "model": ai_news.DECISION_MODEL.split("/", 1)[-1],

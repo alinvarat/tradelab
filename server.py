@@ -581,12 +581,14 @@ def accounts_summary():
     def add(key, name, tab, acct_, start_usd, status, note, ctrl=None):
         with lock:
             eq = acct_.equity()
+            control_equity = ctrl.equity() if ctrl is not None else None
         rows.append({"key": key, "name": name, "tab": tab, "start_usd": start_usd, "equity_usd": eq,
                      "return_pct": (eq / start_usd - 1) * 100 if start_usd else None,
                      "equity_thb": eq / rate if key == "manual" else open_thb(eq, start_usd),
                      "start_thb": acct_.initial / rate if key == "manual" else 5000.0,
                      "positions": len(acct_.positions), "status": status, "note": note,
-                     "control_usd": ctrl.equity() if ctrl else None})
+                     "control_usd": control_equity,
+                     "control_thb": open_thb(control_equity, start_usd) if control_equity is not None else None})
     add("manual", "Manual sandbox", "portfolio", acct, acct.initial, "you place the orders",
         "Not a bot. Start capital is a round $100,000 for trying the order ticket.")
     if auto:
