@@ -250,6 +250,18 @@ class EventTrader:
         out["verdict"] = "edge candidate (needs a second locked window)" if edge else "no edge shown"
         return out
 
+    def _position_view(self, s, p):
+        mark = self.acct.last[s].bid if s in self.acct.last else p.entry
+        ev = next((x for x in reversed(self.events) if x["symbol"] == s and x.get("entry")), None)
+        cs = (ev or {}).get("control", {}) or {}
+        cp = self.ctrl.positions.get(cs.get("symbol", ""))
+        cmark = self.ctrl.last[cp.symbol].bid if cp and cp.symbol in self.ctrl.last else None
+        return {"symbol": s, "qty": p.qty, "entry": p.entry, "mark": mark, "pnl_pct": (mark / p.entry - 1) * 100,
+                "notional_usd": p.qty * mark, "stop": p.sl, "opened_ts": p.opened_ts, "exit_at": p.opened_ts + HOLD_S,
+                "why": f"first sight of a {ev['move_pct']:+.1f}% move on {ev['vol_ratio']:.1f}x volume (SPY {ev.get('spy_move_pct')}%)" if ev else "",
+                "control": {"symbol": cp.symbol, "entry": cp.entry, "mark": cmark,
+                            "pnl_pct": (cmark / cp.entry - 1) * 100 if cmark else None} if cp else None}
+
     def view(self):
         with self.lock:
             a = self.acct
@@ -259,8 +271,7 @@ class EventTrader:
                     "control_equity_usd": self.ctrl.equity(), "capital_usd": self.capital_usd, "paused": self.paused,
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
                     "scan_every_s": SCAN_S, "error": self.last_error,
-                    "positions": [{"symbol": s, "qty": p.qty, "entry": p.entry,
-                                   "mark": a.last[s].bid if s in a.last else None} for s, p in a.positions.items()],
+                    "positions": [self._position_view(s, p) for s, p in a.positions.items()],
                     "events": self.events[::-1][:40], "n_events": len(self.events), "n_up": len(ups),
                     "up_mean_move": {k: (mean(v) if v else None, len(v)) for k, v in hz.items()},
                     "evaluation": self.evaluate(),

@@ -717,8 +717,8 @@ function cycleCard(c) {
   const rows = (c.candidates || []).map((x) => {
     const d = byDec[x.symbol], a = acts[x.symbol] || [], o = outs[x.symbol] || [];
     const heads = (x.headlines || []).map((h) => `${esc(h.title)} <span class="muted">[${esc(h.source)}, lexicon ${h.lexicon ?? "-"}${h.ai_scores && Object.keys(h.ai_scores).length ? ", AI " + Object.values(h.ai_scores).join("/") : ""}]</span>`).join("<br>") || "-";
-    const decision = d ? `<b>${BADGE[d.action] || esc(d.action)}</b>${d.action === "buy" ? ` ${fmt(d.size_pct, 1)}% | ${esc(d.horizon || "")} | stop ${fmt(d.stop_pct, 0)}%${d.target_pct ? " target " + fmt(d.target_pct, 0) + "%" : ""} | look again in ${d.review_in_min} min` : ""}<br>${esc(d.reason || "")}` : "<b>PASS</b> (no reason given)";
-    const did = a.map((z) => z.kind === "skip" ? `<span class="muted">not executed: ${esc(z.why)}</span>` : z.kind === "order" ? `order ${esc(z.status)}${z.usd ? " " + fmt(z.usd, 2) + " USD" : ""}${z.control ? ", control " + esc(z.control) : ""}` : esc(z.kind + " " + (z.status || ""))).join("<br>");
+    const decision = d ? `<b>${BADGE[d.action] || esc(d.action)}</b>${d.action === "buy" ? ` margin ${fmt(d.size_pct, 1)}% x ${fmt(d.leverage || 1, 1)} | ${esc(d.entry || "market")}${d.limit_price ? " @ " + fmt(d.limit_price) : ""} | ${esc(d.horizon || "")} | stop ${fmt(d.stop_pct, 0)}%${d.target_pct ? " target " + fmt(d.target_pct, 0) + "%" : ""} | look again in ${d.review_in_min} min` : ""}<br>${esc(d.reason || "")}` : "<b>PASS</b> (no reason given)";
+    const did = a.map((z) => z.kind === "skip" ? `<span class="muted">not executed: ${esc(z.why)}</span>` : z.kind === "order" ? execHtml({ status: z.status, notional_usd: z.notional_usd, margin_usd: z.margin_usd, leverage: z.leverage, entry: z.entry, limit_price: z.limit_price, valid_until: z.valid_until, stop_price: z.stop_price, target_price: z.target_price, risk_pct_equity: z.risk_pct_equity, clipped_by: z.clipped_by, control: z.control, scaled_in: z.scaled_in }) : esc(z.kind + " " + (z.status || ""))).join("<br>");
     const res = o.map((z) => `+${hmin(z.horizon_s)} vs SPY ${pct(z.abnormal * 100)}`).join("<br>");
     return `<tr><td>${symCell(x.symbol, x.name)}</td><td class="num">${pct(x.move_pct)}<br><span class="muted">vs SPY ${x.abnormal_pct != null ? pct(x.abnormal_pct) : "-"}</span></td><td class="num">${fmt(x.volume_ratio, 1)}x</td>
       <td>${decision}${did ? "<br>" + did : ""}</td><td>${heads}</td>
@@ -766,6 +766,19 @@ views.logs = async () => {
   } catch (e) { box.innerHTML = errBox(e, "log"); }
 };
 
+function execHtml(x) {
+  if (!x) return "-";
+  if (x.status === "skipped") return `<span class="muted">not executed: ${esc(x.why || "")}</span>`;
+  const bits = [esc(x.status) + (x.scaled_in ? " (added to position)" : "")];
+  if (x.notional_usd != null) bits.push(`notional ${fmt(x.notional_usd, 2)} USD, margin ${fmt(x.margin_usd, 2)} USD, ${fmt(x.leverage, 1)}x`);
+  if (x.entry === "limit") bits.push(`limit ${fmt(x.limit_price)}${x.valid_until ? " until " + new Date(x.valid_until * 1000).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) : ""}`);
+  if (x.stop_price) bits.push(`stop ${fmt(x.stop_price)}${x.target_price ? ", target " + fmt(x.target_price) : ""}`);
+  if (x.risk_pct_equity != null) bits.push(`loss at stop ${fmt(x.risk_pct_equity, 1)}% of equity`);
+  if ((x.clipped_by || []).length) bits.push(`<span class="muted">cut by: ${esc(x.clipped_by.join("; "))}</span>`);
+  if (x.control) bits.push(`control ${esc(x.control)}`);
+  return bits.join("<br>");
+}
+
 /* ---------- DeepSeek trader ---------- */
 views.llm = async () => {
   const figs = $("#llm-figs");
@@ -784,17 +797,22 @@ views.llm = async () => {
     Passed: ${dis.passed ? dis.passed.n : 0} scored${dis.passed && dis.passed.mean_abnormal_1d != null ? ", mean " + pct(dis.passed.mean_abnormal_1d * 100) : ""}. Rules: research/llm_trader/protocol.md</p>`;
   $("#llm-pos").innerHTML = table([
     { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
-    { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) }, { h: "Stop", num: 1, f: (r) => fmt(r.stop) },
-    { h: "Target", num: 1, f: (r) => fmt(r.target) }, { h: "Horizon", f: (r) => esc(r.horizon || "-") },
-    { h: "Held (h)", num: 1, f: (r) => fmt(r.held_hours, 1) }, { h: "Why", f: (r) => esc(r.your_reason || "") },
+    { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) },
+    { h: "Leverage", num: 1, f: (r) => fmt(r.leverage, 1) + "x" },
+    { h: "Notional (USD)", num: 1, f: (r) => fmt(r.notional_usd, 2) }, { h: "Margin (USD)", num: 1, f: (r) => fmt(r.margin_usd, 2) },
+    { h: "Stop", num: 1, f: (r) => fmt(r.stop) }, { h: "Target", num: 1, f: (r) => fmt(r.target) },
+    { h: "Horizon", f: (r) => esc(r.horizon || "-") }, { h: "Held (h)", num: 1, f: (r) => fmt(r.held_hours, 1) },
+    { h: "Why", f: (r) => esc(r.your_reason || "") + ((r.clipped_by || []).length ? `<br><span class="muted">cut by: ${esc(r.clipped_by.join("; "))}</span>` : "") },
   ], l.positions, { empty: "No open positions." });
   $("#llm-list").innerHTML = table([
     { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" }) },
     { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Action", f: (r) => esc(r.action) },
-    { h: "Size %", num: 1, f: (r) => fmt(r.size_pct, 1) }, { h: "Horizon", f: (r) => esc(r.horizon || "-") },
+    { h: "Size % (margin)", num: 1, f: (r) => fmt(r.size_pct, 1) }, { h: "Leverage", num: 1, f: (r) => (r.action === "buy" ? fmt(r.leverage, 1) + "x" : "-") },
+    { h: "Entry", f: (r) => (r.action === "buy" ? esc(r.entry || "market") + (r.limit_price ? " @ " + fmt(r.limit_price) : "") : "-") },
+    { h: "Horizon", f: (r) => esc(r.horizon || "-") },
     { h: "Stop / target %", f: (r) => `${r.stop_pct != null ? fmt(r.stop_pct, 0) : "-"} / ${r.target_pct != null ? fmt(r.target_pct, 0) : "-"}` },
     { h: "Look again (min)", num: 1, f: (r) => fmt(r.review_in_min, 0) },
-    { h: "Result", f: (r) => esc((r.executed && (r.executed.status + (r.executed.why ? " (" + r.executed.why + ")" : ""))) || "-") },
+    { h: "Result", f: (r) => execHtml(r.executed) },
     { h: "Reason (model)", f: (r) => esc(r.reason) },
   ], l.decisions, { empty: "No decisions yet; the model is asked when new shocks appear." });
 };
@@ -843,6 +861,14 @@ views.events = async () => {
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
     <div class="figure"><b>${d.paused ? "Paused" : "Running"}</b><span>${esc(d.rules.shock)}</span></div></div>
     <p class="small muted">${esc(d.rules.trade)}</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
+  $("#ev-pos").innerHTML = table([
+    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
+    { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) }, { h: "Notional (USD)", num: 1, f: (r) => fmt(r.notional_usd, 2) },
+    { h: "Stop", num: 1, f: (r) => fmt(r.stop) },
+    { h: "Sells at (20 h rule)", f: (r) => new Date(r.exit_at * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
+    { h: "Why it bought", f: (r) => esc(r.why || "") },
+    { h: "Random control", f: (r) => (r.control ? `${esc(r.control.symbol)} ${r.control.pnl_pct != null ? pct(r.control.pnl_pct) : ""}` : "-") },
+  ], d.positions, { empty: "No open positions right now. The rule holds at most 3 at a time; later shocks show 'max positions' below." });
   list.innerHTML = table([
     { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
     { h: "Stock", f: (r) => symCell(r.symbol, "") },
@@ -952,8 +978,86 @@ setInterval(() => {
   renderAlerts();
 }, 5000);
 
+/* ---------- language switch (English / Thai) ---------- */
+/* Static text is translated by exact match; numbers, tickers, headlines and the model's own notes stay as they are
+   (the DeepSeek trader writes its reasons in Thai itself). Sentences with embedded numbers are not covered. */
+const TH = {
+  "Overview": "ภาพรวม", "Auto trader": "บอทหลัก", "Markets": "ตลาด", "Chart and analysis": "กราฟและวิเคราะห์", "Portfolio": "พอร์ต",
+  "DeepSeek": "ดีปซีค", "Logs": "บันทึกการตัดสินใจ", "Events": "เหตุการณ์", "Buzz": "กระแสโซเชียล", "News": "ข่าว", "Screener": "สแกนหุ้น",
+  "Backtest": "ทดสอบย้อนหลัง", "Calendar and alerts": "ปฏิทินและแจ้งเตือน", "Risk tools": "เครื่องมือความเสี่ยง",
+  "Manual sandbox": "บัญชีทดลองสั่งเอง", "Simulated money": "เงินจำลอง",
+  "All simulated accounts side by side": "ทุกบัญชีจำลองเทียบกัน", "Account": "บัญชี", "Start (USD)": "ทุนเริ่ม (USD)",
+  "Equity (USD)": "มูลค่า (USD)", "Equity (THB)": "มูลค่า (บาท)", "Return": "ผลตอบแทน", "Random control (USD)": "บัญชีสุ่มเทียบ (USD)",
+  "Open": "ถืออยู่", "Status": "สถานะ", "Note": "หมายเหตุ", "Loading...": "กำลังโหลด...",
+  "DeepSeek trader (paper money)": "DeepSeek เทรดเดอร์ (เงินจำลอง)", "Open positions": "ตำแหน่งที่ถืออยู่",
+  "Decisions and the model's reasons": "การตัดสินใจและเหตุผลของโมเดล", "Open positions of the rule": "ตำแหน่งที่กติกาถืออยู่",
+  "Event trader (paper)": "Event trader (เงินจำลอง)", "Large single-stock moves with headlines": "หุ้นที่ขยับแรงพร้อมข่าว",
+  "Decision log: why it bought, why it passed": "บันทึกการตัดสินใจ: ทำไมซื้อ ทำไมไม่ซื้อ", "DeepSeek trader": "DeepSeek trader",
+  "Event trader": "Event trader", "Closed trades (stops, targets, sells) and errors": "การปิดสถานะ (ตัดขาดทุน เป้า ขาย) และข้อผิดพลาด",
+  "Social buzz, whole US market (analysis only)": "กระแสโซเชียลทั้งตลาดสหรัฐ (วิเคราะห์เท่านั้น)", "Most mentioned right now": "ถูกพูดถึงมากที่สุดตอนนี้",
+  "Buzz events (surges in mentions) and what happened next": "เหตุการณ์กระแสพุ่ง (คนพูดถึงเพิ่มกะทันหัน) และผลหลังจากนั้น",
+  "Stock": "หุ้น", "Entry": "ราคาเข้า", "Mark": "ราคาตอนนี้", "P/L": "กำไร/ขาดทุน", "Stop": "ตัดขาดทุน", "Target": "เป้ากำไร",
+  "Horizon": "ระยะถือ", "Held (h)": "ถือมา (ชม.)", "Why": "เหตุผล", "When": "เวลา", "Action": "การตัดสินใจ", "Size %": "ขนาด %",
+  "Size % (margin)": "ขนาด % (เงินประกัน)", "Leverage": "เลเวอเรจ", "Notional (USD)": "มูลค่าสถานะ (USD)", "Margin (USD)": "เงินประกัน (USD)",
+  "Result": "ผล", "Reason (model)": "เหตุผล (โมเดล)", "Stop / target %": "ตัดขาดทุน / เป้า %", "Look again (min)": "กลับมาดูอีก (นาที)",
+  "Move": "ขยับ", "Volume": "ปริมาณ", "Volume x": "ปริมาณ x", "Traded": "ผลการเทรด", "Headlines": "พาดหัวข่าว", "Debate": "โต้แย้ง",
+  "Decision and reason": "การตัดสินใจและเหตุผล", "Headlines the model saw": "ข่าวที่โมเดลเห็น", "What happened next": "หลังจากนั้น",
+  "Sells at (20 h rule)": "ขายเมื่อ (กฎ 20 ชม.)", "Why it bought": "ทำไมถึงซื้อ", "Random control": "หุ้นสุ่มเทียบ", "Account": "บัญชี",
+  "Why closed": "ปิดเพราะ", "P/L %": "กำไร/ขาดทุน %", "Mentions": "จำนวนที่ถูกพูดถึง", "24h ago": "24 ชม.ก่อน", "Upvotes": "โหวตขึ้น",
+  "Rank": "อันดับ", "Ticker": "สัญลักษณ์", "+1h / +1d vs SPY": "+1 ชม. / +1 วัน เทียบ SPY", "Control +1d": "หุ้นสุ่ม +1 วัน",
+  "What": "ประเภท", "Context": "บริบท", "Decision": "การตัดสินใจ", "Running": "กำลังทำงาน", "Paused": "หยุดอยู่",
+  "DeepSeek account": "บัญชี DeepSeek", "Random control account": "บัญชีสุ่มเทียบ", "closed pairs needed": "คู่ที่ปิดแล้ว / ที่ต้องการ",
+  "events with a +1d result": "เหตุการณ์ที่มีผล +1 วัน", "buzz events": "เหตุการณ์กระแส", "mean +1d return vs SPY": "ผลตอบแทน +1 วันเฉลี่ย เทียบ SPY",
+  "matched controls": "หุ้นสุ่มที่เทียบ", "Verdict:": "ข้อสรุป:", "Refresh": "รีเฟรช", "Reset account": "รีเซ็ตบัญชี", "Pause": "หยุดชั่วคราว",
+  "Restart": "เริ่มใหม่", "Learn now": "เรียนรู้ใหม่", "Equity": "มูลค่าบัญชี", "Profit or loss": "กำไรหรือขาดทุน", "Months completed": "เดือนที่ครบ",
+  "Max drawdown": "ขาดทุนสูงสุดจากจุดสูงสุด", "Equity in USD": "มูลค่าเป็น USD", "Return in USD": "ผลตอบแทนเป็น USD", "Current model": "โมเดลปัจจุบัน",
+  "This month's targets": "เป้าหมายเดือนนี้", "Equity curve": "เส้นมูลค่าบัญชี", "Orders": "ออเดอร์", "Allocation": "สัดส่วน", "Cash balance": "เงินสด",
+  "Open profit or loss": "กำไรขาดทุนที่ยังไม่ปิด", "Realised": "ปิดแล้ว", "Buying power": "กำลังซื้อ", "Win rate, 0 trades": "อัตราชนะ, 0 เทรด",
+  "Top headlines": "พาดหัวข่าวเด่น", "Order ticket": "ใบสั่งซื้อขาย", "Technical rating": "คะแนนทางเทคนิค", "Run scan": "สแกน",
+  "Broad list": "รายการกว้าง", "Watchlist": "รายการที่ติดตาม", "Run backtest": "ทดสอบย้อนหลัง", "Add alert": "เพิ่มแจ้งเตือน",
+  "Date (your time)": "วันที่ (เวลาของคุณ)", "Impact": "ผลกระทบ", "Source": "แหล่งที่มา", "Price alerts": "แจ้งเตือนราคา",
+  "No open positions.": "ไม่มีตำแหน่งที่ถืออยู่", "No decisions yet.": "ยังไม่มีการตัดสินใจ", "No events yet.": "ยังไม่มีเหตุการณ์",
+  "Nothing here yet.": "ยังไม่มีข้อมูล", "No accounts.": "ไม่มีบัญชี", "Waiting for the first scan.": "รอการสแกนครั้งแรก", "No closed trades yet.": "ยังไม่มีการปิดสถานะ",
+};
+let LANG = "en";
+try { LANG = localStorage.getItem("lang") || "en"; } catch (e) { /* private window */ }
+const NOTE_TH = [
+  [/^Every account below is separate play money.*$/, "ทุกบัญชีด้านล่างเป็นเงินจำลองแยกกัน แต่ละบัญชีมีทุนเริ่มต้นและกติกาของตัวเอง ตัวเลข 100,000 ดอลลาร์ที่แถบบนคือบัญชีทดลองสั่งเอง ไม่ใช่บอท ส่วนบอทเริ่มด้วย 5,000 บาท (ราว 147 ดอลลาร์)"],
+  [/^Each card is one decision cycle.*$/, "แต่ละการ์ดคือการตัดสินใจหนึ่งรอบของ DeepSeek: สิ่งที่โมเดลเห็น การโต้แย้งฝั่งซื้อ/ค้าน การตัดสินใจและเหตุผลของทุกตัว (รวมทั้งที่ไม่ซื้อ) สิ่งที่ระบบทำ และผลหลังจากนั้น เรียงใหม่สุดก่อน"],
+  [/^Event trader \(fixed rule\).*$/, "Event trader (กติกาตายตัว): ทุกหุ้นใหญ่ที่ขยับตั้งแต่ 5% พร้อมปริมาณซื้อขายจริง พร้อมข่าว สิ่งที่กติกาทำ และเหตุผลที่ไม่เทรด"],
+  [/^No open positions right now\..*$/, "ตอนนี้ไม่มีตำแหน่งที่ถืออยู่ กติกาถือได้สูงสุด 3 ตัวพร้อมกัน เหตุการณ์ที่เกินจะขึ้นว่า 'max positions' ด้านล่าง"],
+];
+const textNodes = (root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out = []; while (w.nextNode()) out.push(w.currentNode); return out; };
+function applyLang() {
+  const btn = $("#lang-btn");
+  if (btn) btn.textContent = LANG === "th" ? "EN" : "ไทย";
+  document.documentElement.lang = LANG;
+  for (const n of textNodes(document.body)) {
+    if (n.parentNode && ["SCRIPT", "STYLE"].includes(n.parentNode.nodeName)) continue;
+    if (n.__en === undefined) {
+      const raw = n.nodeValue.trim();
+      if (!raw) continue;
+      const hit = TH[raw] || (NOTE_TH.find(([re]) => re.test(raw)) || [])[1];
+      if (!hit) continue;
+      n.__en = n.nodeValue;
+      n.__th = n.nodeValue.replace(raw, hit);
+    }
+    const want = LANG === "th" ? n.__th : n.__en;
+    if (want !== undefined && n.nodeValue !== want) n.nodeValue = want;
+  }
+}
+let langTimer;
+new MutationObserver(() => { clearTimeout(langTimer); langTimer = setTimeout(applyLang, 80); }).observe(document.body, { childList: true, subtree: true, characterData: true });
+document.addEventListener("click", (e) => {
+  if (e.target.id !== "lang-btn") return;
+  LANG = LANG === "th" ? "en" : "th";
+  try { localStorage.setItem("lang", LANG); } catch (err) { /* ignore */ }
+  applyLang();
+});
+
 show();
 refreshAccount();
+applyLang();
 
 /* layout probe for automated checks: ?probe writes scrollWidth/viewport width to body[data-sw] */
 if (location.search === "?probe") setTimeout(() => { document.body.dataset.sw = document.documentElement.scrollWidth + "/" + window.innerWidth; }, 9000);

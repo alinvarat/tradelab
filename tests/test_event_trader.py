@@ -135,6 +135,19 @@ class Context(Base):
         self.assertAlmostEqual(ev["out_vs_spy"]["3600"], 0.10 - 0.01, places=4)
 
 
+class PositionsView(Base):
+    def test_view_lists_open_positions_with_stop_exit_time_reason_and_control(self):
+        self.t.context = {"SPY": quote("SPY", px=500, move=3.0), "^VIX": quote("^VIX", px=22.0)}
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        p = self.t.view()["positions"][0]
+        for key in ("symbol", "entry", "mark", "pnl_pct", "notional_usd", "stop", "opened_ts", "exit_at", "why", "control"):
+            self.assertIn(key, p)
+        self.assertEqual(p["symbol"], "AAA")
+        self.assertAlmostEqual(p["exit_at"] - p["opened_ts"], et.HOLD_S)
+        self.assertIn("12.0%", p["why"])
+        self.assertIsNotNone(p["control"]["symbol"])
+
+
 class Evaluation(Base):
     def test_no_conclusion_before_thirty_pairs(self):
         self.t.pairs = [{"id": str(i), "s1": 0.05, "ctrl": 0.0} for i in range(29)]
