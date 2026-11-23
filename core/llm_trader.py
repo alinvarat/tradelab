@@ -526,8 +526,7 @@ class LlmTrader:
                     "calls_today": self.calls["n"], "max_calls_day": MAX_CALLS_DAY, "error": self.last_error,
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
                     "model": ai_news.DECISION_MODEL.split("/", 1)[-1],
-                    "positions": [{"symbol": s, "qty": p.qty, "entry": p.entry,
-                                   "mark": a.last[s].bid if s in a.last else None} for s, p in a.positions.items()],
+                    "positions": [self._pos_view(s, p, time.time()) for s, p in a.positions.items()],
                     "decisions": self.decisions[::-1][:40], "evaluation": self.evaluate(), "log_file": str(self.log_path.name)}
 
 

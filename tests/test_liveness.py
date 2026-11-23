@@ -28,5 +28,18 @@ class Supervisor(unittest.TestCase):
         server.RESTARTS.clear()
 
 
+class Accounts(unittest.TestCase):
+    def test_summary_is_safe_before_the_bots_start_and_uses_one_unit(self):
+        from unittest import mock
+        with mock.patch("server.data.fx_to_usd", return_value=0.03), mock.patch.object(server, "auto", None), \
+                mock.patch.object(server, "hunt", None), mock.patch.object(server, "evt", None), mock.patch.object(server, "llm", None):
+            out = server.accounts_summary()
+        self.assertEqual([r["key"] for r in out["rows"]], ["manual"])
+        row = out["rows"][0]
+        self.assertAlmostEqual(row["equity_thb"], row["equity_usd"] / 0.03)
+        self.assertAlmostEqual(out["thb_per_usd"], 1 / 0.03)
+        self.assertEqual(row["return_pct"], 0.0)
+
+
 if __name__ == "__main__":
     unittest.main()

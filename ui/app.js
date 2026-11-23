@@ -81,10 +81,10 @@ function bindRowOpen(el) {
 const symCell = (s, n) => `<span class="sym">${esc(s)}</span>${n ? `<span class="sym-name">${esc(n)}</span>` : ""}`;
 
 /* ---------- routing (state lives in the hash) ---------- */
-const route = { view: "auto", symbol: "AAPL", range: "1y" };
+const route = { view: "overview", symbol: "AAPL", range: "1y" };
 function readHash() {
   const [v, q] = location.hash.slice(1).split("?");
-  route.view = v || "auto";
+  route.view = v || "overview";
   const p = new URLSearchParams(q || "");
   if (p.get("symbol")) route.symbol = p.get("symbol").toUpperCase();
   if (p.get("range")) route.range = p.get("range");
@@ -437,7 +437,7 @@ let eqChart = null;
 async function refreshAccount() {
   try { ACCOUNT = await api("account"); } catch (e) { return; }
   const a = ACCOUNT;
-  $("#simflag").textContent = `Simulated equity ${usd(a.stats.equity)}`;
+  $("#simflag").textContent = `Manual sandbox ${usd(a.stats.equity)}`;
   const p = a.positions.find((x) => x.symbol === route.symbol);
   const ph = $("#pos-here");
   if (ph) ph.innerHTML = p ? `<dl class="kv"><dt>Side</dt><dd>${p.side > 0 ? "Long" : "Short"}</dd><dt>Quantity</dt><dd>${fmt(p.qty, null)}</dd><dt>Entry</dt><dd>${fmt(p.entry)}</dd><dt>Profit or loss</dt><dd class="${cls(p.pnl_usd)}">${usd(p.pnl_usd)} (${pct(p.pnl_pct)})</dd><dt>Stop loss</dt><dd>${fmt(p.sl)}</dd><dt>Take profit</dt><dd>${fmt(p.tp)}</dd></dl><div class="row" style="margin-top: var(--space-sm)"><button class="sm" data-close="${esc(p.symbol)}">Close position</button></div>` : `<div class="empty">No position in ${esc(route.symbol)}. Use the ticket above.</div>`;
@@ -685,6 +685,58 @@ function rorCalc() {
 ["#size-form", "#ror-form"].forEach((id) => $(id).addEventListener("input", id === "#size-form" ? sizeCalc : rorCalc));
 views.tools = () => { sizeCalc(); rorCalc(); };
 
+/* ---------- overview of all accounts ---------- */
+views.overview = async () => {
+  const el = $("#ov-table");
+  let d;
+  try { d = await api("accounts"); } catch (e) { el.innerHTML = errBox(e, "accounts"); return; }
+  $("#ov-sub").textContent = `1 USD = ${fmt(d.thb_per_usd, 2)} THB | social buzz study: ${d.buzz_events ?? "off"} events (analysis only, no account)`;
+  el.innerHTML = table([
+    { h: "Account", f: (r) => `<a href="#${r.tab}"><b>${esc(r.name)}</b></a>` },
+    { h: "Start (USD)", num: 1, f: (r) => fmt(r.start_usd, 2) },
+    { h: "Equity (USD)", num: 1, f: (r) => fmt(r.equity_usd, 2) },
+    { h: "Equity (THB)", num: 1, f: (r) => fmt(r.equity_thb, 0) },
+    { h: "Return", num: 1, f: (r) => pct(r.return_pct), cls: (r) => cls(r.return_pct) },
+    { h: "Random control (USD)", num: 1, f: (r) => (r.control_usd != null ? fmt(r.control_usd, 2) : "-") },
+    { h: "Open", num: 1, f: (r) => r.positions },
+    { h: "Status", f: (r) => esc(r.status) },
+    { h: "Note", f: (r) => esc(r.note) },
+  ], d.rows, { empty: "No accounts." });
+};
+
+/* ---------- DeepSeek trader ---------- */
+views.llm = async () => {
+  const figs = $("#llm-figs");
+  let l;
+  try { l = await api("llm_trader"); } catch (e) { figs.innerHTML = errBox(e, "llm_trader"); return; }
+  if (l.disabled) { figs.innerHTML = `<div class="empty">The DeepSeek trader is off on this server (needs the OPENROUTER_API_KEY secret).</div>`; return; }
+  const ev = l.evaluation || {}, dis = ev.discrimination || {};
+  $("#llm-sub").textContent = `${l.model} | calls today ${l.calls_today}/${l.max_calls_day}${l.error ? " | " + l.error : ""}`;
+  figs.innerHTML = `<div class="figures">
+    <div class="figure hot"><b>${fmt(l.equity_usd, 2)} USD</b><span>DeepSeek account (${fmt(l.equity_thb, 0)} THB, start ${fmt(l.capital_usd, 2)} USD)</span></div>
+    <div class="figure"><b>${fmt(l.control_equity_usd, 2)} USD</b><span>Random control account</span></div>
+    <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
+    <div class="figure"><b>${l.paused ? "Paused" : "Running"}</b><span>last scan ${l.last_scan_age_s ?? "never"} s ago</span></div></div>
+    <p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>
+    <p class="small muted">Every stock shown to the model is also scored +1 day vs SPY. Bought: ${dis.bought ? dis.bought.n : 0} scored${dis.bought && dis.bought.mean_abnormal_1d != null ? ", mean " + pct(dis.bought.mean_abnormal_1d * 100) : ""}.
+    Passed: ${dis.passed ? dis.passed.n : 0} scored${dis.passed && dis.passed.mean_abnormal_1d != null ? ", mean " + pct(dis.passed.mean_abnormal_1d * 100) : ""}. Rules: research/llm_trader/protocol.md</p>`;
+  $("#llm-pos").innerHTML = table([
+    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
+    { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) }, { h: "Stop", num: 1, f: (r) => fmt(r.stop) },
+    { h: "Target", num: 1, f: (r) => fmt(r.target) }, { h: "Horizon", f: (r) => esc(r.horizon || "-") },
+    { h: "Held (h)", num: 1, f: (r) => fmt(r.held_hours, 1) }, { h: "Why", f: (r) => esc(r.your_reason || "") },
+  ], l.positions, { empty: "No open positions." });
+  $("#llm-list").innerHTML = table([
+    { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" }) },
+    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Action", f: (r) => esc(r.action) },
+    { h: "Size %", num: 1, f: (r) => fmt(r.size_pct, 1) }, { h: "Horizon", f: (r) => esc(r.horizon || "-") },
+    { h: "Stop / target %", f: (r) => `${r.stop_pct != null ? fmt(r.stop_pct, 0) : "-"} / ${r.target_pct != null ? fmt(r.target_pct, 0) : "-"}` },
+    { h: "Look again (min)", num: 1, f: (r) => fmt(r.review_in_min, 0) },
+    { h: "Result", f: (r) => esc((r.executed && (r.executed.status + (r.executed.why ? " (" + r.executed.why + ")" : ""))) || "-") },
+    { h: "Reason (model)", f: (r) => esc(r.reason) },
+  ], l.decisions, { empty: "No decisions yet; the model is asked when new shocks appear." });
+};
+
 /* ---------- social buzz ---------- */
 views.buzz = async () => {
   const figs = $("#bz-figs");
@@ -729,24 +781,6 @@ views.events = async () => {
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
     <div class="figure"><b>${d.paused ? "Paused" : "Running"}</b><span>${esc(d.rules.shock)}</span></div></div>
     <p class="small muted">${esc(d.rules.trade)}</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
-  try {
-    const l = await api("llm_trader");
-    $("#llm-panel").hidden = !!l.disabled;
-    if (!l.disabled) {
-      const ev2 = l.evaluation || {};
-      $("#llm-sub").textContent = `${l.model} | calls today ${l.calls_today}/${l.max_calls_day}${l.error ? " | " + l.error : ""}`;
-      $("#llm-figs").innerHTML = `<div class="figures">
-        <div class="figure hot"><b>${fmt(l.equity_thb, 0)} THB</b><span>Model account</span></div>
-        <div class="figure"><b>${fmt(l.control_equity_usd, 2)} USD</b><span>Random control</span></div>
-        <div class="figure"><b>${ev2.closed_pairs ?? 0} / ${ev2.needed ?? 30}</b><span>closed pairs</span></div></div><p><b>Verdict:</b> ${esc(ev2.verdict || "")}</p>`;
-      $("#llm-list").innerHTML = table([
-        { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
-        { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Action", f: (r) => esc(r.action) },
-        { h: "Size %", num: 1, f: (r) => fmt(r.size_pct, 1) }, { h: "Result", f: (r) => esc((r.executed && (r.executed.status + (r.executed.why ? " (" + r.executed.why + ")" : ""))) || "-") },
-        { h: "Reason (model)", f: (r) => esc(r.reason) },
-      ], l.decisions, { empty: "No decisions yet; the model is asked when new shocks appear." });
-    }
-  } catch (e) { $("#llm-panel").hidden = true; }
   list.innerHTML = table([
     { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
     { h: "Stock", f: (r) => symCell(r.symbol, "") },
@@ -845,8 +879,10 @@ $$("[data-auto]").forEach((b) => b.addEventListener("click", async () => {
 setInterval(() => {
   if (document.hidden) return;
   if (route.view === "markets") views.markets();
+  else if (route.view === "overview") views.overview();
   else if (route.view === "auto") views.auto();
   else if (route.view === "events") views.events();
+  else if (route.view === "llm") views.llm();
   else if (route.view === "buzz") views.buzz();
   else if (route.view === "portfolio" || route.view === "chart") refreshAccount();
   if (route.view === "chart" && curSym) api("quote?symbol=" + encodeURIComponent(curSym)).then((q) => { if (q && !q.error && curSym === route.symbol) { lastQuote = q; const el = $("#qhead .px"); if (el) el.textContent = fmt(q.price); renderTicket(); } }).catch(() => {});

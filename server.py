@@ -345,6 +345,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200, hunt.view())
             if p == "events":
                 return self._send(200, evt.view())
+            if p == "accounts":
+                return self._send(200, accounts_summary())
             if p == "steward":
                 return self._send(200, steward.LAST or {"note": "no review yet (first one runs about 5 minutes after start)"})
             if p == "dvol":
@@ -552,6 +554,39 @@ def backup_loop(keep=14):
 def ai_news_available():
     from core import ai_news
     return ai_news.openrouter_available() or ai_news.opencode_available()
+
+
+def accounts_summary():
+    """One row per simulated account/experiment so the UI can show them side by side in the same units."""
+    rate = data.fx_to_usd("THB") or 0.03
+    rows = []
+
+    def add(key, name, tab, acct_, start_usd, status, note, ctrl=None):
+        with lock:
+            eq = acct_.equity()
+        rows.append({"key": key, "name": name, "tab": tab, "start_usd": start_usd, "equity_usd": eq,
+                     "return_pct": (eq / start_usd - 1) * 100 if start_usd else None, "equity_thb": eq / rate,
+                     "positions": len(acct_.positions), "status": status, "note": note,
+                     "control_usd": ctrl.equity() if ctrl else None})
+    add("manual", "Manual sandbox", "portfolio", acct, acct.initial, "you place the orders",
+        "Not a bot. Start capital is a round $100,000 for trying the order ticket.")
+    if auto:
+        add("auto", "Auto trader (monthly momentum)", "auto", auto.acct, auto.capital_usd, "paused" if auto.paused else "running",
+            "all cash this month" if not auto.targets else "holding " + ", ".join(auto.targets))
+    if hunt:
+        v = hunt.view()
+        add("hunter", "Hunter (20x BTC/ETH/SOL)", "auto", hunt.acct, hunt.capital_usd,
+            "ruined" if v["ruined"] else "running", "leveraged crypto trend; high risk by design")
+    if evt:
+        ev = evt.evaluate()
+        add("event", "Event trader (rule)", "events", evt.acct, evt.capital_usd, "paused" if evt.paused else "running",
+            f"{ev['closed_pairs']}/{ev['needed']} pairs vs random control", ctrl=evt.ctrl)
+    if llm:
+        ev = llm.evaluate()
+        add("llm", "DeepSeek trader", "llm", llm.acct, llm.capital_usd, "paused" if llm.paused else "running",
+            f"{ev['closed_pairs']}/{ev['needed']} pairs vs random control", ctrl=llm.ctrl)
+    extra = {"buzz_events": len(buzzmon.events) if buzzmon else None}
+    return {"rows": rows, "thb_per_usd": 1 / rate, **extra}
 
 
 def status_for_steward():
