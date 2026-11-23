@@ -233,6 +233,19 @@ class HorizonFreedom(Base):
         self.assertEqual(len(out["rejected"]), 1)
 
 
+class ViewData(Base):
+    def test_view_positions_carry_stop_target_pnl_and_reason_for_the_ui(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "horizon": "swing", "stop_pct": 6, "target_pct": 25,
+                    "review_in_min": 120, "reason": "guidance"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        v = self.t.view()
+        p = v["positions"][0]
+        for key in ("symbol", "entry", "mark", "pnl_pct", "stop", "target", "horizon", "held_hours", "your_reason"):
+            self.assertIn(key, p)
+        self.assertEqual((p["horizon"], p["your_reason"]), ("swing", "guidance"))
+        self.assertIn("discrimination", v["evaluation"])
+
+
 class FastTier(Base):
     def test_watch_requotes_only_open_positions_and_triggers_the_stop(self):
         self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "stop_pct": 5, "review_in_min": 999, "reason": "r"})

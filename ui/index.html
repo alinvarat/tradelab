@@ -20,6 +20,7 @@
       <a href="#markets" data-view="markets">Markets</a>
       <a href="#chart" data-view="chart">Chart and analysis</a>
       <a href="#portfolio" data-view="portfolio">Portfolio</a>
+      <a href="#llm" data-view="llm">DeepSeek</a>
       <a href="#events" data-view="events">Events</a>
       <a href="#buzz" data-view="buzz">Buzz</a>
       <a href="#news" data-view="news">News</a>
@@ -147,11 +148,15 @@
 </section>
 
 <!-- NEWS -->
+<section class="view" id="v-llm" hidden>
+  <div class="panel"><div class="row spread"><h2>DeepSeek trader (paper money)</h2><span class="small muted" id="llm-sub"></span></div>
+    <div id="llm-figs"></div></div>
+  <div class="panel"><h2>Open positions</h2><div id="llm-pos"><div class="empty">No open positions.</div></div></div>
+  <div class="panel"><h2>Decisions and the model's reasons</h2><div id="llm-list"><div class="empty">No decisions yet.</div></div></div>
+</section>
 <section class="view" id="v-events" hidden>
   <div class="panel"><div class="row spread"><h2>Event trader (paper)</h2><span class="small muted" id="ev-sub"></span></div>
     <div id="ev-figs"></div></div>
-  <div class="panel" id="llm-panel" hidden><div class="row spread"><h2>LLM trader (DeepSeek, paper)</h2><span class="small muted" id="llm-sub"></span></div>
-    <div id="llm-figs"></div><div id="llm-list"></div></div>
   <div class="panel"><h2>Large single-stock moves with headlines</h2><div id="ev-list"><div class="empty">No events yet.</div></div></div>
 </section>
 <section class="view" id="v-buzz" hidden>

@@ -685,6 +685,39 @@ function rorCalc() {
 ["#size-form", "#ror-form"].forEach((id) => $(id).addEventListener("input", id === "#size-form" ? sizeCalc : rorCalc));
 views.tools = () => { sizeCalc(); rorCalc(); };
 
+/* ---------- DeepSeek trader ---------- */
+views.llm = async () => {
+  const figs = $("#llm-figs");
+  let l;
+  try { l = await api("llm_trader"); } catch (e) { figs.innerHTML = errBox(e, "llm_trader"); return; }
+  if (l.disabled) { figs.innerHTML = `<div class="empty">The DeepSeek trader is off on this server (needs the OPENROUTER_API_KEY secret).</div>`; return; }
+  const ev = l.evaluation || {}, dis = ev.discrimination || {};
+  $("#llm-sub").textContent = `${l.model} | calls today ${l.calls_today}/${l.max_calls_day}${l.error ? " | " + l.error : ""}`;
+  figs.innerHTML = `<div class="figures">
+    <div class="figure hot"><b>${fmt(l.equity_usd, 2)} USD</b><span>DeepSeek account (${fmt(l.equity_thb, 0)} THB, start ${fmt(l.capital_usd, 2)} USD)</span></div>
+    <div class="figure"><b>${fmt(l.control_equity_usd, 2)} USD</b><span>Random control account</span></div>
+    <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
+    <div class="figure"><b>${l.paused ? "Paused" : "Running"}</b><span>last scan ${l.last_scan_age_s ?? "never"} s ago</span></div></div>
+    <p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>
+    <p class="small muted">Every stock shown to the model is also scored +1 day vs SPY. Bought: ${dis.bought ? dis.bought.n : 0} scored${dis.bought && dis.bought.mean_abnormal_1d != null ? ", mean " + pct(dis.bought.mean_abnormal_1d * 100) : ""}.
+    Passed: ${dis.passed ? dis.passed.n : 0} scored${dis.passed && dis.passed.mean_abnormal_1d != null ? ", mean " + pct(dis.passed.mean_abnormal_1d * 100) : ""}. Rules: research/llm_trader/protocol.md</p>`;
+  $("#llm-pos").innerHTML = table([
+    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
+    { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) }, { h: "Stop", num: 1, f: (r) => fmt(r.stop) },
+    { h: "Target", num: 1, f: (r) => fmt(r.target) }, { h: "Horizon", f: (r) => esc(r.horizon || "-") },
+    { h: "Held (h)", num: 1, f: (r) => fmt(r.held_hours, 1) }, { h: "Why", f: (r) => esc(r.your_reason || "") },
+  ], l.positions, { empty: "No open positions." });
+  $("#llm-list").innerHTML = table([
+    { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" }) },
+    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Action", f: (r) => esc(r.action) },
+    { h: "Size %", num: 1, f: (r) => fmt(r.size_pct, 1) }, { h: "Horizon", f: (r) => esc(r.horizon || "-") },
+    { h: "Stop / target %", f: (r) => `${r.stop_pct != null ? fmt(r.stop_pct, 0) : "-"} / ${r.target_pct != null ? fmt(r.target_pct, 0) : "-"}` },
+    { h: "Look again (min)", num: 1, f: (r) => fmt(r.review_in_min, 0) },
+    { h: "Result", f: (r) => esc((r.executed && (r.executed.status + (r.executed.why ? " (" + r.executed.why + ")" : ""))) || "-") },
+    { h: "Reason (model)", f: (r) => esc(r.reason) },
+  ], l.decisions, { empty: "No decisions yet; the model is asked when new shocks appear." });
+};
+
 /* ---------- social buzz ---------- */
 views.buzz = async () => {
   const figs = $("#bz-figs");
@@ -729,24 +762,6 @@ views.events = async () => {
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
     <div class="figure"><b>${d.paused ? "Paused" : "Running"}</b><span>${esc(d.rules.shock)}</span></div></div>
     <p class="small muted">${esc(d.rules.trade)}</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
-  try {
-    const l = await api("llm_trader");
-    $("#llm-panel").hidden = !!l.disabled;
-    if (!l.disabled) {
-      const ev2 = l.evaluation || {};
-      $("#llm-sub").textContent = `${l.model} | calls today ${l.calls_today}/${l.max_calls_day}${l.error ? " | " + l.error : ""}`;
-      $("#llm-figs").innerHTML = `<div class="figures">
-        <div class="figure hot"><b>${fmt(l.equity_thb, 0)} THB</b><span>Model account</span></div>
-        <div class="figure"><b>${fmt(l.control_equity_usd, 2)} USD</b><span>Random control</span></div>
-        <div class="figure"><b>${ev2.closed_pairs ?? 0} / ${ev2.needed ?? 30}</b><span>closed pairs</span></div></div><p><b>Verdict:</b> ${esc(ev2.verdict || "")}</p>`;
-      $("#llm-list").innerHTML = table([
-        { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
-        { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Action", f: (r) => esc(r.action) },
-        { h: "Size %", num: 1, f: (r) => fmt(r.size_pct, 1) }, { h: "Result", f: (r) => esc((r.executed && (r.executed.status + (r.executed.why ? " (" + r.executed.why + ")" : ""))) || "-") },
-        { h: "Reason (model)", f: (r) => esc(r.reason) },
-      ], l.decisions, { empty: "No decisions yet; the model is asked when new shocks appear." });
-    }
-  } catch (e) { $("#llm-panel").hidden = true; }
   list.innerHTML = table([
     { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
     { h: "Stock", f: (r) => symCell(r.symbol, "") },
@@ -847,6 +862,7 @@ setInterval(() => {
   if (route.view === "markets") views.markets();
   else if (route.view === "auto") views.auto();
   else if (route.view === "events") views.events();
+  else if (route.view === "llm") views.llm();
   else if (route.view === "buzz") views.buzz();
   else if (route.view === "portfolio" || route.view === "chart") refreshAccount();
   if (route.view === "chart" && curSym) api("quote?symbol=" + encodeURIComponent(curSym)).then((q) => { if (q && !q.error && curSym === route.symbol) { lastQuote = q; const el = $("#qhead .px"); if (el) el.textContent = fmt(q.price); renderTicket(); } }).catch(() => {});
