@@ -68,6 +68,12 @@ def chart(symbol: str, rng: str = "1y", interval: str | None = None) -> dict:
     return {"meta": res["meta"], "bars": bars, "interval": iv}
 
 
+def thb_at_open(equity_usd: float, capital_usd: float, capital_thb: float = 5000.0) -> float:
+    """THB value of an account at the exchange rate it was opened with, so THB profit/loss equals the USD return
+    (a baht/dollar move on play money is not trading profit)."""
+    return equity_usd * capital_thb / capital_usd if capital_usd else 0.0
+
+
 def quote_fast(symbol: str, ttl: float = 1.5) -> dict:
     """Same fields as quote() but from a one-bar chart request with a ~1 s cache, so positions and shock candidates can be
     polled every few seconds (the Yahoo meta price is within seconds of the exchange for US stocks)."""
@@ -82,7 +88,7 @@ def quote_fast(symbol: str, ttl: float = 1.5) -> dict:
 
 
 def quote(symbol: str) -> dict:
-    """Latest price. Crypto uses Binance live bid/ask; everything else the Yahoo chart meta (may be delayed)."""
+    """Latest price. Crypto uses Binance live bid/ask; everything else the Yahoo chart meta (about 1-6 s old for US stocks)."""
     m = chart(symbol, "5d", "15m")["meta"] if not is_crypto(symbol) else None
     if is_crypto(symbol):
         b = binance_symbol(symbol)
@@ -117,7 +123,7 @@ def _quote_from_meta(symbol, m):
             "volume": m.get("regularMarketVolume"), "currency": m.get("currency", "USD"), "type": typ,
             "name": m.get("shortName") or m.get("longName") or symbol, "ts": ts,
             "w52_high": m.get("fiftyTwoWeekHigh"), "w52_low": m.get("fiftyTwoWeekLow"),
-            "exchange": m.get("fullExchangeName"), "source": "Yahoo (may be delayed ~15 min)", "open": open_}
+            "exchange": m.get("fullExchangeName"), "source": "Yahoo (US quotes were measured at about 1-6 s old)", "open": open_}
 
 
 # Simulated full spread when the source gives no bid/ask (fraction of price).

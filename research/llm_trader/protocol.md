@@ -1,3 +1,17 @@
+# LLM trader (paper) - CURRENT RULES (v3, 2026-11-24)
+This block is the rule set in force. The sections below are the history of earlier versions (v1, v2, v2.1, v2.2); where they differ from this block, THIS BLOCK WINS (for example, the 5-day exit, 5% size cap, 8-position cap and the pro-model choice are all withdrawn).
+- Decider: `openrouter/deepseek/deepseek-v4.1-flash-1017` only (decision, bull/bear, steward, headline scoring; haiku additionally scores headlines for the locked scoring comparison). Model id pinned; a differing served model is logged as "(SERVED: x)".
+- Trigger: a decision cycle (bull call and bear call in parallel, then the decision call) when large-cap stocks of the 104-stock universe move >= 5% from the previous close on >= 0.5x their 50-day volume with a fresh quote in an open market, and for position reviews at the times the model chose (5 minutes to 7 days). Min 60 s between cycles, 300 cycles/day runaway guard.
+- The model decides: whether to trade any universe stock (not only shown candidates), margin 0-100% of equity, leverage 1-20, market or limit entry (limit valid 5-1440 min), stop 1-25%, optional target, horizon, review time, adding to or cutting positions. One decision with a reason is required for every shown candidate, passes included. Free text is in Thai.
+- Only physical limits remain: margin/cash (total notional <= 20x equity, fee and slippage must fit), fresh quote from an open market, engine liquidation at margin level 50%, 8% a year financing on the borrowed part (model and control alike), pause when the account is ruined (< 5% of start), 180-day safety exit, technical cap of 100 positions.
+- Control account: on every fill a random non-shock stock gets the same notional and leverage; it exits when the model exits (or by its own stop/target/liquidation).
+- Data speed: universe scan every 10 s, open positions every 2 s, stocks within 1.5 points of the threshold re-polled each fast pass; quotes measured 1-6 s old.
+- Logs: append-only `data/llm_trader_log.jsonl` (full context, raw reply, debate, decisions with reasons, orders with notional/margin/leverage/stop/target/clipping, skips with reason, fills/expiries of limit entries, financing, closed trades, pairs, scored candidates) and the process log; Logs tab shows them.
+- Evaluation: nothing concluded before 30 closed pairs; then mean model return > 0, mean paired difference vs control > 0 and bootstrap p(diff <= 0) < 0.10 (2000 resamples, seed 20261123), and even then a second non-overlapping window is required. Every shown candidate is also scored at +1h/+1d vs SPY (bought vs passed), descriptive only.
+- Expected result: "no edge shown"; earlier research found no edge from buying after big news.
+
+---- history below (superseded where different) ----
+
 # LLM trader (paper): DeepSeek v4.1 flash 1017 decides, the system supplies data and enforces limits
 Locked 2026-11-23 before the first decision. Simulated money only (5,000 THB = USD at the live rate). No real orders, no keys in code.
 Question: do the model's buy choices on large-cap shocks beat a same-time random control?
@@ -25,3 +39,11 @@ Owner direction: everything real-time and the best available, cost is not a conc
 
 ## Protocol v2.2 (2026-11-23, before any live decision): one model only
 Owner rule: `openrouter/deepseek/deepseek-v4.1-flash-1017` is the only model used by the LLM trader, the bull/bear calls, the steward and the headline scoring (haiku stays as a second headline scorer only for the locked scoring comparison). This replaces the v2.1 choice of a pro model, which is withdrawn. The model id is pinned (no `~...-latest` alias, no auto router, no fallback model list); the OpenRouter API path compares the model the service reports with the one requested and appends "(SERVED: x)" to the logged model name if they ever differ.
+
+## Protocol v3 (2026-11-24, before the next live decision): the model decides everything
+Owner direction: the model may decide leverage, entry price, size, number of positions and everything else; "no restrictions".
+- Removed our own limits: no cap on position count (technical 100), no cap on size (margin up to all equity), no daily loss halt, no risk-per-trade shrinking, no total exposure rule. The model picks leverage 1-20 per trade, market or limit entry (with a validity window up to 24 h), stop 1-25%, optional target, horizon, review time, and may add to a position it holds (the control account adds the same notional to its own stock) or buy any stock of the 104-stock universe, not only the shown candidates.
+- Physical limits that remain (they are simulation realism, not strategy rules): margin/cash (total notional <= 20x equity), a fresh quote from an open market, the engine's liquidation when margin level falls under 50%, a financing charge of 8% a year on the borrowed part (charged to the model and to its control), and a pause only when the account is ruined (< 5% of start).
+- The control account mirrors the model's notional and leverage on a random non-shock stock, so the paired comparison stays fair at any leverage; stops, targets and exits of the control follow the model's sells.
+- Because leverage can wipe the account in minutes, an all-in outcome is a valid result; closed trades, liquidations and the model's stated reason for size/leverage are logged. The evaluation rule is unchanged (30 closed pairs, bootstrap).
+- Language: the model writes reasons, market view and bull/bear arguments in Thai (tickers, numbers, JSON keys in English). Thai text can be less precise than English; the decision fields are numeric and validated, so only the explanations are affected.

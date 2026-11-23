@@ -27,8 +27,8 @@ body { font-size: var(--text-sm); }
 .topbar { position: sticky; top: 0; z-index: var(--z-sticky-nav); background: var(--color-ink); color: var(--color-paper); }
 .topbar-in { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter-app); display: flex; align-items: center; gap: var(--space-lg); min-height: 52px; }
 .brand { font-family: var(--font-display); font-weight: 800; font-size: var(--text-lg); text-transform: uppercase; letter-spacing: var(--tracking-display); white-space: nowrap; }
-.tabs { display: flex; gap: var(--space-3xs); overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
-.tabs a { color: var(--color-paper); text-decoration: none; padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-pill); white-space: nowrap; font-weight: 500; min-height: 36px; display: inline-flex; align-items: center; }
+.tabs { display: flex; flex-wrap: wrap; gap: var(--space-3xs); flex: 1; min-width: 0; }   /* wraps onto a second row instead of hiding tabs off-screen */
+.tabs a { color: var(--color-paper); text-decoration: none; padding: var(--space-2xs) var(--space-xs); border-radius: var(--radius-pill); white-space: nowrap; font-weight: 500; min-height: 36px; display: inline-flex; align-items: center; }
 .tabs a:hover { background: var(--color-ink-2); }
 .tabs a[aria-current="page"] { background: var(--color-accent); color: var(--color-accent-ink); }
 .tabs a:focus-visible { outline-color: var(--color-accent); }
@@ -173,3 +173,5 @@ dl.kv dd { text-align: right; font-family: var(--font-outlier); font-weight: 500
 .note { color: var(--color-muted); font-size: var(--text-xs); margin-top: var(--space-xs); }
 .view[hidden] { display: none; }
 noscript p { padding: var(--space-lg); }
+
+.lang-btn { margin-left: var(--space-sm); }

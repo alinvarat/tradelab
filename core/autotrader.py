@@ -329,7 +329,7 @@ class AutoTrader:
                 pos.append({"symbol": s, "name": NAMES.get(s, s), "qty": p.qty, "entry": p.entry, "mark": mark,
                             "value_usd": val, "weight": val / eq * 100 if eq else 0,
                             "pnl_usd": (mark - p.entry) * p.qty * (q.fx if q else 1)})
-            return {"stats": a.stats(), "equity_thb": eq / rate if rate else None, "capital_thb": CAPITAL_THB,
+            return {"stats": a.stats(), "equity_thb": data.thb_at_open(eq, self.capital_usd, CAPITAL_THB), "fx_now_thb_per_usd": 1 / rate if rate else None, "capital_thb": CAPITAL_THB,
                     "capital_usd": self.capital_usd, "positions": pos, "model": self.model, "grid": self.grid[:12],
                     "targets": [{"symbol": s, "name": NAMES.get(s, s), "weight": w * 100, "tags": self.entry_tags.get(s, [])}
                                 for s, w in self.targets.items()],

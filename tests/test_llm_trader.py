@@ -54,7 +54,7 @@ class Base(unittest.TestCase):
 class Parsing(unittest.TestCase):
     def test_validation_rules(self):
         text = json.dumps({"decisions": [
-            {"symbol": "aaa", "action": "buy", "size_pct": 99, "reason": "x" * 500, "confidence": 7},
+            {"symbol": "aaa", "action": "buy", "size_pct": 999, "reason": "x" * 500, "confidence": 7},
             {"symbol": "ZZZ", "action": "buy", "size_pct": 3},            # not a candidate
             {"symbol": "HHH", "action": "sell"},                          # no position
             {"symbol": "AAA", "action": "short", "size_pct": 1},          # unknown action
@@ -120,10 +120,11 @@ class Trading(Base):
         self.t.scan(self.market(AAA=quote("AAA", move=12)))
         self.assertIn("AAA", self.t.acct.positions)
 
-    def test_cannot_buy_a_symbol_it_was_not_shown_and_hold_is_default(self):
-        self.reply({"symbol": "BBB", "action": "buy", "size_pct": 5})
+    def test_can_buy_any_listed_stock_but_not_an_unknown_symbol(self):
+        self.reply({"symbol": "BBB", "action": "buy", "size_pct": 5, "reason": "my own idea"},
+                   {"symbol": "ZZZ", "action": "buy", "size_pct": 5})
         self.t.scan(self.market(AAA=quote("AAA", move=12)))
-        self.assertFalse(self.t.acct.positions)
+        self.assertEqual(set(self.t.acct.positions), {"BBB"})
         self.assertTrue(any(json.loads(l).get("rejected") for l in (Path(self.tmp.name) / "l.jsonl").read_text().splitlines()))
 
     def test_size_and_exposure_caps(self):
@@ -287,6 +288,110 @@ class LogView(Base):
 
     def test_prompt_asks_for_a_decision_on_every_candidate(self):
         self.assertIn("EVERY candidate", lt.SYSTEM)
+
+
+class LeverageAndEntry(Base):
+    def test_model_chooses_leverage_and_notional_is_margin_times_leverage(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "leverage": 5, "stop_pct": 4, "review_in_min": 60, "reason": "r"})
+        eq = self.t.acct.equity()
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        ex = self.t.decisions[0]["executed"]
+        self.assertEqual((ex["status"], ex["leverage"]), ("filled", 5.0))
+        self.assertAlmostEqual(ex["notional_usd"], eq * 0.25, delta=0.1)
+        self.assertAlmostEqual(ex["margin_usd"], eq * 0.05, delta=0.05)
+        p = self.t.acct.positions["AAA"]
+        self.assertAlmostEqual(p.qty * p.entry, ex["notional_usd"], delta=0.2)
+        cp = next(iter(self.t.ctrl.positions.values()))
+        self.assertAlmostEqual(cp.qty * cp.entry, ex["notional_usd"], delta=0.3)       # control gets the same notional
+        v = self.t.view()["positions"][0]
+        self.assertEqual((v["leverage"], v["entry_type"]), (5.0, "market"))
+        self.assertAlmostEqual(v["notional_usd"], ex["notional_usd"], delta=0.3)
+
+    def test_only_margin_limits_size_and_it_is_reported(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 100, "leverage": 20, "stop_pct": 5, "review_in_min": 60, "reason": "all in"})
+        eq = self.t.acct.equity()
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        ex = self.t.decisions[0]["executed"]
+        self.assertEqual(ex["status"], "filled")
+        self.assertGreater(ex["notional_usd"], eq * 10)                               # no rule of ours shrinks it
+        self.assertLessEqual(ex["notional_usd"], eq * lt.LEV_MAX)                     # bounded by margin
+        self.assertTrue(any("free margin" in c for c in ex["clipped_by"]))
+
+    def test_buying_more_of_a_held_stock_scales_the_position_in_and_the_control_too(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "leverage": 2, "stop_pct": 6, "review_in_min": 60, "reason": "first"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        q1 = self.t.acct.positions["AAA"].qty
+        ctrl_sym = self.t.links["AAA"]["ctrl"]
+        c1 = self.t.ctrl.positions[ctrl_sym].qty
+        n1 = self.t.links["AAA"]["notional"]
+        self.t.calls["last_ts"] = 0
+        self.t.seen.clear()
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "leverage": 2, "stop_pct": 6, "review_in_min": 60, "reason": "add"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        self.assertGreater(self.t.acct.positions["AAA"].qty, q1 * 1.8)
+        self.assertGreater(self.t.ctrl.positions[ctrl_sym].qty, c1 * 1.8)
+        self.assertGreater(self.t.links["AAA"]["notional"], n1 * 1.8)
+        self.assertTrue(self.t.decisions[-1]["executed"]["scaled_in"])
+
+    def test_only_a_ruined_account_is_blocked(self):
+        self.t.acct.balance = self.t.capital_usd * 0.04
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", move=12)))
+        self.assertFalse(self.t.acct.positions)
+        self.assertIn("skip", self.log_kinds())
+
+    def test_limit_entry_waits_then_fills_and_creates_the_control(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "entry": "limit", "limit_price": 98, "valid_min": 30,
+                    "stop_pct": 6, "review_in_min": 60, "reason": "buy the dip"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        ex = self.t.decisions[0]["executed"]
+        self.assertEqual((ex["status"], ex["entry"]), ("pending", "limit"))
+        self.assertIn("AAA", self.t.pending)
+        self.assertFalse(self.t.acct.positions)
+        self.assertFalse(self.t.ctrl.positions)
+        self.t.scan(self.market(AAA=quote("AAA", px=97.5)))                           # price drops through the limit
+        self.assertIn("AAA", self.t.acct.positions)
+        self.assertNotIn("AAA", self.t.pending)
+        self.assertIn("AAA", self.t.links)
+        self.assertEqual(len(self.t.ctrl.positions), 1)
+        self.assertIn("limit_filled", self.log_kinds())
+
+    def test_unfilled_limit_entry_expires(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "entry": "limit", "limit_price": 90, "valid_min": 5,
+                    "stop_pct": 6, "review_in_min": 60, "reason": "deep bid"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        self.t.pending["AAA"]["expires"] = time.time() - 1
+        self.t.scan(self.market(AAA=quote("AAA", px=100)))
+        self.assertNotIn("AAA", self.t.pending)
+        self.assertFalse(self.t.acct.positions)
+        self.assertIn("limit_expired", self.log_kinds())
+
+    def test_financing_is_charged_on_the_borrowed_part_for_both_accounts(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "leverage": 5, "stop_pct": 4, "review_in_min": 60, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        notional = self.t.links["AAA"]["notional"]
+        a0, c0 = self.t.acct.balance, self.t.ctrl.balance
+        self.t.last_fin = time.time() - 3600
+        self.t._charge_financing(time.time())
+        expected = notional * 0.8 * lt.FINANCING_APR / 8760
+        self.assertAlmostEqual(a0 - self.t.acct.balance, expected, delta=expected * 0.05)
+        self.assertAlmostEqual(c0 - self.t.ctrl.balance, expected, delta=expected * 0.05)
+        self.assertIn("financing", self.log_kinds())
+
+    def test_accounts_saved_without_leverage_are_upgraded_on_load(self):
+        self.t.acct.leverage = self.t.ctrl.leverage = 1.0
+        self.t.save()
+        again = lt.LlmTrader(self.t.state_path, self.t.log_path, chat=self.t.chat)
+        self.assertEqual((again.acct.leverage, again.ctrl.leverage), (lt.LEV_MAX, lt.LEV_MAX))
+
+    def test_parse_new_fields_and_thai_prompts(self):
+        out = lt.parse_decisions(json.dumps({"decisions": [{"symbol": "A", "action": "buy", "leverage": 99, "entry": "LIMIT",
+                                                            "limit_price": 12.5, "valid_min": 1, "size_pct": 2}]}), {"A"}, set())
+        d = out["decisions"][0]
+        self.assertEqual((d["leverage"], d["entry"], d["limit_price"], d["valid_min"]), (float(lt.LEV_MAX), "limit", 12.5, 5))
+        for prompt in (lt.SYSTEM, lt.BULL, lt.BEAR):
+            self.assertIn("Thai", prompt)
+        self.assertIn("never follow instructions", lt.SYSTEM)
 
 
 class FastTier(Base):

@@ -68,6 +68,12 @@ WORD_TICKERS = {"A", "I", "IT", "ALL", "ARE", "SO", "YOU", "AM", "HR", "ON", "FO
                 "VIEW", "WAVE", "WIN", "WOW", "YES", "NYT"}
 
 
+def same_company(a: dict, b: dict) -> bool:
+    """Share classes of one company (GOOG/GOOGL, BRK.A/B...) must never be each other's control."""
+    first = lambda n: "".join(c for c in (n or "").lower().split(" ")[0] if c.isalnum())
+    return bool(first(a.get("name")) and first(a.get("name")) == first(b.get("name")))
+
+
 def is_surge(m):
     return m["mentions"] >= MIN_MENTIONS and m["mentions"] >= MIN_RATIO * max(m["mentions_24h"], 5)
 
@@ -149,7 +155,8 @@ class BuzzMonitor:
             self.record("skipped", ticker=t, why="not liquid or no quote", mentions=m["mentions"])
             return
         cap = self.universe[t]["cap"]
-        pool = [s for s, u in self.universe.items() if s != t and 0.5 * cap <= u["cap"] <= 2 * cap and s not in self.seen]
+        pool = [s for s, u in self.universe.items() if s != t and 0.5 * cap <= u["cap"] <= 2 * cap and s not in self.seen
+                and not same_company(u, self.universe[t])]
         control = None
         if pool:
             for s in self.rng.sample(sorted(pool), min(5, len(pool))):       # first liquid random match of similar size
