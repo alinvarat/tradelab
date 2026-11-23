@@ -121,7 +121,7 @@ class Hunter:
             a = self.acct
             rate = data.fx_to_usd("THB")
             eq = a.equity()
-            return {"equity_usd": eq, "equity_thb": eq / rate, "capital_thb": CAPITAL_THB, "lev": LEV,
+            return {"equity_usd": eq, "equity_thb": data.thb_at_open(eq, self.capital_usd, CAPITAL_THB), "capital_thb": CAPITAL_THB, "lev": LEV,
                     "month_start": self.month_start, "month_multiple": eq / self.month_start if self.month_start else None,
                     "positions": [{"symbol": s, "qty": p.qty, "entry": p.entry, "mark": a.last[s].bid if s in a.last else None,
                                    "notional": p.qty * (a.last[s].bid if s in a.last else p.entry)} for s, p in a.positions.items()],

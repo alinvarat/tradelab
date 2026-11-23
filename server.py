@@ -576,12 +576,15 @@ def accounts_summary():
     """One row per simulated account/experiment so the UI can show them side by side in the same units."""
     rate = data.fx_to_usd("THB") or 0.03
     rows = []
+    open_thb = lambda eq, start: data.thb_at_open(eq, start) if start else 0.0
 
     def add(key, name, tab, acct_, start_usd, status, note, ctrl=None):
         with lock:
             eq = acct_.equity()
         rows.append({"key": key, "name": name, "tab": tab, "start_usd": start_usd, "equity_usd": eq,
-                     "return_pct": (eq / start_usd - 1) * 100 if start_usd else None, "equity_thb": eq / rate,
+                     "return_pct": (eq / start_usd - 1) * 100 if start_usd else None,
+                     "equity_thb": eq / rate if key == "manual" else open_thb(eq, start_usd),
+                     "start_thb": acct_.initial / rate if key == "manual" else 5000.0,
                      "positions": len(acct_.positions), "status": status, "note": note,
                      "control_usd": ctrl.equity() if ctrl else None})
     add("manual", "Manual sandbox", "portfolio", acct, acct.initial, "you place the orders",

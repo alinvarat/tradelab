@@ -1,3 +1,17 @@
+# LLM trader (paper) - CURRENT RULES (v3, 2026-11-24)
+This block is the rule set in force. The sections below are the history of earlier versions (v1, v2, v2.1, v2.2); where they differ from this block, THIS BLOCK WINS (for example, the 5-day exit, 5% size cap, 8-position cap and the pro-model choice are all withdrawn).
+- Decider: `openrouter/deepseek/deepseek-v4.1-flash-1017` only (decision, bull/bear, steward, headline scoring; haiku additionally scores headlines for the locked scoring comparison). Model id pinned; a differing served model is logged as "(SERVED: x)".
+- Trigger: a decision cycle (bull call and bear call in parallel, then the decision call) when large-cap stocks of the 104-stock universe move >= 5% from the previous close on >= 0.5x their 50-day volume with a fresh quote in an open market, and for position reviews at the times the model chose (5 minutes to 7 days). Min 60 s between cycles, 300 cycles/day runaway guard.
+- The model decides: whether to trade any universe stock (not only shown candidates), margin 0-100% of equity, leverage 1-20, market or limit entry (limit valid 5-1440 min), stop 1-25%, optional target, horizon, review time, adding to or cutting positions. One decision with a reason is required for every shown candidate, passes included. Free text is in Thai.
+- Only physical limits remain: margin/cash (total notional <= 20x equity, fee and slippage must fit), fresh quote from an open market, engine liquidation at margin level 50%, 8% a year financing on the borrowed part (model and control alike), pause when the account is ruined (< 5% of start), 180-day safety exit, technical cap of 100 positions.
+- Control account: on every fill a random non-shock stock gets the same notional and leverage; it exits when the model exits (or by its own stop/target/liquidation).
+- Data speed: universe scan every 10 s, open positions every 2 s, stocks within 1.5 points of the threshold re-polled each fast pass; quotes measured 1-6 s old.
+- Logs: append-only `data/llm_trader_log.jsonl` (full context, raw reply, debate, decisions with reasons, orders with notional/margin/leverage/stop/target/clipping, skips with reason, fills/expiries of limit entries, financing, closed trades, pairs, scored candidates) and the process log; Logs tab shows them.
+- Evaluation: nothing concluded before 30 closed pairs; then mean model return > 0, mean paired difference vs control > 0 and bootstrap p(diff <= 0) < 0.10 (2000 resamples, seed 20261123), and even then a second non-overlapping window is required. Every shown candidate is also scored at +1h/+1d vs SPY (bought vs passed), descriptive only.
+- Expected result: "no edge shown"; earlier research found no edge from buying after big news.
+
+---- history below (superseded where different) ----
+
 # LLM trader (paper): DeepSeek v4.1 flash 1017 decides, the system supplies data and enforces limits
 Locked 2026-11-23 before the first decision. Simulated money only (5,000 THB = USD at the live rate). No real orders, no keys in code.
 Question: do the model's buy choices on large-cap shocks beat a same-time random control?

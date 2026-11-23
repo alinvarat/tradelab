@@ -1,3 +1,5 @@
+**LEGACY (2026-11-24): these systemd timers and scripts were for a personal machine, which the owner switched off. Everything now runs inside the Kuber app (see deploy/README.md). Do not enable them.**
+
 # Ops (collectors, health check, backup)
 Timers (copy `*.service`/`*.timer` to `~/.config/systemd/user/`, then `systemctl --user enable --now <name>.timer`):
 - `tradelab-news-archive` every 60 s — see `../news_archive/README.md`

@@ -693,7 +693,7 @@ views.overview = async () => {
   $("#ov-sub").textContent = `1 USD = ${fmt(d.thb_per_usd, 2)} THB | social buzz study: ${d.buzz_events ?? "off"} events (analysis only, no account)`;
   el.innerHTML = table([
     { h: "Account", f: (r) => `<a href="#${r.tab}"><b>${esc(r.name)}</b></a>` },
-    { h: "Start (USD)", num: 1, f: (r) => fmt(r.start_usd, 2) },
+    { h: "Start (THB)", num: 1, f: (r) => fmt(r.start_thb, 0) }, { h: "Start (USD)", num: 1, f: (r) => fmt(r.start_usd, 2) },
     { h: "Equity (USD)", num: 1, f: (r) => fmt(r.equity_usd, 2) },
     { h: "Equity (THB)", num: 1, f: (r) => fmt(r.equity_thb, 0) },
     { h: "Return", num: 1, f: (r) => pct(r.return_pct), cls: (r) => cls(r.return_pct) },
@@ -788,7 +788,7 @@ views.llm = async () => {
   const ev = l.evaluation || {}, dis = ev.discrimination || {};
   $("#llm-sub").textContent = `${l.model} | calls today ${l.calls_today}/${l.max_calls_day}${l.error ? " | " + l.error : ""}`;
   figs.innerHTML = `<div class="figures">
-    <div class="figure hot"><b>${fmt(l.equity_usd, 2)} USD</b><span>DeepSeek account (${fmt(l.equity_thb, 0)} THB, start ${fmt(l.capital_usd, 2)} USD)</span></div>
+    <div class="figure hot"><b>${fmt(l.equity_usd, 2)} USD</b><span>DeepSeek account (${fmt(l.equity_thb, 0)} THB, from ${fmt(l.capital_thb, 0)} THB = ${fmt(l.capital_usd, 2)} USD)</span></div>
     <div class="figure"><b>${fmt(l.control_equity_usd, 2)} USD</b><span>Random control account</span></div>
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
     <div class="figure"><b>${l.paused ? "Paused" : "Running"}</b><span>last scan ${l.last_scan_age_s ?? "never"} s ago</span></div></div>
@@ -855,7 +855,7 @@ views.events = async () => {
   const ev = d.evaluation || {};
   $("#ev-sub").textContent = `scans every ${d.scan_every_s}s, last scan ${d.last_scan_age_s ?? "never"}s ago${d.error ? " | error: " + d.error : ""}`;
   figs.innerHTML = `<div class="figures">
-    <div class="figure hot"><b>${fmt(d.equity_thb, 0)} THB</b><span>Rule account, from ${fmt(d.capital_usd / (d.equity_usd / d.equity_thb), 0)} THB</span></div>
+    <div class="figure hot"><b>${fmt(d.equity_thb, 0)} THB</b><span>Rule account, from ${fmt(d.capital_thb, 0)} THB</span></div>
     <div class="figure"><b>${fmt(d.control_equity_usd, 2)} USD</b><span>Random control account</span></div>
     <div class="figure"><b>${d.n_events}</b><span>events (${d.n_up} up-shocks)</span></div>
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
@@ -987,7 +987,7 @@ const TH = {
   "Backtest": "ทดสอบย้อนหลัง", "Calendar and alerts": "ปฏิทินและแจ้งเตือน", "Risk tools": "เครื่องมือความเสี่ยง",
   "Manual sandbox": "บัญชีทดลองสั่งเอง", "Simulated money": "เงินจำลอง",
   "All simulated accounts side by side": "ทุกบัญชีจำลองเทียบกัน", "Account": "บัญชี", "Start (USD)": "ทุนเริ่ม (USD)",
-  "Equity (USD)": "มูลค่า (USD)", "Equity (THB)": "มูลค่า (บาท)", "Return": "ผลตอบแทน", "Random control (USD)": "บัญชีสุ่มเทียบ (USD)",
+  "Equity (USD)": "มูลค่า (USD)", "Equity (THB)": "มูลค่า (บาท)", "Start (THB)": "ทุนเริ่ม (บาท)", "Return": "ผลตอบแทน", "Random control (USD)": "บัญชีสุ่มเทียบ (USD)",
   "Open": "ถืออยู่", "Status": "สถานะ", "Note": "หมายเหตุ", "Loading...": "กำลังโหลด...",
   "DeepSeek trader (paper money)": "DeepSeek เทรดเดอร์ (เงินจำลอง)", "Open positions": "ตำแหน่งที่ถืออยู่",
   "Decisions and the model's reasons": "การตัดสินใจและเหตุผลของโมเดล", "Open positions of the rule": "ตำแหน่งที่กติกาถืออยู่",

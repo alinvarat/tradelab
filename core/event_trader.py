@@ -267,7 +267,7 @@ class EventTrader:
             a = self.acct
             ups = [e for e in self.events if e["direction"] == "up"]
             hz = {str(h): [e["out"][str(h)] for e in ups if str(h) in e["out"]] for h in HORIZONS}
-            return {"equity_usd": a.equity(), "equity_thb": a.equity() / data.fx_to_usd("THB"),
+            return {"equity_usd": a.equity(), "equity_thb": data.thb_at_open(a.equity(), self.capital_usd, CAPITAL_THB), "capital_thb": CAPITAL_THB,
                     "control_equity_usd": self.ctrl.equity(), "capital_usd": self.capital_usd, "paused": self.paused,
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
                     "scan_every_s": SCAN_S, "error": self.last_error,

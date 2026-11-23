@@ -54,7 +54,7 @@ class Base(unittest.TestCase):
 class Parsing(unittest.TestCase):
     def test_validation_rules(self):
         text = json.dumps({"decisions": [
-            {"symbol": "aaa", "action": "buy", "size_pct": 99, "reason": "x" * 500, "confidence": 7},
+            {"symbol": "aaa", "action": "buy", "size_pct": 999, "reason": "x" * 500, "confidence": 7},
             {"symbol": "ZZZ", "action": "buy", "size_pct": 3},            # not a candidate
             {"symbol": "HHH", "action": "sell"},                          # no position
             {"symbol": "AAA", "action": "short", "size_pct": 1},          # unknown action

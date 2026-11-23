@@ -440,7 +440,7 @@ class LlmTrader:
         room = max(0.0, (MAX_EXPOSURE - self.exposure()) * eq)
         if notional > room:
             notional, _ = room, clipped.append("total exposure cap (3x equity)")
-        free = self.acct.free_margin() * LEV_MAX * 0.99
+        free = self.acct.free_margin() / (1 / LEV_MAX + self.acct.fee_rate + self.acct.slippage + 0.0003)   # margin + fee + slippage must fit
         if notional > free:
             notional, _ = free, clipped.append("free margin")
         if notional < 1:
@@ -658,7 +658,7 @@ class LlmTrader:
     def view(self):
         with self.lock:
             a = self.acct
-            return {"equity_usd": a.equity(), "equity_thb": a.equity() / data.fx_to_usd("THB"),
+            return {"equity_usd": a.equity(), "equity_thb": data.thb_at_open(a.equity(), self.capital_usd, CAPITAL_THB), "capital_thb": CAPITAL_THB,
                     "control_equity_usd": self.ctrl.equity(), "capital_usd": self.capital_usd, "paused": self.paused,
                     "calls_today": self.calls["n"], "max_calls_day": MAX_CALLS_DAY, "error": self.last_error,
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,

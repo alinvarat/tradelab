@@ -66,6 +66,14 @@ class SingleModel(unittest.TestCase):
         self.assertIn("SERVED: vendor/other", other)
 
 
+class ThbAtOpen(unittest.TestCase):
+    def test_thb_profit_equals_usd_return_so_fx_moves_do_not_fake_a_loss(self):
+        self.assertAlmostEqual(data.thb_at_open(147.0, 147.0), 5000.0)
+        self.assertAlmostEqual(data.thb_at_open(148.47, 147.0), 5050.0, places=1)       # +1% in USD is +50 THB
+        self.assertAlmostEqual(data.thb_at_open(147.5, 147.5) - 5000.0, 0.0)             # opened at a different USD amount
+        self.assertEqual(data.thb_at_open(10.0, 0.0), 0.0)
+
+
 class QuoteFast(unittest.TestCase):
     def test_same_fields_as_quote_from_a_meta_block(self):
         meta = {"regularMarketPrice": 100.0, "previousClose": 90.0, "regularMarketTime": 4_000_000_000,
