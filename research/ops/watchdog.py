@@ -6,6 +6,7 @@ from pathlib import Path
 import os
 import shutil
 import subprocess
+from urllib.error import HTTPError
 from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +42,9 @@ def check(now):
             problems.append(f"TradeLab server unhealthy: {health}")
         elif health.get("auto_cycle_age_s") and health["auto_cycle_age_s"] > 3600:
             problems.append(f"auto trader has not completed a cycle for {health['auto_cycle_age_s']} s")
+    except HTTPError as exc:
+        if exc.code != 404:  # 404 = server started before /healthz existed; restart it to enable the check
+            problems.append(f"TradeLab server error {exc.code}")
     except Exception as exc:  # noqa: BLE001
         problems.append(f"TradeLab server not answering: {exc!r}")
     free_gb = shutil.disk_usage(ROOT).free / 1e9
