@@ -26,6 +26,8 @@ STATE = ROOT / "data" / "state.json"
 HOST = os.environ.get("TRADELAB_HOST", "127.0.0.1")  # keep 127.0.0.1 behind a tunnel; the server has no login
 PORT = int(os.environ.get("TRADELAB_PORT", "8770"))
 STARTED = time.time()
+THREADS: dict = {}   # name -> (target, args, thread) so a dead loop thread is restarted
+RESTARTS: dict = {}
 
 DEFAULT_WATCH = ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "SPY", "QQQ",
                  "BTC-USD", "ETH-USD", "SOL-USD", "GC=F", "CL=F", "EURUSD=X", "USDJPY=X"]
@@ -270,9 +272,25 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if u.path == "/healthz":
                 now = time.time()
-                ok = now - status["last_poll"] < 300 or now - STARTED < 120
+                age = {"poller": (now - status["last_poll"], 300)}
+                if auto:
+                    age["auto_trader"] = (now - getattr(auto, "last_cycle", STARTED), 1800)
+                if evt and evt.last_scan:
+                    age["event_trader"] = (now - evt.last_scan, 600)
+                if buzzmon:
+                    age["buzz"] = (now - (buzzmon.last_scan or STARTED), 3 * buzz.SCAN_S + 300)
+                if news_archive.STATUS:
+                    age["news_archive"] = (now - news_archive.STATUS["ts"], 900)
+                if llm and llm.last_scan:
+                    age["llm_trader"] = (now - llm.last_scan, 1800)
+                grace = now - STARTED < 180
+                stale = sorted(k for k, (a, limit) in age.items() if a > limit)
+                free_gb = shutil.disk_usage(ROOT).free / 1e9
+                ok = grace or (not stale and free_gb > 0.2)
                 return self._send(200 if ok else 503, {
-                    "ok": ok, "uptime_s": round(now - STARTED), "last_poll_age_s": round(now - status["last_poll"]),
+                    "ok": ok, "uptime_s": round(now - STARTED), "stale": stale, "disk_free_gb": round(free_gb, 2),
+                    "ages_s": {k: round(a) for k, (a, _) in age.items()}, "restarts": RESTARTS,
+                    "last_poll_age_s": round(now - status["last_poll"]),
                     "auto_cycle_age_s": round(now - getattr(auto, "last_cycle", STARTED)) if auto else None,
                     "buzz": ({"last_scan_age_s": round(now - buzzmon.last_scan), "events": len(buzzmon.events), "error": buzzmon.last_error}
                              if buzzmon and buzzmon.last_scan else None),
@@ -524,6 +542,23 @@ def backup_loop(keep=14):
         time.sleep(3600)
 
 
+def start(name, target, *args):
+    t = threading.Thread(target=target, args=args, daemon=True, name=name)
+    THREADS[name] = (target, args, t)
+    t.start()
+
+
+def supervisor():
+    """Restart any background loop whose thread has died (loops catch their own errors; this covers the rest)."""
+    while True:
+        time.sleep(60)
+        for name, (target, args, t) in list(THREADS.items()):
+            if not t.is_alive():
+                RESTARTS[name] = RESTARTS.get(name, 0) + 1
+                print(f"thread {name} died; restarting (#{RESTARTS[name]})", flush=True)
+                start(name, target, *args)
+
+
 def shutdown(signum, _frame):
     """SIGTERM/SIGINT: persist every account once, then exit (systemd restarts it when wanted)."""
     for name, fn in (("server", save), ("auto", getattr(auto, "save", None)), ("hunter", getattr(hunt, "save", None)),
@@ -540,23 +575,24 @@ def shutdown(signum, _frame):
 if __name__ == "__main__":
     load()
     auto = autotrader.AutoTrader()
-    threading.Thread(target=autotrader.loop, args=(auto,), daemon=True).start()
+    start("autotrader", autotrader.loop, auto)
     hunt = hunter.Hunter()
-    threading.Thread(target=hunter.loop, args=(hunt,), daemon=True).start()
+    start("hunter", hunter.loop, hunt)
     evt = event_trader.EventTrader()
-    threading.Thread(target=event_trader.loop, args=(evt,), daemon=True).start()
+    start("event_trader", event_trader.loop, evt)
     if os.environ.get("TRADELAB_BUZZ", "1") == "1":  # read-only analysis; on by default
         buzzmon = buzz.BuzzMonitor()
-        threading.Thread(target=buzz.loop, args=(buzzmon,), daemon=True).start()
+        start("buzz", buzz.loop, buzzmon)
     if os.environ.get("TRADELAB_LLM_TRADER") == "1":  # needs opencode or OPENROUTER_API_KEY; off by default
         llm = llm_trader.LlmTrader()
-        threading.Thread(target=llm_trader.loop, args=(llm,), daemon=True).start()
-    threading.Thread(target=poller, daemon=True).start()
-    threading.Thread(target=backup_loop, daemon=True).start()
-    threading.Thread(target=shock_warm_loop, daemon=True).start()
-    threading.Thread(target=history_loop, daemon=True).start()
+        start("llm_trader", llm_trader.loop, llm)
+    start("poller", poller)
+    start("backup_loop", backup_loop)
+    start("shock_warm_loop", shock_warm_loop)
+    start("history_loop", history_loop)
     if os.environ.get("TRADELAB_NEWS_ARCHIVE") == "1":  # set in the container; the systemd collector uses its own copy
-        threading.Thread(target=news_archive.loop, daemon=True).start()
+        start("news_archive", news_archive.loop)
+    start("supervisor", supervisor)
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)
     print(f"TradeLab on http://{HOST}:{PORT}", flush=True)
