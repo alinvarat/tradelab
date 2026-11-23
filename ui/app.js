@@ -845,7 +845,8 @@ views.llm = async () => {
     <p class="small muted">Protocol v4: the model sees US stocks, ETFs, commodity futures, FX and crypto; v4 starts a new paper account (the old v3 account and log stay archived and are not mixed into these results). It chooses whether to trade, the margin (0-100% of equity), leverage (1-20x, margin = notional / leverage), entry, stop, target and when to look again; it is called on new shocks, linked news, social buzz, and at least every 15 minutes. The control account buys a random symbol in the same asset class with the same notional and leverage.</p>
     <p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>
     <p class="small muted">Every symbol shown to the model is also scored +1 day vs SPY. Bought: ${dis.bought ? dis.bought.n : 0} scored${dis.bought && dis.bought.mean_abnormal_1d != null ? ", mean " + pct(dis.bought.mean_abnormal_1d * 100) : ""}.
-    Passed: ${dis.passed ? dis.passed.n : 0} scored${dis.passed && dis.passed.mean_abnormal_1d != null ? ", mean " + pct(dis.passed.mean_abnormal_1d * 100) : ""}. Rules: research/llm_trader/protocol.md</p>`;
+    Passed: ${dis.passed ? dis.passed.n : 0} scored${dis.passed && dis.passed.mean_abnormal_1d != null ? ", mean " + pct(dis.passed.mean_abnormal_1d * 100) : ""}. Rules: research/llm_trader/protocol.md</p>
+    ${Object.keys(ev.by_class || {}).length ? `<p class="small muted">By asset class (closed pairs): ${Object.entries(ev.by_class).map(([k, v]) => `${k} ${v.n}, mean difference ${pct(v.mean_diff * 100)}`).join(" | ")}</p>` : ""}`;
   $("#llm-pos").innerHTML = table([
     { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Class", f: (r) => esc(r.asset_class || "-") },
     { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },

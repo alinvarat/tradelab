@@ -241,6 +241,9 @@ class WholeMarket(Base):
         self.assertEqual(v["protocol"], "v4")
         self.assertEqual(v["universe_size"], len(lt.ALL))
         self.assertEqual(v["classes"]["fx"], len(lt.ASSETS["fx"]))
+        self.t.pairs = [{"id": "1", "asset_class": "commodity", "s1": 0.02, "ctrl": 0.0},
+                        {"id": "2", "asset_class": "stock", "s1": -0.01, "ctrl": 0.0}]
+        self.assertEqual(self.t.evaluate()["by_class"]["commodity"]["n"], 1)
 
 
 class Pairing(Base):
