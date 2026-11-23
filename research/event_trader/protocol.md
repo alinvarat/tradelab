@@ -10,3 +10,5 @@ Recorded: all events (up and down) with price paths at +1h, +4h, +1d, +3d; close
 Evaluation (locked): nothing may be concluded before 30 closed pairs. Then edge candidate only if mean rule return > 0, mean paired difference > 0 and bootstrap p(diff <= 0) < 0.10 (2000 resamples, seed 20261123). Even then it needs a second, non-overlapping locked window. Otherwise report "no edge shown". Down-shocks are data only.
 No tuning of the numbers above on events already seen. Changes = a new dated protocol file.
 Limits: Yahoo quotes may be delayed ~15 min and have no order book; fills are proxies; a small sample in a few months is noisy.
+
+Addendum 2026-11-23 (logging only, rule unchanged): each event also records SPY move, abnormal move (stock move minus SPY move), VIX level, number of shocks so far that day, and each outcome also as a SPY-relative return. Reason: the first events came on a day the whole market jumped (Dow +1,300), so a raw 5% move can be market-wide rather than stock-specific. Analyses may split by this context but the locked trading rule and criterion stay as written.

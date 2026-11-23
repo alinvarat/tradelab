@@ -120,6 +120,21 @@ class Lifecycle(Base):
         self.assertTrue(any('"kind": "event"' in l for l in lines))
 
 
+class Context(Base):
+    def test_events_record_market_context_and_spy_relative_outcome(self):
+        self.t.context = {"SPY": quote("SPY", px=500, move=3.0), "^VIX": quote("^VIX", px=22.0)}
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=10)))
+        ev = self.t.events[0]
+        self.assertEqual(ev["spy_move_pct"], 3.0)
+        self.assertEqual(ev["abnormal_move_pct"], 7.0)
+        self.assertEqual(ev["vix"], 22.0)
+        ev["ts"] -= 3660
+        self.t.context["SPY"] = quote("SPY", px=505, move=4.0)       # SPY +1% since the event
+        self.t.seen.add(f"{et._day()}:AAA")
+        self.t.scan(self.market(AAA=quote("AAA", px=121, move=21)))  # stock +10%
+        self.assertAlmostEqual(ev["out_vs_spy"]["3600"], 0.10 - 0.01, places=4)
+
+
 class Evaluation(Base):
     def test_no_conclusion_before_thirty_pairs(self):
         self.t.pairs = [{"id": str(i), "s1": 0.05, "ctrl": 0.0} for i in range(29)]
