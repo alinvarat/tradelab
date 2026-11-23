@@ -20,5 +20,32 @@ Rules: `research/news_backtest/protocol_next.md`, including the addendum, all lo
 - **The pass is almost certainly inflated by the universe.** `core/universe.py` was written in 2026 and lists stocks that are famous now (PLTR, SMCI, MSTR, ENPH, SE, SHOP and others). Today's winners are therefore in the universe from the start, and a delisted loser can never be picked. The most frequent picks were ENPH, NVDA, SE, AMD, SHOP, MSTR and PLTR. The protocol listed survivorship as a known limit. That limit means this result **cannot be used as evidence of a tradable edge**.
 - The way to confirm it is a point-in-time universe, for example the S&P 500 members as of each month-end, or ETFs/sectors that existed throughout. That test needs a new protocol, locked before any run. Even if it confirmed, about +2% a month above the basket is far below the 3× a month target.
 
-## (a) 8-K items and (b) Form 4: not run yet
-Both jobs got HTTP 403 from SEC, because the `TRADELAB_SEC_UA` repo secret has not been set. Once the owner sets it, re-run with `gh workflow run research.yml -f study=items` (or `form4`).
+## (a) 8-K by item: run 45269334155 (2026-11-23 21:35 UTC), 148 stocks, 8-K since 2018
+Paired diff = event net minus a random same-class stock bought at the same open. "train / val / test" are the diffs in each split.
+
+| Item | H | n | net | diff | train / val / test | block p (train+val) | net 2× | pass |
+|---|---|---|---|---|---|---|---|---|
+| 2.02 results | 1 | 3937 | −0.14% | +0.10% | +0.30% / −0.08% / −0.05% | 0.03 | −0.32% | no |
+| 2.02 | 3 | 3934 | +0.04% | −0.14% | −0.05% / −0.36% / −0.09% | 0.86 | −0.14% | no |
+| 2.02 | 5 | 3929 | +0.28% | −0.40% | −0.68% / −0.35% / +0.03% | 1.00 | +0.10% | no |
+| 1.01 agreement | 1 / 3 / 5 | ~970 | −0.21% / −0.07% / −0.00% | −0.07% / −0.35% / −1.04% | test −0.63% / −1.23% / −1.81% | ≥ 0.28 | < 0 | no |
+| 5.02 officer change | 1 / 3 / 5 | ~2420 | −0.28% / −0.13% / −0.12% | −0.06% / −0.25% / −0.40% | test −0.30% / −0.37% / −0.10% | ≥ 0.37 | < 0 | no |
+| any of the three | 1 / 3 / 5 | ~7130 | −0.18% / −0.02% / +0.14% | +0.04% / −0.18% / −0.44% | test −0.16% / −0.22% / −0.11% | 0.02 / 0.95 / 1.00 | < 0 | no |
+
+- No item passes at any horizon. The only small p values (2.02 H1, "any" H1) come entirely from train. Validation and test are both negative, and the result is negative at 2× cost.
+
+## (b) Form 4 officer/director purchases ≥ 50k USD: run 45269343194 (2026-11-23 21:26 UTC)
+925 events from 2018 onward. 733 have the exact EDGAR acceptance time; the rest use the conservative filing-date stamp.
+
+| H | n | net | diff | train / val / test | block p (train+val) | net 2× | pass |
+|---|---|---|---|---|---|---|---|
+| 1 | 925 | −0.02% | +0.18% | +0.14% / +0.30% / +0.19% | 0.17 | −0.20% | no (p, 2× cost) |
+| 3 | 925 | +0.13% | −0.36% | −0.74% / +0.52% / +0.28% | 0.88 | −0.05% | no |
+| 5 | 925 | −0.08% | −1.36% | −2.35% / +1.28% / −0.01% | 1.00 | −0.26% | no |
+
+- H1 is positive in all three splits (+0.14% to +0.30%), but it is not significant (block p 0.17), and net turns negative once costs exceed 1×. This matches the literature: the drift exists, but it is small in large caps and does not cover costs.
+- The H3/H5 means are dominated by fat-tailed controls. The control pool includes HOOD (+85% in 5 days, Aug 2021) and UPST (+84%), because the control is not matched on volatility (a limit stated in `protocol.md`). With every |return| ≥ 50% removed, the H5 diff is still −0.61%. The verdict does not change.
+- The protocol's microcap version (wider spreads, at least 0.5% per side) has not been run. Running it would need a new protocol and a new universe.
+
+## Summary of all four
+Harness check: the placebo diff is about 0, so the tool works correctly. Pass rule: **only 12-1 momentum passed, and it is untrustworthy because of survivorship bias.** Turn of month, 8-K items and Form 4 all fail. None of them comes anywhere near 3× a month.
