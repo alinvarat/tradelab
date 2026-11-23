@@ -127,3 +127,29 @@ def providers() -> dict:
     elif openrouter_available():
         out[deepseek] = score_openrouter
     return out
+
+
+def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None) -> tuple:
+    """One free-form answer from the DeepSeek model: -> (text, model_name) or ("", reason). Same safety rules as
+    score_opencode (empty temp dir, no --auto) / score_openrouter (key from the environment only)."""
+    name = OPENCODE_MODEL.split("/", 1)[-1]
+    if opencode_available():
+        try:
+            with tempfile.TemporaryDirectory() as empty:
+                r = run(["opencode", "run", "-m", OPENCODE_MODEL, "--archived", system + "\n\n" + user],
+                        capture_output=True, text=True, timeout=timeout, cwd=empty)
+            return (ANSI.sub("", r.stdout), name) if r.returncode == 0 else ("", f"opencode exit {r.returncode}")
+        except Exception as exc:  # noqa: BLE001
+            return "", f"opencode error: {exc!r}"[:200]
+    if openrouter_available():
+        from urllib.request import Request, urlopen as _urlopen
+        body = json.dumps({"model": name, "temperature": 0.2, "messages": [
+            {"role": "system", "content": system}, {"role": "user", "content": user}]}).encode()
+        req = Request("https://openrouter.ai/api/v1/chat/completions", data=body, headers={
+            "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json"})
+        try:
+            with (urlopen or _urlopen)(req, timeout=timeout) as r:
+                return json.loads(r.read())["choices"][0]["message"]["content"], name
+        except Exception as exc:  # noqa: BLE001
+            return "", f"openrouter error: {exc!r}"[:200]
+    return "", "no provider (need opencode or OPENROUTER_API_KEY)"
