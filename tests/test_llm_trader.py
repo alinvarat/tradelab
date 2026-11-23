@@ -23,7 +23,9 @@ class Base(unittest.TestCase):
                   mock.patch("core.llm_trader.news.symbol_news", return_value={"items": [
                       {"title": "Big news", "source": "X", "sentiment": 0.3}]}),
                   mock.patch.object(lt.LlmTrader, "avg50", return_value=1e6),
-                  mock.patch("core.llm_trader.archive_headlines", return_value=[])):
+                  mock.patch("core.llm_trader.archive_headlines", return_value=[]),
+                  mock.patch("core.llm_trader.recent_news", return_value={}),
+                  mock.patch("core.llm_trader.buzz_symbols", return_value={})):
             p.start()
             self.addCleanup(p.stop)
         self.replies = []
@@ -181,6 +183,64 @@ class Trading(Base):
         self.t.save()
         again = lt.LlmTrader(self.t.state_path, self.t.log_path, chat=self.t.chat)
         self.assertEqual(len(again.seen), len(self.t.seen))
+
+
+class WholeMarket(Base):
+    def test_class_specific_shock_thresholds_and_no_volume_requirement_outside_stocks(self):
+        now = time.time()
+        for sym, pct in (("EURUSD=X", 1.2), ("GC=F", 2.2), ("BTC-USD", 5.2)):
+            q = quote(sym, px=100, move=pct)
+            q["volume"] = None
+            self.assertEqual(self.t.shock(q, now), 1.0, sym)
+            q = quote(sym, px=100, move=pct - 0.3)
+            q["volume"] = None
+            self.assertIsNone(self.t.shock(q, now), sym)
+        self.assertEqual(self.t.shock(quote("AAA", px=100, move=5.5, vol=1e5), now), None)   # stock volume still matters
+
+    def test_control_is_drawn_from_the_same_asset_class(self):
+        self.reply({"symbol": "GC=F", "action": "buy", "size_pct": 5, "leverage": 2, "stop_pct": 5,
+                    "review_in_min": 60, "reason": "gold breakout"})
+        m = self.market(**{"GC=F": quote("GC=F", px=2000, move=3), "SI=F": quote("SI=F", px=30)})
+        self.t.scan(m)
+        self.assertIn("GC=F", self.t.acct.positions)
+        ctrl = next(iter(self.t.ctrl.positions))
+        self.assertEqual(lt.asset_class(ctrl), "commodity")
+        self.assertNotEqual(ctrl, "GC=F")
+
+    def test_scheduled_scan_calls_the_model_when_nothing_crossed_the_threshold(self):
+        self.t.calls["last_idle"] = 0
+        self.t.scan(self.market())
+        self.assertEqual(len(self.prompts), 1)
+        call = next(json.loads(l) for l in (Path(self.tmp.name) / "l.jsonl").read_text().splitlines() if '"kind": "call"' in l)
+        self.assertEqual(call["trigger"], "scheduled scan")
+        ctx = call["context"]
+        self.assertEqual(ctx["protocol"], "v4")
+        self.assertEqual(ctx["universe_classes"]["crypto"], len(lt.ASSETS["crypto"]))
+        self.assertTrue(ctx["movers"])
+        self.assertIn("gold", ctx["market"])
+
+    def test_recent_news_is_a_candidate_and_triggers_a_call(self):
+        self.t.calls["last_idle"] = time.time()
+        with mock.patch("core.llm_trader.recent_news", return_value={"BBB": {"title": "BBB wins contract", "source": "X",
+                                                                            "lexicon": 0.4, "seen": "2026-11-24T01:00"}}):
+            self.t.scan(self.market())
+        self.assertEqual(len(self.prompts), 1)
+        call = next(json.loads(l) for l in (Path(self.tmp.name) / "l.jsonl").read_text().splitlines() if '"kind": "call"' in l)
+        self.assertEqual(call["trigger"], "new signals")
+        cand = next(c for c in call["context"]["candidates"] if c["symbol"] == "BBB")
+        self.assertIn("BBB wins contract", cand["why"])
+
+    def test_macro_headline_words_map_to_tradable_symbols(self):
+        self.assertIn("GC=F", lt._macro_symbols("Gold hits a record as the dollar falls"))
+        self.assertIn("CL=F", lt._macro_symbols("OPEC cuts oil output"))
+        self.assertIn("BTC-USD", lt._macro_symbols("Bitcoin ETF inflows surge"))
+        self.assertNotIn("GC=F", lt._macro_symbols("A gold medal for the swimmer"))
+
+    def test_view_reports_the_universe_and_protocol(self):
+        v = self.t.view()
+        self.assertEqual(v["protocol"], "v4")
+        self.assertEqual(v["universe_size"], len(lt.ALL))
+        self.assertEqual(v["classes"]["fx"], len(lt.ASSETS["fx"]))
 
 
 class Pairing(Base):
