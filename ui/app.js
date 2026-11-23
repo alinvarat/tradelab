@@ -686,18 +686,18 @@ function rorCalc() {
 views.tools = () => { sizeCalc(); rorCalc(); };
 
 /* ---------- overview of all accounts ---------- */
+const accountAmounts = (thb, dollars) => thb == null ? "–" : `${fmt(thb, 2)} THB<span class="sym-name">${fmt(dollars, 2)} USD</span>`;
 views.overview = async () => {
   const el = $("#ov-table");
   let d;
   try { d = await api("accounts"); } catch (e) { el.innerHTML = errBox(e, "accounts"); return; }
-  $("#ov-sub").textContent = `1 USD = ${fmt(d.thb_per_usd, 2)} THB | social buzz study: ${d.buzz_events ?? "off"} events (analysis only, no account)`;
+  $("#ov-sub").textContent = `Current exchange rate: 1 USD = ${fmt(d.thb_per_usd, 2)} THB | Buzz events: ${d.buzz_events ?? "–"}`;
   el.innerHTML = table([
     { h: "Account", f: (r) => `<a href="#${r.tab}"><b>${esc(r.name)}</b></a>` },
-    { h: "Start (THB)", num: 1, f: (r) => fmt(r.start_thb, 0) }, { h: "Start (USD)", num: 1, f: (r) => fmt(r.start_usd, 2) },
-    { h: "Equity (USD)", num: 1, f: (r) => fmt(r.equity_usd, 2) },
-    { h: "Equity (THB)", num: 1, f: (r) => fmt(r.equity_thb, 0) },
+    { h: "Starting capital", num: 1, f: (r) => accountAmounts(r.start_thb, r.start_usd) },
+    { h: "Equity", num: 1, f: (r) => accountAmounts(r.equity_thb, r.equity_usd) },
+    { h: "Random control account", num: 1, f: (r) => accountAmounts(r.control_thb, r.control_usd) },
     { h: "Return", num: 1, f: (r) => pct(r.return_pct), cls: (r) => cls(r.return_pct) },
-    { h: "Random control (USD)", num: 1, f: (r) => (r.control_usd != null ? fmt(r.control_usd, 2) : "-") },
     { h: "Open", num: 1, f: (r) => r.positions },
     { h: "Status", f: (r) => esc(r.status) },
     { h: "Note", f: (r) => esc(r.note) },
@@ -807,6 +807,12 @@ function execHtml(x) {
   return bits.join("<br>");
 }
 
+function accountComparison(d, label) {
+  return `<div class="figure hot"><b>${fmt(d.equity_thb, 2)} THB</b><span>${label}</span><div class="small">${fmt(d.equity_usd, 2)} USD</div></div>
+    <div class="figure"><b>${fmt(d.control_equity_thb, 2)} THB</b><span>Random control account</span><div class="small">${fmt(d.control_equity_usd, 2)} USD</div></div>`;
+}
+const accountBasis = (d) => `<p class="small muted"><span>Starting capital for each account</span> ${fmt(d.capital_thb, 2)} THB (${fmt(d.capital_usd, 2)} USD). <span>Both accounts use their opening exchange rate for THB.</span></p>`;
+
 /* ---------- DeepSeek trader ---------- */
 views.llm = async () => {
   const figs = $("#llm-figs");
@@ -816,11 +822,10 @@ views.llm = async () => {
   const ev = l.evaluation || {}, dis = ev.discrimination || {};
   $("#llm-sub").textContent = `${l.model} | calls today ${l.calls_today}/${l.max_calls_day}${l.error ? " | " + l.error : ""}`;
   figs.innerHTML = `<div class="figures">
-    <div class="figure hot"><b>${fmt(l.equity_usd, 2)} USD</b><span>DeepSeek account (${fmt(l.equity_thb, 0)} THB, from ${fmt(l.capital_thb, 0)} THB = ${fmt(l.capital_usd, 2)} USD)</span></div>
-    <div class="figure"><b>${fmt(l.control_equity_usd, 2)} USD</b><span>Random control account</span></div>
+    ${accountComparison(l, "DeepSeek account")}
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
     <div class="figure"><b>${l.paused ? "Paused" : "Running"}</b><span>last scan ${l.last_scan_age_s ?? "never"} s ago</span></div></div>
-    <p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>
+    ${accountBasis(l)}<p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>
     <p class="small muted">Every stock shown to the model is also scored +1 day vs SPY. Bought: ${dis.bought ? dis.bought.n : 0} scored${dis.bought && dis.bought.mean_abnormal_1d != null ? ", mean " + pct(dis.bought.mean_abnormal_1d * 100) : ""}.
     Passed: ${dis.passed ? dis.passed.n : 0} scored${dis.passed && dis.passed.mean_abnormal_1d != null ? ", mean " + pct(dis.passed.mean_abnormal_1d * 100) : ""}. Rules: research/llm_trader/protocol.md</p>`;
   $("#llm-pos").innerHTML = table([
@@ -883,17 +888,16 @@ views.events = async () => {
   const ev = d.evaluation || {};
   $("#ev-sub").textContent = `scans every ${d.scan_every_s}s, last scan ${d.last_scan_age_s ?? "never"}s ago${d.error ? " | error: " + d.error : ""}`;
   figs.innerHTML = `<div class="figures">
-    <div class="figure hot"><b>${fmt(d.equity_thb, 0)} THB</b><span>Rule account, from ${fmt(d.capital_thb, 0)} THB</span></div>
-    <div class="figure"><b>${fmt(d.control_equity_usd, 2)} USD</b><span>Random control account</span></div>
+    ${accountComparison(d, "Event trader account")}
     <div class="figure"><b>${d.n_events}</b><span>events (${d.n_up} up-shocks)</span></div>
     <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
     <div class="figure"><b>${d.paused ? "Paused" : "Running"}</b><span>${esc(d.rules.shock)}</span></div></div>
-    <p class="small muted">${esc(d.rules.trade)}</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
+    ${accountBasis(d)}<p class="small muted">${esc(d.rules.trade)}</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
   $("#ev-pos").innerHTML = table([
     { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
     { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) }, { h: "Notional (USD)", num: 1, f: (r) => fmt(r.notional_usd, 2) },
     { h: "Stop", num: 1, f: (r) => fmt(r.stop) },
-    { h: "Sells at (20 h rule)", f: (r) => new Date(r.exit_at * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
+    { h: "Eligible to exit after", f: (r) => dt(r.exit_at) },
     { h: "Why it bought", f: (r) => esc(r.why || "") },
     { h: "Random control", f: (r) => (r.control ? `${esc(r.control.symbol)} ${r.control.pnl_pct != null ? pct(r.control.pnl_pct) : ""}` : "-") },
   ], d.positions, { empty: "No open positions right now. The rule holds at most 3 at a time; later shocks show 'max positions' below." });
@@ -1007,8 +1011,7 @@ setInterval(() => {
 }, 5000);
 
 /* ---------- language switch (English / Thai) ---------- */
-/* Static text is translated by exact match; numbers, tickers, headlines and the model's own notes stay as they are
-   (the DeepSeek trader writes its reasons in Thai itself). Sentences with embedded numbers are not covered. */
+/* Match fixed and formatted UI labels. Preserve tickers, headline text and the original model response. */
 const TH = {
   "Overview": "ภาพรวม", "Auto trader": "บอทหลัก", "Markets": "ตลาด", "Chart and analysis": "กราฟและวิเคราะห์", "Portfolio": "พอร์ต",
   "DeepSeek": "ดีปซีค", "Logs": "บันทึกการตัดสินใจ", "Events": "เหตุการณ์", "Buzz": "กระแสโซเชียล", "News": "ข่าว", "Screener": "สแกนหุ้น",
@@ -1035,6 +1038,16 @@ const TH = {
   "Rank": "อันดับ", "Ticker": "สัญลักษณ์", "+1h / +1d vs SPY": "+1 ชม. / +1 วัน เทียบ SPY", "Control +1d": "หุ้นสุ่ม +1 วัน",
   "What": "ประเภท", "Context": "บริบท", "Decision": "การตัดสินใจ", "Running": "กำลังทำงาน", "Paused": "หยุดอยู่",
   "DeepSeek account": "บัญชี DeepSeek", "Random control account": "บัญชีสุ่มเทียบ", "closed pairs needed": "คู่ที่ปิดแล้ว / ที่ต้องการ",
+  "Event trader account": "บัญชี Event trader", "Starting capital": "ทุนเริ่มต้น",
+  "Starting capital for each account": "ทุนเริ่มต้นต่อบัญชี",
+  "Both accounts use their opening exchange rate for THB.": "ทั้งสองบัญชีใช้อัตราตอนเปิดบัญชีในการแปลงเป็นบาท",
+  "Eligible to exit after": "ครบเวลาถือ (ขายเมื่อตลาดเปิด)", "max positions": "ถือครบจำนวนที่กำหนด",
+  "data only": "เก็บข้อมูลเท่านั้น", "running": "กำลังทำงาน", "paused": "หยุดชั่วคราว", "ruined": "ทุนต่ำกว่าเกณฑ์",
+  "buy": "ซื้อ", "sell": "ขาย", "hold": "ไม่ส่งคำสั่ง", "adjust": "ปรับสถานะ",
+  "closed": "ปิดสถานะแล้ว", "filled": "จับคู่แล้ว", "pending": "รอผล", "adjusted": "ปรับแล้ว",
+  "intraday": "ภายในวัน", "swing": "ถือหลายวัน", "long": "ซื้อ", "scalp": "ถือช่วงสั้น",
+  "No decisions yet; the model is asked when new shocks appear.": "ยังไม่มีคำตัดสิน ระบบจะถามโมเดลเมื่อพบหุ้นที่เคลื่อนไหวแรง",
+  "+1h / +1d": "+1 ชม. / +1 วัน",
   "events with a +1d result": "เหตุการณ์ที่มีผล +1 วัน", "buzz events": "เหตุการณ์กระแส", "mean +1d return vs SPY": "ผลตอบแทน +1 วันเฉลี่ย เทียบ SPY",
   "matched controls": "หุ้นสุ่มที่เทียบ", "Verdict:": "ข้อสรุป:", "Refresh": "รีเฟรช", "Reset account": "รีเซ็ตบัญชี", "Pause": "หยุดชั่วคราว",
   "Restart": "เริ่มใหม่", "Learn now": "เรียนรู้ใหม่", "Equity": "มูลค่าบัญชี", "Profit or loss": "กำไรหรือขาดทุน", "Months completed": "เดือนที่ครบ",
@@ -1050,10 +1063,23 @@ const TH = {
 let LANG = "en";
 try { LANG = localStorage.getItem("lang") || "en"; } catch (e) { /* private window */ }
 const NOTE_TH = [
-  [/^Every account below is separate play money.*$/, "ทุกบัญชีด้านล่างเป็นเงินจำลองแยกกัน แต่ละบัญชีมีทุนเริ่มต้นและกติกาของตัวเอง ตัวเลข 100,000 ดอลลาร์ที่แถบบนคือบัญชีทดลองสั่งเอง ไม่ใช่บอท ส่วนบอทเริ่มด้วย 5,000 บาท (ราว 147 ดอลลาร์)"],
+  [/^Every account below is separate play money.*$/, "ทุกบัญชีใช้เงินจำลอง บัญชีสั่งเองเริ่มที่ 100,000 ดอลลาร์และแปลงเป็นบาทด้วยค่าเงินล่าสุด บัญชีบอทเริ่มที่ 5,000 บาท ส่วนยอดเงินบาทของบอทและบัญชีสุ่มเทียบใช้อัตราตอนเปิดบัญชีนั้น"],
   [/^Each card is one decision cycle.*$/, "แต่ละการ์ดคือการตัดสินใจหนึ่งรอบของ DeepSeek: สิ่งที่โมเดลเห็น การโต้แย้งฝั่งซื้อ/ค้าน การตัดสินใจและเหตุผลของทุกตัว (รวมทั้งที่ไม่ซื้อ) สิ่งที่ระบบทำ และผลหลังจากนั้น เรียงใหม่สุดก่อน"],
   [/^Event trader \(fixed rule\).*$/, "Event trader (กติกาตายตัว): ทุกหุ้นใหญ่ที่ขยับตั้งแต่ 5% พร้อมปริมาณซื้อขายจริง พร้อมข่าว สิ่งที่กติกาทำ และเหตุผลที่ไม่เทรด"],
   [/^No open positions right now\..*$/, "ตอนนี้ไม่มีตำแหน่งที่ถืออยู่ กติกาถือได้สูงสุด 3 ตัวพร้อมกัน เหตุการณ์ที่เกินจะขึ้นว่า 'max positions' ด้านล่าง"],
+  [/^Current exchange rate: 1 USD = ([\d,.]+) THB \| Buzz events: (.+)$/, "ค่าเงินล่าสุด 1 USD = $1 THB | เหตุการณ์กระแส $2 รายการ"],
+  [/^(deepseek\/[^ ]+) \| calls today (\d+\/\d+)$/, "$1 | เรียกโมเดลวันนี้ $2 ครั้ง"],
+  [/^last scan (\d+) s ago$/, "สแกนล่าสุด $1 วินาทีที่แล้ว"],
+  [/^scans every (\d+)s, last scan (\d+)s ago$/, "สแกนทุก $1 วินาที สแกนล่าสุด $2 วินาทีที่แล้ว"],
+  [/^scans every (\d+)s, last scan nevers ago$/, "สแกนทุก $1 วินาที ยังไม่เคยสแกน"],
+  [/^events \((\d+) up-shocks\)$/, "เหตุการณ์ (หุ้นขึ้นแรง $1 ครั้ง)"],
+  [/^move >= ([\d.]+)% vs previous close, day volume >= ([\d.]+)x 50-day average$/, "ราคาขยับอย่างน้อย $1% เทียบราคาปิดก่อนหน้า และปริมาณซื้อขายวันนี้อย่างน้อย $2 เท่าของค่าเฉลี่ย 50 วัน"],
+  [/^long ([\d.]+)% of equity at first sight of an UP shock, hold (\d+) h, stop ([\d.]+)%, max (\d+) open; control = random non-shock stock, same time and rules$/, "ซื้อด้วย $1% ของมูลค่าบัญชีเมื่อพบหุ้นขึ้นแรงครั้งแรก ถือ $2 ชม. ตัดขาดทุน $3% ถือพร้อมกันได้สูงสุด $4 ตัว บัญชีเทียบสุ่มหุ้นที่ไม่ได้ขยับแรงและใช้เวลาและกติกาเดียวกัน"],
+  [/^too early \((\d+\/\d+) closed pairs\): no conclusion allowed$/, "มีคู่ปิด $1 คู่ ยังสรุปไม่ได้"],
+  [/^first sight of a ([+\-\d.]+)% move on ([\d.]+)x volume \(SPY unavailable at entry\)$/, "ซื้อเมื่อพบว่าราคาขยับ $1% ครั้งแรก ปริมาณซื้อขาย $2 เท่าของค่าเฉลี่ย ตอนเข้าไม่มีข้อมูล SPY"],
+  [/^first sight of a ([+\-\d.]+)% move on ([\d.]+)x volume \(SPY ([+\-\d.]+)%\)$/, "ซื้อเมื่อพบว่าราคาขยับ $1% ครั้งแรก ปริมาณซื้อขาย $2 เท่าของค่าเฉลี่ย (SPY $3%)"],
+  [/^long ([\d,.]+) USD vs (.+)$/, "ซื้อ $1 USD เทียบกับ $2"],
+  [/^Every stock shown to the model is also scored \+1 day vs SPY\. Bought: (\d+) scored([^.]*(?:\.[\d]+%?)?)\.\s+Passed: (\d+) scored([^.]*(?:\.[\d]+%?)?)\. Rules: research\/llm_trader\/protocol\.md$/, "วัดผลของหุ้นที่โมเดลเห็นหลัง 1 วันเทียบกับ SPY หุ้นที่ซื้อมีผลแล้ว $1 ตัว$2 หุ้นที่ไม่ซื้อมีผลแล้ว $3 ตัว$4"],
 ];
 const textNodes = (root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out = []; while (w.nextNode()) out.push(w.currentNode); return out; };
 function applyLang() {
@@ -1066,10 +1092,11 @@ function applyLang() {
     if (n.__en === undefined) {
       const raw = n.nodeValue.trim();
       if (!raw) continue;
-      const hit = TH[raw] || (NOTE_TH.find(([re]) => re.test(raw)) || [])[1];
+      const rule = NOTE_TH.find(([pattern]) => pattern.test(raw));
+      const hit = TH[raw] || (rule ? raw.replace(...rule) : undefined);
       if (!hit) continue;
       n.__en = n.nodeValue;
-      n.__th = n.nodeValue.replace(raw, hit);
+      n.__th = n.nodeValue.replace(raw, () => hit);
     }
     const want = LANG === "th" ? n.__th : n.__en;
     if (want !== undefined && n.nodeValue !== want) n.nodeValue = want;

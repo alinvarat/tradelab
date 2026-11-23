@@ -235,6 +235,13 @@ class HorizonFreedom(Base):
 
 
 class ViewData(Base):
+    def test_view_converts_control_with_the_same_opening_rate(self):
+        self.t.ctrl.balance = 148.5
+        with mock.patch("core.llm_trader.data.fx_to_usd", return_value=0.025):
+            view = self.t.view()
+        self.assertAlmostEqual(view["control_equity_thb"], 4950.0)
+        self.assertAlmostEqual(view["equity_thb"], 5000.0)
+
     def test_view_positions_carry_stop_target_pnl_and_reason_for_the_ui(self):
         self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "horizon": "swing", "stop_pct": 6, "target_pct": 25,
                     "review_in_min": 120, "reason": "guidance"})

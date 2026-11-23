@@ -256,19 +256,27 @@ class EventTrader:
         cs = (ev or {}).get("control", {}) or {}
         cp = self.ctrl.positions.get(cs.get("symbol", ""))
         cmark = self.ctrl.last[cp.symbol].bid if cp and cp.symbol in self.ctrl.last else None
+        why = ""
+        if ev:
+            spy = ev.get("spy_move_pct")
+            benchmark = f"SPY {spy:+.1f}%" if spy is not None else "SPY unavailable at entry"
+            why = f"first sight of a {ev['move_pct']:+.1f}% move on {ev['vol_ratio']:.1f}x volume ({benchmark})"
         return {"symbol": s, "qty": p.qty, "entry": p.entry, "mark": mark, "pnl_pct": (mark / p.entry - 1) * 100,
                 "notional_usd": p.qty * mark, "stop": p.sl, "opened_ts": p.opened_ts, "exit_at": p.opened_ts + HOLD_S,
-                "why": f"first sight of a {ev['move_pct']:+.1f}% move on {ev['vol_ratio']:.1f}x volume (SPY {ev.get('spy_move_pct')}%)" if ev else "",
+                "why": why,
                 "control": {"symbol": cp.symbol, "entry": cp.entry, "mark": cmark,
                             "pnl_pct": (cmark / cp.entry - 1) * 100 if cmark else None} if cp else None}
 
     def view(self):
         with self.lock:
             a = self.acct
+            control_equity = self.ctrl.equity()
             ups = [e for e in self.events if e["direction"] == "up"]
             hz = {str(h): [e["out"][str(h)] for e in ups if str(h) in e["out"]] for h in HORIZONS}
             return {"equity_usd": a.equity(), "equity_thb": data.thb_at_open(a.equity(), self.capital_usd, CAPITAL_THB), "capital_thb": CAPITAL_THB,
-                    "control_equity_usd": self.ctrl.equity(), "capital_usd": self.capital_usd, "paused": self.paused,
+                    "control_equity_usd": control_equity,
+                    "control_equity_thb": data.thb_at_open(control_equity, self.capital_usd, CAPITAL_THB),
+                    "capital_usd": self.capital_usd, "paused": self.paused,
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
                     "scan_every_s": SCAN_S, "error": self.last_error,
                     "positions": [self._position_view(s, p) for s, p in a.positions.items()],

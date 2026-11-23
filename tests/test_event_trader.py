@@ -33,6 +33,13 @@ class Base(unittest.TestCase):
 
 
 class Detection(Base):
+    def test_view_converts_control_with_the_same_opening_rate(self):
+        self.t.ctrl.balance = 148.5
+        with mock.patch("core.event_trader.data.fx_to_usd", return_value=0.025):
+            view = self.t.view()
+        self.assertAlmostEqual(view["control_equity_thb"], 4950.0)
+        self.assertAlmostEqual(view["equity_thb"], 5000.0)
+
     def test_threshold_volume_staleness_and_market_state(self):
         now = time.time()
         self.assertTrue(self.t.is_shock(quote("A", move=5.0), now)[0])
@@ -136,6 +143,12 @@ class Context(Base):
 
 
 class PositionsView(Base):
+    def test_view_describes_unavailable_spy_without_inventing_a_value(self):
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        reason = self.t.view()["positions"][0]["why"]
+        self.assertIn("SPY unavailable at entry", reason)
+        self.assertNotIn("None", reason)
+
     def test_view_lists_open_positions_with_stop_exit_time_reason_and_control(self):
         self.t.context = {"SPY": quote("SPY", px=500, move=3.0), "^VIX": quote("^VIX", px=22.0)}
         self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
