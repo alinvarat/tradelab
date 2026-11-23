@@ -61,6 +61,14 @@ class Detection(unittest.TestCase):
         self.assertFalse(buzz.liquid(None))
 
 
+class Controls(unittest.TestCase):
+    def test_share_classes_of_the_same_company_are_never_controls(self):
+        self.assertTrue(buzz.same_company({"name": "Alphabet Inc. Class A Common Stock"}, {"name": "Alphabet Inc. Class C Capital Stock"}))
+        self.assertTrue(buzz.same_company({"name": "Berkshire Hathaway Inc. Class B"}, {"name": "Berkshire Hathaway Inc. Class A"}))
+        self.assertFalse(buzz.same_company({"name": "NVIDIA Corporation"}, {"name": "Microsoft Corporation"}))
+        self.assertFalse(buzz.same_company({"name": ""}, {"name": ""}))
+
+
 class Monitor(Base):
     def test_word_tickers_are_ignored(self):
         self.px["YOU"] = 10.0

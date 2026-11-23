@@ -12,3 +12,5 @@ No tuning of the numbers above on events already seen. Changes = a new dated pro
 Limits: Yahoo quotes may be delayed ~15 min and have no order book; fills are proxies; a small sample in a few months is noisy.
 
 Addendum 2026-11-23 (logging only, rule unchanged): each event also records SPY move, abnormal move (stock move minus SPY move), VIX level, number of shocks so far that day, and each outcome also as a SPY-relative return. Reason: the first events came on a day the whole market jumped (Dow +1,300), so a raw 5% move can be market-wide rather than stock-specific. Analyses may split by this context but the locked trading rule and criterion stay as written.
+
+Addendum 2026-11-24 (correction): the limit line above says Yahoo quotes may be delayed ~15 min. Measured on 2026-11-23, US quotes were 1-6 s old, so the polling interval (now 10 s scan, hot tier and positions faster) is the only delay. Rules and criterion are unchanged.

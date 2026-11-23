@@ -9,3 +9,5 @@ Evaluation (locked): primary horizon +1d. Nothing may be concluded before 100 ev
 Why this before any trading rule: events are far more numerous than trades, so the question is answered sooner, with a control that fixes market-wide moves and size.
 Not done here, by design: trading on these events, sentiment scoring of posts (the source gives counts, not text), pump-and-dump filtering beyond the liquidity floor. Illiquid micro caps are excluded because paper fills there would be fiction (spreads of several percent).
 Limits: ApeWisdom is a third-party summary of Reddit and may change or vanish; counts include bots and repeated posts; Yahoo quotes can lag ~15 minutes; the first weeks will fall in one market regime.
+
+Addendum 2026-11-24 (before any +1d result): a control may never be another share class of the same company (the first live event GOOGL was matched with GOOG). Fixed in code by comparing the first word of the company names; events already recorded before the fix keep their original control. Everything else is unchanged.

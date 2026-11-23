@@ -807,11 +807,11 @@ views.llm = async () => {
   $("#llm-list").innerHTML = table([
     { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" }) },
     { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Action", f: (r) => esc(r.action) },
-    { h: "Size % (margin)", num: 1, f: (r) => fmt(r.size_pct, 1) }, { h: "Leverage", num: 1, f: (r) => (r.action === "buy" ? fmt(r.leverage, 1) + "x" : "-") },
+    { h: "Size % (margin)", num: 1, f: (r) => (r.action === "buy" ? fmt(r.size_pct, 1) : "-") }, { h: "Leverage", num: 1, f: (r) => (r.action === "buy" ? fmt(r.leverage, 1) + "x" : "-") },
     { h: "Entry", f: (r) => (r.action === "buy" ? esc(r.entry || "market") + (r.limit_price ? " @ " + fmt(r.limit_price) : "") : "-") },
     { h: "Horizon", f: (r) => esc(r.horizon || "-") },
-    { h: "Stop / target %", f: (r) => `${r.stop_pct != null ? fmt(r.stop_pct, 0) : "-"} / ${r.target_pct != null ? fmt(r.target_pct, 0) : "-"}` },
-    { h: "Look again (min)", num: 1, f: (r) => fmt(r.review_in_min, 0) },
+    { h: "Stop / target %", f: (r) => (["buy", "adjust"].includes(r.action) ? `${r.stop_pct != null ? fmt(r.stop_pct, 0) : "-"} / ${r.target_pct != null ? fmt(r.target_pct, 0) : "-"}` : "-") },
+    { h: "Look again (min)", num: 1, f: (r) => (r.action === "sell" ? "-" : fmt(r.review_in_min, 0)) },
     { h: "Result", f: (r) => execHtml(r.executed) },
     { h: "Reason (model)", f: (r) => esc(r.reason) },
   ], l.decisions, { empty: "No decisions yet; the model is asked when new shocks appear." });

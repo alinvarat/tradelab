@@ -11,15 +11,7 @@ so they keep receiving this Secret. After rollout, sign in and check
 
 `server.py` listens only on `127.0.0.1:8770` and has no login. Never open that port directly; publish it through a tunnel that does the authentication (Cloudflare Tunnel + Cloudflare Access for `tradelab.dgnr.us`, which already answers with an Access login).
 
-On an always-on Linux host (Python 3.13, no packages needed):
-1. `git clone https://github.com/alinvarat/tradelab.git ~/Project/tradelab`
-2. `bash deploy/install.sh` installs and starts everything as systemd user services (server, news archiver, DVOL collector, watchdog, DVOL backup) and enables linger so they survive logout/reboot. Use `--no-server` if the server already runs another way.
-3. Point the Cloudflare tunnel's public hostname `tradelab.dgnr.us` to `http://127.0.0.1:8770` (owner of the Cloudflare account does this; the tunnel token is a secret, never commit it)
-4. Check: `curl -I http://127.0.0.1:8770/` returns 200
-
-Notes: a fresh host starts a fresh simulated account (`data/*.json` is not in git), so long-term results accumulate only on the host that keeps running. Do not run two hosts for the same account.
-
-Operations: logs `journalctl --user -u tradelab-server -f`; health `curl http://127.0.0.1:8770/healthz` (503 when quotes stall >5 min; the watchdog also alerts if the auto trader skips a cycle for >1 h or disk <1 GB). Env: `TRADELAB_HOST`, `TRADELAB_PORT`. SIGTERM saves all accounts before exit; a corrupt `data/state.json` is restored from the newest `data/backups/` copy (daily copies made by the server itself, 14 kept, inside the data volume, never committed). To switch an already-running `run_forever.sh` server to systemd: stop that script and `python3 -u server.py` once, then `systemctl --user enable --now tradelab-server`.
+**Current setup (2026-11-24): Kuber only.** The owner switched off every personal machine; nothing is run locally. Deploy = merge to `main` (GitHub Actions runs the tests, then `kuber ci --trust`). `deploy/install.sh`, `deploy/tradelab-server.service`, `research/ops/*` and the systemd files in `research/news_archive/` are LEGACY for a personal Linux host and must not be enabled. If a deploy job fails with `KuberApiError`, re-run the failed job (it was a platform problem: full source storage and a 64 MB tunnel, both fixed by the platform owner).
 
 **Existing Kuber deployment (`compose.yml`, `Dockerfile`, `.github/workflows/kuber.yml`)**: it runs only `server.py` + `core` + `ui` with `data/` on a persistent volume and `TRADELAB_HOST=0.0.0.0` behind Cloudflare Access; the container does not include `research/` (collectors) or `deploy/`. Collectors, watchdog and DVOL backup therefore stay on a machine with systemd. That Kuber instance has its own simulated account (started fresh); do not also run the same account elsewhere. CI runs only `tests.test_engine`; `tests.test_research` can be added to the workflow.
 
