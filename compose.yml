@@ -1,0 +1,12 @@
+managedBy: kuber # See https://npmx.dev/@dmgnr/kuber for documentation.
+name: tradelab
+
+services:
+  app:
+    build: .
+    ports:
+      - "tradelab.dgnr.us:8770:protected"
+    volumes:
+      - state(1Gi):/app/data
+    deploy:
+      replicas: 1

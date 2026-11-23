@@ -1,0 +1,12 @@
+.git
+.serena
+__pycache__
+*.pyc
+*.log
+data/*.json
+data/*.jsonl
+research/
+research_notes/
+reports/
+tests/
+HANDOFF*.md

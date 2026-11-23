@@ -1,6 +1,7 @@
 """TradeLab: multi-market paper-trading simulator with analysis, news, backtests and an AI analyst.
 Run: python3 server.py  ->  http://127.0.0.1:8770   (simulated money only; no broker connection exists)."""
 import json
+import os
 import threading
 import time
 import traceback
@@ -16,6 +17,7 @@ ROOT = Path(__file__).resolve().parent
 UI = ROOT / "ui"
 STATE = ROOT / "data" / "state.json"
 PORT = 8770
+HOST = os.environ.get("TRADELAB_HOST", "127.0.0.1")
 
 DEFAULT_WATCH = ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "SPY", "QQQ",
                  "BTC-USD", "ETH-USD", "SOL-USD", "GC=F", "CL=F", "EURUSD=X", "USDJPY=X"]
@@ -413,5 +415,5 @@ if __name__ == "__main__":
     hunt = hunter.Hunter()
     threading.Thread(target=hunter.loop, args=(hunt,), daemon=True).start()
     threading.Thread(target=poller, daemon=True).start()
-    print(f"TradeLab on http://127.0.0.1:{PORT}", flush=True)
-    ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
+    print(f"TradeLab on http://{HOST}:{PORT}", flush=True)
+    ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
