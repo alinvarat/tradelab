@@ -1,333 +1,471 @@
 {
-"AAPL": [
-"Apple",
-"Tim Cook",
-"iPhone"
-],
-"MSFT": [
-"Microsoft",
-"Satya Nadella"
-],
-"NVDA": [
-"Jensen Huang",
-"NVIDIA",
-"Nvidia"
-],
-"AMZN": [
-"AWS",
-"Amazon"
-],
-"GOOGL": [
-"Alphabet",
-"Google"
-],
-"META": [
-"Facebook",
-"Instagram",
-"Meta Platforms",
-"Zuckerberg"
-],
-"TSLA": [
-"Elon Musk",
-"Tesla"
-],
-"BRK-B": [
-"Berkshire",
-"Berkshire Hathaway",
-"Warren Buffett"
-],
-"JPM": [
-"JP Morgan Chase &",
-"JPMorgan",
-"Jamie Dimon"
-],
-"V": [
-"Visa"
-],
-"MA": [
-"Mastercard"
-],
-"UNH": [
-"UnitedHealth"
-],
-"XOM": [
-"Exxon",
-"ExxonMobil"
-],
-"JNJ": [
-"Johnson & Johnson"
-],
-"PG": [
-"Procter & Gamble ()"
-],
-"HD": [
-"Home Depot ()"
-],
-"COST": [
-"Costco Wholesale"
-],
-"ABBV": [
-"AbbVie"
-],
-"MRK": [
-"Merck &"
-],
-"LLY": [
-"Eli Lilly",
-"Eli Lilly and"
-],
-"AVGO": [
-"Broadcom"
-],
-"PEP": [
-"PepsiCo",
-"Pepsico"
-],
-"KO": [
-"Coca-Cola",
-"Coca-Cola ()"
-],
-"WMT": [
-"Walmart"
-],
-"BAC": [
-"Bank of America"
-],
-"CVX": [
-"Chevron"
-],
-"ORCL": [
-"Oracle"
-],
-"CRM": [
-"Salesforce"
-],
-"ADBE": [
-"Adobe"
-],
-"NFLX": [
-"Netflix"
-],
-"AMD": [
-"Advanced Micro Devices"
-],
-"INTC": [
-"Intel"
-],
-"CSCO": [
-"Cisco Systems"
-],
-"QCOM": [
-"QUALCOMM"
-],
-"TXN": [
-"Texas Instruments"
-],
-"IBM": [
-"IBM",
-"International Business Machines"
-],
-"DIS": [
-"Disney",
-"Walt Disney ()"
-],
-"NKE": [
-"Nike"
-],
-"MCD": [
-"McDonald's"
-],
-"SBUX": [
-"Starbucks"
-],
-"BA": [
-"Boeing",
-"Boeing ()"
-],
-"CAT": [
-"Caterpillar"
-],
-"GE": [
-"GE Aerospace"
-],
-"HON": [
-"Honeywell International"
-],
-"MMM": [],
-"UPS": [
-"United Parcel Service"
-],
-"FDX": [
-"FedEx"
-],
-"LMT": [
-"Lockheed Martin"
-],
-"RTX": [],
-"GS": [
-"Goldman Sachs",
-"Goldman Sachs ()"
-],
-"MS": [
-"Morgan Stanley"
-],
-"C": [
-"Citigroup"
-],
-"WFC": [
-"Wells Fargo",
-"Wells Fargo &"
-],
-"AXP": [
-"American Express"
-],
-"BLK": [
-"BlackRock"
-],
-"SCHW": [
-"Charles Schwab ("
-],
-"PFE": [
-"Pfizer"
-],
-"BMY": [
-"Bristol-Myers Squibb"
-],
-"AMGN": [
-"Amgen"
-],
-"GILD": [
-"Gilead Sciences"
-],
-"CVS": [
-"CVS Health"
-],
-"CI": [
-"Cigna"
-],
-"TMO": [
-"Thermo Fisher Scientific"
-],
-"DHR": [
-"Danaher"
-],
-"ABT": [
-"Abbott Laboratories"
-],
-"MDT": [
-"Medtronic"
-],
-"ISRG": [
-"Intuitive Surgical"
-],
-"VRTX": [
-"Vertex Pharmaceuticals Incorpor"
-],
-"REGN": [
-"Regeneron Pharmaceuticals"
-],
-"T": [
-"AT&T"
-],
-"VZ": [
-"Verizon Communications"
-],
-"CMCSA": [
-"Comcast"
-],
-"TMUS": [
-"T-Mobile US"
-],
-"PYPL": [
-"PayPal"
-],
-"INTU": [
-"Intuit"
-],
-"NOW": [
-"ServiceNow"
-],
-"AMAT": [
-"Applied Materials"
-],
-"MU": [
-"Micron",
-"Micron Technology"
-],
-"LRCX": [
-"Lam Research"
-],
-"ADI": [
-"Analog Devices"
-],
-"KLAC": [],
-"SNPS": [
-"Synopsys"
-],
-"CDNS": [
-"Cadence Design Systems"
-],
-"PANW": [
-"Palo Alto Networks"
-],
-"F": [
-"Ford Motor"
-],
-"GM": [
-"General Motors"
-],
-"UBER": [
-"Uber Technologies"
-],
-"ABNB": [
-"Airbnb"
-],
-"BKNG": [
-"Booking Common St"
-],
-"MAR": [
-"Marriott International"
-],
-"LOW": [
-"Lowe's Companies"
-],
-"TGT": [
-"Target"
-],
-"DG": [
-"Dollar General"
-],
-"DLTR": [
-"Dollar Tree"
-],
-"KR": [
-"Kroger ()"
-],
-"EL": [
-"Estee Lauder Companies (T"
-],
-"CL": [
-"Colgate-Palmolive"
-],
-"KHC": [
-"Kraft Heinz"
-],
-"MO": [
-"Altria"
-],
-"PM": [
-"Philip Morris International"
-],
-"SLB": [
-"SLB Limited"
-],
-"COP": [
-"ConocoPhillips"
-],
-"OXY": [
-"Occidental Petroleum Corporatio"
-],
-"DE": [
-"Deere &"
-]
+ "AAPL": [
+  "Apple",
+  "Tim Cook",
+  "iPhone"
+ ],
+ "MSFT": [
+  "Microsoft",
+  "Satya Nadella"
+ ],
+ "NVDA": [
+  "Jensen Huang",
+  "NVIDIA",
+  "Nvidia"
+ ],
+ "AMZN": [
+  "AWS",
+  "Amazon"
+ ],
+ "GOOGL": [
+  "Alphabet",
+  "Google"
+ ],
+ "META": [
+  "Facebook",
+  "Instagram",
+  "Meta Platforms",
+  "Zuckerberg"
+ ],
+ "TSLA": [
+  "Elon Musk",
+  "Tesla"
+ ],
+ "BRK-B": [
+  "Berkshire",
+  "Berkshire Hathaway",
+  "Warren Buffett"
+ ],
+ "JPM": [
+  "JP Morgan Chase &",
+  "JPMorgan",
+  "Jamie Dimon"
+ ],
+ "V": [
+  "Visa"
+ ],
+ "MA": [
+  "Mastercard"
+ ],
+ "UNH": [
+  "UnitedHealth"
+ ],
+ "XOM": [
+  "Exxon",
+  "ExxonMobil"
+ ],
+ "JNJ": [
+  "Johnson & Johnson"
+ ],
+ "PG": [
+  "Procter & Gamble ()"
+ ],
+ "HD": [
+  "Home Depot ()"
+ ],
+ "COST": [
+  "Costco Wholesale"
+ ],
+ "ABBV": [
+  "AbbVie"
+ ],
+ "MRK": [
+  "Merck &"
+ ],
+ "LLY": [
+  "Eli Lilly",
+  "Eli Lilly and"
+ ],
+ "AVGO": [
+  "Broadcom"
+ ],
+ "PEP": [
+  "PepsiCo",
+  "Pepsico"
+ ],
+ "KO": [
+  "Coca-Cola",
+  "Coca-Cola ()"
+ ],
+ "WMT": [
+  "Walmart"
+ ],
+ "BAC": [
+  "Bank of America"
+ ],
+ "CVX": [
+  "Chevron"
+ ],
+ "ORCL": [
+  "Oracle"
+ ],
+ "CRM": [
+  "Salesforce"
+ ],
+ "ADBE": [
+  "Adobe"
+ ],
+ "NFLX": [
+  "Netflix"
+ ],
+ "AMD": [
+  "Advanced Micro Devices"
+ ],
+ "INTC": [
+  "Intel"
+ ],
+ "CSCO": [
+  "Cisco Systems"
+ ],
+ "QCOM": [
+  "QUALCOMM"
+ ],
+ "TXN": [
+  "Texas Instruments"
+ ],
+ "IBM": [
+  "IBM",
+  "International Business Machines"
+ ],
+ "DIS": [
+  "Disney",
+  "Walt Disney ()"
+ ],
+ "NKE": [
+  "Nike"
+ ],
+ "MCD": [
+  "McDonald's"
+ ],
+ "SBUX": [
+  "Starbucks"
+ ],
+ "BA": [
+  "Boeing",
+  "Boeing ()"
+ ],
+ "CAT": [
+  "Caterpillar"
+ ],
+ "GE": [
+  "GE Aerospace"
+ ],
+ "HON": [
+  "Honeywell International"
+ ],
+ "MMM": [],
+ "UPS": [
+  "United Parcel Service"
+ ],
+ "FDX": [
+  "FedEx"
+ ],
+ "LMT": [
+  "Lockheed Martin"
+ ],
+ "RTX": [],
+ "GS": [
+  "Goldman Sachs",
+  "Goldman Sachs ()"
+ ],
+ "MS": [
+  "Morgan Stanley"
+ ],
+ "C": [
+  "Citigroup"
+ ],
+ "WFC": [
+  "Wells Fargo",
+  "Wells Fargo &"
+ ],
+ "AXP": [
+  "American Express"
+ ],
+ "BLK": [
+  "BlackRock"
+ ],
+ "SCHW": [
+  "Charles Schwab ("
+ ],
+ "PFE": [
+  "Pfizer"
+ ],
+ "BMY": [
+  "Bristol-Myers Squibb"
+ ],
+ "AMGN": [
+  "Amgen"
+ ],
+ "GILD": [
+  "Gilead Sciences"
+ ],
+ "CVS": [
+  "CVS Health"
+ ],
+ "CI": [
+  "Cigna"
+ ],
+ "TMO": [
+  "Thermo Fisher Scientific"
+ ],
+ "DHR": [
+  "Danaher"
+ ],
+ "ABT": [
+  "Abbott Laboratories"
+ ],
+ "MDT": [
+  "Medtronic"
+ ],
+ "ISRG": [
+  "Intuitive Surgical"
+ ],
+ "VRTX": [
+  "Vertex Pharmaceuticals Incorpor"
+ ],
+ "REGN": [
+  "Regeneron Pharmaceuticals"
+ ],
+ "T": [
+  "AT&T"
+ ],
+ "VZ": [
+  "Verizon Communications"
+ ],
+ "CMCSA": [
+  "Comcast"
+ ],
+ "TMUS": [
+  "T-Mobile US"
+ ],
+ "PYPL": [
+  "PayPal"
+ ],
+ "INTU": [
+  "Intuit"
+ ],
+ "NOW": [
+  "ServiceNow"
+ ],
+ "AMAT": [
+  "Applied Materials"
+ ],
+ "MU": [
+  "Micron",
+  "Micron Technology"
+ ],
+ "LRCX": [
+  "Lam Research"
+ ],
+ "ADI": [
+  "Analog Devices"
+ ],
+ "KLAC": [],
+ "SNPS": [
+  "Synopsys"
+ ],
+ "CDNS": [
+  "Cadence Design Systems"
+ ],
+ "PANW": [
+  "Palo Alto Networks"
+ ],
+ "F": [
+  "Ford Motor"
+ ],
+ "GM": [
+  "General Motors"
+ ],
+ "UBER": [
+  "Uber Technologies"
+ ],
+ "ABNB": [
+  "Airbnb"
+ ],
+ "BKNG": [
+  "Booking Common St"
+ ],
+ "MAR": [
+  "Marriott International"
+ ],
+ "LOW": [
+  "Lowe's Companies"
+ ],
+ "TGT": [
+  "Target"
+ ],
+ "DG": [
+  "Dollar General"
+ ],
+ "DLTR": [
+  "Dollar Tree"
+ ],
+ "KR": [
+  "Kroger ()"
+ ],
+ "EL": [
+  "Estee Lauder Companies (T"
+ ],
+ "CL": [
+  "Colgate-Palmolive"
+ ],
+ "KHC": [
+  "Kraft Heinz"
+ ],
+ "MO": [
+  "Altria"
+ ],
+ "PM": [
+  "Philip Morris International"
+ ],
+ "SLB": [
+  "SLB Limited"
+ ],
+ "COP": [
+  "ConocoPhillips"
+ ],
+ "OXY": [
+  "Occidental Petroleum Corporatio"
+ ],
+ "DE": [
+  "Deere &"
+ ],
+ "PLTR": [
+  "Palantir"
+ ],
+ "SNOW": [
+  "Snowflake"
+ ],
+ "CRWD": [
+  "CrowdStrike"
+ ],
+ "DDOG": [
+  "Datadog"
+ ],
+ "NET": [
+  "Cloudflare"
+ ],
+ "ZS": [
+  "Zscaler"
+ ],
+ "MDB": [
+  "MongoDB"
+ ],
+ "TEAM": [
+  "Atlassian"
+ ],
+ "SHOP": [
+  "Shopify"
+ ],
+ "COIN": [
+  "Coinbase"
+ ],
+ "HOOD": [
+  "Robinhood"
+ ],
+ "SOFI": [
+  "SoFi"
+ ],
+ "AFRM": [
+  "Affirm"
+ ],
+ "UPST": [
+  "Upstart"
+ ],
+ "AI": [
+  "C3.ai"
+ ],
+ "SMCI": [
+  "Super Micro",
+  "Supermicro"
+ ],
+ "ARM": [
+  "Arm Holdings"
+ ],
+ "MRVL": [
+  "Marvell"
+ ],
+ "ON": [
+  "ON Semiconductor"
+ ],
+ "ENPH": [
+  "Enphase"
+ ],
+ "FSLR": [
+  "First Solar"
+ ],
+ "RIVN": [
+  "Rivian"
+ ],
+ "LCID": [
+  "Lucid Group",
+  "Lucid Motors"
+ ],
+ "NIO": [
+  "Nio"
+ ],
+ "XPEV": [
+  "XPeng"
+ ],
+ "LI": [
+  "Li Auto"
+ ],
+ "TSM": [
+  "Taiwan Semiconductor",
+  "TSMC"
+ ],
+ "ASML": [
+  "ASML"
+ ],
+ "SAP": [
+  "SAP"
+ ],
+ "MELI": [
+  "MercadoLibre",
+  "Mercado Libre"
+ ],
+ "SE": [
+  "Sea Limited"
+ ],
+ "BABA": [
+  "Alibaba"
+ ],
+ "JD": [
+  "JD.com"
+ ],
+ "PDD": [
+  "PDD Holdings",
+  "Temu"
+ ],
+ "NVO": [
+  "Novo Nordisk"
+ ],
+ "SPOT": [
+  "Spotify"
+ ],
+ "RBLX": [
+  "Roblox"
+ ],
+ "U": [
+  "Unity Software"
+ ],
+ "ROKU": [
+  "Roku"
+ ],
+ "TTD": [
+  "The Trade Desk"
+ ],
+ "TWLO": [
+  "Twilio"
+ ],
+ "OKTA": [
+  "Okta"
+ ],
+ "MSTR": [
+  "MicroStrategy",
+  "Strategy Inc"
+ ],
+ "IBKR": [
+  "Interactive Brokers"
+ ]
 }

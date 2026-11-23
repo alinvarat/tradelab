@@ -175,6 +175,7 @@ class NewsData(unittest.TestCase):
         self.assertEqual(entities.link("Nvidia skyrockets 30% on Huang's return as CEO"), ["NVDA"])
         self.assertEqual(entities.link("Apple and Microsoft slide as Amazon jumps"), ["AAPL", "MSFT", "AMZN"])
         self.assertEqual(entities.link("Oil rises as stocks fall"), [])
+        self.assertEqual(entities.link("Palantir and Shopify jump while Arm Holdings slips"), ["PLTR", "SHOP", "ARM"])
         self.assertEqual(entities.link("Shares of $TSLA fall"), ["TSLA"])
 
     def test_labels_open_settle_and_drop_late(self):
