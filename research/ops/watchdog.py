@@ -6,10 +6,12 @@ from pathlib import Path
 import os
 import shutil
 import subprocess
+import sys
 from urllib.error import HTTPError
 from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT.parent))  # repo root, for core.news
 NEWS = ROOT / "news_archive" / "data"
 DVOL = ROOT / "threefold_plan" / "dvol_forward" / "raw"
 STATUS = Path(__file__).parent / "status.json"
@@ -31,6 +33,15 @@ def check(now):
     # a quiet feed can legitimately give no new headline for a while; alarm only after 3 hours
     if last is None or now - last > timedelta(hours=3):
         problems.append(f"news archive has no new headline since {last}")
+    try:
+        feeds = json.loads((NEWS / "feed_health.json").read_text())["feeds"]
+        from core.news import LOW_FREQUENCY
+        bad = [n for n, h in feeds.items() if n not in LOW_FREQUENCY and n != "Bybit delistings"
+               and (h["error"] or (h["newest_age_h"] is not None and h["newest_age_h"] > 12))]
+        if len(bad) >= 3:
+            problems.append(f"{len(bad)} news feeds dead or stale: {', '.join(bad[:6])}")
+    except FileNotFoundError:
+        pass
     for unit in ("tradelab-news-archive.timer", "tradelab-dvol-collect.timer"):
         state = subprocess.run(["systemctl", "--user", "is-active", unit], capture_output=True, text=True).stdout.strip()
         if state != "active":
