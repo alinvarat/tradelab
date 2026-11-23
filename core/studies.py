@@ -334,6 +334,20 @@ def llm_summary(rows: list, horizon: int, min_conf: int = 0) -> dict:
             "p_diff_block": nb.block_bootstrap_p(diff, keys, rng), "p_net_block": nb.block_bootstrap_p(mine, keys, rng)}
 
 
+LLM_FORWARD_FIRST_DAY = "2026-12-01"
+LLM_FORWARD_MIN_TRADES = 600
+
+
+def llm_forward_verdict(rows: list) -> str:
+    """protocol_llm_earnings_forward.md: H5 primary, decided once at >= 600 non-skip trades."""
+    h5, h3 = llm_summary(rows, 5), llm_summary(rows, 3)
+    if h5.get("n", 0) < LLM_FORWARD_MIN_TRADES:
+        return f"collecting ({h5.get('n', 0)}/{LLM_FORWARD_MIN_TRADES} trades)"
+    ok = (h5["mean_net"] > 0 and h5["p_net_block"] < 0.05 and h5["mean_net_2x"] > 0 and h3.get("mean_net", 0) > 0
+          and h5["mean_diff"] > 0 and h5["p_diff_block"] < 0.05)
+    return "edge" if ok else "no edge shown"
+
+
 def llm_verdict(rows: list) -> str:
     h1, h3 = llm_summary(rows, 1), llm_summary(rows, 3)
     if h1.get("n", 0) < 60:

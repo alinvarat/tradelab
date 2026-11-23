@@ -6,16 +6,66 @@ on:
   workflow_dispatch:
     inputs:
       study:
-        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide or all"
+        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward or all"
         default: all
   push:
     branches:
       - "research-run/**"
+  schedule:
+    - cron: "0 3 * * 0"        # Sundays 03:00 UTC: forward DeepSeek earnings reader
 
 permissions:
   contents: read
 
 jobs:
+  forward:
+    name: llm_earnings_forward (weekly)
+    if: github.event_name == 'schedule' || inputs.study == 'llm_earnings_forward'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    permissions:
+      contents: write
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Restore the call cache from the data branch
+        run: |
+          if git fetch origin data/llm-earnings 2>/dev/null; then
+            git show origin/data/llm-earnings:research/studies/llm_earnings_calls.json > research/studies/llm_earnings_calls.json
+          fi
+
+      - name: Run forward study
+        env:
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          python research/studies/run.py llm_earnings_forward --out /tmp/llm_earnings_forward.json > /tmp/llm_earnings_forward_summary.json
+
+      - name: Push cache and results to data/llm-earnings
+        run: |
+          cp research/studies/llm_earnings_calls.json /tmp/calls.json
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/llm-earnings; then
+            git checkout -q -B data/llm-earnings origin/data/llm-earnings
+          else
+            git checkout -q --orphan data/llm-earnings && git rm -rq --cached . && git clean -fdq -e /tmp
+          fi
+          mkdir -p research/studies
+          cp /tmp/calls.json research/studies/llm_earnings_calls.json
+          cp /tmp/llm_earnings_forward.json /tmp/llm_earnings_forward_summary.json research/studies/
+          git add research/studies/llm_earnings_calls.json research/studies/llm_earnings_forward.json research/studies/llm_earnings_forward_summary.json
+          git commit -qm "Forward DeepSeek earnings reader: weekly update $(date -u +%F)" || echo "nothing new"
+          git push -q origin data/llm-earnings
+
   study:
     name: ${{ matrix.study }}
     runs-on: ubuntu-latest

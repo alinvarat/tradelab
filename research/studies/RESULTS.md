@@ -71,3 +71,17 @@ The served model was `deepseek/deepseek-v4.1-flash-1017`. 106 filings from 2026-
 - **Locked verdict: "edge candidate"**, meaning H1 and H3 net > 0, H1 block p diff < 0.05, and H1 2× net > 0.
 - Caveats: this is one earnings season (one market regime) with only 71 trades. The random-direction control came out unluckily negative (−0.81% where about 0 is expected), which makes the diff larger than it should be. The model's own net is significant only at p 0.076 (H1). It cannot be called confirmed until another season is added.
 - As a daily book (equal weight across that day's trades, 21 days, 3.4 trades/day): mean +0.32%/day, sd 1.96%. The best path was 8× leverage, giving 1.32× over the period (worst drawdown −38%). That is far from 3×, because there are too few trades per day and the volatility is high. To reach 3× a month, **more independent trades per day** are needed, from every US company that files 2.02, not just 148 stocks. That needs a new protocol, with costs that rise with lower liquidity.
+
+## DeepSeek earnings reader on every US 2.02 filer: run 45280463314 (`protocol_llm_earnings_wide.md`)
+There were 3,475 2.02 filings from 2026-10-20 to 2026-11-22. 2,097 passed the liquidity screen and 1,378 were excluded. The daily indexes for 11-11 and 11-23 returned 403, so filings from those two days are missing. 1,987 new calls were made, and the served model was `deepseek/deepseek-v4.1-flash-1017`.
+
+| new filings only | trades | hit | net / trade | net 2× | random dir | diff | always long | block p diff | block p net |
+|---|---|---|---|---|---|---|---|---|---|
+| H1 | 1214 | 51% | −0.21% | −0.64% | −0.70% | +0.49% | −0.49% | 0.035 | 0.85 |
+| H3 | 1204 | 53% | +0.38% | −0.06% | −0.78% | +1.16% | +0.07% | 0.001 | 0.079 |
+| H5 | 1195 | 54% | +0.60% | +0.16% | −0.88% | +1.48% | +0.20% | 0.002 | 0.027 |
+
+- **Locked verdict: "no edge shown"**, because H1 net is negative. The 148-stock result (61% hit at H1) **did not replicate** across the whole market.
+- By liquidity tier at H1: the most liquid (≥ 100M/day) netted −0.26%, the middle tier −0.36%, and the thinnest tier +0.12% (with diff +2.18%, made larger by its random control at −2.06%).
+- What looks interesting is the slower drift at H3/H5 (H5 net +0.60%, p 0.027). That horizon was not locked as the primary one, so it **cannot be claimed**. It is locked as the primary for the forward test in `protocol_llm_earnings_forward.md`.
+- Daily book (H1, 53 trades/day, 23 days): mean +0.34%/day, sd 1.6%. Best path: 1.63× at 10× leverage (worst drawdown −42%). Still not 3×.

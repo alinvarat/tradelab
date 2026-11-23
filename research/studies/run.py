@@ -262,8 +262,10 @@ def _calls_path():
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), "llm_earnings_calls.json")
 
 
-def study_llm_earnings_wide(_symbols, workers=6):
-    """protocol_llm_earnings_wide.md: every US 2.02 filer since 2026-10-20, liquidity-tier costs, one call each."""
+def study_llm_earnings_wide(_symbols, workers=6, first_day=None):
+    """protocol_llm_earnings_wide.md: every US 2.02 filer since 2026-10-20, liquidity-tier costs, one call each.
+    first_day moves the window (the forward protocol starts 2026-12-01)."""
+    first_day = first_day or st.LLM_FIRST_DAY
     import calendar as _cal
     import urllib.error
     from concurrent.futures import ThreadPoolExecutor
@@ -274,7 +276,7 @@ def study_llm_earnings_wide(_symbols, workers=6):
     for t, c in nb.sec_company_tickers().items():
         cik_ticker.setdefault(c, t)
     # 1) every 8-K in the EDGAR daily indexes
-    day, end, idx_rows = _cal.timegm(time.strptime(st.LLM_FIRST_DAY, "%Y-%m-%d")), time.time(), []
+    day, end, idx_rows = _cal.timegm(time.strptime(first_day, "%Y-%m-%d")), time.time(), []
     while day <= end:
         g = time.gmtime(day)
         if g.tm_wday < 5:
@@ -292,7 +294,7 @@ def study_llm_earnings_wide(_symbols, workers=6):
     events = []
     for cik in ciks:
         try:
-            for f in nb.sec_filings(cik, forms=("8-K",), since=st.LLM_FIRST_DAY):
+            for f in nb.sec_filings(cik, forms=("8-K",), since=first_day):
                 if "2.02" in f["items"]:
                     events.append({**f, "cik": cik, "symbol": cik_ticker[cik]})
         except Exception as e:
@@ -380,7 +382,17 @@ def study_llm_earnings_wide(_symbols, workers=6):
     return summ, rows
 
 
-STUDIES = {"llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+def study_llm_earnings_forward(symbols):
+    """protocol_llm_earnings_forward.md: same pipeline from 2026-12-01, verdict on H5 once 600 trades exist."""
+    summ, rows = study_llm_earnings_wide(symbols, first_day=st.LLM_FORWARD_FIRST_DAY)
+    summ = {"verdict_forward": st.llm_forward_verdict(rows), "H5": st.llm_summary(rows, 5),
+            "H3": st.llm_summary(rows, 3), "H1": st.llm_summary(rows, 1),
+            **{k: summ[k] for k in ("models_served", "filings_2_02", "tradeable", "excluded_liquidity",
+                                    "calls_total", "calls_new")}}
+    return summ, rows
+
+
+STUDIES = {"llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):

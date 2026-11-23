@@ -144,6 +144,23 @@ class LlmEarnings(unittest.TestCase):
         self.assertEqual(st.llm_verdict(rows[:30]), "too few, keep collecting")
 
 
+class ForwardEarnings(unittest.TestCase):
+    def rows(self, n, g5):
+        out = []
+        for i in range(n):
+            for h, g in ((1, 0.0), (3, 0.01), (5, g5 if i % 4 else -g5 / 2)):
+                out.append({"symbol": f"S{i % 50}", "ts": 1796000000 + 86400 * 31 * (i // 50), "horizon": h,
+                            "gross": g, "direction": "long", "confidence": 80, "rand_sign": -1 if i % 2 else 1})
+        return out
+
+    def test_waits_for_600_trades(self):
+        self.assertEqual(st.llm_forward_verdict(self.rows(100, 0.03)), "collecting (100/600 trades)")
+
+    def test_clear_h5_drift_is_an_edge_and_flat_is_not(self):
+        self.assertEqual(st.llm_forward_verdict(self.rows(640, 0.03)), "edge")
+        self.assertEqual(st.llm_forward_verdict(self.rows(640, 0.0)), "no edge shown")
+
+
 class WideEarnings(unittest.TestCase):
     def test_form_idx_keeps_only_plain_8k(self):
         text = ("Form Type   Company Name   CIK   Date Filed   File Name\n" + "-" * 40 + "\n"
