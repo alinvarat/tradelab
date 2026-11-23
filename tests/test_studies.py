@@ -86,6 +86,29 @@ class Momentum(unittest.TestCase):
         self.assertEqual(st.momentum_rows({"A": bars_for(days)}), [])
 
 
+class PointInTime(unittest.TestCase):
+    def test_membership_spells_and_dot_tickers(self):
+        m = st.parse_membership("ticker,start_date,end_date\nAAL,1996-01-02,1997-01-15\nAAL,2015-03-23,2024-09-23\n"
+                                "BRK.B,2010-02-16,\n")
+        self.assertEqual(m["AAL"], [("1996-01-02", "1997-01-15"), ("2015-03-23", "2024-09-23")])
+        self.assertIn("BRK-B", m)
+        self.assertEqual(st.members_on(m, "2020-01-31"), {"AAL", "BRK-B"})
+        self.assertEqual(st.members_on(m, "2024-09-23"), {"BRK-B"})        # gone on its end date
+        self.assertEqual(st.members_on(m, "2000-01-31"), set())
+
+    def test_non_members_are_never_picked(self):
+        days = business_days("2022-01-03", 340)
+        pool = {f"S{i:02d}": bars_for(days, 100.0, step=0.01 * (i + 1)) for i in range(20)}
+        allowed = {f"S{i:02d}" for i in range(15)}                         # the steepest five are not members
+        rows = st.momentum_rows(pool, members=lambda day: allowed)
+        self.assertTrue(rows)
+        for r in rows:
+            self.assertTrue(set(r["top"]) <= allowed)
+            self.assertEqual(r["basket"], 15)
+            self.assertAlmostEqual(r["coverage"], 1.0)
+        self.assertEqual(rows[0]["top"], ["S14"])                          # 10% of 15 = 1
+
+
 class Items(unittest.TestCase):
     def test_only_locked_items_count_and_each_counts_once(self):
         self.assertEqual(st.item_tags(["2.02", "9.01"]), ["2.02"])

@@ -73,18 +73,46 @@ def tom_rows(symbol: str, bars: list, placebo: bool = False) -> list:
 
 
 # ------------------------------------------------------------------ (c) momentum 12-1
-def momentum_rows(bars_by_symbol: dict, top_frac: float = 0.1, min_names: int = 10) -> list:
+def parse_membership(text: str) -> dict:
+    """ticker,start_date,end_date CSV -> {yahoo ticker: [(start, end or None)]}. A ticker can have several spells."""
+    out: dict = {}
+    for i, line in enumerate(text.strip().splitlines()):
+        parts = [x.strip() for x in line.split(",")]
+        if i == 0 or len(parts) < 2 or not parts[0]:
+            continue
+        end = parts[2] if len(parts) > 2 and parts[2] else None
+        out.setdefault(parts[0].replace(".", "-"), []).append((parts[1], end))
+    return out
+
+
+def members_on(intervals: dict, day: str) -> set:
+    """Members whose spell covers day (start <= day, and no end or day < end)."""
+    return {t for t, spells in intervals.items() if any(a <= day and (b is None or day < b) for a, b in spells)}
+
+
+def momentum_rows(bars_by_symbol: dict, top_frac: float = 0.1, min_names: int = 10, members=None) -> list:
     """Each month end m: score = close(end of m-1) / close(end of m-12) - 1. Hold the top decile equal weight from
     the next session's open to the close of the last session of m+1, flat otherwise. Control: the equal-weight
     basket of every stock that had a score that month, same entry and exit. Both pay a full round trip each month
-    (the rule exits at month-end close and re-enters at the next open, so every month is a new position)."""
+    (the rule exits at month-end close and re-enters at the next open, so every month is a new position).
+    members: optional {"YYYY-MM-DD": set} or callable(day) -> set of point-in-time members; only they are eligible,
+    and each row then records coverage = scored members / members."""
     ends = {s: {month_key(b[i]["t"]): i for i in month_end_indices(b)} for s, b in bars_by_symbol.items()}
     months = sorted(set().union(*[set(e) for e in ends.values()])) if ends else []
     rows = []
     for m in months:
         m1, m12, nxt = add_months(m, -1), add_months(m, -12), add_months(m, 1)
         scores, legs, entry_t = {}, {}, None
+        eligible = None
+        if members is not None:
+            any_end = next((bars_by_symbol[s][e[m]]["t"] for s, e in ends.items() if m in e), None)
+            if any_end is None:
+                continue
+            day = time.strftime("%Y-%m-%d", time.gmtime(any_end))
+            eligible = members(day) if callable(members) else members.get(day, set())
         for s, e in ends.items():
+            if eligible is not None and s not in eligible:
+                continue
             if not all(k in e for k in (m, m1, m12, nxt)):
                 continue
             b = bars_by_symbol[s]
@@ -105,7 +133,8 @@ def momentum_rows(bars_by_symbol: dict, top_frac: float = 0.1, min_names: int = 
         rows.append({"symbol": "MOM12-1", "month": nxt, "ts": entry_t, "split": nb.split_of(entry_t),
                      "horizon": "1m", "gross": sum(legs[s] for s in top) / k,
                      "ctrl_gross": sum(legs.values()) / len(legs), "asset_class": "stock",
-                     "basket": len(legs), "top": top})
+                     "basket": len(legs), "top": top,
+                     "coverage": (len(legs) / len(eligible)) if eligible else None})
     return rows
 
 
