@@ -32,9 +32,18 @@ class Base(unittest.TestCase):
         self.prompts = []
 
         self.debate_calls = []
+        self.analyst_calls = []
+        self.risk_calls = []
+        self.risk_replies = []
 
         def chat(system, user):
-            if system in (lt.BULL, lt.BEAR):               # research stage: separate from the decision replies
+            if system in (lt.ANALYST_NEWS, lt.ANALYST_PRICE, lt.ANALYST_MACRO):
+                self.analyst_calls.append(user)
+                return json.dumps({"notes": {"AAA": "note for AAA"}}), "fake-model"
+            if system == lt.RISK:
+                self.risk_calls.append(user)
+                return (self.risk_replies.pop(0) if self.risk_replies else '{"reviews":[]}'), "fake-model"
+            if system.startswith(lt.BULL) or system.startswith(lt.BEAR):   # research stage: separate from decisions
                 self.debate_calls.append(system)
                 return json.dumps({"arguments": {"AAA": "case for AAA"}}), "fake-model"
             self.prompts.append(user)
@@ -92,10 +101,12 @@ class Trading(Base):
     def test_bull_bear_debate_reaches_the_decision_prompt_and_every_candidate_is_scored(self):
         self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "reason": "r"})
         self.t.scan(self.market(AAA=quote("AAA", px=110, move=12), BBB=quote("BBB", px=50, move=9)))
-        self.assertEqual(len(self.debate_calls), 2)
+        self.assertEqual(len(self.debate_calls), 4)
         ctx = json.loads(self.prompts[0].split("JSON):\n", 1)[1])
         self.assertEqual(ctx["bull_case"]["AAA"], "case for AAA")
         self.assertIn("bear_case", ctx)
+        self.assertIn("bull_rebuttal", ctx)
+        self.assertIn("analysts", ctx)
         self.assertIn("track_record", ctx)
         self.assertEqual({(c["symbol"], c["action"]) for c in self.t.cands}, {("AAA", "buy"), ("BBB", "hold")})
 
@@ -118,7 +129,7 @@ class Trading(Base):
 
     def test_failed_debate_does_not_block_the_decision(self):
         real = self.t.chat
-        self.t.chat = lambda s, u: ("", "down") if s in (lt.BULL, lt.BEAR) else real(s, u)
+        self.t.chat = lambda s, u: ("", "down") if s.startswith((lt.BULL, lt.BEAR)) else real(s, u)
         self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "reason": "r"})
         self.t.scan(self.market(AAA=quote("AAA", move=12)))
         self.assertIn("AAA", self.t.acct.positions)
@@ -214,7 +225,7 @@ class WholeMarket(Base):
         call = next(json.loads(l) for l in (Path(self.tmp.name) / "l.jsonl").read_text().splitlines() if '"kind": "call"' in l)
         self.assertEqual(call["trigger"], "scheduled scan")
         ctx = call["context"]
-        self.assertEqual(ctx["protocol"], "v4")
+        self.assertEqual(ctx["protocol"], lt.PROTOCOL_VERSION)
         self.assertEqual(ctx["universe_classes"]["crypto"], len(lt.ASSETS["crypto"]))
         self.assertTrue(ctx["movers"])
         self.assertIn("gold", ctx["market"])
@@ -238,12 +249,43 @@ class WholeMarket(Base):
 
     def test_view_reports_the_universe_and_protocol(self):
         v = self.t.view()
-        self.assertEqual(v["protocol"], "v4")
+        self.assertEqual(v["protocol"], lt.PROTOCOL_VERSION)
         self.assertEqual(v["universe_size"], len(lt.ALL))
         self.assertEqual(v["classes"]["fx"], len(lt.ASSETS["fx"]))
         self.t.pairs = [{"id": "1", "asset_class": "commodity", "s1": 0.02, "ctrl": 0.0},
                         {"id": "2", "asset_class": "stock", "s1": -0.01, "ctrl": 0.0}]
         self.assertEqual(self.t.evaluate()["by_class"]["commodity"]["n"], 1)
+
+
+class HeavyDesk(Base):
+    def test_risk_manager_can_veto_or_reduce_but_never_increase_size(self):
+        self.risk_replies.append(json.dumps({"reviews": [{"symbol": "AAA", "approve": False,
+                                                          "size_multiplier": 1, "reason": "too concentrated"}]}))
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", move=12)))
+        self.assertNotIn("AAA", self.t.acct.positions)
+        self.assertIn("risk_veto", self.log_kinds())
+        self.risk_replies.append(json.dumps({"reviews": [{"symbol": "AAA", "approve": True,
+                                                          "size_multiplier": 0.5, "reason": "halve it"}]}))
+        self.t.calls["last_ts"] = 0
+        self.t.seen.clear()
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 10, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", move=12)))
+        self.assertEqual(self.t.decisions[-1]["size_pct"], 5)
+        self.assertEqual(self.t.decisions[-1]["size_pct_before_risk"], 10)
+        self.assertIn("risk_reduce", self.log_kinds())
+
+    def test_risk_parser_never_accepts_an_increase(self):
+        out = lt.parse_reviews('{"reviews":[{"symbol":"AAA","size_multiplier":9,"approve":true}]}', {"AAA"})
+        self.assertEqual(out["AAA"]["size_multiplier"], 1.0)
+        self.assertEqual(lt.parse_reviews("no json", {"AAA"}), {})
+
+    def test_analyst_notes_are_in_the_decision_context(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", move=12)))
+        ctx = json.loads(self.prompts[0].split("JSON):\n", 1)[1])
+        self.assertEqual(ctx["analysts"]["news"]["AAA"], "note for AAA")
+        self.assertEqual(len(self.analyst_calls), 3)
 
 
 class Pairing(Base):

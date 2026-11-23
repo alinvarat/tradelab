@@ -1,4 +1,16 @@
-# CURRENT RULES (v4, 2026-11-24, before any v4 decision) — THIS BLOCK WINS
+# CURRENT RULES (v4.1, 2026-11-24, before any v4.1 decision) — THIS BLOCK WINS
+Owner direction: use the same single paper account and keep its statistics running; make the model work harder (more analysts, a real debate, a risk check, longer memory), but prove the change with the same paired-control criterion instead of assuming "more AI" helps. Everything in the v4 block below still applies except where this block changes it.
+- **Same account, tagged evidence:** v4.1 runs in `data/llm_trader_v4.json` / `data/llm_trader_log_v4.jsonl`, no reset. Every decision, trade link and closed pair carries `protocol` so v4 and v4.1 statistics can be separated; per-protocol paired results are reported alongside the pooled numbers.
+- **Pipeline per cycle:** three analyst calls in parallel (news catalyst, price/volume structure, macro regime) that see data only → one bull/bear debate round that sees the analyst notes → one rebuttal round where each side answers the other's case → the decision call sees both rounds, the analyst notes, the 30-trade memory and the whole candidate list → an advisory risk review of the proposed buys/adjusts.
+- **Risk review is advisory and one-way:** it may only veto a buy/adjust or reduce size (size_multiplier 0-1). It may never increase size, add a trade, change the symbol/stop/leverage. A failed or unparsable review leaves the decision unchanged. Sells and closes are not reviewed. Every veto/reduction is logged with its reason.
+- **Memory:** the last 30 settled decisions (not 10), each with its SPY-relative +1 day result, are fed back to the decision call.
+- **Candidate breadth and cadence:** up to 24 candidates per cycle; the scheduled whole-market look is every 10 minutes (was 15); the 60 s minimum gap and the 300 cycles/day cap are unchanged.
+- **Cost of the change is part of the test:** v4.1 makes 6 model calls per cycle instead of 3, so its forward result is compared with v4 on paired difference and on cycles per day; a v4.1 edge that only exists before cost or only in one asset class is not a result.
+- **Everything else (triggers, universe, limits, costs, control, evaluation criterion) is unchanged from v4.**
+
+---- v4 rules (superseded only where v4.1 changes them) ----
+
+# LLM trader (paper) - v4 RULES (2026-11-24, before any v4 decision)
 Owner direction: follow news and social attention across the whole market, not only large-cap US stocks; no fixed holding period; the single pinned DeepSeek model decides everything including leverage. Simulated money and public data only.
 - **Account:** a NEW paper account (`data/llm_trader_v4.json`, log `data/llm_trader_log_v4.jsonl`). The v3 account/log are archived on the volume and are never mixed into v4 evidence.
 - **Decider:** `openrouter/deepseek/deepseek-v4.1-flash-1017` only, pinned; bull/bear and decision calls (headline scoring keeps its own locked comparison). Model id logged with every call.
