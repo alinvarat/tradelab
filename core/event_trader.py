@@ -17,6 +17,7 @@ from statistics import mean
 
 from . import data, news
 from .engine import Account, Quote
+from .storage import write_json_atomic
 from .universe import TICKERS
 
 DATA = Path(__file__).resolve().parent.parent / "data"
@@ -79,9 +80,7 @@ class EventTrader:
             d = {"account": self.acct.to_dict(), "ctrl": self.ctrl.to_dict(), "events": self.events[-500:],
                  "pairs": self.pairs, "seen": sorted(self.seen)[-5000:], "day_start": self.day_start,
                  "capital_usd": self.capital_usd, "paused": self.paused}
-        tmp = self.state_path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(d, default=str))
-        tmp.replace(self.state_path)
+            write_json_atomic(self.state_path, d, default=str)
 
     # ---------- detection ----------
     def avg50(self, sym):

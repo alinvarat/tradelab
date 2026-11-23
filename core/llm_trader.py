@@ -19,6 +19,7 @@ from statistics import mean
 from . import ai_news, data, news, news_archive
 from .engine import Account, Quote
 from .event_trader import STALE_S, UP_PCT, VOL_MIN, _day
+from .storage import write_json_atomic
 from .universe import TICKERS
 
 log = logging.getLogger("tradelab.llm")
@@ -43,6 +44,7 @@ DAILY_HALT = 1.0   # disabled (owner rule: no restrictions)
 MAX_CALLS_DAY, MIN_GAP_S, MAX_CANDIDATES = 300, 60, 5
 DEFAULT_REVIEW_MIN = 60
 MIN_TRADES = 30
+LEGACY_MATCH_S = 6 * 3600   # links saved before trade references existed: accept the nearest trade within this window
 RAW_LOG_CHARS = 8000
 OUT_HORIZONS = (3600, 24 * 3600)   # every candidate shown to the model is scored afterwards, whatever it decided
 MEMORY_N = 10                      # settled decisions fed back to the model as its track record
@@ -216,9 +218,7 @@ class LlmTrader:
                  "seen": sorted(self.seen)[-5000:], "decisions": self.decisions[-200:], "calls": self.calls, "cands": self.cands[-600:], "logged_trades": self.logged_trades,
                  "pending": self.pending, "last_fin": self.last_fin,
                  "day_start": self.day_start, "capital_usd": self.capital_usd, "paused": self.paused}
-        tmp = self.state_path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(d, default=str))
-        tmp.replace(self.state_path)
+            write_json_atomic(self.state_path, d, default=str)
 
     # ---------- data ----------
     def avg50(self, sym):
@@ -449,13 +449,14 @@ class LlmTrader:
         margin = notional / lev
         qty = notional / ref
         stop_px, target_px = ref * (1 - stop), (ref * (1 + target / 100) if target else None)
+        self.acct.on_quote(self._q(q))                  # a market order must fill on today's quote, not the last one the account saw
         adding = sym in self.links and sym in self.acct.positions     # buying more of a stock already held scales the position in
-        o = self.acct.place(sym, 1, qty, "limit" if limit else "market", limit, stop_px, target_px)
-        self.acct.on_quote(self._q(q))
+        link_id = self.links[sym]["id"] if adding else f"{_day(now)}-{sym}-{int(now)}"
+        o = self.acct.place(sym, 1, qty, "limit" if limit else "market", limit, stop_px, target_px, ref=link_id)
         meta = {"decision": {k: d.get(k) for k in ("reason", "horizon", "review_in_min")}, "notional": notional, "margin": margin,
                 "leverage": lev, "entry_type": "limit" if limit else "market", "limit_price": limit, "stop_pct": stop * 100,
                 "target_pct": target, "stop_price": stop_px, "target_price": target_px, "clipped_by": clipped,
-                "risk_pct_equity": notional * stop / eq * 100, "order_id": o.id,
+                "risk_pct_equity": notional * stop / eq * 100, "order_id": o.id, "link_id": link_id,
                 "expires": now + d.get("valid_min", 60) * 60}
         out = {"status": o.status, "usd": round(notional, 2), "notional_usd": round(notional, 2), "margin_usd": round(margin, 2),
                "leverage": lev, "entry": meta["entry_type"], "limit_price": limit, "stop_price": round(stop_px, 4),
@@ -474,17 +475,18 @@ class LlmTrader:
 
     def _activate(self, sym, meta, quotes, now):
         """A position is open: create its link and the same-notional random control. Returns the control symbol."""
+        link_id = meta.get("link_id") or f"{_day(now)}-{sym}-{int(now)}"   # entries saved before references existed
         pool = [s for s, x in quotes.items() if s != sym and abs(x.get("change_pct") or 0) < UP_PCT and x.get("open")
                 and now - (x.get("ts") or 0) <= STALE_S and s not in self.ctrl.positions]
         ctrl_sym = None
         if pool:
             ctrl_sym = self.rng.choice(sorted(pool))
             cq = quotes[ctrl_sym]
+            self.ctrl.on_quote(self._q(cq))             # fresh quote before the fill (the control may have traded it before)
             self.ctrl.place(ctrl_sym, 1, meta["notional"] / cq["ask"], "market", None, cq["ask"] * (1 - meta["stop_pct"] / 100),
-                            cq["ask"] * (1 + meta["target_pct"] / 100) if meta["target_pct"] else None)
-            self.ctrl.on_quote(self._q(cq))
+                            cq["ask"] * (1 + meta["target_pct"] / 100) if meta["target_pct"] else None, ref=link_id)
         d = meta["decision"]
-        self.links[sym] = {"id": f"{_day(now)}-{sym}-{int(now)}", "symbol": sym, "ctrl": ctrl_sym, "ts": now,
+        self.links[sym] = {"id": link_id, "symbol": sym, "ctrl": ctrl_sym, "ts": now,
                            "reason": d.get("reason", ""), "usd": round(meta["notional"], 2), "horizon": d.get("horizon", ""),
                            "stop_pct": meta["stop_pct"], "target_pct": meta["target_pct"], "leverage": meta["leverage"],
                            "notional": meta["notional"], "margin": meta["margin"], "entry_type": meta["entry_type"],
@@ -501,12 +503,12 @@ class LlmTrader:
         cs = link.get("ctrl")
         if cs and cs in self.ctrl.positions and cs in quotes:
             cq = quotes[cs]
-            self.ctrl.place(cs, 1, meta["notional"] / cq["ask"], "market", None, None, None)
+            self.ctrl.on_quote(self._q(cq))
+            self.ctrl.place(cs, 1, meta["notional"] / cq["ask"], "market", None, None, None, ref=link["id"])
             cp = self.ctrl.positions.get(cs)
             if cp:
                 cp.sl = cq["ask"] * (1 - meta["stop_pct"] / 100)
                 cp.tp = cq["ask"] * (1 + meta["target_pct"] / 100) if meta["target_pct"] else None
-            self.ctrl.on_quote(self._q(cq))
         link["notional"] += meta["notional"]
         link["margin"] += meta["margin"]
         link["leverage"] = link["notional"] / link["margin"] if link["margin"] else 1.0
@@ -616,6 +618,20 @@ class LlmTrader:
                             held_hours=round((t.closed_ts - t.opened_ts) / 3600, 2))
             self.logged_trades[name] = len(acct.trades)
 
+    @staticmethod
+    def _find_trade(acct, sym, link):
+        """The closed trade that belongs to this link. New records carry the link id; links saved before references
+        existed (or whose trade predates them) fall back to the open time nearest the link, because a quote timestamp
+        can be older than the decision by more than the old 5-second window."""
+        legacy = [t for t in acct.trades if t.symbol == sym and t.ref is None]
+        for t in reversed(acct.trades):
+            if t.symbol == sym and t.ref == link["id"]:
+                return t
+        if not legacy:
+            return None
+        near = [t for t in legacy if abs(t.opened_ts - link["ts"]) <= LEGACY_MATCH_S]
+        return min(near, key=lambda t: abs(t.opened_ts - link["ts"])) if near else None
+
     def _book_pairs(self, now):
         done = {p["id"] for p in self.pairs}
         for sym, link in list(self.links.items()):
@@ -623,13 +639,17 @@ class LlmTrader:
                 continue
             if link["ctrl"] and link["ctrl"] in self.ctrl.positions:
                 self.ctrl.close(link["ctrl"], reason="paired exit")
-            a = next((t for t in reversed(self.acct.trades) if t.symbol == sym and t.opened_ts >= link["ts"] - 5), None)
-            c = next((t for t in reversed(self.ctrl.trades) if t.symbol == link["ctrl"] and t.opened_ts >= link["ts"] - 5), None)
+            a = self._find_trade(self.acct, sym, link)
+            c = self._find_trade(self.ctrl, link["ctrl"], link) if link["ctrl"] else None
             if a and (c or not link["ctrl"]):
                 if c and link["id"] not in done:
                     self.pairs.append({"id": link["id"], "s1": a.pnl / (a.qty * a.entry), "ctrl": c.pnl / (c.qty * c.entry)})
                     self.record("pair", **self.pairs[-1], model_reason=link["reason"], symbol=sym, control=link["ctrl"])
                 del self.links[sym]
+            elif a and link["ctrl"] and not link.get("pair_wait_logged"):
+                link["pair_wait_logged"] = True
+                self.record("pair_waiting", symbol=sym, control=link["ctrl"], id=link["id"], model_trade_ref=a.ref,
+                            why="control trade not found; pair not booked yet")
 
     # ---------- evaluation / view ----------
     def discrimination(self):

@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest import mock
 
 from core import llm_trader as lt
+from core.storage import write_json_atomic
 
 
 def quote(sym, px=100.0, move=0.0, vol=2e6, ts=None, open_=True):
@@ -180,6 +181,85 @@ class Trading(Base):
         self.t.save()
         again = lt.LlmTrader(self.t.state_path, self.t.log_path, chat=self.t.chat)
         self.assertEqual(len(again.seen), len(self.t.seen))
+
+
+class Pairing(Base):
+    def buy_then_close(self, legacy=False, skew=30.0):
+        """Buy AAA, pretend the fill used a quote older than the decision, then close both legs."""
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 4, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        link = self.t.links["AAA"]
+        for acct in (self.t.acct, self.t.ctrl):
+            for p in acct.positions.values():
+                p.opened_ts = link["ts"] - skew
+                if legacy:
+                    p.ref = None
+        self.t.calls["last_ts"] = 0
+        link["review_at"] = 0
+        self.reply({"symbol": "AAA", "action": "sell", "reason": "exit"})
+        m = self.market(AAA=quote("AAA", px=112, move=14))
+        m[link["ctrl"]] = quote(link["ctrl"], px=101)
+        self.t.scan(m)
+        self.t.scan(m)
+        return link
+
+    def test_market_buy_fills_on_the_quote_the_model_was_shown_not_a_stale_account_quote(self):
+        old = time.time() - 86400
+        self.t.acct.on_quote(lt.Quote("AAA", 49.0, 49.1, old))
+        for s in ("BBB", "CCC", "DDD", "EEE"):
+            self.t.ctrl.on_quote(lt.Quote(s, 50.0, 50.1, old))
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 4, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        p = self.t.acct.positions["AAA"]
+        self.assertAlmostEqual(p.entry, 110.02 * 1.0002, delta=0.02)     # today's ask (plus slippage), not the day-old 49.1
+        cp = next(iter(self.t.ctrl.positions.values()))
+        self.assertGreater(cp.entry, 99.0)                              # the control also fills on the fresh quote
+        self.assertEqual(p.ref, self.t.links["AAA"]["id"])
+
+    def test_pair_is_booked_by_reference_even_when_the_fill_timestamp_is_older_than_the_decision(self):
+        link = self.buy_then_close(skew=30)
+        self.assertEqual(len(self.t.pairs), 1, "a stale quote timestamp must not lose the pair")
+        model, control = self.t.acct.trades[-1], self.t.ctrl.trades[-1]
+        self.assertEqual(model.ref, link["id"])
+        self.assertEqual(control.ref, link["id"])
+
+    def test_a_link_saved_before_references_existed_still_pairs_without_the_five_second_window(self):
+        self.buy_then_close(legacy=True, skew=30)
+        self.assertEqual(len(self.t.pairs), 1)
+        self.assertIsNone(self.t.acct.trades[-1].ref)
+
+    def test_references_and_links_survive_a_state_round_trip(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 4, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.t.save()
+        again = lt.LlmTrader(self.t.state_path, self.t.log_path, chat=self.t.chat)
+        self.assertEqual(again.acct.positions["AAA"].ref, again.links["AAA"]["id"])
+        self.assertEqual(next(p.ref for p in again.ctrl.positions.values()), again.links["AAA"]["id"])
+
+    def test_concurrent_state_saves_leave_one_complete_file_and_no_temp_files(self):
+        from concurrent.futures import ThreadPoolExecutor
+
+        def writer(i):
+            for n in range(40):
+                write_json_atomic(self.t.state_path, {"writer": i, "n": n, "pad": "x" * 2000})
+
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            list(ex.map(writer, range(8)))
+        doc = json.loads(self.t.state_path.read_text())
+        self.assertIn("writer", doc)
+        self.assertEqual(list(self.t.state_path.parent.glob("*.tmp")), [])
+
+    def test_missing_control_trade_is_reported_once_instead_of_vanishing(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 4, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        link = self.t.links["AAA"]
+        self.t.acct.close("AAA", reason="manual")
+        self.t.ctrl.positions.clear()               # simulate a control order that never produced a trade
+        self.t.ctrl.trades = []
+        for _ in range(3):
+            self.t.scan(self.market(AAA=quote("AAA", px=110)))
+        self.assertEqual(self.log_kinds().count("pair_waiting"), 1)
+        self.assertEqual(self.t.pairs, [])
 
 
 class HorizonFreedom(Base):
@@ -362,6 +442,18 @@ class LeverageAndEntry(Base):
         self.assertIn("AAA", self.t.links)
         self.assertEqual(len(self.t.ctrl.positions), 1)
         self.assertIn("limit_filled", self.log_kinds())
+
+    def test_limit_entry_saved_before_references_still_activates(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "entry": "limit", "limit_price": 98, "valid_min": 30,
+                    "stop_pct": 6, "review_in_min": 60, "reason": "buy the dip"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        self.t.pending["AAA"].pop("link_id")                     # state written by the previous version
+        for o in self.t.acct.orders:
+            o.ref = None
+        self.t.scan(self.market(AAA=quote("AAA", px=97.5)))
+        self.assertIn("AAA", self.t.acct.positions)
+        self.assertIn("AAA", self.t.links)
+        self.assertEqual(len(self.t.ctrl.positions), 1)
 
     def test_unfilled_limit_entry_expires(self):
         self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "entry": "limit", "limit_price": 90, "valid_min": 5,
