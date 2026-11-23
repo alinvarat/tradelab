@@ -589,8 +589,7 @@ def accounts_summary():
                      "positions": len(acct_.positions), "status": status, "note": note,
                      "control_usd": control_equity,
                      "control_thb": open_thb(control_equity, start_usd) if control_equity is not None else None})
-    add("manual", "Manual sandbox", "portfolio", acct, acct.initial, "you place the orders",
-        "Not a bot. Start capital is a round $100,000 for trying the order ticket.")
+    add("manual", "Manual sandbox", "portfolio", acct, acct.initial, "you place the orders", "Manual paper trading account")
     if auto:
         add("auto", "Auto trader (monthly momentum)", "auto", auto.acct, auto.capital_usd, "paused" if auto.paused else "running",
             "all cash this month" if not auto.targets else "holding " + ", ".join(auto.targets))

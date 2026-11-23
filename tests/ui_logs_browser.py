@@ -14,7 +14,12 @@ def check_log_refresh():
     cycle = {
         "ts": 1795454141.4,
         "trigger": "new shocks",
-        "candidates": [{"symbol": "KLAC", "name": "KLA", "move_pct": 13, "volume_ratio": 0.5}],
+        "candidates": [
+            {"symbol": "KLAC", "name": "KLA", "move_pct": 13, "volume_ratio": 0.5},
+            {"symbol": "ADI", "name": "Analog Devices", "move_pct": 9, "volume_ratio": 0.5},
+        ],
+        "decisions": [{"symbol": "KLAC", "action": "hold"}, {"symbol": "NVDA", "action": "hold"}],
+        "account": {"positions": [{"symbol": "NVDA"}]},
     }
     comparison = {
         "equity_thb": 5050, "equity_usd": 151.5, "control_equity_thb": 4950,
@@ -47,6 +52,12 @@ def check_log_refresh():
             return route.fulfill(json=comparison)
         if url.path == "/api/accounts":
             return route.fulfill(json={"rows": [account_row], "thb_per_usd": 40, "buzz_events": 6})
+        if url.path == "/api/quotes":
+            return route.fulfill(json={"watchlist": ["KLAC"], "quotes": [{"symbol": "KLAC", "open": False}]})
+        if url.path == "/api/overview":
+            return route.fulfill(json={"groups": {}})
+        if url.path == "/api/news":
+            return route.fulfill(json={"items": []})
         file = UI / (url.path.lstrip("/") or "index.html")
         return route.fulfill(path=file) if file.is_file() else route.fulfill(status=404)
 
@@ -68,6 +79,8 @@ def check_log_refresh():
         page.goto(ORIGIN + "/#logs")
         header = page.locator("#lg-cycles th").first
         expect(header).to_have_text("หุ้น")
+        for label in ("ไม่เปิดสถานะ", "ถือสถานะต่อ", "โมเดลไม่ได้ตอบ"):
+            expect(page.locator("#lg-cycles").get_by_text(label, exact=True)).to_be_visible()
         details = page.locator("#lg-cycles details").first
         summary = details.locator("summary")
         summary.click()
@@ -115,6 +128,14 @@ def check_log_refresh():
             cell = overview.locator("tbody td").nth(index)
             expect(cell).to_contain_text(thb)
             expect(cell).to_contain_text(usd)
+
+        page.locator('.tabs a[data-view="markets"]').click()
+        expect(page.locator("#watchlist").get_by_text("ตลาดปิด", exact=True)).to_be_visible()
+        expect(page.locator("#overview")).to_have_attribute("data-loaded", "1")
+        expect(page.locator("#mk-news")).to_have_attribute("data-loaded", "1")
+        with page.expect_response(ORIGIN + "/api/overview"):
+            page.locator('[data-refresh="markets"]').click()
+        expect(page.locator("#watchlist").get_by_text("ตลาดปิด", exact=True)).to_be_visible()
         browser.close()
 
 
