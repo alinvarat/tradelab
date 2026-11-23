@@ -704,6 +704,68 @@ views.overview = async () => {
   ], d.rows, { empty: "No accounts." });
 };
 
+/* ---------- decision log ---------- */
+let logSource = "llm";
+const BADGE = { buy: "BUY", sell: "SELL", adjust: "ADJUST", hold: "PASS" };
+const hmin = (s) => (s % 3600 === 0 ? s / 3600 + "h" : s / 3600 >= 1 ? (s / 3600).toFixed(1) + "h" : Math.round(s / 60) + "m");
+function cycleCard(c) {
+  const when = new Date(c.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  const byDec = {}; (c.decisions || []).forEach((d) => { byDec[d.symbol] = d; });
+  const acts = {}; (c.actions || []).forEach((a) => { (acts[a.symbol] = acts[a.symbol] || []).push(a); });
+  const outs = {}; (c.outcomes || []).forEach((o) => { (outs[o.symbol] = outs[o.symbol] || []).push(o); });
+  const mk = c.market || {}, ac = c.account || {};
+  const rows = (c.candidates || []).map((x) => {
+    const d = byDec[x.symbol], a = acts[x.symbol] || [], o = outs[x.symbol] || [];
+    const heads = (x.headlines || []).map((h) => `${esc(h.title)} <span class="muted">[${esc(h.source)}, lexicon ${h.lexicon ?? "-"}${h.ai_scores && Object.keys(h.ai_scores).length ? ", AI " + Object.values(h.ai_scores).join("/") : ""}]</span>`).join("<br>") || "-";
+    const decision = d ? `<b>${BADGE[d.action] || esc(d.action)}</b>${d.action === "buy" ? ` ${fmt(d.size_pct, 1)}% | ${esc(d.horizon || "")} | stop ${fmt(d.stop_pct, 0)}%${d.target_pct ? " target " + fmt(d.target_pct, 0) + "%" : ""} | look again in ${d.review_in_min} min` : ""}<br>${esc(d.reason || "")}` : "<b>PASS</b> (no reason given)";
+    const did = a.map((z) => z.kind === "skip" ? `<span class="muted">not executed: ${esc(z.why)}</span>` : z.kind === "order" ? `order ${esc(z.status)}${z.usd ? " " + fmt(z.usd, 2) + " USD" : ""}${z.control ? ", control " + esc(z.control) : ""}` : esc(z.kind + " " + (z.status || ""))).join("<br>");
+    const res = o.map((z) => `+${hmin(z.horizon_s)} vs SPY ${pct(z.abnormal * 100)}`).join("<br>");
+    return `<tr><td>${symCell(x.symbol, x.name)}</td><td class="num">${pct(x.move_pct)}<br><span class="muted">vs SPY ${x.abnormal_pct != null ? pct(x.abnormal_pct) : "-"}</span></td><td class="num">${fmt(x.volume_ratio, 1)}x</td>
+      <td>${decision}${did ? "<br>" + did : ""}</td><td>${heads}</td>
+      <td><details><summary>bull / bear</summary><b>Bull:</b> ${esc((c.bull || {})[x.symbol] || "-")}<br><b>Bear:</b> ${esc((c.bear || {})[x.symbol] || "-")}</details></td><td>${res || "<span class='muted'>pending</span>"}</td></tr>`;
+  }).join("");
+  const extra = (c.decisions || []).filter((d) => !(c.candidates || []).some((x) => x.symbol === d.symbol)).map((d) => {
+    const a = (acts[d.symbol] || []).map((z) => esc(z.kind + " " + (z.status || z.why || ""))).join(", ");
+    return `<li><b>${BADGE[d.action] || esc(d.action)} ${esc(d.symbol)}</b> (position review): ${esc(d.reason || "")}${a ? " <span class='muted'>→ " + a + "</span>" : ""}</li>`;
+  }).join("");
+  return `<div class="panel" style="margin:12px 0"><div class="row spread"><b>${when} | ${esc(c.trigger || "?")}</b><span class="small muted">${esc(c.model || "")} ${c.seconds != null ? "| " + c.seconds + " s" : ""}</span></div>
+    <p class="small muted">SPY ${mk.spy_move_pct != null ? pct(mk.spy_move_pct) : "-"} | VIX ${mk.vix ?? "-"} | account ${fmt(ac.equity_usd, 2)} USD, exposure ${ac.exposure_pct ?? 0}%, ${(ac.positions || []).length} open</p>
+    ${c.market_view ? `<p><b>Market view:</b> ${esc(c.market_view)}</p>` : ""}${c.error ? `<p class="down">Error: ${esc(c.error)}</p>` : ""}
+    ${rows ? `<div class="tbl-wrap"><table><thead><tr><th>Stock</th><th>Move</th><th>Volume</th><th>Decision and reason</th><th>Headlines the model saw</th><th>Debate</th><th>What happened next</th></tr></thead><tbody>${rows}</tbody></table></div>` : ""}
+    ${extra ? `<ul>${extra}</ul>` : ""}${(c.rejected || []).length ? `<p class="small muted">Ignored model output: ${c.rejected.map(esc).join("; ")}</p>` : ""}
+    <details><summary class="small muted">raw model reply</summary><pre class="small">${esc(c.raw || "")}</pre></details></div>`;
+}
+views.logs = async () => {
+  $("#lg-llm").onclick = () => { logSource = "llm"; views.logs(); };
+  $("#lg-evt").onclick = () => { logSource = "evt"; views.logs(); };
+  const box = $("#lg-cycles");
+  try {
+    if (logSource === "llm") {
+      const d = await api("llm_log?n=30");
+      $("#lg-note").textContent = "Each card is one decision cycle of the DeepSeek trader: what it was shown, the bull and bear cases, its decision and reason for every stock (including why it passed), what the system did, and the result afterwards. Newest first.";
+      box.innerHTML = d.cycles.length ? d.cycles.map(cycleCard).join("") : `<div class="empty">No decision cycles yet. The model is asked when a stock moves 5%+ on real volume, and to review open positions.</div>`;
+      $("#lg-closed").innerHTML = table([
+        { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
+        { h: "Account", f: (r) => esc(r.account || r.kind) }, { h: "Stock", f: (r) => symCell(r.symbol || "", "") },
+        { h: "Why closed", f: (r) => esc(r.reason || r.message || "") }, { h: "P/L %", num: 1, f: (r) => (r.pnl_pct != null ? pct(r.pnl_pct) : "-"), cls: (r) => cls(r.pnl_pct) },
+        { h: "Held (h)", num: 1, f: (r) => (r.held_hours != null ? fmt(r.held_hours, 1) : "-") },
+      ], d.closed, { empty: "No closed trades yet." });
+    } else {
+      const d = await api("event_log?n=60");
+      $("#lg-note").textContent = "Event trader (fixed rule): every large-cap move of 5%+ on real volume, with the headlines, what the rule did, and why it did not trade when it did not.";
+      box.innerHTML = table([
+        { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
+        { h: "What", f: (r) => esc(r.kind) }, { h: "Stock", f: (r) => symCell(r.symbol || "", "") },
+        { h: "Move", num: 1, f: (r) => (r.move_pct != null ? pct(r.move_pct) : "-") },
+        { h: "Context", f: (r) => (r.kind === "event" ? `SPY ${r.spy_move_pct != null ? pct(r.spy_move_pct) : "-"}, vs SPY ${r.abnormal_move_pct != null ? pct(r.abnormal_move_pct) : "-"}, VIX ${r.vix ?? "-"}, volume ${fmt(r.vol_ratio, 1)}x` : "") },
+        { h: "Decision", f: (r) => (r.kind === "event" ? (r.entry ? `bought ${fmt(r.entry.usd, 2)} USD (control ${esc((r.control || {}).symbol || "-")})` : esc(r.skipped ? "not traded: " + r.skipped : r.direction === "down" ? "not traded: down-move (data only)" : "-")) : esc(r.message || "")) },
+        { h: "Headlines", f: (r) => (r.headlines || []).map((x) => esc(x.title)).join("<br>") },
+      ], d.rows, { empty: "No events yet." });
+      $("#lg-closed").innerHTML = "";
+    }
+  } catch (e) { box.innerHTML = errBox(e, "log"); }
+};
+
 /* ---------- DeepSeek trader ---------- */
 views.llm = async () => {
   const figs = $("#llm-figs");
@@ -883,6 +945,7 @@ setInterval(() => {
   else if (route.view === "auto") views.auto();
   else if (route.view === "events") views.events();
   else if (route.view === "llm") views.llm();
+  else if (route.view === "logs") views.logs();
   else if (route.view === "buzz") views.buzz();
   else if (route.view === "portfolio" || route.view === "chart") refreshAccount();
   if (route.view === "chart" && curSym) api("quote?symbol=" + encodeURIComponent(curSym)).then((q) => { if (q && !q.error && curSym === route.symbol) { lastQuote = q; const el = $("#qhead .px"); if (el) el.textContent = fmt(q.price); renderTicket(); } }).catch(() => {});

@@ -48,7 +48,7 @@ Rules: (1) Reply with ONLY one JSON object: {"decisions":[{"symbol":"NVDA","acti
 (2) There is NO required holding period: pick the horizon that fits the catalyst, from hours to months, and say when you \
 want to look again (review_in_min). Quotes can be ~15 minutes old, so horizons under about 30 minutes are not meaningful. \
 Set stop_pct and optionally target_pct for every buy; "adjust" changes them (and review_in_min) for a position you hold. \
-(3) The default is hold. Buy only when there is a clear catalyst that the price has not already absorbed; compare move_pct \
+(3) Give one decision object for EVERY candidate: use action hold with a short reason when you pass, so every pass is explained. The default is hold. Buy only when there is a clear catalyst that the price has not already absorbed; compare move_pct \
 with abnormal_pct, because on days when the whole market moves many stocks move together; social-attention surges often \
 fade, so weigh headlines, volume and liquidity. (4) You may only buy symbols listed under candidates and sell or adjust \
 symbols you hold. (5) Position size is a percent of equity, at most 5; the system enforces stops, exposure limits and a \
@@ -153,6 +153,7 @@ class LlmTrader:
         self.context: dict[str, dict] = {}
         self.last_scan, self.last_error = 0.0, None
         self.cands: list = []
+        self.logged_trades: dict = {}
         self.last_quotes: dict[str, dict] = {}
         if self.state_path.exists():
             d = json.loads(self.state_path.read_text())
@@ -160,6 +161,7 @@ class LlmTrader:
             self.links, self.pairs, self.seen = d["links"], d["pairs"], set(d["seen"])
             self.decisions, self.calls = d["decisions"], d["calls"]
             self.cands = d.get("cands", [])
+            self.logged_trades = d.get("logged_trades", {"model": len(self.acct.trades), "control": len(self.ctrl.trades)})
             self.day_start, self.capital_usd, self.paused = d["day_start"], d["capital_usd"], d.get("paused", False)
         else:
             self.reset()
@@ -188,7 +190,7 @@ class LlmTrader:
     def save(self):
         with self.lock:
             d = {"account": self.acct.to_dict(), "ctrl": self.ctrl.to_dict(), "links": self.links, "pairs": self.pairs,
-                 "seen": sorted(self.seen)[-5000:], "decisions": self.decisions[-200:], "calls": self.calls, "cands": self.cands[-600:],
+                 "seen": sorted(self.seen)[-5000:], "decisions": self.decisions[-200:], "calls": self.calls, "cands": self.cands[-600:], "logged_trades": self.logged_trades,
                  "day_start": self.day_start, "capital_usd": self.capital_usd, "paused": self.paused}
         tmp = self.state_path.with_suffix(".tmp")
         tmp.write_text(json.dumps(d, default=str))
@@ -460,6 +462,7 @@ class LlmTrader:
             for s, p in list(self.acct.positions.items()):  # forced time exit
                 if now - p.opened_ts >= MAX_HOLD_S and s in quotes and quotes[s].get("open"):
                     self._sell(s, "safety exit (180 days)", now)
+            self._log_closed_trades()
             self._book_pairs(now)
             self._outcomes(now, quotes)
             fresh = []
@@ -478,6 +481,16 @@ class LlmTrader:
             self.last_scan = now
         if trigger:
             self.decide(now, trigger, cands, quotes)
+
+    def _log_closed_trades(self):
+        """Stops, targets and safety exits happen inside the engine; log each closed trade once with its reason and P&L."""
+        for name, acct in (("model", self.acct), ("control", self.ctrl)):
+            done = self.logged_trades.get(name, 0)
+            for t in acct.trades[done:]:
+                self.record("trade_closed", account=name, symbol=t.symbol, reason=t.reason, entry=round(t.entry, 4),
+                            exit=round(t.exit, 4), pnl_usd=round(t.pnl, 4), pnl_pct=round(t.pnl / (t.qty * t.entry) * 100, 2),
+                            held_hours=round((t.closed_ts - t.opened_ts) / 3600, 2))
+            self.logged_trades[name] = len(acct.trades)
 
     def _book_pairs(self, now):
         done = {p["id"] for p in self.pairs}
@@ -552,6 +565,7 @@ class LlmTrader:
                     self.acct.on_quote(self._q(q))
                 if s in self.ctrl.positions or s in self.ctrl.last:
                     self.ctrl.on_quote(self._q(q))
+                self._log_closed_trades()
         if hot_quotes and self.hot_shock(hot_quotes):
             self.scan(quotes=dict(self.last_quotes))     # a hot stock just crossed the threshold: decide now, not at the next full pass
 
@@ -574,3 +588,58 @@ def loop(t: LlmTrader, every=SCAN_S):
             t.last_error = str(e)[:200]
             t.record("error", message=t.last_error)
         time.sleep(WATCH_S)
+
+
+def build_cycles(lines, limit=40):
+    """Group the append-only log into decision cycles (newest first) for the Logs page: what was shown to the model, the bull
+    and bear cases, every decision with its reason and what the system did with it, later outcomes, and closed trades."""
+    events = []
+    for line in lines:
+        try:
+            events.append(json.loads(line))
+        except ValueError:
+            continue
+    cycles, cur, loose = [], None, []
+    for e in events:
+        k = e["kind"]
+        if k == "debate":
+            if cur is None or cur.get("call_seen"):
+                cur = {"ts": e["ts"], "bull": {}, "bear": {}, "decisions": [], "actions": [], "outcomes": [], "call_seen": False}
+                cycles.append(cur)
+            cur["bear" if e["side"] == "bear_case" else "bull"] = e.get("arguments", {})
+        elif k == "call":
+            if cur is None or cur.get("call_seen"):
+                cur = {"ts": e["ts"], "bull": {}, "bear": {}, "decisions": [], "actions": [], "outcomes": [], "call_seen": False}
+                cycles.append(cur)
+            ctx = e.get("context", {})
+            cur.update(call_seen=True, trigger=e.get("trigger"), model=e.get("model"), seconds=e.get("seconds"),
+                       market_view=e.get("market_view"), error=e.get("error"), rejected=e.get("rejected", []),
+                       market=ctx.get("market"), account=ctx.get("account"), candidates=ctx.get("candidates", []),
+                       track_record=ctx.get("track_record", []), raw=(e.get("raw") or "")[:1500])
+        elif cur is not None and k == "decision":
+            cur["decisions"].append({x: e.get(x) for x in ("symbol", "action", "size_pct", "reason", "confidence", "horizon",
+                                                          "stop_pct", "target_pct", "review_in_min")})
+        elif cur is not None and k in ("order", "skip", "adjust", "exit"):
+            cur["actions"].append({x: v for x, v in e.items() if x not in ("ts",)} | {"at": e["ts"]})
+        elif k == "candidate_outcome":
+            loose.append(e)
+        elif k in ("trade_closed", "pair", "error"):
+            loose.append(e)
+    for e in loose:
+        if e["kind"] == "candidate_outcome":
+            for c in reversed(cycles):
+                if c["ts"] <= e["ts"] and any(x["symbol"] == e["symbol"] for x in c.get("candidates", [])):
+                    c["outcomes"].append({"symbol": e["symbol"], "horizon_s": e["horizon_s"], "abnormal": e["abnormal"],
+                                          "action": e.get("action")})
+                    break
+    closed = [e for e in loose if e["kind"] in ("trade_closed", "error")]
+    for c in cycles:
+        c.pop("call_seen", None)
+    return {"cycles": cycles[::-1][:limit], "closed": closed[::-1][:60]}
+
+
+def read_log_tail(path, n=6000):
+    p = Path(path)
+    if not p.exists():
+        return []
+    return p.read_text().splitlines()[-n:]

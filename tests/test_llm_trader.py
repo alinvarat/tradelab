@@ -246,6 +246,49 @@ class ViewData(Base):
         self.assertIn("discrimination", v["evaluation"])
 
 
+class LogView(Base):
+    def test_cycles_show_why_it_bought_why_it_passed_and_what_happened_next(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "horizon": "swing", "stop_pct": 6, "review_in_min": 60,
+                    "reason": "guidance raise"},
+                   {"symbol": "BBB", "action": "hold", "reason": "market-wide move, no catalyst"})
+        self.t.context["SPY"] = quote("SPY", px=500, move=1)
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12), BBB=quote("BBB", px=50, move=9)))
+        for c in self.t.cands:
+            c["ts"] -= 3700
+        self.t.context["SPY"] = quote("SPY", px=500, move=1)
+        self.t.scan(self.market(AAA=quote("AAA", px=104), BBB=quote("BBB", px=49)))
+        out = lt.build_cycles(lt.read_log_tail(self.t.log_path))
+        self.assertEqual(len(out["cycles"]), 1)
+        c = out["cycles"][0]
+        self.assertEqual({x["symbol"] for x in c["candidates"]}, {"AAA", "BBB"})
+        reasons = {d["symbol"]: (d["action"], d["reason"]) for d in c["decisions"]}
+        self.assertEqual(reasons["AAA"], ("buy", "guidance raise"))
+        self.assertEqual(reasons["BBB"], ("hold", "market-wide move, no catalyst"))
+        self.assertTrue(any(a["kind"] == "order" and a["symbol"] == "AAA" for a in c["actions"]))
+        self.assertEqual(c["bull"]["AAA"], "case for AAA")
+        self.assertEqual({o["symbol"] for o in c["outcomes"]}, {"AAA", "BBB"})
+        self.assertIn("market_view", c)
+
+    def test_blocked_buys_show_the_reason_and_stop_exits_are_logged(self):
+        self.t.paused = True
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", move=12)))
+        c = lt.build_cycles(lt.read_log_tail(self.t.log_path))["cycles"][0]
+        self.assertEqual([a["why"] for a in c["actions"] if a["kind"] == "skip"], ["paused"])
+        self.t.paused = False
+        self.t.calls["last_ts"] = 0
+        self.t.seen.clear()
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "stop_pct": 5, "review_in_min": 999, "reason": "r2"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        with mock.patch("core.llm_trader.data.quote_fast", lambda s, ttl=1.0: quote(s, px=90)):
+            self.t.watch()
+        closed = lt.build_cycles(lt.read_log_tail(self.t.log_path))["closed"]
+        self.assertTrue(any(x["kind"] == "trade_closed" and x["reason"] == "stop loss" and x["account"] == "model" for x in closed))
+
+    def test_prompt_asks_for_a_decision_on_every_candidate(self):
+        self.assertIn("EVERY candidate", lt.SYSTEM)
+
+
 class FastTier(Base):
     def test_watch_requotes_only_open_positions_and_triggers_the_stop(self):
         self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "stop_pct": 5, "review_in_min": 999, "reason": "r"})
