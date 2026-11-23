@@ -831,7 +831,8 @@ class LlmTrader:
             c = self._find_trade(self.ctrl, link["ctrl"], link, anchor=a.closed_ts if a else None) if link["ctrl"] else None
             if a and (c or not link["ctrl"]):
                 if c and link["id"] not in done:
-                    self.pairs.append({"id": link["id"], "s1": a.pnl / (a.qty * a.entry), "ctrl": c.pnl / (c.qty * c.entry)})
+                    self.pairs.append({"id": link["id"], "asset_class": asset_class(sym),
+                                       "s1": a.pnl / (a.qty * a.entry), "ctrl": c.pnl / (c.qty * c.entry)})
                     self.record("pair", **self.pairs[-1], model_reason=link["reason"], symbol=sym, control=link["ctrl"])
                 del self.links[sym]
             elif a and link["ctrl"] and not link.get("pair_wait_logged"):
@@ -850,6 +851,10 @@ class LlmTrader:
     def evaluate(self):
         p = self.pairs
         out = {"closed_pairs": len(p), "needed": MIN_TRADES, "discrimination": self.discrimination()}
+        by = {}
+        for x in p:
+            by.setdefault(x.get("asset_class", "stock"), []).append(x["s1"] - x["ctrl"])
+        out["by_class"] = {c: {"n": len(v), "mean_diff": mean(v)} for c, v in by.items()}
         if len(p) < MIN_TRADES:
             out["verdict"] = f"too early ({len(p)}/{MIN_TRADES} closed pairs): no conclusion allowed"
             return out
