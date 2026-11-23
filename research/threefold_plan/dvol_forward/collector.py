@@ -34,8 +34,14 @@ def friday_expiry(now):
     return datetime(friday.year, friday.month, friday.day, 8, tzinfo=timezone.utc)
 
 
+WINDOW_END = datetime(2027, 2, 23, tzinfo=timezone.utc)  # protocol window ends with the 2027-02-22 entry
+
+
 def main():
     started = datetime.now(timezone.utc)
+    if started >= WINDOW_END:
+        print("outside the locked test window; nothing collected")
+        return
     ms = lambda d: int(d.timestamp() * 1000)
     out = {"started_utc": started.isoformat(), "errors": []}
     try:

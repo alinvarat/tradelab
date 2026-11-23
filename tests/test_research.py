@@ -60,6 +60,27 @@ class DvolForward(unittest.TestCase):
         self.assertLess(end, D(147))
 
 
+class DeliveryPaging(unittest.TestCase):
+    def test_old_week_is_found_by_paging_and_missing_raises(self):
+        from datetime import date, timedelta
+        old = ev.DELIVERY
+        pages = []
+
+        def page(offset):  # newest-first, 100 days per page, like the API
+            pages.append(offset)
+            top = date(2027, 2, 26) - timedelta(days=offset)
+            return [{"date": (top - timedelta(days=i)).isoformat(), "delivery_price": 1000 + i} for i in range(100)]
+        try:
+            with tempfile.TemporaryDirectory() as d:
+                ev.DELIVERY = Path(d) / "x.json"
+                self.assertEqual(ev.delivery(date(2026, 11, 30), page), 1000 + (date(2027, 2, 26) - date(2026, 12, 4)).days)
+                self.assertGreater(len(pages), 0)
+                with self.assertRaises(RuntimeError):
+                    ev.delivery(date(2020, 1, 6), lambda o: [])
+        finally:
+            ev.DELIVERY = old
+
+
 class PreRemoval(unittest.TestCase):
     def rows(self, strengths):
         entry = ENTRY

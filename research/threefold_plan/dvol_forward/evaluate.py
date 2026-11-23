@@ -93,16 +93,29 @@ def settle(leg, side, s, cost):
     return (intrinsic - fee) * leg["size"] * s * (1 - cost["fx"])
 
 
-def delivery(day):
+def delivery(day, fetch_page=None):
+    """Friday delivery price for the week starting `day`. Pages back (the API caps a page at 100 days)
+    and raises if the price cannot be found, so a week is never silently skipped."""
     cache = json.loads(DELIVERY.read_text()) if DELIVERY.exists() else {}
     key = (day + timedelta(days=4)).isoformat()
-    if key not in cache:
-        req = Request("https://www.deribit.com/api/v2/public/get_delivery_prices?" +
-                      urlencode({"index_name": "btc_usd", "count": 60}), headers={"User-Agent": "tradelab-research"})
-        rows = json.loads(urlopen(req, timeout=20).read())["result"]["data"]
+    offset = 0
+    while key not in cache and offset <= 1000:
+        if fetch_page:
+            rows = fetch_page(offset)
+        else:
+            req = Request("https://www.deribit.com/api/v2/public/get_delivery_prices?" +
+                          urlencode({"index_name": "btc_usd", "count": 100, "offset": offset}),
+                          headers={"User-Agent": "tradelab-research"})
+            rows = json.loads(urlopen(req, timeout=20).read())["result"]["data"]
+        if not rows:
+            break
         cache.update({r["date"]: r["delivery_price"] for r in rows})
+        offset += 100
+    if not fetch_page:
         DELIVERY.write_text(json.dumps(cache, indent=1, sort_keys=True))
-    return cache.get(key)
+    if key not in cache:
+        raise RuntimeError(f"no delivery price for {key}")
+    return cache[key]
 
 
 def week(snap, equity, cost, s):
