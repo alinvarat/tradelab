@@ -1099,6 +1099,7 @@ const NOTE_TH = [
   [/^No open positions right now\..*$/, "ตอนนี้ไม่มีตำแหน่งที่ถืออยู่ กติกาถือได้สูงสุด 3 ตัวพร้อมกัน เหตุการณ์ที่เกินจะขึ้นว่า 'max positions' ด้านล่าง"],
   [/^Current exchange rate: 1 USD = ([\d,.]+) THB \| Buzz events: (.+)$/, "ค่าเงินล่าสุด 1 USD = $1 THB | เหตุการณ์กระแส $2 รายการ"],
   [/^(deepseek\/[^ ]+) \| calls today (\d+\/\d+)$/, "$1 | เรียกโมเดลวันนี้ $2 ครั้ง"],
+  [/^(deepseek\/[^ ]+) \| (\d+) symbols \((.*)\) \| calls today (\d+\/\d+) \| next scheduled scan in (\d+) s$/, "$1 | $2 สินทรัพย์ ($3) | เรียกโมเดลวันนี้ $4 ครั้ง | สแกนตามกำหนดในอีก $5 วินาที"],
   [/^last scan (\d+) s ago$/, "สแกนล่าสุด $1 วินาทีที่แล้ว"],
   [/^scans every (\d+)s, last scan (\d+)s ago$/, "สแกนทุก $1 วินาที สแกนล่าสุด $2 วินาทีที่แล้ว"],
   [/^scans every (\d+)s, last scan nevers ago$/, "สแกนทุก $1 วินาที ยังไม่เคยสแกน"],

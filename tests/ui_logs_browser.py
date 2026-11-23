@@ -27,6 +27,8 @@ def check_log_refresh():
         "positions": [], "decisions": [], "events": [], "n_events": 0, "n_up": 0,
         "scan_every_s": 10, "last_scan_age_s": 4,
         "model": "deepseek/deepseek-v4.1-flash-1017", "calls_today": 4, "max_calls_day": 300,
+        "protocol": "v4", "universe_size": 217,
+        "classes": {"stock": 148, "etf": 34, "commodity": 16, "fx": 8, "crypto": 11}, "next_scan_in_s": 120,
         "rules": {"shock": "move >= 5.0% vs previous close, day volume >= 0.5x 50-day average", "trade": ""},
         "evaluation": {"closed_pairs": 0, "needed": 30, "verdict": "too early (0/30 closed pairs): no conclusion allowed"},
     }
