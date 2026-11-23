@@ -223,6 +223,24 @@ class Pairing(Base):
         self.assertEqual(model.ref, link["id"])
         self.assertEqual(control.ref, link["id"])
 
+    def test_legacy_control_opened_on_a_very_old_quote_pairs_by_its_close_time(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 4, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        link = self.t.links["AAA"]
+        self.t.acct.positions["AAA"].opened_ts = link["ts"] - 30
+        self.t.acct.positions["AAA"].ref = None
+        cp = next(iter(self.t.ctrl.positions.values()))
+        cp.opened_ts = link["ts"] - 3 * 86400        # stale quote the control account still had
+        cp.ref = None
+        self.t.calls["last_ts"] = 0
+        link["review_at"] = 0
+        self.reply({"symbol": "AAA", "action": "sell", "reason": "exit"})
+        m = self.market(AAA=quote("AAA", px=112, move=14))
+        m[link["ctrl"]] = quote(link["ctrl"], px=101)
+        self.t.scan(m)
+        self.t.scan(m)
+        self.assertEqual(len(self.t.pairs), 1)
+
     def test_a_link_saved_before_references_existed_still_pairs_without_the_five_second_window(self):
         self.buy_then_close(legacy=True, skew=30)
         self.assertEqual(len(self.t.pairs), 1)

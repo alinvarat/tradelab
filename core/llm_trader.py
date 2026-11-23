@@ -619,18 +619,21 @@ class LlmTrader:
             self.logged_trades[name] = len(acct.trades)
 
     @staticmethod
-    def _find_trade(acct, sym, link):
+    def _find_trade(acct, sym, link, anchor=None):
         """The closed trade that belongs to this link. New records carry the link id; links saved before references
         existed (or whose trade predates them) fall back to the open time nearest the link, because a quote timestamp
-        can be older than the decision by more than the old 5-second window."""
-        legacy = [t for t in acct.trades if t.symbol == sym and t.ref is None]
+        can be older than the decision. An old control leg may also have been opened much earlier on a stale quote, so
+        a close time near the model leg's close (anchor) is accepted as well."""
         for t in reversed(acct.trades):
             if t.symbol == sym and t.ref == link["id"]:
                 return t
-        if not legacy:
-            return None
-        near = [t for t in legacy if abs(t.opened_ts - link["ts"]) <= LEGACY_MATCH_S]
-        return min(near, key=lambda t: abs(t.opened_ts - link["ts"])) if near else None
+        legacy = [t for t in acct.trades if t.symbol == sym and t.ref is None]
+        if anchor is not None:
+            near_close = [t for t in legacy if abs(t.closed_ts - anchor) <= 3600]
+            if near_close:
+                return min(near_close, key=lambda t: abs(t.closed_ts - anchor))
+        near_open = [t for t in legacy if abs(t.opened_ts - link["ts"]) <= LEGACY_MATCH_S]
+        return min(near_open, key=lambda t: abs(t.opened_ts - link["ts"])) if near_open else None
 
     def _book_pairs(self, now):
         done = {p["id"] for p in self.pairs}
@@ -640,7 +643,7 @@ class LlmTrader:
             if link["ctrl"] and link["ctrl"] in self.ctrl.positions:
                 self.ctrl.close(link["ctrl"], reason="paired exit")
             a = self._find_trade(self.acct, sym, link)
-            c = self._find_trade(self.ctrl, link["ctrl"], link) if link["ctrl"] else None
+            c = self._find_trade(self.ctrl, link["ctrl"], link, anchor=a.closed_ts if a else None) if link["ctrl"] else None
             if a and (c or not link["ctrl"]):
                 if c and link["id"] not in done:
                     self.pairs.append({"id": link["id"], "s1": a.pnl / (a.qty * a.entry), "ctrl": c.pnl / (c.qty * c.entry)})
