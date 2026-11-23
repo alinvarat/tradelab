@@ -15,6 +15,7 @@ Learning loop (daily):
  3. The portfolio trades only if the chosen setting also made money in the validation years.
 Rebalances once a month. Simulated money only; no broker connection exists."""
 import json
+import os
 import threading
 import time
 from pathlib import Path
@@ -33,6 +34,8 @@ FEE_PCT, SLIP_PCT = 0.10, 0.05
 CAPITAL_THB = 5000.0
 VALID_YEARS = 3
 RELEARN_S = 24 * 3600
+EVERY_S = int(os.environ.get("TRADELAB_AUTO_EVERY", "60"))  # how often the trader checks quotes, orders and the drawdown guard
+SNAPSHOT_S = 900  # equity-curve resolution (keeps the chart's 2000 points ~3 weeks long)
 TOL = 0.05  # rebalance tolerance as a share of equity
 
 
@@ -232,7 +235,9 @@ class AutoTrader:
                     return
             self.rebalance()
             with self.lock:
-                self.acct.snapshot_equity()
+                curve = self.acct.equity_curve
+                if not curve or time.time() - curve[-1][0] >= SNAPSHOT_S:
+                    self.acct.snapshot_equity()
         finally:
             self.cycle_lock.release()
             self.save()
@@ -240,11 +245,11 @@ class AutoTrader:
     def rebalance(self, month=None):
         if not self.model:
             return  # never trade before a successful learning pass
-        days, px = R.panel(UNIVERSE + ["SHY"], "2004-01-01")
-        today = time.strftime("%Y-%m-%d", time.gmtime())
-        last = len(days) - 1 if days[-1] < today else len(days) - 2   # last completed session
         month = month or time.strftime("%Y-%m", time.gmtime())
-        if self.rebalanced != month:
+        if self.rebalanced != month:  # only now is the long price history needed
+            days, px = R.panel(UNIVERSE + ["SHY"], "2004-01-01")
+            today = time.strftime("%Y-%m-%d", time.gmtime())
+            last = len(days) - 1 if days[-1] < today else len(days) - 2   # last completed session
             for o in self.acct.orders:
                 if o.status == "pending":
                     self.acct.cancel(o.id)
@@ -330,12 +335,12 @@ class AutoTrader:
                                 for s, w in self.targets.items()],
                     "lessons": self.lessons[::-1][:100], "log": self.log[::-1][:100], "months": self.months[::-1],
                     "trades": [vars(t) for t in a.trades[::-1][:100]], "orders": [vars(o) for o in a.orders[::-1][:30]],
-                    "paused": self.paused, "learning": self.learning, "equity_curve": a.equity_curve[-2000:],
+                    "paused": self.paused, "learning": self.learning, "check_every_s": EVERY_S, "equity_curve": a.equity_curve[-2000:],
                     "rebalanced": self.rebalanced, "universe": [{"symbol": s, "name": NAMES[s]} for s in UNIVERSE],
                     "costs": {"fee_pct": FEE_PCT, "slippage_pct": SLIP_PCT}}
 
 
-def loop(at: AutoTrader, every=900):
+def loop(at: AutoTrader, every=EVERY_S):
     while True:
         try:
             at.cycle()

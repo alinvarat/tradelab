@@ -33,6 +33,33 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class FastChecks(unittest.TestCase):
+    def make(self, d):
+        from unittest import mock
+        from core import autotrader
+        patcher = mock.patch.object(autotrader, "STATE", __import__("pathlib").Path(d) / "auto.json")
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        with mock.patch("core.data.fx_to_usd", return_value=0.03):
+            return autotrader.AutoTrader()
+
+    def test_no_history_download_when_month_already_rebalanced(self):
+        import tempfile, time
+        from unittest import mock
+        from core import autotrader
+        with tempfile.TemporaryDirectory() as d:
+            at = self.make(d)
+            at.model = {"status": "live", "ts": time.time(), "p": {}}
+            at.rebalanced = time.strftime("%Y-%m", time.gmtime())
+            with mock.patch.object(autotrader.R, "panel", side_effect=AssertionError("panel must not run")):
+                at.rebalance()  # would raise if the long history were fetched every minute
+
+    def test_default_check_interval_is_one_minute(self):
+        from core import autotrader, hunter
+        self.assertLessEqual(autotrader.EVERY_S, 60)
+        self.assertLessEqual(hunter.EVERY_S, 60)
+
+
 class AiAvailability(unittest.TestCase):
     def test_missing_cli_gives_clear_error_without_logging(self):
         from unittest import mock
