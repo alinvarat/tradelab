@@ -1,0 +1,1062 @@
+{
+ "0000320193-26-000024": {
+  "symbol": "AAPL",
+  "accepted": "2026-11-02T21:30:23.000Z",
+  "ts": 1793655023,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 11052,
+  "direction": "long",
+  "confidence": 72,
+  "reason": "Apple reported strong September-quarter records with revenue up 12%, EPS up 14%, iPhone and Services records, and robust Greater China growth, likely supporting near-term positive momentum despite a modest tariff-refund benefit."
+ },
+ "0001193125-26-436122": {
+  "symbol": "MSFT",
+  "accepted": "2026-10-28T20:04:44.000Z",
+  "ts": 1793217884,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "Microsoft delivered a strong beat with accelerating Microsoft Cloud and Azure growth plus 73% RPO growth, likely driving positive near-term momentum despite weak Windows/devices."
+ },
+ "0001045810-26-000088": {
+  "symbol": "NVDA",
+  "accepted": "2026-11-17T21:20:51.000Z",
+  "ts": 1794950451,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4389,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing only announces that earnings materials were furnished and contains no actual financial results or commentary to assess."
+ },
+ "0001018724-26-000038": {
+  "symbol": "AMZN",
+  "accepted": "2026-10-29T20:05:27.000Z",
+  "ts": 1793304327,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "AWS accelerated to 39% growth with record operating margin and Q4 operating income guidance well above last year, likely outweighing negative free cash flow from heavy AI capex over the next few sessions."
+ },
+ "0001652044-26-000080": {
+  "symbol": "GOOGL",
+  "accepted": "2026-10-28T20:01:33.000Z",
+  "ts": 1793217693,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Alphabet delivered strong 25% revenue growth, 103% Cloud growth, and 30% operating income growth, with the EPS decline driven by non-operating investment losses rather than core weakness."
+ },
+ "0001628280-26-066700": {
+  "symbol": "META",
+  "accepted": "2026-10-21T20:03:35.000Z",
+  "ts": 1792613015,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "Strong 26% revenue growth, higher ad impressions/pricing, and Q4 revenue guidance of $73–76B outweigh the one-time legal charge and elevated capex, supporting a short-term long."
+ },
+ "0001628280-26-066738": {
+  "symbol": "TSLA",
+  "accepted": "2026-10-21T20:41:42.000Z",
+  "ts": 1792615302,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 60,
+  "reason": "Q3 revenue was flat YoY while operating income fell 56% and EPS declined, a weak earnings print likely to outweigh the robotaxi/Optimus narrative over the next few sessions."
+ },
+ "0001193125-26-452530": {
+  "symbol": "BRK-B",
+  "accepted": "2026-11-09T11:10:14.000Z",
+  "ts": 1794222614,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 6344,
+  "direction": "short",
+  "confidence": 62,
+  "reason": "Third-quarter operating earnings fell to $12.7B from $13.5B a year earlier, with insurance underwriting and investment income both weaker, likely pressuring BRK-B over the next few sessions despite strong buybacks."
+ },
+ "0001403161-26-000126": {
+  "symbol": "V",
+  "accepted": "2026-10-27T20:05:22.000Z",
+  "ts": 1793131522,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4078,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing only announces that earnings were released and declares a dividend, but provides no actual revenue, EPS, guidance, or comparison to expectations to justify a directional trade."
+ },
+ "0001141391-26-000122": {
+  "symbol": "MA",
+  "accepted": "2026-10-29T12:04:22.000Z",
+  "ts": 1793275462,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3595,
+  "direction": "skip",
+  "confidence": 95,
+  "reason": "The filing only references an earnings release exhibit without providing actual quarterly results, so there is insufficient text to justify a long or short trade."
+ },
+ "0002115436-26-000018": {
+  "symbol": "XOM",
+  "accepted": "2026-10-30T10:32:50.000Z",
+  "ts": 1793356370,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3747,
+  "direction": "skip",
+  "confidence": 90,
+  "reason": "The filing only announces that Q3 2026 results were furnished via exhibits, but provides no actual earnings figures or guidance to assess a directional trade."
+ },
+ "0000080424-26-000250": {
+  "symbol": "PG",
+  "accepted": "2026-10-22T11:02:49.000Z",
+  "ts": 1792666969,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "skip",
+  "confidence": 60,
+  "reason": "PG delivered solid organic sales growth but flat currency-neutral core EPS and maintained rather than raised guidance amid margin pressure, offering no clear 1-5 day trading catalyst."
+ },
+ "0000354950-26-000184": {
+  "symbol": "HD",
+  "accepted": "2026-11-17T11:18:03.000Z",
+  "ts": 1794914283,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "HD reported Q3 sales and adjusted EPS above expectations with positive comparable sales and market-share gains, supporting a modest near-term positive reaction despite margin pressure and cautious full-year guidance."
+ },
+ "0001551152-26-000033": {
+  "symbol": "ABBV",
+  "accepted": "2026-10-30T11:51:51.000Z",
+  "ts": 1793361111,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Strong Q3 revenue and EPS growth, raised full-year guidance, and a dividend increase alongside robust immunology/neuroscience momentum should support near-term upside."
+ },
+ "0001104659-26-119825": {
+  "symbol": "MRK",
+  "accepted": "2026-10-29T10:43:01.000Z",
+  "ts": 1793270581,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 68,
+  "reason": "Raised full-year sales and non-GAAP EPS guidance plus positive pipeline milestones outweigh the modest EPS decline and support a short-term positive reaction."
+ },
+ "0000059478-26-000104": {
+  "symbol": "LLY",
+  "accepted": "2026-10-29T11:03:30.000Z",
+  "ts": 1793271810,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4391,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing is only the 8-K cover page and exhibit index — it references the earnings press release as Exhibit 99.1 but contains no actual revenue, EPS, or guidance figures, leaving no substantive data to trade on."
+ },
+ "0001628280-26-067403": {
+  "symbol": "KO",
+  "accepted": "2026-10-27T10:58:13.000Z",
+  "ts": 1793098693,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 5111,
+  "direction": "skip",
+  "confidence": 95,
+  "reason": "The filing only references an attached earnings press release but provides no financial results or guidance, so there is no actionable information to justify a long or short trade."
+ },
+ "0000104169-26-000168": {
+  "symbol": "WMT",
+  "accepted": "2026-11-19T11:58:52.000Z",
+  "ts": 1795089532,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 5126,
+  "direction": "skip",
+  "confidence": 95,
+  "reason": "The filing only announces that Walmart will issue an earnings press release and financial presentation, but provides no actual results or guidance to trade on."
+ },
+ "0000093410-26-000196": {
+  "symbol": "CVX",
+  "accepted": "2026-10-30T10:16:00.000Z",
+  "ts": 1793355360,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "Chevron reported strong year-over-year earnings growth, record U.S. refining throughput, robust free cash flow, and debt reduction, which should support near-term positive sentiment despite lower sequential earnings and production."
+ },
+ "0001065280-26-000290": {
+  "symbol": "NFLX",
+  "accepted": "2026-10-20T20:01:55.000Z",
+  "ts": 1792526515,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 65,
+  "reason": "Full-year revenue guidance was trimmed and ad revenue/FCF forecasts were cut, which likely outweighs the in-line Q3 revenue and margin beat driven partly by expense timing."
+ },
+ "0000002488-26-000188": {
+  "symbol": "AMD",
+  "accepted": "2026-11-03T21:16:27.000Z",
+  "ts": 1793740587,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4378,
+  "direction": "skip",
+  "confidence": 78,
+  "reason": "The filing is only the 8-K cover page and exhibit index — the actual Q3 2026 results, guidance, and presentation (Exhibits 99.1/99.2) are not included in the text, leaving no revenue, margin, or outlook data to justify a directional trade."
+ },
+ "0000050863-26-000188": {
+  "symbol": "INTC",
+  "accepted": "2026-10-29T20:08:53.000Z",
+  "ts": 1793304533,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4218,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing text contains only the 8-K cover page and references Exhibit 99.1 without any actual financial results or guidance, providing no basis to trade."
+ },
+ "0000858877-26-000170": {
+  "symbol": "CSCO",
+  "accepted": "2026-11-12T21:06:24.000Z",
+  "ts": 1794517584,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 72,
+  "reason": "Cisco delivered record revenue and EPS well above prior-year levels, raised FY27 revenue/EPS guidance and AI infrastructure expectations, which should support positive short-term momentum despite softer sequential Q2 guidance."
+ },
+ "0000804328-26-000127": {
+  "symbol": "QCOM",
+  "accepted": "2026-11-04T21:03:36.000Z",
+  "ts": 1793826216,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 65,
+  "reason": "Q4 revenue and non-GAAP EPS fell 7% and 28% YoY with handsets down 26%, and Q1 FY27 guidance implies continued YoY weakness plus near-term margin pressure from input-cost inflation, outweighing positive diversification headlines."
+ },
+ "0000097476-26-000165": {
+  "symbol": "TXN",
+  "accepted": "2026-10-21T20:04:14.000Z",
+  "ts": 1792613054,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 14266,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "Strong Q3 revenue/EPS growth with broad industrial, automotive, and data-center demand plus a roughly in-line Q4 midpoint supports a modest post-earnings long bias."
+ },
+ "0000051143-26-000093": {
+  "symbol": "IBM",
+  "accepted": "2026-10-21T20:19:17.000Z",
+  "ts": 1792613957,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "IBM reported accelerated revenue growth with Software and Infrastructure strength and raised full-year free cash flow outlook, likely supporting positive near-term momentum despite flat Consulting and slightly lower gross margin."
+ },
+ "0001744489-26-000065": {
+  "symbol": "DIS",
+  "accepted": "2026-11-17T11:30:22.000Z",
+  "ts": 1794915022,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "Disney reported strong Q4 revenue, operating income, and adjusted EPS growth, exceeded guidance, raised its dividend 33%, and guided to double-digit fiscal 2027 adjusted EPS growth, which should support positive near-term momentum."
+ },
+ "0000063908-26-000080": {
+  "symbol": "MCD",
+  "accepted": "2026-11-04T12:01:40.000Z",
+  "ts": 1793793700,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 12705,
+  "direction": "long",
+  "confidence": 62,
+  "reason": "MCD delivered double-digit adjusted EPS growth, higher operating income, and a 4% dividend increase, with management citing sequential U.S. improvement despite slightly negative U.S. comparable sales."
+ },
+ "0000829224-26-000154": {
+  "symbol": "SBUX",
+  "accepted": "2026-10-29T20:07:14.000Z",
+  "ts": 1793304434,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 2745,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing only references an earnings release without providing any financial results or guidance, leaving insufficient information to justify a long or short position."
+ },
+ "0001628280-26-067411": {
+  "symbol": "BA",
+  "accepted": "2026-10-27T11:30:23.000Z",
+  "ts": 1793100623,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "Boeing delivered positive operating and free cash flow, record $745B backlog, 737 certifications, and the F/A-XX win, which likely outweigh the still-weak Commercial Airplanes margin for a short-term positive reaction."
+ },
+ "0000018230-26-000052": {
+  "symbol": "CAT",
+  "accepted": "2026-10-29T10:33:40.000Z",
+  "ts": 1793270020,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "CAT delivered a broad-based 17% sales increase, 38% operating profit growth, and a large EPS beat with record backlog and strong order rates, likely driving positive near-term momentum."
+ },
+ "0000040545-26-000063": {
+  "symbol": "GE",
+  "accepted": "2026-10-20T10:30:57.000Z",
+  "ts": 1792492257,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4050,
+  "direction": "skip",
+  "confidence": 95,
+  "reason": "The filing only announces that Q3 2026 results were released and does not include the actual financial results or guidance needed to form a directional trading view."
+ },
+ "0000773840-26-000141": {
+  "symbol": "HON",
+  "accepted": "2026-10-22T10:02:13.000Z",
+  "ts": 1792663333,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Honeywell beat on organic growth (7%), adjusted EPS ($2.27, +34%) and segment margin (21.3%), and raised full-year organic revenue, EPS and free cash flow guidance, a broadly positive surprise likely to drive near-term upside."
+ },
+ "0000066740-26-000308": {
+  "symbol": "MMM",
+  "accepted": "2026-10-20T10:35:38.000Z",
+  "ts": 1792492538,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4194,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing only references the Q3 2026 earnings release and guidance update but does not include the actual financial results or guidance details needed to assess the stock."
+ },
+ "0001628280-26-067381": {
+  "symbol": "UPS",
+  "accepted": "2026-10-27T10:05:34.000Z",
+  "ts": 1793095534,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "UPS posted revenue growth across all segments and raised both fourth-quarter and full-year 2026 guidance, signaling positive momentum into the holiday season."
+ },
+ "0001048911-26-000128": {
+  "symbol": "FDX",
+  "accepted": "2026-10-28T20:12:47.000Z",
+  "ts": 1793218367,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 5013,
+  "direction": "skip",
+  "confidence": 90,
+  "reason": "The filing only references an attached earnings press release without providing any financial results or guidance, so there is insufficient information to trade on."
+ },
+ "0001048911-26-000126": {
+  "symbol": "FDX",
+  "accepted": "2026-10-28T20:05:46.000Z",
+  "ts": 1793217946,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "This is supplemental historical recast information tied to FedEx’s fiscal-year change, Freight spin-off, and segment realignment, not fresh current-quarter results or guidance, so it offers no clear 1-5 day trading catalyst."
+ },
+ "0001628280-26-066780": {
+  "symbol": "LMT",
+  "accepted": "2026-10-22T10:26:08.000Z",
+  "ts": 1792664768,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 80,
+  "reason": "LMT posted strong 11% sales and 14% EPS growth, record $292B backlog, and raised full-year sales/EPS/FCF guidance for the second straight quarter, outweighing the flagged F-35 contract funding risk near term."
+ },
+ "0000101829-26-000030": {
+  "symbol": "RTX",
+  "accepted": "2026-10-20T10:57:06.000Z",
+  "ts": 1792493826,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 76,
+  "reason": "RTX delivered double-digit organic sales growth, a 33% adjusted EPS increase, record $340 billion backlog, and raised full-year adjusted sales, EPS, and free cash flow guidance, which should support near-term positive momentum despite lower reported free cash flow and one-time IEEPA benefits."
+ },
+ "0000004962-26-000405": {
+  "symbol": "AXP",
+  "accepted": "2026-10-23T11:00:36.000Z",
+  "ts": 1792753236,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "AXP delivered 9% revenue growth, 13% adjusted EPS growth, strong credit quality, and raised FY 2026 EPS guidance, supporting a positive near-term trading reaction."
+ },
+ "0000078003-26-000125": {
+  "symbol": "PFE",
+  "accepted": "2026-11-03T13:07:34.000Z",
+  "ts": 1793711254,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 72,
+  "reason": "Pfizer raised full-year revenue and adjusted EPS guidance on strong non-COVID commercial momentum and 32% operational growth in launched/acquired products, likely outweighing flat total revenue and COVID declines over the next few sessions."
+ },
+ "0000014272-26-000022": {
+  "symbol": "BMY",
+  "accepted": "2026-10-29T11:05:52.000Z",
+  "ts": 1793271952,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 70,
+  "reason": "Bristol Myers raised full-year revenue guidance on 7% revenue growth and 12% Growth Portfolio growth, with multiple positive pipeline milestones offsetting headline non-GAAP EPS pressure from acquired IPRD charges."
+ },
+ "0000318154-26-000153": {
+  "symbol": "AMGN",
+  "accepted": "2026-11-03T21:05:44.000Z",
+  "ts": 1793739944,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 9257,
+  "direction": "skip",
+  "confidence": 95,
+  "reason": "The filing only contains boilerplate 8-K and non-GAAP reconciliation language without actual Q3 2026 results or guidance, providing no actionable trading signal."
+ },
+ "0000882095-26-000037": {
+  "symbol": "GILD",
+  "accepted": "2026-10-29T20:03:48.000Z",
+  "ts": 1793304228,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Gilead delivered strong Q3 base-business growth with product sales ex-Veklury up 16%, HIV up 18%, and raised full-year product sales guidance, likely outweighing GAAP EPS pressure from acquisition-related IPR&D charges over the next few sessions."
+ },
+ "0000064803-26-000107": {
+  "symbol": "CVS",
+  "accepted": "2026-11-04T11:31:50.000Z",
+  "ts": 1793791910,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "CVS delivered a strong Q3 beat with adjusted EPS up 31% year-over-year, raised full-year EPS and cash flow guidance, and showed broad segment improvement including a lower medical benefit ratio, which should support positive near-term momentum despite cautious cost-trend commentary."
+ },
+ "0001140361-26-042030": {
+  "symbol": "CI",
+  "accepted": "2026-11-05T11:15:38.000Z",
+  "ts": 1793877338,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "The raised 2026 adjusted EPS outlook and strong revenue/Cigna Healthcare growth should support near-term sentiment despite PBM margin pressure and customer declines."
+ },
+ "0000097745-26-000173": {
+  "symbol": "TMO",
+  "accepted": "2026-10-21T10:03:16.000Z",
+  "ts": 1792576996,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Strong 6% organic revenue growth, margin expansion, and 15% adjusted EPS growth suggest a positive near-term market reaction."
+ },
+ "0000313616-26-000201": {
+  "symbol": "DHR",
+  "accepted": "2026-10-20T21:43:14.000Z",
+  "ts": 1792532594,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "DHR delivered better-than-expected Q3 revenue, earnings, and cash flow, cited improving end-market trends, and raised full-year adjusted EPS guidance, supporting positive near-term momentum."
+ },
+ "0001628280-26-066601": {
+  "symbol": "ABT",
+  "accepted": "2026-10-21T11:36:13.000Z",
+  "ts": 1792582573,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4664,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing only references Abbott's Q3 2026 results and non-GAAP adjustments but does not include the actual earnings figures, guidance, or surprise versus expectations needed to trade."
+ },
+ "0001035267-26-000067": {
+  "symbol": "ISRG",
+  "accepted": "2026-10-20T20:05:16.000Z",
+  "ts": 1792526716,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Strong revenue growth of 22%, non-GAAP EPS of $3.00 versus $2.40, and robust procedure and system placement growth should outweigh the one-time antitrust settlement charge and support near-term upside."
+ },
+ "0000875320-26-000287": {
+  "symbol": "VRTX",
+  "accepted": "2026-11-02T21:05:46.000Z",
+  "ts": 1793653546,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "skip",
+  "confidence": 65,
+  "reason": "Mixed quarter: revenue growth and a modest guidance raise are offset by a large increase in expense guidance and flat non-GAAP net income, leaving no clear short-term directional edge."
+ },
+ "0000872589-26-000032": {
+  "symbol": "REGN",
+  "accepted": "2026-10-30T10:50:20.000Z",
+  "ts": 1793357420,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "Regeneron delivered broad-based revenue and EPS growth with raised gross-margin guidance, strong Dupixent/EYLEA HD/Libtayo sales, and a $1B Sanofi upfront plus pipeline catalysts, likely supporting near-term positive momentum."
+ },
+ "0000732717-26-000370": {
+  "symbol": "T",
+  "accepted": "2026-10-21T10:32:08.000Z",
+  "ts": 1792578728,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "AT&T posted strong adjusted EPS and revenue growth, record Advanced Connectivity net adds, raised 2026 adjusted EPS outlook, and lowered long-term capex, supporting positive near-term momentum despite the non-cash Mexico impairment."
+ },
+ "0000732712-26-000049": {
+  "symbol": "VZ",
+  "accepted": "2026-10-26T11:00:28.000Z",
+  "ts": 1793012428,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Verizon reported strong postpaid phone and account growth, record Adjusted EBITDA and free cash flow, and raised full-year guidance for the third consecutive quarter, which should support a positive near-term stock reaction."
+ },
+ "0001628280-26-066783": {
+  "symbol": "CMCSA",
+  "accepted": "2026-10-22T11:05:59.000Z",
+  "ts": 1792667159,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 65,
+  "reason": "Core connectivity weakened with worse broadband/video subscriber losses and lower residential EBITDA, while adjusted EPS and free cash flow declined, likely outweighing Peacock and studio strength over the next few sessions."
+ },
+ "0001283699-26-000128": {
+  "symbol": "TMUS",
+  "accepted": "2026-10-28T20:02:56.000Z",
+  "ts": 1793217776,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 72,
+  "reason": "T-Mobile delivered strong service revenue, EPS, EBITDA and free cash flow growth and raised midpoint profitability/cash-flow guidance, likely outweighing slower postpaid account additions and higher churn over the next few sessions."
+ },
+ "0001633917-26-000086": {
+  "symbol": "PYPL",
+  "accepted": "2026-10-27T11:02:43.000Z",
+  "ts": 1793098963,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3603,
+  "direction": "skip",
+  "confidence": 95,
+  "reason": "The filing only references an attached earnings press release but provides no actual financial results, guidance, or metrics to assess."
+ },
+ "0000896878-26-000043": {
+  "symbol": "INTU",
+  "accepted": "2026-11-19T21:08:04.000Z",
+  "ts": 1795122484,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3928,
+  "direction": "skip",
+  "confidence": 70,
+  "reason": "The filing only announces that results and guidance were released and declares a routine dividend, without providing actual financial figures or guidance details to assess earnings direction."
+ },
+ "0001373715-26-000092": {
+  "symbol": "NOW",
+  "accepted": "2026-10-28T20:14:14.000Z",
+  "ts": 1793218454,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3604,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing only announces that earnings were released and does not include the actual results or guidance needed to assess near-term stock direction."
+ },
+ "0001628280-26-073360": {
+  "symbol": "AMAT",
+  "accepted": "2026-11-12T21:02:46.000Z",
+  "ts": 1794517366,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "Record Q4 revenue and EPS with strong year-over-year growth plus Q1 FY2027 revenue and EPS guidance above Q4 levels signal continued AI-driven momentum likely to support the stock over the next few sessions."
+ },
+ "0000707549-26-000052": {
+  "symbol": "LRCX",
+  "accepted": "2026-10-21T20:13:03.000Z",
+  "ts": 1792613583,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3845,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing only references the earnings press release without including actual results or guidance, so there is insufficient information to trade."
+ },
+ "0000319201-26-000032": {
+  "symbol": "KLAC",
+  "accepted": "2026-10-28T20:07:50.000Z",
+  "ts": 1793218070,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "KLA beat guidance across key metrics and issued strong Q2 revenue/EPS guidance well above Q1, reinforcing AI-driven process-control demand and likely supporting near-term positive momentum."
+ },
+ "0000813672-26-000116": {
+  "symbol": "CDNS",
+  "accepted": "2026-10-26T20:03:09.000Z",
+  "ts": 1793044989,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 75,
+  "reason": "Cadence raised its 2026 revenue and non-GAAP EPS outlook, posted 22% YoY revenue growth with record $8.2B backlog, and highlighted strong AI-driven demand, likely supporting a positive short-term reaction despite lower margins."
+ },
+ "0001327567-26-000030": {
+  "symbol": "PANW",
+  "accepted": "2026-11-18T21:37:04.000Z",
+  "ts": 1795037824,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 88,
+  "reason": "Palo Alto Networks delivered a strong Q1 beat with 39% revenue growth, 66% NGS ARR growth, and materially raised full-year guidance, which should drive positive near-term momentum."
+ },
+ "0000037996-26-000190": {
+  "symbol": "F",
+  "accepted": "2026-10-28T20:07:18.000Z",
+  "ts": 1793218038,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 60,
+  "reason": "Ford raised the low end of full-year adjusted EBIT guidance and posted higher adjusted EBIT, adjusted EPS, and free cash flow despite lower revenue, supporting a modest near-term positive reaction."
+ },
+ "0001467858-26-000056": {
+  "symbol": "GM",
+  "accepted": "2026-10-20T11:30:18.000Z",
+  "ts": 1792495818,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3691,
+  "direction": "skip",
+  "confidence": 95,
+  "reason": "The filing only announces that Q3 2026 earnings materials were issued and provides no actual financial results or guidance to trade on."
+ },
+ "0001543151-26-000039": {
+  "symbol": "UBER",
+  "accepted": "2026-11-04T11:55:39.000Z",
+  "ts": 1793793339,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4971,
+  "direction": "skip",
+  "confidence": 65,
+  "reason": "The filing only references Q3 results without actual financial figures and announces a senior executive departure, providing insufficient information to justify a directional trade."
+ },
+ "0001193125-26-449727": {
+  "symbol": "ABNB",
+  "accepted": "2026-11-05T21:02:09.000Z",
+  "ts": 1793912529,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "Airbnb showed accelerating Nights and Seats Booked growth (+16% Y/Y), strong GBV (+21%), and raised its full-year 2026 revenue and Adjusted EBITDA margin outlook, likely driving positive near-term momentum."
+ },
+ "0001075531-26-000044": {
+  "symbol": "BKNG",
+  "accepted": "2026-11-03T21:03:57.000Z",
+  "ts": 1793739837,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 7124,
+  "direction": "skip",
+  "confidence": 60,
+  "reason": "The filing only announces that Q3 2026 results were released and does not include the actual earnings figures or guidance needed to assess near-term stock direction."
+ },
+ "0001048286-26-000040": {
+  "symbol": "MAR",
+  "accepted": "2026-11-02T12:00:19.000Z",
+  "ts": 1793620819,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 82,
+  "reason": "Marriott delivered strong Q3 results with 6.5% worldwide RevPAR growth, 22% adjusted EPS growth, double-digit EBITDA and fee growth, a raised full-year RevPAR outlook, and record pipeline, supporting positive near-term momentum."
+ },
+ "0000060667-26-000126": {
+  "symbol": "LOW",
+  "accepted": "2026-11-18T13:45:11.000Z",
+  "ts": 1795009511,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 65,
+  "reason": "Adjusted EPS was flattered by a $0.34 one-time tariff refund while gross margin fell 124 bps and full-year operating margin guidance was cut, pointing to weaker underlying profitability."
+ },
+ "0000027419-26-000051": {
+  "symbol": "TGT",
+  "accepted": "2026-11-18T11:46:59.000Z",
+  "ts": 1795002419,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Target delivered a strong Q3 beat with accelerating comparable sales, traffic and digital growth, raised full-year sales and EPS guidance, and noted November sales accelerating, which should support positive near-term momentum despite the one-time tariff refund boost."
+ },
+ "0001001250-26-000057": {
+  "symbol": "EL",
+  "accepted": "2026-11-02T13:01:35.000Z",
+  "ts": 1793624495,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 85,
+  "reason": "EL delivered strong Q1 sales growth, significant margin expansion, more than doubled adjusted EPS, and raised its full-year outlook, which should drive positive near-term momentum."
+ },
+ "0000021665-26-000047": {
+  "symbol": "CL",
+  "accepted": "2026-10-30T11:56:34.000Z",
+  "ts": 1793361394,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3885,
+  "direction": "skip",
+  "confidence": 90,
+  "reason": "The filing only references an attached earnings press release but provides no actual quarterly results or guidance, leaving no basis to trade the stock."
+ },
+ "0001637459-26-000078": {
+  "symbol": "KHC",
+  "accepted": "2026-11-04T12:00:49.000Z",
+  "ts": 1793793649,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "skip",
+  "confidence": 55,
+  "reason": "Mixed quarter with declining organic sales, adjusted operating income, and EPS offset by raised low-end organic sales and adjusted EPS guidance, providing no clear short-term directional edge."
+ },
+ "0000764180-26-000112": {
+  "symbol": "MO",
+  "accepted": "2026-10-29T11:04:43.000Z",
+  "ts": 1793271883,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 72,
+  "reason": "Altria raised full-year adjusted EPS guidance, expanded its share repurchase program by $1 billion, and showed solid Q3 adjusted EPS growth, providing positive near-term catalysts despite continued cigarette volume declines."
+ },
+ "0001628280-26-066596": {
+  "symbol": "PM",
+  "accepted": "2026-10-21T11:04:41.000Z",
+  "ts": 1792580681,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Strong Q3 organic revenue and operating income growth, record adjusted EPS, and an 8.8% dividend increase should outweigh softer reported smoke-free growth and higher Q4 investment plans over the next few sessions."
+ },
+ "0001193125-26-429435": {
+  "symbol": "SLB",
+  "accepted": "2026-10-23T11:04:15.000Z",
+  "ts": 1792753455,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "Sequential revenue and adjusted EPS growth, broad regional recovery, and a bullish 2027 outlook with data-center momentum likely outweigh the year-on-year margin declines over the next few sessions."
+ },
+ "0001163165-26-000043": {
+  "symbol": "COP",
+  "accepted": "2026-11-05T12:13:17.000Z",
+  "ts": 1793880797,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3182,
+  "direction": "skip",
+  "confidence": 95,
+  "reason": "The filing only announces that earnings were released and provides no actual financial or operating results, leaving no directional trading signal."
+ },
+ "0001628280-26-072193": {
+  "symbol": "OXY",
+  "accepted": "2026-11-09T21:13:54.000Z",
+  "ts": 1794258834,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "OXY delivered a production beat, strong free cash flow, and a $1.8B debt reduction that should support near-term sentiment despite lower sequential crude realizations."
+ },
+ "0001321655-26-000045": {
+  "symbol": "PLTR",
+  "accepted": "2026-11-02T21:06:48.000Z",
+  "ts": 1793653608,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 72,
+  "reason": "Palantir delivered a blowout Q3 with 96% revenue growth, 148% U.S. commercial growth, 62% adjusted operating margin, and raised FY2026 guidance well above consensus, a strongly positive near-term catalyst likely to drive upward momentum over the next few sessions."
+ },
+ "0001535527-26-000035": {
+  "symbol": "CRWD",
+  "accepted": "2026-11-23T11:04:51.000Z",
+  "ts": 1795431891,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 65,
+  "reason": "Despite record ARR and raised guidance, the large all-stock $43.9B Zscaler acquisition introduces significant dilution and integration risk that likely pressures CRWD shares near term."
+ },
+ "0001628280-26-069792": {
+  "symbol": "DDOG",
+  "accepted": "2026-11-04T12:11:26.000Z",
+  "ts": 1793794286,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 72,
+  "reason": "Despite strong Q3 growth, Q4 guidance implies essentially flat sequential revenue and a sharp drop in non-GAAP operating income and EPS versus Q3, likely disappointing traders."
+ },
+ "0001477333-26-000060": {
+  "symbol": "NET",
+  "accepted": "2026-11-05T21:18:21.000Z",
+  "ts": 1793913501,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Cloudflare delivered accelerating 39% revenue growth, beat profitability metrics, and issued strong Q4 guidance with expanding non-GAAP operating margin, likely driving near-term positive momentum despite GAAP losses and gross-margin pressure."
+ },
+ "0001193125-26-470942": {
+  "symbol": "ZS",
+  "accepted": "2026-11-23T12:33:34.000Z",
+  "ts": 1795437214,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 75,
+  "reason": "Zscaler announced a definitive agreement to be acquired by CrowdStrike alongside strong Q1 results, a major positive catalyst likely to support the stock over the next few sessions."
+ },
+ "0001650372-26-000049": {
+  "symbol": "TEAM",
+  "accepted": "2026-11-05T21:09:54.000Z",
+  "ts": 1793912994,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 68,
+  "reason": "Strong Q1 growth is offset by FY27 guidance implying sharp deceleration in revenue/ARR growth and non-GAAP operating margin compression, likely pressuring the stock near term."
+ },
+ "0001594805-26-000067": {
+  "symbol": "SHOP",
+  "accepted": "2026-11-03T13:08:14.000Z",
+  "ts": 1793711294,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Q3 revenue grew 32% with free cash flow margin expanding to 22% and operating income up 66%, while Q4 guidance calls for low-thirties revenue growth, supporting a positive near-term reaction."
+ },
+ "0001679788-26-000121": {
+  "symbol": "COIN",
+  "accepted": "2026-10-29T20:09:03.000Z",
+  "ts": 1793304543,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4307,
+  "direction": "skip",
+  "confidence": 90,
+  "reason": "The filing only announces that Coinbase published its Q3 2026 earnings presentation and will hold a Q&A, without including any actual financial results or guidance to assess."
+ },
+ "0001783879-26-000164": {
+  "symbol": "HOOD",
+  "accepted": "2026-10-27T20:06:05.000Z",
+  "ts": 1793131565,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 68,
+  "reason": "Record revenues, strong October net deposits, and a lowered expense outlook outweigh the EPS decline that was largely driven by unrealized losses."
+ },
+ "0001818874-26-000065": {
+  "symbol": "SOFI",
+  "accepted": "2026-10-27T11:02:59.000Z",
+  "ts": 1793098979,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3350,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing only contains 8-K boilerplate referencing an attached earnings press release (Exhibit 99.1) with no actual financial results, guidance, or metrics disclosed, leaving no basis for a directional trade."
+ },
+ "0001628280-26-071005": {
+  "symbol": "AFRM",
+  "accepted": "2026-11-05T21:04:08.000Z",
+  "ts": 1793912648,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3508,
+  "direction": "skip",
+  "confidence": 95,
+  "reason": "The filing only announces the issuance of a shareholder letter and contains no actual financial results or guidance to trade on."
+ },
+ "0001647639-26-000083": {
+  "symbol": "UPST",
+  "accepted": "2026-11-03T13:10:50.000Z",
+  "ts": 1793711450,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3789,
+  "direction": "skip",
+  "confidence": 80,
+  "reason": "The filing is only the 8-K cover page and boilerplate; the actual Exhibit 99.1 press release with Q3 2026 results, guidance, and non-GAAP reconciliations is not included, leaving no substantive data to trade on."
+ },
+ "0001375365-26-000026": {
+  "symbol": "SMCI",
+  "accepted": "2026-11-03T21:31:04.000Z",
+  "ts": 1793741464,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "Record Q1 revenue of $19.9B, sharply higher EPS, and strong Q2/FY27 sales guidance point to continued AI-server demand momentum despite lower sequential gross margin."
+ },
+ "0001375365-26-000025": {
+  "symbol": "SMCI",
+  "accepted": "2026-10-20T20:44:26.000Z",
+  "ts": 1792529066,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 3904,
+  "direction": "skip",
+  "confidence": 75,
+  "reason": "The filing only references a preliminary business update without disclosing actual results or guidance, so there is insufficient information to justify a directional trade."
+ },
+ "0001193125-26-442714": {
+  "symbol": "MRVL",
+  "accepted": "2026-11-02T13:06:04.000Z",
+  "ts": 1793624764,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 65,
+  "reason": "Marvell is using stock to pay a 23.9% premium for Lumentum, ceding 33% ownership and creating near-term dilution/integration overhang, while its preliminary revenue update is only in line with guidance."
+ },
+ "0001140361-26-041580": {
+  "symbol": "ON",
+  "accepted": "2026-11-02T21:15:56.000Z",
+  "ts": 1793654156,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 78,
+  "reason": "ON delivered a broad beat with 11% revenue growth, 43% non-GAAP EPS growth, fifth straight gross-margin expansion, strong AI data-center momentum, and Q4 guidance above Q3 levels, likely driving positive near-term momentum."
+ },
+ "0001463101-26-000101": {
+  "symbol": "ENPH",
+  "accepted": "2026-10-27T20:07:51.000Z",
+  "ts": 1793131671,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 4058,
+  "direction": "skip",
+  "confidence": 85,
+  "reason": "The filing is only the 8-K cover page and signature page; it references Exhibit 99.1 but contains no actual financial results, guidance, or metrics, leaving no basis to trade the stock."
+ },
+ "0001274494-26-000211": {
+  "symbol": "FSLR",
+  "accepted": "2026-10-29T20:03:20.000Z",
+  "ts": 1793304200,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "Despite lower revenue and volume guidance, EPS/EBITDA growth, unchanged gross profit, and a new $500M buyback support a short-term long bias."
+ },
+ "0001874178-26-000065": {
+  "symbol": "RIVN",
+  "accepted": "2026-10-29T20:00:35.000Z",
+  "ts": 1793304035,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 70,
+  "reason": "Rivian posted strong revenue and delivery growth, positive gross profit, and improved 2026 guidance across all metrics, which should support near-term positive momentum despite elevated cash burn."
+ },
+ "0001628280-26-072158": {
+  "symbol": "LCID",
+  "accepted": "2026-11-09T21:08:17.000Z",
+  "ts": 1794258497,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 65,
+  "reason": "The press release highlights a 30% sequential reduction in cash burn and a $1.75 billion liquidity boost from PIF, likely easing near-term financing concerns and supporting a positive short-term reaction despite continued heavy cash consumption."
+ },
+ "0001099590-26-000027": {
+  "symbol": "MELI",
+  "accepted": "2026-11-04T21:01:31.000Z",
+  "ts": 1793826091,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "short",
+  "confidence": 65,
+  "reason": "Despite 45% revenue growth, operating income fell 6% YoY and margin compressed to 6.3%, which likely disappoints near-term profitability expectations."
+ },
+ "0001628280-26-068235": {
+  "symbol": "RBLX",
+  "accepted": "2026-10-29T20:10:59.000Z",
+  "ts": 1793304659,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 72,
+  "reason": "Bookings beat the high end of guidance with strong sequential DAU and hours growth plus accelerating O18 and AI momentum, outweighing the largely expected YoY bookings decline against a tough 2025 comparison."
+ },
+ "0001810806-26-000053": {
+  "symbol": "U",
+  "accepted": "2026-11-05T12:01:55.000Z",
+  "ts": 1793880115,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 85,
+  "reason": "Unity delivered a strong beat with 32% revenue growth, first GAAP profitability, 41% adjusted EBITDA margin, and Q4 guidance implying accelerating Strategic/Grow revenue and EBITDA growth, likely driving positive near-term momentum."
+ },
+ "0001671933-26-000115": {
+  "symbol": "TTD",
+  "accepted": "2026-11-09T21:09:41.000Z",
+  "ts": 1794258581,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 5821,
+  "direction": "skip",
+  "confidence": 65,
+  "reason": "The filing only notes the earnings release and a $731M buyback authorization without disclosing actual revenue, earnings, or guidance, so there is insufficient information to trade."
+ },
+ "0001447669-26-000106": {
+  "symbol": "TWLO",
+  "accepted": "2026-10-29T20:07:30.000Z",
+  "ts": 1793304450,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 74,
+  "reason": "Strong Q3 results with 20% revenue growth, 39% non-GAAP operating income growth, improved DBNER, and raised FY26 guidance outweigh the Q4 organic growth deceleration."
+ },
+ "0001050446-26-000047": {
+  "symbol": "MSTR",
+  "accepted": "2026-10-29T20:03:24.000Z",
+  "ts": 1793304204,
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "chars": 15000,
+  "direction": "long",
+  "confidence": 62,
+  "reason": "The release leads with record $21B operating income, $44.75 EPS, and Saylor’s bullish bitcoin-market call, which should support near-term momentum despite negative BTC yield and the CFO transition."
+ }
+}

@@ -49,3 +49,25 @@ Paired diff = event net minus a random same-class stock bought at the same open.
 
 ## Summary of all four
 Harness check: the placebo diff is about 0, so the tool works correctly. Pass rule: **only 12-1 momentum passed, and it is untrustworthy because of survivorship bias.** Turn of month, 8-K items and Form 4 all fail. None of them comes anywhere near 3× a month.
+
+## Momentum 12-1 on a point-in-time S&P 500: run 45273979829 (`protocol_pit_momentum.md`)
+601 of 771 tickers have bars. Coverage of members was 80–100% (mean 90%), so all 107 months count.
+
+| gross / month | basket | net | diff | train / val / test | block p (train+val) | net 2× | largest month share | pass |
+|---|---|---|---|---|---|---|---|---|
+| +1.19% | +0.82% | +1.01% | +0.37% | −0.01% / +0.44% / +1.35% | 0.34 | +0.83% | 43% | **no** |
+
+- **The earlier pass came from survivorship.** On the point-in-time membership the diff drops from +2.16% to +0.37% a month, with no significance and nothing in train. Ending equity: 2.4× at 1× leverage, 1.9× at 2×, 1.04× at 3×. No month reached 3× at any leverage.
+
+## DeepSeek reads 2.02 earnings releases, forward-only: run 45274805697 (`protocol_llm_earnings.md`)
+The served model was `deepseek/deepseek-v4.1-flash-1017`. 106 filings from 2026-10-20 to 2026-11-23 were each called once; the calls are kept in `llm_earnings_calls.json`, and the protocol says they are never called again.
+
+| H | trades (no skip) | hit | net / trade | net 2× | random direction | diff | always long | block p diff | block p net |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 71 of 106 | 61% | +0.67% | +0.49% | −0.81% | +1.48% | +0.19% | 0.009 | 0.076 |
+| 3 | 69 | 54% | +0.99% | +0.81% | −0.87% | +1.86% | +0.31% | 0.059 | 0.095 |
+| 5 | 66 | 65% | +1.55% | +1.37% | −0.87% | +2.42% | +0.94% | 0.062 | 0.050 |
+
+- **Locked verdict: "edge candidate"**, meaning H1 and H3 net > 0, H1 block p diff < 0.05, and H1 2× net > 0.
+- Caveats: this is one earnings season (one market regime) with only 71 trades. The random-direction control came out unluckily negative (−0.81% where about 0 is expected), which makes the diff larger than it should be. The model's own net is significant only at p 0.076 (H1). It cannot be called confirmed until another season is added.
+- As a daily book (equal weight across that day's trades, 21 days, 3.4 trades/day): mean +0.32%/day, sd 1.96%. The best path was 8× leverage, giving 1.32× over the period (worst drawdown −38%). That is far from 3×, because there are too few trades per day and the volatility is high. To reach 3× a month, **more independent trades per day** are needed, from every US company that files 2.02, not just 148 stocks. That needs a new protocol, with costs that rise with lower liquidity.
