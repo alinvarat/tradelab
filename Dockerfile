@@ -5,7 +5,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     TRADELAB_HOST=0.0.0.0 \
     TRADELAB_NEWS_ARCHIVE=1 \
     TRADELAB_NEWS_DIR=/app/data/news \
-    TRADELAB_BUZZ_DIR=/app/data/buzz
+    TRADELAB_BUZZ_DIR=/app/data/buzz \
+    TRADELAB_DVOL_DIR=/app/data/dvol
 
 WORKDIR /app
 

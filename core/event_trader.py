@@ -22,7 +22,7 @@ from .universe import TICKERS
 DATA = Path(__file__).resolve().parent.parent / "data"
 STATE = DATA / "event_trader.json"
 LOG = DATA / "event_trader_log.jsonl"
-SCAN_S = int(os.environ.get("TRADELAB_EVENT_EVERY", "60"))
+SCAN_S = int(os.environ.get("TRADELAB_EVENT_EVERY", "10"))
 CAPITAL_THB = 5000.0
 UP_PCT, VOL_MIN = 5.0, 0.5            # shock definition (locked)
 SIZE, MAX_POS, STOP = 0.05, 3, 0.08   # 5% of equity per trade, 3 open at once, 8% stop (locked)
@@ -134,10 +134,14 @@ class EventTrader:
         if quotes is None:
             def get(s):
                 try:
-                    return data.quote(s)
+                    return data.quote_fast(s, ttl=1.5)
                 except Exception:  # noqa: BLE001
                     return None
-            quotes = {s: q for s, q in zip(TICKERS, self.pool.map(get, TICKERS)) if q}
+            got = list(self.pool.map(get, TICKERS))
+            quotes = {s: q for s, q in zip(TICKERS, got) if q}
+            if sum(q is None for q in got) > 0.3 * len(TICKERS):   # rate-limited or source down: back off, do not hammer
+                self.last_error = "quote source failing; backing off 30 s"
+                time.sleep(30)
             for extra in ("SPY", "^VIX"):  # market context only; never traded, never counted as shocks
                 q = get(extra)
                 if q:

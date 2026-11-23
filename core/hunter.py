@@ -129,7 +129,7 @@ class Hunter:
                     "target_done": self.done_month == time.strftime("%Y-%m", time.gmtime())}
 
 
-EVERY_S = int(os.environ.get("TRADELAB_HUNTER_EVERY", "60"))
+EVERY_S = int(os.environ.get("TRADELAB_HUNTER_EVERY", "15"))
 
 
 def loop(h: Hunter, every=EVERY_S):
