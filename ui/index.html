@@ -16,6 +16,7 @@
   <div class="topbar-in">
     <span class="brand">TradeLab</span>
     <nav class="tabs" aria-label="Views">
+      <a href="#overview" data-view="overview">Overview</a>
       <a href="#auto" data-view="auto">Auto trader</a>
       <a href="#markets" data-view="markets">Markets</a>
       <a href="#chart" data-view="chart">Chart and analysis</a>
@@ -36,6 +37,11 @@
 <main>
 
 <!-- AUTO -->
+<section class="view" id="v-overview" hidden>
+  <div class="panel"><div class="row spread"><h2>All simulated accounts side by side</h2><span class="small muted" id="ov-sub"></span></div>
+    <p class="small muted">Every account below is separate play money with its own start capital and rules. The $100,000 in the top bar is the manual sandbox, not a bot. The bots start with 5,000 THB (about 147 USD).</p>
+    <div id="ov-table"><div class="empty">Loading...</div></div></div>
+</section>
 <section class="view" id="v-auto" hidden>
   <div class="view-head">
     <div><h1>Auto trader</h1><p>5,000 THB of simulated money in a monthly momentum portfolio of ten global assets. It relearns daily and reviews its losing months.</p></div>

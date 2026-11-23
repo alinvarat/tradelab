@@ -81,10 +81,10 @@ function bindRowOpen(el) {
 const symCell = (s, n) => `<span class="sym">${esc(s)}</span>${n ? `<span class="sym-name">${esc(n)}</span>` : ""}`;
 
 /* ---------- routing (state lives in the hash) ---------- */
-const route = { view: "auto", symbol: "AAPL", range: "1y" };
+const route = { view: "overview", symbol: "AAPL", range: "1y" };
 function readHash() {
   const [v, q] = location.hash.slice(1).split("?");
-  route.view = v || "auto";
+  route.view = v || "overview";
   const p = new URLSearchParams(q || "");
   if (p.get("symbol")) route.symbol = p.get("symbol").toUpperCase();
   if (p.get("range")) route.range = p.get("range");
@@ -437,7 +437,7 @@ let eqChart = null;
 async function refreshAccount() {
   try { ACCOUNT = await api("account"); } catch (e) { return; }
   const a = ACCOUNT;
-  $("#simflag").textContent = `Simulated equity ${usd(a.stats.equity)}`;
+  $("#simflag").textContent = `Manual sandbox ${usd(a.stats.equity)}`;
   const p = a.positions.find((x) => x.symbol === route.symbol);
   const ph = $("#pos-here");
   if (ph) ph.innerHTML = p ? `<dl class="kv"><dt>Side</dt><dd>${p.side > 0 ? "Long" : "Short"}</dd><dt>Quantity</dt><dd>${fmt(p.qty, null)}</dd><dt>Entry</dt><dd>${fmt(p.entry)}</dd><dt>Profit or loss</dt><dd class="${cls(p.pnl_usd)}">${usd(p.pnl_usd)} (${pct(p.pnl_pct)})</dd><dt>Stop loss</dt><dd>${fmt(p.sl)}</dd><dt>Take profit</dt><dd>${fmt(p.tp)}</dd></dl><div class="row" style="margin-top: var(--space-sm)"><button class="sm" data-close="${esc(p.symbol)}">Close position</button></div>` : `<div class="empty">No position in ${esc(route.symbol)}. Use the ticket above.</div>`;
@@ -685,6 +685,25 @@ function rorCalc() {
 ["#size-form", "#ror-form"].forEach((id) => $(id).addEventListener("input", id === "#size-form" ? sizeCalc : rorCalc));
 views.tools = () => { sizeCalc(); rorCalc(); };
 
+/* ---------- overview of all accounts ---------- */
+views.overview = async () => {
+  const el = $("#ov-table");
+  let d;
+  try { d = await api("accounts"); } catch (e) { el.innerHTML = errBox(e, "accounts"); return; }
+  $("#ov-sub").textContent = `1 USD = ${fmt(d.thb_per_usd, 2)} THB | social buzz study: ${d.buzz_events ?? "off"} events (analysis only, no account)`;
+  el.innerHTML = table([
+    { h: "Account", f: (r) => `<a href="#${r.tab}"><b>${esc(r.name)}</b></a>` },
+    { h: "Start (USD)", num: 1, f: (r) => fmt(r.start_usd, 2) },
+    { h: "Equity (USD)", num: 1, f: (r) => fmt(r.equity_usd, 2) },
+    { h: "Equity (THB)", num: 1, f: (r) => fmt(r.equity_thb, 0) },
+    { h: "Return", num: 1, f: (r) => pct(r.return_pct), cls: (r) => cls(r.return_pct) },
+    { h: "Random control (USD)", num: 1, f: (r) => (r.control_usd != null ? fmt(r.control_usd, 2) : "-") },
+    { h: "Open", num: 1, f: (r) => r.positions },
+    { h: "Status", f: (r) => esc(r.status) },
+    { h: "Note", f: (r) => esc(r.note) },
+  ], d.rows, { empty: "No accounts." });
+};
+
 /* ---------- DeepSeek trader ---------- */
 views.llm = async () => {
   const figs = $("#llm-figs");
@@ -860,6 +879,7 @@ $$("[data-auto]").forEach((b) => b.addEventListener("click", async () => {
 setInterval(() => {
   if (document.hidden) return;
   if (route.view === "markets") views.markets();
+  else if (route.view === "overview") views.overview();
   else if (route.view === "auto") views.auto();
   else if (route.view === "events") views.events();
   else if (route.view === "llm") views.llm();
