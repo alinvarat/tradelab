@@ -194,7 +194,7 @@ def main():
           "labels", wrote, "ai_scored", scored)
 
 
-def loop(every=60):
+def loop(every=30):
     """Run main() forever (used by the web app); one failed cycle never stops the next."""
     time.sleep(15)
     while True:

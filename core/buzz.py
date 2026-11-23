@@ -22,7 +22,7 @@ DATA = Path(os.environ.get("TRADELAB_BUZZ_DIR") or Path(__file__).resolve().pare
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120 Safari/537.36"}
 APE = "https://apewisdom.io/api/v1.0/filter/all-stocks/page/{}"
 NASDAQ = "https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=25&download=true"
-SCAN_S = int(os.environ.get("TRADELAB_BUZZ_EVERY", "600"))
+SCAN_S = int(os.environ.get("TRADELAB_BUZZ_EVERY", "120"))
 MIN_MENTIONS, MIN_RATIO = 20, 3.0       # surge definition (locked)
 MIN_PRICE, MIN_CAP, MIN_DOLLAR_VOL = 1.0, 50e6, 1e6   # liquidity filter (locked)
 HORIZONS = (3600, 24 * 3600, 3 * 24 * 3600)

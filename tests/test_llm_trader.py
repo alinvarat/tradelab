@@ -161,7 +161,7 @@ class Trading(Base):
         self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
         self.t.calls["last_ts"] = 0
         self.reply({"symbol": "AAA", "action": "sell", "reason": "target reached"})
-        self.t.calls["last_review"] = 0
+        self.t.links["AAA"]["review_at"] = 0          # the model's own review time has arrived
         m = self.market(AAA=quote("AAA", px=120, move=20))
         ctrl_sym = next(iter(self.t.ctrl.positions))
         m[ctrl_sym] = quote(ctrl_sym, px=99)
@@ -179,6 +179,78 @@ class Trading(Base):
         self.t.save()
         again = lt.LlmTrader(self.t.state_path, self.t.log_path, chat=self.t.chat)
         self.assertEqual(len(again.seen), len(self.t.seen))
+
+
+class HorizonFreedom(Base):
+    def test_model_chooses_stop_target_horizon_and_review_time(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "horizon": "long_term", "stop_pct": 20,
+                    "target_pct": 150, "review_in_min": 10080, "reason": "multi-month thesis"})
+        t0 = time.time()
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        p = self.t.acct.positions["AAA"]
+        self.assertAlmostEqual(p.sl, p.entry * 0.80, delta=0.5)
+        self.assertAlmostEqual(p.tp, p.entry * 2.5, delta=1.0)
+        link = self.t.links["AAA"]
+        self.assertEqual(link["horizon"], "long_term")
+        self.assertAlmostEqual(link["review_at"] - t0, 10080 * 60, delta=30)
+
+    def test_out_of_range_values_are_clipped(self):
+        out = lt.parse_decisions(json.dumps({"decisions": [{"symbol": "A", "action": "buy", "stop_pct": 90, "target_pct": 9999,
+                                                            "review_in_min": 1, "size_pct": 1}]}), {"A"}, set())
+        d = out["decisions"][0]
+        self.assertEqual((d["stop_pct"], d["target_pct"], d["review_in_min"]), (25.0, 300.0, 5))
+
+    def test_no_fixed_holding_limit_but_a_180_day_safety_exit(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "stop_pct": 10, "review_in_min": 10080, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        p = self.t.acct.positions["AAA"]
+        p.opened_ts -= 30 * 86400                    # held 30 days: nothing forces an exit
+        self.t.links["AAA"]["review_at"] = time.time() + 99999
+        self.t.scan(self.market(AAA=quote("AAA", px=100)))
+        self.assertIn("AAA", self.t.acct.positions)
+        p.opened_ts -= 160 * 86400                   # now beyond 180 days
+        self.t.scan(self.market(AAA=quote("AAA", px=100)))
+        self.assertNotIn("AAA", self.t.acct.positions)
+
+    def test_review_runs_on_the_models_schedule_and_adjust_moves_the_stop(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "stop_pct": 10, "review_in_min": 5, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        self.assertEqual(len(self.prompts), 1)
+        self.t.calls["last_ts"] = 0
+        self.t.scan(self.market(AAA=quote("AAA", px=100)))
+        self.assertEqual(len(self.prompts), 1)       # review not due yet (5 minutes)
+        self.t.links["AAA"]["review_at"] = 0
+        self.reply({"symbol": "AAA", "action": "adjust", "stop_pct": 3, "target_pct": 20, "review_in_min": 30, "reason": "lock gains"})
+        self.t.scan(self.market(AAA=quote("AAA", px=110)))
+        self.assertEqual(len(self.prompts), 2)
+        p = self.t.acct.positions["AAA"]
+        self.assertAlmostEqual(p.sl, 110 * 0.9998 * 0.97, delta=0.3)
+        self.assertIn("adjust", self.log_kinds())
+
+    def test_adjust_without_a_position_is_rejected(self):
+        out = lt.parse_decisions(json.dumps({"decisions": [{"symbol": "ZZ", "action": "adjust"}]}), {"A"}, {"HELD"})
+        self.assertEqual(out["decisions"], [])
+        self.assertEqual(len(out["rejected"]), 1)
+
+
+class FastTier(Base):
+    def test_watch_requotes_only_open_positions_and_triggers_the_stop(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "stop_pct": 5, "review_in_min": 999, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        calls = []
+        expected = {"AAA", *self.t.ctrl.positions}
+
+        def fake_fast(sym, ttl=1.5):
+            calls.append(sym)
+            return quote(sym, px=90)             # -10%: through the 5% stop
+        with mock.patch("core.llm_trader.data.quote_fast", fake_fast):
+            self.t.watch()
+        self.assertEqual(set(calls), expected)                 # only the open positions were re-quoted
+        self.assertNotIn("AAA", self.t.acct.positions)       # stopped out within one fast-tier pass
+
+    def test_default_cadences_are_seconds_not_minutes(self):
+        self.assertLessEqual(lt.SCAN_S, 10)
+        self.assertLessEqual(lt.WATCH_S, 2)
 
 
 class Evaluation(Base):

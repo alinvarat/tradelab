@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from core.universe import TICKERS
-from core import buzz, event_trader, llm_trader, news_archive
+from core import buzz, dvol_collect, event_trader, llm_trader, news_archive, steward
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 
@@ -100,7 +100,7 @@ def to_quote(q: dict) -> Quote:
 
 def refresh(symbol: str) -> dict | None:
     try:
-        q = data.quote(symbol)
+        q = data.quote_fast(symbol, ttl=1.5)
         if q.get("price") is None:
             return None
         q["fx"] = data.fx_to_usd(q["currency"])
@@ -147,8 +147,9 @@ def poller():
         try:
             syms = tracked()
             crypto = [s for s in syms if data.is_crypto(s)]
-            slow = time.time() - last_slow > 60
-            todo = crypto + ([s for s in syms if not data.is_crypto(s)] if slow else [])
+            slow = time.time() - last_slow > 30
+            held = set(acct.positions) | (set(auto.acct.positions) if auto else set()) | (set(hunt.acct.positions) if hunt else set())
+            todo = crypto + [s for s in syms if not data.is_crypto(s) and (slow or s in held)]
             list(pool.map(refresh, todo))
             if slow:
                 last_slow = time.time()
@@ -160,7 +161,7 @@ def poller():
                 last_save = time.time()
         except Exception:  # noqa: BLE001
             traceback.print_exc()
-        time.sleep(5)
+        time.sleep(3)
 
 
 def overview():
@@ -344,6 +345,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200, hunt.view())
             if p == "events":
                 return self._send(200, evt.view())
+            if p == "steward":
+                return self._send(200, steward.LAST or {"note": "no review yet (first one runs about 5 minutes after start)"})
+            if p == "dvol":
+                files = sorted(f.name for f in dvol_collect.RAW.glob("*.json.gz")) if dvol_collect.RAW.exists() else []
+                return self._send(200, {**dvol_collect.STATUS, "snapshots": files, "dir": str(dvol_collect.RAW.name),
+                                        "window": "Mondays 2026-11-30..2027-02-22 09:00 and 09:05 UTC"})
             if p == "buzz":
                 return self._send(200, buzzmon.view() if buzzmon else {"disabled": True})
             if p == "llm_trader":
@@ -542,6 +549,24 @@ def backup_loop(keep=14):
         time.sleep(3600)
 
 
+def ai_news_available():
+    from core import ai_news
+    return ai_news.openrouter_available() or ai_news.opencode_available()
+
+
+def status_for_steward():
+    now = time.time()
+    s = {"uptime_h": round((now - STARTED) / 3600, 1), "poller_age_s": round(now - status["last_poll"]),
+         "restarts": RESTARTS, "disk_free_gb": round(shutil.disk_usage(ROOT).free / 1e9, 2),
+         "errors": {"event_trader": evt.last_error, "buzz": buzzmon.last_error if buzzmon else None,
+                    "llm_trader": llm.last_error if llm else None, "dvol": dvol_collect.STATUS["last_error"]},
+         "news_archive": news_archive.STATUS, "dvol_snapshots_taken": dvol_collect.STATUS["taken"][-6:],
+         "experiments": {"event_trader": evt.evaluate() if evt else None,
+                         "buzz_1d": buzzmon.evaluate() if buzzmon else None,
+                         "llm_trader": llm.evaluate() if llm else "disabled (needs OPENROUTER_API_KEY or opencode)"}}
+    return s
+
+
 def start(name, target, *args):
     t = threading.Thread(target=target, args=args, daemon=True, name=name)
     THREADS[name] = (target, args, t)
@@ -583,7 +608,8 @@ if __name__ == "__main__":
     if os.environ.get("TRADELAB_BUZZ", "1") == "1":  # read-only analysis; on by default
         buzzmon = buzz.BuzzMonitor()
         start("buzz", buzz.loop, buzzmon)
-    if os.environ.get("TRADELAB_LLM_TRADER") == "1":  # needs opencode or OPENROUTER_API_KEY; off by default
+    want_llm = os.environ.get("TRADELAB_LLM_TRADER")   # unset: start automatically when a provider is available
+    if want_llm == "1" or (want_llm is None and (ai_news_available())):
         llm = llm_trader.LlmTrader()
         start("llm_trader", llm_trader.loop, llm)
     start("poller", poller)
@@ -592,6 +618,8 @@ if __name__ == "__main__":
     start("history_loop", history_loop)
     if os.environ.get("TRADELAB_NEWS_ARCHIVE") == "1":  # set in the container; the systemd collector uses its own copy
         start("news_archive", news_archive.loop)
+    start("dvol", dvol_collect.loop)
+    start("steward", steward.loop, status_for_steward)
     start("supervisor", supervisor)
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)

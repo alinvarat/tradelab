@@ -34,7 +34,7 @@ FEE_PCT, SLIP_PCT = 0.10, 0.05
 CAPITAL_THB = 5000.0
 VALID_YEARS = 3
 RELEARN_S = 24 * 3600
-EVERY_S = int(os.environ.get("TRADELAB_AUTO_EVERY", "60"))  # how often the trader checks quotes, orders and the drawdown guard
+EVERY_S = int(os.environ.get("TRADELAB_AUTO_EVERY", "15"))  # how often the trader checks quotes, orders and the drawdown guard
 SNAPSHOT_S = 900  # equity-curve resolution (keeps the chart's 2000 points ~3 weeks long)
 TOL = 0.05  # rebalance tolerance as a share of equity
 

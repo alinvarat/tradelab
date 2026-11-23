@@ -68,6 +68,19 @@ def chart(symbol: str, rng: str = "1y", interval: str | None = None) -> dict:
     return {"meta": res["meta"], "bars": bars, "interval": iv}
 
 
+def quote_fast(symbol: str, ttl: float = 1.5) -> dict:
+    """Same fields as quote() but from a one-bar chart request with a ~1 s cache, so positions and shock candidates can be
+    polled every few seconds (the Yahoo meta price is within seconds of the exchange for US stocks)."""
+    if is_crypto(symbol):
+        return quote(symbol)
+    url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}?range=1d&interval=1d"
+           "&includePrePost=false")
+    d = get_json(url, ttl)["chart"]
+    if d.get("error") or not d.get("result"):
+        raise ValueError(f"no data for {symbol}")
+    return _quote_from_meta(symbol, d["result"][0]["meta"])
+
+
 def quote(symbol: str) -> dict:
     """Latest price. Crypto uses Binance live bid/ask; everything else the Yahoo chart meta (may be delayed)."""
     m = chart(symbol, "5d", "15m")["meta"] if not is_crypto(symbol) else None
@@ -84,6 +97,10 @@ def quote(symbol: str) -> dict:
                     "source": "Binance (live, USDT)", "open": True}
         except Exception:
             m = chart(symbol, "5d", "15m")["meta"]
+    return _quote_from_meta(symbol, m)
+
+
+def _quote_from_meta(symbol, m):
     px = m.get("regularMarketPrice")
     prev = m.get("previousClose") or m.get("chartPreviousClose")
     ts = m.get("regularMarketTime") or 0
