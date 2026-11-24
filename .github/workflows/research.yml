@@ -121,7 +121,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_8k_other, probe_options, polymarket_llm, probe_llm_cost, pit_swing]
+        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_8k_other, probe_options, polymarket_llm, probe_llm_cost, pit_swing, news_v2]
     steps:
       - name: Check out repository
         if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
@@ -137,7 +137,7 @@ jobs:
         if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
-          OPENROUTER_API_KEY: ${{ (startsWith(matrix.study, 'llm_') || matrix.study == 'polymarket_llm' || matrix.study == 'probe_llm_cost') && secrets.OPENROUTER_API_KEY || '' }}
+          OPENROUTER_API_KEY: ${{ (startsWith(matrix.study, 'llm_') || matrix.study == 'polymarket_llm' || matrix.study == 'probe_llm_cost' || matrix.study == 'news_v2') && secrets.OPENROUTER_API_KEY || '' }}
         run: |
           mkdir -p out
           python research/studies/run.py ${{ matrix.study }} --out out/${{ matrix.study }}.json > out/${{ matrix.study }}_summary.json

@@ -230,6 +230,26 @@ class Swing(unittest.TestCase):
         self.assertEqual(st.monthly_returns(curve), {"2024-02": 0.10000000000000009, "2024-03": 1.0})
 
 
+class NewsV2(unittest.TestCase):
+    def test_vote_majority_tie_and_skip(self):
+        L = '{"direction": "long", "confidence": 80}'
+        S = '{"direction": "short", "confidence": 60}'
+        K = '{"direction": "skip", "confidence": 0}'
+        self.assertEqual(st.vote([L, L, S])["direction"], "long")
+        self.assertEqual(st.vote([L, L, S])["confidence"], 80)
+        self.assertEqual(st.vote([L, S, K])["direction"], "skip")       # three-way tie
+        self.assertEqual(st.vote([K, K, L])["direction"], "skip")
+        self.assertEqual(st.vote([])["direction"], "skip")
+
+    def test_reaction_features_use_only_what_is_known_at_entry(self):
+        b = [{"t": i * 100, "o": 10.0 + i, "c": 10.0 + i} for i in range(10)]
+        f = st.reaction_features(b, 750)                       # first bar at/after 750 is index 8
+        self.assertEqual(f["entry_index"], 8)
+        self.assertAlmostEqual(f["gap_pct"], round((18 / 17 - 1) * 100, 2))
+        self.assertAlmostEqual(f["runup_5d_pct"], round((17 / 12 - 1) * 100, 2))
+        self.assertIsNone(st.reaction_features(b, 250))
+
+
 class Items(unittest.TestCase):
     def test_only_locked_items_count_and_each_counts_once(self):
         self.assertEqual(st.item_tags(["2.02", "9.01"]), ["2.02"])

@@ -173,7 +173,8 @@ def cache_messages(system: str, user: str) -> list:
             {"role": "user", "content": user + "\n\nROLE INSTRUCTIONS:\n" + system}]
 
 
-def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, model=None, cache_layout=False) -> tuple:
+def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, model=None, cache_layout=False,
+         temperature: float = 0.2) -> tuple:
     """One free-form answer from the DeepSeek model: -> (text, model_name) or ("", reason). Same safety rules as
     score_opencode (empty temp dir, no --auto) / score_openrouter (key from the environment only)."""
     full = model or OPENCODE_MODEL
@@ -190,7 +191,8 @@ def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, 
         from urllib.request import Request, urlopen as _urlopen
         messages = cache_messages(system, user) if cache_layout else [
             {"role": "system", "content": system}, {"role": "user", "content": user}]
-        body = json.dumps({"model": name, "temperature": 0.2, "usage": {"include": True}, "messages": messages}).encode()
+        body = json.dumps({"model": name, "temperature": temperature, "usage": {"include": True},
+                           "messages": messages}).encode()
         req = Request("https://openrouter.ai/api/v1/chat/completions", data=body, headers={
             "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json"})
         try:
