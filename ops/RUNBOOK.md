@@ -51,10 +51,11 @@
 4. เขียนเทสต์ offline ใน `tests/test_screens.py` ใช้ข้อมูลปลอมขนาดเล็กที่รู้คำตอบล่วงหน้า
 5. เขียนฟังก์ชันดึงข้อมูลและฟังก์ชัน `study_<line>` ใน `research/studies/run.py` แล้วเพิ่มชื่อลงใน `STUDIES`
 6. เพิ่มชื่อ study ลงใน `matrix.study` ของ `.github/workflows/research.yml` บรรทัด `study: [...]`
-7. push ไปที่ branch `research-run/<line>` ซึ่งสั่งให้ Actions รันอัตโนมัติ หรือสั่งรันเอง
+7. push ไปที่ branch ปกติ (เช่น `line/<line>`) แล้วสั่งรันเฉพาะ study นั้น
    ```bash
    gh workflow run "Research studies" -f study=<line> --ref <branch>
    ```
+   **ห้าม push ไปที่ branch `research-run/**`** เพราะ push ไปที่ branch นี้จะรัน**ทุก** study รวมถึง study ที่เรียก LLM และเสียเงิน
 8. ดาวน์โหลดผลแล้วอ่านตัวเลขจริง
    ```bash
    gh run download <run-id> -n study-<line> -D /tmp/claude-1000/<line>
