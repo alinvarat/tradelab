@@ -1574,6 +1574,29 @@ def study_l12_hour_shocks(_symbols, workers=16):
     return summ, fade + bounce
 
 
+def study_factory_crypto_1(_symbols, workers=16):
+    """Pre-registered in RESULTS.md 'Factory crypto 1': portfolio rules on every Binance USDT coin ever listed."""
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime, timezone
+    from core import factory as fa
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2021), T(2023)), "validation": (T(2023), T(2025)), "test": (T(2025), T(2026, 11))}
+    start, end = T(2020, 11, 1), T(2026, 11)
+    syms = [x for x in _binance_all_usdt_symbols()
+            if x[:-4] not in L8_SKIP and not re.search(r"(UP|DOWN|BULL|BEAR)$", x[:-4])]
+    with ThreadPoolExecutor(workers) as ex:
+        bars = dict(zip(syms, ex.map(lambda s: _binance_daily_bulk(s, start, end), syms)))
+    bars = {s: b for s, b in bars.items() if len(b) >= 31 or s == "BTCUSDT"}
+    days, close, qv = fa.panel(bars)
+    feats = fa.features(days, close, qv)
+    results = {}
+    for name in fa.STRATEGY_NAMES:
+        results[name] = fa.run(days, close, feats, fa.STRATEGIES[name])
+        results[name + "@2x"] = fa.run(days, close, feats, fa.STRATEGIES[name], cost_mult=2.0)
+    summ = {"coins_with_bars": len(bars), "days": len(days), **fa.judge_all(results, bounds)}
+    return summ, {n: r for n, r in results.items() if not n.endswith("@2x")}
+
+
 def study_l9_loser_bounce(_symbols, workers=6):
     """Pre-registered in RESULTS.md 'L9 screen': buy the day's >= 20% crypto losers at the next UTC open."""
     return study_l8_gainer_fade(_symbols, workers, kind="l9")
@@ -1706,6 +1729,15 @@ def study_l2_unlocks(_symbols, workers=6):
     return summ, rows
 
 
+def study_probe_claude(_symbols):
+    """One short Claude Haiku call through core.ai_news.chat (checks the CLI and the CLAUDE_CODE_OAUTH_TOKEN secret)."""
+    from core import ai_news
+    t0 = time.time()
+    text, served = ai_news.chat("You are a test.", "Reply with the single word OK.", timeout=120)
+    return {"ready": ai_news.claude_ready(), "ok": bool(text), "served_or_error": served, "reply": (text or "")[:40],
+            "seconds": round(time.time() - t0, 1), "spend": ai_news.spend()}, []
+
+
 def study_probe_provider(_symbols):
     """List the model ids of the OpenAI-compatible provider (ai.thirx.com) using the THIRX_API_KEY secret. Prints ids
     only; the key is read from the environment and never logged."""
@@ -1728,7 +1760,7 @@ def study_probe_provider(_symbols):
     ids = sorted(m.get("id", "") for m in (d.get("data") or []))
     return {"models": len(ids), "deepseek": [i for i in ids if "deepseek" in i.lower()], "all": ids[:200]}, []
 
-STUDIES = {"l12b_perp_fade": study_l12b_perp_fade, "l12_hour_shocks": study_l12_hour_shocks, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+STUDIES = {"probe_claude": study_probe_claude, "factory_crypto_1": study_factory_crypto_1, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4, "l12b_perp_fade": study_l12b_perp_fade, "l12_hour_shocks": study_l12_hour_shocks}
 
 
 def brief(summ, prefix=""):

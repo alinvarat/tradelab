@@ -38,6 +38,15 @@ jobs:
         with:
           python-version: "3.13"
 
+
+      - name: Install Claude Code (LLM calls use the owner's Claude Max plan)
+
+        run: |
+
+          curl -fsSL https://claude.ai/install.sh | bash
+
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
       - name: Restore the call cache from the data branch
         run: |
           touch /tmp/previous_llm_earnings_forward.json
@@ -51,10 +60,7 @@ jobs:
       - name: Run forward study
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          TRADELAB_LLM_API_KEY: ${{ (secrets.DEEPSEEK_API_KEY || secrets.THIRX_API_KEY) }}
-          TRADELAB_LLM_PROVIDER_MODEL: ${{ (vars.LLM_MODEL || vars.THIRX_MODEL) }}
-          TRADELAB_LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}   # owner 2026-11-25: Claude only
         run: |
           python research/studies/run.py llm_earnings_forward --previous-forward-results /tmp/previous_llm_earnings_forward.json \
             --out /tmp/llm_earnings_forward.json > /tmp/llm_earnings_forward_summary.json
@@ -95,6 +101,15 @@ jobs:
         with:
           python-version: "3.13"
 
+
+      - name: Install Claude Code (LLM calls use the owner's Claude Max plan)
+
+        run: |
+
+          curl -fsSL https://claude.ai/install.sh | bash
+
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
       - name: Restore state
         run: |
           if git fetch origin data/options-forward 2>/dev/null; then
@@ -104,10 +119,7 @@ jobs:
       - name: Run
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          TRADELAB_LLM_API_KEY: ${{ (secrets.DEEPSEEK_API_KEY || secrets.THIRX_API_KEY) }}
-          TRADELAB_LLM_PROVIDER_MODEL: ${{ (vars.LLM_MODEL || vars.THIRX_MODEL) }}
-          TRADELAB_LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}   # owner 2026-11-25: Claude only
         run: python research/studies/options_forward.py /tmp/options_forward_state.json /tmp/options_forward_summary.json
 
       - name: Push state to data/options-forward
@@ -148,6 +160,15 @@ jobs:
         with:
           python-version: "3.13"
 
+
+      - name: Install Claude Code (LLM calls use the owner's Claude Max plan)
+
+        run: |
+
+          curl -fsSL https://claude.ai/install.sh | bash
+
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
       - name: Restore state
         run: |
           mkdir -p /tmp/l4f
@@ -185,7 +206,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        study: ${{ fromJSON(inputs.study == 'all' && '["tom","momentum","items","form4","pit_momentum","llm_earnings","llm_earnings_wide","llm_8k_other","probe_options","polymarket_llm","probe_llm_cost","pit_swing","news_v2","l1_listings","l1c_binance_notices","l1e_binance_delist","l1g_alpha_remove","l4_polymarket_longshot","l3_smallcap_news","l6_smallcap_insider","l2_unlocks","probe_provider","news_v3","l7_first_red_day","l8_gainer_fade","l9_loser_bounce","l10_gap_fade","l11_funding_short","l12_hour_shocks","l12b_perp_fade","l8b_gainer_fade_all"]' || format('["{0}"]', inputs.study)) }}
+        study: ${{ fromJSON(inputs.study == 'all' && '["tom","momentum","items","form4","pit_momentum","llm_earnings","llm_earnings_wide","llm_8k_other","probe_options","polymarket_llm","probe_llm_cost","pit_swing","news_v2","l1_listings","l1c_binance_notices","l1e_binance_delist","l1g_alpha_remove","l4_polymarket_longshot","l3_smallcap_news","l6_smallcap_insider","l2_unlocks","probe_provider","probe_claude","news_v3","l7_first_red_day","l8_gainer_fade","l9_loser_bounce","l10_gap_fade","l11_funding_short","factory_crypto_1","l8b_gainer_fade_all","l12_hour_shocks","l12b_perp_fade"]' || format('["{0}"]', inputs.study)) }}
     steps:
       - name: Check out repository
         if: inputs.study == 'all' || inputs.study == matrix.study
@@ -197,14 +218,20 @@ jobs:
         with:
           python-version: "3.13"
 
+
+      - name: Install Claude Code (LLM calls use the owner's Claude Max plan)
+
+        run: |
+
+          curl -fsSL https://claude.ai/install.sh | bash
+
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
       - name: Run study
         if: inputs.study == 'all' || inputs.study == matrix.study
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
-          TRADELAB_LLM_API_KEY: ${{ (matrix.study == 'probe_provider' || startsWith(matrix.study, 'llm_') || matrix.study == 'polymarket_llm' || matrix.study == 'news_v2' || matrix.study == 'news_v3') && (secrets.DEEPSEEK_API_KEY || secrets.THIRX_API_KEY) || '' }}
-          TRADELAB_LLM_PROVIDER_MODEL: ${{ (vars.LLM_MODEL || vars.THIRX_MODEL) }}
-          TRADELAB_LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
-          OPENROUTER_API_KEY: ${{ (startsWith(matrix.study, 'llm_') || matrix.study == 'polymarket_llm' || matrix.study == 'probe_llm_cost' || matrix.study == 'news_v2' || matrix.study == 'news_v3') && secrets.OPENROUTER_API_KEY || '' }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}   # owner 2026-11-25: Claude only
         run: |
           mkdir -p out
           python research/studies/run.py ${{ matrix.study }} --out out/${{ matrix.study }}.json > out/${{ matrix.study }}_summary.json
