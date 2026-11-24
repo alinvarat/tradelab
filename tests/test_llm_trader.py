@@ -338,6 +338,11 @@ class Trading(Base):
         self.assertIsNone(lt.recent_8k("AAA", now + 3 * 86400, get=get))     # older than 48 h
         self.assertIsNone(lt.recent_8k("ZZZ", now, get=get))                  # unknown ticker
 
+    def test_context_carries_news_principles_and_sourced_playbook(self):
+        c = self.t.build_context(1000.0, [], self.market(), [])
+        self.assertIn("Chan 2003", c["news_principles"])
+        self.assertIn("Womack 1996", lt.PLAYBOOK["analyst"])
+
     def test_news_type_classification(self):
         self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
         self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")

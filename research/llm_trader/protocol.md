@@ -131,3 +131,6 @@ Every stock candidate carries its sector ETF (`SECTOR_ETF` in `core/universe.py`
 
 ## Addendum 2026-11-24: v4.13, the company's own 8-K text
 Stock candidates carry `sec_8k` when the issuer filed an 8-K in the last 48 hours: the items and the first 3,000 characters of the EX-99 press release (else the primary document), fetched from SEC with the `TRADELAB_SEC_UA` contact now passed to the Kuber runtime. Submissions are cached 15 minutes. The analyst reads the filing's numbers and facts before the headlines.
+
+## Addendum 2026-11-24: v4.14, knowledge from research and trading literature
+Every context carries `news_principles` (news vs no-news moves, stale news, small-cap gap reversal) and the playbook entries for earnings, m&a and analyst news now cite specific findings (estimate revisions, the practitioner "episodic pivot" as an untested hypothesis, stock-paid deals, Womack 1996). Sources and evidence levels: `ops/knowledge/news_trading.md`. Desk data still overrides them.
