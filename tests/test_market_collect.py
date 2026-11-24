@@ -83,6 +83,24 @@ class ListingLedger(unittest.TestCase):
             closed = mc._l1b_load("l1d")["closed"][0]
             self.assertAlmostEqual(closed["net"], 0.10 - 0.002 - 0.007)       # bought back at the ask 9.0
 
+    def test_delist_short_stops_out_on_a_squeeze(self):
+        t0 = 1_800_000_000
+        notice = [{"kind": "delist", "venue": "binance", "symbol": "SQZ", "ts": t0 - 30, "title": "t"}]
+        quotes = iter([("kucoin", 10.0, 10.1), ("kucoin", 10.5, 10.6), ("kucoin", 12.9, 13.0)])
+        btc = iter([100.0, 100.0])
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(mc, "DIR", Path(d)), \
+                mock.patch.object(mc, "listing_notices", return_value=notice), \
+                mock.patch.object(mc, "quote", side_effect=lambda s: next(quotes)), \
+                mock.patch.object(mc, "_btc_mid", side_effect=lambda v: next(btc)):
+            mc.listings_once(t0)
+            mc.listings_once(t0 + 61)                    # short at bid 10.0
+            mc.listings_once(t0 + 120)                   # ask 10.6: +6%, below the 25% stop, still open
+            self.assertEqual(len(mc._l1b_load("l1f")["pending"]), 1)
+            mc.listings_once(t0 + 180)                   # ask 13.0: +30%, stopped
+            closed = mc._l1b_load("l1f")["closed"][0]
+            self.assertTrue(closed["stopped"])
+            self.assertAlmostEqual(closed["net"], -0.30 - 0.002 - 0.001)
+
     def test_old_notices_are_not_events(self):
         old = [{"venue": "upbit", "symbol": "BAR", "ts": 1_800_000_000 - 3600, "title": "t"}]
         with tempfile.TemporaryDirectory() as d, mock.patch.object(mc, "DIR", Path(d)), \
