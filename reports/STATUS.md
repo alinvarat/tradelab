@@ -15,7 +15,7 @@
 ## เส้นกลยุทธ์ (sprint ข้อ 1.5 ใน ROADMAP)
 | เส้น | สเปก | สถานะ | ผลล่าสุด | ขั้นต่อไป |
 |---|---|---|---|---|
-| L1 listing | `ops/lines/L1_listings.md` | todo | — | ลงทะเบียนเกณฑ์ใน RESULTS แล้วเขียนตัวดึงประกาศ Binance + Upbit |
+| L1 listing | `ops/lines/L1_listings.md` | killed (ตามกฎ) → L1b | รอบ 2: กฎเลือก 7 วันแล้วไม่ผ่าน; ถือ 4 ชม. บวกทุกช่วง (validation +10.2% p 0.0075, test +9.3%) แต่มีเหตุการณ์แค่ราว 1 ครั้งต่อเดือน | L1b: ล็อกกติกาถือ 4 ชม. แบบเดินหน้า + เพิ่มตัวดึงประกาศหลาย exchange บน Kuber |
 | L2 unlock | `ops/lines/L2_unlocks.md` | todo | — | หาแหล่งข้อมูลฟรี (จำกัด 2 ชม.) |
 | L3 หุ้นเล็กมีข่าว | `ops/lines/L3_smallcap_news.md` | todo | — | ลงทะเบียนเกณฑ์ แล้วสร้างรายการ event 8-K นอกเวลา |
 | L4 Polymarket maker | `ops/lines/L4_polymarket_maker.md` | todo | — | ดึงรายการตลาดที่จบแล้ว |
@@ -30,7 +30,8 @@
 | # | งาน | ผู้ทำ | วัน | สถานะ | หมายเหตุ |
 |---|---|---|---|---|---|
 | 1 | deploy ผ่านและตรวจผ่าน Chrome | Claude | 1 | done | 09:47 |
-| 2 | ด่านคัดกรอง L1 | Claude | 1 | running | Actions run 45369639086 |
+| 2 | ด่านคัดกรอง L1 | Claude | 1 | done | killed ตามกฎ; เปิด L1b |
+| 2b | L1b: protocol ถือ 4 ชม. + ตัวดึงประกาศ listing (Binance, Upbit, Bithumb, OKX, Coinbase, Bybit) บน Kuber + บัญชีจำลอง | Claude | 2 | todo | |
 | 3 | ด่านคัดกรอง L3 | เพื่อน (dmgnr) | 1 | todo | issue #85 |
 | 4 | ด่านคัดกรอง L4 | เพื่อน (dmgnr) | 1 | todo | issue #86 |
 | 5 | หาแหล่งข้อมูล L2 | เพื่อน (dmgnr) | 1 | todo | issue #88 |
