@@ -201,6 +201,7 @@ Code `core.screens.gap_fade_rows`, study `l10_gap_fade` (same data path, univers
 - Splits train 2019-2022, validation 2023-2024, test 2025 to 2026-10. Pass/kill exactly as L7, including >= 3 events a week.
 - Known limits: a fill at the official open is optimistic for a gapping small cap; many are hard to borrow; survivorship from today's ticker list.
 - Run 0 (Actions 45481807860) was cancelled before any output was read, because of the short-gain formula error found in L8 run 1 (below).
+- **Run 1 (2026-11-25, Actions 45482058492, correct formula): killed.** 272 rows on the 1,500-ticker sample, only 0.65 a week (far below the 3-a-week gate). Train pick h5 +12.6% (p 0.001) but validation h5 -6.1% (p 0.80), h0 -1.5%, h1 -2.5%; test h5 +9.4% (p 0.02). Without the best event validation is -8.4%. Too rare and not stable.
 
 ## L9 screen: buy the day's biggest crypto losers (pre-registered 2026-11-25, before any L9 row or L8 result was seen)
 Code `core.screens.loser_bounce_rows`, study `l9_loser_bounce` (shares the L8 data path). No LLM, no cost. Hypothesis (not proven): one-day crashes of >= 20% in liquid altcoins partly rebound. Universe, data, volume screen (20-day average quote volume >= 2M USDT), one event per coin per 7 days, splits, `judge`, pass and kill rules are exactly those of L8.
