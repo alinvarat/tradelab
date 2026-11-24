@@ -236,6 +236,23 @@ class Trading(Base):
         self.t.scan(self.market(AAA=quote("AAA", px=102, move=4)))
         self.assertEqual(len(self.prompts), 2)                    # 2% >= a quarter of the 5% stock threshold
 
+    def test_held_top_mover_is_not_resent_until_it_moves_on(self):
+        self.t.calls.update(last_idle=0.0, last_ts=0.0)
+        self.reply({"symbol": "AAA", "action": "hold", "reason": "no edge"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=3)))
+        self.assertIn("AAA", self.t.calls.get("held", {}))
+
+        def last_cands():
+            calls = [json.loads(l) for l in (Path(self.tmp.name) / "l.jsonl").read_text().splitlines() if '"kind": "call"' in l]
+            return [c["symbol"] for c in calls[-1]["context"]["candidates"]]
+        self.t.calls.update(last_idle=0.0, last_ts=0.0)
+        self.t.scan(self.market(AAA=quote("AAA", px=100.5, move=3.5), BBB=quote("BBB", px=103, move=3)))
+        self.assertNotIn("AAA", last_cands())                     # held, moved 0.5% < 1.25%: not re-sent
+        self.assertIn("BBB", last_cands())
+        self.t.calls.update(last_idle=0.0, last_ts=0.0)
+        self.t.scan(self.market(AAA=quote("AAA", px=102, move=5), BBB=quote("BBB", px=106, move=6)))
+        self.assertIn("AAA", last_cands())                        # moved 2% since the hold: back in
+
     def test_scheduled_scan_needs_a_meaningful_mover(self):
         self.t.calls.update(last_idle=0.0, last_ts=0.0)
         self.t.scan(self.market())                                   # nothing moved: no call

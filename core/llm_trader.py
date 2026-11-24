@@ -45,6 +45,7 @@ STOP_RANGE, TARGET_MAX, REVIEW_RANGE_MIN = (1.0, 25.0), 300.0, (5, 10080)   # th
 MAX_HOLD_S = 180 * 24 * 3600     # safety cap only; the holding period is otherwise the model's choice (minutes to months)
 DAILY_HALT = 1.0   # disabled (owner rule: no restrictions)
 MAX_CALLS_DAY, MIN_GAP_S, MAX_CANDIDATES = 300, 60, 24
+HELD_TTL_S = 3600                # v4.4: a top mover the model held is not re-sent for 1 h unless it moves on
 IDLE_CALL_S = 10 * 60            # v4.1: a scheduled whole-market look every 10 minutes
 # v4.2 (2026-11-24, cost without limits): every call of a cycle starts with the same JSON block (market + candidates)
 # and the role instructions go last (ai_news.chat cache_layout), so DeepSeek's prefix cache serves the shared part
@@ -60,7 +61,7 @@ OVERNIGHT_MAX = 60
 MOVER_SHARE = 0.5
 EXT_MAX = 40                       # symbols re-quoted per pass in US extended hours                  # a "top mover" must have moved at least half its class's shock threshold
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
-PROTOCOL_VERSION = "v4.3"
+PROTOCOL_VERSION = "v4.4"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60
@@ -816,6 +817,9 @@ class LlmTrader:
                                     after=d["size_pct"], reason=r.get("reason", ""))
                 self.decisions.append({"ts": now, "trigger": trigger, "protocol": PROTOCOL_VERSION, **d, "executed": None})
                 self.record("decision", **d, trigger=trigger)
+                px = (quotes.get(d["symbol"]) or {}).get("price")
+                if d["action"] in ("hold", "pass", "skip") and d["symbol"] not in self.acct.positions and px:
+                    self.calls.setdefault("held", {})[d["symbol"]] = [now, px]     # v4.4 hold memory
                 if d.get("preflight"):
                     self.record("skip", symbol=d["symbol"], action=d["action"], why=d["preflight"])
                     self.decisions[-1]["executed"] = {"status": "skipped", "why": d["preflight"]}
@@ -1134,9 +1138,16 @@ class LlmTrader:
                       if s in quotes and s not in {c["symbol"] for c in cands}]
             cands += [{"symbol": s, "ratio": None, "why": f"social buzz: {r.get('mentions')} mentions"}
                       for s, r in buz.items() if s in quotes and s not in {c['symbol'] for c in cands}]
+            held = self.calls.get("held") or {}
+            for k in [k for k, v in held.items() if now - v[0] > HELD_TTL_S]:
+                held.pop(k)
             for s, _ in movers:                     # fill the remaining slots with the biggest move in each class
                 if len(cands) >= MAX_CANDIDATES:
                     break
+                h = held.get(s)
+                if h and quotes.get(s, {}).get("price") and \
+                        abs(quotes[s]["price"] / h[1] - 1) * 100 < UNCHANGED_SHARE * SHOCK_PCT[asset_class(s)]:
+                    continue                        # v4.4: already passed on, nothing new since (hold memory)
                 if s in quotes and s not in {c["symbol"] for c in cands}:
                     cands.append({"symbol": s, "ratio": None, "why": "top mover in its asset class"})
             cands = cands[:MAX_CANDIDATES]
