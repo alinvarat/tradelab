@@ -1509,6 +1509,278 @@ def study_factory_crypto_1(_symbols, workers=16):
     return summ, {n: r for n, r in results.items() if not n.endswith("@2x")}
 
 
+def _s3_list(prefix, keys=False):
+    """Common prefixes (keys=False) or object keys (keys=True) under `prefix` on data.binance.vision; None on failure."""
+    from urllib.request import Request, urlopen
+    base = ("https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?"
+            + ("" if keys else "delimiter=/&") + "prefix=" + prefix)
+    tag = "Key" if keys else "Prefix"
+    out, marker = [], ""
+    for _ in range(500):
+        xml = None
+        for k in range(3):
+            try:
+                with urlopen(Request(base + (f"&marker={marker}" if marker else ""),
+                                     headers={"User-Agent": "Mozilla/5.0 tradelab-research"}), timeout=60) as r:
+                    xml = r.read().decode()
+                break
+            except Exception:  # noqa: BLE001
+                time.sleep(2 * (k + 1))
+        if xml is None:
+            return None
+        items = [x for x in re.findall(rf"<{tag}>([^<]+)</{tag}>", xml) if x != prefix]
+        out += items
+        if "<IsTruncated>true" not in xml or not items:
+            break
+        nxt = re.search(r"<NextMarker>([^<]+)</NextMarker>", xml)
+        marker = nxt.group(1) if nxt else items[-1]
+    return out
+
+
+def _binance_all_um_symbols():
+    """Every USDT-M futures symbol that ever had monthly klines (delisted included), quarterlies ('_') excluded."""
+    pre = "data/futures/um/monthly/klines/"
+    got = _s3_list(pre) or []
+    syms = [p[len(pre):].strip("/") for p in got if p.startswith(pre)]
+    return sorted({s for s in syms if s.endswith("USDT") and "_" not in s})
+
+
+def _um_months(path):
+    """{(y, m)} of the monthly zips under data/futures/um/monthly/<path> (e.g. 'klines/BTCUSDT/1d/'); None on failure."""
+    keys = _s3_list("data/futures/um/monthly/" + path, keys=True)
+    if keys is None:
+        return None
+    out = set()
+    for k in keys:
+        g = re.search(r"-(\d{4})-(\d{2})\.zip$", k)
+        if g:
+            out.add((int(g.group(1)), int(g.group(2))))
+    return out
+
+
+def _zip_text(url):
+    """Text of the single CSV in a zip; '' when the file does not exist, None after failed retries."""
+    import io
+    import zipfile
+    from urllib.request import Request, urlopen
+    for k in range(3):
+        try:
+            with urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0 tradelab-research"}), timeout=30) as r:
+                z = zipfile.ZipFile(io.BytesIO(r.read()))
+            return z.read(z.namelist()[0]).decode()
+        except Exception as e:  # noqa: BLE001
+            if getattr(e, "code", None) == 404:
+                return ""
+            time.sleep(2 * (k + 1))
+    return None
+
+
+def _month_range(start_s, end_s):
+    g0, g1 = time.gmtime(start_s), time.gmtime(end_s - 1)
+    y, m, out = g0.tm_year, g0.tm_mon, []
+    while (y, m) <= (g1.tm_year, g1.tm_mon):
+        out.append((y, m))
+        y, m = (y, m + 1) if m < 12 else (y + 1, 1)
+    return out
+
+
+def _binance_um_bulk(sym, start_s, end_s, interval="1d", months=None):
+    """[(open_ts, o, h, l, c, quote_vol, taker_buy_quote)] of a USDT-M perp from the monthly kline zips (a delisted
+    perp simply ends at its last file). months: the listed (y, m) set, or None to try every month. -> (rows, failed)."""
+    from core import factory_perp as fp
+    out, failed = [], 0
+    for y, m in _month_range(start_s, end_s):
+        if months is not None and (y, m) not in months:
+            continue
+        txt = _zip_text(f"https://data.binance.vision/data/futures/um/monthly/klines/{sym}/{interval}/"
+                        f"{sym}-{interval}-{y}-{m:02d}.zip")
+        if txt is None:
+            failed += 1
+        elif txt:
+            out += fp.parse_kline_csv(txt)
+    out = sorted({x[0]: x for x in out}.values())
+    return [x for x in out if start_s <= x[0] < end_s], failed
+
+
+def _um_funding(sym, kline_months, start_s, end_s):
+    """Settled funding rows of a perp plus its gap months: a month with klines but no funding file ('missing') or a
+    failed download ('failed'). -> (rows, {(y, m): reason})."""
+    from core import factory_perp as fp
+    listed = _um_months(f"fundingRate/{sym}/")
+    rows, gaps = [], {}
+    for y, m in _month_range(start_s, end_s):
+        if (y, m) not in kline_months:
+            continue
+        if listed is not None and (y, m) not in listed:
+            gaps[(y, m)] = "missing"
+            continue
+        txt = _zip_text(f"https://data.binance.vision/data/futures/um/monthly/fundingRate/{sym}/"
+                        f"{sym}-fundingRate-{y}-{m:02d}.zip")
+        if txt is None:
+            gaps[(y, m)] = "failed"
+        elif not txt:
+            gaps[(y, m)] = "missing"
+        else:
+            rows += fp.parse_funding_csv(txt)
+    return sorted(set(rows)), gaps
+
+
+def _deribit_dvol_daily(start_s, end_s):
+    """Deribit BTC DVOL 1D candles, paged backwards with `continuation`. -> [(ts_s, close)]."""
+    from core import factory_perp as fp
+    pages, end_ms = [], int(end_s * 1000)
+    for _ in range(100):
+        d = _get_json("https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=1D"
+                      f"&start_timestamp={int(start_s * 1000)}&end_timestamp={end_ms}", timeout=30)
+        if not d or not (d.get("result") or {}).get("data"):
+            break
+        pages.append(d)
+        cont = d["result"].get("continuation")
+        if not cont or int(cont) >= end_ms or int(cont) <= start_s * 1000:
+            break
+        end_ms = int(cont)
+    return fp.parse_dvol_pages(pages)
+
+
+def study_factory_crypto_2(_symbols, workers=16):
+    """Pre-registered in RESULTS.md 'factory_crypto_2 screen': 7 rules on every Binance USDT-M perp ever listed,
+    measured funding, judged together (Bonferroni 0.05/7); descriptive controls judged separately."""
+    import math
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime, timezone
+    from core import factory as fa, factory_perp as fp
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2021), T(2023)), "validation": (T(2023), T(2025)), "test": (T(2025), T(2026, 11))}
+    start, end = int(T(2020, 11)), int(T(2026, 11))
+    listed = _binance_all_um_symbols()
+    syms = [s for s in listed if fp.eligible_symbol(s, L8_SKIP)]
+    for must in ("BTCUSDT", "ETHUSDT"):
+        if must not in syms:
+            syms.append(must)
+    log(f"perps listed {len(listed)}, eligible {len(syms)}")
+    cov = {"perps_listed": len(listed), "perps_eligible": len(syms), "kline_month_failures": 0,
+           "kline_listing_failures": 0, "funding_gap_missing": 0, "funding_gap_failed": 0}
+
+    def load_daily(sym):
+        km = _um_months(f"klines/{sym}/1d/")
+        rows, failed = _binance_um_bulk(sym, start, end, "1d", km)
+        months = km if km is not None else {(time.gmtime(r[0]).tm_year, time.gmtime(r[0]).tm_mon) for r in rows}
+        fund, gaps = _um_funding(sym, months, int(T(2020, 10)), end) if rows else ([], {})
+        return sym, rows, failed, km is None, fund, gaps
+    bars, frows, bad = {}, {}, set()
+    with ThreadPoolExecutor(workers) as ex:
+        for sym, rows, failed, nolist, fund, gaps in ex.map(load_daily, syms):
+            cov["kline_month_failures"] += failed
+            cov["kline_listing_failures"] += int(nolist)
+            for (y, m), why in gaps.items():
+                bad.add((sym, f"{y}-{m:02d}"))
+                cov["funding_gap_" + why] += 1
+            if len(rows) >= 31 or sym == "BTCUSDT":
+                bars[sym], frows[sym] = rows, fund
+    cov["perps_with_bars"] = len(bars)
+    log(f"daily: {len(bars)} perps with bars, funding gaps {len(bad)}")
+    funding = fp.Funding(frows, bad)
+    days, close, qv, taker = fp.panel_perp(bars)
+    feats = fp.perp_features(days, close, qv, taker, funding)
+    btc_long, _ = _binance_um_bulk("BTCUSDT", int(T(2019, 9)), end, "1d")
+    dvol = _deribit_dvol_daily(T(2021, 3), end)
+    cov["dvol_days"] = len(dvol)
+    ctx = {"days": days, "close": close, "feats": feats, "funding": funding,
+           "regime_rv": fp.rv_regime(days, btc_long), "regime_dvol": fp.dvol_regime(days, dvol)}
+    cov["regime_rv_days"] = sum(r is not None for r in ctx["regime_rv"])
+    cov["regime_dvol_days"] = sum(r is not None for r in ctx["regime_dvol"])
+
+    results, desc, extra = {}, {}, {}
+
+    def daily(name, build, hedge, into):
+        st = {}
+        into[name] = fp.run_perp(days, close, feats, build(ctx), funding, hedge=hedge, cost_mult=1.0, stats=st)
+        into[name + "@2x"] = fp.run_perp(days, close, feats, build(ctx), funding, hedge=hedge, cost_mult=2.0)
+        extra[name] = {"vanished_long": st["vanished_long"], "vanished_short": st["vanished_short"],
+                       "events_per_week_validation": round(fp.events_per_week(st["event_ts"], *bounds["validation"]), 2)}
+    for name, (build, hedge) in fp.PERP_RULES.items():
+        daily(name, build, hedge, results)
+        log(f"  {name} done")
+    for name, (build, hedge) in fp.descriptive_daily().items():
+        daily(name, build, hedge, desc)
+
+    # hourly panel: perps whose 20-day average quote volume ever reaches 5M
+    adv = fp.daily_adv(days, qv)
+    hsyms = sorted({s for a in adv for s, v in a.items() if v >= fp.HOURLY_QV} | {"BTCUSDT", "ETHUSDT"})
+    h0, n = start, (end - start) // fp.HOUR
+
+    def load_hourly(sym):
+        hm = _um_months(f"klines/{sym}/1h/")
+        rows, failed = _binance_um_bulk(sym, start, end, "1h", hm)
+        return sym, (fp.hourly_array(rows, h0, n) if rows else None), failed
+    hc = {}
+    cov["hourly_month_failures"] = 0
+    with ThreadPoolExecutor(workers) as ex:
+        for sym, arr, failed in ex.map(load_hourly, hsyms):
+            cov["hourly_month_failures"] += failed
+            if arr is not None:
+                hc[sym] = arr
+    cov["hourly_perps_requested"], cov["hourly_perps_loaded"] = len(hsyms), len(hc)
+    log(f"hourly: {len(hc)}/{len(hsyms)} perps")
+    settle = funding.settle_hours(h0, n)
+    hdays = [d for d in days if h0 <= d < end]
+    adv_at = {d: adv[i] for i, d in enumerate(days)}
+
+    prep = {s: fp.same_hour_cumsum(a) for s, a in hc.items()}
+    for name, placebo, into in (("A6_hour_of_day_xs", False, results), ("A6_placebo_hour_plus_12", True, desc)):
+        pnl, turn, hst = fp.run_hour_of_day(hc, prep, adv_at, funding, h0, n, settle, placebo=placebo)
+        into[name] = fp.compound_days(pnl, turn, h0, hdays, 1.0)
+        into[name + "@2x"] = fp.compound_days(pnl, turn, h0, hdays, 2.0)
+        extra[name] = {"vanished_long": hst["vanished_long"], "vanished_short": hst["vanished_short"],
+                       "traded_hours": len(hst["traded_hour_ts"]),
+                       "events_per_week_validation": round(fp.events_per_week(hst["traded_hour_ts"], *bounds["validation"]), 2)}
+        log(f"  {name} done")
+    del prep
+
+    adv30 = fp.daily_adv(days, qv, n=30)
+    months, npairs = [], []
+    for y, m in _month_range(int(T(2021)), end):
+        F = int(T(y, m))
+        m0 = (F - h0) // fp.HOUR
+        m1 = (int(T(y + (m == 12), m % 12 + 1)) - h0) // fp.HOUR
+        if F not in adv_at or m0 < 1440:
+            continue
+        mk = f"{y}-{m:02d}"
+        full = {s for s, a in hc.items() if (s, mk) not in bad and all(fp._ok(a[t]) for t in range(m0 - 1440, m0))}
+        qv30 = adv30[days.index(F)]
+        uni = fp.select_universe(qv30, full)
+        logs = {s: [math.log(hc[s][t]) for t in range(m0 - 1440, m0)] for s in uni}
+        pairs = fp.form_pairs(logs, qv30)
+        months.append((m0, m1, pairs))
+        npairs.append(len(pairs))
+    trades = fp.a7_schedule(hc, months)
+    ctrl = fp.a7_random_control(trades, months, hc)
+    for name, tr, into in (("A7_coint_pairs_hourly", trades, results), ("A7_random_entry_control", ctrl, desc)):
+        pnl, turn = fp.simulate_trades(tr, hc, funding, h0, settle)
+        into[name] = fp.compound_days(pnl, turn, h0, hdays, 1.0)
+        into[name + "@2x"] = fp.compound_days(pnl, turn, h0, hdays, 2.0)
+        ets = [h0 + t["et"] * fp.HOUR for t in tr]
+        extra[name] = {"trades": len(tr),
+                       "events_per_week_validation": round(fp.events_per_week(ets, *bounds["validation"]), 2)}
+    cov["a7_months_formed"] = len(months)
+    cov["a7_mean_pairs"] = round(sum(npairs) / len(npairs), 2) if npairs else 0
+
+    judged = fa.judge_all(results, bounds)
+    for name, row in judged["strategies"].items():
+        row.update(extra.get(name, {}))
+        row["passed_with_events"] = bool(row["passed"] and row.get("events_per_week_validation", 0) >= 3)
+    judged["passed"] = [n_ for n_, r in judged["strategies"].items() if r["passed_with_events"]]
+    descriptive = fa.judge_all(desc, bounds)
+    for name, row in descriptive["strategies"].items():
+        row.update(extra.get(name, {}))
+        row.pop("passed", None)
+    descriptive.pop("passed", None)
+    descriptive["note"] = "descriptive only, cannot pass; judged separately so the bar for the 7 rules is 0.05/7"
+    summ = {"coverage": cov, "days": len(days), **judged, "descriptive": descriptive}
+    rows = {n_: r for n_, r in {**results, **desc}.items() if not n_.endswith("@2x")}
+    return summ, rows
+
+
 def study_l9_loser_bounce(_symbols, workers=6):
     """Pre-registered in RESULTS.md 'L9 screen': buy the day's >= 20% crypto losers at the next UTC open."""
     return study_l8_gainer_fade(_symbols, workers, kind="l9")
@@ -1663,7 +1935,7 @@ def study_probe_provider(_symbols):
     ids = sorted(m.get("id", "") for m in (d.get("data") or []))
     return {"models": len(ids), "deepseek": [i for i in ids if "deepseek" in i.lower()], "all": ids[:200]}, []
 
-STUDIES = {"factory_crypto_1": study_factory_crypto_1, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+STUDIES = {"factory_crypto_2": study_factory_crypto_2, "factory_crypto_1": study_factory_crypto_1, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):
