@@ -1070,6 +1070,16 @@ class Evaluation(Base):
         self.t.pairs = [{"id": str(i), "s1": -0.01, "ctrl": 0.01 + (i % 3) * 0.001} for i in range(40)]
         self.assertEqual(self.t.evaluate()["verdict"], "no edge shown")
 
+    def test_claude_pairs_are_never_pooled_with_deepseek(self):
+        ds = [{"id": f"d{i}", "s1": -0.01, "ctrl": 0.01, "protocol": "v4.17"} for i in range(29)]
+        cl = [{"id": f"c{i}", "s1": 0.05, "ctrl": 0.0, "protocol": "v4.18"} for i in range(5)]
+        self.t.pairs = ds + cl
+        ev = self.t.evaluate()
+        self.assertEqual(ev["closed_pairs"], 29)                 # headline: DeepSeek tags only
+        self.assertIn("too early", ev["verdict"])
+        self.assertEqual(ev["claude_v4_18"]["closed_pairs"], 5)
+        self.assertEqual(ev["by_protocol"]["v4.18"]["n"], 5)
+
 
 if __name__ == "__main__":
     unittest.main()
