@@ -1,5 +1,6 @@
 """Structure checks for the workflow files (stdlib only), so a misplaced edit fails CI instead of silently disabling
 the workflow (2026-11-24: the l4f job was inserted inside workflow_dispatch inputs and GitHub dropped the workflow)."""
+import json
 import re
 import unittest
 from pathlib import Path
@@ -40,9 +41,14 @@ class ResearchWorkflow(unittest.TestCase):
 
     def test_every_matrix_study_exists_in_run_py(self):
         run = (WF.parent.parent / "research" / "studies" / "run.py").read_text()
-        studies = re.search(r"study: \[([^\]]+)\]", self.text).group(1).split(",")
-        for s in (x.strip() for x in studies):
+        studies = json.loads(re.search(r"inputs\.study == 'all' && '(\[[^']+\])'", self.text).group(1))
+        self.assertGreater(len(studies), 20)
+        for s in studies:
             self.assertIn(f'"{s}":', run, s)
+
+    def test_dispatch_starts_only_the_requested_study(self):
+        self.assertIn("format('[\"{0}\"]', inputs.study)", self.text)
+        self.assertIn("if: github.event_name == 'workflow_dispatch'", self.text)
 
     def test_no_tabs(self):
         self.assertNotIn("\t", self.text)

@@ -3,6 +3,11 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-24 20:20 UTC)
+- **GitHub Actions หยุดทั้งหมด:** ทุกงานขึ้นว่า "The job was not started because recent account payments have failed or your spending limit needs to be increased" (run 45479343841, 45479289827, 45479470983) → ไม่มี CI, ไม่มี deploy, งานวิจัยและงานเดินหน้าที่ตั้งเวลาไว้ (options, l4f, news_v3) ไม่รัน จนกว่าเจ้าของแก้ Billing & plans หรือเพิ่ม spending limit
+- **v4.18 Claude Haiku 5.5 (PR #149, #150 merge แล้ว):** ใช้ Claude Code CLI บนแพ็กเกจ Claude Max ของเจ้าของ CI ยืนยันแล้วว่า image มี `claude` 2.1.331 ที่ `/home/app/.local/bin/claude`; ยังไม่ขึ้นระบบ: ต้องมี secret `CLAUDE_CODE_OAUTH_TOKEN` และ deploy ที่ผ่าน (deploy #149 ล้มที่ Kuber "Uploading context" 6 ครั้ง, issue #80)
+- **L8 / L9 ล็อกกติกาแล้วใน `research/studies/RESULTS.md` (PR #151) ยังไม่ได้รัน** เพราะ Actions หยุด
+
 ## สุขภาพระบบ (ตรวจล่าสุด 2026-11-24 19:25 UTC)
 | ส่วน | สถานะ | รายละเอียด |
 |---|---|---|
@@ -49,6 +54,9 @@
 | 2i | บอทกติกาแบบกว้าง broad-v1 (จักรวาลเดียวกับ DeepSeek) | Claude | 1 | forward | ขึ้นระบบ 13:40, /api/events_broad 5 เหตุการณ์ 147.28 USD |
 | 2j | v4.3: โมเดลฟรีสำหรับบทบาทผู้ช่วย, DeepSeek ตัดสินใจ | Claude | 1 | live | ดู helper_models ใน /api/llm_trader |
 | 2k | L7 ด่านคัดกรอง: short วันแรกที่ปิดแดงหลังหุ้นเล็กวิ่งหลายวัน (Tim Sykes "first red day") | Claude | 2 | **killed** | run 45463480460: 1,597 เหตุการณ์, 3.1 ครั้ง/สัปดาห์; h5 validation +1.29% p 0.085 (ไม่ผ่านเกณฑ์ 0.05) และต้นทุน 2 เท่าติดลบหลังตัดไม้ที่ดีที่สุด → หยุดเส้นนี้ ตามเกณฑ์ที่ลงทะเบียนไว้ก่อนรัน |
+| 2l | L8 ด่านคัดกรอง: short เหรียญที่ขึ้น ≥ 20% ในวัน UTC (Binance spot, h1/h3/h7) | Claude | 1 | locked | PR #151; รอ Actions กลับมา |
+| 2m | L9 ด่านคัดกรอง: long เหรียญที่ร่วง ≥ 20% ในวัน UTC | Claude | 1 | locked | PR #151; ล็อกก่อนเห็นผล L8 |
+| 2n | v4.18: ทุกบทบาทใช้ Claude Haiku 5.5 ผ่าน Claude Code CLI (Max plan) | Claude | 1 | รอเจ้าของ | ต้องตั้ง `CLAUDE_CODE_OAUTH_TOKEN` + deploy ผ่าน |
 | 2c | เพิ่มแหล่งประกาศ listing ที่ Kuber เข้าถึงได้ (Upbit ทางอื่น, Bithumb, OKX, Bybit, Coinbase) ด้วย addendum ก่อนเหตุการณ์แรก | เพื่อน (dmgnr) หรือ Claude | 2 | todo | เพิ่มความถี่ของ L1b |
 | 3 | ด่านคัดกรอง L3 | Claude (รับแทน) | 1 | killed | 315 เหตุการณ์; กลุ่ม 2.02 ไม่ผ่าน, กลุ่มอื่นน้อยเกิน |
 | 4 | ด่านคัดกรอง L4 | Claude (รับแทน) | 1 | killed | รอบ 4 (ข้อมูลไม่ซ้ำ 2,613 เหตุการณ์): validation +0.35%/ครั้ง p 0.39 |
@@ -74,4 +82,5 @@
 - PR #130 เพิ่มคำแปลไทยสำหรับ Auto/Markets/Chart/Portfolio/Backtest พร้อมเทสต์ Chrome ใน CI จากข้อมูลจำลอง รอรีวิวก่อนรวม หลัง deploy ให้ตรวจสลับภาษาไทย↔อังกฤษบน Kuber แบบอ่านอย่างเดียวทั้งห้าหน้า (รอบนี้ยังตรวจเว็บจริงไม่ได้: Chrome `Target closed` / Cloudflare Access 302 เมื่อไม่ได้ล็อกอิน)
 
 ## รอเจ้าของตัดสิน
-- ไม่มี
+- แก้ GitHub Billing & plans (การจ่ายเงินล้มหรือ spending limit เต็ม) เพื่อให้ Actions รันได้อีกครั้ง
+- สร้าง token: รัน `claude setup-token` ใน terminal ของตัวเอง แล้ว `gh secret set CLAUDE_CODE_OAUTH_TOKEN -R alinvarat/tradelab` (วางที่ prompt แบบซ่อน ไม่ส่งในแชต); บอทจะใช้โควตา Max ร่วมกับการใช้ Claude ของเจ้าของ

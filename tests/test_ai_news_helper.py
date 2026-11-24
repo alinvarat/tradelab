@@ -90,58 +90,66 @@ class ScoringProvider(unittest.TestCase):
         self.assertTrue(seen and "openrouter.ai" not in seen[0])
 
 
-class AnthropicProvider(unittest.TestCase):
-    """Owner 2026-11-25: Claude Haiku 5.5 answers paid calls when ANTHROPIC_API_KEY is set (no network in tests)."""
 
-    class _Client:
-        def __init__(self, stop="end_turn", text="hi", fail=None):
-            self.sent, self.stop, self.text, self.fail = [], stop, text, fail
-            self.messages = self
+class ClaudeCli(unittest.TestCase):
+    """Owner 2026-11-25: Claude Haiku 5.5 via the Claude Code CLI (Max plan). No process or network in tests."""
 
-        def create(self, **kw):
-            from types import SimpleNamespace as NS
-            self.sent.append(kw)
-            if self.fail:
-                raise self.fail
-            return NS(stop_reason=self.stop, model="claude-haiku-5-5",
-                      content=[NS(type="thinking", thinking=""), NS(type="text", text=self.text)],
-                      usage=NS(input_tokens=1000, output_tokens=200, cache_read_input_tokens=10000,
-                               cache_creation_input_tokens=0))
+    @staticmethod
+    def _run(result="hi", code=0, subtype="success", models=("claude-haiku-5-5",), sent=None):
+        import json as _json
+        from types import SimpleNamespace as NS
 
-    def test_request_shape_text_and_cost(self):
-        c = self._Client()
-        before = ai_news.spend()["total_usd"]
-        text, name = ai_news._chat_anthropic("ROLE", "DATA", 30, True, client=c)
-        self.assertEqual((text, name), ("hi", "anthropic/claude-haiku-5-5"))
-        kw = c.sent[0]
-        self.assertEqual(kw["model"], "claude-haiku-5-5")
-        self.assertNotIn("temperature", kw)                  # Haiku 5.5 rejects sampling parameters
-        self.assertEqual(kw["system"], ai_news.CACHE_SYSTEM)
-        self.assertTrue(kw["messages"][0]["content"].startswith("DATA"))
-        self.assertTrue(kw["messages"][0]["content"].endswith("ROLE"))
-        self.assertEqual(kw["cache_control"], {"type": "ephemeral"})
-        # 1000*0.10 + 10000*0.01 + 200*0.50 = 300 -> 0.0003 USD
-        self.assertAlmostEqual(ai_news.spend()["total_usd"] - before, 0.0003, places=9)
+        def run(cmd, input=None, capture_output=True, text=True, timeout=0, cwd=None):
+            if sent is not None:
+                sent.append((cmd, input, cwd))
+            out = {"type": "result", "subtype": subtype, "is_error": subtype != "success", "result": result,
+                   "total_cost_usd": 0.0123, "usage": {"input_tokens": 100, "output_tokens": 20,
+                                                       "cache_read_input_tokens": 900},
+                   "modelUsage": {m: {} for m in models}}
+            return NS(returncode=code, stdout=_json.dumps(out), stderr="")
+        return run
 
-    def test_refusal_and_error_return_no_text(self):
-        self.assertEqual(ai_news._chat_anthropic("s", "u", 30, False, client=self._Client(stop="refusal"))[0], "")
-        text, reason = ai_news._chat_anthropic("s", "u", 30, False, client=self._Client(fail=RuntimeError("x")))
-        self.assertEqual(text, "")
-        self.assertTrue(reason.startswith("anthropic error: RuntimeError"))
+    def test_command_stdin_and_label(self):
+        sent = []
+        before = ai_news.spend()
+        text, name = ai_news._chat_claude("ROLE", "DATA", 30, True, run=self._run(sent=sent))
+        self.assertEqual((text, name), ("hi", "claude/claude-haiku-5-5"))
+        cmd, stdin, cwd = sent[0]
+        self.assertEqual(cmd[:4], ["claude", "-p", "--model", "claude-haiku-5-5"])   # full id, not an alias
+        self.assertEqual(cmd[cmd.index("--tools") + 1], "")
+        self.assertIn("--no-session-persistence", cmd)
+        self.assertEqual(cmd[cmd.index("--system-prompt") + 1], ai_news.CACHE_SYSTEM)
+        self.assertTrue(stdin.startswith("DATA") and stdin.endswith("ROLE"))       # prompt via stdin, not argv
+        self.assertIsNotNone(cwd)
+        after = ai_news.spend()
+        self.assertEqual(after["total_usd"], before["total_usd"])                  # plan: nothing billed per call
+        self.assertAlmostEqual(after["notional_usd"] - before["notional_usd"], 0.0123)
+        self.assertEqual(after["tokens_in"] - before["tokens_in"], 1000)
 
-    def test_paid_calls_go_to_claude_only_when_key_is_set(self):
+    def test_other_model_is_flagged_and_errors_give_no_text(self):
+        self.assertIn("SERVED: claude-x", ai_news._chat_claude("s", "u", 30, False, run=self._run(models=("claude-x",)))[1])
+        self.assertEqual(ai_news._chat_claude("s", "u", 30, False, run=self._run(code=1)), ("", "claude exit 1"))
+        self.assertEqual(ai_news._chat_claude("s", "u", 30, False, run=self._run(subtype="error_during_execution"))[0], "")
+
+    def test_ready_needs_token_and_cli_and_has_no_fallback(self):
         import os
         from unittest import mock
-        with mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test"}), \
-                mock.patch.object(ai_news, "_chat_anthropic", return_value=("ok", "anthropic/claude-haiku-5-5")) as m:
-            self.assertEqual(ai_news.chat("s", "u", model=ai_news.DECISION_MODEL)[1], "anthropic/claude-haiku-5-5")
+        with mock.patch.dict(os.environ, {"CLAUDE_CODE_OAUTH_TOKEN": "t"}), \
+                mock.patch.object(ai_news.shutil, "which", return_value="/x/claude"):
+            self.assertTrue(ai_news.claude_ready())
             self.assertIn("claude-haiku-5-5", ai_news.providers())
-        self.assertEqual(m.call_count, 1)
-        env = {k: v for k, v in os.environ.items() if k != "ANTHROPIC_API_KEY"}
-        with mock.patch.dict(os.environ, env, clear=True):
-            self.assertFalse(ai_news.anthropic_available())
+            self.assertNotIn(ai_news.MODEL, ai_news.providers())          # one Claude scorer, one label
+            with mock.patch.object(ai_news, "custom_available", return_value=True):
+                # Claude fails -> empty answer, never a silent DeepSeek answer under the v4.18 tag
+                self.assertEqual(ai_news.chat("s", "u", run=self._run(code=2))[0], "")
+        with mock.patch.dict(os.environ, {"CLAUDE_CODE_OAUTH_TOKEN": "t"}), \
+                mock.patch.object(ai_news.shutil, "which", return_value=None):
+            self.assertFalse(ai_news.claude_ready())
+        env = {k: v for k, v in os.environ.items() if k != "CLAUDE_CODE_OAUTH_TOKEN"}
+        with mock.patch.dict(os.environ, env, clear=True), \
+                mock.patch.object(ai_news.shutil, "which", return_value="/x/claude"):
+            self.assertFalse(ai_news.claude_ready())
 
     def test_headline_scores_parse(self):
-        c = self._Client(text='[{"id": "1", "score": 0.5, "confidence": 0.8, "category": "earnings"}]')
-        out = ai_news.score_anthropic([{"id": "1", "title": "X beats", "symbols": ["X"]}], client=c)
-        self.assertIn("1", out)
+        run = self._run(result='[{"id": "1", "score": 0.5, "confidence": 0.8, "category": "earnings"}]')
+        self.assertIn("1", ai_news.score_claude([{"id": "1", "title": "X beats", "symbols": ["X"]}], run=run))
