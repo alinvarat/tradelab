@@ -80,7 +80,22 @@ L1_DELAY = 60                    # enter one minute after the announcement
 L1_COST = 0.006                  # round trip: taker 0.1% + slippage 0.2% per side
 
 
-def listing_returns(ts: float, m1: list, h1: list, bench_m1: list, bench_h1: list, cost: float = L1_COST) -> dict:
+def binance_delist_symbols(title: str) -> list:
+    """'Binance Will Delist EPIC, QUICK on 2026-10-28' -> ['EPIC', 'QUICK']; pair removals, margin, futures,
+    Alpha and fiat notices give []."""
+    m = re.match(r"^Binance Will Delist (.+?) on \d{4}-\d{2}-\d{2}", title.strip())
+    if not m:
+        return []
+    out = []
+    for tok in re.split(r",|\band\b|&", m.group(1)):
+        tok = tok.strip()
+        if _TICK.match(tok) and tok not in out:
+            out.append(tok)
+    return out
+
+
+def listing_returns(ts: float, m1: list, h1: list, bench_m1: list, bench_h1: list, cost: float = L1_COST,
+                    side: int = 1) -> dict:
     """Net log-free simple return of the coin minus the BTC return over the same window, per horizon.
     Entry at the close of the 1-minute bar containing ts+60s; horizons <= 4h exit on 1-minute bars, longer on 1-hour bars."""
     t0 = ts + L1_DELAY
@@ -95,7 +110,8 @@ def listing_returns(ts: float, m1: list, h1: list, bench_m1: list, bench_h1: lis
             p1, b1 = close_at(h1, t0 + h, 3600), close_at(bench_h1, t0 + h, 3600)
         if p1 and b1:
             raw = p1 / p0 - 1
-            out[name] = {"raw": raw, "abn": raw - (b1 / b0 - 1), "net": raw - (b1 / b0 - 1) - cost}
+            abn = side * (raw - (b1 / b0 - 1))          # side -1: a short gains when the coin falls against BTC
+            out[name] = {"raw": raw, "abn": abn, "net": abn - cost}
     return out
 
 

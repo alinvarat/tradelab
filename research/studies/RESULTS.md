@@ -151,3 +151,10 @@ Code: `core/screens.py` (`binance_futures_symbols`, `binance_add_symbols`, `judg
 - One change from L1, fixed before data: the horizon is picked on train by the mean **without the best 5 train events**, so a single outlier (ACT in L1 run 2) cannot choose it.
 - **Run 1 (2026-11-24, Actions 45379100863): killed.** 363 notices parsed (futures 361, add 2 priced of few); 117 priced (Binance spot 38, Coinbase 29, KuCoin 50), 78 with no prior market, 168 without bars at entry; 3.4 priced events a month. Trimmed pick 15m: train -1.8%, validation -1.4% (p 0.88), test -2.3%. No horizon is positive in train; 4h validation +2.1% (p 0.18) only.
 - Observation (post hoc, not a result): the 7d return is negative in every split, train -10.2% (n 37), validation -7.5% (n 62), test -8.5% (n 18), so coins tend to fall in the week after a Binance futures launch. This becomes hypothesis L1d (short), testable only on new events: `protocol_L1d_futures_short_forward.md`.
+
+## L1e screen: short after Binance delisting notices (pre-registered 2026-11-24, before any data was pulled)
+Code: `core/screens.py` (`binance_delist_symbols`, `listing_returns(side=-1)`), study `l1e_binance_delist`. Earlier work tested a rebound buy around Bybit delisting days (`research/LESSONS.md`), not a short at the notice.
+- Events: Binance catalog 161 "Binance Will Delist <SYM>, <SYM> on <date>" notices, 2024-01-01 to 2026-10-31 (pair removals, margin, futures, Alpha and fiat notices excluded).
+- Pricing: first venue with a market in the hour before the notice, in the order KuCoin, Binance spot, Coinbase (KuCoin first, because a short is possible there after Binance stops); BTC benchmark on the same venue.
+- Return: short from the close of the 1-minute bar containing notice + 60 s, i.e. -(coin return - BTC return) - 0.6% round trip; horizons, splits, bootstrap, trimmed horizon pick (without the best 5 train events) and pass/kill rules as in L1c.
+- Result: pending.

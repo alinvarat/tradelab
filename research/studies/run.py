@@ -897,15 +897,23 @@ def study_l1_listings(_symbols):
     return summ, rows
 
 
-def _priced_bars(sym, ts):
+def _priced_bars(sym, ts, order=("binance", "coinbase", "kucoin")):
     """First venue with a market in the hour before ts: Binance spot, Coinbase, KuCoin. Returns (venue, m1, h1, bm1, bh1)."""
-    if _binance_bars(sym, ts - 3600, "1m", 60):
+    for v in order:
+        got = _venue_bars(v, sym, ts)
+        if got:
+            return got
+    return None
+
+
+def _venue_bars(v, sym, ts):
+    if v == "binance" and _binance_bars(sym, ts - 3600, "1m", 60):
         return ("binance", _binance_bars(sym, ts, "1m", 300), _binance_bars(sym, ts, "1h", 200),
                 _binance_bars("BTC", ts, "1m", 300), _binance_bars("BTC", ts, "1h", 200))
-    if _coinbase_bars(sym, ts - 3600, 60, 60):
+    if v == "coinbase" and _coinbase_bars(sym, ts - 3600, 60, 60):
         return ("coinbase", _coinbase_bars(sym, ts, 60, 290), _coinbase_bars(sym, ts, 3600, 200),
                 _coinbase_bars("BTC", ts, 60, 290), _coinbase_bars("BTC", ts, 3600, 200))
-    if _kucoin_bars(sym, ts - 3600, "1min", 60, 60):
+    if v == "kucoin" and _kucoin_bars(sym, ts - 3600, "1min", 60, 60):
         return ("kucoin", _kucoin_bars(sym, ts, "1min", 60, 300), _kucoin_bars(sym, ts, "1hour", 3600, 200),
                 _kucoin_bars("BTC", ts, "1min", 60, 300), _kucoin_bars("BTC", ts, "1hour", 3600, 200))
     return None
@@ -957,7 +965,51 @@ def study_l1c_binance_notices(_symbols):
         summ[f"only_{k}"] = sc.judge([r for r in rows if r["kind"] == k], hs, bounds, pick_trim=5)
     return summ, rows
 
-STUDIES = {"l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+
+def study_l1e_binance_delist(_symbols):
+    """Pre-registered in RESULTS.md 'L1e screen': short after 'Binance Will Delist ... on <date>' notices."""
+    from core import screens as sc
+    from datetime import datetime, timezone
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2024), T(2025)), "validation": (T(2025), T(2026)), "test": (T(2026), T(2026, 11))}
+    events, gaps, page = [], {}, 1
+    while page <= 30:
+        d = _get_json("https://www.binance.com/bapi/composite/v1/public/cms/article/list/query"
+                      f"?type=1&catalogId=161&pageNo={page}&pageSize=50")
+        arts = (((d or {}).get("data") or {}).get("catalogs") or [{}])[0].get("articles") or []
+        if not arts:
+            gaps["binance"] = f"stopped at page {page}"
+            break
+        for a in arts:
+            ts, title = a["releaseDate"] / 1000, a.get("title", "")
+            if T(2024) <= ts < T(2026, 11):
+                for sym in sc.binance_delist_symbols(title):
+                    events.append({"kind": "delist", "venue": "binance", "symbol": sym, "ts": ts, "title": title[:120]})
+        if arts[-1]["releaseDate"] / 1000 < T(2024):
+            break
+        page += 1
+    log(f"L1e events: {len(events)} {gaps}")
+    rows, skipped = [], {"no_prior_market": 0, "no_bars": 0}
+    for e in events:
+        got = _priced_bars(e["symbol"], e["ts"], order=("kucoin", "binance", "coinbase"))
+        if not got:
+            skipped["no_prior_market"] += 1
+            continue
+        venue, m1, h1, bm1, bh1 = got
+        ret = sc.listing_returns(e["ts"], m1, h1, bm1, bh1, side=-1)
+        if not ret:
+            skipped["no_bars"] += 1
+            continue
+        rows.append({**e, "price_venue": venue, "split": sc.split_of(e["ts"], bounds), "ret": ret})
+    hs = list(sc.L1_HORIZONS)
+    summ = {"events": len(events), "rows": len(rows), "skipped": skipped, "gaps": gaps,
+            "rows_per_month": round(len(rows) / 34, 2),
+            "by_venue": {v: sum(1 for r in rows if r["price_venue"] == v) for v in ("kucoin", "binance", "coinbase")},
+            "base_cost": sc.judge(rows, hs, bounds, pick_trim=5),
+            "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L1_COST, pick_trim=5)}
+    return summ, rows
+
+STUDIES = {"l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):

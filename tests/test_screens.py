@@ -57,6 +57,19 @@ class Returns(unittest.TestCase):
         self.assertAlmostEqual(r["15m"]["net"], 0.074)
         self.assertNotIn("1d", r)                            # no hourly bars given
 
+    def test_short_side_gains_when_the_coin_falls(self):
+        ts = 1_000_000
+        m1 = [(ts + 60 + i * 60, 100.0 if i == 0 else 80.0) for i in range(300)]
+        bench = [(ts + 60 + i * 60, 50.0) for i in range(300)]
+        r = sc.listing_returns(ts, m1, [], bench, [], cost=0.006, side=-1)
+        self.assertAlmostEqual(r["15m"]["net"], 0.20 - 0.006)
+
+    def test_delist_symbols(self):
+        self.assertEqual(sc.binance_delist_symbols("Binance Will Delist EPIC, QUICK on 2026-10-28"), ["EPIC", "QUICK"])
+        self.assertEqual(sc.binance_delist_symbols("Binance Will Delist BAR and FOO on 2025-01-02"), ["BAR", "FOO"])
+        self.assertEqual(sc.binance_delist_symbols("Notice of Removal of Spot Trading Pairs - 2026-11-20"), [])
+        self.assertEqual(sc.binance_delist_symbols("Binance Futures Will Delist PTBUSDT and MITOUSDT USDⓈ-M Perpetual Contracts"), [])
+
     def test_missing_entry_bar_gives_nothing(self):
         self.assertEqual(sc.listing_returns(0, [], [], [], []), {})
 
