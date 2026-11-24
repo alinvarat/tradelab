@@ -61,8 +61,9 @@ OVERNIGHT_MAX = 60
 MOVER_SHARE = 0.5
 EXT_MAX = 40                       # symbols re-quoted per pass in US extended hours                  # a "top mover" must have moved at least half its class's shock threshold
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
-# v4.18 (2026-11-25, owner): every role runs on Claude Haiku 5.5 when ANTHROPIC_API_KEY is set; v4.17 otherwise
-PROTOCOL_VERSION = "v4.18" if ai_news.anthropic_available() else "v4.17"
+# v4.18 (2026-11-25, owner): every role runs on Claude Haiku 5.5 (Claude Code CLI, Max plan) when the token is set and
+# the CLI is installed; v4.17 (DeepSeek) otherwise. v4.18 has no fallback to another model, so the tag stays honest.
+PROTOCOL_VERSION = "v4.18" if ai_news.claude_ready() else "v4.17"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60
@@ -1141,7 +1142,8 @@ class LlmTrader:
                         d["risk"] = r
                         self.record("risk_reduce", symbol=d["symbol"], before=d["size_pct_before_risk"],
                                     after=d["size_pct"], reason=r.get("reason", ""))
-                self.decisions.append({"ts": now, "trigger": trigger, "protocol": PROTOCOL_VERSION, **d, "executed": None})
+                self.decisions.append({"ts": now, "trigger": trigger, "protocol": PROTOCOL_VERSION, "model": model, **d,
+                                       "executed": None})
                 self.record("decision", **d, trigger=trigger)
                 px = (quotes.get(d["symbol"]) or {}).get("price")
                 if d["action"] in ("hold", "pass", "skip") and d["symbol"] not in self.acct.positions and px:
