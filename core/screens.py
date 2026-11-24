@@ -271,3 +271,56 @@ def longshot_sells(history: list, close_ts: float, yes_won: bool, lo: float = 0.
                 net = pnl / (1 - price)
                 out[f"T-{lead}d"] = {"net": net, "monthly": net * 30 / lead, "side": side, "price": round(price, 4)}
     return out
+
+
+# ------------------------------------------------------------------ L3 small caps with an 8-K outside market hours
+L3_ITEMS = ("1.01", "2.02", "5.02", "7.01", "8.01", "3.02", "2.01")
+L3_COST, L3_GAP = 0.01, 0.10
+
+
+def _et(ts: float):
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    return datetime.fromtimestamp(ts, ZoneInfo("America/New_York"))
+
+
+def _et_ts(day, hh: int, mm: int) -> float:
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    return datetime(day.year, day.month, day.day, hh, mm, tzinfo=ZoneInfo("America/New_York")).timestamp()
+
+
+def smallcap_events(symbol: str, bars: list, filings: list, bench: dict, px=(1.0, 20.0), dollar_vol=(1e6, 50e6)) -> list:
+    """bars: daily [{'t','o','c','v'}]; filings: [{'ts','items','accession'}]; bench: ET date -> (open, close) of IWM.
+    An 8-K accepted after 16:00 ET of the previous session and before 09:00 ET of session D, when the stock closed at
+    $1-20 with 20-day average dollar volume $1-50M before D and gapped >= 10% at D's open. Returns rows with
+    continuation and reversal returns for D (open->close) and D+1 (open D -> close D+1), IWM-adjusted, net of 1%."""
+    days = [(_et(b["t"]).date(), b) for b in bars]
+    out = []
+    for f in filings:
+        for i in range(21, len(days) - 1):
+            d, b = days[i]
+            prev_d, prev = days[i - 1]
+            if not _et_ts(prev_d, 16, 0) <= f["ts"] < _et_ts(d, 9, 0):
+                continue
+            win = [x for _, x in days[i - 20:i]]
+            adv = sum(x["c"] * x["v"] for x in win) / 20
+            if not (px[0] <= prev["c"] <= px[1] and dollar_vol[0] <= adv <= dollar_vol[1]):
+                break
+            gap = b["o"] / prev["c"] - 1
+            if abs(gap) < L3_GAP or d not in bench:
+                break
+            sign = 1 if gap > 0 else -1
+            nxt_d, nxt = days[i + 1]
+            bo, bc = bench[d]
+            bn = bench.get(nxt_d, (None, None))[1]
+            r0 = sign * ((b["c"] / b["o"] - 1) - (bc / bo - 1))
+            ret = {"cont_d0": {"net": r0 - L3_COST}, "rev_d0": {"net": -r0 - L3_COST}}
+            if bn:
+                r1 = sign * ((nxt["c"] / b["o"] - 1) - (bn / bo - 1))
+                ret |= {"cont_d1": {"net": r1 - L3_COST}, "rev_d1": {"net": -r1 - L3_COST}}
+            tag = next((it for it in L3_ITEMS if it in f["items"]), "other")
+            out.append({"symbol": symbol, "market": f.get("accession"), "ts": b["t"], "kind": tag,
+                        "dir": "up" if sign > 0 else "down", "gap": round(gap, 4), "ret": ret})
+            break
+    return out

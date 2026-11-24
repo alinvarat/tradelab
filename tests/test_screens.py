@@ -163,5 +163,43 @@ class Longshot(unittest.TestCase):
         self.assertEqual(sc.longshot_sells([{"t": 0, "p": 0.05}], 100 * 86400, yes_won=False), {})
 
 
+class SmallCap(unittest.TestCase):
+    def bars(self):
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+        out = []
+        for k in range(25):                              # 25 sessions, 2026-03-02 onward (Mon-Fri)
+            day = datetime(2026, 3, 2, 9, 30, tzinfo=ZoneInfo("America/New_York"))
+            import datetime as dt
+            d = day + dt.timedelta(days=k + 2 * (k // 5))
+            out.append({"t": d.timestamp(), "o": 10.0, "c": 10.0, "v": 300_000})
+        return out
+
+    def test_overnight_8k_with_a_gap_gives_continuation_and_reversal(self):
+        bars = self.bars()
+        bars[22] = {**bars[22], "o": 12.0, "c": 13.2}            # gap +20%, then +10% open->close
+        from core.screens import _et
+        bench = {_et(b["t"]).date(): (100.0, 101.0) for b in bars}
+        filing = {"ts": bars[22]["t"] - 3 * 3600, "items": ["8.01"], "accession": "a1"}   # 06:30 ET
+        rows = sc.smallcap_events("SMOL", bars, [filing], bench)
+        self.assertEqual(len(rows), 1)
+        r = rows[0]
+        self.assertEqual((r["dir"], r["kind"]), ("up", "8.01"))
+        self.assertAlmostEqual(r["ret"]["cont_d0"]["net"], (0.10 - 0.01) - 0.01)
+        self.assertAlmostEqual(r["ret"]["rev_d0"]["net"], -(0.10 - 0.01) - 0.01)
+
+    def test_filing_during_the_session_or_large_cap_is_ignored(self):
+        bars = self.bars()
+        bars[22] = {**bars[22], "o": 12.0, "c": 13.2}
+        from core.screens import _et
+        bench = {_et(b["t"]).date(): (100.0, 101.0) for b in bars}
+        during = {"ts": bars[21]["t"] + 3600, "items": ["8.01"], "accession": "a2"}     # 10:30 ET the day before
+        self.assertEqual(sc.smallcap_events("SMOL", bars, [during], bench), [])
+        big = [{**b, "c": 50.0, "o": 50.0} for b in bars]
+        big[22] = {**big[22], "o": 60.0, "c": 61.0}
+        overnight = {"ts": bars[22]["t"] - 3 * 3600, "items": ["8.01"], "accession": "a3"}
+        self.assertEqual(sc.smallcap_events("BIG", big, [overnight], bench), [])
+
+
 if __name__ == "__main__":
     unittest.main()
