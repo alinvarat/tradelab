@@ -1215,7 +1215,30 @@ def study_l2_unlocks(_symbols, workers=6):
             "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L2_FEES + sc.L2_FUNDING_DAY * 21, pick_trim=5)}
     return summ, rows
 
-STUDIES = {"l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+
+def study_probe_provider(_symbols):
+    """List the model ids of the OpenAI-compatible provider (ai.thirx.com) using the THIRX_API_KEY secret. Prints ids
+    only; the key is read from the environment and never logged."""
+    from urllib.request import Request, urlopen
+    from core import ai_news
+    key = os.environ.get("TRADELAB_LLM_API_KEY", "")
+    if not key:
+        return {"error": "no key in the environment"}, []
+    try:
+        with urlopen(Request(ai_news.CUSTOM_BASE_URL + "/models", headers={"Authorization": "Bearer " + key, **ai_news.CUSTOM_HEADERS}),
+                     timeout=30) as r:
+            d = json.loads(r.read())
+    except Exception as e:  # noqa: BLE001
+        body = ""
+        try:
+            body = e.read().decode()[:300] if hasattr(e, "read") else ""
+        except Exception:  # noqa: BLE001
+            pass
+        return {"error": type(e).__name__ + ": " + str(getattr(e, "code", "")), "body": body.replace(key, "***")}, []
+    ids = sorted(m.get("id", "") for m in (d.get("data") or []))
+    return {"models": len(ids), "deepseek": [i for i in ids if "deepseek" in i.lower()], "all": ids[:200]}, []
+
+STUDIES = {"probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):
