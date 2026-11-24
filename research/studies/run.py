@@ -841,6 +841,13 @@ def _coinbase_bars(sym, start_s, gran, n):
     return sorted((int(c[0]), float(c[4])) for c in d) if isinstance(d, list) else []
 
 
+def _kucoin_bars(sym, start_s, typ, width, n):
+    d = _get_json(f"https://api.kucoin.com/api/v1/market/candles?type={typ}&symbol={sym}-USDT"
+                  f"&startAt={int(start_s)}&endAt={int(start_s + width * n)}")
+    rows = (d or {}).get("data") if isinstance(d, dict) else None
+    return sorted((int(c[0]), float(c[2])) for c in rows) if rows else []
+
+
 def study_l1_listings(_symbols):
     """Pre-registered in RESULTS.md 'L1 screen'. Binance listings are priced on Coinbase, Upbit listings on Binance spot;
     the coin must already trade there before the announcement (a bar in the hour before)."""
@@ -855,9 +862,17 @@ def study_l1_listings(_symbols):
         ts, sym = e["ts"], e["symbol"]
         if e["venue"] == "binance":
             pre = _coinbase_bars(sym, ts - 3600, 60, 60)
-            m1 = _coinbase_bars(sym, ts, 60, 290)
-            h1 = _coinbase_bars(sym, ts, 3600, 200)
-            bm1, bh1 = _coinbase_bars("BTC", ts, 60, 290), _coinbase_bars("BTC", ts, 3600, 200)
+            e["price_venue"] = "coinbase"
+            if pre:
+                m1 = _coinbase_bars(sym, ts, 60, 290)
+                h1 = _coinbase_bars(sym, ts, 3600, 200)
+                bm1, bh1 = _coinbase_bars("BTC", ts, 60, 290), _coinbase_bars("BTC", ts, 3600, 200)
+            else:                               # addendum 2026-11-24: KuCoin USDT when Coinbase has no prior market
+                pre = _kucoin_bars(sym, ts - 3600, "1min", 60, 60)
+                e["price_venue"] = "kucoin"
+                m1 = _kucoin_bars(sym, ts, "1min", 60, 300)
+                h1 = _kucoin_bars(sym, ts, "1hour", 3600, 200)
+                bm1, bh1 = _kucoin_bars("BTC", ts, "1min", 60, 300), _kucoin_bars("BTC", ts, "1hour", 3600, 200)
         else:
             pre = _binance_bars(sym, ts - 3600, "1m", 60)
             m1 = _binance_bars(sym, ts, "1m", 300)
@@ -877,6 +892,8 @@ def study_l1_listings(_symbols):
             "base_cost": sc.judge(rows, hs, bounds), "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L1_COST)}
     for v in ("binance", "upbit"):
         summ[f"only_{v}"] = sc.judge([r for r in rows if r["venue"] == v], hs, bounds)
+    for pv in ("coinbase", "kucoin"):
+        summ[f"priced_{pv}"] = sc.judge([r for r in rows if r.get("price_venue") == pv], hs, bounds)
     return summ, rows
 
 STUDIES = {"l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}

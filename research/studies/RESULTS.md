@@ -137,4 +137,6 @@ Spec: `ops/lines/L1_listings.md`; code: `core/screens.py` (`listing_returns`, `j
 - Return: coin minus BTC over the same window (control), minus 0.6% round trip; double cost reported too.
 - Splits: 2024 train, 2025 validation, 2026-01 to 2026-10 test. Horizon = best train mean. Block bootstrap by UTC day.
 - Pass: validation mean > 0 with p < 0.05, still > 0 without the best 1 and best 5 events, test mean > 0. Kill: validation mean <= 0, p > 0.2, or <= 0 without the best 1 or 5 events. Otherwise inconclusive.
-- Result: pending.
+- **Run 1 (2026-11-24, Actions 45369639086): inconclusive.** 65 notices; 15 priced (all Binance notices on Coinbase), 50 had no prior Coinbase market; Upbit returned nothing from the US runner (request failed). Horizon picked on train: 4h. Net abnormal mean at 4h: train +37.4% (n 5, p 0.0005), validation +15.3% (n 4, p 0.064), test +9.5% (n 6, p 0.11); validation without the best event +3.8%. Double cost: validation +14.7% (p 0.08). 9 of 15 events positive at 4h; winners +20% to +57% (COW, ACX, ORCA, AVNT, ZKP, CFG), losers down to -10%. Too few events to pass.
+- **Addendum (2026-11-24, before run 2):** same rules, horizon and splits; Binance notices with no prior Coinbase market are priced on KuCoin USDT (1-minute and 1-hour candles), BTC benchmark on the same venue. Results reported in total and per pricing venue. Upbit stays out until a non-US fetcher exists.
+- Run 2: pending.
