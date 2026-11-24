@@ -17,3 +17,7 @@ The held-out comparison (`protocol_news_v2.md`, run 45332709844) showed that the
 
 ## Addendum 2026-11-24: daily sequential evidence
 Use [daily-v1](../sequential_protocol_20261124.md) for non-skip H5 outcomes, grouped by the outcome's exit UTC day. Each successful weekly publication seals the completed days through its cutoff. Quotes or filings that appear after their day was sealed continue to affect the ordinary fixed-sample report. Previously published sequential observations are restored from the forward results file, so a rerun or revised price cannot rewrite earlier sequential evidence.
+
+## Addendum 2026-11-25: model changed to Claude Haiku 5.5 before the first real event (owner order: Claude only)
+The DeepSeek provider returns 402 (credit exhausted) and the owner ordered every LLM call onto Claude Haiku 5.5 (`claude-haiku-5-5`, Claude Code CLI on the owner's Max plan, `CLAUDE_CODE_OAUTH_TOKEN` secret; verified on Actions run 45510699072). The window starts with filings accepted on or after 2026-12-01, so no filing has been read yet. Everything else (events, prompt, parsing, entry, exits, costs, control, sample size and verdict) is unchanged. Haiku takes no temperature, so calls use its default sampling instead of temperature 0. The verdict is reported as a Claude Haiku 5.5 result; nothing collected under DeepSeek exists to pool.
+
