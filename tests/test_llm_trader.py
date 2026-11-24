@@ -224,16 +224,31 @@ class Trading(Base):
 
     def test_unchanged_scheduled_scan_is_skipped(self):
         self.t.calls.update(last_idle=0.0, last_ts=0.0)
-        m = self.market(AAA=quote("AAA", px=100, move=2))
+        m = self.market(AAA=quote("AAA", px=100, move=3))
         self.t.scan(m)
         self.assertEqual(len(self.prompts), 1)
         self.t.calls.update(last_idle=0.0, last_ts=0.0)
-        self.t.scan(self.market(AAA=quote("AAA", px=100.1, move=2.1)))
+        self.t.scan(self.market(AAA=quote("AAA", px=100.1, move=3.1)))
         self.assertEqual(len(self.prompts), 1)
         self.assertIn("skip", self.log_kinds())
         self.t.calls.update(last_idle=0.0, last_ts=0.0)
-        self.t.scan(self.market(AAA=quote("AAA", px=101, move=3)))
+        self.t.scan(self.market(AAA=quote("AAA", px=101, move=4)))
         self.assertEqual(len(self.prompts), 2)                    # a real move: look again
+
+    def test_scheduled_scan_needs_a_meaningful_mover(self):
+        self.t.calls.update(last_idle=0.0, last_ts=0.0)
+        self.t.scan(self.market())                                   # nothing moved: no call
+        self.assertEqual(self.prompts, [])
+        self.assertIn("skip", self.log_kinds())
+        self.t.calls.update(last_idle=0.0, last_ts=0.0)
+        self.t.scan(self.market(AAA=quote("AAA", move=3)))           # 3% >= half of the 5% stock threshold
+        self.assertEqual(len(self.prompts), 1)
+
+    def test_abnormal_is_only_for_us_stocks_while_spy_trades(self):
+        self.t.context = {"SPY": quote("SPY", move=4.7, open_=False), "^VIX": quote("^VIX", px=20)}
+        ctx = self.t.build_context(time.time(), [{"symbol": "AAA", "ratio": None, "why": "x"}],
+                                   {"AAA": quote("AAA", move=3)}, [])
+        self.assertIsNone(ctx["candidates"][0]["abnormal_pct"])
 
     def test_model_failure_is_logged_and_nothing_trades(self):
         self.t.chat = lambda s, u: ("", "no provider")
@@ -289,9 +304,9 @@ class WholeMarket(Base):
         self.assertEqual(lt.asset_class(ctrl), "commodity")
         self.assertNotEqual(ctrl, "GC=F")
 
-    def test_scheduled_scan_calls_the_model_when_nothing_crossed_the_threshold(self):
+    def test_scheduled_scan_calls_the_model_for_a_mover_below_the_shock_threshold(self):
         self.t.calls["last_idle"] = 0
-        self.t.scan(self.market())
+        self.t.scan(self.market(AAA=quote("AAA", move=3)))          # 3%: under the 5% shock, over half of it
         self.assertEqual(len(self.prompts), 1)
         call = next(json.loads(l) for l in (Path(self.tmp.name) / "l.jsonl").read_text().splitlines() if '"kind": "call"' in l)
         self.assertEqual(call["trigger"], "scheduled scan")
