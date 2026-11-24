@@ -316,6 +316,33 @@ class Trading(Base):
         from core.universe import SECTOR_ETF, STOCKS
         self.assertEqual(sorted(s for s in STOCKS if s not in SECTOR_ETF), [])          # every stock has a sector
 
+    def test_recent_8k_reads_the_press_release(self):
+        now = 1_800_000_000.0
+        acc = time.strftime("%Y-%m-%dT%H:%M:%S.000Z", time.gmtime(now - 3600))
+        old = time.strftime("%Y-%m-%dT%H:%M:%S.000Z", time.gmtime(now - 5 * 86400))
+        pages = {"https://www.sec.gov/files/company_tickers.json": {"0": {"ticker": "AAA", "cik_str": 123}},
+                 "https://data.sec.gov/submissions/CIK0000000123.json": {"filings": {"recent": {
+                     "form": ["8-K", "10-Q"], "acceptanceDateTime": [acc, old], "accessionNumber": ["0001-26-1", "x"],
+                     "primaryDocument": ["a8k.htm", "q.htm"], "items": ["2.02,9.01", ""]}}},
+                 "https://www.sec.gov/Archives/edgar/data/123/0001261/index.json": {"directory": {"item": [
+                     {"name": "a8k.htm"}, {"name": "ex99-1.htm"}]}}}
+        texts = {"https://www.sec.gov/Archives/edgar/data/123/0001261/ex99-1.htm": "<p>Revenue rose 12% to $1.2B</p>"}
+
+        def get(url):
+            return json.dumps(pages[url]).encode() if url in pages else texts[url].encode()
+        lt._SEC.update(tickers=None, subs={}, docs={})
+        r = lt.recent_8k("AAA", now, get=get)
+        self.assertEqual(r["items"], ["2.02", "9.01"])
+        self.assertEqual(r["text"], "Revenue rose 12% to $1.2B")
+        lt._SEC["subs"].clear()
+        self.assertIsNone(lt.recent_8k("AAA", now + 3 * 86400, get=get))     # older than 48 h
+        self.assertIsNone(lt.recent_8k("ZZZ", now, get=get))                  # unknown ticker
+
+    def test_context_carries_news_principles_and_sourced_playbook(self):
+        c = self.t.build_context(1000.0, [], self.market(), [])
+        self.assertIn("Chan 2003", c["news_principles"])
+        self.assertIn("Womack 1996", lt.PLAYBOOK["analyst"])
+
     def test_news_type_classification(self):
         self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
         self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")

@@ -33,7 +33,7 @@
 | ผู้เรียก | โมเดล | หมายเหตุ |
 |---|---|---|
 | บอท: การตัดสินใจสุดท้าย | DeepSeek v4.1 flash 1017 ผ่าน ai.thirx.com (ตั้งแต่ 24 พ.ย. 17:04 UTC; เครดิต OpenRouter หมด) | ตรวจแล้ว: model `custom/deepseek-v4.1-flash-1017` ใน `/api/llm_log` |
-| บอท: นักวิเคราะห์, bull/bear, risk, pre-open; steward | โมเดลฟรี (`ai_news.HELPER_MODELS`) แล้วจึง DeepSeek ถ้าฟรีล้ม | จำนวนครั้งดูที่ `helper_models` |
+| บอท: นักวิเคราะห์, bull/bear, risk, pre-open; steward | DeepSeek ผ่าน thirx (v4.16); โมเดลฟรีของ OpenRouter ใช้เฉพาะเมื่อไม่ได้ตั้ง thirx | จำนวนครั้งดูที่ `helper_models` |
 | ให้คะแนนพาดหัวข่าว | DeepSeek (thirx ก่อน, OpenRouter สำรอง) | เพดาน 600 ข่าวต่อวัน (`core/news_archive.py`) |
 | ออปชันและข่าวงบแบบเดินหน้า | DeepSeek | บันทึกค่าใช้จ่ายใน summary ของ data branch |
 | study ที่ชื่อขึ้นต้น `llm_`, `news_v2`, `polymarket_llm` | DeepSeek | เสียเงินทุกครั้งที่รัน: สั่งรันเฉพาะเมื่อตั้งใจ |

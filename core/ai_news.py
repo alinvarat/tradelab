@@ -152,6 +152,10 @@ _helper_stats = {"free_ok": 0, "free_fail": 0, "fallback": 0, "by_model": {}}
 def chat_helper(system: str, user: str, chat_fn=None) -> tuple:
     """Free models first (in order), then DeepSeek. -> (text, model_name). Records which model answered."""
     chat_fn = chat_fn or chat
+    if custom_available():          # owner 2026-11-24: DeepSeek on the cheap provider for every role, no free models
+        with _spend_lock:
+            _helper_stats["by_model"]["custom/" + CUSTOM_MODEL] = _helper_stats["by_model"].get("custom/" + CUSTOM_MODEL, 0) + 1
+        return chat_fn(system, user, model=DECISION_MODEL, cache_layout=True)
     for m in HELPER_MODELS:
         text, name = chat_fn(system, user, timeout=HELPER_TIMEOUT, model=m)
         if text and text.strip():
