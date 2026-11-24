@@ -6,13 +6,14 @@ on:
   workflow_dispatch:
     inputs:
       study:
-        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other or all"
+        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward or all"
         default: all
   push:
     branches:
       - "research-run/**"
   schedule:
     - cron: "0 3 * * 0"        # Sundays 03:00 UTC: forward DeepSeek earnings reader
+    - cron: "0 15 * * 1-5"     # weekdays 15:00 UTC: forward options test
 
 permissions:
   contents: read
@@ -20,7 +21,7 @@ permissions:
 jobs:
   forward:
     name: llm_earnings_forward (weekly)
-    if: github.event_name == 'schedule' || inputs.study == 'llm_earnings_forward'
+    if: (github.event_name == 'schedule' && github.event.schedule == '0 3 * * 0') || inputs.study == 'llm_earnings_forward'
     runs-on: ubuntu-latest
     timeout-minutes: 240
     permissions:
@@ -65,6 +66,53 @@ jobs:
           git add research/studies/llm_earnings_calls.json research/studies/llm_earnings_forward.json research/studies/llm_earnings_forward_summary.json
           git commit -qm "Forward DeepSeek earnings reader: weekly update $(date -u +%F)" || echo "nothing new"
           git push -q origin data/llm-earnings
+
+  options:
+    name: options_forward (weekdays)
+    if: (github.event_name == 'schedule' && github.event.schedule == '0 15 * * 1-5') || inputs.study == 'options_forward'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Restore state
+        run: |
+          if git fetch origin data/options-forward 2>/dev/null; then
+            git show origin/data/options-forward:options_forward_state.json > /tmp/options_forward_state.json
+          fi
+
+      - name: Run
+        env:
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: python research/studies/options_forward.py /tmp/options_forward_state.json /tmp/options_forward_summary.json
+
+      - name: Push state to data/options-forward
+        if: always()
+        run: |
+          [ -f /tmp/options_forward_state.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/options-forward; then
+            git checkout -q -B data/options-forward origin/data/options-forward
+          else
+            git checkout -q --orphan data/options-forward && git rm -rq --cached . && git clean -fdq
+          fi
+          cp /tmp/options_forward_state.json .
+          [ -f /tmp/options_forward_summary.json ] && cp /tmp/options_forward_summary.json .
+          git add options_forward_state.json options_forward_summary.json 2>/dev/null || git add options_forward_state.json
+          git commit -qm "Forward options test: $(date -u +%FT%TZ)" || echo "nothing new"
+          git push -q origin data/options-forward
 
   study:
     name: ${{ matrix.study }}
