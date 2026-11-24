@@ -510,8 +510,6 @@ class LlmTrader:
             c.update(day=_day(now), n=0, usd=0.0)
         if c["n"] >= MAX_CALLS_DAY or now - c["last_ts"] < MIN_GAP_S:
             return None
-        if not self.acct.positions and self.risk_block(now):    # cannot open anything and nothing to manage
-            return None
         if fresh:
             return "new signals"
         if idle and now - c.get("last_idle", 0) >= IDLE_CALL_S:
