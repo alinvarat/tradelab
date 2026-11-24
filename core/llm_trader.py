@@ -651,7 +651,7 @@ class LlmTrader:
                 "clipped_by": link.get("clipped_by", [])}
 
     def desk_stats(self, min_n: int = 5) -> dict:
-        """v4.5: how this desk's own calls turned out, by signal source and action (SPY-relative, +1 day; buy/long
+        """v4.5: how this desk's own calls turned out, by signal source, action and horizon (SPY-relative, +1 h and +1 day; buy/long
         positive when the stock beat SPY, short positive when it lagged, hold = what passing on it would have earned
         long). Fed back to the model every cycle and shown in the API, so the desk improves from its own results."""
         def src(why):
@@ -660,11 +660,11 @@ class LlmTrader:
                     else "pre-open" if "pre-open" in w else "mover")
         groups: dict = {}
         for c in self.cands:
-            r = c["out"].get("86400")
-            if r is None:
-                continue
             sign = -1 if c["action"] == "short" else 1
-            groups.setdefault(f"{src(c.get('why'))}/{c['action']}", []).append(sign * r)
+            for h, label in (("3600", "1h"), ("86400", "1d")):
+                r = c["out"].get(h)
+                if r is not None:
+                    groups.setdefault(f"{src(c.get('why'))}/{c['action']}/{label}", []).append(sign * r)
         return {k: {"n": len(v), "mean_pct": round(sum(v) / len(v) * 100, 2), "hit": round(sum(x > 0 for x in v) / len(v), 2)}
                 for k, v in sorted(groups.items()) if len(v) >= min_n}
 
