@@ -417,7 +417,34 @@ def study_llm_earnings_forward(symbols):
     return summ, rows
 
 
-STUDIES = {"llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+def study_probe_options(_symbols):
+    """Check the free sources a forward options study would need (no trading, no model call)."""
+    import urllib.request
+    out = {}
+    def get(url, headers=None):
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64)", **(headers or {})})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return r.status, r.read()
+    try:
+        code, body = get("https://cdn.cboe.com/api/global/delayed_quotes/options/AAPL.json")
+        d = json.loads(body)
+        opts = d.get("data", {}).get("options", [])
+        out["cboe"] = {"status": code, "n_options": len(opts), "timestamp": d.get("timestamp"),
+                       "keys": sorted(opts[0])[:30] if opts else None, "sample": opts[0] if opts else None,
+                       "spot": d.get("data", {}).get("current_price")}
+    except Exception as e:
+        out["cboe"] = {"error": repr(e)[:200]}
+    try:
+        code, body = get("https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=&dateb="
+                         "&owner=include&start=0&count=40&output=atom", {"User-Agent": nb.SEC_UA})
+        text = body.decode("utf-8", "replace")
+        out["sec_current"] = {"status": code, "entries": text.count("<entry>"), "head": text[:1500]}
+    except Exception as e:
+        out["sec_current"] = {"error": repr(e)[:200]}
+    return out, []
+
+
+STUDIES = {"probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):
