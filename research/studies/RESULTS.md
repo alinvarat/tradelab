@@ -171,4 +171,5 @@ Spec `ops/lines/L4_polymarket_maker.md`; code `core.screens.longshot_sells`, stu
 - Return per event: +price if the side loses, -(1-price) if it wins, divided by the locked collateral (1-price). The monthly equivalent (x 30 / lead days) is reported per split.
 - Splits by resolution time: train 2024-01 to 2025-06, validation 2025-07 to 2026-03, test 2026-04 to 2026-10. Lead picked on train by the mean without its best 5 events; block bootstrap by UTC day; pass/kill as in L1, plus the spec's rule that the monthly equivalent in validation must exceed 5%.
 - Run 1 (2026-11-24, Actions 45406586130): void as a test. Offset pagination stopped after 500 markets, all resolved in 2024 (train only): T-1d train mean +3.8% per event (n 72, p 0.013), T-3d +0.8%, T-7d -0.3%. Fix before run 2 (no rule change): keyset pagination (`/markets/keyset`), max 6,000 markets.
-- Run 2: pending.
+- Run 2 (2026-11-24, Actions 45406857348): void as a test. Keyset pagination reached the 6,000-market cap inside 2024-2025H1, so again train only: 1,740 events; per event T-7d +4.5% (n 1,140), T-3d +4.9% (n 900), T-1d +4.0% (n 360), all p 0.0005; monthly equivalents +19%, +49%, +120%. Fix before run 3 (no rule change): sample each split window separately, up to 4,000 markets each.
+- Run 3: pending.

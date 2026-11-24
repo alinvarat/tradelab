@@ -1017,25 +1017,29 @@ def study_l1e_binance_delist(_symbols, parser="delist"):
     return summ, rows
 
 
-def study_l4_polymarket_longshot(_symbols, workers=8, max_markets=6000):
+def study_l4_polymarket_longshot(_symbols, workers=8, max_markets=12000):
     """Pre-registered in RESULTS.md 'L4 screen': sell Polymarket long shots (2-10c) as a maker 7/3/1 days before close."""
     from concurrent.futures import ThreadPoolExecutor
     from datetime import datetime, timezone
     from core import screens as sc
     T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
     bounds = {"train": (T(2024), T(2025, 7)), "validation": (T(2025, 7), T(2026, 4)), "test": (T(2026, 4), T(2026, 11))}
-    markets, cursor = [], ""
-    while len(markets) < max_markets:          # keyset pagination (plain offsets stop at a few thousand)
-        from urllib.parse import quote as _q
-        page = _get_json("https://gamma-api.polymarket.com/markets/keyset?closed=true&limit=100&volume_num_min=50000"
-                         "&end_date_min=2024-01-01T00:00:00Z&end_date_max=2026-11-01T00:00:00Z"
-                         + (f"&next_cursor={_q(cursor)}" if cursor else ""))
-        if not page or not page.get("markets"):
-            break
-        markets += page["markets"]
-        cursor = page.get("next_cursor") or ""
-        if not cursor:
-            break
+    from urllib.parse import quote as _q
+    markets = []
+    for a, b in (("2024-01-01", "2025-07-01"), ("2025-07-01", "2026-04-01"), ("2026-04-01", "2026-11-01")):
+        got, cursor = [], ""                    # keyset pagination per split window, so every split is sampled
+        while len(got) < max_markets // 3:
+            page = _get_json("https://gamma-api.polymarket.com/markets/keyset?closed=true&limit=100&volume_num_min=50000"
+                             f"&end_date_min={a}T00:00:00Z&end_date_max={b}T00:00:00Z"
+                             + (f"&next_cursor={_q(cursor)}" if cursor else ""))
+            if not page or not page.get("markets"):
+                break
+            got += page["markets"]
+            cursor = page.get("next_cursor") or ""
+            if not cursor:
+                break
+        log(f"L4 window {a}..{b}: {len(got)} markets")
+        markets += got
     log(f"L4 markets: {len(markets)}")
 
     def one(m):
