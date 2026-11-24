@@ -34,8 +34,12 @@ KRAKEN = "XBTUSD,ETHUSD,USDCUSD,USDTUSD"
 BINANCE = ("BTCUSDT", "ETHUSDT", "USDCUSDT")
 
 
-def get(url, timeout=8):
-    with urlopen(Request(url, headers=UA), timeout=timeout) as r:
+BROWSER_UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
+              "Accept": "application/json"}
+
+
+def get(url, timeout=8, headers=None):
+    with urlopen(Request(url, headers=headers or UA), timeout=timeout) as r:
         return json.loads(r.read())
 
 
@@ -184,7 +188,8 @@ def listing_notices():
     except Exception as e:  # noqa: BLE001  one blocked venue must not stop the other
         errors["binance"] = repr(e)[:120]
     try:
-        d = get("https://api-manager.upbit.com/api/v1/announcements?os=web&page=1&per_page=20&category=trade", 10)
+        d = get("https://api-manager.upbit.com/api/v1/announcements?os=web&page=1&per_page=20&category=trade", 10,
+                BROWSER_UA)   # the notice API answers 403 to non-browser user agents
         for n in ((d.get("data") or {}).get("notices") or []):
             for sym in sc.upbit_listing_symbols(n.get("title", "")):
                 ev.append({"venue": "upbit", "symbol": sym, "title": n["title"][:120],
