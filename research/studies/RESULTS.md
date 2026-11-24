@@ -194,6 +194,17 @@ Spec `ops/lines/L6_smallcap_insider.md`; code `core.screens.insider_rows`, study
 - Splits: train 2019-2022, validation 2023-2024, test 2025-2026-10. Trimmed pick on train, data gate, pass/kill as in L1c.
 - **Run 1 (2026-11-24, Actions 45416703411): killed.** Data gate ok: 3,857 rows, 3,857 unique, train 1,994 / validation 1,047 / test 816, no warnings. 31,399 qualifying purchases at 3,289 issuers; 1,500 issuers priced (seeded sample). Trimmed pick h5: train +0.3% (p 0.18), validation -0.4% (p 0.92), test +0.3%. h20: validation +1.0% (p 0.09), test +0.2%. Double cost: negative everywhere. No usable edge after costs.
 
+## L7 screen: first red day short in small caps (pre-registered 2026-11-25, before any data was pulled)
+Spec `ops/lines/L7_first_red_day.md`; code `core.screens.first_red_day_rows`, study `l7_first_red_day`. No LLM, no cost. Hypothesis from the Tim Sykes course table in `ops/knowledge/news_trading.md`, not a proven result.
+- Universe: the same seeded random sample (seed 20261125) of 1,500 Nasdaq / NYSE / NYSE American tickers from SEC `company_tickers_exchange.json` (no dashed tickers) used by L3/L6; Yahoo daily bars (10 years).
+- Event: session D closes red (`c < o`) after D-1, D-2 and D-3 all closed green (`c > o`) and close(D-1) / close(D-3) - 1 >= 15%. Small cap at D: close(D-1) $1-20 and 20-day average dollar volume $1-50M. One event per symbol per streak (a new streak cannot start until the price has run again).
+- Entry: the open of D+1, never the close of D (that would use a decision already known). Short from that open to the close at +1, +2 and +5 sessions.
+- Returns: -(stock) minus IWM over the identical window, 1% round trip; double cost reported. Control = IWM in the same window (no free point-in-time small-cap peer set).
+- Splits: train 2019-2022, validation 2023-2024, test 2025 to 2026-10. `core.screens.judge` with trimmed pick on train and the data gate; no Bonferroni (one event definition, not a group family).
+- Pass: validation net > 0 with block p (cluster = UTC day) < 0.05, no losing result without the best 1 or 5 events, test sign not negative, and at least 3 events a week (below that it cannot matter for the monthly target even if real).
+- Kill: validation mean <= 0 or p > 0.2.
+- Known limits to state in the result: survivorship (today's ticker list), small caps may be unborrowable to short, and a red close is only known after the session.
+
 ## L2 screen: short around large cliff token unlocks (pre-registered 2026-11-24, before any price data was pulled)
 Spec `ops/lines/L2_unlocks.md`; data source found for #88: `https://defillama-datasets.llama.fi/emissionsIndex` (free; `api.llama.fi` needs a paid plan). Code `core.screens.unlock_events`, `unlock_short_returns`, study `l2_unlocks`.
 - Events: cliff unlocks (`unlockEvents[].summary.totalTokensCliff`) from 2024-01-01 to 2026-10-20 whose size is >= 1% of the token's current circulating supply (current, not point-in-time: a known bias that overstates old unlocks' size relative to supply then).
