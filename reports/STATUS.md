@@ -6,7 +6,8 @@
 ## ด่วน (2026-11-24 22:05 UTC)
 - **รันบนเครื่องเจ้าของชั่วคราว (เจ้าของสั่ง):** unit `tradelab-local` ที่ `~/Project/tradelab-local` → http://127.0.0.1:8770; บอท v4.18 Claude Haiku 5.5 ผ่าน Claude Code ที่ล็อกอิน Max (ตรวจ 22:00 UTC: protocol v4.18, model claude/claude-haiku-5-5, error ไม่มี) เป็นบัญชีจำลองแยกจาก Kuber เริ่ม 147.5 USD
 - **N1 run 45481243341 ใช้ไม่ได้** (env ของ provider ว่าง ไม่ได้เรียกโมเดลเลย) → รันใหม่จาก main: 45495806547
-- **L8b:** ไม่ผ่าน (validation +0.52% p 0.17, ต้นทุน 2 เท่าติดลบ); cron ยังไม่เคยยิงจนถึง 21:52 UTC แม้ repo เป็น public
+- **L8b:** ไม่ผ่าน (validation +0.52% p 0.17, ต้นทุน 2 เท่าติดลบ)
+- **cron ของ GitHub ไม่เคยยิง** → ใช้ systemd timer บนเครื่องเจ้าของสั่ง `gh workflow run` แทน: L4f ทุก :17/:47, ออปชัน จ.–ศ. 15:00 UTC, ข่าวงบ อา. 03:00 UTC (unit `tradelab-dispatch-*`); ตรวจแล้ว L4f run 45495947030 สำเร็จและ commit ledger 21:55 UTC; ทำงานเฉพาะตอนเครื่องเปิด
 - **Actions รันได้แล้ว:** repo เปลี่ยนเป็น public (เจ้าของเลือก แทนการจ่ายเงิน) หลังนาทีฟรีของ repo private หมด
 - **deploy ยังล้ม:** Kuber ปฏิเสธที่ "Uploading context: 0 B" ภายใน 1–2 วินาทีทุกครั้งตั้งแต่ 20:04 UTC (issue #80) → เว็บจริงค้างที่ build 19:17 UTC; PR #149–#155 merge แล้วแต่ยังไม่ขึ้นเครื่อง
 - **บอท DeepSeek v4.17 รันอยู่จริง** (ตรวจ `/api/llm_trader` ผ่าน Chrome 20:58 UTC): 284 calls วันนี้, ถือ 8 ไม้, ปิด 28/30 คู่, 142.81 vs สุ่ม 146.98 USD; หน้าเว็บโชว์ "Could not load: openrouter 402" เพราะบั๊ก `api()` (แก้แล้วใน PR #154 รอ deploy)
