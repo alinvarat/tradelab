@@ -57,6 +57,7 @@ PREOPEN_WINDOW_ET = ((9, 10), (9, 29))
 BRIEFING_USE_S = 2 * 3600          # the briefing is part of the context for the first two hours of the session
 UNCHANGED_PCT = 0.3                # a scheduled scan is skipped when no candidate moved more than this since the last one
 OVERNIGHT_MAX = 60
+MOVER_SHARE = 0.5                  # a "top mover" must have moved at least half its class's shock threshold
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
 PROTOCOL_VERSION = "v4.2"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
@@ -493,11 +494,13 @@ class LlmTrader:
         return True
 
     def top_movers(self, quotes, per_class=2):
-        """The largest moves in each class, so a scheduled call always has something concrete to look at."""
+        """The largest moves in each class, if they are at least MOVER_SHARE of that class's shock threshold; a tiny
+        move (FX +0.1%) is not worth a model cycle, so a scheduled scan with no such mover is skipped."""
         out = []
         for cls in ASSETS:
             rows = [(s, q) for s, q in quotes.items() if asset_class(s) == cls and self._liquid(q, cls)
-                    and q.get("change_pct") is not None]
+                    and q.get("change_pct") is not None
+                    and abs(q["change_pct"]) >= MOVER_SHARE * SHOCK_PCT[cls]]
             rows.sort(key=lambda x: -abs(x[1]["change_pct"]))
             out += rows[:per_class]
         return out
@@ -505,6 +508,7 @@ class LlmTrader:
     def build_context(self, now, cands, quotes, movers):
         spy, vix = self.context.get("SPY"), self.context.get("^VIX")
         spy_move = spy.get("change_pct") if spy else None
+        spy_open = bool(spy and spy.get("open"))
         eq = self.acct.equity()
 
         def macro(sym, label):
@@ -544,8 +548,10 @@ class LlmTrader:
                     heads = []
             out["candidates"].append({"symbol": sym, "name": q.get("name"), "asset_class": cls, "price": q["price"],
                                       "move_pct": round(q["change_pct"], 2) if q.get("change_pct") is not None else None,
+                                      # vs SPY only for US stocks/ETFs while the US session is open (else it mixes days)
                                       "abnormal_pct": round(q["change_pct"] - spy_move, 2)
-                                      if q.get("change_pct") is not None and spy_move is not None else None,
+                                      if q.get("change_pct") is not None and spy_move is not None and spy_open
+                                      and cls in ("stock", "etf") else None,
                                       "volume_ratio": round(c["ratio"], 2) if c.get("ratio") else None,
                                       "why": c.get("why", "")[:120], "headlines": heads})
         return out
@@ -977,6 +983,10 @@ class LlmTrader:
             if trigger and opening:
                 trigger = "market open (pre-open watchlist)"
                 brief["used"] = now
+            if trigger == "scheduled scan" and not cands:
+                self.calls["last_idle"] = now
+                self.record("skip", why="scheduled scan: no candidate moved half its class threshold")
+                trigger = None
             if trigger == "scheduled scan":
                 snap = {c["symbol"]: quotes[c["symbol"]]["price"] for c in cands if quotes.get(c["symbol"], {}).get("price")}
                 last = self.calls.get("last_sched") or {}
