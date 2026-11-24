@@ -357,7 +357,7 @@ def check_clarity_views():
         expect(page.locator("#llm-list .badge").first).to_have_text("Buy")
         decision = page.locator("#llm-list details.dec").first
         expect(decision.locator(".dec-body")).not_to_be_visible()
-        decision.locator("summary").click()
+        decision.locator(":scope > summary").click()
         expect(decision.locator(".dec-body")).to_contain_text("Earnings beat and strong volume")
         expect(page.locator("#llm-list").get_by_text("No clear catalyst").first).not_to_be_visible()
         expect(page.locator("#llm-figs")).to_contain_text("too early (3/30 closed pairs)")
