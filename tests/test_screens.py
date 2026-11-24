@@ -343,3 +343,48 @@ class FirstRedDay(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GainerFade(unittest.TestCase):
+    """L8: short the day's >= 20% crypto gainer at the next UTC open; BTC-adjusted, fees + funding."""
+    T0 = 1_700_006_400            # a UTC midnight
+
+    def series(self, gain_day=25, n=40, qv=5e6):
+        d1, px = [], 1.0
+        for k in range(n):
+            o = px
+            c = o * (1.3 if k == gain_day else 1.0)
+            if k > gain_day:
+                c = o * 0.95      # falls 5% a day after the spike
+            d1.append((self.T0 + k * 86400, o, max(o, c), min(o, c), c, qv))
+            px = c
+        return d1
+
+    def btc(self, n=40):
+        return {self.T0 + k * 86400: (100.0, 100.0) for k in range(n)}
+
+    def test_short_next_open_net_of_costs(self):
+        from core import screens as sc
+        rows = sc.gainer_fade_rows("XUSDT", self.series(), self.btc())
+        self.assertEqual(len(rows), 1)
+        r = rows[0]
+        self.assertEqual(r["ts"], self.T0 + 26 * 86400)          # entry = open of the next UTC day
+        self.assertAlmostEqual(r["ret"]["h1"]["net"], 1 / 0.95 - 1 - sc.L8_FEES - sc.L8_FUNDING_DAY, places=9)
+        self.assertAlmostEqual(r["ret"]["h3"]["net"], 1 / 0.95 ** 3 - 1 - sc.L8_FEES - 3 * sc.L8_FUNDING_DAY, places=9)
+
+    def test_thin_volume_small_gain_and_gaps_do_not_fire(self):
+        from core import screens as sc
+        self.assertEqual(sc.gainer_fade_rows("X", self.series(qv=1e5), self.btc()), [])
+        d1 = [(t, o, h, l, o * 1.1 if c > o * 1.2 else c, q) for t, o, h, l, c, q in self.series()]
+        self.assertEqual(sc.gainer_fade_rows("X", d1, self.btc()), [])
+        gap = [x for x in self.series() if x[0] != self.T0 + 26 * 86400]
+        self.assertEqual(sc.gainer_fade_rows("X", gap, self.btc()), [])
+
+    def test_btc_adjustment(self):
+        from core import screens as sc
+        btc = self.btc()
+        e = self.T0 + 26 * 86400
+        btc[e] = (100.0, 110.0)                                   # BTC up 10% on the entry day
+        r = sc.gainer_fade_rows("X", self.series(), btc)[0]
+        self.assertAlmostEqual(r["ret"]["h1"]["net"], (1 / 0.95 - 1) - (100 / 110 - 1) - sc.L8_FEES - sc.L8_FUNDING_DAY,
+                               places=9)

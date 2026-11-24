@@ -458,3 +458,40 @@ def unlock_short_returns(ts: float, d1: list, bench_d1: list) -> dict:
             abn = -((p1 / p0 - 1) - (b1 / b0 - 1))
             out[name] = {"net": abn - L2_FEES - L2_FUNDING_DAY * (b - a)}
     return out
+
+
+# ------------------------------------------------------------------ L8 fade the day's top crypto gainers
+L8_THRESH, L8_MIN_QV = 0.20, 2e6          # UTC-day gain (close/open - 1) and 20-day average quote volume in USDT
+L8_FEES, L8_FUNDING_DAY = 0.004, 0.0009   # round trip taker + slippage; assumed perp funding paid by the short
+L8_HOLDS = (1, 3, 7)
+L8_COOLDOWN = 7                           # days before the same coin can fire again (no overlapping rows)
+
+
+def gainer_fade_rows(symbol: str, d1: list, btc: dict) -> list:
+    """d1: daily [(open_ts, o, h, l, c, quote_vol)] oldest first (UTC days); btc: open_ts -> (o, c) of BTCUSDT.
+    Day D gains >= L8_THRESH (close/open) with 20-day average quote volume >= L8_MIN_QV. Short at the open of D+1
+    (the first price after D's close is known) to the close of D+h, minus BTC over the same window, minus fees and
+    assumed funding for h days. One row per coin per L8_COOLDOWN days."""
+    out, i = [], 21
+    while i + 1 < len(d1):
+        t, o, _h, _l, c, _qv = d1[i]
+        adv = sum(x[5] for x in d1[i - 20:i]) / 20
+        if not (o > 0 and c / o - 1 >= L8_THRESH and adv >= L8_MIN_QV):
+            i += 1
+            continue
+        e = d1[i + 1]
+        if e[0] - t != 86400 or e[0] not in btc:        # gap in the data: no clean next-day entry
+            i += 1
+            continue
+        ret = {}
+        for h in L8_HOLDS:
+            j = i + h
+            if j < len(d1) and d1[j][0] - e[0] == (h - 1) * 86400 and d1[j][0] in btc:
+                short = e[1] / d1[j][4] - 1
+                bshort = btc[e[0]][0] / btc[d1[j][0]][1] - 1
+                ret[f"h{h}"] = {"net": short - bshort - L8_FEES - L8_FUNDING_DAY * h}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{t}{symbol}", "ts": e[0], "kind": "gainer_fade",
+                        "gain": round(c / o - 1, 4), "ret": ret})
+        i += L8_COOLDOWN
+    return out

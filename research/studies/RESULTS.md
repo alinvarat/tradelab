@@ -194,6 +194,16 @@ Spec `ops/lines/L6_smallcap_insider.md`; code `core.screens.insider_rows`, study
 - Splits: train 2019-2022, validation 2023-2024, test 2025-2026-10. Trimmed pick on train, data gate, pass/kill as in L1c.
 - **Run 1 (2026-11-24, Actions 45416703411): killed.** Data gate ok: 3,857 rows, 3,857 unique, train 1,994 / validation 1,047 / test 816, no warnings. 31,399 qualifying purchases at 3,289 issuers; 1,500 issuers priced (seeded sample). Trimmed pick h5: train +0.3% (p 0.18), validation -0.4% (p 0.92), test +0.3%. h20: validation +1.0% (p 0.09), test +0.2%. Double cost: negative everywhere. No usable edge after costs.
 
+## L8 screen: fade the day's top crypto gainers (pre-registered 2026-11-25, before any data was pulled)
+Spec `ops/lines/L8_gainer_fade.md`; code `core.screens.gainer_fade_rows`, study `l8_gainer_fade`. No LLM, no cost. Why this line: LESSONS says the binding constraint toward 3x/month is independent trades per day, and a capacity edge (small, fast-moving coins that large funds cannot size into). Hypothesis (not a proven result): one-day spikes of >= 20% in liquid altcoins partly reverse over the next days.
+- Universe: every Binance spot USDT pair with status TRADING today (exchangeInfo), minus stablecoins, fiat, wrapped coins and leveraged tokens (`L8_SKIP`, `UP/DOWN/BULL/BEAR`). Daily klines from `data-api.binance.vision`, 2020-11 to 2026-10.
+- Event: UTC day D with close/open - 1 >= 20% and 20-day average quote volume >= 2M USDT. One event per coin per 7 days (no overlapping rows).
+- Entry: the open of D+1 (00:00 UTC, the first price after D's close is known). Short to the close of D+1, D+3 and D+7 (h1, h3, h7).
+- Returns: short gain minus the gain of shorting BTC over the identical window, minus 0.4% round trip (taker + slippage) and assumed perp funding of 0.09% a day paid by the short (not fetched). Double cost adds 0.4% + 3 days of funding.
+- Splits: train 2021-2022, validation 2023-2024, test 2025 to 2026-10. `core.screens.judge` with trimmed pick on train and the data gate.
+- Pass: validation net > 0 with block p (cluster = UTC day) < 0.05, no losing result without the best 1 or 5 events, test sign not negative, and at least 3 events a week. Kill: validation mean <= 0 or p > 0.2.
+- Known limits to state in the result: survivorship (today's TRADING list drops delisted coins, which mostly fell, so a short result is if anything understated), spot prices stand in for perps, funding is assumed, and not every spot coin has a perp to short.
+
 ## L7 screen: first red day short in small caps (pre-registered 2026-11-25, before any data was pulled)
 Spec `ops/lines/L7_first_red_day.md`; code `core.screens.first_red_day_rows`, study `l7_first_red_day`. No LLM, no cost. Hypothesis from the Tim Sykes course table in `ops/knowledge/news_trading.md`, not a proven result.
 - Universe: the same seeded random sample (seed 20261125) of 1,500 Nasdaq / NYSE / NYSE American tickers from SEC `company_tickers_exchange.json` (no dashed tickers) used by L3/L6; Yahoo daily bars (10 years).
