@@ -164,3 +164,23 @@ class ExtendedSessionBar(unittest.TestCase):
                                                  "pre": {"start": 0, "end": 1}}, "regularMarketPrice": 100.0},
                "timestamp": [now - 120], "indicators": {"quote": [{"close": [100.0]}]}}   # last bar is before the post window
         self.assertIsNone(data.ext_quote_from_chart("AAA", res, now))
+
+
+class ScaleInLeverage(unittest.TestCase):
+    def test_adding_a_1x_lot_keeps_the_20x_margin_of_the_first_lot(self):
+        from core.engine import Account, Quote
+        a = Account(balance=1000, leverage=20, fee_rate=0.0, slippage=0.0)
+        a.on_quote(Quote("X", 100, 100))
+        a.place("X", 1, 10, leverage=20)          # 1000 notional on 50 margin
+        a.place("X", 1, 1, leverage=1)            # 100 notional on 100 margin
+        p = a.positions["X"]
+        self.assertAlmostEqual(p.leverage, 1100 / 150)
+
+
+class StewardDigest(unittest.TestCase):
+    def test_volatile_fields_do_not_trigger_a_review(self):
+        from core import steward
+        a = {"uptime_h": 1, "poller_age_s": 3, "errors": {"x": None}}
+        b = {"uptime_h": 9, "poller_age_s": 1, "errors": {"x": None}}
+        self.assertEqual(steward.digest(a), steward.digest(b))
+        self.assertNotEqual(steward.digest(a), steward.digest({**a, "errors": {"x": "boom"}}))
