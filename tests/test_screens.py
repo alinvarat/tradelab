@@ -236,5 +236,95 @@ class Unlocks(unittest.TestCase):
         self.assertAlmostEqual(r["pre7_0"]["net"], 0.20 - 0.002 - 0.0009 * 7)   # the close of day 30 is already 80
 
 
+class FirstRedDay(unittest.TestCase):
+    """L7: short the open after the first red close following a run-up, never the red close itself."""
+
+    def bars(self, closes):
+        """closes: list of (open, close); 30 sessions from 2026-03-02, volume 300k (dollar volume ~$3M)."""
+        import datetime as dt
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+        out = []
+        for k, (o, c) in enumerate(closes):
+            day = datetime(2026, 3, 2, 9, 30, tzinfo=ZoneInfo("America/New_York")) + dt.timedelta(days=k + 2 * (k // 5))
+            out.append({"t": day.timestamp(), "o": o, "c": c, "v": 300_000})
+        return out
+
+    def flat(self, n=40):
+        return [(10.0, 10.0)] * n
+
+    def bench(self, bars):
+        from core.screens import _et
+        return {_et(b["t"]).date(): (100.0, 100.0) for b in bars}
+
+    def test_run_up_then_red_close_sells_the_next_open(self):
+        # 25 flat, then D-3..D-1 green (+15% total), D red, D+1 opens at 11.0 and falls 10% to 9.9
+        c = self.flat()
+        c[25:28] = [(10.0, 10.5), (10.5, 11.5), (11.5, 12.5)]      # green run-up, +25% close to close
+        c[28] = (13.0, 12.5)                                        # D is the first red close
+        c[29] = (11.0, 9.9)                                        # entry open 11.0 -> exit close 9.9
+        bars = self.bars(c)
+        rows = sc.first_red_day_rows("SMOL", bars, self.bench(bars))
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["ts"], bars[29]["t"])              # D+1, not D
+        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], (11.0 / 9.9 - 1) - 0.01)
+
+    def test_benchmark_is_short_for_an_adjusted_comparison(self):
+        c = self.flat()
+        c[25:28] = [(10.0, 10.5), (10.5, 11.5), (11.5, 12.5)]
+        c[28] = (12.5, 12.0)                                        # D closes red
+        c[29] = (11.0, 9.9)
+        bars = self.bars(c)
+        from core.screens import _et
+        flat = {_et(b["t"]).date(): (100.0, 100.0) for b in bars}   # IWM unchanged: same as no adjustment
+        drop = dict(flat)
+        drop[_et(bars[29]["t"]).date()] = (100.0, 98.0)             # IWM falls 2% on the exit session
+        a = sc.first_red_day_rows("SMOL", bars, flat)[0]["ret"]["h1"]["net"]
+        b = sc.first_red_day_rows("SMOL", bars, drop)[0]["ret"]["h1"]["net"]
+        # IWM 100 -> 98 gives a short-benchmark gain of 100/98 - 1 = +2.0408%, so b is lower by exactly that
+        self.assertAlmostEqual(b - a, -(100.0 / 98.0 - 1))
+
+    def test_no_red_close_or_small_run_up_gives_nothing(self):
+        c = self.flat()
+        c[25:28] = [(11.0, 12.0), (12.0, 13.0), (13.0, 14.0)]      # all green, +16%
+        c[28] = (14.0, 14.5)                                        # still green: no event
+        c[29] = (14.5, 14.0)
+        bars = self.bars(c)
+        self.assertEqual(sc.first_red_day_rows("SMOL", bars, self.bench(bars)), [])
+        c[28] = (14.5, 14.0)                                        # now red, but the run-up is only +6%
+        c[25:28] = [(11.0, 11.5), (11.5, 11.6), (11.6, 11.7)]
+        bars = self.bars(c)
+        self.assertEqual(sc.first_red_day_rows("SMOL", bars, self.bench(bars)), [])
+
+    def test_one_row_per_streak(self):
+        c = self.flat()
+        c[22:25] = [(10.0, 11.0), (11.0, 12.0), (12.0, 13.0)]       # +30% run-up
+        c[25] = (13.5, 13.0)                                        # red close: fires once (entry at 26)
+        c[26:29] = [(13.0, 14.0), (14.0, 14.5), (14.5, 15.0)]       # green again
+        c[29] = (15.5, 15.0)                                        # second red close
+        bars = self.bars(c)
+        rows = sc.first_red_day_rows("SMOL", bars, self.bench(bars))
+        self.assertEqual(len(rows), 1)                              # the streak is skipped after it fires
+        self.assertEqual(rows[0]["ts"], bars[26]["t"])
+
+
+    def test_missing_benchmark_day_does_not_truncate_later_events(self):
+        c = self.flat()
+        c[25:28] = [(10.0, 10.5), (10.5, 11.5), (11.5, 12.5)]
+        c[28] = (13.0, 12.5)                                        # first red close, entry would be bar 29
+        c[29] = (11.0, 9.9)
+        c[31:34] = [(10.0, 10.5), (10.5, 11.5), (11.5, 12.5)]       # a second, later run-up
+        c[34] = (13.0, 12.5)                                        # second red close, entry at bar 35
+        c[35] = (11.0, 9.0)
+        c[36] = (9.0, 8.0)                                          # h1 exit
+        bars = self.bars(c)
+        from core.screens import _et
+        bench = self.bench(bars)
+        bench.pop(_et(bars[29]["t"]).date())                        # IWM missing on the first entry day
+        rows = sc.first_red_day_rows("SMOL", bars, bench)
+        self.assertEqual(len(rows), 1)                              # the gap must not hide the later streak
+        self.assertEqual(rows[0]["ts"], bars[35]["t"])
+
+
 if __name__ == "__main__":
     unittest.main()
