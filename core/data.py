@@ -126,6 +126,45 @@ def _quote_from_meta(symbol, m):
             "exchange": m.get("fullExchangeName"), "source": "Yahoo (US quotes were measured at about 1-6 s old)", "open": open_}
 
 
+EXT_SPREAD = 0.003       # full spread assumed in US pre-market / after-hours (thin books)
+
+
+def ext_quote_from_chart(symbol: str, res: dict, now: float, max_age: float = 900):
+    """A pre-market or after-hours quote from a 1-minute chart fetched with includePrePost=true. None unless `now`
+    is inside the pre or post window and the last extended bar is at most max_age seconds old."""
+    meta = res.get("meta") or {}
+    per = meta.get("currentTradingPeriod") or {}
+    session = None
+    for name in ("pre", "post"):
+        w = per.get(name) or {}
+        if w.get("start", 0) <= now < w.get("end", 0):
+            session = name
+    if not session:
+        return None
+    q = (res.get("indicators") or {}).get("quote", [{}])[0]
+    ts = res.get("timestamp") or []
+    last = next(((t, c) for t, c in zip(reversed(ts), reversed(q.get("close") or [])) if c is not None), None)
+    if not last or now - last[0] > max_age:
+        return None
+    t, px = last
+    base = meta.get("regularMarketPrice") if session == "post" else (meta.get("previousClose") or meta.get("chartPreviousClose"))
+    return {"symbol": symbol, "price": px, "bid": px * (1 - EXT_SPREAD / 2), "ask": px * (1 + EXT_SPREAD / 2),
+            "prev_close": base, "change_pct": (px / base - 1) * 100 if base else None, "high": None, "low": None,
+            "volume": None, "currency": meta.get("currency", "USD"), "type": meta.get("instrumentType", ""),
+            "name": meta.get("shortName") or symbol, "ts": t, "exchange": meta.get("fullExchangeName"),
+            "source": f"Yahoo {session}-market 1-minute bars", "open": True, "session": session}
+
+
+def quote_ext(symbol: str):
+    """Extended-hours quote for a US stock/ETF, or None outside pre/post or without a fresh extended print."""
+    url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}"
+           "?range=1d&interval=1m&includePrePost=true")
+    d = get_json(url, 20)["chart"]
+    if d.get("error") or not d.get("result"):
+        return None
+    return ext_quote_from_chart(symbol, d["result"][0], time.time())
+
+
 # Simulated full spread when the source gives no bid/ask (fraction of price).
 SPREAD = {"EQUITY": 0.0004, "ETF": 0.0003, "INDEX": 0.0004, "FUTURE": 0.0003, "CURRENCY": 0.0001,
           "CRYPTOCURRENCY": 0.0005, "MUTUALFUND": 0.0}

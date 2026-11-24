@@ -273,6 +273,21 @@ class Trading(Base):
         self.assertEqual(out["status"], "skipped")
         self.assertIn("opposite", out["why"])
 
+    def test_extended_hours_requote_only_the_focus_set(self):
+        self.t.calls["overnight"] = {"AAPL": [{"title": "x"}]}
+        quotes = {"AAPL": quote("AAPL", open_=False), "MSFT": quote("MSFT", open_=False)}
+        ext = dict(quote("AAPL", px=110, move=10), session="pre")
+        with mock.patch("core.llm_trader.ny_time", return_value=(1, (8, 0), "2026-11-24")), \
+             mock.patch("core.llm_trader.data.quote_ext", return_value=ext) as qe:
+            self.t._extended(quotes)
+        qe.assert_called_once_with("AAPL")
+        self.assertEqual(quotes["AAPL"]["session"], "pre")
+        self.assertFalse(quotes["MSFT"]["open"])
+        with mock.patch("core.llm_trader.ny_time", return_value=(1, (21, 0), "2026-11-24")), \
+             mock.patch("core.llm_trader.data.quote_ext") as qe2:
+            self.t._extended({"AAPL": quote("AAPL", open_=False)})
+        qe2.assert_not_called()
+
     def test_model_failure_is_logged_and_nothing_trades(self):
         self.t.chat = lambda s, u: ("", "no provider")
         self.t.scan(self.market(AAA=quote("AAA", move=12)))

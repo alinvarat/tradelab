@@ -127,3 +127,30 @@ class CacheLayout(unittest.TestCase):
         self.assertEqual(a[0], b[0])
         self.assertTrue(a[1]["content"].startswith("DATA"))
         self.assertTrue(a[1]["content"].endswith("ROLE A"))
+
+
+class ExtendedHours(unittest.TestCase):
+    def chart(self, now, pre=True, age=60, price=105.0):
+        win = {"start": now - 3600, "end": now + 3600}
+        far = {"start": now - 90000, "end": now - 80000}
+        return {"meta": {"currentTradingPeriod": {"pre": win if pre else far, "post": far if pre else win,
+                                                  "regular": far},
+                         "regularMarketPrice": 102.0, "previousClose": 100.0, "currency": "USD"},
+                "timestamp": [now - 600, now - age], "indicators": {"quote": [{"close": [104.0, price]}]}}
+
+    def test_pre_market_quote_uses_previous_close_and_wide_spread(self):
+        from core import data
+        now = 1_800_000_000
+        q = data.ext_quote_from_chart("AAA", self.chart(now), now)
+        self.assertEqual(q["session"], "pre")
+        self.assertTrue(q["open"])
+        self.assertAlmostEqual(q["change_pct"], 5.0)
+        self.assertAlmostEqual(q["ask"] - q["bid"], 105.0 * data.EXT_SPREAD)
+
+    def test_after_hours_change_is_vs_regular_close_and_stale_prints_are_ignored(self):
+        from core import data
+        now = 1_800_000_000
+        q = data.ext_quote_from_chart("AAA", self.chart(now, pre=False, price=102.0 * 1.02), now)
+        self.assertEqual(q["session"], "post")
+        self.assertAlmostEqual(q["change_pct"], 2.0)
+        self.assertIsNone(data.ext_quote_from_chart("AAA", self.chart(now, age=3600), now))
