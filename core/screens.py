@@ -158,6 +158,12 @@ def listing_returns(ts: float, m1: list, h1: list, bench_m1: list, bench_h1: lis
     return out
 
 
+def short_gain(entry: float, exit_: float) -> float:
+    """Gain of a short opened at `entry` and closed at `exit_` as a fraction of the entry notional: 1 - exit/entry
+    (a halving is +50%, never +100%). Fixed 2026-11-25: L7/L8/L10 used entry/exit - 1, which overstated gains."""
+    return 1 - exit_ / entry
+
+
 def split_of(ts: float, bounds: dict) -> str:
     """bounds = {'train': (start, end), ...} in unix seconds, end exclusive."""
     for k, (a, b) in bounds.items():
@@ -417,8 +423,8 @@ def first_red_day_rows(symbol: str, bars: list, bench: dict, px=(1.0, 20.0), dol
         for h in L7_HOLDS:
             j = i + h
             if j < len(days) and days[j][0] in bench:
-                short = e["o"] / days[j][1]["c"] - 1     # gain on the short from the D+1 open
-                bshort = bench[ed][0] / bench[days[j][0]][1] - 1   # gain on shorting IWM over the same window
+                short = short_gain(e["o"], days[j][1]["c"])     # gain on the short from the D+1 open
+                bshort = short_gain(bench[ed][0], bench[days[j][0]][1])   # gain on shorting IWM over the same window
                 ret[f"h{h}"] = {"net": short - bshort - L7_COST}
         if ret:
             out.append({"symbol": symbol, "market": f"{d}{symbol}", "ts": e["t"], "kind": "first_red_day",
@@ -487,8 +493,8 @@ def gainer_fade_rows(symbol: str, d1: list, btc: dict) -> list:
         for h in L8_HOLDS:
             j = i + h
             if j < len(d1) and d1[j][0] - e[0] == (h - 1) * 86400 and d1[j][0] in btc:
-                short = e[1] / d1[j][4] - 1
-                bshort = btc[e[0]][0] / btc[d1[j][0]][1] - 1
+                short = short_gain(e[1], d1[j][4])
+                bshort = short_gain(btc[e[0]][0], btc[d1[j][0]][1])
                 ret[f"h{h}"] = {"net": short - bshort - L8_FEES - L8_FUNDING_DAY * h}
         if ret:
             out.append({"symbol": symbol, "market": f"{t}{symbol}", "ts": e[0], "kind": "gainer_fade",
@@ -556,8 +562,8 @@ def gap_fade_rows(symbol: str, bars: list, bench: dict, px=(1.0, 20.0), dollar_v
         for h in L10_HOLDS:
             j = i + h
             if j < len(days) and days[j][0] in bench:
-                short = b["o"] / days[j][1]["c"] - 1
-                bshort = bench[d][0] / bench[days[j][0]][1] - 1
+                short = short_gain(b["o"], days[j][1]["c"])
+                bshort = short_gain(bench[d][0], bench[days[j][0]][1])
                 ret[f"h{h}"] = {"net": short - bshort - L10_COST}
         if ret:
             out.append({"symbol": symbol, "market": f"{d}{symbol}", "ts": b["t"], "kind": "gap_fade",

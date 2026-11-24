@@ -282,7 +282,7 @@ class FirstRedDay(unittest.TestCase):
         rows = sc.first_red_day_rows("SMOL", bars, self.bench(bars))
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["ts"], bars[29]["t"])              # D+1, not D
-        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], (11.0 / 9.9 - 1) - 0.01)
+        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], (1 - 9.9 / 11.0) - 0.01)
 
     def test_benchmark_is_short_for_an_adjusted_comparison(self):
         c = self.flat()
@@ -296,8 +296,8 @@ class FirstRedDay(unittest.TestCase):
         drop[_et(bars[29]["t"]).date()] = (100.0, 98.0)             # IWM falls 2% on the exit session
         a = sc.first_red_day_rows("SMOL", bars, flat)[0]["ret"]["h1"]["net"]
         b = sc.first_red_day_rows("SMOL", bars, drop)[0]["ret"]["h1"]["net"]
-        # IWM 100 -> 98 gives a short-benchmark gain of 100/98 - 1 = +2.0408%, so b is lower by exactly that
-        self.assertAlmostEqual(b - a, -(100.0 / 98.0 - 1))
+        # IWM 100 -> 98 gives a short-benchmark gain of 1 - 98/100 = +2%, so b is lower by exactly that
+        self.assertAlmostEqual(b - a, -(1 - 98.0 / 100.0))
 
     def test_no_red_close_or_small_run_up_gives_nothing(self):
         c = self.flat()
@@ -369,8 +369,8 @@ class GainerFade(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         r = rows[0]
         self.assertEqual(r["ts"], self.T0 + 26 * 86400)          # entry = open of the next UTC day
-        self.assertAlmostEqual(r["ret"]["h1"]["net"], 1 / 0.95 - 1 - sc.L8_FEES - sc.L8_FUNDING_DAY, places=9)
-        self.assertAlmostEqual(r["ret"]["h3"]["net"], 1 / 0.95 ** 3 - 1 - sc.L8_FEES - 3 * sc.L8_FUNDING_DAY, places=9)
+        self.assertAlmostEqual(r["ret"]["h1"]["net"], 1 - 0.95 - sc.L8_FEES - sc.L8_FUNDING_DAY, places=9)
+        self.assertAlmostEqual(r["ret"]["h3"]["net"], 1 - 0.95 ** 3 - sc.L8_FEES - 3 * sc.L8_FUNDING_DAY, places=9)
 
     def test_thin_volume_small_gain_and_gaps_do_not_fire(self):
         from core import screens as sc
@@ -386,7 +386,7 @@ class GainerFade(unittest.TestCase):
         e = self.T0 + 26 * 86400
         btc[e] = (100.0, 110.0)                                   # BTC up 10% on the entry day
         r = sc.gainer_fade_rows("X", self.series(), btc)[0]
-        self.assertAlmostEqual(r["ret"]["h1"]["net"], (1 / 0.95 - 1) - (100 / 110 - 1) - sc.L8_FEES - sc.L8_FUNDING_DAY,
+        self.assertAlmostEqual(r["ret"]["h1"]["net"], (1 - 0.95) - (1 - 110 / 100) - sc.L8_FEES - sc.L8_FUNDING_DAY,
                                places=9)
 
 
@@ -420,6 +420,13 @@ class GapFade(unittest.TestCase):
         bench = {sc._et(b["t"]).date(): (100.0, 100.0) for b in bars}
         rows = sc.gap_fade_rows("SMOL", bars, bench)
         self.assertEqual(len(rows), 1)
-        self.assertAlmostEqual(rows[0]["ret"]["h0"]["net"], 7 / 6 - 1 - sc.L10_COST, places=9)
-        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], 7 / 5 - 1 - sc.L10_COST, places=9)
+        self.assertAlmostEqual(rows[0]["ret"]["h0"]["net"], 1 - 6 / 7 - sc.L10_COST, places=9)
+        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], 1 - 5 / 7 - sc.L10_COST, places=9)
         self.assertEqual(sc.gap_fade_rows("SMOL", bars[:25] + [dict(bars[25], o=6.0)] + bars[26:], bench), [])
+
+
+class ShortGain(unittest.TestCase):
+    def test_halving_is_fifty_percent(self):
+        self.assertAlmostEqual(sc.short_gain(10.0, 5.0), 0.5)
+        self.assertAlmostEqual(sc.short_gain(10.0, 20.0), -1.0)
+        self.assertLessEqual(sc.short_gain(10.0, 0.0001), 1.0)
