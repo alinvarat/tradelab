@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from statistics import mean
 
-from . import ai_news, buzz, data, news, news_archive
+from . import ai_news, buzz, data, news, news_archive, sequential
 from .engine import Account, Quote
 from .event_trader import STALE_S, VOL_MIN, _day
 from .storage import write_json_atomic
@@ -1266,6 +1266,7 @@ class LlmTrader:
                 if c and link["id"] not in done:
                     self.pairs.append({"id": link["id"], "asset_class": asset_class(sym),
                                        "protocol": link.get("protocol", "v4"),
+                                       "booked_ts": now,
                                        "s1": a.pnl / (a.qty * a.entry), "ctrl": c.pnl / (c.qty * c.entry)})
                     self.trade_memory.append({"ts": now, "symbol": sym, "asset_class": asset_class(sym),
                                               "model_return_pct": round(self.pairs[-1]["s1"] * 100, 3),
@@ -1298,10 +1299,15 @@ class LlmTrader:
         for x in p:
             by.setdefault(x.get("asset_class", "stock"), []).append(x["s1"] - x["ctrl"])
         out["by_class"] = {c: {"n": len(v), "mean_diff": mean(v)} for c, v in by.items()}
-        byp = {}
+        byp, daily_by_protocol = {}, {PROTOCOL_VERSION: []}
         for x in p:
-            byp.setdefault(x.get("protocol", "v4"), []).append(x["s1"] - x["ctrl"])
+            tag = x.get("protocol", "v4")
+            byp.setdefault(tag, []).append(x["s1"] - x["ctrl"])
+            daily_by_protocol.setdefault(tag, []).append({"ts": x.get("booked_ts"), "model": x["s1"], "control": x["ctrl"]})
         out["by_protocol"] = {k: {"n": len(v), "mean_diff": mean(v)} for k, v in byp.items()}
+        today = int(time.time()) // 86400 * 86400
+        out["sequential_by_protocol"] = {tag: sequential.paired_daily(rows, start=sequential.FORWARD_START_TS, before=today)
+                                         for tag, rows in daily_by_protocol.items()}
         if len(p) < MIN_TRADES:
             out["verdict"] = f"too early ({len(p)}/{MIN_TRADES} closed pairs): no conclusion allowed"
             return out

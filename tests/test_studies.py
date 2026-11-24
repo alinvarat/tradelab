@@ -26,6 +26,22 @@ def business_days(first, n):
     return out
 
 
+class WeeklySequential(unittest.TestCase):
+    def test_revisions_to_a_published_utc_day_do_not_change_the_evidence(self):
+        thursday = day("2026-12-10")
+        friday = day("2026-12-11")
+        row = {"exit_t": thursday, "horizon": 5, "direction": "long", "gross": 0.10,
+               "rand_sign": -1, "cost_side": 0.002}
+        first, state = st.llm_forward_sequential([row], friday, {})
+        self.assertEqual(first["paired"]["n_units"], 1)
+        revision = {**row, "gross": -0.5}
+        weekend, state = st.llm_forward_sequential([revision, {**row, "exit_t": friday}], friday + 86400, state)
+        self.assertEqual(weekend["paired"]["n_units"], 2)
+        self.assertEqual(weekend["paired"]["mean_scaled"], first["paired"]["mean_scaled"])
+        retry, _ = st.llm_forward_sequential([revision], friday + 86400, state)
+        self.assertEqual(retry, weekend)
+
+
 class Months(unittest.TestCase):
     def test_add_months_wraps_years(self):
         self.assertEqual(st.add_months("2024-01", -1), "2023-12")

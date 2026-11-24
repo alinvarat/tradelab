@@ -14,3 +14,6 @@ Why: the all-market run (Oct–Nov 2026 season) failed at H1. H3/H5 showed post-
 
 ## Addendum 2026-11-24, before any filing in the window: the reader becomes v2-single
 The held-out comparison (`protocol_news_v2.md`, run 45332709844) showed that the v2 inputs read earnings releases clearly better than v1 on the same filings: paired H5 +1.56% per filing, block p 0.008. From the first forward filing onward, the model gets the v2 message: the 5-session run-up, the gap at the first open, the previous 2.02 release (6,000 characters), the current release (12,000 characters), and `NEWS_V2_SYSTEM`. It is called **once at temperature 0**, instead of a 3-sample vote, to keep cost at about a third. Calls are tagged `"reader": "v2"`. The verdict rules are unchanged.
+
+## Addendum 2026-11-24: daily sequential evidence
+Use [daily-v1](../sequential_protocol_20261124.md) for non-skip H5 outcomes, grouped by the outcome's exit UTC day. Each successful weekly publication seals the completed days through its cutoff. Quotes or filings that appear after their day was sealed continue to affect the ordinary fixed-sample report. Previously published sequential observations are restored from the forward results file, so a rerun or revised price cannot rewrite earlier sequential evidence.

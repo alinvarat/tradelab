@@ -39,6 +39,16 @@ class EProcessTests(unittest.TestCase):
         rows = [{"ts": 0, "ret": 1.0}, {"ts": 100, "ret": 3.0}, {"ts": 86400, "ret": -1.0}, {"ts": 5, "ret": None}]
         self.assertEqual(sq.daily_means(rows), [2.0, -1.0])
 
+    def test_paired_evidence_bounds_each_leg_and_uses_only_complete_days(self):
+        rows = [{"ts": -1, "model": 3, "control": -2},
+                {"ts": 0, "model": 4, "control": -3},
+                {"ts": 1, "model": -3, "control": None},
+                {"ts": 86400, "model": -2, "control": 3}]
+        evidence = sq.paired_daily(rows, start=0, before=86400)
+        self.assertEqual(evidence["model"]["n_units"], 1)
+        self.assertEqual(evidence["model"]["mean_scaled"], 0.25)
+        self.assertEqual(evidence["paired"]["mean_scaled"], 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()

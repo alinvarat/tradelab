@@ -1,7 +1,9 @@
 import calendar
 import unittest
+from unittest.mock import patch
 
 from core import options_forward as of
+from research.studies import options_forward as runner
 
 ATOM = """<?xml version="1.0"?><feed>
 <entry>
@@ -21,6 +23,13 @@ ATOM = """<?xml version="1.0"?><feed>
 
 
 class Feed(unittest.TestCase):
+    def test_all_filing_types_are_eligible_only_in_the_new_window(self):
+        start = of.ALL_ITEMS_START_TS
+        self.assertIsNone(of.filing_protocol({"ts": start - 1, "items": ["8.01"]}))
+        self.assertEqual(of.filing_protocol({"ts": start - 1, "items": ["2.02"]}), of.EARNINGS_PROTOCOL)
+        for items in (["2.02"], ["5.02"], ["8.01"], []):
+            self.assertEqual(of.filing_protocol({"ts": start, "items": items}), of.ALL_ITEMS_PROTOCOL)
+
     def test_iso_variants(self):
         self.assertEqual(of.iso_to_ts("2026-11-23T21:30:05Z"), calendar.timegm((2026, 11, 23, 21, 30, 5)))
         self.assertEqual(of.iso_to_ts("2026-11-23T21:30:05.000Z"), calendar.timegm((2026, 11, 23, 21, 30, 5)))
@@ -108,6 +117,26 @@ class AccountOrder(unittest.TestCase):
 
 
 class Verdict(unittest.TestCase):
+    def test_summary_keeps_old_and_new_options_wallets_separate(self):
+        state = {"open": [{}, {"protocol": of.ALL_ITEMS_PROTOCOL}], "closed": [], "gaps": [{}],
+                 "calls": {"older": {}, "newer": {"protocol": of.ALL_ITEMS_PROTOCOL}}}
+        with patch.object(runner.time, "time", return_value=of.ALL_ITEMS_START_TS):
+            result = runner.summary(state)
+        self.assertEqual(result["protocol"], of.ALL_ITEMS_PROTOCOL)
+        self.assertEqual(result["calls"], 1)
+        self.assertEqual(result["gaps"], 1)
+        self.assertEqual(result["by_protocol"][of.EARNINGS_PROTOCOL]["open"], 1)
+
+    def test_matched_wallets_use_both_legs_and_stress_both_exits(self):
+        start = of.ALL_ITEMS_START_TS
+        model = {"entry_ts": start, "exit_ts": start + 86400, "entry_ask": 0.20, "exit_bid": 0.40}
+        trade = {"symbol": "AAA", "ts": start, "model": model, "control": {**model, "exit_bid": 0.10}}
+        wallets = runner.protocol_summary({"open": [], "closed": [trade], "calls": []})["matched_whole_contract_wallets"]
+        self.assertGreater(wallets["model"]["base"]["end_equity_usd"], 147.0)
+        self.assertLess(wallets["control"]["base"]["end_equity_usd"], 147.0)
+        for arm in wallets.values():
+            self.assertLess(arm["stress"]["end_equity_usd"], arm["base"]["end_equity_usd"])
+
     def test_collecting_until_150(self):
         self.assertTrue(of.verdict([])["verdict"].startswith("collecting"))
 

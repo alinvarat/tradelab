@@ -392,7 +392,7 @@ def study_llm_earnings_wide(_symbols, workers=6, first_day=None, kind="earnings"
             r = nb.event_return(b, ev["ts"], h)
             if not r:
                 continue
-            rows.append({"symbol": ev["symbol"], "ts": ev["ts"], "entry_t": r["entry_t"], "horizon": h,
+            rows.append({"symbol": ev["symbol"], "ts": ev["ts"], "entry_t": r["entry_t"], "exit_t": r["exit_t"], "horizon": h,
                          "gross": r["gross"], "accession": ev["accession"], "cost_side": ev["cost_side"],
                          "direction": c["direction"], "confidence": c["confidence"],
                          "new": ev["accession"] not in seen_before, "items": ev["items"],
@@ -918,15 +918,23 @@ def main():
     ap.add_argument("study", choices=sorted(STUDIES))
     ap.add_argument("--symbols", default="", help="comma separated; empty = every universe stock")
     ap.add_argument("--out", default="")
+    ap.add_argument("--previous-forward-results", default="")
     a = ap.parse_args()
     symbols = [s.strip().upper() for s in a.symbols.split(",") if s.strip()] or list(universe.STOCKS)
+    previous = {}
+    if a.study == "llm_earnings_forward" and a.previous_forward_results and os.path.getsize(a.previous_forward_results):
+        with open(a.previous_forward_results) as f:
+            previous = json.load(f).get("sequential_state", {})
     t0 = time.time()
     summ, rows = STUDIES[a.study](symbols)
     summ.update(study=a.study, seconds=round(time.time() - t0, 1), n_symbols=len(symbols),
                 run_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
     out = a.out or os.path.join(os.path.dirname(os.path.abspath(__file__)), f"{a.study}.json")
+    result = {"summary": summ, "rows": rows}
+    if a.study == "llm_earnings_forward":
+        summ["sequential"], result["sequential_state"] = st.llm_forward_sequential(rows, time.time(), previous)
     with open(out, "w") as f:
-        json.dump({"summary": summ, "rows": rows}, f, ensure_ascii=False, default=str)
+        json.dump(result, f, ensure_ascii=False, default=str)
     print(json.dumps(summ, ensure_ascii=False, indent=1, default=str))
     log("\n".join(brief(summ)))
     log(f"rows: {len(rows)} -> {out}")

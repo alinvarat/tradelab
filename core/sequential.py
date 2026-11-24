@@ -14,6 +14,7 @@ import math
 
 ALPHA = 0.05
 LAMBDA_MAX = 0.5
+FORWARD_START_TS = 1795564800  # 2026-11-25 00:00 UTC, first eligible day for daily-v1
 
 
 class EProcess:
@@ -79,3 +80,23 @@ def daily_means(rows: list, key_ts: str = "ts", value: str = "ret") -> list:
             continue
         by.setdefault(time.strftime("%Y-%m-%d", time.gmtime(r[key_ts])), []).append(r[value])
     return [sum(v) / len(v) for _, v in sorted(by.items())]
+
+
+def paired_daily(rows: list, *, start: float, before: float) -> dict:
+    """Report evidence on daily means of bounded model/control returns in [start, before)."""
+    low, high = -2.0, 3.0
+    metrics = {"model": [], "paired": []}
+    for row in rows:
+        ts, model, control = row.get("ts"), row.get("model"), row.get("control")
+        if ts is None or not start <= ts < before or model is None or not math.isfinite(model):
+            continue
+        bounded_model = min(high, max(low, model))
+        metrics["model"].append({"ts": ts, "ret": bounded_model})
+        if control is not None and math.isfinite(control):
+            bounded_control = min(high, max(low, control))
+            metrics["paired"].append({"ts": ts, "ret": bounded_model - bounded_control})
+    return {
+        "protocol": "daily-v1",
+        "model": run(daily_means(metrics["model"]), lo=-low, hi=high),
+        "paired": run(daily_means(metrics["paired"]), lo=-low, hi=high, paired=True),
+    }

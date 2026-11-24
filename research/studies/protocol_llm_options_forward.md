@@ -29,3 +29,8 @@ No threshold or rule changes. Corrections so the code matches the rules above:
 
 ## Addendum 2026-11-24 (before the first market-open run): v2-single reader
 Same reason as `protocol_llm_earnings_forward.md`. The model gets the v2 message: run-up over the 5 sessions to the last completed close, the move from that close to the option-chain spot at the run (what a trader can act on), the previous 2.02 release, and the current release. It uses `NEWS_V2_SYSTEM`, called once at temperature 0. Contract choice, exits and the verdict are unchanged.
+
+## Addendum 2026-11-24: daily sequential evidence
+Use [daily-v1](../sequential_protocol_20261124.md) for entries from November 25, 2026 UTC onward. Group each completed record by the UTC day of bookkeeping (`closed_ts`), including records priced after their planned exit. The first market-open run on November 24 stays in the fixed-sample study.
+
+[The separately tagged all-8-K protocol](protocol_llm_options_forward_v2_sec_20261124.md) covers the prospective window from November 25 onward, beginning on its first scheduled run.

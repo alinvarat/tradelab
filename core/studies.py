@@ -12,7 +12,7 @@ import random
 import time
 import zipfile
 
-from . import news_backtest as nb
+from . import news_backtest as nb, sequential
 
 TOM_HOLD = 4                      # last session of the month + first three sessions of the next month
 PLACEBO_SHIFT = (20, 60)          # sessions
@@ -494,6 +494,19 @@ def reaction_features(bars: list, accepted_ts: int) -> dict | None:
 
 LLM_FORWARD_FIRST_DAY = "2026-12-01"
 LLM_FORWARD_MIN_TRADES = 600
+
+
+def llm_forward_sequential(rows: list, now: float, previous: dict) -> tuple[dict, dict]:
+    start = calendar.timegm(time.strptime(LLM_FORWARD_FIRST_DAY, "%Y-%m-%d"))
+    today = int(now) // 86400 * 86400
+    cutoff = previous.get("before", start)
+    daily = [{"ts": r["exit_t"],
+              "model": signed_net(r["gross"], sign_of(r["direction"]), cost_side=r.get("cost_side")),
+              "control": signed_net(r["gross"], r["rand_sign"], cost_side=r.get("cost_side"))}
+             for r in rows if r["horizon"] == 5 and r["direction"] != "skip" and cutoff <= r["exit_t"] < today]
+    observations = previous.get("observations", []) + daily
+    return (sequential.paired_daily(observations, start=start, before=today),
+            {"before": max(cutoff, today), "observations": observations})
 
 
 def llm_forward_verdict(rows: list) -> str:
