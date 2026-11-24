@@ -110,3 +110,6 @@ Live data showed 35 of the last 40 decisions were holds, with the same top mover
 ## Addendum 2026-11-24: v4.6, is the news already priced in, and which news types work
 - Every headline in a candidate's context now carries `minutes_since_desk_saw` and `move_since_desk_saw_pct` (price change since this desk first saw that headline for that symbol), so the news analyst can tell a fresh catalyst from one the price has already run on.
 - Headlines get a type (earnings, m&a, fda/clinical, analyst, legal/regulatory, macro, contract/product, other; `news_type` in `core/llm_trader.py`). Candidates record the newest headline's type and desk_stats also groups outcomes as `type:<news type>/<action>/<1h|1d>`.
+
+## Addendum 2026-11-24: v4.7, stricter headline-to-asset linking
+Live example: "Platinum Equity ..." linked to platinum futures (PL=F) and reached the model as platinum news. Generic keywords for platinum, palladium, copper, grains, softs, natural gas, euro, pound and ether now link only when the headline also has a market word (price, futures, supply, falls, against, currency, ...), and known company phrases (Platinum Equity, Euronext, ...) never link. Specific phrases (spot gold, crude, bitcoin, ...) are unchanged.

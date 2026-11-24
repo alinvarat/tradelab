@@ -264,6 +264,17 @@ class Trading(Base):
         self.assertEqual(st["shock/hold/1h"]["mean_pct"], -1.0)
         self.assertEqual(self.t.desk_stats(), {})                       # nothing reaches 5 outcomes
 
+    def test_generic_words_need_market_context(self):
+        m = lt._macro_symbols
+        self.assertNotIn("PL=F", m("Platinum Equity agrees to buy Amex unit"))
+        self.assertIn("PL=F", m("Platinum prices jump as supply tightens"))
+        self.assertNotIn("GBPUSD=X", m("Champion wins pound for pound title"))
+        self.assertIn("GBPUSD=X", m("Pound falls against the dollar after BoE"))
+        self.assertIn("HG=F", m("Copper futures hit a record"))
+        self.assertNotIn("HG=F", m("Copper Property CTL Pass Through Trust reports"))
+        self.assertIn("GC=F", m("Spot gold climbs"))                   # specific phrases need no extra context
+        self.assertIn("BTC-USD", m("Bitcoin slides below 60k"))
+
     def test_news_type_classification(self):
         self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
         self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")

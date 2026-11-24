@@ -61,7 +61,7 @@ OVERNIGHT_MAX = 60
 MOVER_SHARE = 0.5
 EXT_MAX = 40                       # symbols re-quoted per pass in US extended hours                  # a "top mover" must have moved at least half its class's shock threshold
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
-PROTOCOL_VERSION = "v4.6"
+PROTOCOL_VERSION = "v4.7"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60
@@ -288,10 +288,37 @@ def _archive_snapshot():
     return rows, scores
 
 
+# v4.7: generic words link a headline to a commodity, FX pair or coin only with a market word next to them
+# ("Platinum Equity buys ..." is not platinum; "pound for pound" is not sterling).
+_COMMODITY_CTX = ("price", "prices", "futures", "ounce", "tonne", "tonnes", "bushel", "metal", "metals", "spot", "rally",
+                  "slump", "surge", "surges", "falls", "rises", "jumps", "drops", "supply", "demand", "output", "mine",
+                  "mining", "harvest", "crop", "crops", "export", "exports", "imports", "inventories", "stockpile", "market")
+_FX_CTX = ("currency", "exchange rate", "dollar", "against", "forex", "fx", "weakens", "strengthens", "falls", "rises",
+           "slides", "climbs", "rate", "rates", "central bank", "versus")
+_CRYPTO_CTX = ("crypto", "price", "token", "blockchain", "etf", "network", "rally", "falls", "rises", "coin")
+MACRO_CONTEXT = {"PL=F": _COMMODITY_CTX, "PA=F": _COMMODITY_CTX, "HG=F": _COMMODITY_CTX, "ZC=F": _COMMODITY_CTX,
+                 "ZW=F": _COMMODITY_CTX, "ZS=F": _COMMODITY_CTX, "KC=F": _COMMODITY_CTX, "SB=F": _COMMODITY_CTX,
+                 "CT=F": _COMMODITY_CTX, "NG=F": _COMMODITY_CTX, "EURUSD=X": _FX_CTX, "GBPUSD=X": _FX_CTX,
+                 "ETH-USD": _CRYPTO_CTX}
+MACRO_EXCLUDE = ("platinum equity", "platinum card", "amex platinum", "platinum partners", "copper state",
+                 "euronext", "euro stoxx", "pound for pound")
+
+
+def _has(low: str, w: str) -> bool:
+    return re.search(r"(?<![\w])" + re.escape(w) + r"(?![\w])", low) is not None
+
+
 def _macro_symbols(text: str) -> set:
     low = (text or "").lower()
-    return {sym for sym, words in MACRO_KEYWORDS.items()
-            if any(re.search(r"(?<![\w])" + re.escape(w) + r"(?![\w])", low) for w in words)}
+    out = set()
+    for sym, words in MACRO_KEYWORDS.items():
+        if not any(_has(low, w) for w in words):
+            continue
+        ctx = MACRO_CONTEXT.get(sym)
+        if ctx and (any(x in low for x in MACRO_EXCLUDE) or not any(_has(low, c) for c in ctx)):
+            continue
+        out.add(sym)
+    return out
 
 
 def _age_s(row, now):
