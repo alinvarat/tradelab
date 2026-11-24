@@ -10,6 +10,14 @@ ORIGIN = "http://tradelab.test"
 LOG_URL = ORIGIN + "/api/llm_log?n=30"
 
 
+def open_tab(page, view):
+    """Tabs in the "More" menu are only clickable while it is open; the primary ones always are."""
+    link = page.locator(f'.tabs a[data-view="{view}"]')
+    if not link.is_visible():
+        page.locator("#more-tabs > summary").click()
+    link.click()
+
+
 def check_log_refresh():
     cycle = {
         "ts": 1795454141.4,
@@ -124,6 +132,7 @@ def check_log_refresh():
         expect(page.locator("#llm-sub")).to_contain_text("เรียกโมเดลวันนี้ 4/300 ครั้ง")
 
         page.locator('.tabs a[data-view="overview"]').click()
+        page.locator("#ov-details > summary").click()
         overview = page.locator("#ov-table")
         expect(overview.get_by_role("columnheader", name="บัญชีสุ่มเทียบ")).to_be_visible()
         for index, thb, usd in ((2, "5,050.00 THB", "151.50 USD"), (3, "4,950.00 THB", "148.50 USD")):
@@ -131,7 +140,7 @@ def check_log_refresh():
             expect(cell).to_contain_text(thb)
             expect(cell).to_contain_text(usd)
 
-        page.locator('.tabs a[data-view="markets"]').click()
+        open_tab(page, "markets")
         expect(page.locator("#watchlist").get_by_text("ตลาดปิด", exact=True)).to_be_visible()
         expect(page.locator("#overview")).to_have_attribute("data-loaded", "1")
         expect(page.locator("#mk-news")).to_have_attribute("data-loaded", "1")
@@ -210,7 +219,7 @@ def check_page_translations():
         expect(page.locator("#auto-pause")).to_have_text("ทำงานต่อ", timeout=10000)
         expect(page.locator("#auto-pause")).to_have_attribute("data-auto", "resume")
 
-        page.locator('[data-view="markets"]').click()
+        open_tab(page, "markets")
         watch = page.locator("#watch-sym")
         expect(watch).to_have_attribute("placeholder", "เพิ่มสัญลักษณ์ เช่น AMD")
         expect(page.locator("#watchlist").get_by_role("button", name="นำ BUY ออก")).to_be_visible()
@@ -252,7 +261,7 @@ def check_page_translations():
         assert original_price.evaluate("(element) => element.isConnected")
         lang.click()
 
-        page.locator('[data-view="portfolio"]').click()
+        open_tab(page, "portfolio")
         expect(page.locator("#orders")).to_contain_text("ซื้อ จำกัดราคา")
         expect(page.locator("#orders")).to_contain_text("รอผล")
         page.locator('#reset-form button[type="submit"]').click()
@@ -261,7 +270,7 @@ def check_page_translations():
         expect(page.locator('#reset-form button[type="submit"]')).to_have_text("Press again to erase")
         lang.click()
 
-        page.locator('[data-view="backtest"]').click()
+        open_tab(page, "backtest")
         expect(page.locator("#bt-strat option")).to_have_text("SMA ตัดกัน")
         page.locator('#bt-form [name="symbol"]').fill("BUY")
         page.locator('#bt-form [data-p="fast"]').fill("51")
@@ -275,6 +284,93 @@ def check_page_translations():
         browser.close()
 
 
+def check_clarity_views():
+    """Overview and AI trader pages with mock data: headline, goal progress, health, positions, expandable detail."""
+    stamp = 1795454141
+    llm = {
+        "equity_usd": 165, "equity_thb": 5500, "capital_usd": 150, "capital_thb": 5000,
+        "control_equity_usd": 150, "control_equity_thb": 5000, "paused": False, "last_scan_age_s": 12,
+        "model": "claude-haiku-5-5", "protocol": "v4.18", "universe_size": 217, "classes": {"stock": 148},
+        "calls_today": 4, "max_calls_day": 300, "next_scan_in_s": 60,
+        "positions": [{"symbol": "NVDA", "asset_class": "stock", "side": "long", "entry": 100, "mark": 105,
+                       "pnl_pct": 5, "stop": 95, "target": 115, "leverage": 2, "notional_usd": 31.5,
+                       "margin_usd": 15, "held_hours": 2, "horizon": "1d", "your_reason": "Earnings beat", "clipped_by": []}],
+        "decisions": [
+            {"ts": stamp, "symbol": "NVDA", "action": "buy", "reason": "Earnings beat and strong volume", "size_pct": 10,
+             "leverage": 2, "entry": "market", "stop_pct": 5, "target_pct": 10, "review_in_min": 30, "executed": {"status": "filled"}},
+            {"ts": stamp - 60, "symbol": "AMD", "action": "hold", "reason": "No clear catalyst"},
+        ],
+        "evaluation": {"closed_pairs": 3, "needed": 30, "verdict": "too early (3/30 closed pairs): no conclusion allowed",
+                       "by_protocol": {"v4.18": {"n": 3, "mean_diff": 0.01}},
+                       "sequential_by_protocol": {"v4.18": {"paired": {"n_units": 2, "e_value_edge": 1.2, "threshold": 20, "decision": None}}}},
+    }
+    accounts = {"thb_per_usd": 40, "buzz_events": 0, "rows": [
+        {"key": "llm", "name": "DeepSeek trader (v4, whole market)", "tab": "llm", "start_usd": 150, "start_thb": 5000,
+         "equity_usd": 165, "equity_thb": 5500, "control_usd": 150, "control_thb": 5000, "positions": 1,
+         "return_pct": 10, "status": "running", "note": "x"}]}
+    health = {"ok": False, "stale": ["llm_trader"], "ages_s": {"llm_trader": 2400, "poller": 10},
+              "uptime_s": 3600, "restarts": {}, "disk_free_gb": 5.0}
+
+    def offline(route):
+        url = urlsplit(route.request.url)
+        if url.hostname != "tradelab.test":
+            return route.abort()
+        if url.path == "/healthz":
+            return route.fulfill(status=503, json=health)  # unhealthy answers 503 with a JSON body
+        if url.path == "/api/accounts":
+            return route.fulfill(json=accounts)
+        if url.path == "/api/llm_trader":
+            return route.fulfill(json=llm)
+        if url.path == "/api/events":
+            return route.fulfill(json={**llm, "positions": [], "decisions": [], "events": [], "n_events": 0, "n_up": 0,
+                                       "scan_every_s": 10, "rules": {"shock": "", "trade": ""}})
+        if url.path in {"/api/account", "/api/alerts", "/api/quotes", "/api/overview", "/api/news"}:
+            return route.fulfill(json={"stats": {}, "positions": [], "alerts": [], "log": [], "watchlist": [], "quotes": [],
+                                       "groups": {}, "items": []})
+        file = UI / (url.path.lstrip("/") or "index.html")
+        return route.fulfill(path=file) if file.is_file() else route.fulfill(status=404)
+
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(channel="chrome")
+        page = browser.new_page(viewport={"width": 390, "height": 844})
+        page.route("**/*", offline)
+        page.goto(ORIGIN + "/#overview")
+        hero = page.locator("#ov-hero")
+        expect(hero).to_contain_text("Is it getting closer to the goal?")
+        expect(hero).to_contain_text("+5.0%")  # (165 - 150) / (450 - 150)
+        expect(hero).to_contain_text("ahead of the random control by +$15.00")
+        expect(page.locator("#ov-health")).to_contain_text("Needs attention")
+        expect(page.locator("#ov-health")).to_contain_text("AI trader")
+        expect(page.locator("#ov-pos")).to_contain_text("NVDA")
+        expect(page.locator("#ov-dec")).to_contain_text("Earnings beat")
+
+        tip = hero.locator("details.tip").first
+        tip.locator("summary").click()
+        expect(tip.locator(".tip-body")).to_be_visible()
+        with page.expect_response(ORIGIN + "/api/llm_trader", timeout=10000):
+            pass
+        page.wait_for_timeout(150)
+        expect(tip).to_have_attribute("open", "")  # the 5 s refresh must not close it
+
+        page.locator('.tabs a[data-view="llm"]').click()
+        expect(page.locator("#llm-hero")).to_contain_text("Progress to 3x")
+        expect(page.locator("#llm-list .badge").first).to_have_text("Buy")
+        decision = page.locator("#llm-list details.dec").first
+        expect(decision.locator(".dec-body")).not_to_be_visible()
+        decision.locator(":scope > summary").click()
+        expect(decision.locator(".dec-body")).to_contain_text("Earnings beat and strong volume")
+        expect(page.locator("#llm-list").get_by_text("No clear catalyst").first).not_to_be_visible()
+        expect(page.locator("#llm-figs")).to_contain_text("too early (3/30 closed pairs)")
+
+        page.locator("#lang-btn").click()
+        expect(page.locator("#llm-hero")).to_contain_text("ความคืบหน้าสู่เป้า 3 เท่า")
+        expect(page.locator("#llm-list .badge").first).to_have_text("ซื้อ")
+        page.locator('.tabs a[data-view="overview"]').click()
+        expect(page.locator("#ov-health")).to_contain_text("ต้องตรวจสอบ")
+        browser.close()
+
+
 if __name__ == "__main__":
     check_log_refresh()
     check_page_translations()
+    check_clarity_views()

@@ -15,14 +15,6 @@ const css = (v) => {
 };
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-function target3x(a) {
-  // Every account here is judged against one goal: 3x the starting capital. Closed pairs are only the evidence count.
-  const eq = a.equity_usd, cap = a.capital_usd, ev = a.evaluation || {};
-  if (eq == null || !cap) return "";
-  const pct = Math.max(0, Math.min(100, (eq - cap) / (2 * cap) * 100));
-  return `<div class="figure"><b>${eq.toFixed(2)} / ${(3 * cap).toFixed(2)} USD</b><span>toward the 3x goal (${pct.toFixed(0)}%) | closed pairs ${ev.closed_pairs ?? 0}</span></div>`;
-}
-
 async function api(path, body) {
   const r = await fetch("/api/" + path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
   const j = await r.json().catch(() => ({ error: "bad response" }));
@@ -96,6 +88,68 @@ function bindRowOpen(el) {
 const originalText = (s) => `<span translate="no">${esc(s)}</span>`;
 const symCell = (s, n) => `<span class="sym" translate="no">${esc(s)}</span>${n ? `<span class="sym-name" translate="no">${esc(n)}</span>` : ""}`;
 
+/* ---------- plain-language helpers (overview, AI trader, event trader) ---------- */
+/* New copy is written in both languages here and chosen at render time; the views redraw from cached data when the language changes. */
+const L = (en, th) => (LANG === "th" ? th : en);
+const sUsd = (v) => (v == null ? "–" : (v > 0 ? "+" : v < 0 ? "-" : "") + "$" + fmt(Math.abs(v), 2));
+const sGain = (v, text) => `<span class="${cls(v)}">${text ?? sUsd(v)}</span>`;
+const dtL = (t) => (t ? new Date(t * 1000).toLocaleString(LANG === "th" ? "th-TH-u-ca-gregory" : "en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "–");
+const agoL = (s) => (s == null ? L("never", "ยังไม่เคย") : s < 90 ? L(`${Math.round(s)} s ago`, `${Math.round(s)} วินาทีที่แล้ว`) : s < 5400 ? L(`${Math.round(s / 60)} min ago`, `${Math.round(s / 60)} นาทีที่แล้ว`) : L(`${(s / 3600).toFixed(1)} h ago`, `${(s / 3600).toFixed(1)} ชม. ที่แล้ว`));
+/* Jargon explained on demand. A native details element works with keyboard, touch and screen readers. */
+const GLOSS = {
+  pairs: ["pairs", "คู่เทียบ", "A pair is one closed trade by the bot and one closed trade by the random control account. A result only counts after enough pairs exist (30), because a few trades can be luck.", "คู่เทียบคือเทรดของบอทที่ปิดแล้ว 1 รายการ กับเทรดของบัญชีสุ่มที่ปิดแล้ว 1 รายการ ผลจะนับก็ต่อเมื่อมีครบ 30 คู่ เพราะไม่กี่ครั้งอาจเป็นแค่โชค"],
+  control: ["random control", "บัญชีสุ่มเทียบ", "A second play-money account that buys random symbols with the same size, leverage and costs. The bot only counts as good if it beats this account, not just if it makes money.", "บัญชีเงินจำลองอีกบัญชีที่ซื้อสินทรัพย์แบบสุ่มด้วยขนาด เลเวอเรจ และต้นทุนเท่ากัน บอทจะนับว่าดีก็ต่อเมื่อชนะบัญชีนี้ ไม่ใช่แค่ทำกำไรได้"],
+  protocol: ["protocol tag", "ป้ายเวอร์ชันกติกา", "The version label of the locked rule set. Results are counted separately for each version, so a rule change never mixes with older results.", "ป้ายบอกเวอร์ชันของกติกาที่ล็อกไว้ ผลลัพธ์นับแยกตามเวอร์ชัน เมื่อแก้กติกาจะไม่ปนกับผลเก่า"],
+  eprocess: ["evidence score (e-process)", "คะแนนหลักฐาน (e-process)", "A running score of the evidence that the bot beats the control, updated one day at a time. It has to pass the threshold shown beside it before the result counts. Below the threshold the honest answer is 'not proven'. It is not a probability of winning.", "คะแนนสะสมของหลักฐานว่าบอทชนะบัญชีสุ่ม ปรับทีละวัน ต้องผ่านเกณฑ์ที่แสดงข้างกันจึงจะนับ ต่ำกว่าเกณฑ์แปลว่ายังพิสูจน์ไม่ได้ ไม่ใช่ความน่าจะเป็นที่จะชนะ"],
+  leverage: ["leverage", "เลเวอเรจ", "Borrowed exposure. At 5x, a 1% price move changes the position by 5%. Gains and losses are both multiplied.", "การยืมขนาดสถานะเพิ่ม ที่ 5 เท่า ราคาขยับ 1% มูลค่าสถานะขยับ 5% ทั้งกำไรและขาดทุนถูกคูณ"],
+  margin: ["margin", "เงินประกัน", "The cash set aside to hold the position. Position size = margin x leverage.", "เงินที่กันไว้เพื่อถือสถานะ ขนาดสถานะ = เงินประกัน x เลเวอเรจ"],
+  stop: ["stop", "จุดตัดขาดทุน", "The price at which the bot closes the trade to limit the loss.", "ราคาที่บอทจะปิดสถานะเพื่อจำกัดการขาดทุน"],
+  target: ["target", "เป้ากำไร", "The price at which the bot closes the trade to take the profit.", "ราคาที่บอทจะปิดสถานะเพื่อเก็บกำไร"],
+  unrealized: ["unrealized P/L", "กำไร/ขาดทุนที่ยังไม่ปิด", "Profit or loss on a position that is still open. It only becomes real when the position is closed. The dollar figure is estimated from the size and the price change.", "กำไรหรือขาดทุนของสถานะที่ยังถืออยู่ จะเป็นจริงเมื่อปิดสถานะเท่านั้น ตัวเลขดอลลาร์ประมาณจากขนาดสถานะและราคาที่เปลี่ยน"],
+  shock: ["shock", "ราคาพุ่ง/ตกแรง", "A sudden large price move on unusually heavy trading volume. This is what wakes the bots up.", "ราคาขยับแรงอย่างกะทันหันพร้อมปริมาณซื้อขายสูงผิดปกติ เป็นสิ่งที่ปลุกบอทให้ทำงาน"],
+  vsSpy: ["vs SPY", "เทียบ SPY", "The move compared with SPY (a fund that tracks the US stock market) over the same time, so moves of the whole market are removed.", "การขยับเทียบกับ SPY (กองทุนที่ตามตลาดหุ้นสหรัฐ) ในช่วงเวลาเดียวกัน เพื่อตัดการขยับของตลาดทั้งหมดออก"],
+  goal: ["3x goal", "เป้า 3 เท่า", "The goal is for the simulated account to reach 3 times its starting money in 30 days after costs, while also beating the random control. Shown only as progress, not a promise.", "เป้าหมายคือให้บัญชีจำลองโตเป็น 3 เท่าของทุนเริ่มต้นภายใน 30 วันหลังหักต้นทุน และชนะบัญชีสุ่มด้วย แสดงเป็นความคืบหน้าเท่านั้น ไม่ใช่คำสัญญา"],
+};
+function tip(key) {
+  const g = GLOSS[key];
+  if (!g) return "";
+  const name = L(g[0], g[1]);
+  return `<details class="tip" data-log-detail="tip:${key}"><summary aria-label="${esc(L("What is " + g[0] + "?", "คืออะไร: " + g[1]))}"><span aria-hidden="true">?</span></summary><span class="tip-body"><b>${esc(name)}</b> ${esc(L(g[2], g[3]))}</span></details>`;
+}
+/* Progress from 0 to the 3x goal. The tick marks the starting money; below the tick means a loss, shown as such. */
+function goalBar(eq, cap) {
+  if (eq == null || !cap) return "";
+  const goal = 3 * cap, progress = (eq - cap) / (goal - cap) * 100, fill = Math.max(0, Math.min(100, eq / goal * 100));
+  const left = goal - eq;
+  const summary = L(`${usd(eq)} now, started with ${usd(cap)}, goal ${usd(goal)}`, `ตอนนี้ ${usd(eq)} เริ่มจาก ${usd(cap)} เป้า ${usd(goal)}`);
+  return `<div class="gbar-wrap"><div class="gbar" role="img" aria-label="${esc(summary)}"><span class="gbar-fill ${eq >= cap ? "up" : "down"}" style="width:${fill.toFixed(1)}%"></span><span class="gbar-tick" style="left:33.33%"></span></div>
+    <div class="gbar-scale small muted"><span>$0</span><span>${L("start", "ทุนเริ่ม")} ${usd(cap)}</span><span>${L("goal", "เป้า")} ${usd(goal)}</span></div>
+    <div class="gbar-text">${L("Progress to 3x", "ความคืบหน้าสู่เป้า 3 เท่า")}: ${sGain(progress, pct(progress, 1))} ${tip("goal")}<span class="muted"> ${left > 0 ? L(`(${usd(left)} to go)`, `(เหลืออีก ${usd(left)})`) : L("(goal reached on paper; check the evidence below)", "(ถึงเป้าบนกระดาษแล้ว ดูหลักฐานด้านล่างด้วย)")}</span></div></div>`;
+}
+/* One headline line: money, change from start, and the gap to the random control. It only describes; the server's verdict is shown separately. */
+function headline(eq, cap, ctrl) {
+  const ret = cap ? (eq / cap - 1) * 100 : null, gap = ctrl == null ? null : eq - ctrl;
+  const vs = gap == null ? "" : gap >= 0
+    ? L(`ahead of the random control by ${sGain(gap)}`, `นำบัญชีสุ่ม ${sGain(gap)}`)
+    : L(`behind the random control by ${sGain(gap)}`, `ตามบัญชีสุ่ม ${sGain(gap)}`);
+  return `<p class="hero-line"><span class="hero-num">${usd(eq)}</span> <span class="hero-sub">${sGain(ret, pct(ret))} ${L("since the start", "จากทุนเริ่มต้น")}${vs ? ", " + vs : ""}</span></p>`;
+}
+const verdictBlock = (ev) => `<div class="verdict"><b>${L("Verdict from the system", "ข้อสรุปจากระบบ")}:</b> <span>${esc(ev.verdict || "")}</span> ${tip("pairs")}</div>
+  <p class="small muted">${L(`Closed pairs: ${ev.closed_pairs ?? 0} of ${ev.needed ?? 30} needed before any conclusion is allowed.`, `คู่เทียบที่ปิดแล้ว ${ev.closed_pairs ?? 0} จาก ${ev.needed ?? 30} คู่ที่ต้องมีก่อนสรุปผลได้`)}</p>`;
+const ACTION = { buy: ["Buy", "ซื้อ", "b-buy"], short: ["Short", "ขายชอร์ต", "b-sell"], sell: ["Sell", "ขาย", "b-sell"], adjust: ["Adjust stop/target", "ปรับจุดตัดขาดทุน/เป้า", "b-adj"] };
+function actionBadge(r, held) {
+  const a = ACTION[r.action];
+  if (a) return `<span class="badge ${a[2]}">${esc(L(a[0], a[1]))}</span>`;
+  return `<span class="badge b-pass">${esc(r.action === "hold" ? (held ? L("Hold position", "ถือสถานะต่อ") : L("Pass", "ไม่เปิดสถานะ")) : r.action || "?")}</span>`;
+}
+const clip = (s, n) => { s = String(s ?? "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n - 1) + "…" : s; };
+const approxPnl = (r) => (r.notional_usd != null && r.entry && r.mark ? (r.side === "short" ? -1 : 1) * (r.notional_usd - r.notional_usd * r.entry / r.mark) : null);
+const plPct = (r) => { const p = approxPnl(r); return `${sGain(r.pnl_pct, pct(r.pnl_pct))}${p != null ? `<span class="sym-name">≈ ${sGain(p)}</span>` : ""}`; };
+const kv = (rows) => `<dl class="kv">${rows.filter(Boolean).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;
+/* Redraw an element only when its markup changed, keeping open details, focus and scroll (the 5 s refresh must not close them). */
+const put = (sel, markup) => updateLogMarkup($(sel), markup);
+const LOCAL = {};   /* last data per view, so a language switch redraws without a request */
+
 /* ---------- routing (state lives in the hash) ---------- */
 const route = { view: "overview", symbol: "AAPL", range: "1y" };
 function readHash() {
@@ -114,6 +168,8 @@ function show() {
   $$(".view").forEach((s) => (s.hidden = s.id !== "v-" + route.view));
   $$(".tabs a").forEach((a) => a.toggleAttribute("aria-current", a.dataset.view === route.view) || (a.dataset.view === route.view && a.setAttribute("aria-current", "page")));
   $$(".tabs a").forEach((a) => (a.dataset.view === route.view ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current")));
+  const more = $("#more-tabs");
+  if (more) { more.classList.toggle("has-current", Boolean($(`.more-list a[data-view="${route.view}"]`))); more.open = false; }
   views[route.view]?.();
 }
 function openChart(sym) {
@@ -728,14 +784,84 @@ function rorCalc() {
 ["#size-form", "#ror-form"].forEach((id) => $(id).addEventListener("input", id === "#size-form" ? sizeCalc : rorCalc));
 views.tools = () => { sizeCalc(); rorCalc(); };
 
-/* ---------- overview of all accounts ---------- */
+/* ---------- overview: one page that answers "is it getting closer to the goal?" ---------- */
 const accountAmounts = (thb, dollars) => thb == null ? "–" : `${fmt(thb, 2)} THB<span class="sym-name">${fmt(dollars, 2)} USD</span>`;
+const BOT_NAME = {
+  manual: ["Manual sandbox", "บัญชีทดลองสั่งเอง"], auto: ["Auto trader (monthly momentum)", "บอทหลัก (โมเมนตัมรายเดือน)"], hunter: ["Hunter (20x crypto)", "Hunter (คริปโตเลเวอเรจ 20 เท่า)"],
+  event: ["Event trader (fixed rule)", "Event trader (กติกาตายตัว)"], llm: ["AI trader (whole market)", "บอท AI (ทั้งตลาด)"],
+};
+const botName = (r) => (BOT_NAME[r.key] ? L(...BOT_NAME[r.key]) : esc(r.name));
+const STATUS_NAME = { running: ["Running", "กำลังทำงาน"], paused: ["Paused", "หยุดชั่วคราว"], ruined: ["Wiped out", "พอร์ตล้ม"], "you place the orders": ["You place the orders", "คุณสั่งเอง"] };
+const statusName = (s) => (STATUS_NAME[s] ? L(...STATUS_NAME[s]) : esc(s));
+const JOB_NAME = {
+  poller: ["Price feed", "ตัวดึงราคา"], auto_trader: ["Auto trader", "บอทหลัก"], event_trader: ["Event trader", "Event trader"], buzz: ["Social buzz monitor", "ตัวตรวจกระแสโซเชียล"],
+  news_archive: ["News archive", "คลังข่าว"], llm_trader: ["AI trader", "บอท AI"],
+};
+const jobName = (k) => (JOB_NAME[k] ? L(...JOB_NAME[k]) : esc(k));
+/* /healthz sits outside /api and answers 503 with a JSON body exactly when something is stale, so read the body either way. */
+async function fetchHealth() {
+  const r = await fetch("/healthz");
+  const j = await r.json();
+  if (typeof j !== "object" || j === null || !("ok" in j)) throw new Error("bad response");
+  return j;
+}
+function healthBlock(h) {
+  if (!h) return `<p class="small muted">${L("System health could not be read right now.", "อ่านสถานะระบบตอนนี้ไม่ได้")}</p>`;
+  const late = (h.stale || []).map(jobName).join(", ");
+  const rows = Object.entries(h.ages_s || {}).map(([k, v]) => `<tr><td>${jobName(k)}</td><td class="num">${agoL(v)}</td><td>${(h.stale || []).includes(k) ? L("late", "ช้ากว่ากำหนด") : L("on time", "ตามกำหนด")}</td></tr>`).join("");
+  return `<div class="health ${h.ok ? "ok" : "bad"}"><p><b>${h.ok ? L("System is healthy", "ระบบทำงานปกติ") : L("Needs attention", "ต้องตรวจสอบ")}</b> ${h.ok ? L("Every background job reported on time.", "ทุกงานเบื้องหลังรายงานตามกำหนด") : L(`Not reporting on time: ${late || "disk space"}.`, `ไม่รายงานตามกำหนด: ${late || "พื้นที่ดิสก์"}`)}</p>
+    <details data-log-detail="ov:health"><summary>${L("System details", "รายละเอียดระบบ")}</summary>
+      <div class="tbl-wrap"><table><thead><tr><th scope="col">${L("Job", "งาน")}</th><th scope="col" class="num">${L("Last report", "รายงานล่าสุด")}</th><th scope="col">${L("State", "สถานะ")}</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="small muted">${L(`Running for ${fmt((h.uptime_s || 0) / 3600, 1)} h, ${h.restarts ? Object.values(h.restarts).reduce((a, b) => a + b, 0) : 0} restarts, ${fmt(h.disk_free_gb, 1)} GB disk free.`, `ทำงานมาแล้ว ${fmt((h.uptime_s || 0) / 3600, 1)} ชม. รีสตาร์ต ${h.restarts ? Object.values(h.restarts).reduce((a, b) => a + b, 0) : 0} ครั้ง ดิสก์ว่าง ${fmt(h.disk_free_gb, 1)} GB`)}</p></details></div>`;
+}
+function goalMini(eq, cap) {
+  if (eq == null || !cap) return "";
+  const goal = 3 * cap, progress = (eq - cap) / (goal - cap) * 100;
+  return `<div class="gbar gbar-s" role="img" aria-label="${esc(L(`Progress to 3x: ${pct(progress, 1)}`, `ความคืบหน้าสู่เป้า 3 เท่า ${pct(progress, 1)}`))}"><span class="gbar-fill ${eq >= cap ? "up" : "down"}" style="width:${Math.max(0, Math.min(100, eq / goal * 100)).toFixed(1)}%"></span><span class="gbar-tick" style="left:33.33%"></span></div>
+    <div class="small">${L("To 3x", "สู่เป้า 3 เท่า")}: ${sGain(progress, pct(progress, 1))}</div>`;
+}
+function decLine(r, held) {
+  return `<li class="dec-line"><span class="when">${dtL(r.ts)}</span> ${actionBadge(r, held)} <b class="sym" translate="no">${esc(r.symbol)}</b> <span class="why" translate="no">${esc(clip(r.reason, 150))}</span></li>`;
+}
 views.overview = async () => {
-  const el = $("#ov-table");
-  let d;
-  try { d = await api("accounts"); } catch (e) { el.innerHTML = errBox(e, "overview"); return; }
-  $("#ov-sub").textContent = `Current exchange rate: 1 USD = ${fmt(d.thb_per_usd, 2)} THB | Buzz events: ${d.buzz_events ?? "–"}`;
-  el.innerHTML = table([
+  const names = ["acc", "llm", "evt", "health"];
+  const got = await Promise.allSettled([api("accounts"), api("llm_trader"), api("events"), fetchHealth()]);
+  LOCAL.overview = Object.fromEntries(names.map((n, i) => [n, got[i]]));
+  drawOverview();
+};
+function drawOverview() {
+  const D = LOCAL.overview;
+  if (!D) return;
+  const val = (r) => (r.status === "fulfilled" ? r.value : null);
+  const acc = val(D.acc), llm = val(D.llm), evt = val(D.evt), health = val(D.health);
+  $("#ov-lead").textContent = L("Goal: simulated money grows 3x in 30 days after costs, and beats a random control account. Play money only.", "เป้าหมาย: เงินจำลองโต 3 เท่าใน 30 วันหลังหักต้นทุน และชนะบัญชีสุ่ม ใช้เงินจำลองเท่านั้น");
+  if (!acc) { put("#ov-hero", errBox(D.acc.reason, "overview")); return; }
+  $("#ov-sub").textContent = `Current exchange rate: 1 USD = ${fmt(acc.thb_per_usd, 2)} THB | Buzz events: ${acc.buzz_events ?? "–"}`;
+  const rows = acc.rows || [];
+  const main = rows.find((r) => r.key === "llm") || rows.find((r) => r.control_usd != null) || rows[0];
+  const mainData = !main ? null : main.tab === "llm" ? llm : main.tab === "events" ? evt : null;
+  put("#ov-hero", !main ? `<div class="empty">${L("No accounts.", "ไม่มีบัญชี")}</div>` : `<div class="hero"><h2>${L("Is it getting closer to the goal?", "ใกล้ถึงเป้าหรือยัง")}</h2>
+    <p class="small muted">${L("Main experiment", "การทดลองหลัก")}: <a href="#${esc(main.tab)}">${botName(main)}</a></p>
+    ${headline(main.equity_usd, main.start_usd, main.control_usd)}${goalBar(main.equity_usd, main.start_usd)}
+    ${mainData?.evaluation ? `<div class="verdict"><b>${L("Verdict from the system", "ข้อสรุปจากระบบ")}:</b> <span>${esc(mainData.evaluation.verdict || "")}</span> ${tip("pairs")}</div>` : ""}</div>`);
+  put("#ov-health", healthBlock(health));
+  put("#ov-cards", rows.length ? `<ul class="cards">${rows.map((r) => {
+    const gap = r.control_usd == null ? null : r.equity_usd - r.control_usd;
+    return `<li class="card"><div class="row spread"><a class="card-name" href="#${esc(r.tab)}">${botName(r)}</a><span class="chip">${statusName(r.status)}</span></div>
+      <div class="card-num">${usd(r.equity_usd)} <span class="small">${sGain(r.return_pct, pct(r.return_pct))}</span></div>
+      ${gap == null ? `<div class="small muted">${L("No random control for this account", "บัญชีนี้ไม่มีบัญชีสุ่มเทียบ")}</div>` : `<div class="small">${gap >= 0 ? L("Ahead of control", "นำบัญชีสุ่ม") : L("Behind control", "ตามบัญชีสุ่ม")} ${sGain(gap)} ${tip("control")}</div>`}
+      ${r.key === "manual" || r.tab === "portfolio" ? "" : goalMini(r.equity_usd, r.start_usd)}
+      <div class="small muted">${L("Open positions", "สถานะที่ถืออยู่")}: ${r.positions ?? 0}</div></li>`;
+  }).join("")}</ul>` : `<div class="empty">${L("No accounts.", "ไม่มีบัญชี")}</div>`);
+  /* open positions across the two bots that report them */
+  const pos = [...(llm?.positions || []).map((p) => ({ ...p, bot: L("AI trader", "บอท AI"), why: p.your_reason })), ...(evt?.positions || []).map((p) => ({ ...p, bot: "Event trader", side: "long" }))];
+  put("#ov-pos", pos.length ? table([{ h: L("Bot", "บอท"), f: (r) => r.bot }, ...posCols({ key: "ov", body: posBody })], pos, {}) : `<div class="empty">${L("No open positions right now. The bots only trade when something moves a lot.", "ตอนนี้ไม่มีสถานะที่ถืออยู่ บอทจะเทรดเมื่อมีราคาขยับแรงเท่านั้น")}</div>`);
+  const held = new Set((llm?.positions || []).map((p) => p.symbol));
+  const acts = (llm?.decisions || []).filter((d) => d.action !== "hold");
+  const latest = acts.slice(0, 6);
+  put("#ov-dec", llm ? (latest.length ? `<ul class="decs">${latest.map((d) => decLine(d, held.has(d.symbol))).join("")}</ul>` : `<div class="empty">${L(`No trades or changes in the latest ${(llm.decisions || []).length} decisions; the AI passed on everything it was shown.`, `ไม่มีการเทรดหรือปรับสถานะใน ${(llm.decisions || []).length} การตัดสินใจล่าสุด AI ผ่านทุกตัวที่เห็น`)}</div>`)
+    + `<p class="small"><a href="#llm">${L("All decisions and reasons", "การตัดสินใจและเหตุผลทั้งหมด")}</a> | <a href="#logs">${L("Full decision log", "บันทึกการตัดสินใจฉบับเต็ม")}</a></p>` : `<div class="empty">${L("AI trader data is not available.", "ไม่มีข้อมูลบอท AI")}</div>`);
+  $("#ov-table").innerHTML = table([
     { h: "Account", f: (r) => `<a href="#${r.tab}"><b>${esc(r.name)}</b></a>` },
     { h: "Starting capital", num: 1, f: (r) => accountAmounts(r.start_thb, r.start_usd) },
     { h: "Equity", num: 1, f: (r) => accountAmounts(r.equity_thb, r.equity_usd) },
@@ -744,8 +870,9 @@ views.overview = async () => {
     { h: "Open", num: 1, f: (r) => r.positions },
     { h: "Status", f: (r) => esc(r.status) },
     { h: "Note", f: (r) => esc(r.note) },
-  ], d.rows, { empty: "No accounts." });
-};
+  ], rows, { empty: "No accounts." });
+}
+
 
 /* ---------- decision log ---------- */
 let logSource = "llm";
@@ -753,6 +880,13 @@ let logRequest;
 const logMarkup = new WeakMap();
 const BADGE = { buy: "BUY", sell: "SELL", adjust: "ADJUST" };
 const hmin = (s) => (s % 3600 === 0 ? s / 3600 + "h" : s / 3600 >= 1 ? (s / 3600).toFixed(1) + "h" : Math.round(s / 60) + "m");
+function cycleSummary(c, held) {
+  const ds = c.decisions || [], n = (f) => ds.filter(f).length;
+  const bought = n((d) => d.action === "buy" || d.action === "short"), sold = n((d) => d.action === "sell" || d.action === "adjust");
+  const kept = n((d) => d.action === "hold" && held.has(d.symbol)), passed = n((d) => d.action === "hold" && !held.has(d.symbol));
+  const seen = (c.candidates || []).length;
+  return `<p class="cyc-sum">${L(`Looked at ${seen} moving stocks: ${bought} bought, ${sold} sold or adjusted, ${kept} kept, ${passed} passed.`, `ดูหุ้นที่ขยับ ${seen} ตัว: ซื้อ ${bought} ขายหรือปรับ ${sold} ถือต่อ ${kept} ไม่เปิดสถานะ ${passed}`)}</p>`;
+}
 function cycleCard(c) {
   const key = esc(c.ts);
   const when = new Date(c.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" });
@@ -778,6 +912,7 @@ function cycleCard(c) {
   }).join("");
   return `<div class="panel" data-log-cycle="${key}" style="margin:12px 0"><div class="row spread"><b>${when} | ${esc(c.trigger || "?")}</b><span class="small muted">${esc(c.model || "")} ${c.seconds != null ? "| " + c.seconds + " s" : ""}</span></div>
     <p class="small muted">SPY ${mk.spy_move_pct != null ? pct(mk.spy_move_pct) : "-"} | VIX ${mk.vix ?? "-"} | account ${fmt(ac.equity_usd, 2)} USD, exposure ${ac.exposure_pct ?? 0}%, ${(ac.positions || []).length} open</p>
+    ${cycleSummary(c, held)}
     ${c.market_view ? `<p><b>Market view:</b> ${esc(c.market_view)}</p>` : ""}${c.error ? `<p class="down">Error: ${esc(c.error)}</p>` : ""}
     ${c.risk ? `<p class="small muted"><b>Risk review:</b> ${Object.entries(c.risk.reviews || {}).map(([s, r]) => `${esc(s)} ${r.approve ? "approved" : "vetoed"}${r.size_multiplier != null && r.size_multiplier < 1 ? " (" + Math.round(r.size_multiplier * 100) + "% size)" : ""}${r.reason ? ": " + esc(r.reason) : ""}`).join(" | ") || esc(c.risk.error || "no comments")}</p>` : ""}
     ${c.analysts ? `<details data-log-detail="${key}:analysts"><summary class="small muted">analyst notes</summary>${Object.entries(c.analysts).map(([n, notes]) => `<p class="small"><b>${esc(n)}:</b> ${Object.entries(notes || {}).map(([s, v]) => `${esc(s)} ${esc(v)}`).join("; ") || "-"}</p>`).join("")}</details>` : ""}
@@ -854,55 +989,96 @@ function execHtml(x) {
   return bits.join("<br>");
 }
 
+/* ---------- shared pieces of the two trader pages ---------- */
+const posBody = (r) => `${r.why || r.your_reason ? `<p class="why-full" translate="no">${esc(r.why || r.your_reason)}</p>` : ""}${kv([
+  r.leverage != null ? [`${L("Leverage", "เลเวอเรจ")} ${tip("leverage")}`, fmt(r.leverage, 1) + "x"] : null,
+  r.margin_usd != null ? [`${L("Margin", "เงินประกัน")} ${tip("margin")}`, usd(r.margin_usd)] : null,
+  r.notional_usd != null ? [L("Position size", "ขนาดสถานะ"), usd(r.notional_usd)] : null,
+  r.horizon ? [L("Planned holding", "ระยะถือที่วางไว้"), esc(r.horizon)] : null,
+  r.held_hours != null ? [L("Held so far", "ถือมาแล้ว"), L(fmt(r.held_hours, 1) + " h", fmt(r.held_hours, 1) + " ชม.")] : null,
+  r.exit_at ? [L("Can exit after", "ออกได้หลัง"), dtL(r.exit_at)] : null,
+  r.control ? [L("Random control", "บัญชีสุ่มเทียบ"), `${esc(r.control.symbol)} ${r.control.pnl_pct != null ? pct(r.control.pnl_pct) : ""}`] : null,
+  (r.clipped_by || []).length ? [L("Size cut by", "ถูกลดขนาดโดย"), esc(r.clipped_by.join("; "))] : null,
+])}`;
+function posCols(extra) {
+  return [
+    { h: L("Stock", "หุ้น"), f: (r) => `${symCell(r.symbol, "")}<span class="sym-name">${r.side === "short" ? L("short", "ชอร์ต") : L("long", "ซื้อ")}${r.asset_class ? " · " + esc(r.asset_class) : ""}</span>` },
+    { h: L("Entry", "ราคาเข้า"), num: 1, f: (r) => fmt(r.entry) },
+    { h: L("Now", "ตอนนี้"), num: 1, f: (r) => fmt(r.mark) },
+    { h: `${L("P/L", "กำไร/ขาดทุน")} ${tip("unrealized")}`, num: 1, f: plPct },
+    { h: `${L("Stop", "ตัดขาดทุน")} ${tip("stop")}`, num: 1, f: (r) => (r.stop ? fmt(r.stop) : "–") },
+    { h: `${L("Target", "เป้ากำไร")} ${tip("target")}`, num: 1, f: (r) => (r.target ? fmt(r.target) : L("none", "ไม่มี")) },
+    { h: L("Details", "รายละเอียด"), f: (r) => `<details data-log-detail="pos:${esc(extra.key)}:${esc(r.bot || "")}:${esc(r.symbol)}"><summary>${L("Why and size", "เหตุผลและขนาด")}</summary>${extra.body(r)}</details>` },
+  ];
+}
+const basisLine = (d) => `<p class="small muted">${L(`Starting money for each account: ${fmt(d.capital_thb, 2)} THB (${fmt(d.capital_usd, 2)} USD). Both accounts convert to THB at the rate on their opening day.`, `ทุนเริ่มต้นของแต่ละบัญชี ${fmt(d.capital_thb, 2)} บาท (${fmt(d.capital_usd, 2)} USD) ทั้งสองบัญชีแปลงเป็นบาทด้วยอัตราวันเปิดบัญชี`)}</p>`;
 function accountComparison(d, label) {
   return `<div class="figure hot"><b>${fmt(d.equity_thb, 2)} THB</b><span>${label}</span><div class="small">${fmt(d.equity_usd, 2)} USD</div></div>
-    <div class="figure"><b>${fmt(d.control_equity_thb, 2)} THB</b><span>Random control account</span><div class="small">${fmt(d.control_equity_usd, 2)} USD</div></div>`;
+    <div class="figure"><b>${fmt(d.control_equity_thb, 2)} THB</b><span>${L("Random control account", "บัญชีสุ่มเทียบ")}</span> ${tip("control")}<div class="small">${fmt(d.control_equity_usd, 2)} USD</div></div>`;
 }
-const accountBasis = (d) => `<p class="small muted"><span>Starting capital for each account</span> ${fmt(d.capital_thb, 2)} THB (${fmt(d.capital_usd, 2)} USD). <span>Both accounts use their opening exchange rate for THB.</span></p>`;
 
-/* ---------- DeepSeek trader ---------- */
+/* ---------- AI trader ---------- */
 views.llm = async () => {
-  const figs = $("#llm-figs");
   let l;
-  try { l = await api("llm_trader"); } catch (e) { figs.innerHTML = errBox(e, "llm"); return; }
-  if (l.disabled) { figs.innerHTML = `<div class="empty">The DeepSeek trader is off on this server (needs the OPENROUTER_API_KEY secret).</div>`; return; }
+  try { l = await api("llm_trader"); } catch (e) { put("#llm-figs", errBox(e, "llm")); return; }
+  LOCAL.llm = l;
+  drawLlm();
+};
+function drawLlm() {
+  const l = LOCAL.llm;
+  if (!l) return;
+  $("#llm-lead").textContent = L("An AI model picks trades with play money. Every trade is compared with a random control trade, to see whether the AI adds anything.", "โมเดล AI เลือกเทรดด้วยเงินจำลอง ทุกเทรดถูกเทียบกับเทรดสุ่มเพื่อดูว่า AI เพิ่มอะไรให้จริงหรือไม่");
+  if (l.disabled) { put("#llm-hero", ""); put("#llm-figs", `<div class="empty">${L("The AI trader is off on this server (no model provider is configured).", "บอท AI ปิดอยู่บนเซิร์ฟเวอร์นี้ (ยังไม่ได้ตั้งผู้ให้บริการโมเดล)")}</div>`); return; }
   const ev = l.evaluation || {}, dis = ev.discrimination || {}, cl = l.classes || {};
   const classes = Object.entries(cl).map(([k, v]) => `${v} ${k}`).join(", ");
-  $("#llm-sub").textContent = `${l.model} | ${l.universe_size} symbols (${classes}) | calls today ${l.calls_today}/${l.max_calls_day} | next scheduled scan in ${l.next_scan_in_s ?? "?"} s${l.error ? " | " + l.error : ""}`;
-  figs.innerHTML = `<div class="figures">
-    ${accountComparison(l, "DeepSeek account")}
-    ${target3x(l)}
-    <div class="figure"><b>${l.paused ? "Paused" : "Running"}</b><span>last scan ${l.last_scan_age_s ?? "never"} s ago</span></div></div>
-    ${accountBasis(l)}
-    <p class="small muted">Protocol v4.1: the same paper account now runs three analyst calls (news, price, macro), a bull/bear debate with a rebuttal round, an advisory risk review that can only veto or cut size, 30-trade memory and up to 24 candidates, with a scheduled scan every 10 minutes. v4.2 keeps everything above but sends every call of a cycle with the same data block first, so the model's prompt cache makes the later calls cheaper and faster; the real cost per cycle is logged. Headlines on closed markets wait for a pre-open briefing (09:10-09:29 New York) whose watchlist starts the first cycle at the open, and a scheduled scan with nothing new is skipped. v4 rules are unchanged otherwise: the model sees US stocks, ETFs, commodity futures, FX and crypto, chooses whether to trade, the margin (0-100% of equity), leverage (1-20x, margin = notional / leverage), entry, stop, target and when to look again. The control account buys a random symbol in the same asset class with the same notional and leverage.</p>
-    <p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>
-    <p class="small muted">Every symbol shown to the model is also scored +1 day vs SPY. Bought: ${dis.bought ? dis.bought.n : 0} scored${dis.bought && dis.bought.mean_abnormal_1d != null ? ", mean " + pct(dis.bought.mean_abnormal_1d * 100) : ""}.
-    Passed: ${dis.passed ? dis.passed.n : 0} scored${dis.passed && dis.passed.mean_abnormal_1d != null ? ", mean " + pct(dis.passed.mean_abnormal_1d * 100) : ""}. Rules: research/llm_trader/protocol.md</p>
-    ${Object.keys(ev.by_class || {}).length ? `<p class="small muted">By asset class (closed pairs): ${Object.entries(ev.by_class).map(([k, v]) => `${k} ${v.n}, mean difference ${pct(v.mean_diff * 100)}`).join(" | ")}</p>` : ""}`;
-  $("#llm-pos").innerHTML = table([
-    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Class", f: (r) => esc(r.asset_class || "-") },
-    { h: "Side", f: (r) => esc(r.side === "short" ? "Short" : "Long") },
-    { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
-    { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) },
-    { h: "Leverage", num: 1, f: (r) => fmt(r.leverage, 1) + "x" },
-    { h: "Notional (USD)", num: 1, f: (r) => fmt(r.notional_usd, 2) }, { h: "Margin (USD)", num: 1, f: (r) => fmt(r.margin_usd, 2) },
-    { h: "Stop", num: 1, f: (r) => fmt(r.stop) }, { h: "Target", num: 1, f: (r) => fmt(r.target) },
-    { h: "Horizon", f: (r) => esc(r.horizon || "-") }, { h: "Held (h)", num: 1, f: (r) => fmt(r.held_hours, 1) },
-    { h: "Why", f: (r) => esc(r.your_reason || "") + ((r.clipped_by || []).length ? `<br><span class="muted">cut by: ${esc(r.clipped_by.join("; "))}</span>` : "") },
-  ], l.positions, { empty: "No open positions." });
-  $("#llm-list").innerHTML = table([
-    { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" }) },
-    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Class", f: (r) => esc(r.asset_class || "-") },
-    { h: "Action", f: (r) => esc(r.action) },
-    { h: "Size % (margin)", num: 1, f: (r) => (r.action === "buy" ? fmt(r.size_pct, 1) : "-") }, { h: "Leverage", num: 1, f: (r) => (r.action === "buy" ? fmt(r.leverage, 1) + "x" : "-") },
-    { h: "Entry", f: (r) => (r.action === "buy" ? esc(r.entry || "market") + (r.limit_price ? " @ " + fmt(r.limit_price) : "") : "-") },
-    { h: "Horizon", f: (r) => esc(r.horizon || "-") },
-    { h: "Stop / target %", f: (r) => (["buy", "adjust"].includes(r.action) ? `${r.stop_pct != null ? fmt(r.stop_pct, 0) : "-"} / ${r.target_pct != null ? fmt(r.target_pct, 0) : "-"}` : "-") },
-    { h: "Look again (min)", num: 1, f: (r) => (r.action === "sell" ? "-" : fmt(r.review_in_min, 0)) },
-    { h: "Result", f: (r) => execHtml(r.executed) },
-    { h: "Reason (model)", f: (r) => esc(r.reason) },
-  ], l.decisions, { empty: "No decisions yet; the model is asked when new shocks appear." });
-};
+  $("#llm-sub").textContent = L(`${l.model} | ${l.universe_size} symbols (${classes}) | model calls today ${l.calls_today}/${l.max_calls_day} | next scheduled scan in ${l.next_scan_in_s ?? "?"} s${l.error ? " | " + l.error : ""}`,
+    `${l.model} | ${l.universe_size} สินทรัพย์ (${classes}) | เรียกโมเดลวันนี้ ${l.calls_today}/${l.max_calls_day} ครั้ง | สแกนตามกำหนดอีก ${l.next_scan_in_s ?? "?"} วินาที${l.error ? " | " + l.error : ""}`);
+  put("#llm-hero", `<div class="hero">${headline(l.equity_usd, l.capital_usd, l.control_equity_usd)}${goalBar(l.equity_usd, l.capital_usd)}</div>`);
+  const seq = Object.entries(ev.sequential_by_protocol || {}).filter(([, v]) => v && v.paired);
+  const bp = ev.by_protocol || {};
+  const evidence = seq.length ? `<details data-log-detail="llm:evidence"><summary>${L("Evidence by rule version", "หลักฐานแยกตามเวอร์ชันกติกา")}</summary>
+    ${table([
+      { h: `${L("Rule version", "เวอร์ชันกติกา")} ${tip("protocol")}`, f: ([k]) => `<span class="sym" translate="no">${esc(k)}</span>${k === l.protocol ? ` <span class="chip">${L("current", "ปัจจุบัน")}</span>` : ""}` },
+      { h: L("Days counted", "จำนวนวันที่นับ"), num: 1, f: ([, v]) => v.paired.n_units },
+      { h: `${L("Evidence score", "คะแนนหลักฐาน")} ${tip("eprocess")}`, num: 1, f: ([, v]) => `${fmt(v.paired.e_value_edge, 2)} / ${fmt(v.paired.threshold, 0)}` },
+      { h: L("Decision", "ผลตัดสิน"), f: ([, v]) => esc(v.paired.decision ?? L("not decided yet", "ยังไม่ตัดสิน")) },
+      { h: L("Closed pairs", "คู่เทียบที่ปิดแล้ว"), num: 1, f: ([k]) => (bp[k] ? bp[k].n : 0) },
+    ], seq, {})}
+    <p class="small muted">${L("The evidence score needs to reach the number after the slash before the AI counts as better than the control.", "คะแนนหลักฐานต้องถึงตัวเลขหลังเครื่องหมายทับก่อน จึงจะนับว่า AI ดีกว่าบัญชีสุ่ม")}</p></details>` : "";
+  put("#llm-figs", `<div class="figures">
+    ${accountComparison(l, L("AI trader account", "บัญชีบอท AI"))}
+    <div class="figure"><b>${l.paused ? L("Paused", "หยุดชั่วคราว") : L("Running", "กำลังทำงาน")}</b><span>${L("last scan", "สแกนล่าสุด")} ${agoL(l.last_scan_age_s)}</span></div></div>
+    ${verdictBlock({ ...ev, closed_pairs: ev.closed_pairs, needed: ev.needed })}
+    ${evidence}
+    <details data-log-detail="llm:how"><summary>${L("How this bot works and its checks", "บอทนี้ทำงานอย่างไร และการตรวจสอบ")}</summary>
+      <p class="small muted">${L("Model", "โมเดล")}: <span translate="no">${esc(l.model)}</span> | ${L("rule version", "เวอร์ชันกติกา")}: <span translate="no">${esc(l.protocol)}</span> ${tip("protocol")}</p>
+      ${basisLine(l)}
+      <p class="small muted">Protocol v4.1: the same paper account now runs three analyst calls (news, price, macro), a bull/bear debate with a rebuttal round, an advisory risk review that can only veto or cut size, 30-trade memory and up to 24 candidates, with a scheduled scan every 10 minutes. v4.2 keeps everything above but sends every call of a cycle with the same data block first, so the model's prompt cache makes the later calls cheaper and faster; the real cost per cycle is logged. Headlines on closed markets wait for a pre-open briefing (09:10-09:29 New York) whose watchlist starts the first cycle at the open, and a scheduled scan with nothing new is skipped. v4 rules are unchanged otherwise: the model sees US stocks, ETFs, commodity futures, FX and crypto, chooses whether to trade, the margin (0-100% of equity), leverage (1-20x, margin = notional / leverage), entry, stop, target and when to look again. The control account buys a random symbol in the same asset class with the same notional and leverage.</p>
+      <p class="small muted">Every stock shown to the model is also scored +1 day vs SPY. Bought: ${dis.bought ? dis.bought.n : 0} scored${dis.bought && dis.bought.mean_abnormal_1d != null ? ", mean " + pct(dis.bought.mean_abnormal_1d * 100) : ""}. Passed: ${dis.passed ? dis.passed.n : 0} scored${dis.passed && dis.passed.mean_abnormal_1d != null ? ", mean " + pct(dis.passed.mean_abnormal_1d * 100) : ""}. Rules: research/llm_trader/protocol.md</p>
+      ${Object.keys(ev.by_class || {}).length ? `<p class="small muted">By asset class (closed pairs): ${Object.entries(ev.by_class).map(([k, v]) => `${k} ${v.n}, mean difference ${pct(v.mean_diff * 100)}`).join(" | ")}</p>` : ""}
+    </details>`);
+  put("#llm-pos", table(posCols({ key: "llm", body: posBody }), l.positions || [], { empty: L("No open positions.", "ไม่มีสถานะที่ถืออยู่") }));
+  const held = new Set((l.positions || []).map((p) => p.symbol));
+  const item = (r, i) => {
+    const buy = ["buy", "short"].includes(r.action);
+    const body = `<p class="why-full" translate="no">${esc(r.reason || "")}</p>${kv([
+      buy ? [`${L("Margin", "เงินประกัน")} ${tip("margin")}`, fmt(r.size_pct, 1) + "%"] : null,
+      buy ? [`${L("Leverage", "เลเวอเรจ")} ${tip("leverage")}`, fmt(r.leverage, 1) + "x"] : null,
+      buy ? [L("Entry", "การเข้า"), esc(r.entry || "market") + (r.limit_price ? " @ " + fmt(r.limit_price) : "")] : null,
+      r.horizon ? [L("Planned holding", "ระยะถือที่วางไว้"), esc(r.horizon)] : null,
+      ["buy", "adjust", "short"].includes(r.action) ? [`${L("Stop / target", "ตัดขาดทุน / เป้า")} (%)`, `${r.stop_pct != null ? fmt(r.stop_pct, 0) : "–"} / ${r.target_pct != null ? fmt(r.target_pct, 0) : "–"}`] : null,
+      r.action !== "sell" && r.review_in_min != null ? [L("Looks again in", "กลับมาดูอีกใน"), L(fmt(r.review_in_min, 0) + " min", fmt(r.review_in_min, 0) + " นาที")] : null,
+      r.executed ? [L("What the system did", "ระบบทำอะไร"), execHtml(r.executed)] : null,
+    ])}`;
+    return `<li><details class="dec" data-log-detail="dec:${esc(r.ts)}:${esc(r.symbol)}:${i}"><summary><span class="when">${dtL(r.ts)}</span> ${actionBadge(r, held.has(r.symbol))} <b class="sym" translate="no">${esc(r.symbol)}</b> <span class="why" translate="no">${esc(clip(r.reason, 110))}</span></summary><div class="dec-body">${body}</div></details></li>`;
+  };
+  const all = (l.decisions || []).map((r, i) => [r, i]);
+  const acts = all.filter(([r]) => r.action !== "hold"), passes = all.filter(([r]) => r.action === "hold");
+  put("#llm-list", all.length ? `${acts.length ? `<ul class="decs">${acts.map(([r, i]) => item(r, i)).join("")}</ul>` : `<div class="empty">${L("No trades or changes among the latest decisions.", "ยังไม่มีการเทรดหรือปรับสถานะในการตัดสินใจล่าสุด")}</div>`}
+    ${passes.length ? `<details class="fold" data-log-detail="llm:passes"><summary>${L(`${passes.length} passes and holds (nothing opened)`, `ไม่เปิดสถานะหรือถือต่อ ${passes.length} รายการ`)}</summary><ul class="decs">${passes.map(([r, i]) => item(r, i)).join("")}</ul></details>` : ""}
+    <p class="small muted">${L("Click a decision to see the full reason, size and what the system did. Why it passed on the others is in the Logs page.", "กดที่การตัดสินใจเพื่อดูเหตุผลเต็ม ขนาด และสิ่งที่ระบบทำ เหตุผลที่ไม่เลือกตัวอื่นดูได้ที่หน้าบันทึกการตัดสินใจ")}</p>` : `<div class="empty">${L("No decisions yet; the model is asked when new shocks appear.", "ยังไม่มีการตัดสินใจ โมเดลจะถูกเรียกเมื่อมีราคาพุ่งหรือตกแรง")} ${tip("shock")}</div>`);
+}
+
 
 /* ---------- social buzz ---------- */
 views.buzz = async () => {
@@ -938,37 +1114,41 @@ views.buzz = async () => {
 
 /* ---------- event trader ---------- */
 views.events = async () => {
-  const figs = $("#ev-figs"), list = $("#ev-list");
   let d;
-  try { d = await api("events"); } catch (e) { figs.innerHTML = errBox(e, "events"); return; }
-  const ev = d.evaluation || {};
-  $("#ev-sub").textContent = `scans every ${d.scan_every_s}s, last scan ${d.last_scan_age_s ?? "never"}s ago${d.error ? " | error: " + d.error : ""}`;
-  figs.innerHTML = `<div class="figures">
-    ${accountComparison(d, "Event trader account")}
-    <div class="figure"><b>${d.n_events}</b><span>events (${d.n_up} up-shocks)</span></div>
-    ${target3x(d)}
-    <div class="figure"><b>${d.paused ? "Paused" : "Running"}</b><span>${esc(d.rules.shock)}</span></div></div>
-    ${accountBasis(d)}<p class="small muted"><b>Fixed rule, not the AI. No leverage (1x).</b> ${esc(d.rules.trade)}. A pair is counted only after both the stock and its random control have closed, so 0/30 with positions still open is normal.</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
-  $("#ev-pos").innerHTML = table([
-    { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
-    { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) },
-    { h: "Leverage", f: () => "1x (none)" },
-    { h: "Position size (USD)", num: 1, f: (r) => fmt(r.notional_usd, 2) },
-    { h: "Stop price", num: 1, f: (r) => fmt(r.stop) },
-    { h: "Eligible to exit after", f: (r) => dt(r.exit_at) },
-    { h: "Why it bought", f: (r) => esc(r.why || "") },
-    { h: "Random control", f: (r) => (r.control ? `${esc(r.control.symbol)} ${r.control.pnl_pct != null ? pct(r.control.pnl_pct) : ""}` : "-") },
-  ], d.positions, { empty: "No open positions right now. The rule holds at most 3 at a time; later shocks show 'max positions' below." });
-  list.innerHTML = table([
-    { h: "When", f: (r) => new Date(r.ts * 1000).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) },
-    { h: "Stock", f: (r) => symCell(r.symbol, "") },
-    { h: "Move", num: 1, f: (r) => pct(r.move_pct), cls: (r) => cls(r.move_pct) },
-    { h: "Volume x", num: 1, f: (r) => fmt(r.vol_ratio, 1) },
-    { h: "Traded", f: (r) => (r.entry ? `long ${fmt(r.entry.usd, 2)} USD vs ${esc(r.control ? r.control.symbol : "-")}` : esc(r.skipped || (r.direction === "down" ? "data only" : "-"))) },
-    { h: "+1h / +1d", f: (r) => `${r.out["3600"] != null ? pct(r.out["3600"] * 100) : "-"} / ${r.out["86400"] != null ? pct(r.out["86400"] * 100) : "-"}` },
-    { h: "Headlines", f: (r) => (r.headlines || []).map((x) => esc(x.title)).join("<br>") || "-" },
-  ], d.events, { empty: "No events yet." });
+  try { d = await api("events"); } catch (e) { put("#ev-figs", errBox(e, "events")); return; }
+  LOCAL.events = d;
+  drawEvents();
 };
+function drawEvents() {
+  const d = LOCAL.events;
+  if (!d) return;
+  const ev = d.evaluation || {}, rules = d.rules || {};
+  $("#ev-lead").textContent = L("A fixed rule, not an AI: it buys large stocks that jump on heavy volume and holds for a set time. Each trade is compared with a random control trade.", "กติกาตายตัว ไม่ใช่ AI: ซื้อหุ้นใหญ่ที่พุ่งพร้อมปริมาณซื้อขายสูงแล้วถือตามเวลาที่กำหนด ทุกเทรดถูกเทียบกับเทรดสุ่ม");
+  $("#ev-sub").textContent = L(`scans every ${d.scan_every_s} s, last scan ${agoL(d.last_scan_age_s)}${d.error ? " | error: " + d.error : ""}`, `สแกนทุก ${d.scan_every_s} วินาที สแกนล่าสุด ${agoL(d.last_scan_age_s)}${d.error ? " | ข้อผิดพลาด: " + d.error : ""}`);
+  put("#ev-hero", `<div class="hero">${headline(d.equity_usd, d.capital_usd, d.control_equity_usd)}${goalBar(d.equity_usd, d.capital_usd)}</div>`);
+  put("#ev-figs", `<div class="figures">
+    ${accountComparison(d, L("Event trader account", "บัญชี Event trader"))}
+    <div class="figure"><b>${d.n_events}</b><span>${L(`events (${d.n_up} up-shocks)`, `เหตุการณ์ (หุ้นขึ้นแรง ${d.n_up} ครั้ง)`)}</span> ${tip("shock")}</div>
+    <div class="figure"><b>${d.paused ? L("Paused", "หยุดชั่วคราว") : L("Running", "กำลังทำงาน")}</b><span>${L("last scan", "สแกนล่าสุด")} ${agoL(d.last_scan_age_s)}</span></div></div>
+    ${verdictBlock(ev)}
+    <details data-log-detail="ev:how"><summary>${L("The exact rule", "กติกาที่ใช้จริง")}</summary>
+      ${basisLine(d)}
+      <p class="small muted"><span>${esc(rules.shock || "")}</span></p>
+      <p><b>Fixed rule, not the AI. No leverage (1x).</b> ${esc(rules.trade || "")}. A pair is counted only after both the stock and its random control have closed, so 0/30 with positions still open is normal.</p></details>`);
+  put("#ev-pos", table(posCols({ key: "ev", body: posBody }), (d.positions || []).map((p) => ({ ...p, side: "long", target: null })), { empty: "No open positions right now. The rule holds at most 3 at a time; later shocks show 'max positions' below." }));
+  const out = (r, k) => (r.out && r.out[k] != null ? sGain(r.out[k], pct(r.out[k] * 100)) : "–");
+  put("#ev-list", (d.events || []).length ? `<ul class="decs">${d.events.map((r, i) => {
+    const traded = Boolean(r.entry);
+    const chip = traded ? `<span class="badge b-buy">${L("Bought", "ซื้อ")} ${usd(r.entry.usd)}</span>` : `<span class="badge b-pass">${L("Not traded", "ไม่ได้เทรด")}</span>`;
+    const why = traded ? L(`bought ${usd(r.entry.usd)}, random control ${r.control ? r.control.symbol : "–"}`, `ซื้อ ${usd(r.entry.usd)} บัญชีสุ่มซื้อ ${r.control ? r.control.symbol : "–"}`) : (r.skipped || (r.direction === "down" ? L("price fell; recorded as data only", "ราคาลง บันทึกเป็นข้อมูลเท่านั้น") : "–"));
+    return `<li><details class="dec" data-log-detail="ev:${esc(r.ts)}:${esc(r.symbol)}:${i}"><summary><span class="when">${dtL(r.ts)}</span> ${chip} <b class="sym" translate="no">${esc(r.symbol)}</b> ${sGain(r.move_pct, pct(r.move_pct))} <span class="why" translate="no">${esc(clip(why, 90))}</span></summary>
+      <div class="dec-body">${kv([
+        [L("Volume vs normal", "ปริมาณซื้อขายเทียบปกติ"), fmt(r.vol_ratio, 1) + "x"],
+        [`+1 h ${tip("vsSpy")}`, out(r, "3600")], ["+1 d", out(r, "86400")],
+      ])}
+      ${(r.headlines || []).length ? `<ul class="heads">${r.headlines.map((x) => `<li translate="no">${esc(x.title)}</li>`).join("")}</ul>` : `<p class="small muted">${L("No headlines linked to this move.", "ไม่มีพาดหัวข่าวที่เกี่ยวข้อง")}</p>`}</div></details></li>`;
+  }).join("")}</ul>` : `<div class="empty">${L("No events yet.", "ยังไม่มีเหตุการณ์")}</div>`);
+}
 
 /* ---------- auto trader ---------- */
 let autoChart = null;
@@ -1054,6 +1234,16 @@ $$("[data-auto]").forEach((b) => b.addEventListener("click", async () => {
   try { await api("auto", { action: act }); toast(act === "learn" ? "Relearning" : act === "reset" ? "Restarted with 5,000 THB" : act === "pause" ? "Paused" : "Resumed"); setTimeout(views.auto, 1500); } catch (e) { toastError(e); }
 }));
 
+/* ---------- "More" menu: close on Escape or a click elsewhere ---------- */
+document.addEventListener("keydown", (e) => {
+  const more = $("#more-tabs");
+  if (e.key === "Escape" && more?.open) { more.open = false; $("summary", more).focus(); }
+});
+document.addEventListener("click", (e) => {
+  const more = $("#more-tabs");
+  if (more?.open && !more.contains(e.target)) more.open = false;
+});
+
 /* ---------- live refresh ---------- */
 setInterval(() => {
   if (document.hidden) return;
@@ -1072,6 +1262,8 @@ setInterval(() => {
 /* ---------- language switch (English / Thai) ---------- */
 /* Match fixed and formatted UI labels. Preserve tickers, headline text and the original model response. */
 const TH = {
+  "AI trader": "บอท AI", "More": "เพิ่มเติม", "Bots": "บอททั้งหมด", "Open positions now": "สถานะที่ถืออยู่ตอนนี้", "Latest decisions": "การตัดสินใจล่าสุด",
+  "All accounts in one table": "ทุกบัญชีในตารางเดียว", "Account and evidence": "บัญชีและหลักฐาน",
   "Overview": "ภาพรวม", "Auto trader": "บอทหลัก", "Markets": "ตลาด", "Chart and analysis": "กราฟและวิเคราะห์", "Portfolio": "พอร์ต",
   "DeepSeek": "ดีปซีค", "Logs": "บันทึกการตัดสินใจ", "Events": "เหตุการณ์", "Buzz": "กระแสโซเชียล", "News": "ข่าว", "Screener": "สแกนหุ้น",
   "Backtest": "ทดสอบย้อนหลัง", "Calendar and alerts": "ปฏิทินและแจ้งเตือน", "Risk tools": "เครื่องมือความเสี่ยง",
@@ -1338,6 +1530,7 @@ document.addEventListener("click", (e) => {
   LANG = LANG === "th" ? "en" : "th";
   try { localStorage.setItem("lang", LANG); } catch (err) { /* ignore */ }
   applyLang();
+  ({ overview: drawOverview, llm: drawLlm, events: drawEvents, logs: () => views.logs() })[route.view]?.();
 });
 
 show();
