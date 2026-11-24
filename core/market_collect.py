@@ -21,12 +21,12 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 
 DIR = Path(os.environ.get("TRADELAB_COLLECT_DIR") or Path(__file__).resolve().parent.parent / "data/collect")
-VENUE_EVERY, DERIBIT_EVERY = 5, 30 * 60
+VENUE_EVERY, DERIBIT_EVERY, LISTING_EVERY = 5, 30 * 60, 30
 MIN_FREE_BYTES = 200e6
 MAX_DAYS = 30                      # option expiries kept
 UA = {"User-Agent": "tradelab-research"}
 STATUS = {"venues": {"rows": 0, "last_ts": None, "errors": 0}, "deribit": {"rows": 0, "last_ts": None, "errors": 0},
-          "last_error": None, "paused_low_disk": False}
+          "listings": {"polls": 0, "errors": 0, "last_error": None}, "last_error": None, "paused_low_disk": False}
 _lock = threading.Lock()
 
 COINBASE = ("BTC-USD", "ETH-USD", "USDT-USD")
@@ -146,8 +146,130 @@ def deribit_once():
     return out
 
 
+
+# ------------------------------------------------------------------ L1b listing notices + forward paper ledger
+# research/studies/protocol_L1b_listings_forward.md: enter 60 s after a notice is first seen, exit 4 h later.
+L1B_START_EQUITY = 147.0
+MAX_NOTICE_AGE_S = 15 * 60
+
+
+def _l1b_path():
+    return DIR / "listings_state.json"
+
+
+def _l1b_load():
+    try:
+        return json.loads(_l1b_path().read_text())
+    except Exception:  # noqa: BLE001  first run or unreadable state starts clean
+        return {"seen": [], "pending": [], "closed": [], "equity": L1B_START_EQUITY}
+
+
+def _l1b_save(st):
+    if not disk_ok():
+        return
+    DIR.mkdir(parents=True, exist_ok=True)
+    tmp = _l1b_path().with_suffix(".tmp")
+    tmp.write_text(json.dumps(st, separators=(",", ":")))
+    tmp.replace(_l1b_path())
+
+
+def listing_notices():
+    from core import screens as sc
+    ev, errors = [], {}
+    try:
+        d = get("https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&catalogId=48&pageNo=1&pageSize=20", 10)
+        for a in (((d.get("data") or {}).get("catalogs") or [{}])[0].get("articles") or []):
+            for sym in sc.binance_listing_symbols(a.get("title", "")):
+                ev.append({"venue": "binance", "symbol": sym, "ts": a["releaseDate"] / 1000, "title": a["title"][:120]})
+    except Exception as e:  # noqa: BLE001  one blocked venue must not stop the other
+        errors["binance"] = repr(e)[:120]
+    try:
+        d = get("https://api-manager.upbit.com/api/v1/announcements?os=web&page=1&per_page=20&category=trade", 10)
+        for n in ((d.get("data") or {}).get("notices") or []):
+            for sym in sc.upbit_listing_symbols(n.get("title", "")):
+                ev.append({"venue": "upbit", "symbol": sym, "title": n["title"][:120],
+                           "ts": datetime.fromisoformat(n["first_listed_at"]).timestamp()})
+    except Exception as e:  # noqa: BLE001
+        errors["upbit"] = repr(e)[:120]
+    STATUS["listings"]["venue_errors"] = errors or None
+    return ev
+
+
+def quote(sym):
+    """(venue, bid, ask) for SYM-USDT: KuCoin level 1, else Binance spot book ticker, else None."""
+    try:
+        d = get(f"https://api.kucoin.com/api/v1/market/orderbook/level1?symbol={sym}-USDT", 8).get("data")
+        if d and d.get("bestBid") and d.get("bestAsk"):
+            return "kucoin", float(d["bestBid"]), float(d["bestAsk"])
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        d = get(f"https://api.binance.com/api/v3/ticker/bookTicker?symbol={sym}USDT", 8)
+        if d.get("bidPrice") and float(d["bidPrice"]) > 0:
+            return "binance", float(d["bidPrice"]), float(d["askPrice"])
+    except Exception:  # noqa: BLE001
+        pass
+    return None
+
+
+def _btc_mid(venue):
+    if venue == "kucoin":
+        d = get("https://api.kucoin.com/api/v1/market/orderbook/level1?symbol=BTC-USDT", 8)["data"]
+        return (float(d["bestBid"]) + float(d["bestAsk"])) / 2
+    d = get("https://api.binance.com/api/v3/ticker/bookTicker?symbol=BTCUSDT", 8)
+    return (float(d["bidPrice"]) + float(d["askPrice"])) / 2
+
+
+def listings_once(now=None):
+    from core import screens as sc
+    now = now or time.time()
+    st = _l1b_load()
+    seen = set(st["seen"])
+    fresh = sc.new_listing_events(seen, listing_notices())
+    st["seen"] = sorted(seen)[-2000:]
+    fresh = [e for e in fresh if e["ts"] >= now - MAX_NOTICE_AGE_S]   # old notices (first poll, restarts) are not events
+    for e in fresh:
+        append("listings", {**e, "first_seen": round(now, 1)}, now)
+        st["pending"].append({**e, "first_seen": now, "entry_due": now + sc.L1B_DELAY_S})
+    keep = []
+    for p in st["pending"]:
+        try:
+            if "entry_ask" not in p and now >= p["entry_due"]:
+                q = quote(p["symbol"])
+                if not q:
+                    st["closed"].append({**p, "skipped": "no USDT market on KuCoin or Binance", "ts": now})
+                    continue
+                p.update(px_venue=q[0], entry_ask=q[2], btc_entry=_btc_mid(q[0]), entry_ts=now,
+                         exit_due=now + sc.L1B_HOLD_S, stake=round(st["equity"] * sc.L1B_STAKE, 4))
+            elif "entry_ask" in p and now >= p["exit_due"]:
+                q = quote(p["symbol"])
+                if q and q[0] == p["px_venue"]:
+                    r = sc.l1b_result(p["entry_ask"], q[1], p["btc_entry"], _btc_mid(q[0]))
+                    st["equity"] = round(st["equity"] + p["stake"] * r["net"], 4)
+                    row = {**p, **r, "exit_bid": q[1], "ts": now, "equity_after": st["equity"]}
+                    st["closed"].append(row)
+                    append("listing_trades", row, now)
+                    continue
+        except Exception as e:  # noqa: BLE001  a quote failure retries on the next poll
+            STATUS["listings"]["last_error"] = repr(e)[:200]
+        keep.append(p)
+    st["pending"] = keep
+    _l1b_save(st)
+    STATUS["listings"]["polls"] += 1
+    return st
+
+
+def listings_view() -> dict:
+    from core import sequential as sq
+    st = _l1b_load()
+    done = [c for c in st["closed"] if "net" in c]
+    ev = sq.run(sq.daily_means([{"ts": c["ts"], "ret": c["net"]} for c in done]), lo=1.0, hi=5.0)
+    return {"equity_usd": st["equity"], "start_usd": L1B_START_EQUITY, "goal_usd": 3 * L1B_START_EQUITY,
+            "pending": st["pending"], "closed": st["closed"][-30:], "n_closed": len(done), "sequential": ev,
+            "protocol": "research/studies/protocol_L1b_listings_forward.md"}
+
 def loop():
-    last_deribit = 0.0
+    last_deribit = last_listing = 0.0
     while True:
         t0 = time.time()
         try:
@@ -155,6 +277,13 @@ def loop():
         except Exception as e:  # noqa: BLE001
             STATUS["last_error"] = repr(e)[:200]
             traceback.print_exc()
+        if t0 - last_listing >= LISTING_EVERY:
+            last_listing = t0
+            try:
+                listings_once(t0)
+            except Exception as e:  # noqa: BLE001
+                STATUS["listings"]["errors"] += 1
+                STATUS["listings"]["last_error"] = repr(e)[:200]
         if t0 - last_deribit >= DERIBIT_EVERY:
             last_deribit = t0
             try:
@@ -170,4 +299,4 @@ def view() -> dict:
     if DIR.exists():
         for f in sorted(DIR.glob("*/*.jsonl.gz"))[-20:]:
             files[f"{f.parent.name}/{f.name}"] = f.stat().st_size
-    return {**STATUS, "files": files, "dir": str(DIR)}
+    return {**STATUS, "files": files, "dir": str(DIR), "l1b": listings_view()}
