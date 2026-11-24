@@ -309,6 +309,13 @@ class Trading(Base):
         self.assertIn("offer price", c["candidates"][0]["playbook"])
         self.assertEqual(set(lt.PLAYBOOK), {t for t, _ in lt.NEWS_TYPES} | {"other"})
 
+    def test_sector_view_compares_with_the_sector_etf(self):
+        v = lt.LlmTrader._sector_view("NVDA", quote("NVDA", move=-8.0), {"SMH": quote("SMH", move=-7.0)})
+        self.assertEqual(v, {"sector_etf": "SMH", "sector_move_pct": -7.0, "vs_sector_pct": -1.0})
+        self.assertEqual(lt.LlmTrader._sector_view("NVDA", quote("NVDA", move=-8.0), {}), {})
+        from core.universe import SECTOR_ETF, STOCKS
+        self.assertEqual(sorted(s for s in STOCKS if s not in SECTOR_ETF), [])          # every stock has a sector
+
     def test_news_type_classification(self):
         self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
         self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")
