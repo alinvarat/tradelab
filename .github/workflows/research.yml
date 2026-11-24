@@ -52,6 +52,8 @@ jobs:
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          TRADELAB_LLM_API_KEY: ${{ secrets.THIRX_API_KEY }}
+          TRADELAB_LLM_PROVIDER_MODEL: ${{ vars.THIRX_MODEL }}
         run: |
           python research/studies/run.py llm_earnings_forward --previous-forward-results /tmp/previous_llm_earnings_forward.json \
             --out /tmp/llm_earnings_forward.json > /tmp/llm_earnings_forward_summary.json
@@ -102,6 +104,8 @@ jobs:
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          TRADELAB_LLM_API_KEY: ${{ secrets.THIRX_API_KEY }}
+          TRADELAB_LLM_PROVIDER_MODEL: ${{ vars.THIRX_MODEL }}
         run: python research/studies/options_forward.py /tmp/options_forward_state.json /tmp/options_forward_summary.json
 
       - name: Push state to data/options-forward
@@ -192,7 +196,8 @@ jobs:
         if: inputs.study == 'all' || inputs.study == matrix.study
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
-          TRADELAB_LLM_API_KEY: ${{ matrix.study == 'probe_provider' && secrets.THIRX_API_KEY || '' }}
+          TRADELAB_LLM_API_KEY: ${{ (matrix.study == 'probe_provider' || startsWith(matrix.study, 'llm_') || matrix.study == 'polymarket_llm' || matrix.study == 'news_v2' || matrix.study == 'news_v3') && secrets.THIRX_API_KEY || '' }}
+          TRADELAB_LLM_PROVIDER_MODEL: ${{ vars.THIRX_MODEL }}
           OPENROUTER_API_KEY: ${{ (startsWith(matrix.study, 'llm_') || matrix.study == 'polymarket_llm' || matrix.study == 'probe_llm_cost' || matrix.study == 'news_v2' || matrix.study == 'news_v3') && secrets.OPENROUTER_API_KEY || '' }}
         run: |
           mkdir -p out

@@ -13,3 +13,5 @@
 **Verdict (H5 primary).** "v3 edge" requires: at least 60 trades; mean net per trade > 0 with block p (symbol-month) < 0.05; hit rate >= 55%; net > 0 at 2x cost. Also reported: v3 minus v1 paired per filing (skip = 0, SPY-adjusted), the plain-majority variant of v3 (to measure the unanimity rule), and H1/H3. If v3 passes it goes to the weekly forward runner (replacing v2) and into the bot's news analyst; if not, the failure is recorded and the next version is designed only from training data.
 
 **Cost.** About 3 calls per tradeable filing; real cost from OpenRouter `usage.cost` is in the summary and goes to `reports/COSTS.md`.
+
+**Run note 2026-11-24 (rules unchanged):** the first run (Actions 45423419796) was cancelled without any output being read, because OpenRouter returned 402 Payment Required from 16:59 UTC (credit exhausted) and every later call would have come back empty and counted as a skip. The rerun uses the same model, DeepSeek v4.1 flash 1017, through the owner's alternative provider (ai.thirx.com, `THIRX_MODEL`).
