@@ -218,6 +218,26 @@ def listing_notices():
                            "ts": datetime.fromisoformat(n["first_listed_at"]).timestamp()})
     except Exception as e:  # noqa: BLE001
         errors["upbit"] = repr(e)[:120]
+    try:   # addendum 2026-11-25 in protocol_L1b_listings_forward.md
+        d = get("https://api.kucoin.com/api/v3/announcements?language=en_US&type=new-listings&pageSize=50", 10, BROWSER_UA)
+        for n in (((d.get("data") or {}).get("items")) or []):
+            if "new-listings" not in (n.get("annType") or []):
+                continue
+            for sym in sc.kucoin_listing_symbols(n.get("annTitle", "")):
+                ev.append({"kind": "listing", "venue": "kucoin", "symbol": sym, "title": n["annTitle"][:120],
+                           "ts": n["cTime"] / 1000})
+    except Exception as e:  # noqa: BLE001
+        errors["kucoin"] = repr(e)[:120]
+    try:   # Bitget answers the 10 latest coin_listings; the subtype is not filterable, so the title parser filters spot
+        d = get("https://api.bitget.com/api/v2/public/annoucements?language=en_US&annType=coin_listings", 10, BROWSER_UA)
+        for n in (d.get("data") or []):
+            if n.get("annSubType") != "spot":
+                continue
+            for sym in sc.bitget_listing_symbols(n.get("annTitle", "")):
+                ev.append({"kind": "listing", "venue": "bitget", "symbol": sym, "title": n["annTitle"][:120],
+                           "ts": float(n["cTime"]) / 1000})
+    except Exception as e:  # noqa: BLE001
+        errors["bitget"] = repr(e)[:120]
     STATUS["listings"]["venue_errors"] = errors or None
     return ev
 

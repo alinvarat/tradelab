@@ -12,6 +12,8 @@
 | ราคา 1 นาที / 1 ชม. | `https://data-api.binance.vision/api/v3/klines?symbol=<SYM>USDT&interval=1m&startTime=<ms>` | ใช้ได้จาก Actions; ใช้กับเหรียญที่มีคู่ USDT บน Binance อยู่แล้ว (กรณี Upbit list) |
 | ราคา Coinbase | `https://api.exchange.coinbase.com/products/<SYM>-USD/candles?granularity=60&start=<iso>&end=<iso>` | ใช้กับกรณีที่ Binance list เหรียญซึ่งมีบน Coinbase อยู่แล้ว |
 
+**แหล่งประกาศเพิ่มสำหรับบัญชีเดินหน้า L1b (addendum 2026-11-25 ใน `protocol_L1b_listings_forward.md`):** KuCoin `https://api.kucoin.com/api/v3/announcements?language=en_US&type=new-listings&pageSize=50` (เวลา `cTime` ms) และ Bitget `https://api.bitget.com/api/v2/public/annoucements?language=en_US&annType=coin_listings` (`annSubType` = `spot`, เวลา `cTime` ms) ใช้กับด่านคัดกรองย้อนหลังยังไม่ได้ — ต้องมี addendum แยกถ้าจะนำไปคัดกรอง
+
 ## ด่านคัดกรอง (ย้อนหลัง 2024-01-01 ถึง 2026-10-31)
 1. สร้างรายการ event (Binance ใช้ราคา Coinbase, Upbit ใช้ราคา Binance spot) ที่มีฟิลด์ `{venue, symbol, ts_announce}` โดยเก็บเฉพาะเหรียญที่มีราคาซื้อขายอยู่ที่ exchange อื่น **ก่อน** เวลาประกาศ
 2. ราคาเข้า = ราคาปิดของแท่ง 1 นาทีที่ `ts_announce + 60s` บวกต้นทุน taker 0.1% และ slippage 0.2%

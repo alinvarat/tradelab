@@ -129,6 +129,29 @@ class ListingLedger(unittest.TestCase):
                 mock.patch.object(mc, "listing_notices", return_value=old):
             self.assertEqual(mc.listings_once(1_800_000_000)["pending"], [])
 
+    def test_kucoin_and_bitget_are_parsed_and_a_blocked_venue_is_isolated(self):
+        ms = 1_800_000_000_000
+        kucoin = {"data": {"items": [
+            {"annType": ["latest-announcements", "new-listings"], "cTime": ms,
+             "annTitle": "World Premiere: infiniFi (INFI) Listed on KuCoin"},
+            {"annType": ["latest-announcements", "new-listings"], "cTime": ms,
+             "annTitle": "KuCoin Futures New Listing: ANTUSDT Pre-IPO Perpetual"},
+            {"annType": ["latest-announcements"], "cTime": ms, "annTitle": "KuCoin Will List NOPE (NOPE)"}]}}
+        bitget = {"data": [
+            {"annSubType": "spot", "cTime": str(ms), "annTitle": "Bitget Announcement on the Listing of Cow Protocol (COW)"},
+            {"annSubType": "futures", "cTime": str(ms), "annTitle": "Bitget Announcement on the Listing of AUSDT Stock Perps"}]}
+        empty = {"data": {"catalogs": [{"articles": []}]}}
+
+        def fake_get(url, timeout=8, headers=None):
+            if "upbit" in url:
+                raise OSError("403")
+            return kucoin if "kucoin" in url else bitget if "bitget" in url else empty
+        with mock.patch.object(mc, "get", side_effect=fake_get):
+            ev = mc.listing_notices()
+        self.assertEqual({(e["venue"], e["symbol"]) for e in ev}, {("kucoin", "INFI"), ("bitget", "COW")})
+        self.assertEqual([e["ts"] for e in ev], [1_800_000_000, 1_800_000_000])
+        self.assertEqual(set(mc.STATUS["listings"]["venue_errors"]), {"upbit"})
+
 
 if __name__ == "__main__":
     unittest.main()

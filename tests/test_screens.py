@@ -17,6 +17,21 @@ class ListingParsers(unittest.TestCase):
         self.assertEqual(sc.upbit_listing_symbols("BTC 마켓 디지털 자산 추가 (FOO)"), [])
         self.assertEqual(sc.upbit_listing_symbols("거래 유의 종목 지정 안내 (FOO)"), [])
 
+    def test_kucoin_spot_listing_only(self):
+        self.assertEqual(sc.kucoin_listing_symbols("World Premiere: infiniFi (INFI) Listed on KuCoin"), ["INFI"])
+        self.assertEqual(sc.kucoin_listing_symbols("KuCoin Will List XYRO (XYRO)"), ["XYRO"])
+        self.assertEqual(sc.kucoin_listing_symbols("Anthropic xStock (ANTX) Listed on KuCoin"), [])
+        self.assertEqual(sc.kucoin_listing_symbols("KuCoin Spot to List Tokenized Stocks: METAon, TSLAon and QQQon"), [])
+        self.assertEqual(sc.kucoin_listing_symbols("KuCoin Futures New Listing: ANTUSDT Pre-IPO Stock Index Perpetual"), [])
+        self.assertEqual(sc.kucoin_listing_symbols("DAPP-30D Fixed Promotion, Enjoy an APR of 200%! (DAPP)"), [])
+
+    def test_bitget_spot_listing_only(self):
+        self.assertEqual(sc.bitget_listing_symbols("Bitget Announcement on the Listing of Cow Protocol (COW)"), ["COW"])
+        self.assertEqual(sc.bitget_listing_symbols("Bitget Will List LayerZero (ZRO) in the Innovation Zone"), ["ZRO"])
+        self.assertEqual(sc.bitget_listing_symbols("Bitget Announcement on the Listing of ANTOUSDT and ANTDUSDT Stock Perps"), [])
+        self.assertEqual(sc.bitget_listing_symbols("Bitget spot copy trading now supports 2 trading pairs"), [])
+        self.assertEqual(sc.bitget_listing_symbols("Bitget Will Delist FOO (FOO)"), [])
+
 
 class BinanceKinds(unittest.TestCase):
     def test_futures_launch_symbols(self):
