@@ -114,7 +114,8 @@ def _quote_from_meta(symbol, m):
     spread = SPREAD.get(typ, 0.0005)
     reg = (m.get("currentTradingPeriod") or {}).get("regular") or {}
     now = time.time()
-    open_ = typ == "CRYPTOCURRENCY" or (reg.get("start", 0) <= now <= reg.get("end", 0) and now - ts < 1800)
+    open_ = (typ == "CRYPTOCURRENCY" and now - ts < 1800) or (reg.get("start", 0) <= now <= reg.get("end", 0)
+                                                                and now - ts < 1800)
     if typ == "CURRENCY":
         open_ = now - ts < 1800
     return {"symbol": symbol, "price": px, "bid": px * (1 - spread / 2), "ask": px * (1 + spread / 2),

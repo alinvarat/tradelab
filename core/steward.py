@@ -40,11 +40,24 @@ def review(status: dict, chat=None, log_path=LOG) -> dict:
     return out
 
 
+VOLATILE = ("uptime_h", "poller_age_s", "disk_free_gb")
+
+
+def digest(status: dict) -> str:
+    """What the steward would be told, minus fields that change every minute; equal digests mean nothing new."""
+    return json.dumps({k: v for k, v in status.items() if k not in VOLATILE}, sort_keys=True, default=str)
+
+
 def loop(get_status, every=EVERY_S):
     time.sleep(300)
+    last = None
     while True:
         try:
-            review(get_status())
+            st = get_status()
+            d = digest(st)
+            if d != last:                     # a paid review only when the system state changed
+                review(st)
+                last = d
         except Exception:  # noqa: BLE001
             traceback.print_exc()
         time.sleep(every)

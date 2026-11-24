@@ -333,6 +333,35 @@ class Trading(Base):
         self.t.scan(self.market(AAA=quote("AAA", px=100, move=-12)))
         self.assertGreater(self.t.acct.positions["AAA"].tp, 0)
 
+    def test_preflight_refuses_a_closed_market_buy_before_risk_review(self):
+        self.reply({"symbol": "BBB", "action": "buy", "size_pct": 5, "stop_pct": 5, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", move=12), BBB=quote("BBB", open_=False)))
+        self.assertNotIn("BBB", self.t.acct.positions)
+        self.assertFalse(any("BBB" in u for u in self.risk_calls))
+        d = next(x for x in self.t.decisions if x["symbol"] == "BBB")
+        self.assertEqual(d["executed"]["why"], "market closed or stale quote")
+
+    def test_a_headline_is_used_once_and_a_new_one_still_counts(self):
+        h1 = {"BBB": {"title": "BBB wins contract", "source": "X", "lexicon": 0.4, "seen": "t"}}
+        h2 = {"BBB": {"title": "BBB raises guidance", "source": "X", "lexicon": 0.4, "seen": "t"}}
+        self.t.calls["last_idle"] = time.time()
+        with mock.patch("core.llm_trader.recent_news", return_value=h1):
+            self.t.scan(self.market())
+            self.t.calls["last_ts"] = 0
+            self.t.scan(self.market())
+        self.assertEqual(len(self.prompts), 1)
+        self.t.calls["last_ts"] = 0
+        with mock.patch("core.llm_trader.recent_news", return_value=h2):
+            self.t.scan(self.market())
+        self.assertEqual(len(self.prompts), 2)
+
+    def test_tail_lines_skips_a_cut_first_line(self):
+        p = Path(self.tmp.name) / "big.jsonl"
+        p.write_text("".join(json.dumps({"i": i}) + "\n" for i in range(1000)))
+        rows = lt._loads_ok(lt.tail_lines(p, 50, max_bytes=500))
+        self.assertTrue(rows)
+        self.assertEqual(rows[-1]["i"], 999)
+
     def test_model_failure_is_logged_and_nothing_trades(self):
         self.t.chat = lambda s, u: ("", "no provider")
         self.t.scan(self.market(AAA=quote("AAA", move=12)))

@@ -182,10 +182,12 @@ class Account:
         self.balance -= fee
         if p:  # add to same side
             tot = p.qty + qty
+            old_lev = p.leverage or self.leverage
+            old_margin = p.entry * p.qty / old_lev
             p.entry = (p.entry * p.qty + px * qty) / tot
             p.qty, p.fees = tot, p.fees + fee
-            if leverage is not None:
-                p.leverage = leverage
+            if leverage is not None:          # effective leverage = total notional / total committed margin
+                p.leverage = (p.entry * tot) / (old_margin + px * qty / leverage)
             if sl is not None:
                 p.sl = sl
             if tp is not None:
