@@ -570,3 +570,41 @@ def gap_fade_rows(symbol: str, bars: list, bench: dict, px=(1.0, 20.0), dollar_v
                         "gap": round(b["o"] / prev["c"] - 1, 4), "ret": ret})
         i += 5
     return out
+
+
+# ------------------------------------------------------------------ L11 short crowded longs (extreme perp funding)
+L11_FUNDING, L11_FEES = 0.001, 0.004      # a settled funding rate >= 0.10% per interval; round trip taker + slippage
+L11_HOLDS = (1, 3, 7)
+
+
+def funding_short_rows(symbol: str, d1: list, btc: dict, funding: list) -> list:
+    """d1: daily [(open_ts, o, h, l, c, quote_vol)] (spot prices stand in for the perp); funding: [(ts, rate)] settled
+    rates of the USDT perp. Day D has a settled rate >= L11_FUNDING and 20-day average quote volume >= L8_MIN_QV.
+    Short at the open of D+1 to the close of D+h; gain = short_gain - BTC short gain - fees + the funding the short
+    actually received (sum of settled rates from the entry to the exit). One row per coin per L8_COOLDOWN days."""
+    by_day = {}
+    for ts, r in funding:
+        by_day.setdefault(int(ts // 86400) * 86400, []).append((ts, r))
+    out, i = [], 21
+    while i + 1 < len(d1):
+        t = d1[i][0]
+        adv = sum(x[5] for x in d1[i - 20:i]) / 20
+        if not (max((r for _, r in by_day.get(t, [])), default=0.0) >= L11_FUNDING and adv >= L8_MIN_QV):
+            i += 1
+            continue
+        e = d1[i + 1]
+        if e[0] - t != 86400 or e[0] not in btc:
+            i += 1
+            continue
+        ret = {}
+        for h in L11_HOLDS:
+            j = i + h
+            if j < len(d1) and d1[j][0] - e[0] == (h - 1) * 86400 and d1[j][0] in btc:
+                end = d1[j][0] + 86400
+                paid = sum(r for ts, r in funding if e[0] <= ts < end)
+                ret[f"h{h}"] = {"net": short_gain(e[1], d1[j][4]) - short_gain(btc[e[0]][0], btc[d1[j][0]][1])
+                                - L11_FEES + paid, "funding": paid}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{t}{symbol}", "ts": e[0], "kind": "funding_short", "ret": ret})
+        i += L8_COOLDOWN
+    return out

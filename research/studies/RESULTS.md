@@ -194,6 +194,15 @@ Spec `ops/lines/L6_smallcap_insider.md`; code `core.screens.insider_rows`, study
 - Splits: train 2019-2022, validation 2023-2024, test 2025-2026-10. Trimmed pick on train, data gate, pass/kill as in L1c.
 - **Run 1 (2026-11-24, Actions 45416703411): killed.** Data gate ok: 3,857 rows, 3,857 unique, train 1,994 / validation 1,047 / test 816, no warnings. 31,399 qualifying purchases at 3,289 issuers; 1,500 issuers priced (seeded sample). Trimmed pick h5: train +0.3% (p 0.18), validation -0.4% (p 0.92), test +0.3%. h20: validation +1.0% (p 0.09), test +0.2%. Double cost: negative everywhere. No usable edge after costs.
 
+## L11 screen: short coins with extreme perp funding (pre-registered 2026-11-25, before any funding data was pulled)
+Code `core.screens.funding_short_rows`, study `l11_funding_short`. No LLM, no cost. Hypothesis (not proven): a settled funding rate >= 0.10% per interval marks crowded leveraged longs; shorting them earns the funding and the unwind. Differs from L8: the trigger is positioning, not price.
+- Universe: a seeded random sample (seed 20261125) of 150 Binance spot USDT pairs trading today (same filters as L8); funding from `data.binance.vision` monthly `fundingRate` files of the same-name USDT perp (coins without a perp drop out); spot daily klines stand in for perp prices.
+- Event: UTC day D has a settled funding rate >= 0.10% and 20-day average quote volume >= 2M USDT. One row per coin per 7 days.
+- Entry: short at the open of D+1; exit at the close of D+1, D+3, D+7. Return: `short_gain` minus BTC's short gain over the same window, minus 0.4% round trip, PLUS the funding actually settled between entry and exit (measured, not assumed). Double cost adds another 0.4%.
+- Splits, `judge`, pass (validation > 0 at p < 0.05, robust to dropping best 1/5, test not negative, >= 3 a week) and kill rules as L8.
+- Known limits: spot vs perp basis ignored; survivorship (today's list); funding sign convention taken from Binance files (positive = longs pay shorts).
+- **Run 1 (2026-11-25, Actions 45486218047): killed.** 150 coins sampled, 41 without a perp, 8 without bars, 0 funding months failed; 382 rows, 1.2 a week (below the 3-a-week gate). Train pick h1 -0.60% (p 0.82); validation h1 -0.85% (p 0.65), h3 -0.78%, h7 -3.34%. Funding >= 0.10% almost disappeared after 2024 (1 test row), so even a working rule would be too rare. Crowded-long funding does not mark a short that pays after fees.
+
 ## L10 screen: short small caps that gap up >= 30% at the open (pre-registered 2026-11-25, before any L10 row was computed)
 Code `core.screens.gap_fade_rows`, study `l10_gap_fade` (same data path, universe sample, IWM control, splits and `judge` as L7). No LLM, no cost. Hypothesis (not proven): large opening gaps in small caps fade during the day and the following sessions. Differs from L3 (needs an 8-K) and L7 (multi-day run then a red close).
 - Event: session D opens >= 30% above the previous close; previous close $1-20 and 20-day average dollar volume $1-50M, both known before D's open. One row per symbol per 5 sessions.
