@@ -3,10 +3,13 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
-## ด่วน (2026-11-24 20:20 UTC)
-- **GitHub Actions หยุดทั้งหมด:** ทุกงานขึ้นว่า "The job was not started because recent account payments have failed or your spending limit needs to be increased" (run 45479343841, 45479289827, 45479470983) → ไม่มี CI, ไม่มี deploy, งานวิจัยและงานเดินหน้าที่ตั้งเวลาไว้ (options, l4f, news_v3) ไม่รัน จนกว่าเจ้าของแก้ Billing & plans หรือเพิ่ม spending limit
-- **v4.18 Claude Haiku 5.5 (PR #149, #150 merge แล้ว):** ใช้ Claude Code CLI บนแพ็กเกจ Claude Max ของเจ้าของ CI ยืนยันแล้วว่า image มี `claude` 2.1.331 ที่ `/home/app/.local/bin/claude`; ยังไม่ขึ้นระบบ: ต้องมี secret `CLAUDE_CODE_OAUTH_TOKEN` และ deploy ที่ผ่าน (deploy #149 ล้มที่ Kuber "Uploading context" 6 ครั้ง, issue #80)
-- **L8 / L9 ล็อกกติกาแล้วใน `research/studies/RESULTS.md` (PR #151) ยังไม่ได้รัน** เพราะ Actions หยุด
+## ด่วน (2026-11-24 21:15 UTC)
+- **Actions รันได้แล้ว:** repo เปลี่ยนเป็น public (เจ้าของเลือก แทนการจ่ายเงิน) หลังนาทีฟรีของ repo private หมด
+- **deploy ยังล้ม:** Kuber ปฏิเสธที่ "Uploading context: 0 B" ภายใน 1–2 วินาทีทุกครั้งตั้งแต่ 20:04 UTC (issue #80) → เว็บจริงค้างที่ build 19:17 UTC; PR #149–#155 merge แล้วแต่ยังไม่ขึ้นเครื่อง
+- **บอท DeepSeek v4.17 รันอยู่จริง** (ตรวจ `/api/llm_trader` ผ่าน Chrome 20:58 UTC): 284 calls วันนี้, ถือ 8 ไม้, ปิด 28/30 คู่, 142.81 vs สุ่ม 146.98 USD; หน้าเว็บโชว์ "Could not load: openrouter 402" เพราะบั๊ก `api()` (แก้แล้วใน PR #154 รอ deploy)
+- **cron ไม่เคยยิง:** ไม่มีรันจาก schedule เลย → L4f, ออปชัน, ข่าวงบรายสัปดาห์ ยังไม่เก็บข้อมูลจริง
+- **v4.18 Claude Haiku 5.5:** merge แล้ว รอ `CLAUDE_CODE_OAUTH_TOKEN` + deploy ที่ผ่าน; ผลจะไม่รวมกับ DeepSeek (PR #156)
+- **เส้นวันนี้:** L8, L9, L10, L11 ถูกตัด; บั๊กสูตร short ใน screens (L7/L8/L10) แก้แล้ว; L8b (ทุกเหรียญที่เคยลิสต์) กำลังรัน; N1 news_v3 กำลังรัน
 
 ## สุขภาพระบบ (ตรวจล่าสุด 2026-11-24 19:25 UTC)
 | ส่วน | สถานะ | รายละเอียด |
@@ -82,5 +85,6 @@
 - PR #130 เพิ่มคำแปลไทยสำหรับ Auto/Markets/Chart/Portfolio/Backtest พร้อมเทสต์ Chrome ใน CI จากข้อมูลจำลอง รอรีวิวก่อนรวม หลัง deploy ให้ตรวจสลับภาษาไทย↔อังกฤษบน Kuber แบบอ่านอย่างเดียวทั้งห้าหน้า (รอบนี้ยังตรวจเว็บจริงไม่ได้: Chrome `Target closed` / Cloudflare Access 302 เมื่อไม่ได้ล็อกอิน)
 
 ## รอเจ้าของตัดสิน
-- แก้ GitHub Billing & plans (การจ่ายเงินล้มหรือ spending limit เต็ม) เพื่อให้ Actions รันได้อีกครั้ง
+- (ทำแล้ว) Actions กลับมาด้วยการเปิด repo เป็น public; แผนระยะยาว: self-hosted runner บน Kuber แล้วกลับเป็น private
+- เพื่อน (dmgnr) ตรวจ Kuber deploy ที่ปฏิเสธทุกครั้ง (issue #80)
 - สร้าง token: รัน `claude setup-token` ใน terminal ของตัวเอง แล้ว `gh secret set CLAUDE_CODE_OAUTH_TOKEN -R alinvarat/tradelab` (วางที่ prompt แบบซ่อน ไม่ส่งในแชต); บอทจะใช้โควตา Max ร่วมกับการใช้ Claude ของเจ้าของ
