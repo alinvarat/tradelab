@@ -1639,22 +1639,10 @@ class LlmTrader:
         return {"bought": stats("buy"), "passed": stats("hold"),
                 "shorted": {"n": len(sh), "mean_abnormal_1d_for_the_short": mean(sh) if sh else None}}
 
-    def evaluate(self):
-        p = self.pairs
-        out = {"closed_pairs": len(p), "needed": MIN_TRADES, "discrimination": self.discrimination()}
-        by = {}
-        for x in p:
-            by.setdefault(x.get("asset_class", "stock"), []).append(x["s1"] - x["ctrl"])
-        out["by_class"] = {c: {"n": len(v), "mean_diff": mean(v)} for c, v in by.items()}
-        byp, daily_by_protocol = {}, {PROTOCOL_VERSION: []}
-        for x in p:
-            tag = x.get("protocol", "v4")
-            byp.setdefault(tag, []).append(x["s1"] - x["ctrl"])
-            daily_by_protocol.setdefault(tag, []).append({"ts": x.get("booked_ts"), "model": x["s1"], "control": x["ctrl"]})
-        out["by_protocol"] = {k: {"n": len(v), "mean_diff": mean(v)} for k, v in byp.items()}
-        today = int(time.time()) // 86400 * 86400
-        out["sequential_by_protocol"] = {tag: sequential.paired_daily(rows, start=sequential.FORWARD_START_TS, before=today)
-                                         for tag, rows in daily_by_protocol.items()}
+    @staticmethod
+    def _verdict(p) -> dict:
+        """Locked v4 verdict on one model's pairs (30 closed pairs, bootstrap of model minus control)."""
+        out = {"closed_pairs": len(p), "needed": MIN_TRADES}
         if len(p) < MIN_TRADES:
             out["verdict"] = f"too early ({len(p)}/{MIN_TRADES} closed pairs): no conclusion allowed"
             return out
@@ -1668,6 +1656,30 @@ class LlmTrader:
                           if out["mean_model"] > 0 and out["mean_diff"] > 0 and pval < 0.10 else "no edge shown")
         return out
 
+    def evaluate(self):
+        # v4.18 (Claude Haiku 5.5) is never pooled with the DeepSeek tags (addendum 2026-11-25): the headline verdict is
+        # DeepSeek-only, and Claude pairs get their own count from zero.
+        claude = [x for x in self.pairs if x.get("protocol") == "v4.18"]
+        p = [x for x in self.pairs if x.get("protocol") != "v4.18"]
+        out = {"closed_pairs": len(p), "needed": MIN_TRADES, "discrimination": self.discrimination(),
+               "headline_model": "DeepSeek v4.1 flash 1017 (tags v4 to v4.17)", "claude_v4_18": self._verdict(claude)}
+        by = {}
+        for x in p:
+            by.setdefault(x.get("asset_class", "stock"), []).append(x["s1"] - x["ctrl"])
+        out["by_class"] = {c: {"n": len(v), "mean_diff": mean(v)} for c, v in by.items()}
+        byp, daily_by_protocol = {}, {PROTOCOL_VERSION: []}
+        for x in self.pairs:                       # every tag, v4.18 included, reported separately
+            tag = x.get("protocol", "v4")
+            byp.setdefault(tag, []).append(x["s1"] - x["ctrl"])
+            daily_by_protocol.setdefault(tag, []).append({"ts": x.get("booked_ts"), "model": x["s1"], "control": x["ctrl"]})
+        out["by_protocol"] = {k: {"n": len(v), "mean_diff": mean(v)} for k, v in byp.items()}
+        today = int(time.time()) // 86400 * 86400
+        out["sequential_by_protocol"] = {tag: sequential.paired_daily(rows, start=sequential.FORWARD_START_TS, before=today)
+                                         for tag, rows in daily_by_protocol.items()}
+        v = self._verdict(p)
+        out |= {k: v[k] for k in v if k not in ("closed_pairs", "needed")}
+        return out
+
     def view(self):
         with self.lock:
             a = self.acct
@@ -1679,7 +1691,7 @@ class LlmTrader:
                     "calls_today": self.calls["n"], "max_calls_day": MAX_CALLS_DAY, "error": self.last_error, "desk_lessons": self.calls.get("lessons"), "helper_models": ai_news.helper_stats(), "desk_stats": self.desk_stats(min_n=1),
                     "usd_today": round(self.calls.get("usd", 0.0), 4),
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
-                    "model": ai_news.DECISION_MODEL.split("/", 1)[-1],
+                    "model": ("claude/" + ai_news.CLAUDE_MODEL) if ai_news.claude_ready() else ai_news.DECISION_MODEL.split("/", 1)[-1],
                     "protocol": PROTOCOL_VERSION, "universe_size": len(ALL),
                     "classes": {c: len(rows) for c, rows in ASSETS.items()},
                     "next_scan_in_s": max(0, round(IDLE_CALL_S - (time.time() - self.calls.get("last_idle", 0)))),
