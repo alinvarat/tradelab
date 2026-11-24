@@ -21,3 +21,15 @@
 ## ข้อควรระวัง
 - นักเทรดชื่อดังหลายรายไม่มีบัญชีตรวจสอบได้ครบ และ FTC พบว่าลูกค้าคอร์สเทรดหุ้นเล็กส่วนใหญ่ขาดทุน (ดู `research_notes/` market_wizards.md ในเครื่องเจ้าของ) ให้ใช้กฎของนักเทรดเป็นสมมติฐานเพื่อทดสอบเท่านั้น
 - ตัวเลขในงานวิจัยมักเป็นข้อมูลก่อนปี 2015 และยังไม่หักต้นทุน
+
+## คอร์สเทรดสายโชว์รวย (สรุปกฎที่เขียนเป็นโค้ดได้) — 2026-11-24
+ทุกข้อเป็น **สมมติฐาน** ไม่ใช่ผลที่พิสูจน์แล้ว: FTC พบว่าลูกค้า Warrior Trading ส่วนใหญ่ขาดทุน และ Warrior เขียนเองว่าผลของ Ross "not typical"
+
+| สำนัก | กฎที่บอกต่อกัน | ที่มา (ส่วนใหญ่เป็นบุคคลที่สาม) | สิ่งที่เราทดสอบแล้ว |
+|---|---|---|---|
+| Warrior Trading (Ross Cameron) "5 pillars" / gap and go | หุ้น $1–20 (ช่วงที่ชอบคือ $5–10), ขึ้น ≥ 10% ในวัน, relative volume ≥ 5 เท่า, float เล็ก (< 10–50 ล้านหุ้น), ต้องมีข่าวเป็นตัวเร่ง | [TradingView 5 Pillars script](https://it.tradingview.com/script/mbqMf3pF-Ross-Cameron-5-Pillars-Filter), [Mometic](https://blog.mometic.com/how-to-trade-like-warrior-trading-part-2-2), [Warrior blog](https://www.warriortrading.com/mastering-the-gap-and-go-strategy/) | L3 (8-K นอกเวลา + gap ≥ 10% ในหุ้นเล็ก, ตามทาง gap ถึงปิดตลาด): **ไม่ผ่าน** |
+| SMB Capital "stocks in play" | มีตัวเร่ง (ข่าว/เทคนิค/ราคา), ตัวเร่งแรง, สภาพคล่องพอ, ช่วงราคาพอ, relative volume > 3; ราคาขยับ ≥ 2–3% ก่อนตลาดเปิดพร้อมปริมาณ | [SMB blog](https://www.smbtraining.com/blog/a-simple-profitable-and-powerful-stock-trading-strategy-to-jump-start-your-trading-progress-finally), [Trade Ideas](https://www.trade-ideas.com/learning-center/market-events/how-traders-find-stocks-in-play/) | ใช้เป็นเกณฑ์คัดตัวเลือกของบอท (v4.15) |
+| Tim Sykes (หุ้นปั่นราคาต่ำ) | หุ้นที่วิ่งหลายวัน ("supernova") มักร่วงแรงภายหลัง; "first red day" = short วันแรกที่ปิดแดงหลังวิ่งหลายวัน; "first green day" = ซื้อวันแรกที่ปิดเขียวหลังลงหลายวัน; ซื้อย่อเฉพาะตัวที่วิ่งหลายวัน | [Sykes: first red day](https://timothysykes.com/blog/first-red-day-pattern-trading/), [first green day](https://timothysykes.com/blog/first-green-day-pattern/), [dip buy](https://timothysykes.com/blog/when-to-dip-buy-vs-not-dip-buy/) | ยังไม่ทดสอบ (เปิดเป็น L7 ในคิว) |
+| Qullamaggie "episodic pivot" | gap ≥ 10% ด้วยปริมาณ ≥ 2–3 เท่า จากงบหรือ guidance ที่ดีกว่าคาดมาก ซื้อเมื่อทะลุกรอบช่วงเปิด | ดูตารางด้านบน | L3 ครอบคลุมบางส่วน (ไม่ผ่าน) |
+
+**ที่ทุกสำนักเหมือนกัน:** ต้องมีตัวเร่ง + ปริมาณซื้อขายผิดปกติ (relative volume ≥ 2–5 เท่า) + ราคาขยับแรง ถ้าไม่มีปริมาณ ข่าวนั้นตลาดไม่สนใจ ข้อนี้สอดคล้องกับงานวิจัย Chan (2003) ที่ว่าการขยับที่มีข่าวรองรับมักไปต่อ
