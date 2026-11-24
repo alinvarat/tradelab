@@ -127,6 +127,16 @@ class Verdict(unittest.TestCase):
         self.assertEqual(result["gaps"], 1)
         self.assertEqual(result["by_protocol"][of.EARNINGS_PROTOCOL]["open"], 1)
 
+    def test_matched_wallets_use_both_legs_and_stress_both_exits(self):
+        start = of.ALL_ITEMS_START_TS
+        model = {"entry_ts": start, "exit_ts": start + 86400, "entry_ask": 0.20, "exit_bid": 0.40}
+        trade = {"symbol": "AAA", "ts": start, "model": model, "control": {**model, "exit_bid": 0.10}}
+        wallets = runner.protocol_summary({"open": [], "closed": [trade], "calls": []})["matched_whole_contract_wallets"]
+        self.assertGreater(wallets["model"]["base"]["end_equity_usd"], 147.0)
+        self.assertLess(wallets["control"]["base"]["end_equity_usd"], 147.0)
+        for arm in wallets.values():
+            self.assertLess(arm["stress"]["end_equity_usd"], arm["base"]["end_equity_usd"])
+
     def test_collecting_until_150(self):
         self.assertTrue(of.verdict([])["verdict"].startswith("collecting"))
 
