@@ -608,3 +608,50 @@ def funding_short_rows(symbol: str, d1: list, btc: dict, funding: list) -> list:
             out.append({"symbol": symbol, "market": f"{t}{symbol}", "ts": e[0], "kind": "funding_short", "ret": ret})
         i += L8_COOLDOWN
     return out
+
+
+# ------------------------------------------------------------------ L12 / L13 fade one-hour crypto shocks
+L12_MOVE, L12_REL = 0.08, 0.06             # hour return >= 8% and >= 6% beyond BTC's same hour
+L12_MIN_QV = 2e5                           # 30-day average hourly quote volume (USDT)
+L12_FEES, L12_FUNDING_H = 0.004, 0.0009 / 24
+L12_HOLDS = (1, 4, 24)                     # hours after entry
+L12_COOLDOWN_H = 24
+
+
+def hourly_shock_rows(symbol: str, h1: list, btc: dict, side: int) -> list:
+    """h1: hourly [(open_ts, o, h, l, c, quote_vol)] oldest first; btc: open_ts -> (o, c) of BTCUSDT hours.
+    side -1 (L12): hour H rose >= L12_MOVE and >= L12_REL more than BTC -> short at the open of H+1.
+    side +1 (L13): hour H fell <= -L12_MOVE and <= -L12_REL vs BTC -> buy at the open of H+1.
+    Exit at the close of hour H+k (k = 1, 4, 24 hours held), BTC-adjusted, minus fees (and funding for shorts).
+    Needs 720 prior hours for the volume screen. One row per coin per L12_COOLDOWN_H hours."""
+    out, i = [], 720
+    qv_sum = sum(x[5] for x in h1[:720]) if len(h1) >= 720 else 0.0
+    while i + 1 < len(h1):
+        t, o, _hh, _l, c, _qv = h1[i]
+        adv = qv_sum / 720
+        qv_sum += h1[i][5] - h1[i - 720][5]
+        b = btc.get(t)
+        if not (o > 0 and b and adv >= L12_MIN_QV):
+            i += 1
+            continue
+        r, br = c / o - 1, b[1] / b[0] - 1
+        hit = (r >= L12_MOVE and r - br >= L12_REL) if side < 0 else (r <= -L12_MOVE and r - br <= -L12_REL)
+        e = h1[i + 1]
+        if not hit or e[0] - t != 3600 or e[0] not in btc:
+            i += 1
+            continue
+        ret = {}
+        for k in L12_HOLDS:
+            j = i + k
+            if j < len(h1) and h1[j][0] - e[0] == (k - 1) * 3600 and h1[j][0] in btc:
+                if side < 0:
+                    g = short_gain(e[1], h1[j][4]) - short_gain(btc[e[0]][0], btc[h1[j][0]][1]) - L12_FEES - L12_FUNDING_H * k
+                else:
+                    g = (h1[j][4] / e[1] - 1) - (btc[h1[j][0]][1] / btc[e[0]][0] - 1) - L12_FEES
+                ret[f"h{k}"] = {"net": g}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{t}{symbol}{side}", "ts": e[0],
+                        "kind": "hour_spike_fade" if side < 0 else "hour_crash_bounce", "move": round(r, 4), "ret": ret})
+        i += L12_COOLDOWN_H
+        qv_sum = sum(x[5] for x in h1[i - 720:i])   # window of the 720 hours before i (events are rare: cheap)
+    return out
