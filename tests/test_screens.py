@@ -121,5 +121,22 @@ class L1bLedger(unittest.TestCase):
         self.assertAlmostEqual(r["net"], 0.10 - 0.02 - 0.002)
 
 
+class Longshot(unittest.TestCase):
+    def test_selling_a_losing_long_shot_earns_its_price_on_locked_collateral(self):
+        close = 100 * 86400
+        hist = [{"t": close - 7 * 86400, "p": 0.95}, {"t": close - 86400, "p": 0.97}]
+        r = sc.longshot_sells(hist, close, yes_won=True)
+        self.assertEqual(r["T-7d"]["side"], "no")                      # NO traded at 0.05
+        self.assertAlmostEqual(r["T-7d"]["net"], 0.05 / 0.95)
+        self.assertAlmostEqual(r["T-7d"]["monthly"], 0.05 / 0.95 * 30 / 7)
+        self.assertAlmostEqual(r["T-1d"]["net"], 0.03 / 0.97)              # NO at 0.03 also in range
+        self.assertNotIn("T-3d", r)                                    # no point within 2 days before T-3d
+        hist2 = [{"t": close - 86400, "p": 0.03}]
+        self.assertAlmostEqual(sc.longshot_sells(hist2, close, yes_won=True)["T-1d"]["net"], -1.0)  # YES won: lose 0.97/0.97
+
+    def test_no_price_near_the_lead_gives_nothing(self):
+        self.assertEqual(sc.longshot_sells([{"t": 0, "p": 0.05}], 100 * 86400, yes_won=False), {})
+
+
 if __name__ == "__main__":
     unittest.main()

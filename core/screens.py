@@ -210,3 +210,27 @@ def ledger_result(side: int, entry_px: float, exit_px: float, btc_entry: float, 
     raw = side * (exit_px / entry_px - 1)
     abn = raw - side * (btc_exit / btc_entry - 1)
     return {"raw": raw, "abn": abn, "net": abn - L1B_FEES - extra}
+
+
+# ------------------------------------------------------------------ L4 Polymarket long-shot selling (ops/lines/L4_polymarket_maker.md)
+L4_LEADS_D = (7, 3, 1)
+
+
+def longshot_sells(history: list, close_ts: float, yes_won: bool, lo: float = 0.02, hi: float = 0.10) -> dict:
+    """history: [{'t','p'}] of the YES price (daily points). For each lead (days before close), if either side trades
+    in [lo, hi], sell that side at that price as a maker (no fee): +price when it loses, -(1-price) when it wins.
+    Returns {'T-7d': {'net': return on the locked collateral (1-price), 'monthly': net*30/lead, 'side', 'price'}}."""
+    out = {}
+    pts = sorted(history, key=lambda x: x["t"])
+    for lead in L4_LEADS_D:
+        t = close_ts - lead * 86400
+        prior = [x for x in pts if t - 2 * 86400 <= x["t"] <= t]
+        if not prior:
+            continue
+        yes = float(prior[-1]["p"])
+        for side, price, won in (("yes", yes, yes_won), ("no", 1 - yes, not yes_won)):
+            if lo <= price <= hi:
+                pnl = -(1 - price) if won else price
+                net = pnl / (1 - price)
+                out[f"T-{lead}d"] = {"net": net, "monthly": net * 30 / lead, "side": side, "price": round(price, 4)}
+    return out

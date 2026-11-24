@@ -1016,7 +1016,65 @@ def study_l1e_binance_delist(_symbols, parser="delist"):
             "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L1_COST, pick_trim=5)}
     return summ, rows
 
-STUDIES = {"l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+
+def study_l4_polymarket_longshot(_symbols, workers=8, max_markets=12000):
+    """Pre-registered in RESULTS.md 'L4 screen': sell Polymarket long shots (2-10c) as a maker 7/3/1 days before close."""
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime, timezone
+    from core import screens as sc
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2024), T(2025, 7)), "validation": (T(2025, 7), T(2026, 4)), "test": (T(2026, 4), T(2026, 11))}
+    from urllib.parse import quote as _q
+    markets = []
+    for a, b in (("2024-01-01", "2025-07-01"), ("2025-07-01", "2026-04-01"), ("2026-04-01", "2026-11-01")):
+        got, cursor = [], ""                    # keyset pagination per split window, so every split is sampled
+        while len(got) < max_markets // 3:
+            page = _get_json("https://gamma-api.polymarket.com/markets/keyset?closed=true&limit=100&volume_num_min=50000"
+                             f"&end_date_min={a}T00:00:00Z&end_date_max={b}T00:00:00Z"
+                             + (f"&next_cursor={_q(cursor)}" if cursor else ""))
+            if not page or not page.get("markets"):
+                break
+            got += page["markets"]
+            cursor = page.get("next_cursor") or ""
+            if not cursor:
+                break
+        log(f"L4 window {a}..{b}: {len(got)} markets")
+        markets += got
+    log(f"L4 markets: {len(markets)}")
+
+    def one(m):
+        try:
+            outs, prices, toks = (json.loads(m.get(k) or "[]") for k in ("outcomes", "outcomePrices", "clobTokenIds"))
+            if len(toks) != 2 or sorted(prices) != ["0", "1"] or not m.get("closedTime"):
+                return None, "not a resolved binary"
+            close = datetime.fromisoformat(m["closedTime"].replace("+00", "+00:00")).timestamp()
+            h = _get_json(f"https://clob.polymarket.com/prices-history?market={toks[0]}&interval=max&fidelity=1440")
+            hist = (h or {}).get("history") or []
+            if not hist:
+                return None, "no history"
+            ret = sc.longshot_sells(hist, close, yes_won=prices[0] == "1")
+            if not ret:
+                return None, "no long shot at the leads"
+            ev = (m.get("events") or [{}])[0].get("id")
+            return {"symbol": f"ev{ev}", "market": m.get("question", "")[:100], "ts": close, "volume": m.get("volumeNum"),
+                    "split": sc.split_of(close, bounds), "ret": ret}, None
+        except Exception as e:  # noqa: BLE001
+            return None, f"error {type(e).__name__}"
+    rows, skipped = [], {}
+    with ThreadPoolExecutor(workers) as ex:
+        for r, why in ex.map(one, markets):
+            if r:
+                rows.append(r)
+            else:
+                skipped[why] = skipped.get(why, 0) + 1
+    hs = [f"T-{d}d" for d in sc.L4_LEADS_D]
+    monthly = {h: {sp: (lambda v: round(sum(v) / len(v), 4) if v else None)(
+        [r["ret"][h]["monthly"] for r in rows if h in r["ret"] and r["split"] == sp]) for sp in bounds} for h in hs}
+    summ = {"markets": len(markets), "rows": len(rows), "skipped": skipped, "monthly_equiv_mean": monthly,
+            "base": sc.judge(rows, hs, bounds, pick_trim=5)}
+    return summ, rows
+
+STUDIES = {"l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):
