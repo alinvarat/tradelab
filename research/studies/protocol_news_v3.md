@@ -15,3 +15,6 @@
 **Cost.** About 3 calls per tradeable filing; real cost from OpenRouter `usage.cost` is in the summary and goes to `reports/COSTS.md`.
 
 **Run note 2026-11-24 (rules unchanged):** the first run (Actions 45423419796) was cancelled without any output being read, because OpenRouter returned 402 Payment Required from 16:59 UTC (credit exhausted) and every later call would have come back empty and counted as a skip. The rerun uses the same model, DeepSeek v4.1 flash 1017, through the owner's alternative provider (ai.thirx.com, `THIRX_MODEL`).
+
+**Run note 2026-11-25 (rules unchanged):** run 45481243341 (dispatched on the old `research/news-v3` branch) is void: that branch's workflow passed an empty provider key and model, so not one v3 call was made (v3 n = 0 at every horizon, cost 0.00 USD, OpenRouter 402). Its "no edge shown" is an artifact and must not be quoted. The v1 numbers it printed come from cached v1 outputs on these dates, which were already seen (descriptive only). Rerun 45495806547 is dispatched from `main`, where the workflow passes the owner's DeepSeek provider (`DEEPSEEK_API_KEY` secret, `LLM_MODEL` variable `deepseek-flash`, base URL `https://api.deepseek.com`); the summary must record the model id the provider reports, and if it is not DeepSeek v4.1 flash 1017 the result is reported as a different-model run, not as this protocol's verdict.
+
