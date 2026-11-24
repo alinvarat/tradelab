@@ -1130,7 +1130,60 @@ def study_l3_smallcap_news(_symbols, sample=1500, workers=6):
             "passed_groups": [k for k, v in by_group.items() if v["passes_bonferroni"]], "by_group": by_group}
     return summ, rows
 
-STUDIES = {"l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+
+def study_l6_smallcap_insider(_symbols, max_symbols=1500, workers=6):
+    """Pre-registered in RESULTS.md 'L6 screen': insider open-market purchases >= $25k in small caps."""
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime, timezone
+    from core import screens as sc
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2019), T(2023)), "validation": (T(2023), T(2025)), "test": (T(2025), T(2026, 11))}
+    tick = nb._sec_json("https://www.sec.gov/files/company_tickers_exchange.json")
+    listed = {r[2] for r in tick["data"] if r[3] in ("Nasdaq", "NYSE", "NYSE American") and r[2] and "-" not in r[2]}
+    events = []
+    y, q, now = 2019, 1, time.gmtime()
+    while (y, q) <= (now.tm_year, (now.tm_mon - 1) // 3 + 1):
+        zf = st.form345_quarter(y, q)
+        if zf is not None:
+            sub = st.read_tsv(zf, "SUBMISSION.tsv", ("ACCESSION_NUMBER", "FILING_DATE", "DOCUMENT_TYPE", "ISSUERTRADINGSYMBOL"))
+            own = st.read_tsv(zf, "REPORTINGOWNER.tsv", ("ACCESSION_NUMBER", "RPTOWNER_RELATIONSHIP"))
+            tr = st.read_tsv(zf, "NONDERIV_TRANS.tsv", ("ACCESSION_NUMBER", "TRANS_CODE", "TRANS_SHARES",
+                                                        "TRANS_PRICEPERSHARE", "TRANS_ACQUIRED_DISP_CD"))
+            got = st.insider_purchases(sub, own, tr, listed, min_value=25_000.0)
+            log(f"  {y}q{q}: {len(got)} purchases")
+            events += got
+        y, q = (y, q + 1) if q < 4 else (y + 1, 1)
+    for e in events:
+        e["ts"] = st.conservative_ts(e["date"])
+    by_sym = {}
+    for e in events:
+        by_sym.setdefault(e["symbol"], []).append(e)
+    syms = sorted(by_sym)
+    if len(syms) > max_symbols:
+        syms = sorted(random.Random(20261124).sample(syms, max_symbols))
+    iwm = data.chart("IWM", "10y", "1d")["bars"]
+    bench = {sc._et(b["t"]).date(): (b["o"], b["c"]) for b in iwm}
+    gaps = {"bars": 0}
+
+    def one(sym):
+        try:
+            return sc.insider_rows(sym, data.chart(sym, "10y", "1d")["bars"], by_sym[sym], bench)
+        except Exception:  # noqa: BLE001
+            gaps["bars"] += 1
+            return []
+    rows = []
+    with ThreadPoolExecutor(workers) as ex:
+        for r in ex.map(one, syms):
+            rows += r
+    for r in rows:
+        r["split"] = sc.split_of(r["ts"], bounds)
+    hs = [f"h{h}" for h in sc.L6_HOLDS]
+    summ = {"purchases": len(events), "symbols_with_purchases": len(by_sym), "symbols_priced": len(syms),
+            "rows": len(rows), "gaps": gaps, "base": sc.judge(rows, hs, bounds, pick_trim=5),
+            "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L6_COST, pick_trim=5)}
+    return summ, rows
+
+STUDIES = {"l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):

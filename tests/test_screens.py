@@ -201,5 +201,21 @@ class SmallCap(unittest.TestCase):
         self.assertEqual(sc.smallcap_events("BIG", big, [overnight], bench), [])
 
 
+class Insider(unittest.TestCase):
+    def test_entry_after_availability_and_iwm_adjusted_returns(self):
+        bars = SmallCap().bars()
+        for k in range(22, 25):
+            bars[k] = {**bars[k], "o": 10.0, "c": 11.0}
+        from core.screens import _et
+        bench = {_et(b["t"]).date(): (100.0, 100.0) for b in bars}
+        ev = {"accession": "x", "date": "2026-03-31", "value": 5e4, "ts": bars[21]["t"] + 8 * 3600}  # after day 21 open
+        self.assertEqual(sc.insider_rows("SMOL", bars, [ev], bench), [])     # only 3 sessions after entry: no horizon yet
+        bars += [{**bars[-1], "t": bars[-1]["t"] + 86400 * k} for k in range(1, 4)]
+        bench = {_et(b["t"]).date(): (100.0, 100.0) for b in bars}
+        rows = sc.insider_rows("SMOL", bars, [ev], bench)
+        self.assertEqual(rows[0]["ts"], bars[22]["t"])                       # the session after availability, never the same one
+        self.assertAlmostEqual(rows[0]["ret"]["h5"]["net"], 0.10 - 0.01)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -324,3 +324,35 @@ def smallcap_events(symbol: str, bars: list, filings: list, bench: dict, px=(1.0
                         "dir": "up" if sign > 0 else "down", "gap": round(gap, 4), "ret": ret})
             break
     return out
+
+
+# ------------------------------------------------------------------ L6 insider purchases in small caps
+L6_COST, L6_HOLDS = 0.01, (5, 20)
+
+
+def insider_rows(symbol: str, bars: list, events: list, bench: dict, px=(1.0, 20.0), dollar_vol=(0.5e6, 20e6)) -> list:
+    """events: [{'accession','date','value','ts'}] (ts = conservative availability time). Entry at the open of the
+    first session starting after ts; previous close $1-20 and 20-day average dollar volume $0.5-20M. Returns +5 and
+    +20 session returns (open to close), IWM-adjusted, net of 1% round trip."""
+    days = [(_et(b["t"]).date(), b) for b in bars]
+    out = []
+    for e in events:
+        i = next((k for k, (d, b) in enumerate(days) if b["t"] > e["ts"]), None)
+        if i is None or i < 21:
+            continue
+        d, b = days[i]
+        prev = days[i - 1][1]
+        adv = sum(x["c"] * x["v"] for _, x in days[i - 20:i]) / 20
+        if not (px[0] <= prev["c"] <= px[1] and dollar_vol[0] <= adv <= dollar_vol[1]) or d not in bench:
+            continue
+        ret = {}
+        for h in L6_HOLDS:
+            if i + h - 1 < len(days):
+                xd, x = days[i + h - 1]
+                if xd in bench:
+                    r = (x["c"] / b["o"] - 1) - (bench[xd][1] / bench[d][0] - 1)
+                    ret[f"h{h}"] = {"net": r - L6_COST}
+        if ret:
+            out.append({"symbol": symbol, "market": e["accession"], "ts": b["t"], "kind": "form4_buy",
+                        "value": e.get("value"), "ret": ret})
+    return out
