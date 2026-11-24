@@ -36,8 +36,33 @@ class BinanceKinds(unittest.TestCase):
     def test_trimmed_pick_ignores_one_outlier(self):
         bounds = {"train": (0, 100), "validation": (100, 200)}
         rows = [{"ts": i, "symbol": "S", "ret": {"a": {"net": 0.01}, "b": {"net": 5.0 if i == 0 else -0.01}}} for i in range(10)]
+        rows += [{"ts": 100 + i, "symbol": "V", "ret": {"a": {"net": 0.01 * (i % 3 - 1)}, "b": {"net": 0.0}}} for i in range(10)]
         self.assertEqual(sc.judge(rows, ["a", "b"], bounds)["pick"], "b")
         self.assertEqual(sc.judge(rows, ["a", "b"], bounds, pick_trim=5)["pick"], "a")
+
+
+class DataGate(unittest.TestCase):
+    BOUNDS = {"train": (0, 100), "validation": (100, 200), "test": (200, 300)}
+
+    def rows(self, n=12, base=0, sym="S"):
+        return [{"ts": base + i, "symbol": f"{sym}{i}", "ret": {"h": {"net": 0.01 * ((i % 3) - 1)}}} for i in range(n)]
+
+    def test_repeated_rows_make_the_verdict_invalid(self):
+        good = self.rows() + self.rows(base=100, sym="V")
+        self.assertTrue(sc.integrity(good, ["h"], self.BOUNDS)["ok"])
+        doubled = good + good                                   # the L4 failure: same markets fetched again
+        j = sc.judge(doubled, ["h"], self.BOUNDS)
+        self.assertTrue(j["verdict"].startswith("invalid data"))
+        self.assertIsNone(j["pick"])
+
+    def test_a_thin_validation_split_is_invalid(self):
+        j = sc.judge(self.rows() + self.rows(n=3, base=100, sym="V"), ["h"], self.BOUNDS)
+        self.assertTrue(j["verdict"].startswith("invalid data"))
+
+    def test_no_losers_is_flagged(self):
+        rows = [{"ts": i, "symbol": f"S{i}", "ret": {"h": {"net": 0.05}}} for i in range(12)]
+        w = sc.integrity(rows + self.rows(base=100, sym="V"), ["h"], self.BOUNDS)["warnings"]
+        self.assertTrue(any("no losing event" in x for x in w))
 
 
 class Returns(unittest.TestCase):

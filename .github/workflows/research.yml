@@ -8,9 +8,6 @@ on:
       study:
         description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, polymarket_llm or all"
         default: all
-  push:
-    branches:
-      - "research-run/**"
   schedule:
     - cron: "0 3 * * 0"        # Sundays 03:00 UTC: forward DeepSeek earnings reader
     - cron: "0 15 * * 1-5"     # weekdays 15:00 UTC: forward options test
@@ -182,17 +179,17 @@ jobs:
         study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_8k_other, probe_options, polymarket_llm, probe_llm_cost, pit_swing, news_v2, l1_listings, l1c_binance_notices, l1e_binance_delist, l1g_alpha_remove, l4_polymarket_longshot]
     steps:
       - name: Check out repository
-        if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
+        if: inputs.study == 'all' || inputs.study == matrix.study
         uses: actions/checkout@v4
 
       - name: Set up Python
-        if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
+        if: inputs.study == 'all' || inputs.study == matrix.study
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
 
       - name: Run study
-        if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
+        if: inputs.study == 'all' || inputs.study == matrix.study
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
           OPENROUTER_API_KEY: ${{ (startsWith(matrix.study, 'llm_') || matrix.study == 'polymarket_llm' || matrix.study == 'probe_llm_cost' || matrix.study == 'news_v2') && secrets.OPENROUTER_API_KEY || '' }}
@@ -201,7 +198,7 @@ jobs:
           python research/studies/run.py ${{ matrix.study }} --out out/${{ matrix.study }}.json > out/${{ matrix.study }}_summary.json
 
       - name: Upload result
-        if: always() && (github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study)
+        if: always() && (inputs.study == 'all' || inputs.study == matrix.study)
         uses: actions/upload-artifact@v4
         with:
           name: study-${{ matrix.study }}
