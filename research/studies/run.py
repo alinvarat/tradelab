@@ -6,6 +6,7 @@
 stdout: the summary JSON only. stderr: progress and a short human summary. The output file holds summary + rows.
 """
 import argparse
+import calendar
 import json
 import os
 import random
@@ -576,7 +577,62 @@ def study_probe_llm_cost(_symbols):
     return out, []
 
 
-STUDIES = {"probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+def study_pit_swing(_symbols):
+    """protocol_pit_swing.md: pullback-in-uptrend swing book on point-in-time S&P 500 vs a random-pick book."""
+    import urllib.request
+    with urllib.request.urlopen(urllib.request.Request(SP500_URL, headers={"User-Agent": "TradeLab research"}),
+                                timeout=60) as r:
+        spells = st.parse_membership(r.read().decode())
+    names = sorted(t for t, sp in spells.items() if any(b is None or b >= "2015-01-01" for _, b in sp))
+    pool = load_bars(names)
+    member_cache = {}
+
+    def members(day):
+        if day not in member_cache:
+            member_cache[day] = st.members_on(spells, day)
+        return member_cache[day]
+
+    out, rows = {"tickers_with_bars": len(pool), "tickers_wanted": len(names)}, []
+    for label, cost in (("1x_cost", st.SWING["cost"]), ("2x_cost", 2 * st.SWING["cost"])):
+        books = st.swing_books(pool, members, cost=cost)
+        ms, mc = st.monthly_returns(books["strategy"]["curve"]), st.monthly_returns(books["control"]["curve"])
+        months = sorted(set(ms) & set(mc))
+        mrows = [{"symbol": "SWING", "month": m, "ts": calendar.timegm(time.strptime(m + "-15", "%Y-%m-%d")),
+                  "split": nb.split_of(calendar.timegm(time.strptime(m + "-15", "%Y-%m-%d"))),
+                  "gross": ms[m], "ctrl_gross": mc[m], "asset_class": "none"} for m in months]
+        tr = books["strategy"]["trades"]
+        days = len(books["strategy"]["curve"])
+        eq = [e for _, e in books["strategy"]["curve"]]
+        peak, dd = 1.0, 0.0
+        for e in eq:
+            peak = max(peak, e)
+            dd = min(dd, e / peak - 1)
+        lev = {}
+        for L in (1, 2, 3):
+            e, pk, d2, hits = 1.0, 1.0, 0.0, 0
+            for m in months:
+                g = 1 + L * ms[m] - (L - 1) * 0.08 / 12
+                hits += g >= 3
+                e *= max(g, 0.0)
+                pk = max(pk, e)
+                d2 = min(d2, e / pk - 1 if pk else -1)
+            lev[f"{L}x"] = {"end_equity": e, "worst_drawdown": d2, "months_3x": hits}
+        out[label] = {"verdict": st.verdict(mrows, group=lambda r: r["month"]), "trades": len(tr),
+                      "trades_per_day": len(tr) / days if days else 0,
+                      "hit": sum(1 for t in tr if t["ret"] > 0) / len(tr) if tr else None,
+                      "avg_hold": sum(t["held"] for t in tr) / len(tr) if tr else None,
+                      "end_equity": eq[-1] if eq else None, "worst_drawdown": dd,
+                      "control_end_equity": books["control"]["curve"][-1][1] if books["control"]["curve"] else None,
+                      "leverage": lev}
+        if label == "1x_cost":
+            rows = mrows
+    spy = pool.get("SPY") or fetch_bars("SPY")
+    if spy:
+        out["spy_buy_hold"] = spy[-1]["c"] / spy[0]["c"]
+    return out, rows
+
+
+STUDIES = {"pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):

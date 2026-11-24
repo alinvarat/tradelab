@@ -204,6 +204,32 @@ class WideEarnings(unittest.TestCase):
         self.assertAlmostEqual(p["worst_drawdown"], -1.0)
 
 
+class Swing(unittest.TestCase):
+    def make(self, pullback_at):
+        days = business_days("2023-01-02", 260)
+        closes = [100 + 0.2 * i for i in range(len(days))]
+        for k, f in ((0, 0.97), (1, 0.95), (2, 0.93)):                 # 3-day pullback of about 7%
+            closes[pullback_at + k] = closes[pullback_at - 1] * f
+        for k in range(pullback_at + 3, len(days)):
+            closes[k] = closes[pullback_at - 1] * 1.02 + 0.2 * (k - pullback_at)
+        return [{"t": day(d), "o": c, "h": c, "l": c, "c": c, "v": 1} for d, c in zip(days, closes)]
+
+    def test_buys_next_open_after_pullback_and_sells_after_bounce(self):
+        pool = {"AAA": self.make(230), "BBB": [dict(b) for b in self.make(250)]}
+        books = st.swing_books(pool, cost=0.0)
+        tr = [t for t in books["strategy"]["trades"] if t["symbol"] == "AAA"]
+        self.assertEqual(len(tr), 1)
+        entry_bar = pool["AAA"][233]                                     # signal at the 3rd pullback close (232)
+        self.assertEqual(tr[0]["entry_day"], st._day_str(entry_bar["t"]))
+        self.assertGreater(tr[0]["ret"], 0)
+        self.assertEqual(len(books["control"]["trades"]) + len(books["control"]["pos"]),
+                         len(books["strategy"]["trades"]) + len(books["strategy"]["pos"]))
+
+    def test_monthly_returns(self):
+        curve = [("2024-01-31", 1.0), ("2024-02-15", 1.2), ("2024-02-29", 1.1), ("2024-03-29", 2.2)]
+        self.assertEqual(st.monthly_returns(curve), {"2024-02": 0.10000000000000009, "2024-03": 1.0})
+
+
 class Items(unittest.TestCase):
     def test_only_locked_items_count_and_each_counts_once(self):
         self.assertEqual(st.item_tags(["2.02", "9.01"]), ["2.02"])
