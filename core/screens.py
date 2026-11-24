@@ -158,6 +158,12 @@ def listing_returns(ts: float, m1: list, h1: list, bench_m1: list, bench_h1: lis
     return out
 
 
+def short_gain(entry: float, exit_: float) -> float:
+    """Gain of a short opened at `entry` and closed at `exit_` as a fraction of the entry notional: 1 - exit/entry
+    (a halving is +50%, never +100%). Fixed 2026-11-25: L7/L8/L10 used entry/exit - 1, which overstated gains."""
+    return 1 - exit_ / entry
+
+
 def split_of(ts: float, bounds: dict) -> str:
     """bounds = {'train': (start, end), ...} in unix seconds, end exclusive."""
     for k, (a, b) in bounds.items():
@@ -417,8 +423,8 @@ def first_red_day_rows(symbol: str, bars: list, bench: dict, px=(1.0, 20.0), dol
         for h in L7_HOLDS:
             j = i + h
             if j < len(days) and days[j][0] in bench:
-                short = e["o"] / days[j][1]["c"] - 1     # gain on the short from the D+1 open
-                bshort = bench[ed][0] / bench[days[j][0]][1] - 1   # gain on shorting IWM over the same window
+                short = short_gain(e["o"], days[j][1]["c"])     # gain on the short from the D+1 open
+                bshort = short_gain(bench[ed][0], bench[days[j][0]][1])   # gain on shorting IWM over the same window
                 ret[f"h{h}"] = {"net": short - bshort - L7_COST}
         if ret:
             out.append({"symbol": symbol, "market": f"{d}{symbol}", "ts": e["t"], "kind": "first_red_day",
@@ -457,4 +463,110 @@ def unlock_short_returns(ts: float, d1: list, bench_d1: list) -> dict:
         if p0 and p1 and b0 and b1:
             abn = -((p1 / p0 - 1) - (b1 / b0 - 1))
             out[name] = {"net": abn - L2_FEES - L2_FUNDING_DAY * (b - a)}
+    return out
+
+
+# ------------------------------------------------------------------ L8 fade the day's top crypto gainers
+L8_THRESH, L8_MIN_QV = 0.20, 2e6          # UTC-day gain (close/open - 1) and 20-day average quote volume in USDT
+L8_FEES, L8_FUNDING_DAY = 0.004, 0.0009   # round trip taker + slippage; assumed perp funding paid by the short
+L8_HOLDS = (1, 3, 7)
+L8_COOLDOWN = 7                           # days before the same coin can fire again (no overlapping rows)
+
+
+def gainer_fade_rows(symbol: str, d1: list, btc: dict) -> list:
+    """d1: daily [(open_ts, o, h, l, c, quote_vol)] oldest first (UTC days); btc: open_ts -> (o, c) of BTCUSDT.
+    Day D gains >= L8_THRESH (close/open) with 20-day average quote volume >= L8_MIN_QV. Short at the open of D+1
+    (the first price after D's close is known) to the close of D+h, minus BTC over the same window, minus fees and
+    assumed funding for h days. One row per coin per L8_COOLDOWN days."""
+    out, i = [], 21
+    while i + 1 < len(d1):
+        t, o, _h, _l, c, _qv = d1[i]
+        adv = sum(x[5] for x in d1[i - 20:i]) / 20
+        if not (o > 0 and c / o - 1 >= L8_THRESH and adv >= L8_MIN_QV):
+            i += 1
+            continue
+        e = d1[i + 1]
+        if e[0] - t != 86400 or e[0] not in btc:        # gap in the data: no clean next-day entry
+            i += 1
+            continue
+        ret = {}
+        for h in L8_HOLDS:
+            j = i + h
+            if j < len(d1) and d1[j][0] - e[0] == (h - 1) * 86400 and d1[j][0] in btc:
+                short = short_gain(e[1], d1[j][4])
+                bshort = short_gain(btc[e[0]][0], btc[d1[j][0]][1])
+                ret[f"h{h}"] = {"net": short - bshort - L8_FEES - L8_FUNDING_DAY * h}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{t}{symbol}", "ts": e[0], "kind": "gainer_fade",
+                        "gain": round(c / o - 1, 4), "ret": ret})
+        i += L8_COOLDOWN
+    return out
+
+
+# ------------------------------------------------------------------ L9 buy the day's biggest crypto losers
+L9_THRESH = -0.20                         # UTC-day move (close/open - 1) at or below -20%
+L9_FEES = 0.004                           # round trip taker + slippage; spot long, no funding
+L9_HOLDS = (1, 3, 7)
+
+
+def loser_bounce_rows(symbol: str, d1: list, btc: dict) -> list:
+    """Mirror of gainer_fade_rows: day D falls >= 20% (close/open) with 20-day average quote volume >= L8_MIN_QV.
+    Buy spot at the open of D+1, sell at the close of D+h, minus BTC over the same window and L9_FEES.
+    One row per coin per L8_COOLDOWN days."""
+    out, i = [], 21
+    while i + 1 < len(d1):
+        t, o, _h, _l, c, _qv = d1[i]
+        adv = sum(x[5] for x in d1[i - 20:i]) / 20
+        if not (o > 0 and c / o - 1 <= L9_THRESH and adv >= L8_MIN_QV):
+            i += 1
+            continue
+        e = d1[i + 1]
+        if e[0] - t != 86400 or e[0] not in btc:
+            i += 1
+            continue
+        ret = {}
+        for h in L9_HOLDS:
+            j = i + h
+            if j < len(d1) and d1[j][0] - e[0] == (h - 1) * 86400 and d1[j][0] in btc:
+                long = d1[j][4] / e[1] - 1
+                blong = btc[d1[j][0]][1] / btc[e[0]][0] - 1
+                ret[f"h{h}"] = {"net": long - blong - L9_FEES}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{t}{symbol}", "ts": e[0], "kind": "loser_bounce",
+                        "drop": round(c / o - 1, 4), "ret": ret})
+        i += L8_COOLDOWN
+    return out
+
+
+# ------------------------------------------------------------------ L10 fade large small-cap opening gaps
+L10_GAP, L10_COST = 0.30, 0.01
+L10_HOLDS = (0, 1, 5)                     # sessions after the gap day: 0 = cover at the same day's close
+
+
+def gap_fade_rows(symbol: str, bars: list, bench: dict, px=(1.0, 20.0), dollar_vol=(1e6, 50e6)) -> list:
+    """bars: daily [{'t','o','c','v'}] oldest first; bench: ET date -> (open, close) of IWM.
+    Session D opens >= 30% above the previous close; previous close $1-20 and 20-day average dollar volume $1-50M
+    (both known before D's open). Short at D's open to the close of D (+0), D+1 and D+5, IWM-adjusted, net of 1%.
+    One row per symbol per 5 sessions."""
+    days = [(_et(b["t"]).date(), b) for b in bars]
+    out, i = [], 21
+    while i < len(days):
+        d, b = days[i]
+        prev = days[i - 1][1]
+        adv = sum(x["c"] * x["v"] for _, x in days[i - 21:i - 1]) / 20
+        if not (prev["c"] > 0 and b["o"] / prev["c"] - 1 >= L10_GAP and px[0] <= prev["c"] <= px[1]
+                and dollar_vol[0] <= adv <= dollar_vol[1] and d in bench):
+            i += 1
+            continue
+        ret = {}
+        for h in L10_HOLDS:
+            j = i + h
+            if j < len(days) and days[j][0] in bench:
+                short = short_gain(b["o"], days[j][1]["c"])
+                bshort = short_gain(bench[d][0], bench[days[j][0]][1])
+                ret[f"h{h}"] = {"net": short - bshort - L10_COST}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{d}{symbol}", "ts": b["t"], "kind": "gap_fade",
+                        "gap": round(b["o"] / prev["c"] - 1, 4), "ret": ret})
+        i += 5
     return out

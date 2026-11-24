@@ -282,7 +282,7 @@ class FirstRedDay(unittest.TestCase):
         rows = sc.first_red_day_rows("SMOL", bars, self.bench(bars))
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["ts"], bars[29]["t"])              # D+1, not D
-        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], (11.0 / 9.9 - 1) - 0.01)
+        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], (1 - 9.9 / 11.0) - 0.01)
 
     def test_benchmark_is_short_for_an_adjusted_comparison(self):
         c = self.flat()
@@ -296,8 +296,8 @@ class FirstRedDay(unittest.TestCase):
         drop[_et(bars[29]["t"]).date()] = (100.0, 98.0)             # IWM falls 2% on the exit session
         a = sc.first_red_day_rows("SMOL", bars, flat)[0]["ret"]["h1"]["net"]
         b = sc.first_red_day_rows("SMOL", bars, drop)[0]["ret"]["h1"]["net"]
-        # IWM 100 -> 98 gives a short-benchmark gain of 100/98 - 1 = +2.0408%, so b is lower by exactly that
-        self.assertAlmostEqual(b - a, -(100.0 / 98.0 - 1))
+        # IWM 100 -> 98 gives a short-benchmark gain of 1 - 98/100 = +2%, so b is lower by exactly that
+        self.assertAlmostEqual(b - a, -(1 - 98.0 / 100.0))
 
     def test_no_red_close_or_small_run_up_gives_nothing(self):
         c = self.flat()
@@ -343,3 +343,90 @@ class FirstRedDay(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GainerFade(unittest.TestCase):
+    """L8: short the day's >= 20% crypto gainer at the next UTC open; BTC-adjusted, fees + funding."""
+    T0 = 1_700_006_400            # a UTC midnight
+
+    def series(self, gain_day=25, n=40, qv=5e6):
+        d1, px = [], 1.0
+        for k in range(n):
+            o = px
+            c = o * (1.3 if k == gain_day else 1.0)
+            if k > gain_day:
+                c = o * 0.95      # falls 5% a day after the spike
+            d1.append((self.T0 + k * 86400, o, max(o, c), min(o, c), c, qv))
+            px = c
+        return d1
+
+    def btc(self, n=40):
+        return {self.T0 + k * 86400: (100.0, 100.0) for k in range(n)}
+
+    def test_short_next_open_net_of_costs(self):
+        from core import screens as sc
+        rows = sc.gainer_fade_rows("XUSDT", self.series(), self.btc())
+        self.assertEqual(len(rows), 1)
+        r = rows[0]
+        self.assertEqual(r["ts"], self.T0 + 26 * 86400)          # entry = open of the next UTC day
+        self.assertAlmostEqual(r["ret"]["h1"]["net"], 1 - 0.95 - sc.L8_FEES - sc.L8_FUNDING_DAY, places=9)
+        self.assertAlmostEqual(r["ret"]["h3"]["net"], 1 - 0.95 ** 3 - sc.L8_FEES - 3 * sc.L8_FUNDING_DAY, places=9)
+
+    def test_thin_volume_small_gain_and_gaps_do_not_fire(self):
+        from core import screens as sc
+        self.assertEqual(sc.gainer_fade_rows("X", self.series(qv=1e5), self.btc()), [])
+        d1 = [(t, o, h, l, o * 1.1 if c > o * 1.2 else c, q) for t, o, h, l, c, q in self.series()]
+        self.assertEqual(sc.gainer_fade_rows("X", d1, self.btc()), [])
+        gap = [x for x in self.series() if x[0] != self.T0 + 26 * 86400]
+        self.assertEqual(sc.gainer_fade_rows("X", gap, self.btc()), [])
+
+    def test_btc_adjustment(self):
+        from core import screens as sc
+        btc = self.btc()
+        e = self.T0 + 26 * 86400
+        btc[e] = (100.0, 110.0)                                   # BTC up 10% on the entry day
+        r = sc.gainer_fade_rows("X", self.series(), btc)[0]
+        self.assertAlmostEqual(r["ret"]["h1"]["net"], (1 - 0.95) - (1 - 110 / 100) - sc.L8_FEES - sc.L8_FUNDING_DAY,
+                               places=9)
+
+
+class LoserBounce(GainerFade):
+    def test_buy_next_open_after_crash(self):
+        from core import screens as sc
+        d1, px = [], 1.0
+        for k in range(40):
+            o = px
+            c = o * (0.7 if k == 25 else (1.05 if k > 25 else 1.0))
+            d1.append((self.T0 + k * 86400, o, max(o, c), min(o, c), c, 5e6))
+            px = c
+        r = sc.loser_bounce_rows("X", d1, self.btc())
+        self.assertEqual(len(r), 1)
+        self.assertEqual(r[0]["ts"], self.T0 + 26 * 86400)
+        self.assertAlmostEqual(r[0]["ret"]["h1"]["net"], 0.05 - sc.L9_FEES, places=9)
+        self.assertEqual(sc.loser_bounce_rows("X", self.series(), self.btc()), [])   # a spike is not a crash
+
+
+class GapFade(unittest.TestCase):
+    def test_short_open_after_gap(self):
+        import datetime as dt
+        from core import screens as sc
+        t0 = dt.datetime(2024, 1, 2, 14, 30, tzinfo=dt.timezone.utc).timestamp()
+        bars = []
+        for k in range(30):
+            o = c = 5.0
+            if k == 25:
+                o, c = 7.0, 6.0          # gaps up 40%, fades to 6
+            bars.append({"t": t0 + k * 86400, "o": o, "c": c, "v": 1e6})
+        bench = {sc._et(b["t"]).date(): (100.0, 100.0) for b in bars}
+        rows = sc.gap_fade_rows("SMOL", bars, bench)
+        self.assertEqual(len(rows), 1)
+        self.assertAlmostEqual(rows[0]["ret"]["h0"]["net"], 1 - 6 / 7 - sc.L10_COST, places=9)
+        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], 1 - 5 / 7 - sc.L10_COST, places=9)
+        self.assertEqual(sc.gap_fade_rows("SMOL", bars[:25] + [dict(bars[25], o=6.0)] + bars[26:], bench), [])
+
+
+class ShortGain(unittest.TestCase):
+    def test_halving_is_fifty_percent(self):
+        self.assertAlmostEqual(sc.short_gain(10.0, 5.0), 0.5)
+        self.assertAlmostEqual(sc.short_gain(10.0, 20.0), -1.0)
+        self.assertLessEqual(sc.short_gain(10.0, 0.0001), 1.0)
