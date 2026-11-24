@@ -106,3 +106,7 @@ Live data showed 35 of the last 40 decisions were holds, with the same top mover
 - desk_stats: every candidate the model saw is already scored at +1 day relative to SPY; v4.5 groups those outcomes by signal source (news, shock, buzz, pre-open, mover) and action (buy, short, hold) and feeds groups with >= 5 outcomes back to every role each cycle. `/api/llm_trader` shows all groups.
 - Each later improvement is a new tag (v4.6, ...) with its own addendum, so results stay separable in `by_protocol`.
 - Correction minutes after the v4.5 deploy (same tag): desk_stats also groups the +1 hour outcomes, because +1 day outcomes did not exist yet (the candidate list was restarted with v4).
+
+## Addendum 2026-11-24: v4.6, is the news already priced in, and which news types work
+- Every headline in a candidate's context now carries `minutes_since_desk_saw` and `move_since_desk_saw_pct` (price change since this desk first saw that headline for that symbol), so the news analyst can tell a fresh catalyst from one the price has already run on.
+- Headlines get a type (earnings, m&a, fda/clinical, analyst, legal/regulatory, macro, contract/product, other; `news_type` in `core/llm_trader.py`). Candidates record the newest headline's type and desk_stats also groups outcomes as `type:<news type>/<action>/<1h|1d>`.
