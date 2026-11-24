@@ -7,7 +7,7 @@
 <meta name="description" content="Paper-trading simulator for global markets with charts, analysis, news, backtests and a self-reviewing auto trader.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Saira+Condensed:wght@800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Saira+Condensed:wght@800&family=Sarabun:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="app.css">
 <script src="vendor/lightweight-charts.js"></script>
 </head>
@@ -17,19 +17,24 @@
     <span class="brand">TradeLab</span>
     <nav class="tabs" aria-label="Views">
       <a href="#overview" data-view="overview">Overview</a>
+      <a href="#llm" data-view="llm">AI trader</a>
+      <a href="#events" data-view="events">Event trader</a>
       <a href="#auto" data-view="auto">Auto trader</a>
-      <a href="#markets" data-view="markets">Markets</a>
-      <a href="#chart" data-view="chart">Chart and analysis</a>
-      <a href="#portfolio" data-view="portfolio">Portfolio</a>
-      <a href="#llm" data-view="llm">DeepSeek</a>
       <a href="#logs" data-view="logs">Logs</a>
-      <a href="#events" data-view="events">Events</a>
-      <a href="#buzz" data-view="buzz">Buzz</a>
-      <a href="#news" data-view="news">News</a>
-      <a href="#screener" data-view="screener">Screener</a>
-      <a href="#backtest" data-view="backtest">Backtest</a>
-      <a href="#calendar" data-view="calendar">Calendar and alerts</a>
-      <a href="#tools" data-view="tools">Risk tools</a>
+      <a href="#portfolio" data-view="portfolio">Portfolio</a>
+      <details class="more" id="more-tabs">
+        <summary>More</summary>
+        <div class="more-list">
+          <a href="#markets" data-view="markets">Markets</a>
+          <a href="#chart" data-view="chart">Chart and analysis</a>
+          <a href="#buzz" data-view="buzz">Buzz</a>
+          <a href="#news" data-view="news">News</a>
+          <a href="#screener" data-view="screener">Screener</a>
+          <a href="#backtest" data-view="backtest">Backtest</a>
+          <a href="#calendar" data-view="calendar">Calendar and alerts</a>
+          <a href="#tools" data-view="tools">Risk tools</a>
+        </div>
+      </details>
     </nav>
     <span class="sim-flag" id="simflag">Simulated money</span>
     <button class="sm lang-btn" id="lang-btn" type="button" aria-label="Switch to Thai">ไทย</button>
@@ -40,9 +45,16 @@
 
 <!-- AUTO -->
 <section class="view" id="v-overview" hidden>
-  <div class="panel"><div class="row spread"><h2>All simulated accounts side by side</h2><span class="small muted" id="ov-sub"></span></div>
+  <div class="view-head"><div><h1>Overview</h1><p id="ov-lead"></p></div></div>
+  <div id="ov-hero"><div class="empty">Loading...</div></div>
+  <div id="ov-health"></div>
+  <div class="panel"><h2>Bots</h2><div id="ov-cards"></div></div>
+  <div class="panel"><h2>Open positions now</h2><div id="ov-pos"></div></div>
+  <div class="panel"><h2>Latest decisions</h2><div id="ov-dec"></div></div>
+  <details class="fold" id="ov-details"><summary>All accounts in one table</summary>
+    <p class="small muted" id="ov-sub"></p>
     <p class="small muted">Every account below is separate play money. The manual sandbox uses the current exchange rate for THB. Bots start with 5,000 THB. Each bot and its random control use their opening exchange rate for THB.</p>
-    <div id="ov-table"><div class="empty">Loading...</div></div></div>
+    <div id="ov-table"></div></details>
 </section>
 <section class="view" id="v-auto" hidden>
   <div class="view-head">
@@ -64,12 +76,12 @@
     <div class="panel"><h2>Monthly results</h2><div id="auto-months"></div></div>
     <div class="panel"><h2>Open positions</h2><div id="auto-pos"></div></div>
   </div>
-  <div class="panel"><h2>Settings tested, best train first</h2><div id="auto-grid"></div></div>
-  <div class="panel"><div class="row spread"><h2>Hunter: 20x crypto trend, 6x monthly target</h2><button class="sm" id="hunt-reset">Restart hunter</button></div>
+  <details class="fold"><summary>Settings tested, best train first</summary><div id="auto-grid"></div></details>
+  <details class="fold"><summary>Hunter: 20x crypto trend, 6x monthly target</summary><div class="row" style="margin-top: var(--space-sm)"><button class="sm" id="hunt-reset">Restart hunter</button></div>
     <p class="note">A separate 5,000 THB paper account. Backtest 2023-2026: a 6x month in about 1 of 10 months, the account wiped in about 1 of 2 months. Shown so the gamble can be judged on real forward results.</p>
     <div id="hunt-figs"></div>
     <div class="grid g-2"><div><h3>Positions</h3><div id="hunt-pos"></div><h3 style="margin-top: var(--space-md)">Months</h3><div id="hunt-months"></div></div><div><h3>Activity</h3><div id="hunt-log"></div></div></div>
-  </div>
+  </details>
 </section>
 
 <!-- MARKETS -->
@@ -157,7 +169,9 @@
 
 <!-- NEWS -->
 <section class="view" id="v-llm" hidden>
-  <div class="panel"><div class="row spread"><h2>DeepSeek trader (paper money)</h2><span class="small muted" id="llm-sub"></span></div>
+  <div class="view-head"><div><h1>AI trader</h1><p id="llm-lead"></p></div></div>
+  <div id="llm-hero"><div class="empty">Loading...</div></div>
+  <div class="panel"><h2>Account and evidence</h2><p class="small muted" id="llm-sub"></p>
     <div id="llm-figs"></div></div>
   <div class="panel"><h2>Open positions</h2><div id="llm-pos"><div class="empty">No open positions.</div></div></div>
   <div class="panel"><h2>Decisions and the model's reasons</h2><div id="llm-list"><div class="empty">No decisions yet.</div></div></div>
@@ -169,7 +183,9 @@
   <div class="panel" id="lg-closed-panel"><h2>Closed trades (stops, targets, sells) and errors</h2><div id="lg-closed"></div></div>
 </section>
 <section class="view" id="v-events" hidden>
-  <div class="panel"><div class="row spread"><h2>Event trader (paper)</h2><span class="small muted" id="ev-sub"></span></div>
+  <div class="view-head"><div><h1>Event trader</h1><p id="ev-lead"></p></div></div>
+  <div id="ev-hero"><div class="empty">Loading...</div></div>
+  <div class="panel"><h2>Account and evidence</h2><p class="small muted" id="ev-sub"></p>
     <div id="ev-figs"></div></div>
   <div class="panel"><h2>Open positions of the rule</h2><div id="ev-pos"><div class="empty">No open positions.</div></div></div>
   <div class="panel"><h2>Large single-stock moves with headlines</h2><div id="ev-list"><div class="empty">No events yet.</div></div></div>
