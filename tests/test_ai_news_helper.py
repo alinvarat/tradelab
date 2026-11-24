@@ -24,3 +24,33 @@ class Helper(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CustomProvider(unittest.TestCase):
+    def test_paid_calls_use_the_configured_provider_and_free_ones_do_not(self):
+        import io
+        import json as _json
+        import os
+        from unittest import mock
+        sent = []
+
+        def fake_urlopen(req, timeout=0):
+            sent.append((req.full_url, _json.loads(req.data)["model"]))
+            return io.BytesIO(_json.dumps({"model": "m1", "choices": [{"message": {"content": "hi"}}]}).encode())
+        with mock.patch.dict(os.environ, {"TRADELAB_LLM_API_KEY": "test-key"}), \
+                mock.patch.object(ai_news, "CUSTOM_MODEL", "m1"), \
+                mock.patch.object(ai_news, "opencode_available", return_value=False):
+            text, name = ai_news.chat("s", "u", urlopen=fake_urlopen, model=ai_news.DECISION_MODEL)
+            self.assertEqual((text, name), ("hi", "custom/m1"))
+            self.assertTrue(sent[0][0].endswith("/chat/completions"))
+            self.assertEqual(sent[0][1], "m1")
+            with mock.patch.dict(os.environ, {"OPENROUTER_API_KEY": "or-test"}):
+                ai_news.chat("s", "u", urlopen=fake_urlopen, model="openrouter/google/gemma-4-31b-it:free")
+            self.assertIn("openrouter.ai", sent[-1][0])                 # free helper models stay on OpenRouter
+
+    def test_without_a_key_nothing_changes(self):
+        import os
+        from unittest import mock
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("TRADELAB_LLM_API_KEY", None)
+            self.assertFalse(ai_news.custom_available())

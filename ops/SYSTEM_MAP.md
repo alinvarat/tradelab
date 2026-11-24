@@ -38,6 +38,7 @@
 | ออปชันและข่าวงบแบบเดินหน้า | DeepSeek | บันทึกค่าใช้จ่ายใน summary ของ data branch |
 | study ที่ชื่อขึ้นต้น `llm_`, `news_v2`, `polymarket_llm` | DeepSeek | เสียเงินทุกครั้งที่รัน: สั่งรันเฉพาะเมื่อตั้งใจ |
 | OpenCode ในเครื่องเจ้าของ | DeepSeek | ใช้ key เดียวกัน; คำขอจากระบบเราขึ้นชื่อ "TradeLab" ใน OpenRouter |
+| ผู้ให้บริการทางเลือก (ai.thirx.com) | ตามตัวแปร `THIRX_MODEL` | ใช้กับทุกคำขอที่เสียเงินเมื่อมี secret `THIRX_API_KEY` และ variable `THIRX_MODEL` ใน repo; ถ้าล้มจะกลับไปใช้ OpenRouter; โมเดลฟรีของผู้ช่วยยังอยู่บน OpenRouter |
 
 ## 4. เอกสารหลัก (แต่ละเรื่องมีที่เดียว)
 | เรื่อง | ไฟล์ |

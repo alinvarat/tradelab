@@ -204,12 +204,42 @@ def cache_messages(system: str, user: str) -> list:
             {"role": "user", "content": user + "\n\nROLE INSTRUCTIONS:\n" + system}]
 
 
+# Owner 2026-11-24: an OpenAI-compatible provider for the paid calls. Configured only through the environment
+# (Kuber runtime env from the THIRX_API_KEY secret); the key is never in code, logs or files.
+CUSTOM_BASE_URL = os.environ.get("TRADELAB_LLM_BASE_URL", "https://ai.thirx.com/v1").rstrip("/")
+CUSTOM_MODEL = os.environ.get("TRADELAB_LLM_PROVIDER_MODEL", "")
+
+
+def custom_available() -> bool:
+    return bool(os.environ.get("TRADELAB_LLM_API_KEY") and CUSTOM_MODEL)
+
+
+def _chat_custom(system, user, timeout, urlopen, cache_layout, temperature):
+    from urllib.request import Request, urlopen as _urlopen
+    messages = cache_messages(system, user) if cache_layout else [
+        {"role": "system", "content": system}, {"role": "user", "content": user}]
+    body = json.dumps({"model": CUSTOM_MODEL, "temperature": temperature, "messages": messages}).encode()
+    req = Request(CUSTOM_BASE_URL + "/chat/completions", data=body, headers={
+        "Authorization": "Bearer " + os.environ["TRADELAB_LLM_API_KEY"], "Content-Type": "application/json"})
+    try:
+        with (urlopen or _urlopen)(req, timeout=timeout) as r:
+            resp = json.loads(r.read())
+        record_usage(resp)
+        return resp["choices"][0]["message"]["content"], "custom/" + str(resp.get("model") or CUSTOM_MODEL)
+    except Exception as exc:  # noqa: BLE001
+        return "", f"custom provider error: {type(exc).__name__}"[:200]   # no body: it could echo request headers
+
+
 def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, model=None, cache_layout=False,
          temperature: float = 0.2) -> tuple:
     """One free-form answer from the DeepSeek model: -> (text, model_name) or ("", reason). Same safety rules as
     score_opencode (empty temp dir, no --auto) / score_openrouter (key from the environment only)."""
     full = model or OPENCODE_MODEL
     name = full.split("/", 1)[-1]
+    if custom_available() and not full.endswith(":free"):     # paid calls go to the configured provider
+        text, served = _chat_custom(system, user, timeout, urlopen, cache_layout, temperature)
+        if text:
+            return text, served
     if opencode_available():
         try:
             with tempfile.TemporaryDirectory() as empty:
