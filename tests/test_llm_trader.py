@@ -304,9 +304,9 @@ class WholeMarket(Base):
         self.assertEqual(lt.asset_class(ctrl), "commodity")
         self.assertNotEqual(ctrl, "GC=F")
 
-    def test_scheduled_scan_calls_the_model_when_nothing_crossed_the_threshold(self):
+    def test_scheduled_scan_calls_the_model_for_a_mover_below_the_shock_threshold(self):
         self.t.calls["last_idle"] = 0
-        self.t.scan(self.market())
+        self.t.scan(self.market(AAA=quote("AAA", move=3)))          # 3%: under the 5% shock, over half of it
         self.assertEqual(len(self.prompts), 1)
         call = next(json.loads(l) for l in (Path(self.tmp.name) / "l.jsonl").read_text().splitlines() if '"kind": "call"' in l)
         self.assertEqual(call["trigger"], "scheduled scan")
