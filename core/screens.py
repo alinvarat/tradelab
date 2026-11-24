@@ -94,6 +94,21 @@ def binance_delist_symbols(title: str) -> list:
     return out
 
 
+def binance_alpha_remove_symbols(title: str) -> list:
+    """'Binance Alpha Will Remove PTB, AA, OWL, SLX (SLIMEX), 哭哭马 (2026-10-23)' -> ['PTB', 'AA', 'OWL', 'SLX'].
+    The trailing date and parenthesised names are ignored; non-Latin tickers are skipped."""
+    m = re.match(r"^Binance Alpha Will Remove (.+?)(?:\s*\(\d{4}-\d{2}-\d{2}\))?\s*$", title.strip())
+    if not m:
+        return []
+    body = re.sub(r"\([^)]*\)", "", m.group(1))
+    out = []
+    for tok in re.split(r",|\band\b|&", body):
+        tok = tok.strip()
+        if _TICK.match(tok) and tok not in out:
+            out.append(tok)
+    return out
+
+
 def listing_returns(ts: float, m1: list, h1: list, bench_m1: list, bench_h1: list, cost: float = L1_COST,
                     side: int = 1) -> dict:
     """Net log-free simple return of the coin minus the BTC return over the same window, per horizon.

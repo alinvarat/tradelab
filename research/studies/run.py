@@ -966,7 +966,12 @@ def study_l1c_binance_notices(_symbols):
     return summ, rows
 
 
-def study_l1e_binance_delist(_symbols):
+def study_l1g_alpha_remove(_symbols):
+    """Pre-registered in RESULTS.md 'L1g screen': same as L1e with 'Binance Alpha Will Remove ...' notices."""
+    return study_l1e_binance_delist(_symbols, parser="alpha")
+
+
+def study_l1e_binance_delist(_symbols, parser="delist"):
     """Pre-registered in RESULTS.md 'L1e screen': short after 'Binance Will Delist ... on <date>' notices."""
     from core import screens as sc
     from datetime import datetime, timezone
@@ -983,8 +988,9 @@ def study_l1e_binance_delist(_symbols):
         for a in arts:
             ts, title = a["releaseDate"] / 1000, a.get("title", "")
             if T(2024) <= ts < T(2026, 11):
-                for sym in sc.binance_delist_symbols(title):
-                    events.append({"kind": "delist", "venue": "binance", "symbol": sym, "ts": ts, "title": title[:120]})
+                fn = sc.binance_alpha_remove_symbols if parser == "alpha" else sc.binance_delist_symbols
+                for sym in fn(title):
+                    events.append({"kind": parser, "venue": "binance", "symbol": sym, "ts": ts, "title": title[:120]})
         if arts[-1]["releaseDate"] / 1000 < T(2024):
             break
         page += 1
@@ -1009,7 +1015,7 @@ def study_l1e_binance_delist(_symbols):
             "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L1_COST, pick_trim=5)}
     return summ, rows
 
-STUDIES = {"l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+STUDIES = {"l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):

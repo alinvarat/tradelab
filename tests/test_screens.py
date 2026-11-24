@@ -70,6 +70,13 @@ class Returns(unittest.TestCase):
         self.assertEqual(sc.binance_delist_symbols("Notice of Removal of Spot Trading Pairs - 2026-11-20"), [])
         self.assertEqual(sc.binance_delist_symbols("Binance Futures Will Delist PTBUSDT and MITOUSDT USDⓈ-M Perpetual Contracts"), [])
 
+    def test_alpha_remove_symbols(self):
+        f = sc.binance_alpha_remove_symbols
+        self.assertEqual(f("Binance Alpha Will Remove PTB, AA, OWL, DORA, ELIZAOS, MEMES, 哭哭马  (2026-10-23)"),
+                         ["PTB", "AA", "OWL", "DORA", "ELIZAOS", "MEMES"])
+        self.assertEqual(f("Binance Alpha Will Remove SUP, SLX (SLIMEX), CAI (2026-10-20)"), ["SUP", "SLX", "CAI"])
+        self.assertEqual(f("Binance Will Delist EPIC, QUICK on 2026-10-28"), [])
+
     def test_missing_entry_bar_gives_nothing(self):
         self.assertEqual(sc.listing_returns(0, [], [], [], []), {})
 
