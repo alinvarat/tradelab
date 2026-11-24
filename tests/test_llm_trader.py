@@ -253,6 +253,91 @@ class Trading(Base):
         self.t.scan(self.market(AAA=quote("AAA", px=102, move=5), BBB=quote("BBB", px=106, move=6)))
         self.assertIn("AAA", last_cands())                        # moved 2% since the hold: back in
 
+    def test_desk_stats_group_outcomes_by_source_and_action(self):
+        self.t.cands = ([{"symbol": "A", "why": "recent linked headline", "action": "buy", "out": {"86400": 0.02}}] * 3
+                        + [{"symbol": "B", "why": "recent linked headline", "action": "short", "out": {"86400": 0.03}}] * 2
+                        + [{"symbol": "C", "why": "new shock", "action": "hold", "out": {"3600": -0.01}}])
+        st = self.t.desk_stats(min_n=1)
+        self.assertEqual(st["news/buy/1d"], {"n": 3, "mean_pct": 2.0, "hit": 1.0})
+        self.assertEqual(st["news/short/1d"]["mean_pct"], -3.0)       # the stock beat SPY: the short lost
+        self.assertNotIn("shock/hold/1d", st)                           # no outcome yet
+        self.assertEqual(st["shock/hold/1h"]["mean_pct"], -1.0)
+        self.assertEqual(self.t.desk_stats(), {})                       # nothing reaches 5 outcomes
+
+    def test_generic_words_need_market_context(self):
+        m = lt._macro_symbols
+        self.assertNotIn("PL=F", m("Platinum Equity agrees to buy Amex unit"))
+        self.assertIn("PL=F", m("Platinum prices jump as supply tightens"))
+        self.assertNotIn("GBPUSD=X", m("Champion wins pound for pound title"))
+        self.assertIn("GBPUSD=X", m("Pound falls against the dollar after BoE"))
+        self.assertIn("HG=F", m("Copper futures hit a record"))
+        self.assertNotIn("HG=F", m("Copper Property CTL Pass Through Trust reports"))
+        self.assertIn("GC=F", m("Spot gold climbs"))                   # specific phrases need no extra context
+        self.assertIn("BTC-USD", m("Bitcoin slides below 60k"))
+
+    def test_junk_and_irrelevant_headlines_are_dropped(self):
+        self.assertTrue(lt.is_junk("How to Invest in VanEck Biotech ETF (BBH)"))
+        self.assertTrue(lt.is_junk("$100 Invested In State Street Technology Select Sector SPDR ETF 20 Years Ago Would Be Worth This Much Today"))
+        self.assertTrue(lt.is_junk("S&P 500 Movers: HPE, DLTR"))
+        self.assertTrue(lt.is_junk("3 Stocks to Buy Before Black Friday"))
+        self.assertFalse(lt.is_junk("Dollar Tree beats Q3 estimates and raises guidance"))
+        self.assertFalse(lt.relevant("How biotech ETFs fared", "SMH", "VanEck Semiconductor ETF"))
+        self.assertTrue(lt.relevant("Semiconductor stocks slide as AMD drops", "SMH", "VanEck Semiconductor ETF"))
+        self.assertTrue(lt.relevant("DLTR shares jump", "DLTR", "Dollar Tree, Inc."))
+
+    def test_similar_past_headlines_give_a_base_rate(self):
+        import tempfile as _tf
+        rows = [{"key": f"k{i}", "horizon": "1d", "symbol": f"S{i}", "abnormal": 0.02 if i % 2 else -0.01, "t0": i,
+                 "title": f"Acme rival beats third quarter EPS estimates and raises guidance {i}", "source": "x", "sentiment": 0}
+                for i in range(12)]
+        rows.append({"key": "z", "horizon": "1d", "symbol": "Z", "abnormal": 0.5, "t0": 1,
+                     "title": "Totally unrelated mining accident", "source": "x", "sentiment": 0})
+        with _tf.TemporaryDirectory() as d:
+            p = Path(d) / "labels.jsonl"
+            p.write_text("\n".join(json.dumps(r) for r in rows))
+            with mock.patch.object(lt.news_archive, "LABELS", p):
+                lt._LABELS.update(ts=0.0, rows=[], by_type={})
+                sim = lt.similar_past("Widget Co beats third quarter EPS estimates, raises guidance", "WID")
+        self.assertEqual(sim["n"], 8)
+        self.assertEqual(sim["type_base_rate"]["n"], 12)                  # all 12 earnings rows; the mining row is "other"
+        self.assertTrue(all("beats" in e["title"] for e in sim["examples"]))
+
+    def test_playbook_is_attached_for_the_headline_type(self):
+        heads = [{"title": "Big Co agrees to acquire Small Co", "source": "X", "lexicon": 0, "ai_scores": {}, "seen": "", "key": "m1"}]
+        with mock.patch.object(lt, "archive_headlines", return_value=heads), mock.patch.object(lt, "similar_past", return_value=None):
+            c = self.t.build_context(1000.0, [{"symbol": "AAA", "ratio": None, "why": "x"}], self.market(), [])
+        self.assertIn("offer price", c["candidates"][0]["playbook"])
+        self.assertEqual(set(lt.PLAYBOOK), {t for t, _ in lt.NEWS_TYPES} | {"other"})
+
+    def test_sector_view_compares_with_the_sector_etf(self):
+        v = lt.LlmTrader._sector_view("NVDA", quote("NVDA", move=-8.0), {"SMH": quote("SMH", move=-7.0)})
+        self.assertEqual(v, {"sector_etf": "SMH", "sector_move_pct": -7.0, "vs_sector_pct": -1.0})
+        self.assertEqual(lt.LlmTrader._sector_view("NVDA", quote("NVDA", move=-8.0), {}), {})
+        from core.universe import SECTOR_ETF, STOCKS
+        self.assertEqual(sorted(s for s in STOCKS if s not in SECTOR_ETF), [])          # every stock has a sector
+
+    def test_news_type_classification(self):
+        self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
+        self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")
+        self.assertEqual(lt.news_type("Analyst upgrades Acme to overweight"), "analyst")
+        self.assertEqual(lt.news_type("FDA approves Acme drug"), "fda/clinical")
+        self.assertEqual(lt.news_type("Something unusual happened"), "other")
+        self.assertEqual(lt.news_type("Zscaler receives multiple target hikes ahead of proposed acquisition by CrowdStrike"), "m&a")
+        self.assertEqual(lt.news_type("Wedbush raises its price target on Acme"), "analyst")
+        self.assertEqual(lt.news_type("Acme gets target hikes after investor day"), "analyst")
+
+    def test_headline_shows_move_since_the_desk_first_saw_it(self):
+        heads = [{"title": "Acme beats Q3 EPS", "source": "X", "lexicon": 0.5, "ai_scores": {}, "seen": "", "key": "k1"}]
+        with mock.patch.object(lt, "archive_headlines", return_value=[dict(h) for h in heads]):
+            c1 = self.t.build_context(1000.0, [{"symbol": "AAA", "ratio": None, "why": "x"}], self.market(AAA=quote("AAA", px=100)), [])
+        with mock.patch.object(lt, "archive_headlines", return_value=[dict(h) for h in heads]):
+            c2 = self.t.build_context(1600.0, [{"symbol": "AAA", "ratio": None, "why": "x"}], self.market(AAA=quote("AAA", px=104)), [])
+        h1, h2 = c1["candidates"][0]["headlines"][0], c2["candidates"][0]["headlines"][0]
+        self.assertEqual((h1["move_since_desk_saw_pct"], h1["type"]), (0.0, "earnings"))
+        self.assertEqual((h2["minutes_since_desk_saw"], h2["move_since_desk_saw_pct"]), (10, 4.0))
+        self.assertNotIn("key", h2)
+        self.assertEqual(c2["candidates"][0]["news_type"], "earnings")
+
     def test_scheduled_scan_needs_a_meaningful_mover(self):
         self.t.calls.update(last_idle=0.0, last_ts=0.0)
         self.t.scan(self.market())                                   # nothing moved: no call

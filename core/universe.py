@@ -41,3 +41,19 @@ SHOCK_PCT = {"stock": 5.0, "etf": 3.0, "commodity": 2.0, "fx": 1.0, "crypto": 5.
 
 def asset_class(symbol: str) -> str:
     return CLASS.get(symbol, "stock")
+
+
+# v4.12: sector ETF per stock, so a stock's move can be compared with its own group (stock-specific vs sector-wide).
+_SECTORS = {
+    "SMH": "NVDA AVGO AMD INTC QCOM TXN MU AMAT LRCX ADI KLAC MRVL ON SMCI ARM TSM ASML",
+    "XLK": "AAPL MSFT ORCL CRM ADBE CSCO IBM INTU NOW SNPS CDNS PANW PLTR SNOW CRWD DDOG NET ZS MDB TEAM AI SAP TWLO OKTA "
+           "ENPH FSLR",
+    "XLF": "BRK-B JPM V MA BAC GS MS C WFC AXP BLK SCHW PYPL COIN HOOD SOFI AFRM UPST IBKR MSTR",
+    "XLV": "UNH JNJ MRK LLY ABBV PFE BMY AMGN GILD CVS CI TMO DHR ABT MDT ISRG VRTX REGN NVO",
+    "XLE": "XOM CVX SLB COP OXY",
+    "XLI": "BA CAT GE HON MMM UPS FDX LMT RTX DE UBER",
+    "XLY": "AMZN TSLA HD NKE MCD SBUX F GM ABNB BKNG MAR LOW TGT RIVN LCID NIO XPEV LI SHOP MELI SE BABA JD PDD",
+    "XLP": "PG KO PEP WMT COST DG DLTR KR EL CL KHC MO PM",
+    "QQQ": "GOOGL META NFLX DIS T VZ CMCSA TMUS SPOT RBLX U ROKU TTD",
+}
+SECTOR_ETF = {sym: etf for etf, rows in _SECTORS.items() for sym in rows.split()}

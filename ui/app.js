@@ -49,15 +49,19 @@ function ago(t) {
   if (s < 86400) return Math.round(s / 3600) + " h ago";
   return Math.round(s / 86400) + " d ago";
 }
-function toast(msg) {
+function toast(msg, detail) {
   const t = $("#toast");
   t.textContent = msg;
+  if (detail) t.insertAdjacentHTML("beforeend", ` ${originalText(detail)}`);
   t.classList.add("show");
   clearTimeout(toast._t);
   toast._t = setTimeout(() => t.classList.remove("show"), 3500);
 }
+function toastError(error) {
+  toast("Request failed:", error.message || String(error));
+}
 const skel = (n = 5) => Array.from({ length: n }, (_, i) => `<span class="skel ${["w80", "w60", "", "w40"][i % 4]}"></span>`).join("");
-const errBox = (e, retry) => `<div class="error">Could not load: ${esc(e.message || e)}${retry ? ` <button class="sm" data-retry="${retry}">Try again</button>` : ""}</div>`;
+const errBox = (e, retry) => `<div class="error"><span>Could not load:</span> <span translate="no">${esc(e.message || e)}</span>${retry ? ` <button class="sm" data-retry="${retry}">Try again</button>` : ""}</div>`;
 async function load(el, fn, retry) {
   el.innerHTML = skel();
   try { await fn(); } catch (e) { el.innerHTML = errBox(e, retry); }
@@ -83,10 +87,11 @@ function bindRowOpen(el) {
   $$("tr[data-sym]", el).forEach((tr) => {
     const go = () => openChart(tr.dataset.sym);
     tr.addEventListener("click", (e) => { if (!e.target.closest("button")) go(); });
-    tr.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+    tr.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target === tr) go(); });
   });
 }
-const symCell = (s, n) => `<span class="sym">${esc(s)}</span>${n ? `<span class="sym-name">${esc(n)}</span>` : ""}`;
+const originalText = (s) => `<span translate="no">${esc(s)}</span>`;
+const symCell = (s, n) => `<span class="sym" translate="no">${esc(s)}</span>${n ? `<span class="sym-name" translate="no">${esc(n)}</span>` : ""}`;
 
 /* ---------- routing (state lives in the hash) ---------- */
 const route = { view: "overview", symbol: "AAPL", range: "1y" };
@@ -125,9 +130,9 @@ function attachSearch(box, onPick) {
     t = setTimeout(async () => {
       try {
         const res = await api("search?q=" + encodeURIComponent(q));
-        list.innerHTML = res.length ? res.map((r) => `<button type="button" data-s="${esc(r.symbol)}"><span><b>${esc(r.symbol)}</b> ${esc(r.name)}</span><span class="muted small">${esc(r.type || "")} ${esc(r.exchange || "")}</span></button>`).join("") : `<div class="empty" style="padding: var(--space-sm)">No match. Try a ticker such as MSFT, BTC-USD, EURUSD=X or GC=F.</div>`;
+        list.innerHTML = res.length ? res.map((r) => `<button type="button" data-s="${esc(r.symbol)}" translate="no"><span><b>${esc(r.symbol)}</b> ${esc(r.name)}</span><span class="muted small">${esc(r.type || "")} ${esc(r.exchange || "")}</span></button>`).join("") : `<div class="empty" style="padding: var(--space-sm)">No match. Try a ticker such as MSFT, BTC-USD, EURUSD=X or GC=F.</div>`;
         list.hidden = false;
-      } catch (e) { list.hidden = true; }
+      } catch (e) { list.innerHTML = errBox(e); list.hidden = false; }
     }, 250);
   });
   inp.addEventListener("keydown", (e) => {
@@ -159,7 +164,9 @@ views.markets = async (refresh = false) => {
       { h: "", f: (r) => `<button class="ghost sm" data-rm="${esc(r.symbol)}" aria-label="Remove ${esc(r.symbol)}">Remove</button>` },
     ], rows, { click: (r) => r.symbol, empty: "Your watchlist is empty. Add a symbol above." });
     bindRowOpen(wl);
-    $$("[data-rm]", wl).forEach((b) => b.addEventListener("click", async () => { await api("watchlist", { symbol: b.dataset.rm, action: "remove" }); views.markets(); }));
+    $$("[data-rm]", wl).forEach((b) => b.addEventListener("click", async () => {
+      try { await api("watchlist", { symbol: b.dataset.rm, action: "remove" }); views.markets(); } catch (e) { toastError(e); }
+    }));
   }, "markets");
   const ov = $("#overview");
   if (!ov.dataset.loaded || refresh) load(ov, async () => {
@@ -190,14 +197,14 @@ $("#watch-add").addEventListener("submit", async (e) => {
   e.preventDefault();
   const s = $("#watch-sym").value.trim();
   if (!s) return;
-  try { await api("watchlist", { symbol: s }); $("#watch-sym").value = ""; toast(s.toUpperCase() + " added"); views.markets(); } catch (er) { toast(er.message); }
+  try { await api("watchlist", { symbol: s }); $("#watch-sym").value = ""; toast(s.toUpperCase() + " added"); views.markets(); } catch (er) { toastError(er); }
 });
 
 function newsList(items) {
   if (!items.length) return `<div class="empty">No headlines from the feeds right now.</div>`;
   return `<ul class="news">${items.map((n) => {
     const s = n.sentiment, c = s > 0.1 ? "s-pos" : s < -0.1 ? "s-neg" : "s-neu";
-    return `<li><span class="senti ${c}" title="Headline sentiment">${s > 0 ? "+" : ""}${s.toFixed(2)}</span><div><a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a>${n.summary ? `<div class="sum small">${esc(n.summary)}</div>` : ""}<div class="meta">${esc(n.source)}, ${ago(n.ts)}</div></div></li>`;
+    return `<li><span class="senti ${c}" title="Headline sentiment">${s > 0 ? "+" : ""}${s.toFixed(2)}</span><div><a href="${esc(n.link)}" target="_blank" rel="noopener" translate="no">${esc(n.title)}</a>${n.summary ? `<div class="sum small" translate="no">${esc(n.summary)}</div>` : ""}<div class="meta">${originalText(n.source)}, ${ago(n.ts)}</div></div></li>`;
   }).join("")}</ul>`;
 }
 
@@ -220,7 +227,7 @@ function renderNews() {
 segment($("#news-filter"), [["all", "All"], ["pos", "Positive"], ["neg", "Negative"], ["neu", "Neutral"]], "all", (v) => { newsFilter = v; if (NEWS) renderNews(); });
 
 function segment(el, opts, cur, on) {
-  el.innerHTML = opts.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${v === cur}">${l}</button>`).join("");
+  el.innerHTML = opts.map(([v, l, label]) => `<button type="button" data-v="${v}" aria-pressed="${v === cur}"${label ? ` aria-label="${label}"` : ""}>${l}</button>`).join("");
   el.addEventListener("click", (e) => {
     const b = e.target.closest("button");
     if (!b) return;
@@ -281,13 +288,13 @@ function drawOverlays() {
   }
   $("#lg-main").innerHTML = lg.join("");
 }
-segment($("#overlays"), [["sma20", "SMA20"], ["sma50", "SMA50"], ["sma200", "SMA200"], ["ema", "EMA"], ["bb", "BB"]], null, (v) => {
+segment($("#overlays"), [["sma20", "SMA20", "20-period simple moving average"], ["sma50", "SMA50", "50-period simple moving average"], ["sma200", "SMA200", "200-period simple moving average"], ["ema", "EMA", "Exponential moving averages"], ["bb", "BB", "Bollinger Bands"]], null, (v) => {
   OVER[v] = !OVER[v];
   $$("#overlays button").forEach((b) => b.setAttribute("aria-pressed", OVER[b.dataset.v]));
   drawOverlays();
 });
 $$("#overlays button").forEach((b) => b.setAttribute("aria-pressed", OVER[b.dataset.v]));
-segment($("#ranges"), [["1d", "1D"], ["5d", "5D"], ["1mo", "1M"], ["3mo", "3M"], ["6mo", "6M"], ["1y", "1Y"], ["2y", "2Y"], ["5y", "5Y"], ["max", "Max"]], "1y", (v) => { route.range = v; writeHash(); loadChart(); });
+segment($("#ranges"), [["1d", "1D", "1 day"], ["5d", "5D", "5 days"], ["1mo", "1M", "1 month"], ["3mo", "3M", "3 months"], ["6mo", "6M", "6 months"], ["1y", "1Y", "1 year"], ["2y", "2Y", "2 years"], ["5y", "5Y", "5 years"], ["max", "Max", "Maximum available history"]], "1y", (v) => { route.range = v; writeHash(); loadChart(); });
 attachSearch($("#chart-search"), openChart);
 
 views.chart = () => {
@@ -322,19 +329,19 @@ async function loadChart() {
     drawOverlays();
     [s.main, s.rsi, s.macd].forEach((c) => c.timeScale().fitContent());
     s.main.applyOptions({ timeScale: { timeVisible: ["5m", "15m", "1h", "1m"].includes(d.interval) } });
-    await renderQuoteHead(d.meta, sym);
+    await renderQuoteHead(d.meta, sym, bars.length === 0);
   } catch (e) {
     $("#qhead").innerHTML = errBox(e);
   }
 }
-async function renderQuoteHead(meta, sym) {
+async function renderQuoteHead(meta, sym, empty) {
   let q = null;
   try { q = await api("quote?symbol=" + encodeURIComponent(sym)); } catch (e) { /* header falls back to chart meta */ }
   if (sym !== route.symbol) return;                 // the user switched while this quote was loading
   lastQuote = q;
   const px = q?.price ?? meta.regularMarketPrice, ch = q?.change_pct;
-  $("#qhead").innerHTML = `<h1>${esc(route.symbol)}</h1><span class="muted">${esc(meta.longName || meta.shortName || "")}${meta.fullExchangeName ? ", " + esc(meta.fullExchangeName) : ""}</span>
-    <span class="px">${fmt(px)}</span><span class="${cls(ch)} mono">${pct(ch)}</span><span class="muted small">${esc(q?.currency || meta.currency || "")}. ${q ? (q.open ? "Market open" : "Market closed") + ". " + esc(q.source) : ""}</span>`;
+  $("#qhead").innerHTML = `<h1 translate="no">${esc(route.symbol)}</h1><span class="muted" translate="no">${esc(meta.longName || meta.shortName || "")}${meta.fullExchangeName ? ", " + esc(meta.fullExchangeName) : ""}</span>
+    <span class="px">${fmt(px)}</span><span class="${cls(ch)} mono">${pct(ch)}</span><span class="muted small">${originalText(q?.currency || meta.currency || "")}. ${q ? `<span>${q.open ? "Market open" : "Market closed"}</span>. ${originalText(q.source)}` : ""}</span>${empty ? `<span class="muted small">No price history in this range.</span>` : ""}`;
   renderTicket();
 }
 
@@ -348,7 +355,7 @@ async function loadAnalysis() {
       <div class="meter" role="img" aria-label="Score ${a.score} from -100 to 100"><span style="left:${(a.score + 100) / 2}%"></span></div>
       <div class="row spread small muted"><span>-100 sell</span><span>+100 buy</span></div>
       <p class="note">Mechanical vote of ${a.signals.length} daily indicators as of ${day(a.as_of)}. Not a forecast.</p>
-      ${a.profile?.sector ? `<p class="small" style="margin-top: var(--space-xs)">${esc(a.profile.sector)}, ${esc(a.profile.industry)}</p>` : ""}`;
+      ${a.profile?.sector ? `<p class="small" translate="no" style="margin-top: var(--space-xs)">${esc(a.profile.sector)}, ${esc(a.profile.industry)}</p>` : ""}`;
     $("#signals").innerHTML = table([
       { h: "Indicator", f: (r) => esc(r.name) }, { h: "Reading", num: 1, f: (r) => esc(r.value) },
       { h: "Vote", f: (r) => `<span class="vote v${r.vote}">${r.vote > 0 ? "Buy" : r.vote < 0 ? "Sell" : "Neutral"}</span>` },
@@ -393,7 +400,7 @@ $("#ai-form").addEventListener("submit", async (e) => {
   out.innerHTML = `<p class="muted">Analysing ${esc(route.symbol)} with indicators and headlines. This takes about 20 to 60 seconds.</p>${skel(4)}`;
   try {
     const r = await api("ai", { symbol: route.symbol, question: $("#ai-q").value });
-    out.innerHTML = r.error ? errBox(r.error) : `${esc(r.text)}<p class="note">${esc(r.model)}, ${r.seconds} s.</p>`;
+    out.innerHTML = r.error ? errBox(r.error) : `${originalText(r.text)}<p class="note">${originalText(r.model)}, ${r.seconds} s.</p>`;
   } catch (er) { out.innerHTML = errBox(er); }
   b.disabled = false;
 });
@@ -413,7 +420,7 @@ function renderTicket() {
     t.innerHTML = `<h2>Order ticket</h2>
       <div class="sides" role="group" aria-label="Side"><button type="button" class="buy" data-side="1" aria-pressed="true">Buy</button><button type="button" data-side="-1" aria-pressed="false">Sell</button></div>
       <form id="order-form" class="form-grid" style="margin-top: var(--space-sm)">
-        <label class="f">Type<select name="type"><option value="market">Market</option><option value="limit">Limit</option><option value="stop">Stop</option></select></label>
+        <label class="f">Type<select name="type"><option value="market">Market order</option><option value="limit">Limit order</option><option value="stop">Stop order</option></select></label>
         <label class="f">Quantity<input name="qty" type="number" step="any" min="0" value="10" required></label>
         <label class="f" data-px hidden>Order price<input name="price" type="number" step="any"></label>
         <label class="f">Stop loss<input name="sl" type="number" step="any" placeholder="optional"></label>
@@ -442,7 +449,7 @@ function renderTicket() {
         const o = await api("order", body);
         toast(o.status === "filled" ? `Filled ${o.side > 0 ? "buy" : "sell"} ${fmt(o.qty, null)} ${o.symbol} at ${fmt(o.fill_px)}` : o.status === "pending" ? `Order #${o.id} pending. ${o.note}` : `Rejected: ${o.note}`);
         refreshAccount();
-      } catch (er) { toast(er.message); }
+      } catch (er) { toastError(er); }
     });
   }
   const f = $("#order-form"), q = lastQuote;
@@ -451,14 +458,17 @@ function renderTicket() {
   if (q) {
     const px = orderPrice() ?? (side > 0 ? q.ask : q.bid), n = +f.qty.value || 0, val = n * px * (q.fx || 1);
     const limit = f.type.value !== "market" && +f.price.value > 0 ? ` at your limit ${fmt(px)}` : "";
-    $("#est").innerHTML = `Bid ${fmt(q.bid)}, ask ${fmt(q.ask)}. Estimated value${limit} <b class="mono">${usd(val)}</b>${q.currency !== "USD" ? ` (${esc(q.currency)} converted at ${fmt(q.fx, 6)})` : ""}.${q.open ? "" : " Market closed: a market order waits for the next open."}`;
-  }
+    $("#est").innerHTML = `<span>Bid ${fmt(q.bid)}, ask ${fmt(q.ask)}.</span> <span>Estimated value${limit}</span> <b class="mono">${usd(val)}</b>${q.currency !== "USD" ? ` <span>(${esc(q.currency)} converted at ${fmt(q.fx, 6)})</span>` : ""}.${q.open ? "" : " <span>Market closed: a market order waits for the next open.</span>"}`;
+  } else $("#est").textContent = "No quote";
 }
 
 /* ---------- portfolio ---------- */
 let eqChart = null;
 async function refreshAccount() {
-  try { ACCOUNT = await api("account"); } catch (e) { return; }
+  try { ACCOUNT = await api("account"); } catch (e) {
+    if (!ACCOUNT && route.view === "chart") $("#pos-here").innerHTML = errBox(e);
+    return;
+  }
   const a = ACCOUNT;
   $("#simflag").textContent = `Manual sandbox ${usd(a.stats.equity)}`;
   const p = a.positions.find((x) => x.symbol === route.symbol);
@@ -469,20 +479,24 @@ async function refreshAccount() {
 }
 function bindPosButtons(el) {
   $$("[data-close]", el).forEach((b) => b.addEventListener("click", async () => {
-    try { const t = await api("close", { symbol: b.dataset.close }); toast(`Closed ${t.symbol}: ${usd(t.pnl)}`); refreshAccount(); } catch (e) { toast(e.message); }
+    try { const t = await api("close", { symbol: b.dataset.close }); toast(`Closed ${t.symbol}: ${usd(t.pnl)}`); refreshAccount(); } catch (e) { toastError(e); }
   }));
   $$("[data-modify]", el).forEach((b) => b.addEventListener("click", async () => {
     const tr = b.closest("tr"), sl = $("[name=sl]", tr).value, tp = $("[name=tp]", tr).value;
-    await api("modify", { symbol: b.dataset.modify, sl, tp });
-    toast("Stop and target saved");
-    refreshAccount();
+    try {
+      await api("modify", { symbol: b.dataset.modify, sl, tp });
+      toast("Stop and target saved");
+      refreshAccount();
+    } catch (e) { toastError(e); }
   }));
-  $$("[data-cancel]", el).forEach((b) => b.addEventListener("click", async () => { await api("cancel", { id: b.dataset.cancel }); toast("Order cancelled"); refreshAccount(); }));
+  $$("[data-cancel]", el).forEach((b) => b.addEventListener("click", async () => {
+    try { await api("cancel", { id: b.dataset.cancel }); toast("Order cancelled"); refreshAccount(); } catch (e) { toastError(e); }
+  }));
 }
 views.portfolio = async () => {
   if (!ACCOUNT) { $("#positions").innerHTML = skel(); }
   await refreshAccount();
-  if (!ACCOUNT) $("#positions").innerHTML = errBox("account unavailable", "portfolio");
+  if (!ACCOUNT) $("#positions").innerHTML = `<div class="error">Account unavailable. <button class="sm" data-retry="portfolio">Try again</button></div>`;
 };
 function renderPortfolio() {
   const a = ACCOUNT, s = a.stats;
@@ -504,16 +518,16 @@ function renderPortfolio() {
     { h: "P/L", num: 1, f: (r) => `${usd(r.pnl_usd)}<br><span class="small">${pct(r.pnl_pct)}</span>`, cls: (r) => cls(r.pnl_usd) },
     { h: "Stop loss", f: (r) => `<input name="sl" type="number" step="any" value="${r.sl ?? ""}" aria-label="Stop loss" style="width: 100px">` },
     { h: "Take profit", f: (r) => `<input name="tp" type="number" step="any" value="${r.tp ?? ""}" aria-label="Take profit" style="width: 100px">` },
-    { h: "", f: (r) => `<div class="row"><button class="sm" data-modify="${esc(r.symbol)}">Save</button><button class="sm" data-close="${esc(r.symbol)}">Close</button>${r.market_open === false ? `<span class="small muted">closed</span>` : ""}</div>` },
+    { h: "", f: (r) => `<div class="row"><button class="sm" data-modify="${esc(r.symbol)}">Save</button><button class="sm" data-close="${esc(r.symbol)}">Close position</button>${r.market_open === false ? `<span class="small muted">Market closed</span>` : ""}</div>` },
   ], a.positions, { click: (r) => r.symbol, empty: "No open positions. Open a chart and use the order ticket." });
   bindPosButtons(pos);
   bindRowOpen(pos);
   const ord = $("#orders");
   ord.innerHTML = table([
-    { h: "#", num: 1, f: (r) => r.id }, { h: "Time", f: (r) => dt(r.created) }, { h: "Symbol", f: (r) => esc(r.symbol) },
-    { h: "Order", f: (r) => `${r.side > 0 ? "Buy" : "Sell"} ${r.type}${r.price ? " @ " + fmt(r.price) : ""}` },
+    { h: "#", num: 1, f: (r) => r.id }, { h: "Time", f: (r) => dt(r.created) }, { h: "Symbol", f: (r) => originalText(r.symbol) },
+    { h: "Order", f: (r) => `<span>${r.side > 0 ? "Buy" : "Sell"}</span> <span>${esc(r.type)}</span>${r.price ? " @ " + fmt(r.price) : ""}` },
     { h: "Qty", num: 1, f: (r) => fmt(r.qty, null) },
-    { h: "Status", f: (r) => `${esc(r.status)}${r.fill_px ? " @ " + fmt(r.fill_px) : ""}${r.note ? `<br><span class="small muted">${esc(r.note)}</span>` : ""}` },
+    { h: "Status", f: (r) => `<span>${esc(r.status)}</span>${r.fill_px ? " @ " + fmt(r.fill_px) : ""}${r.note ? `<br><span class="small muted">${esc(r.note)}</span>` : ""}` },
     { h: "", f: (r) => (r.status === "pending" ? `<button class="sm" data-cancel="${r.id}">Cancel</button>` : "") },
   ], a.orders.slice(0, 50), { empty: "No orders yet." });
   bindPosButtons(ord);
@@ -521,7 +535,7 @@ function renderPortfolio() {
   const allocRows = [...Object.entries(a.allocation).map(([k, v]) => ({ k: k.toLowerCase(), v })), { k: "cash not in use", v: Math.max(a.cash_usd - (s.used_margin || 0), 0) }];
   $("#alloc").innerHTML = table([{ h: "Asset type", f: (r) => esc(r.k) }, { h: "USD", num: 1, f: (r) => usd(r.v) }, { h: "Share", num: 1, f: (r) => (tot ? fmt((r.v / tot) * 100, 1) + "%" : "–") }], allocRows);
   $("#trades").innerHTML = table([
-    { h: "Closed", f: (r) => dt(r.closed_ts) }, { h: "Symbol", f: (r) => esc(r.symbol) }, { h: "Side", f: (r) => (r.side > 0 ? "Long" : "Short") },
+    { h: "Closed", f: (r) => dt(r.closed_ts) }, { h: "Symbol", f: (r) => originalText(r.symbol) }, { h: "Side", f: (r) => (r.side > 0 ? "Long" : "Short") },
     { h: "Qty", num: 1, f: (r) => fmt(r.qty, null) }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Exit", num: 1, f: (r) => fmt(r.exit) },
     { h: "Fees", num: 1, f: (r) => usd(r.fees) }, { h: "Net P/L", num: 1, f: (r) => usd(r.pnl), cls: (r) => cls(r.pnl) }, { h: "Reason", f: (r) => esc(r.reason) },
   ], a.trades, { empty: "No closed trades yet." });
@@ -539,9 +553,11 @@ $("#reset-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = e.target;
   if (!confirmReset()) return;
-  await api("reset", { balance: f.balance.value, leverage: f.leverage.value, fee_pct: f.fee_pct.value, min_fee: f.min_fee.value, slippage_pct: f.slippage_pct.value, allow_short: f.allow_short.checked });
-  toast("Account reset");
-  refreshAccount();
+  try {
+    await api("reset", { balance: f.balance.value, leverage: f.leverage.value, fee_pct: f.fee_pct.value, min_fee: f.min_fee.value, slippage_pct: f.slippage_pct.value, allow_short: f.allow_short.checked });
+    toast("Account reset");
+    refreshAccount();
+  } catch (er) { toastError(er); }
 });
 function confirmReset() {
   const b = $("#reset-form button[type=submit]");
@@ -599,13 +615,14 @@ views.backtest = async () => {
   if (STRATS) return;
   try { STRATS = await api("strategies"); } catch (e) { $("#bt-out").innerHTML = errBox(e, "backtest"); return; }
   const sel = $("#bt-strat");
-  sel.innerHTML = Object.entries(STRATS).map(([k, v]) => `<option value="${k}">${esc(v.name)}</option>`).join("");
+  sel.innerHTML = Object.entries(STRATS).map(([k, v]) => `<option value="${esc(k)}">${esc(v.name)}</option>`).join("");
   sel.addEventListener("change", btParams);
   btParams();
 };
 function btParams() {
   const p = STRATS[$("#bt-strat").value].params;
-  $("#bt-params").innerHTML = Object.entries(p).map(([k, v]) => `<label class="f">${esc(k)}<input data-p="${k}" type="number" step="any" value="${v}"></label>`).join("");
+  const labels = { fast: "Fast period", slow: "Slow period", period: "Lookback period", low: "Lower RSI threshold", high: "Upper RSI threshold", signal: "Signal period", k: "Band width (standard deviations)", entry: "Entry period", exit: "Exit period" };
+  $("#bt-params").innerHTML = Object.entries(p).map(([k, v]) => `<label class="f">${esc(labels[k] || k)}<input data-p="${esc(k)}" type="number" step="any" value="${esc(v)}"></label>`).join("");
 }
 $("#bt-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -619,7 +636,7 @@ $("#bt-form").addEventListener("submit", async (e) => {
   out.innerHTML = skel(6);
   try {
     const r = await api("backtest", body), m = r.metrics;
-    out.innerHTML = `<h2>${esc(r.symbol)}, ${esc(r.strategy)}, ${day(r.start)} to ${day(r.end)}</h2>
+    out.innerHTML = `<h2>${originalText(r.symbol)}, <span>${esc(r.strategy)}</span>, <span>${day(r.start)} to ${day(r.end)}</span></h2>
       <div class="figures">
         <div class="figure hot"><b>${pct(m.return_pct, 1)}</b><span>Strategy return</span></div>
         <div class="figure"><b class="${cls(m.buy_hold_return_pct)}">${pct(m.buy_hold_return_pct, 1)}</b><span>Buy and hold</span></div>
@@ -629,12 +646,12 @@ $("#bt-form").addEventListener("submit", async (e) => {
         <div class="figure"><b>${m.trades}</b><span>Trades, win ${m.win_rate == null ? "–" : fmt(m.win_rate, 0) + "%"}</span></div>
         <div class="figure"><b>${fmt(m.profit_factor, 2)}</b><span>Profit factor</span></div>
         <div class="figure"><b>${fmt(m.exposure_pct, 0)}%</b><span>Time in market</span></div></div>
-      <div class="chart-box" id="c-bt" style="height: 320px"><div class="chart-legend"><span><i class="k1"></i>Strategy</span><span><i class="k2"></i>Buy and hold</span></div></div>
+      <div class="chart-box" id="c-bt" role="region" aria-label="Strategy versus buy and hold equity chart" style="height: 320px"><div class="chart-legend"><span><i class="k1"></i>Strategy</span><span><i class="k2"></i>Buy and hold</span></div></div>
       <p class="note">${r.bars} ${esc(r.interval)} bars, fee ${r.costs.fee_pct_per_side}% and slippage ${r.costs.slippage_pct_per_side}% per side. One test on one history is not evidence of a future edge: check other symbols, periods and nearby parameters.</p>
       <div class="panel"><h2>Trades</h2>${table([
-        { h: "Entry", f: (t) => day(t.entry_t) }, { h: "Exit", f: (t) => day(t.exit_t) }, { h: "Side", f: (t) => (t.side > 0 ? "Long" : "Short") },
+        { h: "Entry date", f: (t) => day(t.entry_t) }, { h: "Exit date", f: (t) => day(t.exit_t) }, { h: "Side", f: (t) => (t.side > 0 ? "Long" : "Short") },
         { h: "Entry price", num: 1, f: (t) => fmt(t.entry) }, { h: "Exit price", num: 1, f: (t) => fmt(t.exit) },
-        { h: "Return", num: 1, f: (t) => pct(t.ret_pct), cls: (t) => cls(t.ret_pct) }, { h: "Net P/L", num: 1, f: (t) => fmt(t.pnl, 2), cls: (t) => cls(t.pnl) }, { h: "Exit reason", f: (t) => esc(t.reason) },
+        { h: "Return", num: 1, f: (t) => pct(t.ret_pct), cls: (t) => cls(t.ret_pct) }, { h: "Net P/L", num: 1, f: (t) => fmt(t.pnl, 2), cls: (t) => cls(t.pnl) }, { h: "Exit reason", f: (t) => esc(t.reason === "stop" ? "Stop loss" : t.reason) },
       ], r.trades.slice().reverse(), { empty: "The rule never traded in this period." })}</div>`;
     const c = mkChart($("#c-bt"));
     c.addLineSeries({ color: css("--series-1"), lineWidth: 2, priceLineVisible: false }).setData(r.equity.map(([t, v]) => ({ time: t, value: v })));
@@ -953,6 +970,7 @@ views.events = async () => {
 /* ---------- auto trader ---------- */
 let autoChart = null;
 const TAGN = { below_sma200: "below its 200-day average", vol_spike: "volatility spike" };
+const autoFlags = (tags) => tags.length ? tags.map((tag) => Object.hasOwn(TAGN, tag) ? `<span>${TAGN[tag]}</span>` : originalText(tag)).join(", ") : "none";
 views.auto = async () => {
   const figs = $("#auto-figs");
   if (!figs.innerHTML) figs.innerHTML = skel(3);
@@ -970,7 +988,7 @@ views.auto = async () => {
   $("#auto-pause").textContent = d.paused ? "Resume" : "Pause";
   $("#auto-pause").dataset.auto = d.paused ? "resume" : "pause";
   const v = m.valid, sv = m.spy_valid;
-  $("#auto-model").innerHTML = m.label ? `<p><b>${esc(m.label)}</b>, chosen from ${m.settings_tested} settings. ${m.status === "live" ? "Trading it." : "Not trading: it lost money in the validation years."}</p>
+  $("#auto-model").innerHTML = m.label ? `<p><b>${esc(m.label)}</b>, <span>chosen from ${m.settings_tested} settings.</span> <span>${m.status === "live" ? "Trading it." : "Not trading: it lost money in the validation years."}</span></p>
     ${table([
       { h: "Period", f: (r) => `${esc(r.k)}<span class="sym-name">${esc(r.span)}</span>` },
       { h: "Per year", num: 1, f: (r) => pct(r.s.cagr, 1), cls: (r) => cls(r.s.cagr) },
@@ -980,15 +998,15 @@ views.auto = async () => {
       { h: "Sharpe", num: 1, f: (r) => fmt(r.s.sharpe, 2) },
     ], [{ k: "Train (used to choose)", span: m.train_span, s: m.train }, { k: "Validation (not used to choose)", span: m.valid_span, s: v }, { k: "SPY buy and hold, validation", span: m.valid_span, s: sv }])}` : `<div class="empty">Learning has not finished yet. The first pass takes under a minute after start.</div>`;
   $("#auto-targets").innerHTML = d.targets.length ? table([
-    { h: "Asset", f: (r) => symCell(r.symbol, r.name) }, { h: "Target", num: 1, f: (r) => fmt(r.weight, 0) + "%" },
-    { h: "Flags at entry", f: (r) => esc(r.tags.map((t) => TAGN[t] || t).join(", ") || "none") },
+    { h: "Asset", f: (r) => symCell(r.symbol, r.name) }, { h: "Target weight", num: 1, f: (r) => fmt(r.weight, 0) + "%" },
+    { h: "Flags at entry", f: (r) => autoFlags(r.tags) },
   ], d.targets) : `<div class="empty">All cash for ${esc(d.rebalanced || "this month")}: no asset beat cash over the lookback, so the rule stays out. It checks again at the next monthly rebalance.</div>`;
-  const li = (arr, empty) => (arr.length ? `<ul class="news">${arr.map((l) => `<li><span class="senti s-neu">${dt(l.ts)}</span><div>${esc(l.text)}</div></li>`).join("")}</ul>` : `<div class="empty">${empty}</div>`);
+  const li = (arr, empty) => (arr.length ? `<ul class="news">${arr.map((l) => `<li><span class="senti s-neu">${dt(l.ts)}</span><div translate="no">${esc(l.text)}</div></li>`).join("")}</ul>` : `<div class="empty">${empty}</div>`);
   $("#auto-lessons").innerHTML = li(d.lessons.slice(0, 40), "No lessons yet.");
   $("#auto-log").innerHTML = li(d.log.slice(0, 40), "No activity yet.");
   $("#auto-months").innerHTML = table([
     { h: "Month", f: (r) => esc(r.month) }, { h: "Return", num: 1, f: (r) => pct(r.ret), cls: (r) => cls(r.ret) },
-    { h: "Held", f: (r) => esc(Object.keys(r.hold).join(", ") || "cash") }, { h: "Flags", f: (r) => esc(r.tags.map((t) => TAGN[t] || t).join(", ") || "none") },
+    { h: "Held", f: (r) => Object.keys(r.hold).length ? originalText(Object.keys(r.hold).join(", ")) : "cash" }, { h: "Flags", f: (r) => autoFlags(r.tags) },
   ], d.months, { empty: "No month completed yet. The first result appears at the next month change." });
   $("#auto-pos").innerHTML = table([
     { h: "Asset", f: (r) => symCell(r.symbol, r.name) }, { h: "Qty", num: 1, f: (r) => fmt(r.qty, null) }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) },
@@ -1014,15 +1032,15 @@ async function renderHunter() {
     <div class="figure"><b class="${cls(pl)}">${pl >= 0 ? "+" : ""}${fmt(pl, 0)} THB</b><span>Profit or loss</span></div>
     <div class="figure"><b>${h.month_multiple == null ? "–" : fmt(h.month_multiple, 2) + "x"}</b><span>This month vs its start</span></div>
     <div class="figure"><b>${h.ruined ? "Ruined" : h.target_done ? "Target hit" : "Hunting"}</b><span>leverage ${h.lev}x</span></div></div>`;
-  $("#hunt-pos").innerHTML = table([{ h: "Coin", f: (r) => esc(r.symbol) }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) }, { h: "Notional", num: 1, f: (r) => usd(r.notional) }], h.positions, { empty: "Flat: no coin is in an uptrend (above its 50-day average with a positive 30-day return)." });
+  $("#hunt-pos").innerHTML = table([{ h: "Coin", f: (r) => originalText(r.symbol) }, { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) }, { h: "Notional", num: 1, f: (r) => usd(r.notional) }], h.positions, { empty: "Flat: no coin is in an uptrend (above its 50-day average with a positive 30-day return)." });
   $("#hunt-months").innerHTML = table([{ h: "Month", f: (r) => esc(r.month) }, { h: "Result", num: 1, f: (r) => fmt(r.multiple, 2) + "x", cls: (r) => cls(r.multiple - 1) }], h.months, { empty: "No month finished yet." });
-  $("#hunt-log").innerHTML = h.log.length ? `<ul class="news">${h.log.slice(0, 25).map((l) => `<li><span class="senti s-neu">${dt(l.ts)}</span><div>${esc(l.text)}</div></li>`).join("")}</ul>` : `<div class="empty">No activity yet.</div>`;
+  $("#hunt-log").innerHTML = h.log.length ? `<ul class="news">${h.log.slice(0, 25).map((l) => `<li><span class="senti s-neu">${dt(l.ts)}</span><div translate="no">${esc(l.text)}</div></li>`).join("")}</ul>` : `<div class="empty">No activity yet.</div>`;
 }
 $("#hunt-reset").addEventListener("click", async (e) => {
   const b = e.currentTarget;
   if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "Press again to restart"; setTimeout(() => { delete b.dataset.armed; b.textContent = "Restart hunter"; }, 4000); return; }
   delete b.dataset.armed; b.textContent = "Restart hunter";
-  await api("hunter", { action: "reset" }); toast("Hunter restarted with 5,000 THB"); setTimeout(renderHunter, 1500);
+  try { await api("hunter", { action: "reset" }); toast("Hunter restarted with 5,000 THB"); setTimeout(renderHunter, 1500); } catch (er) { toastError(er); }
 });
 $$("[data-auto]").forEach((b) => b.addEventListener("click", async () => {
   const act = b.dataset.auto;
@@ -1030,7 +1048,7 @@ $$("[data-auto]").forEach((b) => b.addEventListener("click", async () => {
     if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "Press again to erase"; setTimeout(() => { delete b.dataset.armed; b.textContent = "Restart"; }, 4000); return; }
     delete b.dataset.armed; b.textContent = "Restart";
   }
-  try { await api("auto", { action: act }); toast(act === "learn" ? "Relearning" : act === "reset" ? "Restarted with 5,000 THB" : act === "pause" ? "Paused" : "Resumed"); setTimeout(views.auto, 1500); } catch (e) { toast(e.message); }
+  try { await api("auto", { action: act }); toast(act === "learn" ? "Relearning" : act === "reset" ? "Restarted with 5,000 THB" : act === "pause" ? "Paused" : "Resumed"); setTimeout(views.auto, 1500); } catch (e) { toastError(e); }
 }));
 
 /* ---------- live refresh ---------- */
@@ -1096,7 +1114,7 @@ const TH = {
   "Restart": "เริ่มใหม่", "Learn now": "เรียนรู้ใหม่", "Equity": "มูลค่าบัญชี", "Profit or loss": "กำไรหรือขาดทุน", "Months completed": "เดือนที่ครบ",
   "Max drawdown": "ขาดทุนสูงสุดจากจุดสูงสุด", "Equity in USD": "มูลค่าเป็น USD", "Return in USD": "ผลตอบแทนเป็น USD", "Current model": "โมเดลปัจจุบัน",
   "This month's targets": "เป้าหมายเดือนนี้", "Equity curve": "เส้นมูลค่าบัญชี", "Orders": "ออเดอร์", "Allocation": "สัดส่วน", "Cash balance": "เงินสด",
-  "Open profit or loss": "กำไรขาดทุนที่ยังไม่ปิด", "Realised": "ปิดแล้ว", "Buying power": "กำลังซื้อ", "Win rate, 0 trades": "อัตราชนะ, 0 เทรด",
+  "Open profit or loss": "กำไรขาดทุนที่ยังไม่ปิด", "Realised": "ปิดแล้ว", "Buying power": "กำลังซื้อ",
   "Top headlines": "พาดหัวข่าวเด่น", "Order ticket": "ใบสั่งซื้อขาย", "Technical rating": "คะแนนทางเทคนิค", "Run scan": "สแกน",
   "Broad list": "รายการกว้าง", "Watchlist": "รายการที่ติดตาม", "Run backtest": "ทดสอบย้อนหลัง", "Add alert": "เพิ่มแจ้งเตือน",
   "Date (your time)": "วันที่ (เวลาของคุณ)", "Impact": "ผลกระทบ", "Source": "แหล่งที่มา", "Price alerts": "แจ้งเตือนราคา",
@@ -1104,7 +1122,7 @@ const TH = {
   "Nothing here yet.": "ยังไม่มีข้อมูล", "No accounts.": "ไม่มีบัญชี", "Waiting for the first scan.": "รอการสแกนครั้งแรก", "No closed trades yet.": "ยังไม่มีการปิดสถานะ",
 };
 let LANG = "en";
-try { LANG = localStorage.getItem("lang") || "en"; } catch (e) { /* private window */ }
+try { if (localStorage.getItem("lang") === "th") LANG = "th"; } catch (e) { /* private window */ }
 const NOTE_TH = [
   [/^Every account below is separate play money.*$/, "ทุกบัญชีใช้เงินจำลอง บัญชีสั่งเองแปลงเป็นบาทด้วยค่าเงินล่าสุด บัญชีบอทเริ่มที่ 5,000 บาท ส่วนยอดเงินบาทของบอทและบัญชีสุ่มเทียบใช้อัตราตอนเปิดบัญชีนั้น"],
   [/^(\d+\/\d+) pairs vs random control$/, "คู่ที่ปิดแล้ว $1 เทียบบัญชีสุ่ม"],
@@ -1134,29 +1152,184 @@ const NOTE_TH = [
   [/^long ([\d,.]+) USD vs (.+)$/, "ซื้อ $1 USD เทียบกับ $2"],
   [/^Every stock shown to the model is also scored \+1 day vs SPY\. Bought: (\d+) scored([^.]*(?:\.[\d]+%?)?)\.\s+Passed: (\d+) scored([^.]*(?:\.[\d]+%?)?)\. Rules: research\/llm_trader\/protocol\.md$/, "วัดผลของหุ้นที่โมเดลเห็นหลัง 1 วันเทียบกับ SPY หุ้นที่ซื้อมีผลแล้ว $1 ตัว$2 หุ้นที่ไม่ซื้อมีผลแล้ว $3 ตัว$4"],
 ];
-const textNodes = (root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out = []; while (w.nextNode()) out.push(w.currentNode); return out; };
+// These labels belong to the five localized trading pages and their shared shell.
+// Keep legacy translations on other pages independent; some words mean different things there.
+const PAGE_ROOTS = "#v-auto, #v-markets, #v-chart, #v-portfolio, #v-backtest, .topbar, #toast";
+const PAGE_TH = {
+  "Views": "เมนูหน้าต่าง ๆ", "Could not load:": "โหลดไม่สำเร็จ:", "Request failed:": "ดำเนินการไม่สำเร็จ:", "Try again": "ลองอีกครั้ง",
+  "Auto trader equity chart": "กราฟมูลค่าบัญชีบอทหลัก", "Price and volume chart": "กราฟราคาและปริมาณซื้อขาย",
+  "RSI chart": "กราฟ RSI", "MACD chart": "กราฟ MACD", "Portfolio equity chart": "กราฟมูลค่าพอร์ต",
+  "Strategy versus buy and hold equity chart": "กราฟมูลค่าบัญชีเทียบกลยุทธ์กับการซื้อและถือ",
+  "5,000 THB of simulated money in a monthly momentum portfolio of ten global assets. It relearns daily and reviews its losing months.": "เงินจำลอง 5,000 บาทในพอร์ตโมเมนตัมรายเดือนที่เลือกจากสินทรัพย์ทั่วโลกสิบตัว ระบบเรียนรู้ใหม่ทุกวันและทบทวนเดือนที่ขาดทุน",
+  "Each month it holds the assets with the strongest recent return, only if they beat cash; otherwise it holds cash. Costs 0.10% fee and 0.05% slippage per side. Past results do not predict future returns.": "แต่ละเดือนระบบเลือกถือสินทรัพย์ที่ให้ผลตอบแทนล่าสุดสูงสุด เฉพาะเมื่อชนะการถือเงินสด มิฉะนั้นจะถือเงินสด ค่าธรรมเนียม 0.10% และส่วนต่างจากราคาที่คาด 0.05% ต่อฝั่ง ผลในอดีตไม่ได้บอกผลตอบแทนในอนาคต",
+  "Lessons from mistakes": "บทเรียนจากข้อผิดพลาด", "Activity": "กิจกรรม", "Monthly results": "ผลรายเดือน", "Settings tested, best train first": "การตั้งค่าที่ทดสอบ เรียงตามผลในช่วงฝึก",
+  "Hunter: 20x crypto trend, 6x monthly target": "Hunter: ตามแนวโน้มคริปโตด้วยเลเวอเรจ 20 เท่า เป้ารายเดือน 6 เท่า",
+  "A separate 5,000 THB paper account. Backtest 2023-2026: a 6x month in about 1 of 10 months, the account wiped in about 1 of 2 months. Shown so the gamble can be judged on real forward results.": "บัญชีจำลองแยก 5,000 บาท ผลย้อนหลังปี 2023–2026 ถึง 6 เท่าประมาณ 1 ใน 10 เดือน และเสียทุนหมดประมาณ 1 ใน 2 เดือน แสดงไว้เพื่อประเมินความเสี่ยงจากผลจำลองนับจากนี้",
+  "Positions": "สถานะที่ถือ", "Months": "เดือน", "Learning": "กำลังเรียนรู้", "Resume": "ทำงานต่อ",
+  "Trading it.": "กำลังใช้เทรด", "Not trading: it lost money in the validation years.": "ไม่เทรด เพราะขาดทุนในช่วงตรวจสอบ",
+  "Train (used to choose)": "ช่วงฝึก (ใช้เลือกกติกา)", "Validation (not used to choose)": "ช่วงตรวจสอบ (ไม่ใช้เลือกกติกา)", "SPY buy and hold, validation": "ซื้อและถือ SPY ในช่วงตรวจสอบ",
+  "Learning has not finished yet. The first pass takes under a minute after start.": "ยังเรียนรู้ไม่เสร็จ รอบแรกใช้เวลาไม่ถึงหนึ่งนาทีหลังเริ่ม",
+  "Period": "ช่วงเวลา", "Per year": "ต่อปี", "Worst year": "ปีที่ผลแย่ที่สุด", "Positive years": "จำนวนปีที่ได้กำไร", "Asset": "สินทรัพย์",
+  "Target weight": "สัดส่วนเป้าหมาย", "Weight": "สัดส่วน",
+  "Flags at entry": "เงื่อนไขตอนเข้า", "Flags": "เงื่อนไข", "below its 200-day average": "ต่ำกว่าค่าเฉลี่ย 200 วัน", "volatility spike": "ความผันผวนพุ่งสูง",
+  "none": "ไม่มี", "this month": "เดือนนี้", "No lessons yet.": "ยังไม่มีบทเรียน", "No activity yet.": "ยังไม่มีกิจกรรม",
+  "Month": "เดือน", "Held": "สินทรัพย์ที่ถือ", "cash": "เงินสด", "No month completed yet. The first result appears at the next month change.": "ยังไม่ครบเดือน ผลรอบแรกจะแสดงเมื่อขึ้นเดือนใหม่",
+  "No open position: the portfolio is in cash.": "ไม่มีสถานะเปิด พอร์ตถือเงินสด",
+  "Setting": "การตั้งค่า", "Train per year": "ผลต่อปีในช่วงฝึก", "Train Sharpe": "Sharpe ช่วงฝึก",
+  "Validation per year": "ผลต่อปีในช่วงตรวจสอบ", "Validation drawdown": "การลดลงจากจุดสูงสุดในช่วงตรวจสอบ", "Not learned yet.": "ยังไม่ได้เรียนรู้",
+  "This month vs its start": "เทียบกับต้นเดือนนี้", "Ruined": "ทุนหมด", "Target hit": "ถึงเป้าแล้ว", "Hunting": "กำลังหาจังหวะ", "Coin": "เหรียญ", "Notional": "มูลค่าสถานะ",
+  "Flat: no coin is in an uptrend (above its 50-day average with a positive 30-day return).": "ไม่มีสถานะ เพราะไม่มีเหรียญที่เป็นขาขึ้น (สูงกว่าค่าเฉลี่ย 50 วันและผลตอบแทน 30 วันเป็นบวก)",
+  "No month finished yet.": "ยังไม่ครบเดือน", "Restart hunter": "เริ่ม Hunter ใหม่", "Press again to restart": "กดอีกครั้งเพื่อเริ่มใหม่",
+  "Hunter restarted with 5,000 THB": "เริ่ม Hunter ใหม่ด้วย 5,000 บาท", "Restarted with 5,000 THB": "เริ่มใหม่ด้วย 5,000 บาท", "Relearning": "กำลังเรียนรู้ใหม่", "Resumed": "ทำงานต่อแล้ว",
+
+  "Global indices, rates, commodities, crypto and your watchlist.": "ดัชนีทั่วโลก อัตราดอกเบี้ย สินค้าโภคภัณฑ์ คริปโต และรายการติดตามของคุณ",
+  "Add symbol": "เพิ่มสัญลักษณ์", "Add symbol, e.g. AMD": "เพิ่มสัญลักษณ์ เช่น AMD", "Add": "เพิ่ม", "Global overview": "ภาพรวมตลาดโลก", "Crypto fear and greed": "ดัชนีความกลัวและความโลภของคริปโต",
+  "Symbol": "สัญลักษณ์", "Last": "ราคาล่าสุด", "Change": "การเปลี่ยนแปลง", "Day range": "ช่วงราคาวันนี้", "Market": "ตลาด", "Remove": "นำออก",
+  "Your watchlist is empty. Add a symbol above.": "รายการติดตามว่าง เพิ่มสัญลักษณ์ด้านบนได้",
+  "Name": "ชื่อ", "Day": "วันนี้", "Trend": "แนวโน้ม", "Indices": "ดัชนี", "Rates and FX": "ดอกเบี้ยและค่าเงิน", "Commodities": "สินค้าโภคภัณฑ์", "Crypto": "คริปโต", "US sectors": "กลุ่มอุตสาหกรรมสหรัฐ",
+  "Extreme fear": "กลัวมาก", "Fear": "กลัว", "Neutral": "เป็นกลาง", "Greed": "โลภ", "Extreme greed": "โลภมาก",
+  "Index unavailable right now.": "ยังไม่มีข้อมูลดัชนี", "Headline sentiment": "อารมณ์ของพาดหัวข่าว", "No headlines from the feeds right now.": "ตอนนี้ไม่มีพาดหัวข่าวจากฟีด",
+
+  "Search symbol or company": "ค้นหาสัญลักษณ์หรือชื่อบริษัท", "Range": "ช่วงเวลา", "Overlays": "เส้นบนกราฟ", "No price history in this range.": "ไม่มีประวัติราคาในช่วงนี้",
+  "20-period simple moving average": "ค่าเฉลี่ยเคลื่อนที่แบบง่าย 20 แท่ง", "50-period simple moving average": "ค่าเฉลี่ยเคลื่อนที่แบบง่าย 50 แท่ง", "200-period simple moving average": "ค่าเฉลี่ยเคลื่อนที่แบบง่าย 200 แท่ง",
+  "Exponential moving averages": "ค่าเฉลี่ยเคลื่อนที่แบบเอ็กซ์โพเนนเชียล", "Bollinger Bands": "กรอบ Bollinger",
+  "1D": "1 วัน", "5D": "5 วัน", "1M": "1 เดือน", "3M": "3 เดือน", "6M": "6 เดือน", "1Y": "1 ปี", "2Y": "2 ปี", "5Y": "5 ปี", "Max": "ทั้งหมด", "Maximum available history": "ข้อมูลย้อนหลังทั้งหมดที่มี",
+  "1 day": "1 วัน", "5 days": "5 วัน", "1 week": "1 สัปดาห์", "1 month": "1 เดือน", "3 months": "3 เดือน", "6 months": "6 เดือน", "1 year": "1 ปี", "2 years": "2 ปี", "5 years": "5 ปี", "10 years": "10 ปี", "Year to date": "ตั้งแต่ต้นปี",
+  "30 / 70 bands": "ระดับ 30 / 70", "Signal": "เส้นสัญญาณ", "Histogram": "ฮิสโตแกรม", "Bollinger 20, 2": "กรอบ Bollinger 20, 2",
+  "Technical signals": "สัญญาณทางเทคนิค", "Key levels": "ระดับราคาสำคัญ", "Performance and risk": "ผลตอบแทนและความเสี่ยง", "Recent events": "เหตุการณ์ล่าสุด",
+  "AI analyst": "นักวิเคราะห์ AI", "Runs Claude Sonnet once per press; logged to data/ai_log.jsonl": "เรียก Claude Sonnet หนึ่งครั้งต่อการกด และบันทึกลง data/ai_log.jsonl",
+  "Question": "คำถาม", "Optional question, e.g. Is a pullback entry reasonable here?": "คำถาม (ไม่บังคับ) เช่น จังหวะย่อเหมาะที่จะเข้าซื้อไหม", "Analyze": "วิเคราะห์",
+  "News for this symbol": "ข่าวของสินทรัพย์นี้", "Position here": "สถานะของสินทรัพย์นี้", "No match. Try a ticker such as MSFT, BTC-USD, EURUSD=X or GC=F.": "ไม่พบผลลัพธ์ ลองใช้สัญลักษณ์ เช่น MSFT, BTC-USD, EURUSD=X หรือ GC=F",
+  "Strong buy": "ซื้อแรง", "Strong sell": "ขายแรง", "Buy": "ซื้อ", "Sell": "ขาย", "-100 sell": "-100 ขาย", "+100 buy": "+100 ซื้อ",
+  "Indicator": "ตัวชี้วัด", "Reading": "ค่าที่อ่านได้", "Vote": "สัญญาณ", "Last price": "ราคาล่าสุด", "52-week high": "สูงสุด 52 สัปดาห์", "52-week low": "ต่ำสุด 52 สัปดาห์",
+  "No swing low below the price in the last 180 sessions.": "ไม่พบจุดต่ำเฉพาะช่วงที่ต่ำกว่าราคาปัจจุบันใน 180 รอบซื้อขายล่าสุด",
+  "ATR 14 (daily range)": "ATR 14 (ช่วงราคาเฉลี่ยรายวัน)", "Volatility, annualised": "ความผันผวนต่อปี", "Max drawdown, 1 year": "การลดลงสูงสุดจากจุดสูงสุดใน 1 ปี",
+  "Sharpe, 1 year": "Sharpe ใน 1 ปี", "Beta to S&P 500": "เบตาเทียบ S&P 500", "Correlation to S&P 500": "สหสัมพันธ์กับ S&P 500", "Stop at 2 ATR below": "จุดตัดขาดทุนต่ำกว่าราคา 2 ATR",
+  "Date": "วันที่", "Event": "เหตุการณ์", "No crossover in the last 60 sessions.": "ไม่มีสัญญาณตัดกันใน 60 รอบซื้อขายล่าสุด",
+  "Price vs SMA20": "ราคาเทียบ SMA20", "Price vs SMA50": "ราคาเทียบ SMA50", "Price vs SMA200": "ราคาเทียบ SMA200", "SMA50 vs SMA200": "SMA50 เทียบ SMA200",
+  "golden cross zone": "อยู่เหนือจุดตัดขาขึ้น", "death cross zone": "อยู่ใต้จุดตัดขาลง", "MACD histogram": "ฮิสโตแกรม MACD", "OBV 20-bar trend": "แนวโน้ม OBV 20 แท่ง", "rising": "เพิ่มขึ้น", "falling": "ลดลง",
+  "Golden cross (SMA50 above SMA200)": "จุดตัดขาขึ้น (SMA50 ตัดเหนือ SMA200)", "Death cross (SMA50 below SMA200)": "จุดตัดขาลง (SMA50 ตัดใต้ SMA200)",
+  "MACD bullish crossover": "MACD ตัดขึ้นเหนือเส้นสัญญาณ", "MACD bearish crossover": "MACD ตัดลงใต้เส้นสัญญาณ",
+  "Side": "ฝั่ง", "Type": "ประเภท", "Market order": "คำสั่งตามราคาตลาด", "Limit order": "คำสั่งจำกัดราคา", "Stop order": "คำสั่งสต็อป",
+  "Quantity": "จำนวน", "Order price": "ราคาที่ตั้ง", "Stop loss": "ตัดขาดทุน", "Take profit": "ทำกำไร", "optional": "ไม่บังคับ",
+  "Or size by USD": "หรือระบุมูลค่าเป็น USD", "e.g. 5000": "เช่น 5000", "Place order": "ส่งคำสั่ง", "Estimated value": "มูลค่าโดยประมาณ",
+  "Market closed: a market order waits for the next open.": "ตลาดปิด คำสั่งตามราคาตลาดจะรอจนตลาดเปิดครั้งถัดไป",
+  "Long": "ซื้อ (Long)", "Short": "ขายชอร์ต (Short)", "Close position": "ปิดสถานะ",
+
+  "Paper account in USD. Fills at bid and ask with fees and slippage.": "บัญชีจำลองหน่วย USD ใช้ราคาเสนอซื้อหรือเสนอขายและคิดค่าธรรมเนียมกับส่วนต่างจากราคาที่คาด",
+  "Trade history": "ประวัติการเทรด", "Account settings": "การตั้งค่าบัญชี", "Starting balance (USD)": "ยอดเงินเริ่มต้น (USD)",
+  "Fee per side (%)": "ค่าธรรมเนียมต่อฝั่ง (%)", "Minimum fee (USD)": "ค่าธรรมเนียมขั้นต่ำ (USD)", "Slippage per side (%)": "ส่วนต่างจากราคาที่คาดต่อฝั่ง (%)", "Allow short selling": "อนุญาตให้ขายชอร์ต",
+  "Reset erases positions, orders and history and starts again with these settings.": "การรีเซ็ตจะล้างสถานะ คำสั่ง และประวัติ แล้วเริ่มใหม่ด้วยการตั้งค่านี้",
+  "Qty": "จำนวน", "Value": "มูลค่า", "Save": "บันทึก", "No open positions. Open a chart and use the order ticket.": "ไม่มีสถานะเปิด เปิดกราฟแล้วใช้ใบสั่งซื้อขาย",
+  "Time": "เวลา", "Order": "คำสั่ง", "market": "ตามราคาตลาด", "limit": "จำกัดราคา", "stop": "สต็อป", "rejected": "ถูกปฏิเสธ", "cancelled": "ยกเลิกแล้ว", "Cancel": "ยกเลิก",
+  "waiting for a quote": "กำลังรอราคา", "market closed: fills at the next open quote": "ตลาดปิด จะจับคู่ที่ราคาแรกเมื่อตลาดเปิด",
+  "invalid quantity, type or price": "จำนวน ประเภท หรือราคาไม่ถูกต้อง", "short selling is disabled": "ไม่ได้เปิดใช้การขายชอร์ต",
+  "No orders yet.": "ยังไม่มีคำสั่ง", "Asset type": "ประเภทสินทรัพย์", "Share": "สัดส่วน", "cash not in use": "เงินสดที่ไม่ได้ใช้",
+  "equity": "หุ้น", "cryptocurrency": "คริปโต", "currency": "สกุลเงิน", "future": "ฟิวเจอร์ส", "index": "ดัชนี", "other": "อื่น ๆ",
+  "Closed": "เวลาปิดสถานะ", "Exit": "ราคาออก", "Fees": "ค่าธรรมเนียม", "Net P/L": "กำไร/ขาดทุนสุทธิ", "Reason": "เหตุผล",
+  "order": "คำสั่ง", "manual": "ปิดเอง", "stop loss": "ตัดขาดทุน", "take profit": "ทำกำไร", "stop out": "บังคับปิดสถานะ",
+  "Account unavailable.": "ยังโหลดข้อมูลบัญชีไม่ได้", "Account reset": "รีเซ็ตบัญชีแล้ว", "Press again to erase": "กดอีกครั้งเพื่อล้างข้อมูล",
+  "Stop and target saved": "บันทึกจุดตัดขาดทุนและเป้ากำไรแล้ว", "Order cancelled": "ยกเลิกคำสั่งแล้ว",
+
+  "Signal at the close, fill at the next open, fees and slippage on both sides.": "ใช้สัญญาณจากราคาปิด จำลองจับคู่ที่ราคาเปิดครั้งถัดไป และคิดค่าธรรมเนียมกับส่วนต่างจากราคาที่คาดทั้งสองฝั่ง",
+  "Strategy": "กลยุทธ์", "History": "ข้อมูลย้อนหลัง", "Bar size": "ช่วงเวลาต่อแท่ง", "Daily": "รายวัน", "Weekly": "รายสัปดาห์", "Capital": "เงินทุน",
+  "Position size (% equity)": "ขนาดสถานะ (% มูลค่าบัญชี)", "Stop (x ATR, 0 = none)": "จุดตัดขาดทุน (เท่าของ ATR, 0 = ไม่ใช้)", "Allow shorts": "อนุญาตให้ขายชอร์ต",
+  "SMA crossover": "SMA ตัดกัน", "EMA crossover": "EMA ตัดกัน", "RSI mean reversion": "RSI กลับสู่ค่าเฉลี่ย", "MACD signal cross": "MACD ตัดเส้นสัญญาณ",
+  "Bollinger breakout": "ทะลุกรอบ Bollinger", "Bollinger mean reversion": "กลับสู่ค่าเฉลี่ยด้วย Bollinger", "Donchian breakout (turtle)": "ทะลุกรอบ Donchian (Turtle)",
+  "Fast period": "ระยะสั้น", "Slow period": "ระยะยาว", "Lookback period": "จำนวนแท่งย้อนหลัง", "Lower RSI threshold": "เกณฑ์ RSI ล่าง", "Upper RSI threshold": "เกณฑ์ RSI บน",
+  "Signal period": "คาบเส้นสัญญาณ", "Band width (standard deviations)": "ความกว้างกรอบ (ส่วนเบี่ยงเบนมาตรฐาน)", "Entry period": "ช่วงย้อนหลังสำหรับเข้า", "Exit period": "ช่วงย้อนหลังสำหรับออก",
+  "Strategy return": "ผลตอบแทนกลยุทธ์", "Buy and hold": "ซื้อและถือ", "Per year (CAGR)": "ผลตอบแทนทบต้นต่อปี (CAGR)", "Profit factor": "อัตราส่วนกำไรรวมต่อขาดทุนรวม", "Time in market": "สัดส่วนเวลาที่ถือสถานะ",
+  "Trades": "รายการเทรด", "Entry date": "วันที่เข้า", "Exit date": "วันที่ออก", "Entry price": "ราคาเข้า", "Exit price": "ราคาออก", "Exit reason": "เหตุผลที่ปิดสถานะ",
+  "signal": "สัญญาณ", "end of test": "สิ้นสุดการทดสอบ", "The rule never traded in this period.": "กติกาไม่ส่งคำสั่งในช่วงนี้",
+};
+const PAGE_NOTE_TH = [
+  [/^Manual sandbox (.+)$/, "บัญชีทดลองสั่งเอง $1"],
+  [/^Equity, from ([\d,.]+) THB$/, "มูลค่าบัญชี จากทุน $1 บาท"],
+  [/^rebalances monthly, checks every (\d+) s$/, "ปรับพอร์ตทุกเดือน ตรวจทุก $1 วินาที"],
+  [/^chosen from (\d+) settings\.$/, "เลือกจาก $1 การตั้งค่า"],
+  [/^top (\d+) by (\d+)-day return(, SMA200 guard)?, (inverse-volatility weights|equal weights)$/, (_, top, days, guard, weights) =>
+    `เลือก ${top} อันดับแรกตามผลตอบแทน ${days} วัน${guard ? " โดยกรองด้วย SMA200" : ""} ให้น้ำหนัก${weights === "equal weights" ? "เท่ากัน" : "ผกผันกับความผันผวน"}`],
+  [/^All cash for (this month|\d{4}-\d{2}): no asset beat cash over the lookback, so the rule stays out\. It checks again at the next monthly rebalance\.$/, (_, month) =>
+    `ถือเงินสดทั้งหมด${month === "this month" ? "เดือนนี้" : `ในเดือน ${month}`} เพราะไม่มีสินทรัพย์ชนะเงินสดในช่วงที่ใช้วัด ระบบจะตรวจอีกครั้งเมื่อถึงรอบปรับพอร์ตเดือนถัดไป`],
+  [/^leverage ([\d.]+)x$/, "เลเวอเรจ $1 เท่า"],
+  [/^Remove (.+)$/, "นำ $1 ออก"],
+  [/^Index (\d+) of 100$/, "ดัชนี $1 จาก 100"],
+  [/^30-day range ([-\d.]+) to ([-\d.]+)\. Source (.+)\.$/, "ช่วง 30 วัน $1 ถึง $2 แหล่งข้อมูล $3"],
+  [/^, (\d+) min ago$/, ", $1 นาทีที่แล้ว"],
+  [/^, (\d+) h ago$/, ", $1 ชม. ที่แล้ว"],
+  [/^, (\d+) d ago$/, ", $1 วันที่แล้ว"],
+  [/^Score ([-\d]+) from -100 to 100$/, "คะแนน $1 จากช่วง -100 ถึง 100"],
+  [/^Mechanical vote of (\d+) daily indicators as of (.+)\. Not a forecast\.$/, "คะแนนตามกฎจากตัวชี้วัดรายวัน $1 ตัว ณ $2 ไม่ใช่การคาดการณ์"],
+  [/^Resistance (\d+)$/, "แนวต้าน $1"],
+  [/^Support (\d+)$/, "แนวรับ $1"],
+  [/^Pivot (\S+)$/, "จุดหมุน $1"],
+  [/^Fibonacci (\S+)$/, "ฟีโบนัชชี $1"],
+  [/^([\d.]+), ([+-]DI) leads$/, "$1 โดย $2 นำ"],
+  [/^(\d+) headlines, (\d+) positive, (\d+) negative, average ([+-]?[\d.]+)\.$/, "พาดหัว $1 ข่าว บวก $2 ลบ $3 คะแนนเฉลี่ย $4"],
+  [/^Analysing (.+) with indicators and headlines\. This takes about 20 to 60 seconds\.$/, "กำลังวิเคราะห์ $1 จากตัวชี้วัดและพาดหัวข่าว ใช้เวลาประมาณ 20 ถึง 60 วินาที"],
+  [/^, ([\d.]+) s\.$/, ", $1 วินาที"],
+  [/^Buy (.+)$/, "ซื้อ $1"],
+  [/^Sell (.+)$/, "ขาย $1"],
+  [/^Bid (.+), ask (.+)\.$/, "ราคาเสนอซื้อ $1 ราคาเสนอขาย $2"],
+  [/^Estimated value at your limit (.+)$/, "มูลค่าโดยประมาณที่ราคาจำกัด $1"],
+  [/^\((.+) converted at (.+)\)$/, "(แปลงจาก $1 ด้วยอัตรา $2)"],
+  [/^No position in (.+)\. Use the ticket above\.$/, "ไม่มีสถานะใน $1 ใช้ใบสั่งซื้อขายด้านบนได้"],
+  [/^([A-Z0-9.^=/-]+) added$/, "เพิ่ม $1 แล้ว"],
+  [/^Filled (buy|sell) (.+) at (.+)$/, (_, side, position, price) => `จับคู่คำสั่ง${side === "buy" ? "ซื้อ" : "ขาย"} ${position} ที่ราคา ${price}`],
+  [/^Order #(\d+) pending\. ?(.*)$/, "คำสั่ง #$1 รอจับคู่ $2"],
+  [/^Rejected: (.+)$/, "คำสั่งถูกปฏิเสธ: $1"],
+  [/^Closed (.+): (.+)$/, "ปิดสถานะ $1: $2"],
+  [/^Win rate, (\d+) trades$/, "อัตราชนะ จาก $1 รายการ"],
+  [/^insufficient buying power \(need (.+) USD, free (.+)\)$/, "กำลังซื้อไม่พอ (ต้องใช้ $1 USD เหลือ $2 USD)"],
+  [/^(\d{1,2} \w{3} \d{4}) to (\d{1,2} \w{3} \d{4})$/, "$1 ถึง $2"],
+  [/^Max drawdown \(hold (.+)%\)$/, "การลดลงสูงสุดจากจุดสูงสุด (ซื้อและถือ $1%)"],
+  [/^Trades, win (.+)$/, "จำนวนรายการ อัตราชนะ $1"],
+  [/^(\d+) (\S+) bars, fee ([\d.]+)% and slippage ([\d.]+)% per side\. One test on one history is not evidence of a future edge: check other symbols, periods and nearby parameters\.$/, (_, count, interval, fee, slip) =>
+    `ข้อมูล ${count} แท่ง (${interval === "1d" ? "รายวัน" : interval === "1wk" ? "รายสัปดาห์" : interval}) ค่าธรรมเนียม ${fee}% และส่วนต่างจากราคาที่คาด ${slip}% ต่อฝั่ง การทดสอบครั้งเดียวกับข้อมูลชุดเดียวไม่ได้พิสูจน์ความได้เปรียบในอนาคต ควรตรวจสัญลักษณ์ ช่วงเวลา และค่าพารามิเตอร์ใกล้เคียงอื่น ๆ`],
+];
+const localizedValues = new WeakMap();
+const labelAttrs = ["aria-label", "placeholder", "title"];
+function translateValue(node, inPage) {
+  const current = node.nodeValue;
+  let pair = localizedValues.get(node);
+  // Renderers may overwrite the same text or attribute rather than replacing its DOM node.
+  if (!pair || current !== pair.applied) {
+    const raw = current.trim();
+    if (!raw) return;
+    const fixed = inPage && Object.hasOwn(PAGE_TH, raw) ? PAGE_TH[raw] : Object.hasOwn(TH, raw) ? TH[raw] : undefined;
+    const rule = fixed ? undefined : (inPage && PAGE_NOTE_TH.find(([pattern]) => pattern.test(raw))) || NOTE_TH.find(([pattern]) => pattern.test(raw));
+    if (!fixed && !rule) { localizedValues.delete(node); return; }
+    const hit = fixed || raw.replace(...rule);
+    pair = { en: current, th: current.replace(raw, () => hit) };
+    localizedValues.set(node, pair);
+  }
+  const want = LANG === "th" ? pair.th : pair.en;
+  pair.applied = want;
+  if (current !== want) node.nodeValue = want;
+}
 function applyLang() {
   const btn = $("#lang-btn");
   const buttonLabel = LANG === "th" ? "EN" : "ไทย";
   if (btn && btn.textContent !== buttonLabel) btn.textContent = buttonLabel;
+  const switchLabel = LANG === "th" ? "เปลี่ยนภาษาเป็นอังกฤษ" : "Switch to Thai";
+  if (btn && btn.getAttribute("aria-label") !== switchLabel) btn.setAttribute("aria-label", switchLabel);
   if (document.documentElement.lang !== LANG) document.documentElement.lang = LANG;
-  for (const n of textNodes(document.body)) {
-    if (n.parentNode && ["SCRIPT", "STYLE"].includes(n.parentNode.nodeName)) continue;
-    if (n.__en === undefined) {
-      const raw = n.nodeValue.trim();
-      if (!raw) continue;
-      const rule = NOTE_TH.find(([pattern]) => pattern.test(raw));
-      const hit = TH[raw] || (rule ? raw.replace(...rule) : undefined);
-      if (!hit) continue;
-      n.__en = n.nodeValue;
-      n.__th = n.nodeValue.replace(raw, () => hit);
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    const n = walker.currentNode, parent = n.parentElement;
+    if (!n.nodeValue.trim() || !parent || parent.closest("script, style, [translate=no]")) continue;
+    translateValue(n, Boolean(parent.closest(PAGE_ROOTS)));
+  }
+  for (const el of $$("[aria-label],[placeholder],[title]")) {
+    if (el === btn || !el.closest(PAGE_ROOTS) || el.closest("[translate=no]")) continue;
+    for (const name of labelAttrs) {
+      const attr = el.getAttributeNode(name);
+      if (attr) translateValue(attr, true);
     }
-    const want = LANG === "th" ? n.__th : n.__en;
-    if (want !== undefined && n.nodeValue !== want) n.nodeValue = want;
   }
 }
 // Translate DOM updates before the next paint instead of showing English for a frame.
-new MutationObserver(applyLang).observe(document.body, { childList: true, subtree: true, characterData: true });
+new MutationObserver(applyLang).observe(document.body, { childList: true, subtree: true, characterData: true, attributeFilter: labelAttrs });
 document.addEventListener("click", (e) => {
   if (e.target.id !== "lang-btn") return;
   LANG = LANG === "th" ? "en" : "th";

@@ -32,12 +32,13 @@
 ## 3. AI และค่าใช้จ่าย
 | ผู้เรียก | โมเดล | หมายเหตุ |
 |---|---|---|
-| บอท: การตัดสินใจสุดท้าย | DeepSeek v4.1 flash 1017 | ราว 0.0026 USD ต่อรอบ (v4.3 ขึ้นไป) |
+| บอท: การตัดสินใจสุดท้าย | DeepSeek v4.1 flash 1017 ผ่าน ai.thirx.com (ตั้งแต่ 24 พ.ย. 17:04 UTC; เครดิต OpenRouter หมด) | ตรวจแล้ว: model `custom/deepseek-v4.1-flash-1017` ใน `/api/llm_log` |
 | บอท: นักวิเคราะห์, bull/bear, risk, pre-open; steward | โมเดลฟรี (`ai_news.HELPER_MODELS`) แล้วจึง DeepSeek ถ้าฟรีล้ม | จำนวนครั้งดูที่ `helper_models` |
-| ให้คะแนนพาดหัวข่าว | DeepSeek | เพดาน 600 ข่าวต่อวัน (`core/news_archive.py`) |
+| ให้คะแนนพาดหัวข่าว | DeepSeek (thirx ก่อน, OpenRouter สำรอง) | เพดาน 600 ข่าวต่อวัน (`core/news_archive.py`) |
 | ออปชันและข่าวงบแบบเดินหน้า | DeepSeek | บันทึกค่าใช้จ่ายใน summary ของ data branch |
 | study ที่ชื่อขึ้นต้น `llm_`, `news_v2`, `polymarket_llm` | DeepSeek | เสียเงินทุกครั้งที่รัน: สั่งรันเฉพาะเมื่อตั้งใจ |
 | OpenCode ในเครื่องเจ้าของ | DeepSeek | ใช้ key เดียวกัน; คำขอจากระบบเราขึ้นชื่อ "TradeLab" ใน OpenRouter |
+| ผู้ให้บริการทางเลือก (ai.thirx.com) | ตามตัวแปร `THIRX_MODEL` | ใช้กับทุกคำขอที่เสียเงินเมื่อมี secret `THIRX_API_KEY` และ variable `THIRX_MODEL` ใน repo; ถ้าล้มจะกลับไปใช้ OpenRouter; โมเดลฟรีของผู้ช่วยยังอยู่บน OpenRouter |
 
 ## 4. เอกสารหลัก (แต่ละเรื่องมีที่เดียว)
 | เรื่อง | ไฟล์ |

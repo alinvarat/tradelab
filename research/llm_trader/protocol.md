@@ -100,3 +100,31 @@ The three analysts, the bull/bear round and its rebuttal, the advisory risk revi
 
 ## Addendum 2026-11-24: v4.4, hold memory (owner: spend is fine, but efficiently)
 Live data showed 35 of the last 40 decisions were holds, with the same top movers re-sent every cycle (ZS 5 times in 5 cycles). A symbol the model answered hold/pass/skip on (and does not hold) is no longer added as a "top mover" filler candidate for 1 hour, unless its price moves another UNCHANGED_SHARE x its class shock threshold from the price at that decision. New shocks, linked headlines, buzz, the pre-open watchlist and position reviews are unaffected. Results are tagged v4.4.
+
+## Addendum 2026-11-24: v4.5, smarter news reading and a learning loop (owner: upgrade the running bot and keep improving it from its results)
+- The news analyst now judges moves relative to the market (SPY for stocks/ETFs, BTC for crypto), treats headline tone as no information, treats shorts as normal, and must use desk_stats. Lessons come from the v2 earnings reader (`protocol_news_v3.md`): a long lean, uncalibrated confidence and market moves mistaken for news.
+- desk_stats: every candidate the model saw is already scored at +1 day relative to SPY; v4.5 groups those outcomes by signal source (news, shock, buzz, pre-open, mover) and action (buy, short, hold) and feeds groups with >= 5 outcomes back to every role each cycle. `/api/llm_trader` shows all groups.
+- Each later improvement is a new tag (v4.6, ...) with its own addendum, so results stay separable in `by_protocol`.
+- Correction minutes after the v4.5 deploy (same tag): desk_stats also groups the +1 hour outcomes, because +1 day outcomes did not exist yet (the candidate list was restarted with v4).
+
+## Addendum 2026-11-24: v4.6, is the news already priced in, and which news types work
+- Every headline in a candidate's context now carries `minutes_since_desk_saw` and `move_since_desk_saw_pct` (price change since this desk first saw that headline for that symbol), so the news analyst can tell a fresh catalyst from one the price has already run on.
+- Headlines get a type (earnings, m&a, fda/clinical, analyst, legal/regulatory, macro, contract/product, other; `news_type` in `core/llm_trader.py`). Candidates record the newest headline's type and desk_stats also groups outcomes as `type:<news type>/<action>/<1h|1d>`.
+
+## Addendum 2026-11-24: v4.7, stricter headline-to-asset linking
+Live example: "Platinum Equity ..." linked to platinum futures (PL=F) and reached the model as platinum news. Generic keywords for platinum, palladium, copper, grains, softs, natural gas, euro, pound and ether now link only when the headline also has a market word (price, futures, supply, falls, against, currency, ...), and known company phrases (Platinum Equity, Euronext, ...) never link. Specific phrases (spot gold, crude, bitcoin, ...) are unchanged.
+
+## Addendum 2026-11-24: v4.8, junk and irrelevant headlines are dropped
+Live examples on v4.6: "How to Invest in VanEck Biotech ETF (BBH)" reached the model as news for SMH, "$100 Invested In ... 20 Years Ago" for XLK and "S&P 500 Movers: HPE, DLTR" for DLTR. Evergreen, listicle and movers-recap headlines (`JUNK_PATTERNS`) no longer reach the model or trigger a cycle, and the per-symbol fallback search keeps only headlines that name the ticker or the company.
+
+## Addendum 2026-11-24: v4.9, similar past headlines as the prior (owner: a step change in how smart the news reading is)
+Each candidate with a headline now carries `similar_past`: the 8 most similar archived headlines (token overlap, same news type preferred) with their measured +1 day abnormal return vs SPY from the news archive's own labels (`research/news_archive/data/labels.jsonl` on the volume), their mean and share up, three examples, and the base rate for that news type over all labels. The news analyst is told to treat this as the prior and to say when today's case differs.
+
+## Addendum 2026-11-24: v4.10, desk playbook per news type
+Each candidate with a headline carries `playbook`: two or three sentences of general priors for its news type (earnings, m&a, fda/clinical, analyst, legal/regulatory, macro, contract/product; `PLAYBOOK` in `core/llm_trader.py`). They are general market knowledge, not this desk's results, and the news analyst is told that similar_past and desk_stats override them.
+
+## Addendum 2026-11-24: v4.11, two live mislabels fixed
+Seen in a v4.9 cycle: "Zscaler receives multiple target hikes ahead of proposed acquisition by CrowdStrike" was (a) typed "other" because the m&a pattern matched "acquir" but not "acquisition", and (b) linked to Target (TGT) through the word "target". The news types now match acquisition/acquire forms and target-hike wording; company names that are ordinary words (Target, Visa, Oracle, Apple, Amazon; `core/entities.py` COMMON_WORD_NAMES) link only when capitalised and not in ordinary-word contexts (price target, target hikes, visa rules, ...). Linking is shared with the news archive, so new labels are linked the same way from now on.
+
+## Addendum 2026-11-24: v4.12, sector context
+Every stock candidate carries its sector ETF (`SECTOR_ETF` in `core/universe.py`: SMH, XLK, XLF, XLV, XLE, XLI, XLY, XLP, QQQ for communications), the ETF's move and `vs_sector_pct`, so the analyst can separate stock-specific news from a sector-wide move (for example NVDA -8% while SMH -7% is mostly the sector).
