@@ -32,3 +32,5 @@ Same reason as `protocol_llm_earnings_forward.md`. The model gets the v2 message
 
 ## Addendum 2026-11-24: daily sequential evidence
 Use [daily-v1](../sequential_protocol_20261124.md) for entries from November 25, 2026 UTC onward. Group each completed record by the UTC day of bookkeeping (`closed_ts`), including records priced after their planned exit. The first market-open run on November 24 stays in the fixed-sample study.
+
+[The separately tagged all-8-K protocol](protocol_llm_options_forward_v2_sec_20261124.md) covers the prospective window from November 25 onward, beginning on its first scheduled run.

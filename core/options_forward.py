@@ -18,6 +18,18 @@ FEE = 0.65            # USD per contract per side
 STAKE = 0.20          # share of equity per new trade
 START_USD = 147.0
 MIN_TRADES = 150
+EARNINGS_PROTOCOL = "options-v1-earnings"
+ALL_ITEMS_PROTOCOL = "options-v2-sec"
+ALL_ITEMS_START_TS = 1795564800  # 2026-11-25 00:00 UTC
+
+
+def filing_protocol(filing: dict) -> str | None:
+    """Use a disjoint prospective SEC filing window for the expanded intake."""
+    if filing["ts"] >= ALL_ITEMS_START_TS:
+        return ALL_ITEMS_PROTOCOL
+    if "2.02" in filing["items"]:
+        return EARNINGS_PROTOCOL
+    return None
 
 
 def parse_current_atom(text: str) -> list:
