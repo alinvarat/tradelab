@@ -5,55 +5,7 @@ name: Research studies
 on:
   workflow_dispatch:
     inputs:
-      l4f:
-    name: l4f_polymarket (every 30 min)
-    if: (github.event_name == 'schedule' && github.event.schedule == '17,47 * * * *') || inputs.study == 'l4f_forward'
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    concurrency:
-      group: tradelab-l4f-state
-      cancel-in-progress: false
-    permissions:
-      contents: write
-    steps:
-      - name: Check out main
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
-      - name: Restore state
-        run: |
-          mkdir -p /tmp/l4f
-          if git fetch origin data/l4f-forward 2>/dev/null; then
-            git show origin/data/l4f-forward:polymarket_longshot_state.json > /tmp/l4f/polymarket_longshot_state.json || true
-          fi
-
-      - name: Run
-        run: python research/studies/l4f_forward.py /tmp/l4f
-
-      - name: Push state to data/l4f-forward
-        if: always()
-        run: |
-          [ -f /tmp/l4f/polymarket_longshot_state.json ] || exit 0
-          git config user.name tradelab-research
-          git config user.email tradelab-research@users.noreply.github.com
-          if git rev-parse --verify -q origin/data/l4f-forward; then
-            git checkout -q -B data/l4f-forward origin/data/l4f-forward
-          else
-            git checkout -q --orphan data/l4f-forward && git rm -rq --cached . && git clean -fdq
-          fi
-          cp /tmp/l4f/polymarket_longshot_state.json /tmp/l4f/l4f_summary.json .
-          [ -d /tmp/l4f/ledger_l4f_events ] && mkdir -p ledger && cp -r /tmp/l4f/ledger_l4f_* ledger/ || true
-          git add -A polymarket_longshot_state.json l4f_summary.json ledger 2>/dev/null || git add polymarket_longshot_state.json l4f_summary.json
-          git commit -qm "L4f ledger: $(date -u +%FT%TZ)" || echo "nothing new"
-          git push -q origin data/l4f-forward
-
-  study:
+      study:
         description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, polymarket_llm or all"
         default: all
   push:
@@ -171,6 +123,54 @@ jobs:
           git add options_forward_state.json options_forward_summary.json 2>/dev/null || git add options_forward_state.json
           git commit -qm "Forward options test: $(date -u +%FT%TZ)" || echo "nothing new"
           git push -q origin data/options-forward
+
+  l4f:
+    name: l4f_polymarket (every 30 min)
+    if: (github.event_name == 'schedule' && github.event.schedule == '17,47 * * * *') || inputs.study == 'l4f_forward'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: tradelab-l4f-state
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Restore state
+        run: |
+          mkdir -p /tmp/l4f
+          if git fetch origin data/l4f-forward 2>/dev/null; then
+            git show origin/data/l4f-forward:polymarket_longshot_state.json > /tmp/l4f/polymarket_longshot_state.json || true
+          fi
+
+      - name: Run
+        run: python research/studies/l4f_forward.py /tmp/l4f
+
+      - name: Push state to data/l4f-forward
+        if: always()
+        run: |
+          [ -f /tmp/l4f/polymarket_longshot_state.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/l4f-forward; then
+            git checkout -q -B data/l4f-forward origin/data/l4f-forward
+          else
+            git checkout -q --orphan data/l4f-forward && git rm -rq --cached . && git clean -fdq
+          fi
+          cp /tmp/l4f/polymarket_longshot_state.json /tmp/l4f/l4f_summary.json .
+          [ -d /tmp/l4f/ledger_l4f_events ] && mkdir -p ledger && cp -r /tmp/l4f/ledger_l4f_* ledger/ || true
+          git add -A polymarket_longshot_state.json l4f_summary.json ledger 2>/dev/null || git add polymarket_longshot_state.json l4f_summary.json
+          git commit -qm "L4f ledger: $(date -u +%FT%TZ)" || echo "nothing new"
+          git push -q origin data/l4f-forward
 
   study:
     name: ${{ matrix.study }}
