@@ -73,7 +73,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_8k_other]
+        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_8k_other, probe_options]
     steps:
       - name: Check out repository
         if: github.event_name == 'push' || inputs.study == 'all' || inputs.study == matrix.study
