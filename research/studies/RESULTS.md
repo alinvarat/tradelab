@@ -85,3 +85,15 @@ There were 3,475 2.02 filings from 2026-10-20 to 2026-11-22. 2,097 passed the li
 - By liquidity tier at H1: the most liquid (≥ 100M/day) netted −0.26%, the middle tier −0.36%, and the thinnest tier +0.12% (with diff +2.18%, made larger by its random control at −2.06%).
 - What looks interesting is the slower drift at H3/H5 (H5 net +0.60%, p 0.027). That horizon was not locked as the primary one, so it **cannot be claimed**. It is locked as the primary for the forward test in `protocol_llm_earnings_forward.md`.
 - Daily book (H1, 53 trades/day, 23 days): mean +0.34%/day, sd 1.6%. Best path: 1.63× at 10× leverage (worst drawdown −42%). Still not 3×.
+
+## DeepSeek reads every non-earnings 8-K: run 45292092632 (`protocol_llm_8k_other.md`)
+3,980 8-Ks without item 2.02, from 2026-10-20 to 2026-11-22 (the 11-11 and 11-23 indexes returned 403). 1,703 passed the liquidity screen and 1,696 were called. The served model was `deepseek/deepseek-v4.1-flash-1017`. The model skipped 78%.
+
+| H | trades | hit | net / trade | net 2× | random dir | diff | always long | block p diff | block p net |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 376 | 47% | −0.86% | −1.29% | −0.99% | +0.13% | −1.03% | 0.36 | 1.00 |
+| 3 | 346 | 45% | −1.23% | −1.65% | −0.38% | −0.84% | −1.36% | 0.92 | 1.00 |
+| 5 | 311 | 46% | −1.81% | −2.24% | −0.96% | −0.85% | −2.10% | 0.85 | 1.00 |
+
+- **Locked verdict: "collecting" (311/600 H5 trades)**, but every horizon so far is clearly negative and the model's picks are no better than random. Most picks were long (221 long, 90 short), in a set where buying every filing lost 2.1% over 5 days (offerings and bad news dominate non-earnings 8-Ks).
+- Daily book (15 trades/day): mean −0.89%/day, ending at 0.80× without leverage.
