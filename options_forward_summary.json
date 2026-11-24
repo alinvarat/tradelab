@@ -1,0 +1,23 @@
+{
+ "verdict": {
+  "verdict": "collecting (0/150 closed trades)",
+  "n": 0
+ },
+ "open": 0,
+ "closed": 0,
+ "calls": 0,
+ "gaps": 0,
+ "account_whole_contracts": {
+  "end_equity_usd": 147.0,
+  "taken": 0,
+  "unaffordable": 0,
+  "month_end_equity": {}
+ },
+ "account_fractional": {
+  "end_equity_usd": 147.0,
+  "taken": 0,
+  "unaffordable": 0,
+  "month_end_equity": {}
+ },
+ "updated_utc": "2026-11-24T04:20:17Z"
+}
