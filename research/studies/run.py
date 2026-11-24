@@ -1225,10 +1225,16 @@ def study_probe_provider(_symbols):
     if not key:
         return {"error": "no key in the environment"}, []
     try:
-        with urlopen(Request(ai_news.CUSTOM_BASE_URL + "/models", headers={"Authorization": "Bearer " + key}), timeout=30) as r:
+        with urlopen(Request(ai_news.CUSTOM_BASE_URL + "/models", headers={"Authorization": "Bearer " + key, **ai_news.CUSTOM_HEADERS}),
+                     timeout=30) as r:
             d = json.loads(r.read())
     except Exception as e:  # noqa: BLE001
-        return {"error": type(e).__name__ + ": " + str(getattr(e, "code", ""))}, []
+        body = ""
+        try:
+            body = e.read().decode()[:300] if hasattr(e, "read") else ""
+        except Exception:  # noqa: BLE001
+            pass
+        return {"error": type(e).__name__ + ": " + str(getattr(e, "code", "")), "body": body.replace(key, "***")}, []
     ids = sorted(m.get("id", "") for m in (d.get("data") or []))
     return {"models": len(ids), "deepseek": [i for i in ids if "deepseek" in i.lower()], "all": ids[:200]}, []
 

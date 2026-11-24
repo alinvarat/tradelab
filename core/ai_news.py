@@ -208,6 +208,8 @@ def cache_messages(system: str, user: str) -> list:
 # (Kuber runtime env from the THIRX_API_KEY secret); the key is never in code, logs or files.
 CUSTOM_BASE_URL = os.environ.get("TRADELAB_LLM_BASE_URL", "https://ai.thirx.com/v1").rstrip("/")
 CUSTOM_MODEL = os.environ.get("TRADELAB_LLM_PROVIDER_MODEL", "")
+CUSTOM_HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
+                  "Accept": "application/json"}   # the provider's front door refuses the default Python user agent
 
 
 def custom_available() -> bool:
@@ -220,7 +222,8 @@ def _chat_custom(system, user, timeout, urlopen, cache_layout, temperature):
         {"role": "system", "content": system}, {"role": "user", "content": user}]
     body = json.dumps({"model": CUSTOM_MODEL, "temperature": temperature, "messages": messages}).encode()
     req = Request(CUSTOM_BASE_URL + "/chat/completions", data=body, headers={
-        "Authorization": "Bearer " + os.environ["TRADELAB_LLM_API_KEY"], "Content-Type": "application/json"})
+        "Authorization": "Bearer " + os.environ["TRADELAB_LLM_API_KEY"], "Content-Type": "application/json",
+        **CUSTOM_HEADERS})
     try:
         with (urlopen or _urlopen)(req, timeout=timeout) as r:
             resp = json.loads(r.read())
