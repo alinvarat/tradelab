@@ -16,7 +16,7 @@
 | เส้น | สเปก | สถานะ | ผลล่าสุด | ขั้นต่อไป |
 |---|---|---|---|---|
 | L1 listing | `ops/lines/L1_listings.md` | killed (ตามกฎ) → L1b | รอบ 2: กฎเลือก 7 วันแล้วไม่ผ่าน; ถือ 4 ชม. บวกทุกช่วง (validation +10.2% p 0.0075, test +9.3%) แต่มีเหตุการณ์แค่ราว 1 ครั้งต่อเดือน | L1b: ล็อกกติกาถือ 4 ชม. แบบเดินหน้า + เพิ่มตัวดึงประกาศหลาย exchange บน Kuber |
-| L2 unlock | `ops/lines/L2_unlocks.md` | todo | — | หาแหล่งข้อมูลฟรี (จำกัด 2 ชม.) |
+| L2 unlock | `ops/lines/L2_unlocks.md` | inconclusive | 1,172 เหตุการณ์; pick post0_7 test −1.5%; pre7_0 บวกทุกช่วงแต่แพ้ต้นทุน 2 เท่า | ถ้าจะทดสอบต่อ ต้องล็อกโปรโตคอลใหม่ |
 | L3 หุ้นเล็กมีข่าว | `ops/lines/L3_smallcap_news.md` | killed | ไม่มีกลุ่มผ่าน (Bonferroni) | — |
 | L4 Polymarket maker | `ops/lines/L4_polymarket_maker.md` | killed; L4f รันต่อ (ไม่มีค่าใช้จ่าย, ความสำคัญต่ำ) | รอบ 4: ราว break-even | — |
 | L5 ออปชันข่าวทุกประเภท | `ops/lines/L5_options_all_news.md` | forward | 0/150 | ตรวจรอบ 15:00 UTC; รีวิว PR #77, #79 |
@@ -43,7 +43,7 @@
 | 3 | ด่านคัดกรอง L3 | Claude (รับแทน) | 1 | killed | 315 เหตุการณ์; กลุ่ม 2.02 ไม่ผ่าน, กลุ่มอื่นน้อยเกิน |
 | 4 | ด่านคัดกรอง L4 | Claude (รับแทน) | 1 | killed | รอบ 4 (ข้อมูลไม่ซ้ำ 2,613 เหตุการณ์): validation +0.35%/ครั้ง p 0.39 |
 | 4b | L4f: ขาย longshot บน Polymarket 1 วันก่อนปิด (เดินหน้า, Actions ทุก 30 นาที) | Claude | 1 | forward | data/l4f-forward; 14:12 เข้า 2 ตลาด (Barcelona NO 0.09, BTC>56k NO 0.042) |
-| 5 | หาแหล่งข้อมูล L2 | เพื่อน (dmgnr) | 1 | todo | issue #88 |
+| 5 | หาแหล่งข้อมูล L2 | Claude | 1 | done | DefiLlama datasets (ฟรี) |
 | 6 | deploy ให้เสถียร (registry DNS, ข้าม deploy เมื่อแก้แค่เอกสาร, แจ้งเตือน) | เพื่อน (dmgnr) | 1 | todo | issue #89, #80 |
 | 7 | รีวิว PR #77–#79 ของ Codex | Claude | 1 | done | merge แล้ว: ออปชันอ่าน 8-K ทุกประเภทตั้งแต่ 25 พ.ย. (options-v2-sec) + e-process รายวัน |
 | 8 | หน้าเว็บแสดงความคืบหน้าสู่ 3 เท่าแทน "x/30 คู่" | Claude | 1 | done | ตรวจแล้วว่า app.js บนเว็บมี target3x |
@@ -57,7 +57,7 @@
 | #113 | หน้าเว็บสำหรับบัญชีทดสอบแบบเดินหน้า (L1b/L1d/L1f/L4f) และบอทกติกาแบบกว้าง | ว่าง |
 | #114 | แหล่งประกาศ listing ที่ Kuber เข้าถึงได้ (เพิ่มเหตุการณ์ L1b) | ว่าง |
 | #115 | แหล่งราคา DEX สำหรับเหรียญ Binance Alpha (L1g) | ว่าง |
-| #88 | หาแหล่งข้อมูล token unlock ฟรี (L2) | ว่าง |
+| #88 | หาแหล่งข้อมูล token unlock ฟรี (L2) | done (Claude) |
 | #89 | ทำให้ deploy บน Kuber เสถียร | dmgnr |
 
 ## รอเจ้าของตัดสิน
