@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths-ignore:            # docs and research runs on Actions; they must not restart the production pod
+      - '**.md'
+      - 'reports/**'
+      - 'research/**'
+      - 'ops/**'
   pull_request:
     branches:
       - main
