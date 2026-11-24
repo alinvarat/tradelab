@@ -76,3 +76,10 @@ Owner direction: the model may decide leverage, entry price, size, number of pos
 - The control account mirrors the model's notional and leverage on a random non-shock stock, so the paired comparison stays fair at any leverage; stops, targets and exits of the control follow the model's sells.
 - Because leverage can wipe the account in minutes, an all-in outcome is a valid result; closed trades, liquidations and the model's stated reason for size/leverage are logged. The evaluation rule is unchanged (30 closed pairs, bootstrap).
 - Language: the model writes reasons, market view and bull/bear arguments in Thai (tickers, numbers, JSON keys in English). Thai text can be less precise than English; the decision fields are numeric and validated, so only the explanations are affected.
+
+## Addendum 2026-11-24: v4.2, cheaper calls without limits (written before any v4.2 decision)
+The owner asked for efficient model use **without a budget cap and without slowing the bot**. The v4.1 pipeline, cadence and caps are unchanged. Changes from deployment onward:
+- Every call in a cycle (3 analysts, bull/bear rounds, decision, risk review) now starts with the same JSON block, market then candidates. The role instructions move to the end of the message, under one shared system message (`ai_news.cache_messages`). DeepSeek's prefix cache then serves that shared block at the cache price ($0.001/M instead of $0.03/M input on OpenRouter, 2026-11-24) for every call after the first stage. Cache hits also cut latency.
+- Real cost per cycle is logged (`cost_usd`, `usd_today`) from OpenRouter `usage.cost`, and shown on `/api/llm_trader`, so the saving can be checked.
+- Decisions, links and pairs are tagged `v4.2`, because the prompt layout changed. v4.1 and v4.2 are not pooled without saying so.
+- No free models: none of the free OpenRouter models is a DeepSeek model, and their rate limits are below this bot's call volume.

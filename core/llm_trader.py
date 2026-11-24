@@ -46,8 +46,12 @@ MAX_HOLD_S = 180 * 24 * 3600     # safety cap only; the holding period is otherw
 DAILY_HALT = 1.0   # disabled (owner rule: no restrictions)
 MAX_CALLS_DAY, MIN_GAP_S, MAX_CANDIDATES = 300, 60, 24
 IDLE_CALL_S = 10 * 60            # v4.1: a scheduled whole-market look every 10 minutes
+# v4.2 (2026-11-24, cost without limits): every call of a cycle starts with the same JSON block (market + candidates)
+# and the role instructions go last (ai_news.chat cache_layout), so DeepSeek's prefix cache serves the shared part
+# of every call after the first stage at the cache price. No budget, no delay; the real cost is measured and logged.
+CACHE_HEADER = "Candidates and context (JSON):\n"
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
-PROTOCOL_VERSION = "v4.1"
+PROTOCOL_VERSION = "v4.2"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60
@@ -291,7 +295,7 @@ def buzz_symbols(now, window=BUZZ_WINDOW_S) -> dict:
 class LlmTrader:
     def __init__(self, state_path=STATE, log_path=LOG, chat=None, rng_seed=None):
         self.state_path, self.log_path = Path(state_path), Path(log_path)
-        self.chat = chat or (lambda system, user: ai_news.chat(system, user, model=ai_news.DECISION_MODEL))
+        self.chat = chat or (lambda system, user: ai_news.chat(system, user, model=ai_news.DECISION_MODEL, cache_layout=True))
         self.lock = threading.RLock()
         self.rng = random.Random(rng_seed)
         self.pool = ThreadPoolExecutor(16)
@@ -429,7 +433,7 @@ class LlmTrader:
     def due(self, now, fresh, idle=False):
         c = self.calls
         if c["day"] != _day(now):
-            c.update(day=_day(now), n=0)
+            c.update(day=_day(now), n=0, usd=0.0)
         if c["n"] >= MAX_CALLS_DAY or now - c["last_ts"] < MIN_GAP_S:
             return None
         if fresh:
@@ -536,7 +540,7 @@ class LlmTrader:
     def analysts(self, ctx):
         """Three independent analyst calls (news, price, macro) before the debate. They see data, not each other."""
         syms = {c["symbol"] for c in ctx["candidates"]}
-        user = "Candidates and context (JSON):\n" + json.dumps({"market": ctx["market"], "candidates": ctx["candidates"]})
+        user = CACHE_HEADER + json.dumps({"market": ctx["market"], "candidates": ctx["candidates"]})
         out = {}
         with ThreadPoolExecutor(3) as ex:
             replies = list(ex.map(lambda sys_: self.chat(sys_, user), (ANALYST_NEWS, ANALYST_PRICE, ANALYST_MACRO)))
@@ -550,7 +554,7 @@ class LlmTrader:
         v4.1 adds a second, rebuttal round that sees the other side's first-round case."""
         syms = {c["symbol"] for c in ctx["candidates"]}
         base = {"market": ctx["market"], "candidates": ctx["candidates"], "analyst_notes": ctx.get("analysts", {})}
-        user = "Candidates and context (JSON):\n" + json.dumps(base)
+        user = CACHE_HEADER + json.dumps(base)
         out = {}
         with ThreadPoolExecutor(2) as ex:      # bull and bear run at the same time: one round trip of latency, not two
             replies = list(ex.map(lambda sys_: self.chat(sys_, user), (BULL, BEAR)))
@@ -559,7 +563,7 @@ class LlmTrader:
             self.record("debate", side=name, round=1, model=model, arguments=out[name], raw=raw[:2000],
                         error=None if raw else model)
         if DEBATE_ROUNDS >= 2:
-            user2 = "Candidates, analyst notes and the first-round cases (JSON):\n" + json.dumps(
+            user2 = CACHE_HEADER + json.dumps(
                 {**base, "bull_case": out["bull_case"], "bear_case": out["bear_case"]})
             with ThreadPoolExecutor(2) as ex:
                 replies = list(ex.map(lambda sys_: self.chat(sys_, user2),
@@ -586,8 +590,8 @@ class LlmTrader:
                           "reason": d.get("reason", "")[:160]})
         if not props:
             return {}, None, None
-        user = "Account and proposed trades (JSON):\n" + json.dumps(
-            {"market": ctx["market"], "account": ctx["account"], "proposals": props})
+        user = CACHE_HEADER + json.dumps(
+            {"market": ctx["market"], "candidates": ctx.get("candidates", []), "account": ctx["account"], "proposals": props})
         raw, model = self.chat(RISK, user)
         return parse_reviews(raw, {p["symbol"] for p in props}), raw, model
 
@@ -602,16 +606,21 @@ class LlmTrader:
             if self.acct.positions:
                 self.calls["last_review"] = now
             calls_today = self.calls["n"]
+        spent0 = ai_news.spend()["total_usd"]
         if ctx["candidates"]:
             ctx["analysts"] = self.analysts(ctx)
             ctx.update(self.debate(ctx))
-        user = "Current situation (JSON):\n" + json.dumps(ctx)
+        shared = {"market": ctx["market"], "candidates": ctx["candidates"]}
+        user = CACHE_HEADER + json.dumps({**shared, **{k: v for k, v in ctx.items() if k not in shared}})
         t0 = time.time()
         raw, model = self.chat(SYSTEM, user)
         parsed = parse_decisions(raw, set(quotes), held)
         reviews, rraw, rmodel = self.risk_review(parsed["decisions"], ctx) if raw else ({}, None, None)
+        cycle_usd = max(0.0, ai_news.spend()["total_usd"] - spent0)
         with self.lock:
+            self.calls["usd"] = self.calls.get("usd", 0.0) + cycle_usd
             self.record("call", trigger=trigger, model=model, seconds=round(time.time() - t0, 1), calls_today=calls_today,
+                        cost_usd=round(cycle_usd, 5), usd_today=round(self.calls["usd"], 4),
                         context=ctx, raw=raw[:RAW_LOG_CHARS], error=parsed.get("error") or (None if raw else model),
                         rejected=parsed["rejected"], market_view=parsed["market_view"])
             if rraw is not None or reviews:
@@ -1003,6 +1012,7 @@ class LlmTrader:
                     "control_equity_thb": data.thb_at_open(control_equity, self.capital_usd, CAPITAL_THB),
                     "capital_usd": self.capital_usd, "paused": self.paused,
                     "calls_today": self.calls["n"], "max_calls_day": MAX_CALLS_DAY, "error": self.last_error,
+                    "usd_today": round(self.calls.get("usd", 0.0), 4),
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
                     "model": ai_news.DECISION_MODEL.split("/", 1)[-1],
                     "protocol": PROTOCOL_VERSION, "universe_size": len(ALL),
