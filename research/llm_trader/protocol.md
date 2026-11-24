@@ -100,3 +100,8 @@ The three analysts, the bull/bear round and its rebuttal, the advisory risk revi
 
 ## Addendum 2026-11-24: v4.4, hold memory (owner: spend is fine, but efficiently)
 Live data showed 35 of the last 40 decisions were holds, with the same top movers re-sent every cycle (ZS 5 times in 5 cycles). A symbol the model answered hold/pass/skip on (and does not hold) is no longer added as a "top mover" filler candidate for 1 hour, unless its price moves another UNCHANGED_SHARE x its class shock threshold from the price at that decision. New shocks, linked headlines, buzz, the pre-open watchlist and position reviews are unaffected. Results are tagged v4.4.
+
+## Addendum 2026-11-24: v4.5, smarter news reading and a learning loop (owner: upgrade the running bot and keep improving it from its results)
+- The news analyst now judges moves relative to the market (SPY for stocks/ETFs, BTC for crypto), treats headline tone as no information, treats shorts as normal, and must use desk_stats. Lessons come from the v2 earnings reader (`protocol_news_v3.md`): a long lean, uncalibrated confidence and market moves mistaken for news.
+- desk_stats: every candidate the model saw is already scored at +1 day relative to SPY; v4.5 groups those outcomes by signal source (news, shock, buzz, pre-open, mover) and action (buy, short, hold) and feeds groups with >= 5 outcomes back to every role each cycle. `/api/llm_trader` shows all groups.
+- Each later improvement is a new tag (v4.6, ...) with its own addendum, so results stay separable in `by_protocol`.
