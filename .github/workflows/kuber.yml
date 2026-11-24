@@ -53,6 +53,8 @@ jobs:
         env:
           KUBER_API_KEY: ${{ secrets.KUBER_API_TOKEN }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          THIRX_API_KEY: ${{ secrets.THIRX_API_KEY }}
+          THIRX_MODEL: ${{ vars.THIRX_MODEL }}
         run: |
           if [ -z "$KUBER_API_KEY" ]; then
             echo "::error::Add the KUBER_API_TOKEN repository secret before deploying."
@@ -70,6 +72,9 @@ jobs:
           runtime_env="$(mktemp "$RUNNER_TEMP/tradelab-env.XXXXXX")"
           trap 'rm -f -- "$runtime_env"' EXIT
           printf 'OPENROUTER_API_KEY=%s\n' "$OPENROUTER_API_KEY" > "$runtime_env"
-          unset OPENROUTER_API_KEY
+          if [ -n "$THIRX_API_KEY" ] && [ -n "$THIRX_MODEL" ]; then     # optional OpenAI-compatible provider for paid calls
+            printf 'TRADELAB_LLM_API_KEY=%s\nTRADELAB_LLM_PROVIDER_MODEL=%s\n' "$THIRX_API_KEY" "$THIRX_MODEL" >> "$runtime_env"
+          fi
+          unset OPENROUTER_API_KEY THIRX_API_KEY
           export TRADELAB_RUNTIME_ENV_FILE="$runtime_env"
           bunx --bun @dmgnr/kuber@2.7.1 ci --trust
