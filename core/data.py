@@ -143,7 +143,9 @@ def ext_quote_from_chart(symbol: str, res: dict, now: float, max_age: float = 90
         return None
     q = (res.get("indicators") or {}).get("quote", [{}])[0]
     ts = res.get("timestamp") or []
-    last = next(((t, c) for t, c in zip(reversed(ts), reversed(q.get("close") or [])) if c is not None), None)
+    w = per.get(session) or {}
+    last = next(((t, c) for t, c in zip(reversed(ts), reversed(q.get("close") or []))
+                 if c is not None and w.get("start", 0) <= t < w.get("end", 0)), None)   # the bar must be in-session
     if not last or now - last[0] > max_age:
         return None
     t, px = last

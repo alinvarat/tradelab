@@ -154,3 +154,13 @@ class ExtendedHours(unittest.TestCase):
         self.assertEqual(q["session"], "post")
         self.assertAlmostEqual(q["change_pct"], 2.0)
         self.assertIsNone(data.ext_quote_from_chart("AAA", self.chart(now, age=3600), now))
+
+
+class ExtendedSessionBar(unittest.TestCase):
+    def test_regular_bar_is_not_an_after_hours_quote(self):
+        from core import data
+        now = 1_800_000_000
+        res = {"meta": {"currentTradingPeriod": {"post": {"start": now - 60, "end": now + 3600},
+                                                 "pre": {"start": 0, "end": 1}}, "regularMarketPrice": 100.0},
+               "timestamp": [now - 120], "indicators": {"quote": [{"close": [100.0]}]}}   # last bar is before the post window
+        self.assertIsNone(data.ext_quote_from_chart("AAA", res, now))
