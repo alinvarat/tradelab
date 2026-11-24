@@ -140,3 +140,6 @@ Every context carries `news_principles` (news vs no-news moves, stale news, smal
 
 ## Addendum 2026-11-24: v4.16, DeepSeek for every role
 Owner: the alternative provider (ai.thirx.com) is cheap, so every role (analysts, bull/bear, risk, pre-open, steward and the decision) now uses DeepSeek v4.1 flash 1017 there; the free OpenRouter models are used only when that provider is not configured. OpenRouter is out of credit (402 since 2026-11-24 16:59 UTC).
+
+## Addendum 2026-11-24: v4.17, the desk coaches itself (owner: let DeepSeek look after the system)
+Every 3 hours (when no cycle is running and the call budget allows) DeepSeek reads the desk's own measured results (desk_stats, by-protocol and by-class results, the last 20 closed trades, equity vs control, previous lessons) and writes up to 8 short lessons, each tied to a number from groups with >= 10 outcomes. The lessons go into every later cycle as `desk_lessons` and are shown in `/api/llm_trader`; they cannot change limits, rules or code. The daily call cap is raised from 300 to 1,000 (owner: use the cheap provider fully).

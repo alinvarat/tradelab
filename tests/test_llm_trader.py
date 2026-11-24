@@ -343,6 +343,18 @@ class Trading(Base):
         self.assertIn("Chan 2003", c["news_principles"])
         self.assertIn("Womack 1996", lt.PLAYBOOK["analyst"])
 
+    def test_self_review_writes_lessons_every_three_hours(self):
+        replies = iter([json.dumps({"lessons": ["ซื้อตามข่าว -1.7% (n 12): ต้องมีปริมาณยืนยัน"], "note": "x"}), "garbage"])
+        self.t.helper = lambda s, u: (next(replies), "fake")
+        r = self.t.self_review(10_000.0)
+        self.assertEqual(r["lessons"], ["ซื้อตามข่าว -1.7% (n 12): ต้องมีปริมาณยืนยัน"])
+        self.assertIsNone(self.t.self_review(10_000.0 + 3600))            # not due yet
+        r2 = self.t.self_review(10_000.0 + 3 * 3600)                      # unparsable reply keeps the old lessons
+        self.assertFalse(r2["parsed"])
+        self.assertEqual(r2["lessons"], r["lessons"])
+        c = self.t.build_context(20_000.0, [], self.market(), [])
+        self.assertEqual(c["desk_lessons"], r["lessons"])
+
     def test_news_type_classification(self):
         self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
         self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")
