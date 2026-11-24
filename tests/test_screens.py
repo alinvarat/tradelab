@@ -430,3 +430,16 @@ class ShortGain(unittest.TestCase):
         self.assertAlmostEqual(sc.short_gain(10.0, 5.0), 0.5)
         self.assertAlmostEqual(sc.short_gain(10.0, 20.0), -1.0)
         self.assertLessEqual(sc.short_gain(10.0, 0.0001), 1.0)
+
+
+class FundingShort(GainerFade):
+    def test_funding_received_is_added(self):
+        d1 = [(self.T0 + k * 86400, 1.0, 1.0, 1.0, 1.0, 5e6) for k in range(40)]
+        funding = [(self.T0 + 25 * 86400 + 3600, 0.002),          # trigger on day 25
+                   (self.T0 + 26 * 86400 + 3600, 0.001),          # received during the h1 hold
+                   (self.T0 + 28 * 86400 + 3600, 0.0005)]         # inside h3 only
+        r = sc.funding_short_rows("X", d1, self.btc(), funding)
+        self.assertEqual(len(r), 1)
+        self.assertAlmostEqual(r[0]["ret"]["h1"]["net"], -sc.L11_FEES + 0.001, places=9)
+        self.assertAlmostEqual(r[0]["ret"]["h3"]["net"], -sc.L11_FEES + 0.0015, places=9)
+        self.assertEqual(sc.funding_short_rows("X", d1, self.btc(), [(self.T0 + 25 * 86400, 0.0005)]), [])
