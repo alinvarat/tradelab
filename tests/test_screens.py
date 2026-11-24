@@ -404,3 +404,22 @@ class LoserBounce(GainerFade):
         self.assertEqual(r[0]["ts"], self.T0 + 26 * 86400)
         self.assertAlmostEqual(r[0]["ret"]["h1"]["net"], 0.05 - sc.L9_FEES, places=9)
         self.assertEqual(sc.loser_bounce_rows("X", self.series(), self.btc()), [])   # a spike is not a crash
+
+
+class GapFade(unittest.TestCase):
+    def test_short_open_after_gap(self):
+        import datetime as dt
+        from core import screens as sc
+        t0 = dt.datetime(2024, 1, 2, 14, 30, tzinfo=dt.timezone.utc).timestamp()
+        bars = []
+        for k in range(30):
+            o = c = 5.0
+            if k == 25:
+                o, c = 7.0, 6.0          # gaps up 40%, fades to 6
+            bars.append({"t": t0 + k * 86400, "o": o, "c": c, "v": 1e6})
+        bench = {sc._et(b["t"]).date(): (100.0, 100.0) for b in bars}
+        rows = sc.gap_fade_rows("SMOL", bars, bench)
+        self.assertEqual(len(rows), 1)
+        self.assertAlmostEqual(rows[0]["ret"]["h0"]["net"], 7 / 6 - 1 - sc.L10_COST, places=9)
+        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], 7 / 5 - 1 - sc.L10_COST, places=9)
+        self.assertEqual(sc.gap_fade_rows("SMOL", bars[:25] + [dict(bars[25], o=6.0)] + bars[26:], bench), [])

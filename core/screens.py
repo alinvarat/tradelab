@@ -530,3 +530,37 @@ def loser_bounce_rows(symbol: str, d1: list, btc: dict) -> list:
                         "drop": round(c / o - 1, 4), "ret": ret})
         i += L8_COOLDOWN
     return out
+
+
+# ------------------------------------------------------------------ L10 fade large small-cap opening gaps
+L10_GAP, L10_COST = 0.30, 0.01
+L10_HOLDS = (0, 1, 5)                     # sessions after the gap day: 0 = cover at the same day's close
+
+
+def gap_fade_rows(symbol: str, bars: list, bench: dict, px=(1.0, 20.0), dollar_vol=(1e6, 50e6)) -> list:
+    """bars: daily [{'t','o','c','v'}] oldest first; bench: ET date -> (open, close) of IWM.
+    Session D opens >= 30% above the previous close; previous close $1-20 and 20-day average dollar volume $1-50M
+    (both known before D's open). Short at D's open to the close of D (+0), D+1 and D+5, IWM-adjusted, net of 1%.
+    One row per symbol per 5 sessions."""
+    days = [(_et(b["t"]).date(), b) for b in bars]
+    out, i = [], 21
+    while i < len(days):
+        d, b = days[i]
+        prev = days[i - 1][1]
+        adv = sum(x["c"] * x["v"] for _, x in days[i - 21:i - 1]) / 20
+        if not (prev["c"] > 0 and b["o"] / prev["c"] - 1 >= L10_GAP and px[0] <= prev["c"] <= px[1]
+                and dollar_vol[0] <= adv <= dollar_vol[1] and d in bench):
+            i += 1
+            continue
+        ret = {}
+        for h in L10_HOLDS:
+            j = i + h
+            if j < len(days) and days[j][0] in bench:
+                short = b["o"] / days[j][1]["c"] - 1
+                bshort = bench[d][0] / bench[days[j][0]][1] - 1
+                ret[f"h{h}"] = {"net": short - bshort - L10_COST}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{d}{symbol}", "ts": b["t"], "kind": "gap_fade",
+                        "gap": round(b["o"] / prev["c"] - 1, 4), "ret": ret})
+        i += 5
+    return out

@@ -1265,7 +1265,12 @@ def study_l3_smallcap_news(_symbols, sample=1500, workers=6):
     return summ, rows
 
 
-def study_l7_first_red_day(_symbols, max_symbols=1500, workers=6):
+def study_l10_gap_fade(_symbols, max_symbols=1500, workers=6):
+    """Pre-registered in RESULTS.md 'L10 screen': short small caps that open >= 30% above the previous close."""
+    return study_l7_first_red_day(_symbols, max_symbols, workers, kind="l10")
+
+
+def study_l7_first_red_day(_symbols, max_symbols=1500, workers=6, kind="l7"):
     """Pre-registered in RESULTS.md 'L7 screen': short the open after the first red close following a run-up."""
     from concurrent.futures import ThreadPoolExecutor
     from datetime import datetime, timezone
@@ -1281,7 +1286,8 @@ def study_l7_first_red_day(_symbols, max_symbols=1500, workers=6):
 
     def one(sym):
         try:
-            return sc.first_red_day_rows(sym, data.chart(sym, "10y", "1d")["bars"], bench)
+            fn = sc.gap_fade_rows if kind == "l10" else sc.first_red_day_rows
+            return fn(sym, data.chart(sym, "10y", "1d")["bars"], bench)
         except Exception:  # noqa: BLE001
             gaps["bars"] += 1
             return []
@@ -1291,8 +1297,9 @@ def study_l7_first_red_day(_symbols, max_symbols=1500, workers=6):
             rows += r
     for r in rows:
         r["split"] = sc.split_of(r["ts"], bounds)
-    hs = [f"h{h}" for h in sc.L7_HOLDS]
-    summ = {"listed": len(listed), "symbols_priced": len(syms), "rows": len(rows), "gaps": gaps,
+    hs = [f"h{h}" for h in (sc.L10_HOLDS if kind == "l10" else sc.L7_HOLDS)]
+    weeks = (T(2026, 11) - T(2019)) / (7 * 86400)
+    summ = {"line": kind, "per_week": round(sum(1 for r in rows if r["split"] != "out") / weeks, 2), "listed": len(listed), "symbols_priced": len(syms), "rows": len(rows), "gaps": gaps,
             "base": sc.judge(rows, hs, bounds, pick_trim=5),
             "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L7_COST, pick_trim=5)}
     return summ, rows
@@ -1470,7 +1477,7 @@ def study_probe_provider(_symbols):
     ids = sorted(m.get("id", "") for m in (d.get("data") or []))
     return {"models": len(ids), "deepseek": [i for i in ids if "deepseek" in i.lower()], "all": ids[:200]}, []
 
-STUDIES = {"l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+STUDIES = {"l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):

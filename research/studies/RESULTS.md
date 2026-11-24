@@ -194,6 +194,13 @@ Spec `ops/lines/L6_smallcap_insider.md`; code `core.screens.insider_rows`, study
 - Splits: train 2019-2022, validation 2023-2024, test 2025-2026-10. Trimmed pick on train, data gate, pass/kill as in L1c.
 - **Run 1 (2026-11-24, Actions 45416703411): killed.** Data gate ok: 3,857 rows, 3,857 unique, train 1,994 / validation 1,047 / test 816, no warnings. 31,399 qualifying purchases at 3,289 issuers; 1,500 issuers priced (seeded sample). Trimmed pick h5: train +0.3% (p 0.18), validation -0.4% (p 0.92), test +0.3%. h20: validation +1.0% (p 0.09), test +0.2%. Double cost: negative everywhere. No usable edge after costs.
 
+## L10 screen: short small caps that gap up >= 30% at the open (pre-registered 2026-11-25, before any L10 row was computed)
+Code `core.screens.gap_fade_rows`, study `l10_gap_fade` (same data path, universe sample, IWM control, splits and `judge` as L7). No LLM, no cost. Hypothesis (not proven): large opening gaps in small caps fade during the day and the following sessions. Differs from L3 (needs an 8-K) and L7 (multi-day run then a red close).
+- Event: session D opens >= 30% above the previous close; previous close $1-20 and 20-day average dollar volume $1-50M, both known before D's open. One row per symbol per 5 sessions.
+- Entry: short at D's open. Exits: close of D (h0), D+1 (h1), D+5 (h5). Returns: -(stock) minus IWM over the identical window, 1% round trip; double cost adds 1%.
+- Splits train 2019-2022, validation 2023-2024, test 2025 to 2026-10. Pass/kill exactly as L7, including >= 3 events a week.
+- Known limits: a fill at the official open is optimistic for a gapping small cap; many are hard to borrow; survivorship from today's ticker list.
+
 ## L9 screen: buy the day's biggest crypto losers (pre-registered 2026-11-25, before any L9 row or L8 result was seen)
 Code `core.screens.loser_bounce_rows`, study `l9_loser_bounce` (shares the L8 data path). No LLM, no cost. Hypothesis (not proven): one-day crashes of >= 20% in liquid altcoins partly rebound. Universe, data, volume screen (20-day average quote volume >= 2M USDT), one event per coin per 7 days, splits, `judge`, pass and kill rules are exactly those of L8.
 - Event: UTC day D with close/open - 1 <= -20%. Entry: buy spot at the open of D+1; exit at the close of D+1, D+3, D+7.
