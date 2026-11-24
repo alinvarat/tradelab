@@ -72,7 +72,7 @@ class SingleModel(unittest.TestCase):
                 return False
         fake = lambda served: (lambda req, timeout: R(json.dumps(
             {"model": served, "choices": [{"message": {"content": "x"}}]}).encode()))
-        with mock.patch.dict(os.environ, {"OPENROUTER_API_KEY": "k"}), mock.patch("core.ai_news.opencode_available", return_value=False):
+        with mock.patch.dict(os.environ, {"OPENROUTER_API_KEY": "k", "TRADELAB_OTHER_MODELS": "1"}), mock.patch("core.ai_news.opencode_available", return_value=False):
             _, same = ai_news.chat("s", "u", urlopen=fake("deepseek/deepseek-v4.1-flash-1017"), model=ai_news.DECISION_MODEL)
             _, other = ai_news.chat("s", "u", urlopen=fake("vendor/other"), model=ai_news.DECISION_MODEL)
         self.assertEqual(same, "deepseek/deepseek-v4.1-flash-1017")

@@ -1,7 +1,7 @@
 # Running TradeLab online long-term
 
 **Kuber CI secrets:** In the GitHub repository, add `KUBER_API_TOKEN` and
-`OPENROUTER_API_KEY` under **Settings → Secrets and variables → Actions**.
+`CLAUDE_CODE_OAUTH_TOKEN` (owner runs `claude setup-token`; Claude only since 2026-11-25) under **Settings → Secrets and variables → Actions**.
 Run **Test and deploy** on `main` (or push to `main`). The workflow writes the
 OpenRouter key to a private temporary file outside the checkout; `.kuberrc.ts`
 passes it to Kuber as the `app` service's `env_file`. Kuber injects it through
