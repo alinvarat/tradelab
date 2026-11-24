@@ -1,4 +1,5 @@
 import calendar
+import json
 import unittest
 
 from core import studies as st
@@ -332,6 +333,26 @@ class Verdict(unittest.TestCase):
 
     def test_empty_never_passes(self):
         self.assertFalse(st.verdict([])["passed"])
+
+
+class NewsV3(unittest.TestCase):
+    def r(self, d, e):
+        return json.dumps({"direction": d, "expected_abnormal_5d_pct": e, "reason": "x"})
+
+    def test_unanimous_and_large_enough(self):
+        v = st.vote_v3([self.r("short", -4), self.r("short", -3), self.r("short", -6)])
+        self.assertEqual((v["direction"], v["expected_median"]), ("short", -4.0))
+
+    def test_split_or_small_or_contradicting_is_skip(self):
+        self.assertEqual(st.vote_v3([self.r("long", 5), self.r("long", 4), self.r("short", -3)])["direction"], "skip")
+        self.assertEqual(st.vote_v3([self.r("long", 5), self.r("long", 4), self.r("short", -3)])["majority"], "long")
+        self.assertEqual(st.vote_v3([self.r("long", 1), self.r("long", 1.5), self.r("long", 1)])["direction"], "skip")
+        self.assertEqual(st.vote_v3([self.r("long", -3), self.r("long", -3), self.r("long", -3)])["direction"], "skip")
+
+    def test_message_has_abnormal_moves(self):
+        m = st.v3_message("AAA", "t", 4.0, -6.0, 1.0, -1.5, "", "text")
+        self.assertIn("abnormal 3.0%", m)
+        self.assertIn("abnormal -4.5%", m)
 
 
 if __name__ == "__main__":

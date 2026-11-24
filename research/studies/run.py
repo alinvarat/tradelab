@@ -777,6 +777,139 @@ def study_news_v2(_symbols, workers=6):
 
 
 
+def study_news_v3(_symbols, workers=6):
+    """protocol_news_v3.md: v3 reader (market-relative context, numbers over tone, unanimity + size rule) on held-out
+    2.02 filings accepted 2026-10-20..11-05 (never used by v2). All returns are SPY-adjusted."""
+    import calendar as _cal
+    import urllib.error
+    from concurrent.futures import ThreadPoolExecutor
+    from core import ai_news
+    v1 = json.load(open(_calls_path()))
+    cik_ticker = {}
+    for t, c in nb.sec_company_tickers().items():
+        cik_ticker.setdefault(c, t)
+    day = _cal.timegm(time.strptime(st.NEWS_V3_FIRST_DAY, "%Y-%m-%d"))
+    end = _cal.timegm(time.strptime(st.NEWS_V3_LAST_DAY, "%Y-%m-%d")) + 86400
+    idx_rows = []
+    while day < end:
+        g = time.gmtime(day)
+        if g.tm_wday < 5:
+            url = (f"https://www.sec.gov/Archives/edgar/daily-index/{g.tm_year}/QTR{(g.tm_mon - 1) // 3 + 1}/"
+                   f"form.{time.strftime('%Y%m%d', g)}.idx")
+            try:
+                idx_rows += st.parse_form_idx(_sec_text(url))
+            except urllib.error.HTTPError as e:
+                log(f"  index {url}: {e}")
+        day += 86400
+    events, prior = [], {}
+    for cik in sorted({r["cik"] for r in idx_rows if r["cik"] in cik_ticker}):
+        try:
+            fs = nb.sec_filings(cik, forms=("8-K",), since="2026-04-01")
+        except Exception as e:
+            log(f"  submissions {cik}: {e}")
+            continue
+        e202 = sorted([f for f in fs if "2.02" in f["items"]], key=lambda f: f["ts"])
+        for k, f in enumerate(e202):
+            if st.NEWS_V3_FIRST_DAY <= f["date"] <= st.NEWS_V3_LAST_DAY:
+                prev = [p for p in e202[:k] if f["ts"] - p["ts"] <= 200 * 86400]
+                events.append({**f, "cik": cik, "symbol": cik_ticker[cik], "prev": prev[-1] if prev else None})
+    log(f"held-out 2.02 filings: {len(events)}")
+    bars, kept = {}, []
+    for ev in events:
+        s = ev["symbol"]
+        if s not in bars:
+            try:
+                bars[s] = data.chart(s, "6mo", "1d")["bars"]
+            except Exception:
+                bars[s] = []
+        feat = st.reaction_features(bars[s], ev["ts"])
+        if not feat:
+            continue
+        cost = st.liquidity_cost(bars[s], feat["entry_index"])
+        if cost is None:
+            continue
+        kept.append({**ev, **feat, "cost_side": cost})
+    log(f"tradeable: {len(kept)}")
+    spy = data.chart("SPY", "6mo", "1d")["bars"]
+    for ev in kept:
+        sf = st.reaction_features(spy, ev["ts"])
+        ev["spy_gap_pct"], ev["spy_runup_pct"] = (sf["gap_pct"], sf["runup_5d_pct"]) if sf else (None, None)
+
+    def doc(cik, f, limit):
+        base = f"https://www.sec.gov/Archives/edgar/data/{cik}/{f['accession'].replace('-', '')}/"
+        names = [x["name"] for x in json.loads(_sec_text(base + "index.json"))["directory"]["item"]]
+        return st.html_text(_sec_text(base + st.pick_exhibit(names, f["doc"])), limit)
+
+    for ev in kept:
+        try:
+            ev["text"] = doc(ev["cik"], ev, 12000)
+            ev["prev_text"] = doc(ev["cik"], ev["prev"], 6000) if ev["prev"] else ""
+        except Exception as e:
+            ev["text"] = None
+            log(f"  document {ev['symbol']}: {e}")
+    kept = [ev for ev in kept if ev.get("text")]
+    spent0 = ai_news.spend()["total_usd"]
+
+    def ask(ev):
+        user = st.v3_message(ev["symbol"], ev["accepted"], ev["runup_5d_pct"], ev["gap_pct"], ev["spy_runup_pct"],
+                             ev["spy_gap_pct"], ev["prev_text"], ev["text"])
+        replies = [ai_news.chat(st.NEWS_V3_SYSTEM, user, timeout=180, temperature=0.7)[0]
+                   for _ in range(st.NEWS_V3_SAMPLES)]
+        return ev, st.vote_v3(replies)
+
+    with ThreadPoolExecutor(workers) as ex:
+        voted = list(ex.map(ask, kept))
+    cost_usd = ai_news.spend()["total_usd"] - spent0
+    rows = []
+    for ev, v in voted:
+        old = v1.get(ev["accession"], {})
+        for h in nb.HORIZONS:
+            r = nb.event_return(bars[ev["symbol"]], ev["ts"], h)
+            m = nb.event_return(spy, ev["ts"], h)
+            if not r or not m or m["entry_t"] != r["entry_t"]:
+                continue
+            r = {**r, "gross": r["gross"] - m["gross"]}          # SPY-adjusted
+            base = {"symbol": ev["symbol"], "ts": ev["ts"], "entry_t": r["entry_t"], "horizon": h, "gross": r["gross"],
+                    "accession": ev["accession"], "cost_side": ev["cost_side"], "gap_pct": ev["gap_pct"],
+                    "rand_sign": random.Random(f"dir:{ev['symbol']}:{ev['ts']}").choice((1, -1))}
+            rows.append({**base, "reader": "v3", "direction": v["direction"], "confidence": v["confidence"],
+                         "votes": v["votes"], "expected_median": v["expected_median"]})
+            rows.append({**base, "reader": "v3_majority", "direction": v["majority"], "confidence": 0})
+            if old.get("direction"):
+                rows.append({**base, "reader": "v1", "direction": old["direction"], "confidence": old.get("confidence", 0)})
+    v2r = [r for r in rows if r["reader"] == "v3"]
+    v1r = [r for r in rows if r["reader"] == "v1"]
+    # paired per filing (skip = 0) on filings both readers saw
+    pair = []
+    by1 = {(r["accession"], r["horizon"]): r for r in v1r}
+    for r in v2r:
+        o = by1.get((r["accession"], r["horizon"]))
+        if not o:
+            continue
+        a = st.signed_net(r["gross"], st.sign_of(r["direction"]), 1.0, r["cost_side"])
+        b = st.signed_net(o["gross"], st.sign_of(o["direction"]), 1.0, o["cost_side"])
+        pair.append({"symbol": r["symbol"], "ts": r["ts"], "horizon": r["horizon"], "diff": a - b})
+    rng = random.Random(20261124)
+    paired = {}
+    for h in nb.HORIZONS:
+        x = [p for p in pair if p["horizon"] == h]
+        if x:
+            paired[f"H{h}"] = {"n": len(x), "mean_diff": sum(p["diff"] for p in x) / len(x),
+                               "p_block": nb.block_bootstrap_p([p["diff"] for p in x], [nb.cluster_key(p) for p in x], rng)}
+    h5 = st.llm_summary(v2r, 5)
+    edge = (h5.get("n", 0) >= 60 and h5.get("mean_net", 0) > 0 and h5.get("p_net_block", 1) < 0.05
+            and h5.get("hit", 0) >= 0.55 and h5.get("mean_net_2x", 0) > 0)
+    better = paired.get("H5", {}).get("mean_diff", 0) > 0 and paired.get("H5", {}).get("p_block", 1) < 0.05
+    maj = [r for r in rows if r["reader"] == "v3_majority"]
+    summ = {"verdict": "v3 edge" if edge else "v3 no edge shown", "v3_better_than_v1": better, "filings": len(kept),
+            "llm_cost_usd": round(cost_usd, 4), "returns": "SPY-adjusted", "paired_v3_minus_v1": paired,
+            **{f"v3_H{h}": st.llm_summary(v2r, h) for h in nb.HORIZONS},
+            **{f"v3_majority_H{h}": st.llm_summary(maj, h) for h in nb.HORIZONS},
+            **{f"v1_H{h}": st.llm_summary(v1r, h) for h in nb.HORIZONS}}
+    return summ, rows
+
+
+
 # ------------------------------------------------------------------ L1 listings screen (ops/lines/L1_listings.md)
 def _get_json(url, tries=4, timeout=20):
     from urllib.request import Request, urlopen
@@ -1183,7 +1316,7 @@ def study_l6_smallcap_insider(_symbols, max_symbols=1500, workers=6):
             "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L6_COST, pick_trim=5)}
     return summ, rows
 
-STUDIES = {"l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+STUDIES = {"news_v3": study_news_v3, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):
