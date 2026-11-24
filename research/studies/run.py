@@ -3,6 +3,13 @@
 
     python research/studies/run.py tom|momentum|items|form4 [--out FILE] [--symbols A,B]
 
+Sharded studies (.github/workflows/research_sharded.yml, research/studies/sharding.py): a study x that defines
+rows_x(symbols_slice) and summarize_x(all_rows) (and optionally symbols_x()) runs as
+
+    python research/studies/run.py x --plan --shards N --out out/universe.json      (stdout: shard index list)
+    python research/studies/run.py x --shard i --shards N [--universe out/universe.json] --out out/x_i.json
+    python research/studies/run.py x --merge out/ --out out/x.json                  (stdout: summary)
+
 stdout: the summary JSON only. stderr: progress and a short human summary. The output file holds summary + rows.
 """
 import argparse
@@ -1395,22 +1402,11 @@ def study_l11_funding_short(_symbols, workers=8, sample=150):
     return summ, rows
 
 
-def _binance_all_usdt_symbols():
-    """Every spot USDT symbol that ever had monthly klines on data.binance.vision (delisted ones included)."""
-    out, marker = [], ""
-    base = "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?delimiter=/&prefix=data/spot/monthly/klines/"
-    from urllib.request import Request, urlopen
-    for _ in range(200):
-        url = base + (f"&marker={marker}" if marker else "")
-        with urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0 tradelab-research"}), timeout=60) as r:
-            xml = r.read().decode()
-        prefixes = re.findall(r"<Prefix>data/spot/monthly/klines/([A-Z0-9]+)/</Prefix>", xml)
-        out += [p for p in prefixes if p.endswith("USDT")]
-        nxt = re.search(r"<NextMarker>([^<]+)</NextMarker>", xml)
-        if "<IsTruncated>true" not in xml or not nxt:
-            break
-        marker = nxt.group(1)
-    return sorted(set(out))
+def _binance_all_usdt_symbols(market="spot"):
+    """Every USDT symbol that ever had monthly klines on data.binance.vision (delisted ones included).
+    market "futures/um" lists every USDT perp ever listed. Retries each listing page (research/studies/binance_vision.py)."""
+    from research.studies import binance_vision as bv
+    return bv.list_symbols(market, "USDT")
 
 
 def _binance_daily_bulk(sym, start_s, end_s, interval="1d"):
@@ -1763,6 +1759,93 @@ def study_probe_provider(_symbols):
 STUDIES = {"probe_claude": study_probe_claude, "factory_crypto_1": study_factory_crypto_1, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4, "l12b_perp_fade": study_l12b_perp_fade, "l12_hour_shocks": study_l12_hour_shocks}
 
 
+
+# ---- sharded studies: rows_<study>(symbols_slice) and summarize_<study>(all_rows), looked up by name below ----
+
+def symbols_selftest_shard():
+    """No-network reference study for research_sharded.yml: 103 synthetic symbols."""
+    return [f"S{k:03d}USDT" for k in range(103)]
+
+
+def rows_selftest_shard(symbols_slice):
+    import hashlib
+    rows = [{"symbol": s, "value": int(hashlib.sha256(s.encode()).hexdigest()[:6], 16) % 1000} for s in symbols_slice]
+    return {"rows": rows, "gaps": {"empty": 0}}
+
+
+def summarize_selftest_shard(all_rows):
+    return {"line": "selftest_shard", "rows": len(all_rows), "symbols": len({r["symbol"] for r in all_rows}),
+            "value_sum": sum(r["value"] for r in all_rows)}
+
+
+def sharded_study(name):
+    """(rows_fn, summarize_fn, symbols_fn) for a study that supports sharding, else None."""
+    g = globals()
+    rows_fn, summ_fn = g.get(f"rows_{name}"), g.get(f"summarize_{name}")
+    if not (callable(rows_fn) and callable(summ_fn)):
+        return None
+    return rows_fn, summ_fn, g.get(f"symbols_{name}") or _binance_all_usdt_symbols
+
+
+def sharded_names():
+    return sorted(k[5:] for k in list(globals()) if k.startswith("rows_") and sharded_study(k[5:]))
+
+
+def sharded_main(a):
+    """--plan / --shard / --merge modes. Exit code 2 on any problem, so the workflow job fails visibly."""
+    from research.studies import sharding as sh
+    fns = sharded_study(a.study)
+    if fns is None:
+        log(f"{a.study} does not support sharding (needs rows_{a.study} and summarize_{a.study} in run.py)")
+        sys.exit(2)
+    rows_fn, summ_fn, symbols_fn = fns
+    if a.merge:
+        try:
+            rows, info = sh.merge_dir(a.merge, a.study)
+        except sh.MergeError as e:
+            log(f"merge failed: {e}")
+            sys.exit(2)
+        t0 = time.time()
+        summ = summ_fn(rows)
+        summ.update(study=a.study, merge_seconds=round(time.time() - t0, 1),
+                    run_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), **info)
+        with open(a.out or f"{a.study}.json", "w") as f:
+            json.dump({"summary": summ, "rows": rows}, f, ensure_ascii=False, default=str)
+        print(json.dumps(summ, ensure_ascii=False, indent=1, default=str))
+        log("\n".join(brief(summ)))
+        log(f"rows: {len(rows)} from {info['shards']} shards -> {a.out}")
+        return
+    if not 1 <= a.shards <= 256:
+        log("--shards must be 1..256 (GitHub matrix limit)")
+        sys.exit(2)
+    if a.universe:
+        with open(a.universe) as f:
+            u = json.load(f)
+        if u.get("study") != a.study or sh.universe_hash(u["symbols"]) != u.get("universe_hash"):
+            log("universe file does not match this study or is corrupt")
+            sys.exit(2)
+        universe_syms = u["symbols"]
+    else:
+        universe_syms = symbols_fn()
+    universe_syms = sorted(set(universe_syms))
+    if a.plan:
+        if not universe_syms:
+            log("empty universe")
+            sys.exit(2)
+        with open(a.out or f"{a.study}_universe.json", "w") as f:
+            json.dump({"study": a.study, "symbols": universe_syms, "universe_hash": sh.universe_hash(universe_syms)}, f)
+        print(json.dumps(list(range(a.shards))))        # a shard may get an empty slice; rows_x must accept []
+        log(f"{a.study}: {len(universe_syms)} symbols over {a.shards} shards")
+        return
+    t0 = time.time()
+    part_slice = sh.split(universe_syms, a.shard, a.shards)
+    log(f"{a.study} shard {a.shard}/{a.shards}: {len(part_slice)} of {len(universe_syms)} symbols")
+    part = sh.make_part(a.study, a.shard, a.shards, universe_syms, rows_fn(part_slice), time.time() - t0)
+    with open(a.out or f"{a.study}_{a.shard}.json", "w") as f:
+        json.dump(part, f, ensure_ascii=False, default=str)
+    print(json.dumps({k: part[k] for k in ("study", "shard", "shards", "n_universe", "gaps", "seconds")}
+                     | {"n_symbols": len(part["symbols"]), "n_rows": len(part["rows"])}, default=str))
+
 def brief(summ, prefix=""):
     lines = []
     for k, v in summ.items():
@@ -1779,11 +1862,20 @@ def brief(summ, prefix=""):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("study", choices=sorted(STUDIES))
+    ap.add_argument("study", choices=sorted(set(STUDIES) | set(sharded_names())))
     ap.add_argument("--symbols", default="", help="comma separated; empty = every universe stock")
     ap.add_argument("--out", default="")
     ap.add_argument("--previous-forward-results", default="")
+    ap.add_argument("--shard", type=int, default=None, help="0-based shard index (sharded studies)")
+    ap.add_argument("--shards", type=int, default=1)
+    ap.add_argument("--universe", default="", help="universe file written by --plan")
+    ap.add_argument("--plan", action="store_true", help="write the universe to --out, print the shard list")
+    ap.add_argument("--merge", default="", help="directory holding <study>_<i>.json parts")
     a = ap.parse_args()
+    if a.plan or a.merge or a.shard is not None:
+        if sum((a.plan, bool(a.merge), a.shard is not None)) != 1:
+            ap.error("use exactly one of --plan, --shard, --merge")
+        return sharded_main(a)
     symbols = [s.strip().upper() for s in a.symbols.split(",") if s.strip()] or list(universe.STOCKS)
     previous = {}
     if a.study == "llm_earnings_forward" and a.previous_forward_results and os.path.getsize(a.previous_forward_results):

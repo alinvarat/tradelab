@@ -1,0 +1,143 @@
+name: Research studies (sharded)
+
+# One study fanned out over many parallel jobs (research/studies/sharding.py). The study must define
+# rows_<study>(symbols_slice) and summarize_<study>(all_rows) in research/studies/run.py; selftest_shard is a
+# no-network reference. Parts are artifacts part-<study>-<i>; the merged result is artifact study-<study>.
+on:
+  workflow_dispatch:
+    inputs:
+      study:
+        description: "a study with rows_<study> and summarize_<study> in run.py (selftest_shard checks the runner)"
+        required: true
+      shards:
+        description: "number of parallel jobs (1-256)"
+        default: "20"
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    name: plan ${{ inputs.study }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build the universe once and the shard list
+        id: plan
+        env:
+          STUDY: ${{ inputs.study }}
+          SHARDS: ${{ inputs.shards }}
+        run: |
+          [[ "$STUDY" =~ ^[a-z0-9_]+$ ]] || { echo "bad study name"; exit 2; }
+          [[ "$SHARDS" =~ ^[0-9]+$ ]] || { echo "bad shard count"; exit 2; }
+          mkdir -p out
+          python research/studies/run.py "$STUDY" --plan --shards "$SHARDS" --out out/universe.json > out/matrix.json
+          echo "matrix=$(cat out/matrix.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload universe
+        uses: actions/upload-artifact@v4
+        with:
+          name: universe-${{ inputs.study }}
+          path: out/universe.json
+
+  shard:
+    name: ${{ inputs.study }} shard ${{ matrix.shard }}
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Claude Code (LLM calls use the owner's Claude Max plan)
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Download universe
+        uses: actions/download-artifact@v4
+        with:
+          name: universe-${{ inputs.study }}
+          path: universe
+
+      - name: Run shard
+        env:
+          STUDY: ${{ inputs.study }}
+          SHARDS: ${{ inputs.shards }}
+          SHARD: ${{ matrix.shard }}
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}   # owner 2026-11-25: Claude only
+        run: |
+          mkdir -p out
+          python research/studies/run.py "$STUDY" --shard "$SHARD" --shards "$SHARDS" --universe universe/universe.json \
+            --out "out/${STUDY}_${SHARD}.json"
+
+      - name: Upload part
+        uses: actions/upload-artifact@v4
+        with:
+          name: part-${{ inputs.study }}-${{ matrix.shard }}
+          path: out/${{ inputs.study }}_${{ matrix.shard }}.json
+
+  merge:
+    name: merge ${{ inputs.study }}
+    needs: [plan, shard]
+    # Runs even when a shard failed, so the log names the missing shards; the merge then exits non-zero.
+    if: ${{ !cancelled() && needs.plan.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Claude Code (LLM calls use the owner's Claude Max plan)
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Download parts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: part-${{ inputs.study }}-*
+          merge-multiple: true
+          path: out
+
+      - name: Merge
+        env:
+          STUDY: ${{ inputs.study }}
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}   # owner 2026-11-25: Claude only
+        run: |
+          mkdir -p out
+          python research/studies/run.py "$STUDY" --merge out/ --out "out/${STUDY}.json" > "out/${STUDY}_summary.json"
+
+      - name: Upload merged result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: study-${{ inputs.study }}
+          path: out/
+          if-no-files-found: warn
