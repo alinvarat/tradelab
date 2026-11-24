@@ -200,4 +200,5 @@ Spec `ops/lines/L2_unlocks.md`; data source found for #88: `https://defillama-da
 - Price: daily closes, Binance spot (`data-api.binance.vision`) else KuCoin, BTC on the same venue. Windows: short from day -14 to +7 (the spec), -7 to 0, and 0 to +7 relative to the unlock day.
 - Return: -(coin - BTC) minus 0.2% fees and assumed funding 0.09% a day (0.03% per 8 h paid by the short; real funding is not fetched). Double cost adds the same again.
 - Splits 2024 / 2025 / 2026, trimmed pick, data gate and pass/kill as in L1c.
-- Result: pending.
+- **Run 1 (2026-11-24, Actions 45418370541): inconclusive (not a pass).** Data gate ok: 1,172 rows, 1,172 unique, train 272 / validation 451 / test 449, no warnings. 372 tokens, 1,532 cliff unlocks >= 1% of supply, 1,172 priced (Binance 835, KuCoin 337), about 34 a month. Trimmed pick post0_7: train +1.9% (p 0.043), validation +2.5% (p 0.0005), test -1.5% (p 0.91), so the test sign fails. Double cost kills it (validation +0.4%, test -3.6%).
+- Observation (post hoc): pre7_0 (short the 7 days before the unlock) is positive in every split, train +0.4%, validation +2.7% (p 0.0015), test +1.5% (p 0.011), but it was not the pick and turns negative at double cost. A forward test would need a new dated protocol; the edge is small relative to costs and funding is assumed, not measured.
