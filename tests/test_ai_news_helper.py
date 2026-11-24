@@ -4,6 +4,23 @@ from core import ai_news
 
 
 class Helper(unittest.TestCase):
+    def setUp(self):
+        from unittest import mock
+        p = mock.patch.object(ai_news, "custom_available", return_value=False)   # the free-model path
+        p.start()
+        self.addCleanup(p.stop)
+
+    def test_custom_provider_serves_helpers_directly(self):
+        from unittest import mock
+        calls = []
+
+        def fake(system, user, timeout=180, model=None, cache_layout=False):
+            calls.append(model)
+            return "ok", "custom/m"
+        with mock.patch.object(ai_news, "custom_available", return_value=True):
+            self.assertEqual(ai_news.chat_helper("s", "u", chat_fn=fake), ("ok", "custom/m"))
+        self.assertEqual(calls, [ai_news.DECISION_MODEL])
+
     def test_free_models_first_then_deepseek(self):
         calls = []
 
