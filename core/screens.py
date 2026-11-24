@@ -655,3 +655,50 @@ def hourly_shock_rows(symbol: str, h1: list, btc: dict, side: int) -> list:
         i += L12_COOLDOWN_H
         qv_sum = sum(x[5] for x in h1[i - 720:i])   # window of the 720 hours before i (events are rare: cheap)
     return out
+
+
+# ------------------------------------------------------------------ L12b: L12 restricted to coins with a live perp
+L12B_STOP = 0.30                           # reported variant: buy back if the price trades 30% above the entry
+
+
+def perp_shock_rows(symbol: str, h1: list, btc: dict, funding: list) -> list:
+    """L12 events (side -1, same thresholds, volume screen and cooldown) kept only when the coin's USDT perp settled
+    a funding rate in the 24 hours before entry (a short was actually possible). Net adds the funding really settled
+    between entry and exit (positive rate = longs pay shorts) instead of an assumed cost. Each hold also reports
+    `net_stop`: the same trade with a buy-back stop at +L12B_STOP from the entry, filled at the stop price or at the
+    first hour's open beyond it (gap), whichever is worse."""
+    fts = sorted(funding)
+    times = [t for t, _ in fts]
+    import bisect
+    out = []
+    idx = {x[0]: n for n, x in enumerate(h1)}
+    for r in hourly_shock_rows(symbol, h1, btc, -1):
+        e_ts = r["ts"]
+        k0 = bisect.bisect_left(times, e_ts - 86400)
+        if k0 >= len(times) or times[k0] >= e_ts:
+            continue
+        ei = idx.get(e_ts)
+        if ei is None:
+            continue
+        entry = h1[ei][1]
+        stop_px = entry * (1 + L12B_STOP)
+        ret = {}
+        for k in L12_HOLDS:
+            j = ei + k - 1
+            if j >= len(h1) or h1[j][0] - e_ts != (k - 1) * 3600 or h1[j][0] not in btc:
+                continue
+            end = h1[j][0] + 3600
+            a, b = bisect.bisect_left(times, e_ts), bisect.bisect_left(times, end)
+            paid = sum(rate for _, rate in fts[a:b])
+            bshort = short_gain(btc[e_ts][0], btc[h1[j][0]][1])
+            net = short_gain(entry, h1[j][4]) - bshort - L12_FEES + paid
+            exit_px = h1[j][4]
+            for m in range(ei, j + 1):                     # first hour that reaches the stop
+                if h1[m][2] >= stop_px:
+                    exit_px = max(stop_px, h1[m][1])       # gapped open above the stop fills at the open
+                    break
+            net_stop = short_gain(entry, exit_px) - bshort - L12_FEES + paid
+            ret[f"h{k}"] = {"net": net, "net_stop": net_stop, "funding": paid}
+        if ret:
+            out.append({**r, "kind": "perp_spike_fade", "ret": ret})
+    return out

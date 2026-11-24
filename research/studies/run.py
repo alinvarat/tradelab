@@ -1486,6 +1486,56 @@ def study_l8b_gainer_fade_all(_symbols, workers=8):
     return summ, rows
 
 
+def study_l12b_perp_fade(_symbols, workers=16):
+    """Pre-registered in RESULTS.md 'L12b screen': L12 on coins with a live USDT perp, real funding, stop variant."""
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime, timezone
+    from core import screens as sc
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2022), T(2023)), "validation": (T(2023), T(2025)), "test": (T(2025), T(2026, 11))}
+    start, end = T(2021, 12, 1), T(2026, 11)
+    syms = [x for x in _binance_all_usdt_symbols()
+            if x[:-4] not in L8_SKIP and not re.search(r"(UP|DOWN|BULL|BEAR)$", x[:-4])]
+    btc = {b[0]: (b[1], b[4]) for b in _binance_daily_bulk("BTCUSDT", start, end, "1h")}
+    gaps = {"empty": 0, "no_perp": 0, "funding_months_failed": 0}
+
+    def one(sym):
+        if sym == "BTCUSDT":
+            return []
+        h1 = _binance_daily_bulk(sym, start, end, "1h")
+        if len(h1) < 800:
+            gaps["empty"] += 1
+            return []
+        funding, y, m = [], time.gmtime(h1[0][0]).tm_year, time.gmtime(h1[0][0]).tm_mon
+        while (y, m) <= (2026, 10):
+            got = _binance_funding_month(sym, y, m)
+            if got is None:
+                gaps["funding_months_failed"] += 1
+            else:
+                funding += got
+            y, m = (y, m + 1) if m < 12 else (y + 1, 1)
+        if not funding:
+            gaps["no_perp"] += 1
+            return []
+        return sc.perp_shock_rows(sym, h1, btc, funding)
+    rows = []
+    with ThreadPoolExecutor(workers) as ex:
+        for r in ex.map(one, syms):
+            rows += r
+    for r in rows:
+        r["split"] = sc.split_of(r["ts"], bounds)
+    stop_rows = [{**r, "ret": {h: {"net": v["net_stop"]} for h, v in r["ret"].items()}} for r in rows]
+    weeks = (T(2026, 11) - T(2022)) / (7 * 86400)
+    hs = [f"h{k}" for k in sc.L12_HOLDS]
+    summ = {"symbols_ever": len(syms), "rows": len(rows), "gaps": gaps,
+            "per_week": round(sum(1 for r in rows if r["split"] != "out") / weeks, 2),
+            "base": sc.judge(rows, hs, bounds, pick_trim=5),
+            "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L12_FEES, pick_trim=5),
+            "stop30_base": sc.judge(stop_rows, hs, bounds, pick_trim=5),
+            "stop30_double_cost": sc.judge(stop_rows, hs, bounds, cost_extra=sc.L12_FEES, pick_trim=5)}
+    return summ, rows
+
+
 def study_l12_hour_shocks(_symbols, workers=16):
     """Pre-registered in RESULTS.md 'L12/L13 screen': fade (L12) or buy (L13) one-hour crypto shocks."""
     from concurrent.futures import ThreadPoolExecutor
@@ -1678,7 +1728,7 @@ def study_probe_provider(_symbols):
     ids = sorted(m.get("id", "") for m in (d.get("data") or []))
     return {"models": len(ids), "deepseek": [i for i in ids if "deepseek" in i.lower()], "all": ids[:200]}, []
 
-STUDIES = {"l12_hour_shocks": study_l12_hour_shocks, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+STUDIES = {"l12b_perp_fade": study_l12b_perp_fade, "l12_hour_shocks": study_l12_hour_shocks, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):
