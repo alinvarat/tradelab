@@ -122,3 +122,6 @@ Each candidate with a headline now carries `similar_past`: the 8 most similar ar
 
 ## Addendum 2026-11-24: v4.10, desk playbook per news type
 Each candidate with a headline carries `playbook`: two or three sentences of general priors for its news type (earnings, m&a, fda/clinical, analyst, legal/regulatory, macro, contract/product; `PLAYBOOK` in `core/llm_trader.py`). They are general market knowledge, not this desk's results, and the news analyst is told that similar_past and desk_stats override them.
+
+## Addendum 2026-11-24: v4.11, two live mislabels fixed
+Seen in a v4.9 cycle: "Zscaler receives multiple target hikes ahead of proposed acquisition by CrowdStrike" was (a) typed "other" because the m&a pattern matched "acquir" but not "acquisition", and (b) linked to Target (TGT) through the word "target". The news types now match acquisition/acquire forms and target-hike wording; company names that are ordinary words (Target, Visa, Oracle, Apple, Amazon; `core/entities.py` COMMON_WORD_NAMES) link only when capitalised and not in ordinary-word contexts (price target, target hikes, visa rules, ...). Linking is shared with the news archive, so new labels are linked the same way from now on.

@@ -315,6 +315,9 @@ class Trading(Base):
         self.assertEqual(lt.news_type("Analyst upgrades Acme to overweight"), "analyst")
         self.assertEqual(lt.news_type("FDA approves Acme drug"), "fda/clinical")
         self.assertEqual(lt.news_type("Something unusual happened"), "other")
+        self.assertEqual(lt.news_type("Zscaler receives multiple target hikes ahead of proposed acquisition by CrowdStrike"), "m&a")
+        self.assertEqual(lt.news_type("Wedbush raises its price target on Acme"), "analyst")
+        self.assertEqual(lt.news_type("Acme gets target hikes after investor day"), "analyst")
 
     def test_headline_shows_move_since_the_desk_first_saw_it(self):
         heads = [{"title": "Acme beats Q3 EPS", "source": "X", "lexicon": 0.5, "ai_scores": {}, "seen": "", "key": "k1"}]
