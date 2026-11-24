@@ -129,3 +129,12 @@ There were 3,475 2.02 filings from 2026-10-20 to 2026-11-22. 2,097 passed the li
 
 - Paired per filing, v2 − v1 at H5 = **+1.56% (block p 0.008)**, H3 +0.77% (p 0.075). v2 reads clearly better than v1: on the same filings it avoided most of v1's losses.
 - **Locked verdict: "v2 not better"**, because v2's own H5 net is not significant (p 0.32) and its hit rate is 52% < 55%. Better than v1 is not yet profitable enough to use on its own.
+
+## L1 screen: new listings (pre-registered 2026-11-24, before any data was pulled)
+Spec: `ops/lines/L1_listings.md`; code: `core/screens.py` (`listing_returns`, `judge`), study `l1_listings`.
+- Events: Binance "Will List ..." notices (catalog 48) and Upbit KRW-market "디지털 자산 추가" notices, 2024-01-01 to 2026-10-31. A coin counts only if it already traded on the pricing venue in the hour before the notice (Binance notices priced on Coinbase USD, Upbit notices on Binance spot USDT).
+- Entry: close of the 1-minute bar containing notice + 60 s. Horizons 15m, 1h, 4h (1-minute bars), 1d, 7d (1-hour bars).
+- Return: coin minus BTC over the same window (control), minus 0.6% round trip; double cost reported too.
+- Splits: 2024 train, 2025 validation, 2026-01 to 2026-10 test. Horizon = best train mean. Block bootstrap by UTC day.
+- Pass: validation mean > 0 with p < 0.05, still > 0 without the best 1 and best 5 events, test mean > 0. Kill: validation mean <= 0, p > 0.2, or <= 0 without the best 1 or 5 events. Otherwise inconclusive.
+- Result: pending.
