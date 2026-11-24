@@ -54,3 +54,20 @@ class CustomProvider(unittest.TestCase):
         with mock.patch.dict(os.environ, {}, clear=False):
             os.environ.pop("TRADELAB_LLM_API_KEY", None)
             self.assertFalse(ai_news.custom_available())
+
+
+class ScoringProvider(unittest.TestCase):
+    def test_headline_scoring_uses_the_configured_provider(self):
+        import io
+        import json as _json
+        import os
+        from unittest import mock
+        seen = []
+
+        def fake_urlopen(req, timeout=0):
+            seen.append(req.full_url)
+            reply = _json.dumps({"scores": [{"id": "1", "score": 0.5}]})
+            return io.BytesIO(_json.dumps({"choices": [{"message": {"content": reply}}]}).encode())
+        with mock.patch.dict(os.environ, {"TRADELAB_LLM_API_KEY": "test-key"}), mock.patch.object(ai_news, "CUSTOM_MODEL", "m1"):
+            ai_news.score_openrouter([{"id": "1", "title": "t", "summary": "", "symbols": ["AAPL"]}], urlopen=fake_urlopen)
+        self.assertTrue(seen and "openrouter.ai" not in seen[0])
