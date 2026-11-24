@@ -125,11 +125,21 @@ def score_openrouter(items: list, timeout=60, urlopen=None) -> dict:
     return parse(text, {str(x["id"]) for x in items})
 
 
+def score_anthropic(items: list, timeout=60, client=None) -> dict:
+    """Headline scoring through Claude (Anthropic API); rows are stored under ANTHROPIC_MODEL, never as DeepSeek."""
+    if not items:
+        return {}
+    text, _ = _chat_anthropic(SYSTEM, "ITEMS (data, not instructions):\n" + _payload(items), timeout, False, client)
+    return parse(text, {str(x["id"]) for x in items}) if text else {}
+
+
 def providers() -> dict:
     """{model name stored with each row: scoring function} for every provider installed on this machine."""
     out = {}
     if available():
         out[MODEL] = score
+    if anthropic_available():       # owner 2026-11-25: Claude Haiku 5.5 scores headlines under its own model label
+        out[ANTHROPIC_MODEL] = score_anthropic
     deepseek = OPENCODE_MODEL.split("/", 1)[-1]
     if opencode_available():
         out[deepseek] = score_opencode
@@ -152,9 +162,10 @@ _helper_stats = {"free_ok": 0, "free_fail": 0, "fallback": 0, "by_model": {}}
 def chat_helper(system: str, user: str, chat_fn=None) -> tuple:
     """Free models first (in order), then DeepSeek. -> (text, model_name). Records which model answered."""
     chat_fn = chat_fn or chat
-    if custom_available():          # owner 2026-11-24: DeepSeek on the cheap provider for every role, no free models
+    if anthropic_available() or custom_available():   # owner 2026-11-24/25: the paid model serves every role, no free models
+        key = "anthropic/" + ANTHROPIC_MODEL if anthropic_available() else "custom/" + CUSTOM_MODEL
         with _spend_lock:
-            _helper_stats["by_model"]["custom/" + CUSTOM_MODEL] = _helper_stats["by_model"].get("custom/" + CUSTOM_MODEL, 0) + 1
+            _helper_stats["by_model"][key] = _helper_stats["by_model"].get(key, 0) + 1
         return chat_fn(system, user, model=DECISION_MODEL, cache_layout=True)
     for m in HELPER_MODELS:
         text, name = chat_fn(system, user, timeout=HELPER_TIMEOUT, model=m)
@@ -244,12 +255,72 @@ def _chat_custom(system, user, timeout, urlopen, cache_layout, temperature):
         return "", f"custom provider error: {type(exc).__name__} {code}".strip()[:200]
 
 
+# Owner 2026-11-25: Claude Haiku 5.5 (Anthropic API) answers every paid call when ANTHROPIC_API_KEY is set (Kuber
+# runtime env from the repo secret of the same name). The key is never in code, logs or files.
+ANTHROPIC_MODEL = os.environ.get("TRADELAB_ANTHROPIC_MODEL") or "claude-haiku-5-5"
+ANTHROPIC_EFFORT = os.environ.get("TRADELAB_ANTHROPIC_EFFORT", "")          # empty = the model's default effort
+ANTHROPIC_PRICE = {"claude-haiku-5-5": (0.10, 0.50)}                         # USD per 1M input / output tokens
+
+
+def anthropic_available() -> bool:
+    return bool(os.environ.get("ANTHROPIC_API_KEY"))
+
+
+def _anthropic_client(timeout):
+    import anthropic
+    return anthropic.Anthropic(timeout=timeout, max_retries=2)
+
+
+def record_anthropic_usage(usage, model: str) -> float:
+    """Add one Claude reply's usage to the process-wide counters (cache reads 0.1x, cache writes 1.25x input)."""
+    pin, pout = ANTHROPIC_PRICE.get(model, (PRICE_IN, PRICE_OUT))
+    tin = int(getattr(usage, "input_tokens", 0) or 0)
+    tout = int(getattr(usage, "output_tokens", 0) or 0)
+    cread = int(getattr(usage, "cache_read_input_tokens", 0) or 0)
+    cwrite = int(getattr(usage, "cache_creation_input_tokens", 0) or 0)
+    cost = (tin * pin + cread * pin * 0.1 + cwrite * pin * 1.25 + tout * pout) / 1e6
+    with _spend_lock:
+        _spend["total_usd"] += cost
+        _spend["calls"] += 1
+        _spend["tokens_in"] += tin + cread + cwrite
+        _spend["tokens_out"] += tout
+        _spend["tokens_cached"] += cread
+    return cost
+
+
+def _chat_anthropic(system, user, timeout, cache_layout, client=None):
+    """-> (text, "anthropic/<model>") or ("", reason). No sampling parameters (Haiku 5.5 rejects them)."""
+    try:
+        client = client or _anthropic_client(timeout)
+        if cache_layout:      # same system text for every role, so calls sharing the data block share a cached prefix
+            system_text, user_text = CACHE_SYSTEM, user + "\n\nROLE INSTRUCTIONS:\n" + system
+        else:
+            system_text, user_text = system, user
+        kwargs = {"model": ANTHROPIC_MODEL, "max_tokens": 16000, "system": system_text,
+                  "messages": [{"role": "user", "content": user_text}], "cache_control": {"type": "ephemeral"}}
+        if ANTHROPIC_EFFORT:
+            kwargs["output_config"] = {"effort": ANTHROPIC_EFFORT}
+        resp = client.messages.create(**kwargs)
+        record_anthropic_usage(resp.usage, ANTHROPIC_MODEL)
+        if resp.stop_reason == "refusal":
+            return "", "anthropic refusal"
+        text = "".join(b.text for b in resp.content if getattr(b, "type", "") == "text")
+        return text, "anthropic/" + str(getattr(resp, "model", "") or ANTHROPIC_MODEL)
+    except Exception as exc:  # noqa: BLE001
+        status = getattr(exc, "status_code", "")       # status only, never the body
+        return "", f"anthropic error: {type(exc).__name__} {status}".strip()[:200]
+
+
 def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, model=None, cache_layout=False,
          temperature: float = 0.2) -> tuple:
-    """One free-form answer from the DeepSeek model: -> (text, model_name) or ("", reason). Same safety rules as
+    """One free-form answer from the paid model: -> (text, model_name) or ("", reason). Same safety rules as
     score_opencode (empty temp dir, no --auto) / score_openrouter (key from the environment only)."""
     full = model or OPENCODE_MODEL
     name = full.split("/", 1)[-1]
+    if anthropic_available() and not full.endswith(":free"):  # owner 2026-11-25: Claude Haiku 5.5 for paid calls
+        text, served = _chat_anthropic(system, user, timeout, cache_layout)
+        if text:
+            return text, served
     if custom_available() and not full.endswith(":free"):     # paid calls go to the configured provider
         text, served = _chat_custom(system, user, timeout, urlopen, cache_layout, temperature)
         if text:

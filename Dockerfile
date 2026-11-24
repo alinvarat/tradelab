@@ -11,6 +11,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# Anthropic SDK for the Claude Haiku 5.5 provider (core/ai_news.py); everything else is the standard library.
+RUN pip install --no-cache-dir anthropic==2.13.0
+
 COPY server.py ./
 COPY core ./core
 COPY ui ./ui
