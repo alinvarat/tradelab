@@ -53,9 +53,10 @@ jobs:
         env:
           KUBER_API_KEY: ${{ secrets.KUBER_API_TOKEN }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          THIRX_API_KEY: ${{ secrets.THIRX_API_KEY }}
+          THIRX_API_KEY: ${{ secrets.DEEPSEEK_API_KEY || secrets.THIRX_API_KEY }}   # DeepSeek direct wins when its secret exists
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
-          THIRX_MODEL: ${{ vars.THIRX_MODEL }}
+          THIRX_MODEL: ${{ vars.LLM_MODEL || vars.THIRX_MODEL }}
         run: |
           if [ -z "$KUBER_API_KEY" ]; then
             echo "::error::Add the KUBER_API_TOKEN repository secret before deploying."
@@ -75,6 +76,7 @@ jobs:
           printf 'OPENROUTER_API_KEY=%s\n' "$OPENROUTER_API_KEY" > "$runtime_env"
           if [ -n "$THIRX_API_KEY" ] && [ -n "$THIRX_MODEL" ]; then     # optional OpenAI-compatible provider for paid calls
             printf 'TRADELAB_LLM_API_KEY=%s\nTRADELAB_LLM_PROVIDER_MODEL=%s\n' "$THIRX_API_KEY" "$THIRX_MODEL" >> "$runtime_env"
+            if [ -n "$LLM_BASE_URL" ]; then printf 'TRADELAB_LLM_BASE_URL=%s\n' "$LLM_BASE_URL" >> "$runtime_env"; fi
           fi
           if [ -n "$TRADELAB_SEC_UA" ]; then printf 'TRADELAB_SEC_UA=%s\n' "$TRADELAB_SEC_UA" >> "$runtime_env"; fi
           unset OPENROUTER_API_KEY THIRX_API_KEY TRADELAB_SEC_UA
