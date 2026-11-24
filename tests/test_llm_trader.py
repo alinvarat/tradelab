@@ -264,6 +264,25 @@ class Trading(Base):
         self.assertEqual(st["shock/hold/1h"]["mean_pct"], -1.0)
         self.assertEqual(self.t.desk_stats(), {})                       # nothing reaches 5 outcomes
 
+    def test_news_type_classification(self):
+        self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
+        self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")
+        self.assertEqual(lt.news_type("Analyst upgrades Acme to overweight"), "analyst")
+        self.assertEqual(lt.news_type("FDA approves Acme drug"), "fda/clinical")
+        self.assertEqual(lt.news_type("Something unusual happened"), "other")
+
+    def test_headline_shows_move_since_the_desk_first_saw_it(self):
+        heads = [{"title": "Acme beats Q3 EPS", "source": "X", "lexicon": 0.5, "ai_scores": {}, "seen": "", "key": "k1"}]
+        with mock.patch.object(lt, "archive_headlines", return_value=[dict(h) for h in heads]):
+            c1 = self.t.build_context(1000.0, [{"symbol": "AAA", "ratio": None, "why": "x"}], self.market(AAA=quote("AAA", px=100)), [])
+        with mock.patch.object(lt, "archive_headlines", return_value=[dict(h) for h in heads]):
+            c2 = self.t.build_context(1600.0, [{"symbol": "AAA", "ratio": None, "why": "x"}], self.market(AAA=quote("AAA", px=104)), [])
+        h1, h2 = c1["candidates"][0]["headlines"][0], c2["candidates"][0]["headlines"][0]
+        self.assertEqual((h1["move_since_desk_saw_pct"], h1["type"]), (0.0, "earnings"))
+        self.assertEqual((h2["minutes_since_desk_saw"], h2["move_since_desk_saw_pct"]), (10, 4.0))
+        self.assertNotIn("key", h2)
+        self.assertEqual(c2["candidates"][0]["news_type"], "earnings")
+
     def test_scheduled_scan_needs_a_meaningful_mover(self):
         self.t.calls.update(last_idle=0.0, last_ts=0.0)
         self.t.scan(self.market())                                   # nothing moved: no call
