@@ -443,3 +443,57 @@ class FundingShort(GainerFade):
         self.assertAlmostEqual(r[0]["ret"]["h1"]["net"], -sc.L11_FEES + 0.001, places=9)
         self.assertAlmostEqual(r[0]["ret"]["h3"]["net"], -sc.L11_FEES + 0.0015, places=9)
         self.assertEqual(sc.funding_short_rows("X", d1, self.btc(), [(self.T0 + 25 * 86400, 0.0005)]), [])
+
+
+class HourlyShock(unittest.TestCase):
+    T0 = 1_700_006_400
+
+    def hours(self, spike_at=800, move=1.10, n=900, qv=3e5):
+        h, px = [], 1.0
+        for k in range(n):
+            o = px
+            c = o * (move if k == spike_at else (0.99 if k > spike_at else 1.0))
+            h.append((self.T0 + k * 3600, o, max(o, c), min(o, c), c, qv))
+            px = c
+        return h
+
+    def btc(self, n=900):
+        return {self.T0 + k * 3600: (100.0, 100.0) for k in range(n)}
+
+    def test_spike_fade_short_next_hour(self):
+        rows = sc.hourly_shock_rows("X", self.hours(), self.btc(), -1)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["ts"], self.T0 + 801 * 3600)
+        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], 0.01 - sc.L12_FEES - sc.L12_FUNDING_H, places=9)
+        self.assertAlmostEqual(rows[0]["ret"]["h4"]["net"], 1 - 0.99 ** 4 - sc.L12_FEES - 4 * sc.L12_FUNDING_H, places=9)
+
+    def test_crash_bounce_and_filters(self):
+        up = [(t, o, h, l, c, q) for t, o, h, l, c, q in self.hours(move=0.90)]
+        rows = sc.hourly_shock_rows("X", up, self.btc(), +1)
+        self.assertEqual(len(rows), 1)
+        self.assertAlmostEqual(rows[0]["ret"]["h1"]["net"], -0.01 - sc.L12_FEES, places=9)
+        self.assertEqual(sc.hourly_shock_rows("X", self.hours(qv=1e4), self.btc(), -1), [])   # thin coin
+        self.assertEqual(sc.hourly_shock_rows("X", self.hours(move=1.05), self.btc(), -1), [])  # 5% is not a shock
+        self.assertEqual(sc.hourly_shock_rows("X", self.hours(spike_at=100), self.btc(), -1), [])  # no 30-day history
+
+
+class PerpShock(HourlyShock):
+    def test_needs_a_live_perp_and_adds_real_funding(self):
+        h = self.hours()
+        e = self.T0 + 801 * 3600
+        self.assertEqual(sc.perp_shock_rows("X", h, self.btc(), []), [])                       # no perp: dropped
+        self.assertEqual(sc.perp_shock_rows("X", h, self.btc(), [(e - 3 * 86400, 0.0001)]), [])  # perp gone > 24 h
+        f = [(e - 3600, 0.0001), (e + 2 * 3600, 0.002)]                       # second rate falls inside h4 only
+        r = sc.perp_shock_rows("X", h, self.btc(), f)
+        self.assertEqual(len(r), 1)
+        self.assertAlmostEqual(r[0]["ret"]["h1"]["net"], 0.01 - sc.L12_FEES, places=9)
+        self.assertAlmostEqual(r[0]["ret"]["h4"]["net"], 1 - 0.99 ** 4 - sc.L12_FEES + 0.002, places=9)
+
+    def test_stop_caps_a_runaway(self):
+        h = self.hours()
+        e_i = 801
+        h = [x if n != e_i + 1 else (x[0], x[1], x[1] * 1.5, x[3], x[4], x[5]) for n, x in enumerate(h)]
+        r = sc.perp_shock_rows("X", h, self.btc(), [(self.T0 + e_i * 3600 - 60, 0.0)])
+        st = r[0]["ret"]["h4"]["net_stop"]
+        entry = h[e_i][1]
+        self.assertAlmostEqual(st, sc.short_gain(entry, entry * 1.30) - sc.L12_FEES, places=9)
