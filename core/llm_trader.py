@@ -61,7 +61,7 @@ OVERNIGHT_MAX = 60
 MOVER_SHARE = 0.5
 EXT_MAX = 40                       # symbols re-quoted per pass in US extended hours                  # a "top mover" must have moved at least half its class's shock threshold
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
-PROTOCOL_VERSION = "v4.14"
+PROTOCOL_VERSION = "v4.15"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60
@@ -442,7 +442,10 @@ NEWS_PRINCIPLES = (   # v4.14: general findings (ops/knowledge/news_trading.md);
     "Big moves WITH a specific news story tend to continue (bad news most); big moves WITHOUT news tend to reverse "
     "(Chan 2003). Stale or repeated news gets overreacted to and reverses (Tetlock 2011). Large opening gaps in small, "
     "illiquid stocks tend to give part back intraday, mostly in the first two hours; in large caps neither fading nor "
-    "following gaps has a clear edge.")
+    "following gaps has a clear edge. Day-trading courses (Warrior Trading, SMB Capital, Sykes) all require a catalyst "
+    "PLUS abnormal volume (relative volume >= 2-5x) before a stock counts as 'in play': news without volume is news "
+    "the market is ignoring. Their other rules (multi-day runners fade on the first red day) are untested hypotheses, "
+    "and most of their students lose money.")
 PLAYBOOK = {
     "earnings": "Guidance and the next quarter matter more than beating this quarter's EPS. A beat with lowered or "
                 "missing guidance often fades. Post-earnings drift in large caps has been weak since about 2006; analyst "

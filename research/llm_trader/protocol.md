@@ -134,3 +134,6 @@ Stock candidates carry `sec_8k` when the issuer filed an 8-K in the last 48 hour
 
 ## Addendum 2026-11-24: v4.14, knowledge from research and trading literature
 Every context carries `news_principles` (news vs no-news moves, stale news, small-cap gap reversal) and the playbook entries for earnings, m&a and analyst news now cite specific findings (estimate revisions, the practitioner "episodic pivot" as an untested hypothesis, stock-paid deals, Womack 1996). Sources and evidence levels: `ops/knowledge/news_trading.md`. Desk data still overrides them.
+
+## Addendum 2026-11-24: v4.15, what the day-trading courses agree on
+`news_principles` adds the one rule the popular courses share (catalyst plus relative volume >= 2-5x before a stock is "in play") and labels their other rules as untested; sources and our own tests in `ops/knowledge/news_trading.md`. The Sykes "first red day" fade of multi-day runners is queued as screen L7.
