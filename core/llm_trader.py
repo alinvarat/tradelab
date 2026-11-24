@@ -609,6 +609,7 @@ class LlmTrader:
         self.state_path, self.log_path = Path(state_path), Path(log_path)
         self.chat = chat or (lambda system, user: ai_news.chat(system, user, model=ai_news.DECISION_MODEL, cache_layout=True))
         self.sec8k = (lambda sym, now: None) if chat else recent_8k    # v4.13; tests (injected chat) stay offline
+        self.coach = not chat                                            # v4.17 self-review; off when tests inject chat
         # v4.3: helper roles (analysts, bull/bear, risk, pre-open) use free models first; the decision stays on self.chat
         self.helper = helper or ((lambda system, user: self.chat(system, user)) if chat
                                  else (lambda system, user: ai_news.chat_helper(system, user)))
@@ -916,8 +917,8 @@ class LlmTrader:
     def self_review(self, now) -> dict | None:
         """v4.17 self-coaching: every COACH_EVERY_S DeepSeek reads this desk's own results and writes up to 8 short
         lessons that go back into every cycle as desk_lessons. Lessons cannot change limits, rules or code."""
-        last = (self.calls.get("lessons") or {}).get("ts", 0)
-        if now - last < COACH_EVERY_S:
+        last = (self.calls.get("lessons") or {}).get("ts")
+        if last is not None and now - last < COACH_EVERY_S:
             return None
         ev = self.evaluate()
         data = {"desk_stats": self.desk_stats(min_n=1), "by_protocol": ev.get("by_protocol"),
@@ -1477,7 +1478,7 @@ class LlmTrader:
             cands = cands[:MAX_CANDIDATES]
             idle = any(q.get("open") for q in quotes.values())
             busy = getattr(self, "_deciding", False)       # a cycle is still thinking: use nothing up now
-            if not busy and not fresh and self.calls.get("n", 0) < MAX_CALLS_DAY:
+            if self.coach and not busy and not fresh and self.calls.get("n", 0) < MAX_CALLS_DAY:
                 try:
                     self.self_review(now)                       # v4.17: at most every 3 hours
                 except Exception as e:  # noqa: BLE001
