@@ -21,6 +21,13 @@ ATOM = """<?xml version="1.0"?><feed>
 
 
 class Feed(unittest.TestCase):
+    def test_iso_variants(self):
+        self.assertEqual(of.iso_to_ts("2026-11-23T21:30:05Z"), calendar.timegm((2026, 11, 23, 21, 30, 5)))
+        self.assertEqual(of.iso_to_ts("2026-11-23T21:30:05.000Z"), calendar.timegm((2026, 11, 23, 21, 30, 5)))
+        self.assertEqual(of.iso_to_ts("2026-11-23T16:30:05-0500"), calendar.timegm((2026, 11, 23, 21, 30, 5)))
+        with self.assertRaises(ValueError):
+            of.iso_to_ts("yesterday")
+
     def test_atom_entries_items_and_utc_time(self):
         got = of.parse_current_atom(ATOM)
         self.assertEqual(len(got), 2)
@@ -42,11 +49,20 @@ class Contracts(unittest.TestCase):
         self.assertIsNone(of.pick_contract(self.chain, 100.0, "skip"))
         self.assertIsNone(of.pick_contract(self.chain, 200.0, "long"))
 
-    def test_expiry_at_least_seven_days(self):
-        now = 1_800_000_000
-        exps = [now + 3 * 86400, now + 7 * 86400 - 1, now + 10 * 86400, now + 30 * 86400]
-        self.assertEqual(of.choose_expiry(exps, now), now + 10 * 86400)
-        self.assertIsNone(of.choose_expiry([now], now))
+    def test_expiry_at_least_seven_days_by_date(self):
+        now = calendar.timegm((2026, 11, 24, 15, 0, 0))
+        dec1, nov30, dec4 = (calendar.timegm((2026, 12, d % 100, 0, 0, 0)) if d > 100 else calendar.timegm((2026, 11, d, 0, 0, 0))
+                             for d in (101, 30, 104))
+        self.assertEqual(of.choose_expiry([nov30, dec1, dec4], now), dec1)      # exactly 7 calendar days counts
+        self.assertIsNone(of.choose_expiry([nov30], now))
+
+    def test_valid_ask_and_median(self):
+        self.assertTrue(of.valid_ask(0.05))
+        for bad in (0, -0.01, None, "x", float("nan")):
+            self.assertFalse(of.valid_ask(bad))
+        bars = [{"c": 1, "v": 80e6}] * 10 + [{"c": 1, "v": 110e6}] * 10
+        self.assertAlmostEqual(of.median_dollar_volume(bars), 95e6)
+        self.assertIsNone(of.median_dollar_volume(bars[:19]))
 
     def test_random_control_direction_is_deterministic(self):
         self.assertEqual(of.random_direction("AAPL", "x"), of.random_direction("AAPL", "x"))
@@ -56,7 +72,7 @@ class Contracts(unittest.TestCase):
 class Returns(unittest.TestCase):
     def test_trade_return_pays_ask_and_fees_and_haircut(self):
         self.assertAlmostEqual(of.trade_return(1.0, 2.0), (200 - 0.65) / (100 + 0.65) - 1)
-        self.assertAlmostEqual(of.trade_return(1.0, 0.0), -1.0)
+        self.assertAlmostEqual(of.trade_return(1.0, 0.0), (-0.65) / 100.65 - 1)     # the exit fee is still paid
         self.assertLess(of.trade_return(1.0, 2.0, haircut=0.1), of.trade_return(1.0, 2.0))
 
     def test_intrinsic_and_sessions(self):
@@ -81,6 +97,16 @@ class Account(unittest.TestCase):
         self.assertAlmostEqual(r["end_equity_usd"], 80 + n * (30 - of.FEE))
 
 
+class AccountOrder(unittest.TestCase):
+    def test_exit_cash_funds_an_entry_at_the_same_time(self):
+        trades = [{"entry_ts": 1, "exit_ts": 5, "entry_ask": 0.2, "exit_bid": 0.4},
+                  {"entry_ts": 5, "exit_ts": 9, "entry_ask": 0.2, "exit_bid": 0.2}]
+        r = of.simulate_account(trades, start=100, stake=1.0)
+        self.assertEqual(r["taken"], 2)
+        self.assertIn("months_3x", r)
+        self.assertIn("worst_drawdown", r)
+
+
 class Verdict(unittest.TestCase):
     def test_collecting_until_150(self):
         self.assertTrue(of.verdict([])["verdict"].startswith("collecting"))
@@ -91,6 +117,13 @@ class Verdict(unittest.TestCase):
         self.assertEqual(of.verdict(good)["verdict"], "edge")
         bad = [dict(t, ret=-0.2, ret_haircut=-0.3) for t in good]
         self.assertEqual(of.verdict(bad)["verdict"], "no edge shown")
+
+    def test_missing_control_keeps_the_model_trade(self):
+        rows = [{"symbol": f"S{i % 40}", "ts": 1_800_000_000 + 86400 * 31 * (i // 40), "ret": 0.8 if i % 3 else -1.0,
+                 "ctrl_ret": None if i % 5 == 0 else -0.5, "ret_haircut": 0.6 if i % 3 else -1.0} for i in range(200)]
+        v = of.verdict(rows)
+        self.assertEqual(v["n"], 200)
+        self.assertEqual(v["n_paired"], 160)
 
 
 if __name__ == "__main__":

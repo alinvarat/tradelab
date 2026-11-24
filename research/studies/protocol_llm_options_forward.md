@@ -17,3 +17,12 @@
 **Verdict, once at ≥ 150 closed trades** (expected after the Jan–Feb 2027 season). "Edge" requires all three: (1) mean return per trade (exit bid ÷ entry ask − 1, after fees) > 0 with block-bootstrap p (symbol-month) < 0.05; (2) mean of model minus random-direction control > 0 with block p < 0.05; (3) the result is still > 0 when every exit bid is cut by a further 10%. Otherwise "no edge shown". Thresholds never move.
 
 **Known limits.** Quotes are delayed about 15 minutes and are not a fill. At 15:00 UTC the opening gap after an after-close filing is already in the price, which is conservative. Yahoo can change or block its endpoint, and gaps are recorded, not filled. Early-assignment and exercise frictions are ignored for long options.
+
+## Addendum 2026-11-24: implementation fixes before the first market-open run (external review by Codex gpt-6.2-sol)
+No threshold or rule changes. Corrections so the code matches the rules above:
+- Form, items and acceptance time come from the issuer's SEC submissions record, not the feed. The window is (previous run, this run], and no earlier than 2026-11-24 00:00 UTC.
+- The option chain is snapshotted before the model call, and its fetch time is the entry time. Both sides are kept (`both_sides`), plus the control draw.
+- "At least 7 calendar days" is compared by date. Only a finite ask > 0 is a valid entry.
+- The liquidity screen uses the true median of 20 completed sessions, ≥ 100M USD only.
+- A failed exit quote is a gap retried at the next run, never a zero. Exits after the 5th session are flagged `late`. Expired contracts settle at intrinsic value from the underlying's close on the expiry date.
+- The exit fee is always charged, even on a zero bid. Model statistics use every priced model exit; the paired statistic uses trades whose control is priced. The account replay processes exits before entries at the same time and reports months ≥ 3×, worst drawdown and one-contract affordability at the first 20% stake.
