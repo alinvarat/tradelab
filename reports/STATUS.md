@@ -6,7 +6,7 @@
 ## สุขภาพระบบ (ตรวจล่าสุด 2026-11-24 09:47)
 | ส่วน | สถานะ | รายละเอียด |
 |---|---|---|
-| deploy main | ผ่าน | ล้มฝั่ง Kuber ตั้งแต่ 07:07 แล้วผ่านเมื่อรันซ้ำตอน 09:45; ตรวจผ่าน Chrome แล้วว่า PR #69–#76 ขึ้นระบบจริง (ตำแหน่งมีฟิลด์ `market_open` และ `exit_queued`) |
+| deploy main | ผ่าน | PR #141 (L7 screen) merge แล้ว deploy 18:4x UTC ผ่าน; **รอบนี้ยังตรวจหน้าเว็บผ่าน Chrome ไม่ได้ (ไม่มีแท็บที่ล็อกอิน, Cloudflare 302)** |
 | บอท DeepSeek (v4.2) | รันอยู่ | ปิดได้ 3/30 คู่, 144.46 USD เทียบบัญชีสุ่ม 147.05 USD, `usd_today` 0.44, 73 calls, `error` ว่าง |
 | ออปชันแบบเดินหน้า | เก็บข้อมูล | 0/150 เทรด, `gaps` 0 (อัปเดต 04:40) |
 | ข่าวงบ H5 แบบเดินหน้า | รอ | เริ่มนับ 1 ธ.ค. |
@@ -46,7 +46,7 @@
 | 2h | L1g ด่านคัดกรอง short หลัง Binance Alpha removal | Claude | 1 | no verdict | หาราคาได้ 13/132 (ปี 2026 เท่านั้น) ต้องมีแหล่งราคา DEX |
 | 2i | บอทกติกาแบบกว้าง broad-v1 (จักรวาลเดียวกับ DeepSeek) | Claude | 1 | forward | ขึ้นระบบ 13:40, /api/events_broad 5 เหตุการณ์ 147.28 USD |
 | 2j | v4.3: โมเดลฟรีสำหรับบทบาทผู้ช่วย, DeepSeek ตัดสินใจ | Claude | 1 | live | ดู helper_models ใน /api/llm_trader |
-| 2k | L7 ด่านคัดกรอง: short วันแรกที่ปิดแดงหลังหุ้นเล็กวิ่งหลายวัน (Tim Sykes "first red day") | Claude | 1 (25 พ.ย.) | screening | ลงทะเบียนเกณฑ์ใน RESULTS.md ก่อนดึงข้อมูลแล้ว (`ops/lines/L7_first_red_day.md`); โค้ด `first_red_day_rows` + 4 เทสต์ผ่าน; รอ dispatch `l7_first_red_day` บน Actions |
+| 2k | L7 ด่านคัดกรอง: short วันแรกที่ปิดแดงหลังหุ้นเล็กวิ่งหลายวัน (Tim Sykes "first red day") | Claude | 1 (25 พ.ย.) | screening | merge แล้ว (PR #141, deploy ผ่าน); ลงทะเบียนเกณฑ์ใน RESULTS.md ก่อนดึงข้อมูล; โค้ด `first_red_day_rows` + 5 เทสต์ผ่าน; **ยังไม่ได้รัน** — รอ dispatch `l7_first_red_day` บน Actions (ไม่ใช้ LLM ไม่มีค่าใช้จ่าย) |
 | 2c | เพิ่มแหล่งประกาศ listing ที่ Kuber เข้าถึงได้ (Upbit ทางอื่น, Bithumb, OKX, Bybit, Coinbase) ด้วย addendum ก่อนเหตุการณ์แรก | เพื่อน (dmgnr) หรือ Claude | 2 | todo | เพิ่มความถี่ของ L1b |
 | 3 | ด่านคัดกรอง L3 | Claude (รับแทน) | 1 | killed | 315 เหตุการณ์; กลุ่ม 2.02 ไม่ผ่าน, กลุ่มอื่นน้อยเกิน |
 | 4 | ด่านคัดกรอง L4 | Claude (รับแทน) | 1 | killed | รอบ 4 (ข้อมูลไม่ซ้ำ 2,613 เหตุการณ์): validation +0.35%/ครั้ง p 0.39 |
