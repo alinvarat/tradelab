@@ -13,10 +13,10 @@
 | ราคา Coinbase | `https://api.exchange.coinbase.com/products/<SYM>-USD/candles?granularity=60&start=<iso>&end=<iso>` | ใช้กับกรณีที่ Binance list เหรียญซึ่งมีบน Coinbase อยู่แล้ว |
 
 ## ด่านคัดกรอง (ย้อนหลัง 2024-01-01 ถึง 2026-10-31)
-1. สร้างรายการ event ที่มีฟิลด์ `{venue, symbol, ts_announce}` โดยเก็บเฉพาะเหรียญที่มีราคาซื้อขายอยู่ที่ exchange อื่น **ก่อน** เวลาประกาศ
+1. สร้างรายการ event (Binance ใช้ราคา Coinbase, Upbit ใช้ราคา Binance spot) ที่มีฟิลด์ `{venue, symbol, ts_announce}` โดยเก็บเฉพาะเหรียญที่มีราคาซื้อขายอยู่ที่ exchange อื่น **ก่อน** เวลาประกาศ
 2. ราคาเข้า = ราคาปิดของแท่ง 1 นาทีที่ `ts_announce + 60s` บวกต้นทุน taker 0.1% และ slippage 0.2%
 3. วัดผลตอบแทนที่ +15 นาที, +1 ชม., +4 ชม., +1 วัน และ +7 วัน
-4. control: เหรียญอื่นในกลุ่มขนาดใกล้กันที่สุ่มจากเวลาเดียวกัน
+4. control: ผลตอบแทน BTC ในช่วงเวลาเดียวกัน (ปรับจากร่างแรกก่อนดึงข้อมูล เพราะไม่มีข้อมูล market cap ย้อนหลังฟรีสำหรับสุ่มเหรียญขนาดใกล้กัน)
 5. ใช้สถิติชุดเดียวกับงานเดิม คือ `block_bootstrap_p` ใน `core/news_backtest.py` โดยใช้ cluster รายวัน
 6. แบ่งข้อมูลตามเวลา: 2024 = train, 2025 = validation, 2026 = test ห้ามดู 2026 จนกว่าจะเลือก horizon จาก train และ validation แล้ว
 
