@@ -97,3 +97,6 @@ Report [daily-v1](../sequential_protocol_20261124.md) separately per trading pro
 
 ## Addendum 2026-11-24: v4.3, free models for the helper roles (owner: DeepSeek-only is too expensive)
 The three analysts, the bull/bear round and its rebuttal, the advisory risk review and the pre-open briefing call free OpenRouter models first, in the order of `ai_news.HELPER_MODELS` (nemotron-3-ultra-550b, gemma-4-31b, nemotron-3.5-lightning), 45 s each, then DeepSeek v4.1 flash 1017 if all fail or answer empty. The final decision call stays on DeepSeek v4.1 flash 1017. The model that answered each call is recorded; `/api/llm_trader` shows `helper_models` counts. Results are tagged v4.3 and kept apart from v4.2.
+
+## Addendum 2026-11-24: v4.4, hold memory (owner: spend is fine, but efficiently)
+Live data showed 35 of the last 40 decisions were holds, with the same top movers re-sent every cycle (ZS 5 times in 5 cycles). A symbol the model answered hold/pass/skip on (and does not hold) is no longer added as a "top mover" filler candidate for 1 hour, unless its price moves another UNCHANGED_SHARE x its class shock threshold from the price at that decision. New shocks, linked headlines, buzz, the pre-open watchlist and position reviews are unaffected. Results are tagged v4.4.
