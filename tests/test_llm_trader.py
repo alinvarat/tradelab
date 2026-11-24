@@ -79,7 +79,7 @@ class Parsing(unittest.TestCase):
         self.assertEqual(out["decisions"][0]["size_pct"], lt.SIZE_MAX * 100)
         self.assertEqual(len(out["decisions"][0]["reason"]), 200)
         self.assertEqual(out["decisions"][0]["confidence"], 1.0)
-        self.assertEqual(len(out["rejected"]), 5)
+        self.assertEqual(len(out["rejected"]), 6)
         self.assertEqual(lt.parse_decisions("no json", set(), set())["error"], "no JSON object in reply")
         self.assertEqual(lt.parse_decisions('{"decisions": "x"}', set(), set())["decisions"], [])
 
