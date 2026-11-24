@@ -275,6 +275,16 @@ class Trading(Base):
         self.assertIn("GC=F", m("Spot gold climbs"))                   # specific phrases need no extra context
         self.assertIn("BTC-USD", m("Bitcoin slides below 60k"))
 
+    def test_junk_and_irrelevant_headlines_are_dropped(self):
+        self.assertTrue(lt.is_junk("How to Invest in VanEck Biotech ETF (BBH)"))
+        self.assertTrue(lt.is_junk("$100 Invested In State Street Technology Select Sector SPDR ETF 20 Years Ago Would Be Worth This Much Today"))
+        self.assertTrue(lt.is_junk("S&P 500 Movers: HPE, DLTR"))
+        self.assertTrue(lt.is_junk("3 Stocks to Buy Before Black Friday"))
+        self.assertFalse(lt.is_junk("Dollar Tree beats Q3 estimates and raises guidance"))
+        self.assertFalse(lt.relevant("How biotech ETFs fared", "SMH", "VanEck Semiconductor ETF"))
+        self.assertTrue(lt.relevant("Semiconductor stocks slide as AMD drops", "SMH", "VanEck Semiconductor ETF"))
+        self.assertTrue(lt.relevant("DLTR shares jump", "DLTR", "Dollar Tree, Inc."))
+
     def test_news_type_classification(self):
         self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
         self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")

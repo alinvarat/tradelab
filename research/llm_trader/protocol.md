@@ -113,3 +113,6 @@ Live data showed 35 of the last 40 decisions were holds, with the same top mover
 
 ## Addendum 2026-11-24: v4.7, stricter headline-to-asset linking
 Live example: "Platinum Equity ..." linked to platinum futures (PL=F) and reached the model as platinum news. Generic keywords for platinum, palladium, copper, grains, softs, natural gas, euro, pound and ether now link only when the headline also has a market word (price, futures, supply, falls, against, currency, ...), and known company phrases (Platinum Equity, Euronext, ...) never link. Specific phrases (spot gold, crude, bitcoin, ...) are unchanged.
+
+## Addendum 2026-11-24: v4.8, junk and irrelevant headlines are dropped
+Live examples on v4.6: "How to Invest in VanEck Biotech ETF (BBH)" reached the model as news for SMH, "$100 Invested In ... 20 Years Ago" for XLK and "S&P 500 Movers: HPE, DLTR" for DLTR. Evergreen, listicle and movers-recap headlines (`JUNK_PATTERNS`) no longer reach the model or trigger a cycle, and the per-symbol fallback search keeps only headlines that name the ticker or the company.

@@ -61,7 +61,7 @@ OVERNIGHT_MAX = 60
 MOVER_SHARE = 0.5
 EXT_MAX = 40                       # symbols re-quoted per pass in US extended hours                  # a "top mover" must have moved at least half its class's shock threshold
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
-PROTOCOL_VERSION = "v4.7"
+PROTOCOL_VERSION = "v4.8"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60
@@ -339,6 +339,30 @@ NEWS_TYPES = (   # v4.6: first match wins; used for the per-type learning loop (
 )
 
 
+# v4.8: evergreen, listicle and promo headlines carry no new information; seen live as "news" for SMH and XLK.
+JUNK_PATTERNS = (r"^how to (invest|buy|trade)\b", r"\$\d[\d,]* invested in\b", r"would be worth this much",
+                 r"\b(top|best) \d+ (stocks?|etfs?|picks)\b", r"^\d+ (stocks?|etfs?) to (buy|watch|sell)\b",
+                 r"^should you (buy|sell)\b", r"^is .{2,60} a (buy|sell)\b", r"\bstocks? to watch\b",
+                 r"\bhere'?s why\b", r"\bwhat you need to know\b", r"\b(dividend|passive income) (stock|machine)s?\b",
+                 r"\bmillionaire\b", r"\bforever\b", r"\bmovers:\s")
+
+
+def is_junk(title: str) -> bool:
+    t = (title or "").lower().strip()
+    return any(re.search(p, t) for p in JUNK_PATTERNS)
+
+
+def relevant(title: str, symbol: str, name: str | None) -> bool:
+    """A fallback headline (per-symbol news search) counts only if it names the ticker or the company."""
+    t = (title or "").lower()
+    if re.search(r"(?<![a-z0-9])" + re.escape(symbol.lower().split("-")[0].split("=")[0]) + r"(?![a-z0-9])", t):
+        return True
+    words = [w for w in re.findall(r"[a-z]{4,}", (name or "").lower())
+             if w not in ("inc", "corp", "corporation", "holdings", "group", "company", "trust", "fund", "shares",
+                          "select", "sector", "spdr", "ishares", "vaneck", "invesco", "index", "class")]
+    return any(w in t for w in words[:2])
+
+
 def news_type(title: str) -> str:
     import re as _re
     t = (title or "").lower()
@@ -364,7 +388,7 @@ def recent_news(now, window=NEWS_WINDOW_S) -> dict:
     rows, _ = _archive_snapshot()
     out = {}
     for r in reversed(rows):
-        if _age_s(r, now) > window:
+        if _age_s(r, now) > window or is_junk(r.get("title", "")):
             continue
         for s in list(r.get("symbols", [])) + sorted(_macro_symbols(r.get("title", ""))):
             if s in ALL:
@@ -665,11 +689,12 @@ class LlmTrader:
             sym = c["symbol"]
             q = quotes[sym]
             cls = asset_class(sym)
-            heads = archive_headlines(sym)
+            heads = [h for h in archive_headlines(sym) if not is_junk(h["title"])]
             if not heads and cls in ("stock", "etf"):
                 try:
                     heads = [{"title": x["title"][:160], "source": x["source"], "lexicon": x["sentiment"], "ai_scores": {}}
-                             for x in news.symbol_news(sym, q.get("name") or "")["items"][:4]]
+                             for x in news.symbol_news(sym, q.get("name") or "")["items"][:8]
+                             if not is_junk(x["title"]) and relevant(x["title"], sym, q.get("name"))][:4]
                 except Exception:  # noqa: BLE001
                     heads = []
             for h in heads:                 # v4.6: has the price already moved since this desk first saw the headline?
