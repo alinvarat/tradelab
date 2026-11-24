@@ -61,7 +61,8 @@ OVERNIGHT_MAX = 60
 MOVER_SHARE = 0.5
 EXT_MAX = 40                       # symbols re-quoted per pass in US extended hours                  # a "top mover" must have moved at least half its class's shock threshold
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
-PROTOCOL_VERSION = "v4.17"
+# v4.18 (2026-11-25, owner): every role runs on Claude Haiku 5.5 when ANTHROPIC_API_KEY is set; v4.17 otherwise
+PROTOCOL_VERSION = "v4.18" if ai_news.anthropic_available() else "v4.17"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60

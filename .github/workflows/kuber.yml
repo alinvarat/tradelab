@@ -62,6 +62,8 @@ jobs:
           LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
           THIRX_MODEL: ${{ vars.LLM_MODEL || vars.THIRX_MODEL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # set = every LLM role runs on Claude (protocol v4.18)
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
         run: |
           if [ -z "$KUBER_API_KEY" ]; then
             echo "::error::Add the KUBER_API_TOKEN repository secret before deploying."
@@ -83,8 +85,16 @@ jobs:
             printf 'TRADELAB_LLM_API_KEY=%s\nTRADELAB_LLM_PROVIDER_MODEL=%s\n' "$THIRX_API_KEY" "$THIRX_MODEL" >> "$runtime_env"
             if [ -n "$LLM_BASE_URL" ]; then printf 'TRADELAB_LLM_BASE_URL=%s\n' "$LLM_BASE_URL" >> "$runtime_env"; fi
           fi
+          if [ -n "$ANTHROPIC_API_KEY" ]; then
+            if [[ "$ANTHROPIC_API_KEY" == *$'\n'* || "$ANTHROPIC_API_KEY" == *$'\r'* ]]; then
+              echo "::error::ANTHROPIC_API_KEY must be a single line."
+              exit 1
+            fi
+            printf 'ANTHROPIC_API_KEY=%s\n' "$ANTHROPIC_API_KEY" >> "$runtime_env"
+            if [ -n "$ANTHROPIC_MODEL" ]; then printf 'TRADELAB_ANTHROPIC_MODEL=%s\n' "$ANTHROPIC_MODEL" >> "$runtime_env"; fi
+          fi
           if [ -n "$TRADELAB_SEC_UA" ]; then printf 'TRADELAB_SEC_UA=%s\n' "$TRADELAB_SEC_UA" >> "$runtime_env"; fi
-          unset OPENROUTER_API_KEY THIRX_API_KEY TRADELAB_SEC_UA
+          unset OPENROUTER_API_KEY THIRX_API_KEY ANTHROPIC_API_KEY TRADELAB_SEC_UA
           export TRADELAB_RUNTIME_ENV_FILE="$runtime_env"
           # Kuber's build step has failed on the platform side ("The request could not be completed") and
           # succeeded on a manual re-run since 2026-11-24. Retry the same command instead of failing the

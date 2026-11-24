@@ -143,3 +143,10 @@ Owner: the alternative provider (ai.thirx.com) is cheap, so every role (analysts
 
 ## Addendum 2026-11-24: v4.17, the desk coaches itself (owner: let DeepSeek look after the system)
 Every 3 hours (when no cycle is running and the call budget allows) DeepSeek reads the desk's own measured results (desk_stats, by-protocol and by-class results, the last 20 closed trades, equity vs control, previous lessons) and writes up to 8 short lessons, each tied to a number from groups with >= 10 outcomes. The lessons go into every later cycle as `desk_lessons` and are shown in `/api/llm_trader`; they cannot change limits, rules or code. The daily call cap is raised from 300 to 1,000 (owner: use the cheap provider fully).
+
+## Addendum 2026-11-25: v4.18, Claude Haiku 5.5 (owner request)
+The owner asked to move the desk from DeepSeek to Claude Haiku 5.5 (`claude-haiku-5-5`, Anthropic API). Rules, limits, prompts,
+universe and evaluation are unchanged; only the model behind every role (decision, analysts, bull/bear, risk, pre-open, coach,
+steward) changes. Haiku 5.5 takes no `temperature`, so calls run at the model's default sampling and default effort. The tag is
+v4.18 only while `ANTHROPIC_API_KEY` is set in the runtime; otherwise the process keeps v4.17 (DeepSeek). Results are reported
+per protocol tag: v4.17 and v4.18 pairs are not pooled. Headline scores from Claude are stored as model `claude-haiku-5-5`.
