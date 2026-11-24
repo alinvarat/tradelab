@@ -162,6 +162,8 @@ LEDGERS = {   # name -> state file, side, hold, extra cost (protocol files in re
             "kinds": ("listing",), "protocol": "research/studies/protocol_L1b_listings_forward.md"},
     "l1d": {"file": "futures_short_state.json", "side": -1, "hold_s": 7 * 86400, "extra": 0.007,
             "kinds": ("futures",), "protocol": "research/studies/protocol_L1d_futures_short_forward.md"},
+    "l1f": {"file": "delist_short_state.json", "side": -1, "hold_s": 4 * 3600, "extra": 0.001, "stop": 0.25,
+            "kinds": ("delist",), "protocol": "research/studies/protocol_L1f_delist_short_forward.md"},
 }
 
 
@@ -197,6 +199,14 @@ def listing_notices():
                                "title": a["title"][:120]})
     except Exception as e:  # noqa: BLE001  one blocked venue must not stop the other
         errors["binance"] = repr(e)[:120]
+    try:
+        d = get("https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&catalogId=161&pageNo=1&pageSize=20", 10)
+        for a in (((d.get("data") or {}).get("catalogs") or [{}])[0].get("articles") or []):
+            for sym in sc.binance_delist_symbols(a.get("title", "")):
+                ev.append({"kind": "delist", "venue": "binance", "symbol": sym, "ts": a["releaseDate"] / 1000,
+                           "title": a["title"][:120]})
+    except Exception as e:  # noqa: BLE001
+        errors["binance_delist"] = repr(e)[:120]
     try:
         d = get("https://api-manager.upbit.com/api/v1/announcements?os=web&page=1&per_page=20&category=trade", 10,
                 BROWSER_UA)   # the notice API answers 403 to non-browser user agents
@@ -253,13 +263,16 @@ def _ledger_step(name, fresh, now):
                     continue
                 p.update(px_venue=q[0], entry_px=q[2] if cfg["side"] > 0 else q[1], btc_entry=_btc_mid(q[0]),
                          entry_ts=now, exit_due=now + cfg["hold_s"], stake=round(st["equity"] * sc.L1B_STAKE, 4))
-            elif "entry_px" in p and now >= p["exit_due"]:
-                q = quote(p["symbol"])
-                if q and q[0] == p["px_venue"]:
+            elif "entry_px" in p:
+                due = now >= p["exit_due"]
+                q = quote(p["symbol"]) if (due or cfg.get("stop")) else None
+                stopped = bool(q and cfg.get("stop") and q[0] == p["px_venue"]
+                               and cfg["side"] * ((q[1] if cfg["side"] > 0 else q[2]) / p["entry_px"] - 1) <= -cfg["stop"])
+                if (due or stopped) and q and q[0] == p["px_venue"]:
                     exit_px = q[1] if cfg["side"] > 0 else q[2]
                     r = sc.ledger_result(cfg["side"], p["entry_px"], exit_px, p["btc_entry"], _btc_mid(q[0]), cfg["extra"])
                     st["equity"] = round(st["equity"] + p["stake"] * r["net"], 4)
-                    row = {**p, **r, "exit_px": exit_px, "ts": now, "equity_after": st["equity"]}
+                    row = {**p, **r, "exit_px": exit_px, "ts": now, "equity_after": st["equity"], "stopped": stopped and not due}
                     st["closed"].append(row)
                     append(f"ledger_{name}_trades", row, now)
                     continue
@@ -331,4 +344,4 @@ def view() -> dict:
     if DIR.exists():
         for f in sorted(DIR.glob("*/*.jsonl.gz"))[-20:]:
             files[f"{f.parent.name}/{f.name}"] = f.stat().st_size
-    return {**STATUS, "files": files, "dir": str(DIR), "l1b": ledger_view("l1b"), "l1d": ledger_view("l1d")}
+    return {**STATUS, "files": files, "dir": str(DIR), "l1b": ledger_view("l1b"), "l1d": ledger_view("l1d"), "l1f": ledger_view("l1f")}
