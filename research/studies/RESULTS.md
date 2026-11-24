@@ -97,3 +97,13 @@ There were 3,475 2.02 filings from 2026-10-20 to 2026-11-22. 2,097 passed the li
 
 - **Locked verdict: "collecting" (311/600 H5 trades)**, but every horizon so far is clearly negative and the model's picks are no better than random. Most picks were long (221 long, 90 short), in a set where buying every filing lost 2.1% over 5 days (offerings and bad news dominate non-earnings 8-Ks).
 - Daily book (15 trades/day): mean −0.89%/day, ending at 0.80× without leverage.
+
+## DeepSeek on post-release Polymarket questions: run 45328442245 (`protocol_polymarket_llm.md`)
+300 markets were eligible, 219 had a price at t0, the model answered all 219, and 100 met the bet rule. The served model was `deepseek/deepseek-v4.1-flash-1017`.
+
+| bets | hit | mean return / bet | at +3¢ slippage | vs random side | block p (return) | block p (diff) | Brier model | Brier market |
+|---|---|---|---|---|---|---|---|---|
+| 100 | 41% | +15.5% | +8.1% | +17.8% | 0.17 | 0.17 | 0.251 | 0.232 |
+
+- **Locked verdict: "no edge shown".** The positive mean is not significant, and the model's probabilities were *worse* than the market price (Brier 0.251 vs 0.232). The best wins were cheap NO bets against favourites (for example "Bitcoin above $70,000 on Nov 13" at 0.875), which is long-shot luck in a sample of 100.
+- Account path (as locked: each bet stakes 10% of equity *including open bets*): October ended at 2.8× because overlapping bets used all the cash, then November wiped it to 0. At 20% stakes, one month was ≥ 3× and the account was still wiped. This is how 3×-a-month accounts actually die.
