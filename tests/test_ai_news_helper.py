@@ -153,3 +153,20 @@ class ClaudeCli(unittest.TestCase):
     def test_headline_scores_parse(self):
         run = self._run(result='[{"id": "1", "score": 0.5, "confidence": 0.8, "category": "earnings"}]')
         self.assertIn("1", ai_news.score_claude([{"id": "1", "title": "X beats", "symbols": ["X"]}], run=run))
+
+
+class FallbackReason(unittest.TestCase):
+    def test_provider_failure_stays_visible_behind_the_openrouter_error(self):
+        import os
+        from unittest import mock
+
+        def fake_urlopen(req, timeout=0):
+            raise RuntimeError("boom")
+        with mock.patch.dict(os.environ, {"TRADELAB_LLM_API_KEY": "k", "OPENROUTER_API_KEY": "k"}), \
+                mock.patch.object(ai_news, "CUSTOM_MODEL", "m1"), \
+                mock.patch.object(ai_news, "claude_ready", return_value=False), \
+                mock.patch.object(ai_news, "opencode_available", return_value=False), \
+                mock.patch.object(ai_news, "_chat_custom", return_value=("", "custom provider error: HTTPError 400")):
+            text, reason = ai_news.chat("s", "u", urlopen=fake_urlopen, model=ai_news.DECISION_MODEL)
+        self.assertEqual(text, "")
+        self.assertTrue(reason.startswith("custom provider error: HTTPError 400; then openrouter error"), reason)

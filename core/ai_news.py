@@ -317,10 +317,12 @@ def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, 
     name = full.split("/", 1)[-1]
     if claude_ready():          # owner 2026-11-25 (v4.18): Claude only, no silent fallback that would mix models
         return _chat_claude(system, user, timeout, cache_layout, run)
+    first_fail = ""
     if custom_available() and not full.endswith(":free"):     # paid calls go to the configured provider
         text, served = _chat_custom(system, user, timeout, urlopen, cache_layout, temperature)
         if text:
             return text, served
+        first_fail = served + "; then "     # keep the provider's own failure visible behind any fallback error
     if opencode_available():
         try:
             with tempfile.TemporaryDirectory() as empty:
@@ -346,5 +348,5 @@ def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, 
             note = "" if served == name else f" (SERVED: {served})"   # flag any difference, never hide it
             return resp["choices"][0]["message"]["content"], name + note
         except Exception as exc:  # noqa: BLE001
-            return "", f"openrouter error: {exc!r}"[:200]
-    return "", "no provider (need opencode or OPENROUTER_API_KEY)"
+            return "", (first_fail + f"openrouter error: {exc!r}")[:300]
+    return "", first_fail + "no provider (need opencode or OPENROUTER_API_KEY)"

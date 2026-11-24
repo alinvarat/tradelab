@@ -18,7 +18,9 @@ permissions:
   contents: read
 
 concurrency:
-  group: tradelab-production
+  # One queue for production deploys; each pull request gets its own queue, so a pending PR test is no longer
+  # replaced (cancelled) when another branch queues a run.
+  group: ${{ github.event_name == 'pull_request' && format('tradelab-pr-{0}', github.ref) || 'tradelab-production' }}
   cancel-in-progress: false
 
 jobs:

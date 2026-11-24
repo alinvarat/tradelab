@@ -18,7 +18,10 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 async function api(path, body) {
   const r = await fetch("/api/" + path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
   const j = await r.json().catch(() => ({ error: "bad response" }));
-  if (!r.ok || (j && j.error && !Array.isArray(j))) throw new Error(j.error || r.statusText);
+  // A status payload (trader, buzz, event trader) carries its last error in `error` next to real data: that is a
+  // warning to show, not a failed request. Only an HTTP error or an error-only body fails the call.
+  const errorOnly = j && j.error && !Array.isArray(j) && Object.keys(j).every((k) => ["error", "symbol", "name"].includes(k));
+  if (!r.ok || errorOnly) throw new Error(j.error || r.statusText);
   return j;
 }
 

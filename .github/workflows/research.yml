@@ -177,12 +177,15 @@ jobs:
 
   study:
     name: ${{ matrix.study }}
+    # Only on a manual run, and only the requested study: before, each dispatch started all ~25 matrix jobs just to
+    # skip their steps, and every job is billed as at least one runner minute.
+    if: github.event_name == 'workflow_dispatch' && !contains(fromJSON('["llm_earnings_forward","options_forward","l4f_forward"]'), inputs.study)
     runs-on: ubuntu-latest
     timeout-minutes: 240
     strategy:
       fail-fast: false
       matrix:
-        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_8k_other, probe_options, polymarket_llm, probe_llm_cost, pit_swing, news_v2, l1_listings, l1c_binance_notices, l1e_binance_delist, l1g_alpha_remove, l4_polymarket_longshot, l3_smallcap_news, l6_smallcap_insider, l2_unlocks, probe_provider, news_v3, l7_first_red_day]
+        study: ${{ fromJSON(inputs.study == 'all' && '["tom","momentum","items","form4","pit_momentum","llm_earnings","llm_earnings_wide","llm_8k_other","probe_options","polymarket_llm","probe_llm_cost","pit_swing","news_v2","l1_listings","l1c_binance_notices","l1e_binance_delist","l1g_alpha_remove","l4_polymarket_longshot","l3_smallcap_news","l6_smallcap_insider","l2_unlocks","probe_provider","news_v3","l7_first_red_day","l8_gainer_fade","l9_loser_bounce","l10_gap_fade"]' || format('["{0}"]', inputs.study)) }}
     steps:
       - name: Check out repository
         if: inputs.study == 'all' || inputs.study == matrix.study
