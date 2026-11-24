@@ -1738,6 +1738,179 @@ def study_probe_claude(_symbols):
             "seconds": round(time.time() - t0, 1), "spend": ai_news.spend()}, []
 
 
+def _yahoo_events(symbol, p1, p2, tries=4):
+    """Daily bars with dividends and split dates (events=div,split), uncached; ([], {}, set()) on failure."""
+    import urllib.parse
+    import urllib.request
+    from core import factory_us_pit as fu
+    url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}?period1={p1}"
+           f"&period2={p2}&interval=1d&events=div%2Csplit&includePrePost=false")
+    for k in range(tries):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=data.UA), timeout=30) as r:
+                d = json.loads(r.read())["chart"]
+            if d.get("error") or not d.get("result"):
+                return [], {}, set()
+            return fu.parse_chart(d["result"][0])
+        except Exception as e:                  # a missing symbol is a gap, not a crash
+            if k == tries - 1:
+                log(f"  bars failed {symbol}: {e}")
+                return [], {}, set()
+            time.sleep(2 * (k + 1))
+
+
+def _sec_get(url, tries=5):
+    """Uncached SEC JSON (submissions pages are large), one request at a time, about 0.15 s apart, with backoff.
+    Raises after the last try: a failed fetch is never read as 'no filings'."""
+    import urllib.error
+    import urllib.request
+    err = None
+    for k in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": nb.SEC_UA, "Accept-Encoding": "identity"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                body = json.loads(r.read())
+            time.sleep(0.15)
+            return body
+        except urllib.error.HTTPError as e:
+            err = e
+            if e.code == 404:
+                break
+            time.sleep(3 * (k + 1))
+        except Exception as e:
+            err = e
+            time.sleep(3 * (k + 1))
+    raise RuntimeError(f"SEC fetch failed {url}: {err}")
+
+
+def study_factory_us_pit_1(_symbols):
+    """Pre-registered in RESULTS.md 'factory_us_pit_1 screen': 4 rules on a point-in-time S&P 500 with 8-K data."""
+    import urllib.request
+    from datetime import datetime
+    from core import factory_us_pit as fu
+    with urllib.request.urlopen(urllib.request.Request(SP500_URL, headers={"User-Agent": "TradeLab research"}),
+                                timeout=60) as r:
+        spells = st.parse_membership(r.read().decode())
+    names = sorted(t for t, sp in spells.items() if any(a < "2026-11-01" and (b is None or b >= "2016-11-01")
+                                                         for a, b in sp))
+    log(f"S&P 500 tickers with a spell in 2016-11..2026-10: {len(names)}")
+    extra = [fu.BENCH, fu.VIX, *fu.ETFS]
+    p1, p2 = calendar.timegm((2016, 1, 1, 0, 0, 0)), calendar.timegm((2026, 11, 1, 0, 0, 0))
+    bars, divs, splits, rejected, missing = {}, {}, {}, [], []
+    for s in extra + [n for n in names if n not in extra]:
+        b, dv, sp = _yahoo_events(s, p1, p2)
+        if not b:
+            missing.append(s)
+            continue
+        if not fu.daily_ok(b):
+            rejected.append(s)
+            continue
+        bars[s], divs[s], splits[s] = b, dv, sp
+    log(f"bars: {len(bars)} symbols, {len(missing)} missing, {len(rejected)} rejected (not daily)")
+    if fu.BENCH not in bars:
+        raise RuntimeError("no SPY bars")
+    tick = nb.sec_company_tickers()
+    stocks = [s for s in bars if s not in extra]
+    ciks = {s: tick[s] for s in stocks if s in tick}
+    filings, sec_failed = {}, []
+    for k, (s, c) in enumerate(sorted(ciks.items())):
+        try:
+            filings[s] = fu.sec_filings_all(c, _sec_get)
+        except Exception as e:
+            sec_failed.append(s)
+            log(f"  sec failed {s}: {e}")
+        if k % 100 == 0:
+            log(f"  sec {k}/{len(ciks)}")
+    cik_ok = set(filings)
+    sets = {s: fu.filing_sets(f) for s, f in filings.items()}
+    any8k = {s: x["any"] for s, x in sets.items()}
+    t202 = {s: x["t202"] for s, x in sets.items()}
+    ev202 = {s: x["ev202"] for s, x in sets.items()}
+    by_year, hours = {}, {}
+    for f in filings.values():
+        for x in f:
+            by_year[x["date"][:4]] = by_year.get(x["date"][:4], 0) + 1
+            if "2.02" in x["items"]:
+                h = datetime.fromtimestamp(x["ts"], fu.NY).strftime("%H")   # the stamp's own wall-clock hour
+                hours[h] = hours.get(h, 0) + 1
+    P = fu.build_panel(bars, divs, splits)
+    members = fu.members_by_session(P, spells)
+    cov = fu.coverage(P, members, cik_ok)
+    log(f"panel: {P['n']} sessions {P['days'][0]}..{P['days'][-1]}; coverage {cov}")
+
+    def pack(trades, ctrl, cost, nightly=False):
+        ent = sorted({P["close_ts"][t["signal_i"]] for t in trades}) if nightly else \
+            [P["close_ts"][t["i0"]] for t in trades]
+        return {"series": fu.to_series(P, fu.book(P, trades, cost)),
+                "series2x": fu.to_series(P, fu.book(P, trades, 2 * cost)),
+                "control": fu.to_series(P, fu.book(P, ctrl, cost)), "entries": ent,
+                "n_trades": len(trades), "n_control": len(ctrl)}
+
+    R = lambda: random.Random(fu.SEED)
+    rows, prim, desc, counts = [], {}, {}, {}
+
+    def keep(rule, trades, ctrl, cost):
+        for lab, lst in (("rule", trades), ("control", ctrl)):
+            for t in lst:
+                rows.append({"rule": rule, "kind": lab, "symbol": t["sym"], "signal_day": P["days"][t["signal_i"]],
+                             "entry_day": P["days"][t["i0"]], "exit_day": P["days"][t["i1"]],
+                             "w": round(t["w"], 4), "ret": fu.trade_return(P, t, cost)})
+
+    scores = fu.b1_scores(P, [s for s in stocks if s in cik_ok])
+    log("B1 scores done")
+    c = fu.COST["B1"]
+    for hold, side, label, target in ((2, 1, "B1 residual_reversal_no_news", prim), (1, 1, "B1 h1", desc),
+                                      (5, 1, "B1 h5", desc), (2, -1, "B1 short h2", desc)):
+        tr, ct = fu.b1_trades(P, scores, members, cik_ok, any8k, hold=hold, side=side, rng=R())
+        target[label] = pack(tr, ct, c)
+        if target is prim:
+            keep(label, tr, ct, c)
+    feats = fu.b2_features(P, [s for s in stocks if s in cik_ok])
+    tr, ct = fu.b2_trades(P, feats, members, cik_ok, t202, rng=R())
+    prim["B2 overnight_tug_of_war"] = pack(tr, ct, fu.COST["B2"], nightly=True)
+    nights = {}
+    for t in tr:
+        nights.setdefault(t["signal_i"], []).append(t["sym"])
+    rows += [{"rule": "B2 overnight_tug_of_war", "kind": "night", "signal_day": P["days"][i], "names": v}
+             for i, v in sorted(nights.items())]
+    del feats
+    log("B2 done")
+    cands = fu.b3_candidates(P, ev202, members, cik_ok)
+    counts["b3_candidates"] = len(cands)
+    c = fu.COST["B3"]
+    tr, ct = fu.b3_trades(P, cands, ev202, members, rng=R())
+    prim["B3 earnings_premium_predicted_date"] = pack(tr, ct, c)
+    keep("B3 earnings_premium_predicted_date", tr, ct, c)
+    tr, ct = fu.b3_trades(P, cands, ev202, members, rng=R(), filter_top_half=True)
+    desc["B3 top-half filter"] = pack(tr, ct, c)
+    log("B3 done")
+    c = fu.COST["B4"]
+    ev_long = fu.b4_events(P, ev202, members, cik_ok, side=1)
+    ev_short = fu.b4_events(P, ev202, members, cik_ok, side=-1)
+    counts.update(b4_long_events=len(ev_long), b4_short_events=len(ev_short),
+                  ev202_filings=sum(len(v) for v in ev202.values()))
+    for hold, side, label, target in ((5, 1, "B4 earnings_reaction_drift_long", prim), (10, 1, "B4 D+10", desc),
+                                      (20, 1, "B4 D+20", desc), (5, -1, "B4 short D+5", desc)):
+        tr, ct = fu.b4_trades(P, ev_long if side > 0 else ev_short, members, cik_ok, hold=hold, side=side, rng=R())
+        target[label] = pack(tr, ct, c)
+        if target is prim:
+            keep(label, tr, ct, c)
+    log("B4 done")
+    summ = {"verdict": fu.judge_all(prim, cov), "descriptive": fu.judge_all(desc, cov, primary=False),
+            "trades": {k: {"rule": v["n_trades"], "control": v["n_control"]} for k, v in {**prim, **desc}.items()},
+            "coverage": cov, "counts": counts, "tickers_wanted": len(names), "tickers_with_bars": len(stocks),
+            "bars_missing": len(missing), "bars_rejected_not_daily": rejected, "ciks": len(ciks),
+            "sec_failed": len(sec_failed), "sec_failed_tickers": sec_failed[:50], "filings_8k_by_year": by_year,
+            "t202_stamp_hour_as_read": hours, "sessions": P["n"], "first_day": P["days"][0], "last_day": P["days"][-1]}
+    v = summ["verdict"]
+    log("factory_us_pit_1 passed: " + (", ".join(v["passed"]) or "none"))
+    for n, r in {**v["rules"], **summ["descriptive"]["rules"]}.items():
+        log(f"  {n}: " + " ".join(f"{sp} {r[sp]['mean_day'] or 0:+.4%}/d p{r[sp]['p_block'] or 1:.3f} "
+                                  f"diff {r[sp]['diff_mean_day'] or 0:+.4%} n/wk {r[sp]['entries_per_week']:.1f}"
+                                  for sp in ("train", "validation", "test")))
+    return summ, rows
+
+
 def study_probe_provider(_symbols):
     """List the model ids of the OpenAI-compatible provider (ai.thirx.com) using the THIRX_API_KEY secret. Prints ids
     only; the key is read from the environment and never logged."""
@@ -1761,6 +1934,7 @@ def study_probe_provider(_symbols):
     return {"models": len(ids), "deepseek": [i for i in ids if "deepseek" in i.lower()], "all": ids[:200]}, []
 
 STUDIES = {"probe_claude": study_probe_claude, "factory_crypto_1": study_factory_crypto_1, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4, "l12b_perp_fade": study_l12b_perp_fade, "l12_hour_shocks": study_l12_hour_shocks}
+STUDIES.update({"factory_us_pit_1": study_factory_us_pit_1})
 
 
 def brief(summ, prefix=""):
