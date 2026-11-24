@@ -110,11 +110,10 @@ def part_files(directory, study):
     """{shard index: path} for files named exactly <study>_<digits>.json (not <study>.json or <study>_summary.json)."""
     pat = re.compile(r"^%s_(\d+)\.json$" % re.escape(study))
     out = {}
-    for root, _dirs, files in os.walk(directory):
-        for f in files:
-            m = pat.match(f)
-            if m:
-                out.setdefault(int(m.group(1)), []).append(os.path.join(root, f))
+    for f in sorted(os.listdir(directory)):            # top level only: subfolders are other runs
+        m = pat.match(f)
+        if m and os.path.isfile(os.path.join(directory, f)):
+            out.setdefault(int(m.group(1)), []).append(os.path.join(directory, f))
     return out
 
 
