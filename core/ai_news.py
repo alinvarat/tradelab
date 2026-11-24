@@ -216,7 +216,7 @@ def cache_messages(system: str, user: str) -> list:
 
 # Owner 2026-11-24: an OpenAI-compatible provider for the paid calls. Configured only through the environment
 # (Kuber runtime env from the THIRX_API_KEY secret); the key is never in code, logs or files.
-CUSTOM_BASE_URL = os.environ.get("TRADELAB_LLM_BASE_URL", "https://ai.thirx.com/v1").rstrip("/")
+CUSTOM_BASE_URL = (os.environ.get("TRADELAB_LLM_BASE_URL") or "https://ai.thirx.com/v1").rstrip("/")   # empty variable = default
 CUSTOM_MODEL = os.environ.get("TRADELAB_LLM_PROVIDER_MODEL", "")
 CUSTOM_HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
                   "Accept": "application/json"}   # the provider's front door refuses the default Python user agent
