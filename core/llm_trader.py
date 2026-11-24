@@ -55,7 +55,7 @@ CACHE_HEADER = "Candidates and context (JSON):\n"
 # first cycle's candidates at the US open. A scheduled scan whose candidates and prices have not changed is skipped.
 PREOPEN_WINDOW_ET = ((9, 10), (9, 29))
 BRIEFING_USE_S = 2 * 3600          # the briefing is part of the context for the first two hours of the session
-UNCHANGED_PCT = 0.3                # a scheduled scan is skipped when no candidate moved more than this since the last one
+UNCHANGED_SHARE = 0.25             # a scheduled scan is skipped unless a candidate moved >= this share of its class shock since the last look
 OVERNIGHT_MAX = 60
 MOVER_SHARE = 0.5
 EXT_MAX = 40                       # symbols re-quoted per pass in US extended hours                  # a "top mover" must have moved at least half its class's shock threshold
@@ -114,7 +114,9 @@ profits when the price falls, with the same size_pct/leverage/entry/stop_pct/tar
 entry, the target below). "sell" closes whatever position you hold, long or short; you cannot hold a long and a short in \
 the same symbol at once. (8) US stocks/ETFs on your focus list (held, pending, in the news, on the pre-open \
 watchlist) also trade in pre-market (04:00-09:30 New York) and after-hours (16:00-20:00); a quote with "session" pre or \
-post has a wide spread (about 0.3 percent) and thin liquidity."""
+post has a wide spread (about 0.3 percent) and thin liquidity. (9) market_open false means that market is closed now: \
+its move_pct is the LAST SESSION's move, not today's, so do not read it as live. A sell of a closed-market position is \
+queued and executes at the next open (exit_queued shows it); a buy or short of a closed-market symbol cannot fill."""
 
 
 ANALYST_NEWS = ("You are the NEWS analyst on a multi-asset desk. For each candidate judge the catalyst: what happened, "
@@ -548,7 +550,8 @@ class LlmTrader:
         def macro(sym, label):
             q = self.context.get(sym)
             return {"name": label, "price": q.get("price") if q else None,
-                    "move_pct": round(q["change_pct"], 2) if q and q.get("change_pct") is not None else None}
+                    "move_pct": round(q["change_pct"], 2) if q and q.get("change_pct") is not None else None,
+                    "market_open": bool(q and q.get("open"))}
         out = {"protocol": PROTOCOL_VERSION, "time_utc": time.strftime("%Y-%m-%d %H:%M", time.gmtime(now)),
                "market": {"spy": macro("SPY", "S&P 500 ETF"), "vix": vix["price"] if vix else None,
                           "dollar_index": macro("DX-Y.NYB", "US dollar index"), "us10y_yield": macro("^TNX", "US 10y yield"),
@@ -596,6 +599,7 @@ class LlmTrader:
         mark = (last.bid if p.side > 0 else last.ask) if last else p.entry
         link = self.links.get(s, {})
         return {"symbol": s, "asset_class": asset_class(s), "side": "short" if p.side < 0 else "long",
+                "market_open": bool(last.open) if last else None, "exit_queued": bool(link.get("exit_at_open")),
                 "entry": round(p.entry, 4), "mark": round(mark, 4),
                 "pnl_pct": round(p.side * (mark / p.entry - 1) * 100, 2),
                 "held_hours": round((now - p.opened_ts) / 3600, 1), "stop": round(p.sl, 4) if p.sl else None,
@@ -952,6 +956,13 @@ class LlmTrader:
         return {"status": "adjusted"}
 
     def _sell(self, sym, reason, now):
+        last = self.acct.last.get(sym)
+        if last is not None and not last.open:          # like a market-on-open order in a broker app
+            link = self.links.get(sym)
+            if link is not None:
+                link["exit_at_open"] = reason
+            self.record("exit_queued", symbol=sym, reason=reason, why="market closed: sells at the next open")
+            return {"status": "queued for the open"}
         _, err = self.acct.close(sym, reason=reason)
         status = "closed" if not err else f"failed: {err}"
         link = self.links.get(sym)
@@ -974,6 +985,10 @@ class LlmTrader:
             for s, p in list(self.acct.positions.items()):  # forced time exit
                 if now - p.opened_ts >= MAX_HOLD_S and s in quotes and quotes[s].get("open"):
                     self._sell(s, "safety exit (180 days)", now)
+            for s, link in list(self.links.items()):     # queued market-on-open exits
+                if link.get("exit_at_open") and s in self.acct.positions and (quotes.get(s) or {}).get("open"):
+                    reason = link.pop("exit_at_open")
+                    self._sell(s, f"{reason} (at the open)", now)
             self._log_closed_trades()
             self._check_pending(now, quotes)
             self._charge_financing(now)
@@ -1038,11 +1053,12 @@ class LlmTrader:
             if trigger == "scheduled scan":
                 snap = {c["symbol"]: quotes[c["symbol"]]["price"] for c in cands if quotes.get(c["symbol"], {}).get("price")}
                 last = self.calls.get("last_sched") or {}
-                if snap and set(snap) == set(last) and all(
-                        abs(snap[k] / last[k] - 1) * 100 < UNCHANGED_PCT for k in snap if last.get(k)):
+                if snap and set(snap) <= set(last) and all(
+                        abs(snap[k] / last[k] - 1) * 100 < UNCHANGED_SHARE * SHOCK_PCT[asset_class(k)]
+                        for k in snap if last.get(k)):
                     self.calls["last_idle"] = now
                     self.record("skip", why="scheduled scan: same candidates, no move over "
-                                            f"{UNCHANGED_PCT}% since the last look")
+                                            f"{UNCHANGED_SHARE:.0%} of its class threshold since the last look")
                     trigger = None
                 else:
                     self.calls["last_sched"] = snap
