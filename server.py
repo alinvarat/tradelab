@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from core.universe import TICKERS
-from core import buzz, dvol_collect, event_trader, llm_trader, news_archive, news_latency, steward
+from core import buzz, dvol_collect, event_trader, llm_trader, market_collect, news_archive, news_latency, steward
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 from core.storage import write_json_atomic
@@ -371,6 +371,8 @@ class Handler(BaseHTTPRequestHandler):
                 files = sorted(f.name for f in dvol_collect.RAW.glob("*.json.gz")) if dvol_collect.RAW.exists() else []
                 return self._send(200, {**dvol_collect.STATUS, "snapshots": files, "dir": str(dvol_collect.RAW.name),
                                         "window": "Mondays 2026-11-30..2027-02-22 09:00 and 09:05 UTC"})
+            if p == "collect":
+                return self._send(200, market_collect.view())
             if p == "buzz":
                 return self._send(200, buzzmon.view() if buzzmon else {"disabled": True})
             if p == "llm_trader":
@@ -616,7 +618,8 @@ def status_for_steward():
     s = {"uptime_h": round((now - STARTED) / 3600, 1), "poller_age_s": round(now - status["last_poll"]),
          "restarts": RESTARTS, "disk_free_gb": round(shutil.disk_usage(ROOT).free / 1e9, 2),
          "errors": {"event_trader": evt.last_error, "buzz": buzzmon.last_error if buzzmon else None,
-                    "llm_trader": llm.last_error if llm else None, "dvol": dvol_collect.STATUS["last_error"]},
+                    "llm_trader": llm.last_error if llm else None, "dvol": dvol_collect.STATUS["last_error"],
+                    "collect": market_collect.STATUS["last_error"]},
          "news_archive": news_archive.STATUS, "dvol_snapshots_taken": dvol_collect.STATUS["taken"][-6:],
          "experiments": {"event_trader": evt.evaluate() if evt else None,
                          "buzz_1d": buzzmon.evaluate() if buzzmon else None,
@@ -676,6 +679,8 @@ if __name__ == "__main__":
     if os.environ.get("TRADELAB_NEWS_ARCHIVE") == "1":  # set in the container; the systemd collector uses its own copy
         start("news_archive", news_archive.loop)
     start("dvol", dvol_collect.loop)
+    if os.environ.get("TRADELAB_COLLECT", "1") == "1":   # forward market data for research/IDEAS_codex_20261124.md
+        start("collect", market_collect.loop)
     start("steward", steward.loop, status_for_steward)
     start("supervisor", supervisor)
     signal.signal(signal.SIGTERM, shutdown)
