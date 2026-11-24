@@ -170,3 +170,13 @@ class FallbackReason(unittest.TestCase):
             text, reason = ai_news.chat("s", "u", urlopen=fake_urlopen, model=ai_news.DECISION_MODEL)
         self.assertEqual(text, "")
         self.assertTrue(reason.startswith("custom provider error: HTTPError 400; then openrouter error"), reason)
+
+
+class LocalCliAuth(unittest.TestCase):
+    def test_logged_in_cli_counts_as_ready(self):
+        import os
+        from unittest import mock
+        env = {k: v for k, v in os.environ.items() if k != "CLAUDE_CODE_OAUTH_TOKEN"}
+        env["TRADELAB_CLAUDE_AUTH"] = "cli"
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(ai_news.shutil, "which", return_value="/x"):
+            self.assertTrue(ai_news.claude_ready())
