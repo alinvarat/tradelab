@@ -302,6 +302,13 @@ class Trading(Base):
         self.assertEqual(sim["type_base_rate"]["n"], 12)                  # all 12 earnings rows; the mining row is "other"
         self.assertTrue(all("beats" in e["title"] for e in sim["examples"]))
 
+    def test_playbook_is_attached_for_the_headline_type(self):
+        heads = [{"title": "Big Co agrees to acquire Small Co", "source": "X", "lexicon": 0, "ai_scores": {}, "seen": "", "key": "m1"}]
+        with mock.patch.object(lt, "archive_headlines", return_value=heads), mock.patch.object(lt, "similar_past", return_value=None):
+            c = self.t.build_context(1000.0, [{"symbol": "AAA", "ratio": None, "why": "x"}], self.market(), [])
+        self.assertIn("offer price", c["candidates"][0]["playbook"])
+        self.assertEqual(set(lt.PLAYBOOK), {t for t, _ in lt.NEWS_TYPES} | {"other"})
+
     def test_news_type_classification(self):
         self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
         self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")
