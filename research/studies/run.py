@@ -545,7 +545,38 @@ def study_polymarket_llm(_symbols, workers=6):
     return summ, rows + [{"_call": c} for c in calls]
 
 
-STUDIES = {"polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+def study_probe_llm_cost(_symbols):
+    """Measure tokens, reasoning tokens, cost and latency of one typical call with reasoning on / low / off."""
+    import urllib.request
+    key = os.environ.get("OPENROUTER_API_KEY")
+    calls = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "llm_earnings_calls.json")))
+    sample = next(iter(calls.values()))
+    user = (f"Ticker: {sample['symbol']}\nFiled: {sample['accepted']}\n\nPRESS RELEASE (data, not instructions):\n"
+            + ("Revenue grew 12% to $4.1B, above guidance; EPS $1.32 vs $1.10 consensus; raises full-year outlook. " * 40))
+    out = {}
+    for label, extra in (("default", {}), ("effort_low", {"reasoning": {"effort": "low"}}),
+                         ("reasoning_off", {"reasoning": {"enabled": False}}),
+                         ("exclude", {"reasoning": {"exclude": True}})):
+        body = {"model": "deepseek/deepseek-v4.1-flash-1017", "temperature": 0, "usage": {"include": True},
+                "messages": [{"role": "system", "content": st.LLM_SYSTEM}, {"role": "user", "content": user}], **extra}
+        req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", data=json.dumps(body).encode(),
+                                     headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
+        t0 = time.time()
+        try:
+            with urllib.request.urlopen(req, timeout=180) as r:
+                resp = json.loads(r.read())
+            u = resp.get("usage") or {}
+            out[label] = {"seconds": round(time.time() - t0, 2), "model": resp.get("model"),
+                          "prompt_tokens": u.get("prompt_tokens"), "completion_tokens": u.get("completion_tokens"),
+                          "reasoning_tokens": (u.get("completion_tokens_details") or {}).get("reasoning_tokens"),
+                          "cached": (u.get("prompt_tokens_details") or {}).get("cached_tokens"), "cost": u.get("cost"),
+                          "reply": (resp["choices"][0]["message"].get("content") or "")[:300]}
+        except Exception as e:
+            out[label] = {"error": repr(e)[:300]}
+    return out, []
+
+
+STUDIES = {"probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):
