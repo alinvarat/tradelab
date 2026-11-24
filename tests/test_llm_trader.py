@@ -164,15 +164,14 @@ class Trading(Base):
         self.t.scan(self.market(BBB=quote("BBB", move=12)))
         self.assertEqual(self.prompts, [])       # minimum gap between calls
 
-    def test_daily_budget_stops_cycles_and_reserves_half_for_signals(self):
-        now = time.time()
-        self.t.calls.update(usd=lt.BUDGET_USD, last_ts=0.0)
-        self.assertIsNone(self.t.due(now, True, idle=True))                 # budget used up: nothing
-        self.t.calls.update(usd=lt.BUDGET_USD * 0.6, last_ts=0.0, last_idle=0.0)
-        self.assertIsNone(self.t.due(now, False, idle=True))                # over half: no scheduled look
-        self.assertEqual(self.t.due(now, True, idle=True), "new signals")   # but news still gets a cycle
-        self.t.calls.update(usd=0.0, last_ts=now - lt.SIGNAL_GAP_S + 30)
-        self.assertIsNone(self.t.due(now, True))                            # headlines are batched
+    def test_every_stage_starts_with_the_same_cacheable_block(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 3, "leverage": 1, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=110, move=12), BBB=quote("BBB", px=50, move=9)))
+        texts = self.analyst_calls + self.prompts + self.risk_calls
+        self.assertTrue(texts)
+        shared = self.analyst_calls[0][:self.analyst_calls[0].rindex("]")]     # header + market + candidates list
+        for u in texts:
+            self.assertTrue(u.startswith(shared), u[:200])
 
     def test_model_failure_is_logged_and_nothing_trades(self):
         self.t.chat = lambda s, u: ("", "no provider")

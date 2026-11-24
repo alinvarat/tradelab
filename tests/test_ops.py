@@ -117,3 +117,13 @@ class Spend(unittest.TestCase):
         self.assertEqual(after["tokens_cached"] - before["tokens_cached"], 800)
         self.assertEqual(ai_news.record_usage({}), 0.0)
 
+
+
+class CacheLayout(unittest.TestCase):
+    def test_role_goes_last_and_system_is_shared(self):
+        from core import ai_news
+        a = ai_news.cache_messages("ROLE A", "DATA")
+        b = ai_news.cache_messages("ROLE B", "DATA")
+        self.assertEqual(a[0], b[0])
+        self.assertTrue(a[1]["content"].startswith("DATA"))
+        self.assertTrue(a[1]["content"].endswith("ROLE A"))

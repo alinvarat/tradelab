@@ -77,9 +77,9 @@ Owner direction: the model may decide leverage, entry price, size, number of pos
 - Because leverage can wipe the account in minutes, an all-in outcome is a valid result; closed trades, liquidations and the model's stated reason for size/leverage are logged. The evaluation rule is unchanged (30 closed pairs, bootstrap).
 - Language: the model writes reasons, market view and bull/bear arguments in Thai (tickers, numbers, JSON keys in English). Thai text can be less precise than English; the decision fields are numeric and validated, so only the explanations are affected.
 
-## Addendum 2026-11-24: v4.2, cost control (written before any v4.2 decision)
-The owner asked for lower AI cost without dropping the v4.1 pipeline (3 analysts, 2-round debate, risk review, 30-trade memory, 24 candidates). Changes, applied only from deployment onward:
-- Daily budget `TRADELAB_LLM_BUDGET_USD`, default 1.0 USD per UTC day, measured from OpenRouter's reported cost per call (`usage.cost`; estimated from tokens at 0.30/1.20 USD per 1M when absent). Scheduled scans stop once half the budget is used. News, shocks and position reviews continue until the whole budget is used. Then nothing is called until the next UTC day; stops and targets still execute.
-- New-signal cycles start at most every 5 minutes, so a burst of headlines becomes one cycle. The 60 s minimum gap and the 300 cycles/day cap stay.
-- Decisions, links and pairs are tagged `v4.2`, so `by_protocol` keeps them apart from v4.1. The v4.1 and v4.2 samples are not pooled for any verdict without a statement that says so.
-- Cost per cycle and the day's total are logged with every call (`cost_usd`, `usd_today`) and shown on `/api/llm_trader` (`usd_today`, `budget_usd`).
+## Addendum 2026-11-24: v4.2, cheaper calls without limits (written before any v4.2 decision)
+The owner asked for efficient model use **without a budget cap and without slowing the bot**. The v4.1 pipeline, cadence and caps are unchanged. Changes from deployment onward:
+- Every call in a cycle (3 analysts, bull/bear rounds, decision, risk review) now starts with the same JSON block, market then candidates. The role instructions move to the end of the message, under one shared system message (`ai_news.cache_messages`). DeepSeek's prefix cache then serves that shared block at the cache price ($0.001/M instead of $0.03/M input on OpenRouter, 2026-11-24) for every call after the first stage. Cache hits also cut latency.
+- Real cost per cycle is logged (`cost_usd`, `usd_today`) from OpenRouter `usage.cost`, and shown on `/api/llm_trader`, so the saving can be checked.
+- Decisions, links and pairs are tagged `v4.2`, because the prompt layout changed. v4.1 and v4.2 are not pooled without saying so.
+- No free models: none of the free OpenRouter models is a DeepSeek model, and their rate limits are below this bot's call volume.
