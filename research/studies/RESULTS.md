@@ -185,3 +185,11 @@ Spec `ops/lines/L3_smallcap_news.md`; code `core.screens.smallcap_events`, study
 - Splits: train 2025-05 to 2025-12, validation 2026-01 to 2026-06, test 2026-07 to 2026-10.
 - Shorts in small caps may be impossible to borrow in a real app; long-side and short-side groups are reported separately.
 - **Run 1 (2026-11-24, Actions 45414890419): killed (no group passes).** Data gate ok overall: 315 events, 315 unique, train 120 / validation 86 / test 73 (36 outside the splits); SEC submissions failed for 385 of 1,500 sampled tickers (rate limit), so the sample is about 1,115 tickers. 13 groups, Bonferroni p 0.0039. The only groups with enough events, item 2.02 (earnings) up and down gaps (95 each, about 1.2 a week), were killed: down gaps, continuation to D+1: validation -1.4%, test -5.3%; up gaps, reversal on D: validation +0.7% (p 0.38), test -4.4%. All other groups had fewer than 10 train or validation events (invalid by the data gate). Too rare in this universe (0.3 to 1.2 events a week per group) to matter for 3x a month even if a group had passed.
+
+## L6 screen: insider purchases in small caps (pre-registered 2026-11-24, before any data was pulled)
+Spec `ops/lines/L6_smallcap_insider.md`; code `core.screens.insider_rows`, study `l6_smallcap_insider`. No LLM. Differs from the closed `form4` study (large-cap universe, $50k minimum).
+- Events: SEC insider-transaction data sets 2019Q1 onward; officer or director open-market purchase (code P, acquired) totalling >= $25k per Form 4, issuer listed on Nasdaq / NYSE / NYSE American. Availability: the conservative timestamp (filing date + 28 h UTC), entry at the open of the first session after it.
+- Small cap at entry: previous close $1-20 and 20-day average dollar volume $0.5-20M. Up to 1,500 issuers (seeded sample if more), Yahoo 10-year daily bars.
+- Returns: open to close after 5 and 20 sessions, minus IWM over the same window, 1% round trip; double cost reported.
+- Splits: train 2019-2022, validation 2023-2024, test 2025-2026-10. Trimmed pick on train, data gate, pass/kill as in L1c.
+- Result: pending.
