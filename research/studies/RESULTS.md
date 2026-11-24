@@ -207,6 +207,7 @@ Code `core.screens.loser_bounce_rows`, study `l9_loser_bounce` (shares the L8 da
 - Event: UTC day D with close/open - 1 <= -20%. Entry: buy spot at the open of D+1; exit at the close of D+1, D+3, D+7.
 - Returns: long gain minus BTC's gain over the identical window, minus 0.4% round trip (spot, no funding). Double cost adds another 0.4%.
 - Known limits: survivorship works AGAINST this line's honesty here: coins that crashed and were later delisted are missing, so a long result is likely overstated; a pass would need a point-in-time coin list before any forward test.
+- **Run 1 (2026-11-25, Actions 45481216883): killed.** 1,205 rows, 3.9 a week, data gate ok (long formula was correct). Trimmed pick on train h7 (+1.27%, p 0.31); validation h7 -2.84% (p 0.90), test -0.93%. Every horizon is negative or insignificant in validation (h1 -3.68%, h3 +0.50% p 0.47). Even with survivorship flattering longs, buying the day's crash does not pay.
 
 ## L8 screen: fade the day's top crypto gainers (pre-registered 2026-11-25, before any data was pulled)
 Spec `ops/lines/L8_gainer_fade.md`; code `core.screens.gainer_fade_rows`, study `l8_gainer_fade`. No LLM, no cost. Why this line: LESSONS says the binding constraint toward 3x/month is independent trades per day, and a capacity edge (small, fast-moving coins that large funds cannot size into). Hypothesis (not a proven result): one-day spikes of >= 20% in liquid altcoins partly reverse over the next days.
