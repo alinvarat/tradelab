@@ -367,7 +367,8 @@ class LlmTrader:
         self.state_path, self.log_path = Path(state_path), Path(log_path)
         self.chat = chat or (lambda system, user: ai_news.chat(system, user, model=ai_news.DECISION_MODEL, cache_layout=True))
         # v4.3: helper roles (analysts, bull/bear, risk, pre-open) use free models first; the decision stays on self.chat
-        self.helper = helper or (self.chat if chat else (lambda system, user: ai_news.chat_helper(system, user)))
+        self.helper = helper or ((lambda system, user: self.chat(system, user)) if chat
+                                 else (lambda system, user: ai_news.chat_helper(system, user)))
         self.lock = threading.RLock()
         self.rng = random.Random(rng_seed)
         self.pool = ThreadPoolExecutor(16)
