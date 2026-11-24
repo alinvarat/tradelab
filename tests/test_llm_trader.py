@@ -70,7 +70,8 @@ class Parsing(unittest.TestCase):
             {"symbol": "aaa", "action": "buy", "size_pct": 999, "reason": "x" * 500, "confidence": 7},
             {"symbol": "ZZZ", "action": "buy", "size_pct": 3},            # not a candidate
             {"symbol": "HHH", "action": "sell"},                          # no position
-            {"symbol": "AAA", "action": "short", "size_pct": 1},          # unknown action
+            {"symbol": "AAA", "action": "fly", "size_pct": 1},            # unknown action
+            {"symbol": "ZZZ", "action": "short", "size_pct": 1},          # short needs a candidate too
             {"symbol": "HELD", "action": "sell"}, {"foo": 1}, "junk"], "market_view": "m" * 500})
         out = lt.parse_decisions("noise " + text + " tail", {"AAA"}, {"HELD"})
         syms = [(d["symbol"], d["action"]) for d in out["decisions"]]
@@ -78,7 +79,7 @@ class Parsing(unittest.TestCase):
         self.assertEqual(out["decisions"][0]["size_pct"], lt.SIZE_MAX * 100)
         self.assertEqual(len(out["decisions"][0]["reason"]), 200)
         self.assertEqual(out["decisions"][0]["confidence"], 1.0)
-        self.assertEqual(len(out["rejected"]), 5)
+        self.assertEqual(len(out["rejected"]), 6)
         self.assertEqual(lt.parse_decisions("no json", set(), set())["error"], "no JSON object in reply")
         self.assertEqual(lt.parse_decisions('{"decisions": "x"}', set(), set())["decisions"], [])
 
@@ -249,6 +250,28 @@ class Trading(Base):
         ctx = self.t.build_context(time.time(), [{"symbol": "AAA", "ratio": None, "why": "x"}],
                                    {"AAA": quote("AAA", move=3)}, [])
         self.assertIsNone(ctx["candidates"][0]["abnormal_pct"])
+
+    def test_short_opens_a_short_with_the_stop_above_and_a_short_control(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "leverage": 2, "stop_pct": 5, "target_pct": 10,
+                    "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=-12)))
+        p = self.t.acct.positions["AAA"]
+        self.assertEqual(p.side, -1)
+        self.assertGreater(p.sl, p.entry)
+        self.assertLess(p.tp, p.entry)
+        ctrl = next(iter(self.t.ctrl.positions.values()))
+        self.assertEqual(ctrl.side, -1)
+        self.assertGreater(ctrl.sl, ctrl.entry)
+        view = self.t.view()["positions"][0]
+        self.assertEqual(view["side"], "short")
+
+    def test_buy_while_short_is_refused_until_sold(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "stop_pct": 5, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=-12)))
+        out = self.t._buy({"symbol": "AAA", "size_pct": 5, "stop_pct": 5, "reason": "r"},
+                          self.market(AAA=quote("AAA", px=100, move=-12)), time.time())
+        self.assertEqual(out["status"], "skipped")
+        self.assertIn("opposite", out["why"])
 
     def test_model_failure_is_logged_and_nothing_trades(self):
         self.t.chat = lambda s, u: ("", "no provider")

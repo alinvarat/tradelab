@@ -853,6 +853,7 @@ views.llm = async () => {
     ${Object.keys(ev.by_class || {}).length ? `<p class="small muted">By asset class (closed pairs): ${Object.entries(ev.by_class).map(([k, v]) => `${k} ${v.n}, mean difference ${pct(v.mean_diff * 100)}`).join(" | ")}</p>` : ""}`;
   $("#llm-pos").innerHTML = table([
     { h: "Stock", f: (r) => symCell(r.symbol, "") }, { h: "Class", f: (r) => esc(r.asset_class || "-") },
+    { h: "Side", f: (r) => esc(r.side === "short" ? "Short" : "Long") },
     { h: "Entry", num: 1, f: (r) => fmt(r.entry) }, { h: "Mark", num: 1, f: (r) => fmt(r.mark) },
     { h: "P/L", num: 1, f: (r) => pct(r.pnl_pct), cls: (r) => cls(r.pnl_pct) },
     { h: "Leverage", num: 1, f: (r) => fmt(r.leverage, 1) + "x" },
