@@ -157,24 +157,32 @@ L1B_START_EQUITY = 147.0
 MAX_NOTICE_AGE_S = 15 * 60
 
 
-def _l1b_path():
-    return DIR / "listings_state.json"
+LEDGERS = {   # name -> state file, side, hold, extra cost (protocol files in research/studies/)
+    "l1b": {"file": "listings_state.json", "side": 1, "hold_s": 4 * 3600, "extra": 0.0,
+            "kinds": ("listing",), "protocol": "research/studies/protocol_L1b_listings_forward.md"},
+    "l1d": {"file": "futures_short_state.json", "side": -1, "hold_s": 7 * 86400, "extra": 0.007,
+            "kinds": ("futures",), "protocol": "research/studies/protocol_L1d_futures_short_forward.md"},
+}
 
 
-def _l1b_load():
+def _ledger_path(name="l1b"):
+    return DIR / LEDGERS[name]["file"]
+
+
+def _l1b_load(name="l1b"):
     try:
-        return json.loads(_l1b_path().read_text())
+        return json.loads(_ledger_path(name).read_text())
     except Exception:  # noqa: BLE001  first run or unreadable state starts clean
         return {"seen": [], "pending": [], "closed": [], "equity": L1B_START_EQUITY}
 
 
-def _l1b_save(st):
+def _l1b_save(st, name="l1b"):
     if not disk_ok():
         return
     DIR.mkdir(parents=True, exist_ok=True)
-    tmp = _l1b_path().with_suffix(".tmp")
+    tmp = _ledger_path(name).with_suffix(".tmp")
     tmp.write_text(json.dumps(st, separators=(",", ":")))
-    tmp.replace(_l1b_path())
+    tmp.replace(_ledger_path(name))
 
 
 def listing_notices():
@@ -183,8 +191,10 @@ def listing_notices():
     try:
         d = get("https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&catalogId=48&pageNo=1&pageSize=20", 10)
         for a in (((d.get("data") or {}).get("catalogs") or [{}])[0].get("articles") or []):
-            for sym in sc.binance_listing_symbols(a.get("title", "")):
-                ev.append({"venue": "binance", "symbol": sym, "ts": a["releaseDate"] / 1000, "title": a["title"][:120]})
+            for kind, fn in (("listing", sc.binance_listing_symbols), ("futures", sc.binance_futures_symbols)):
+                for sym in fn(a.get("title", "")):
+                    ev.append({"kind": kind, "venue": "binance", "symbol": sym, "ts": a["releaseDate"] / 1000,
+                               "title": a["title"][:120]})
     except Exception as e:  # noqa: BLE001  one blocked venue must not stop the other
         errors["binance"] = repr(e)[:120]
     try:
@@ -192,7 +202,7 @@ def listing_notices():
                 BROWSER_UA)   # the notice API answers 403 to non-browser user agents
         for n in ((d.get("data") or {}).get("notices") or []):
             for sym in sc.upbit_listing_symbols(n.get("title", "")):
-                ev.append({"venue": "upbit", "symbol": sym, "title": n["title"][:120],
+                ev.append({"kind": "listing", "venue": "upbit", "symbol": sym, "title": n["title"][:120],
                            "ts": datetime.fromisoformat(n["first_listed_at"]).timestamp()})
     except Exception as e:  # noqa: BLE001
         errors["upbit"] = repr(e)[:120]
@@ -225,53 +235,70 @@ def _btc_mid(venue):
     return (float(d["bidPrice"]) + float(d["askPrice"])) / 2
 
 
-def listings_once(now=None):
+def _ledger_step(name, fresh, now):
     from core import screens as sc
-    now = now or time.time()
-    st = _l1b_load()
-    seen = set(st["seen"])
-    fresh = sc.new_listing_events(seen, listing_notices())
-    st["seen"] = sorted(seen)[-2000:]
-    fresh = [e for e in fresh if e["ts"] >= now - MAX_NOTICE_AGE_S]   # old notices (first poll, restarts) are not events
+    cfg = LEDGERS[name]
+    st = _l1b_load(name)
     for e in fresh:
-        append("listings", {**e, "first_seen": round(now, 1)}, now)
-        st["pending"].append({**e, "first_seen": now, "entry_due": now + sc.L1B_DELAY_S})
+        if e.get("kind", "listing") in cfg["kinds"]:
+            append(f"ledger_{name}_events", {**e, "first_seen": round(now, 1)}, now)
+            st["pending"].append({**e, "first_seen": now, "entry_due": now + sc.L1B_DELAY_S})
     keep = []
     for p in st["pending"]:
         try:
-            if "entry_ask" not in p and now >= p["entry_due"]:
+            if "entry_px" not in p and now >= p["entry_due"]:
                 q = quote(p["symbol"])
                 if not q:
                     st["closed"].append({**p, "skipped": "no USDT market on KuCoin or Binance", "ts": now})
                     continue
-                p.update(px_venue=q[0], entry_ask=q[2], btc_entry=_btc_mid(q[0]), entry_ts=now,
-                         exit_due=now + sc.L1B_HOLD_S, stake=round(st["equity"] * sc.L1B_STAKE, 4))
-            elif "entry_ask" in p and now >= p["exit_due"]:
+                p.update(px_venue=q[0], entry_px=q[2] if cfg["side"] > 0 else q[1], btc_entry=_btc_mid(q[0]),
+                         entry_ts=now, exit_due=now + cfg["hold_s"], stake=round(st["equity"] * sc.L1B_STAKE, 4))
+            elif "entry_px" in p and now >= p["exit_due"]:
                 q = quote(p["symbol"])
                 if q and q[0] == p["px_venue"]:
-                    r = sc.l1b_result(p["entry_ask"], q[1], p["btc_entry"], _btc_mid(q[0]))
+                    exit_px = q[1] if cfg["side"] > 0 else q[2]
+                    r = sc.ledger_result(cfg["side"], p["entry_px"], exit_px, p["btc_entry"], _btc_mid(q[0]), cfg["extra"])
                     st["equity"] = round(st["equity"] + p["stake"] * r["net"], 4)
-                    row = {**p, **r, "exit_bid": q[1], "ts": now, "equity_after": st["equity"]}
+                    row = {**p, **r, "exit_px": exit_px, "ts": now, "equity_after": st["equity"]}
                     st["closed"].append(row)
-                    append("listing_trades", row, now)
+                    append(f"ledger_{name}_trades", row, now)
                     continue
         except Exception as e:  # noqa: BLE001  a quote failure retries on the next poll
             STATUS["listings"]["last_error"] = repr(e)[:200]
         keep.append(p)
     st["pending"] = keep
-    _l1b_save(st)
-    STATUS["listings"]["polls"] += 1
+    _l1b_save(st, name)
     return st
 
 
-def listings_view() -> dict:
+def listings_once(now=None):
+    """Poll the notices once and step every ledger; returns the L1b state (kept for callers and tests)."""
+    from core import screens as sc
+    now = now or time.time()
+    st = _l1b_load("l1b")
+    seen = set(st["seen"])
+    fresh = sc.new_listing_events(seen, listing_notices())
+    fresh = [e for e in fresh if e["ts"] >= now - MAX_NOTICE_AGE_S]   # old notices (first poll, restarts) are not events
+    st["seen"] = sorted(seen)[-3000:]
+    _l1b_save(st, "l1b")
+    out = {name: _ledger_step(name, fresh, now) for name in LEDGERS}
+    STATUS["listings"]["polls"] += 1
+    return out["l1b"]
+
+
+def ledger_view(name) -> dict:
     from core import sequential as sq
-    st = _l1b_load()
+    st = _l1b_load(name)
     done = [c for c in st["closed"] if "net" in c]
     ev = sq.run(sq.daily_means([{"ts": c["ts"], "ret": c["net"]} for c in done]), lo=1.0, hi=5.0)
     return {"equity_usd": st["equity"], "start_usd": L1B_START_EQUITY, "goal_usd": 3 * L1B_START_EQUITY,
             "pending": st["pending"], "closed": st["closed"][-30:], "n_closed": len(done), "sequential": ev,
-            "protocol": "research/studies/protocol_L1b_listings_forward.md"}
+            "protocol": LEDGERS[name]["protocol"]}
+
+
+def listings_view() -> dict:
+    return ledger_view("l1b")
+
 
 def loop():
     last_deribit = last_listing = 0.0
@@ -304,4 +331,4 @@ def view() -> dict:
     if DIR.exists():
         for f in sorted(DIR.glob("*/*.jsonl.gz"))[-20:]:
             files[f"{f.parent.name}/{f.name}"] = f.stat().st_size
-    return {**STATUS, "files": files, "dir": str(DIR), "l1b": listings_view()}
+    return {**STATUS, "files": files, "dir": str(DIR), "l1b": ledger_view("l1b"), "l1d": ledger_view("l1d")}
