@@ -265,7 +265,8 @@ _claude_slots = threading.BoundedSemaphore(max(1, CLAUDE_MAX_PARALLEL))
 
 def claude_ready() -> bool:
     """True only when the subscription token is set AND the CLI is installed; this is what switches on v4.18."""
-    return bool(os.environ.get("CLAUDE_CODE_OAUTH_TOKEN")) and shutil.which("claude") is not None
+    authed = bool(os.environ.get("CLAUDE_CODE_OAUTH_TOKEN")) or os.environ.get("TRADELAB_CLAUDE_AUTH") == "cli"
+    return authed and shutil.which("claude") is not None   # "cli": a machine whose Claude Code is already logged in
 
 
 def record_claude_usage(out: dict) -> None:

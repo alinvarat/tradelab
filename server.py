@@ -576,7 +576,8 @@ def backup_loop(keep=14):
 
 def ai_news_available():
     from core import ai_news
-    return ai_news.openrouter_available() or ai_news.opencode_available()
+    return (ai_news.claude_ready() or ai_news.custom_available() or ai_news.openrouter_available()
+            or ai_news.opencode_available())
 
 
 def accounts_summary():
