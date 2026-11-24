@@ -1,0 +1,40 @@
+{
+ "equity_usd": 147.0,
+ "start_usd": 147.0,
+ "goal_usd": 441.0,
+ "pending": [
+  {
+   "id": "6757110",
+   "question": "Will FC Barcelona win on 2026-11-25?",
+   "end": "2026-11-25T17:45:00Z",
+   "side": "no",
+   "price": 0.09,
+   "stake": 7.35,
+   "entry_ts": 1795529548.836021,
+   "volume": 50628.931149
+  },
+  {
+   "id": "7150180",
+   "question": "Will the price of Bitcoin be above $56,000 on November 25?",
+   "end": "2026-11-25T17:00:00Z",
+   "side": "no",
+   "price": 0.042,
+   "stake": 7.35,
+   "entry_ts": 1795529548.836021,
+   "volume": 55360.12932199999
+  }
+ ],
+ "n_closed": 0,
+ "sequential": {
+  "n_units": 0,
+  "e_value_edge": 1.0,
+  "e_value_negative": 1.0,
+  "threshold": 20.0,
+  "decision": "continue",
+  "decided_at_unit": null,
+  "mean_scaled": null
+ },
+ "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md",
+ "closed_last": [],
+ "last_error": null
+}
