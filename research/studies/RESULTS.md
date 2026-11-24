@@ -162,4 +162,4 @@ Code: `core/screens.py` (`binance_delist_symbols`, `listing_returns(side=-1)`), 
 
 ## L1g screen: short after "Binance Alpha Will Remove" notices (pre-registered 2026-11-24, before any data was pulled)
 Study `l1g_alpha_remove`, parser `core.screens.binance_alpha_remove_symbols`. Same events window, pricing order (KuCoin, Binance spot, Coinbase), short return, cost, splits, trimmed horizon pick and pass/kill rules as L1e. Motivation: one Alpha removal notice names many tokens, so it may supply more events than L1e/L1f. Tokens with no prior market on the three venues are skipped (many Alpha tokens trade only on DEXs).
-- Result: pending.
+- **Run 1 (2026-11-24, Actions 45394637977): no verdict (no data in train or validation).** 132 tokens named in Alpha removal notices, 13 priced (all KuCoin, all in 2026; 119 had no market on KuCoin, Binance spot or Coinbase in the hour before). Test only: 4h short +14.4% (n 13, p 0.0005), 7d +29.5%. Too few events and no train/validation, so nothing is concluded; the forward collector can add Alpha removals with a dated addendum if a DEX price source is added.
