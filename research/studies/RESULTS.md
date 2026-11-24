@@ -107,3 +107,25 @@ There were 3,475 2.02 filings from 2026-10-20 to 2026-11-22. 2,097 passed the li
 
 - **Locked verdict: "no edge shown".** The positive mean is not significant, and the model's probabilities were *worse* than the market price (Brier 0.251 vs 0.232). The best wins were cheap NO bets against favourites (for example "Bitcoin above $70,000 on Nov 13" at 0.875), which is long-shot luck in a sample of 100.
 - Account path (as locked: each bet stakes 10% of equity *including open bets*): October ended at 2.8× because overlapping bets used all the cash, then November wiped it to 0. At 20% stakes, one month was ≥ 3× and the account was still wiped. This is how 3×-a-month accounts actually die.
+
+## Swing timing on point-in-time S&P 500: run 45332168793 (`protocol_pit_swing.md`)
+3,594 trades (1.43/day), 61% winners, average hold 4.3 sessions. One compounding book from 2016: 1.80×, worst drawdown −40%. The random-pick control: 1.02×. SPY buy-and-hold: 3.26×.
+
+| monthly net | control | diff | train / val / test | block p (train+val) | 2× cost net | pass |
+|---|---|---|---|---|---|---|
+| +0.45% | −0.13% | +0.58% | +0.39% / +1.20% / +0.54% | 0.061 | −0.09% | **no** (p 0.061) |
+
+- The timing beats random picks in every split but misses the locked p threshold, and it is flat at 2× cost. It trails SPY because about 40% of the cash sits idle (6 of 10 slots used on average). No month reached 3× at 1–3× leverage.
+
+## News reader v2 vs v1 on held-out earnings: run 45332709844 (`protocol_news_v2.md`)
+346 tradeable 2.02 filings from 2026-11-06 to 11-22. LLM cost was **1.89 USD**: 3 samples, 2 documents per filing, which is above the 0.6–0.9 estimate.
+
+| | trades | hit | net / trade | net 2× | vs random dir (p) |
+|---|---|---|---|---|---|
+| v2 H1 | 193 | 52% | +0.15% | −0.33% | +1.18% (0.08) |
+| v2 H3 | 183 | 51% | +0.84% | +0.36% | +3.66% (0.01) |
+| v2 H5 | 169 | 52% | +0.51% | +0.01% | +3.26% (0.016) |
+| v1 H5 (same filings) | 159 | 45% | −2.45% | −2.92% | −0.66% (0.64) |
+
+- Paired per filing, v2 − v1 at H5 = **+1.56% (block p 0.008)**, H3 +0.77% (p 0.075). v2 reads clearly better than v1: on the same filings it avoided most of v1's losses.
+- **Locked verdict: "v2 not better"**, because v2's own H5 net is not significant (p 0.32) and its hit rate is 52% < 55%. Better than v1 is not yet profitable enough to use on its own.
