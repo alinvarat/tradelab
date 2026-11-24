@@ -358,6 +358,47 @@ def insider_rows(symbol: str, bars: list, events: list, bench: dict, px=(1.0, 20
     return out
 
 
+# ------------------------------------------------------------------ L7 first red day short in small caps
+L7_COST, L7_RUN, L7_GREEN = 0.01, 0.15, 3
+L7_HOLDS = (1, 2, 5)
+
+
+def first_red_day_rows(symbol: str, bars: list, bench: dict, px=(1.0, 20.0), dollar_vol=(1e6, 50e6)) -> list:
+    """bars: daily [{'t','o','c','v'}] oldest first; bench: ET date -> (open, close) of IWM.
+    Session D closes red after L7_GREEN green sessions in a row, with close(D-1)/close(D-L7_GREEN-0) - 1 >= 15%;
+    previous close $1-20 and 20-day average dollar volume $1-50M. Short at the open of D+1 (never the close of D,
+    which is already known) to the close +1/+2/+5 sessions later, IWM-adjusted, net of 1%. One row per streak."""
+    days = [(_et(b["t"]).date(), b) for b in bars]
+    out, i = [], L7_GREEN + 21
+    while i < len(days):
+        d, b = days[i]
+        run = [x for _, x in days[i - L7_GREEN:i]]      # D-3, D-2, D-1
+        green = all(x["c"] > x["o"] for x in run)
+        rise = run[-1]["c"] / run[0]["c"] - 1
+        prev = days[i - 1][1]
+        adv = sum(x["c"] * x["v"] for _, x in days[i - 21:i]) / 20
+        if not (b["c"] < b["o"] and green and rise >= L7_RUN
+                and px[0] <= prev["c"] <= px[1] and dollar_vol[0] <= adv <= dollar_vol[1] and d in bench):
+            i += 1
+            continue
+        if i + 1 >= len(days) or days[i + 1][0] not in bench:
+            i += 1
+            continue
+        ed, e = days[i + 1]                               # entry session D+1
+        ret = {}
+        for h in L7_HOLDS:
+            j = i + h
+            if j < len(days) and days[j][0] in bench:
+                short = e["o"] / days[j][1]["c"] - 1     # gain on the short from the D+1 open
+                bshort = bench[ed][0] / bench[days[j][0]][1] - 1   # gain on shorting IWM over the same window
+                ret[f"h{h}"] = {"net": short - bshort - L7_COST}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{d}{symbol}", "ts": e["t"], "kind": "first_red_day",
+                        "rise": round(rise, 4), "ret": ret})
+        i += L7_GREEN + 1                                # skip the streak so one run cannot fire twice
+    return out
+
+
 # ------------------------------------------------------------------ L2 short around large cliff token unlocks
 L2_FUNDING_DAY, L2_FEES, L2_MIN_FRAC = 0.0009, 0.002, 0.01
 L2_WINDOWS = {"pre14_post7": (-14, 7), "pre7_0": (-7, 0), "post0_7": (0, 7)}
