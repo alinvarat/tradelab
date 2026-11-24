@@ -495,3 +495,38 @@ def gainer_fade_rows(symbol: str, d1: list, btc: dict) -> list:
                         "gain": round(c / o - 1, 4), "ret": ret})
         i += L8_COOLDOWN
     return out
+
+
+# ------------------------------------------------------------------ L9 buy the day's biggest crypto losers
+L9_THRESH = -0.20                         # UTC-day move (close/open - 1) at or below -20%
+L9_FEES = 0.004                           # round trip taker + slippage; spot long, no funding
+L9_HOLDS = (1, 3, 7)
+
+
+def loser_bounce_rows(symbol: str, d1: list, btc: dict) -> list:
+    """Mirror of gainer_fade_rows: day D falls >= 20% (close/open) with 20-day average quote volume >= L8_MIN_QV.
+    Buy spot at the open of D+1, sell at the close of D+h, minus BTC over the same window and L9_FEES.
+    One row per coin per L8_COOLDOWN days."""
+    out, i = [], 21
+    while i + 1 < len(d1):
+        t, o, _h, _l, c, _qv = d1[i]
+        adv = sum(x[5] for x in d1[i - 20:i]) / 20
+        if not (o > 0 and c / o - 1 <= L9_THRESH and adv >= L8_MIN_QV):
+            i += 1
+            continue
+        e = d1[i + 1]
+        if e[0] - t != 86400 or e[0] not in btc:
+            i += 1
+            continue
+        ret = {}
+        for h in L9_HOLDS:
+            j = i + h
+            if j < len(d1) and d1[j][0] - e[0] == (h - 1) * 86400 and d1[j][0] in btc:
+                long = d1[j][4] / e[1] - 1
+                blong = btc[d1[j][0]][1] / btc[e[0]][0] - 1
+                ret[f"h{h}"] = {"net": long - blong - L9_FEES}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{t}{symbol}", "ts": e[0], "kind": "loser_bounce",
+                        "drop": round(c / o - 1, 4), "ret": ret})
+        i += L8_COOLDOWN
+    return out

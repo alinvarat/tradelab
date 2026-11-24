@@ -194,6 +194,12 @@ Spec `ops/lines/L6_smallcap_insider.md`; code `core.screens.insider_rows`, study
 - Splits: train 2019-2022, validation 2023-2024, test 2025-2026-10. Trimmed pick on train, data gate, pass/kill as in L1c.
 - **Run 1 (2026-11-24, Actions 45416703411): killed.** Data gate ok: 3,857 rows, 3,857 unique, train 1,994 / validation 1,047 / test 816, no warnings. 31,399 qualifying purchases at 3,289 issuers; 1,500 issuers priced (seeded sample). Trimmed pick h5: train +0.3% (p 0.18), validation -0.4% (p 0.92), test +0.3%. h20: validation +1.0% (p 0.09), test +0.2%. Double cost: negative everywhere. No usable edge after costs.
 
+## L9 screen: buy the day's biggest crypto losers (pre-registered 2026-11-25, before any L9 row or L8 result was seen)
+Code `core.screens.loser_bounce_rows`, study `l9_loser_bounce` (shares the L8 data path). No LLM, no cost. Hypothesis (not proven): one-day crashes of >= 20% in liquid altcoins partly rebound. Universe, data, volume screen (20-day average quote volume >= 2M USDT), one event per coin per 7 days, splits, `judge`, pass and kill rules are exactly those of L8.
+- Event: UTC day D with close/open - 1 <= -20%. Entry: buy spot at the open of D+1; exit at the close of D+1, D+3, D+7.
+- Returns: long gain minus BTC's gain over the identical window, minus 0.4% round trip (spot, no funding). Double cost adds another 0.4%.
+- Known limits: survivorship works AGAINST this line's honesty here: coins that crashed and were later delisted are missing, so a long result is likely overstated; a pass would need a point-in-time coin list before any forward test.
+
 ## L8 screen: fade the day's top crypto gainers (pre-registered 2026-11-25, before any data was pulled)
 Spec `ops/lines/L8_gainer_fade.md`; code `core.screens.gainer_fade_rows`, study `l8_gainer_fade`. No LLM, no cost. Why this line: LESSONS says the binding constraint toward 3x/month is independent trades per day, and a capacity edge (small, fast-moving coins that large funds cannot size into). Hypothesis (not a proven result): one-day spikes of >= 20% in liquid altcoins partly reverse over the next days.
 - Universe: every Binance spot USDT pair with status TRADING today (exchangeInfo), minus stablecoins, fiat, wrapped coins and leveraged tokens (`L8_SKIP`, `UP/DOWN/BULL/BEAR`). Daily klines from `data-api.binance.vision`, 2020-11 to 2026-10.

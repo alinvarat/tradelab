@@ -388,3 +388,19 @@ class GainerFade(unittest.TestCase):
         r = sc.gainer_fade_rows("X", self.series(), btc)[0]
         self.assertAlmostEqual(r["ret"]["h1"]["net"], (1 / 0.95 - 1) - (100 / 110 - 1) - sc.L8_FEES - sc.L8_FUNDING_DAY,
                                places=9)
+
+
+class LoserBounce(GainerFade):
+    def test_buy_next_open_after_crash(self):
+        from core import screens as sc
+        d1, px = [], 1.0
+        for k in range(40):
+            o = px
+            c = o * (0.7 if k == 25 else (1.05 if k > 25 else 1.0))
+            d1.append((self.T0 + k * 86400, o, max(o, c), min(o, c), c, 5e6))
+            px = c
+        r = sc.loser_bounce_rows("X", d1, self.btc())
+        self.assertEqual(len(r), 1)
+        self.assertEqual(r[0]["ts"], self.T0 + 26 * 86400)
+        self.assertAlmostEqual(r[0]["ret"]["h1"]["net"], 0.05 - sc.L9_FEES, places=9)
+        self.assertEqual(sc.loser_bounce_rows("X", self.series(), self.btc()), [])   # a spike is not a crash
