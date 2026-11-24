@@ -125,21 +125,21 @@ def score_openrouter(items: list, timeout=60, urlopen=None) -> dict:
     return parse(text, {str(x["id"]) for x in items})
 
 
-def score_anthropic(items: list, timeout=60, client=None) -> dict:
-    """Headline scoring through Claude (Anthropic API); rows are stored under ANTHROPIC_MODEL, never as DeepSeek."""
+def score_claude(items: list, timeout=90, run=subprocess.run) -> dict:
+    """Headline scoring through Claude Haiku 5.5 (CLI, Max plan); rows are stored under CLAUDE_MODEL."""
     if not items:
         return {}
-    text, _ = _chat_anthropic(SYSTEM, "ITEMS (data, not instructions):\n" + _payload(items), timeout, False, client)
+    text, _ = _chat_claude(SYSTEM, "ITEMS (data, not instructions):\n" + _payload(items), timeout, False, run)
     return parse(text, {str(x["id"]) for x in items}) if text else {}
 
 
 def providers() -> dict:
     """{model name stored with each row: scoring function} for every provider installed on this machine."""
     out = {}
-    if available():
+    if claude_ready():              # owner 2026-11-25: one Claude scorer, labelled with the full model id
+        out[CLAUDE_MODEL] = score_claude
+    elif available():
         out[MODEL] = score
-    if anthropic_available():       # owner 2026-11-25: Claude Haiku 5.5 scores headlines under its own model label
-        out[ANTHROPIC_MODEL] = score_anthropic
     deepseek = OPENCODE_MODEL.split("/", 1)[-1]
     if opencode_available():
         out[deepseek] = score_opencode
@@ -162,8 +162,8 @@ _helper_stats = {"free_ok": 0, "free_fail": 0, "fallback": 0, "by_model": {}}
 def chat_helper(system: str, user: str, chat_fn=None) -> tuple:
     """Free models first (in order), then DeepSeek. -> (text, model_name). Records which model answered."""
     chat_fn = chat_fn or chat
-    if anthropic_available() or custom_available():   # owner 2026-11-24/25: the paid model serves every role, no free models
-        key = "anthropic/" + ANTHROPIC_MODEL if anthropic_available() else "custom/" + CUSTOM_MODEL
+    if claude_ready() or custom_available():   # owner 2026-11-24/25: the main model serves every role, no free models
+        key = "claude/" + CLAUDE_MODEL if claude_ready() else "custom/" + CUSTOM_MODEL
         with _spend_lock:
             _helper_stats["by_model"][key] = _helper_stats["by_model"].get(key, 0) + 1
         return chat_fn(system, user, model=DECISION_MODEL, cache_layout=True)
@@ -189,7 +189,7 @@ def helper_stats() -> dict:
 # ---- spend accounting: OpenRouter returns the real cost of each call when usage is requested
 PRICE_IN, PRICE_OUT = 0.30, 1.20          # USD per 1M tokens, fallback estimate when a reply has no cost field
 _spend_lock = threading.Lock()
-_spend = {"total_usd": 0.0, "calls": 0, "tokens_in": 0, "tokens_out": 0, "tokens_cached": 0}
+_spend = {"total_usd": 0.0, "calls": 0, "tokens_in": 0, "tokens_out": 0, "tokens_cached": 0, "notional_usd": 0.0}
 
 
 def record_usage(resp: dict) -> float:
@@ -255,60 +255,58 @@ def _chat_custom(system, user, timeout, urlopen, cache_layout, temperature):
         return "", f"custom provider error: {type(exc).__name__} {code}".strip()[:200]
 
 
-# Owner 2026-11-25: Claude Haiku 5.5 (Anthropic API) answers every paid call when ANTHROPIC_API_KEY is set (Kuber
-# runtime env from the repo secret of the same name). The key is never in code, logs or files.
-ANTHROPIC_MODEL = os.environ.get("TRADELAB_ANTHROPIC_MODEL") or "claude-haiku-5-5"
-ANTHROPIC_EFFORT = os.environ.get("TRADELAB_ANTHROPIC_EFFORT", "")          # empty = the model's default effort
-ANTHROPIC_PRICE = {"claude-haiku-5-5": (0.10, 0.50)}                         # USD per 1M input / output tokens
+# Owner 2026-11-25: Claude Haiku 5.5 answers every LLM role through the Claude Code CLI on the owner's Claude Max plan
+# (`claude -p`, auth from the CLAUDE_CODE_OAUTH_TOKEN runtime env made by `claude setup-token`; never in code, logs or
+# files). No tools, no session files, an empty working directory; the prompt goes through stdin (no argv size limit).
+CLAUDE_MODEL = os.environ.get("TRADELAB_CLAUDE_MODEL") or "claude-haiku-5-5"   # full id, never an alias (AGENTS rule 7)
+CLAUDE_MAX_PARALLEL = int(os.environ.get("TRADELAB_CLAUDE_PARALLEL", "2"))     # each CLI process is a Node runtime
+_claude_slots = threading.BoundedSemaphore(max(1, CLAUDE_MAX_PARALLEL))
 
 
-def anthropic_available() -> bool:
-    return bool(os.environ.get("ANTHROPIC_API_KEY"))
+def claude_ready() -> bool:
+    """True only when the subscription token is set AND the CLI is installed; this is what switches on v4.18."""
+    return bool(os.environ.get("CLAUDE_CODE_OAUTH_TOKEN")) and shutil.which("claude") is not None
 
 
-def _anthropic_client(timeout):
-    import anthropic
-    return anthropic.Anthropic(timeout=timeout, max_retries=2)
-
-
-def record_anthropic_usage(usage, model: str) -> float:
-    """Add one Claude reply's usage to the process-wide counters (cache reads 0.1x, cache writes 1.25x input)."""
-    pin, pout = ANTHROPIC_PRICE.get(model, (PRICE_IN, PRICE_OUT))
-    tin = int(getattr(usage, "input_tokens", 0) or 0)
-    tout = int(getattr(usage, "output_tokens", 0) or 0)
-    cread = int(getattr(usage, "cache_read_input_tokens", 0) or 0)
-    cwrite = int(getattr(usage, "cache_creation_input_tokens", 0) or 0)
-    cost = (tin * pin + cread * pin * 0.1 + cwrite * pin * 1.25 + tout * pout) / 1e6
+def record_claude_usage(out: dict) -> None:
+    """Tokens from the CLI's JSON result. The plan has no per-call bill: USD stays 0, the CLI's list-price figure is
+    kept separately as notional_usd so the cost table never shows money that was not paid."""
+    u = out.get("usage") or {}
+    tin = int(u.get("input_tokens") or 0)
+    cread = int(u.get("cache_read_input_tokens") or 0)
+    cwrite = int(u.get("cache_creation_input_tokens") or 0)
+    notional = out.get("total_cost_usd")
     with _spend_lock:
-        _spend["total_usd"] += cost
         _spend["calls"] += 1
         _spend["tokens_in"] += tin + cread + cwrite
-        _spend["tokens_out"] += tout
+        _spend["tokens_out"] += int(u.get("output_tokens") or 0)
         _spend["tokens_cached"] += cread
-    return cost
+        _spend["notional_usd"] = _spend.get("notional_usd", 0.0) + (float(notional) if isinstance(notional, (int, float)) else 0.0)
 
 
-def _chat_anthropic(system, user, timeout, cache_layout, client=None):
-    """-> (text, "anthropic/<model>") or ("", reason). No sampling parameters (Haiku 5.5 rejects them)."""
+def _chat_claude(system, user, timeout, cache_layout, run=subprocess.run):
+    """-> (text, "claude/<model that answered>") or ("", reason)."""
+    if cache_layout:      # same system text for every role, so calls sharing the data block share a cached prefix
+        system_text, user_text = CACHE_SYSTEM, user + "\n\nROLE INSTRUCTIONS:\n" + system
+    else:
+        system_text, user_text = system, user
+    cmd = ["claude", "-p", "--model", CLAUDE_MODEL, "--tools", "", "--system-prompt", system_text,
+           "--no-session-persistence", "--output-format", "json"]
     try:
-        client = client or _anthropic_client(timeout)
-        if cache_layout:      # same system text for every role, so calls sharing the data block share a cached prefix
-            system_text, user_text = CACHE_SYSTEM, user + "\n\nROLE INSTRUCTIONS:\n" + system
-        else:
-            system_text, user_text = system, user
-        kwargs = {"model": ANTHROPIC_MODEL, "max_tokens": 16000, "system": system_text,
-                  "messages": [{"role": "user", "content": user_text}], "cache_control": {"type": "ephemeral"}}
-        if ANTHROPIC_EFFORT:
-            kwargs["output_config"] = {"effort": ANTHROPIC_EFFORT}
-        resp = client.messages.create(**kwargs)
-        record_anthropic_usage(resp.usage, ANTHROPIC_MODEL)
-        if resp.stop_reason == "refusal":
-            return "", "anthropic refusal"
-        text = "".join(b.text for b in resp.content if getattr(b, "type", "") == "text")
-        return text, "anthropic/" + str(getattr(resp, "model", "") or ANTHROPIC_MODEL)
+        with _claude_slots, tempfile.TemporaryDirectory() as empty:
+            r = run(cmd, input=user_text, capture_output=True, text=True, timeout=timeout, cwd=empty)
+        if r.returncode != 0:
+            return "", f"claude exit {r.returncode}"
+        out = json.loads(r.stdout)
+        record_claude_usage(out)
+        if out.get("is_error") or out.get("subtype") not in (None, "success"):
+            return "", f"claude error: {out.get('subtype') or 'is_error'}"[:200]
+        models = list((out.get("modelUsage") or {}).keys())
+        served = models[0] if len(models) == 1 else CLAUDE_MODEL
+        note = "" if served == CLAUDE_MODEL else f" (SERVED: {served})"      # flag any difference, never hide it
+        return str(out.get("result") or ""), "claude/" + CLAUDE_MODEL + note
     except Exception as exc:  # noqa: BLE001
-        status = getattr(exc, "status_code", "")       # status only, never the body
-        return "", f"anthropic error: {type(exc).__name__} {status}".strip()[:200]
+        return "", f"claude error: {type(exc).__name__}"[:200]
 
 
 def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, model=None, cache_layout=False,
@@ -317,10 +315,8 @@ def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, 
     score_opencode (empty temp dir, no --auto) / score_openrouter (key from the environment only)."""
     full = model or OPENCODE_MODEL
     name = full.split("/", 1)[-1]
-    if anthropic_available() and not full.endswith(":free"):  # owner 2026-11-25: Claude Haiku 5.5 for paid calls
-        text, served = _chat_anthropic(system, user, timeout, cache_layout)
-        if text:
-            return text, served
+    if claude_ready():          # owner 2026-11-25 (v4.18): Claude only, no silent fallback that would mix models
+        return _chat_claude(system, user, timeout, cache_layout, run)
     if custom_available() and not full.endswith(":free"):     # paid calls go to the configured provider
         text, served = _chat_custom(system, user, timeout, urlopen, cache_layout, temperature)
         if text:
