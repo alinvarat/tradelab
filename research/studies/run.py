@@ -1395,6 +1395,97 @@ def study_l11_funding_short(_symbols, workers=8, sample=150):
     return summ, rows
 
 
+def _binance_all_usdt_symbols():
+    """Every spot USDT symbol that ever had monthly klines on data.binance.vision (delisted ones included)."""
+    out, marker = [], ""
+    base = "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?delimiter=/&prefix=data/spot/monthly/klines/"
+    from urllib.request import Request, urlopen
+    for _ in range(200):
+        url = base + (f"&marker={marker}" if marker else "")
+        with urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0 tradelab-research"}), timeout=60) as r:
+            xml = r.read().decode()
+        prefixes = re.findall(r"<Prefix>data/spot/monthly/klines/([A-Z0-9]+)/</Prefix>", xml)
+        out += [p for p in prefixes if p.endswith("USDT")]
+        nxt = re.search(r"<NextMarker>([^<]+)</NextMarker>", xml)
+        if "<IsTruncated>true" not in xml or not nxt:
+            break
+        marker = nxt.group(1)
+    return sorted(set(out))
+
+
+def _binance_daily_bulk(sym, start_s, end_s):
+    """Daily [(open_ts, o, h, l, c, quote_vol)] from the monthly kline zips (works for delisted symbols too)."""
+    import io
+    import zipfile
+    from urllib.request import Request, urlopen
+    out = []
+    y, m = time.gmtime(start_s).tm_year, time.gmtime(start_s).tm_mon
+    while True:
+        if (y, m) > (time.gmtime(end_s - 1).tm_year, time.gmtime(end_s - 1).tm_mon):
+            break
+        url = f"https://data.binance.vision/data/spot/monthly/klines/{sym}/1d/{sym}-1d-{y}-{m:02d}.zip"
+        for k in range(3):
+            try:
+                with urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0 tradelab-research"}), timeout=30) as r:
+                    z = zipfile.ZipFile(io.BytesIO(r.read()))
+                for line in z.read(z.namelist()[0]).decode().splitlines():
+                    f = line.split(",")
+                    if f and f[0].strip().isdigit():
+                        t = int(f[0])
+                        t = t // 1000000 if t > 10**14 else t // 1000      # files from 2025 use microseconds
+                        out.append((t, float(f[1]), float(f[2]), float(f[3]), float(f[4]), float(f[7])))
+                break
+            except Exception as e:  # noqa: BLE001
+                if getattr(e, "code", None) == 404:
+                    break
+                time.sleep(2 * (k + 1))
+        y, m = (y, m + 1) if m < 12 else (y + 1, 1)
+    out = sorted({x[0]: x for x in out}.values())
+    return [x for x in out if start_s <= x[0] < end_s]
+
+
+def study_l8b_gainer_fade_all(_symbols, workers=8):
+    """Pre-registered in RESULTS.md 'L8b screen': L8 unchanged, on every USDT pair ever listed (survivorship check)."""
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime, timezone
+    from core import screens as sc
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2021), T(2023)), "validation": (T(2023), T(2025)), "test": (T(2025), T(2026, 11))}
+    start, end = T(2020, 11, 1), T(2026, 11)
+    syms = [x for x in _binance_all_usdt_symbols()
+            if x[:-4] not in L8_SKIP and not re.search(r"(UP|DOWN|BULL|BEAR)$", x[:-4])]
+    info = _get_json("https://data-api.binance.vision/api/v3/exchangeInfo?permissions=SPOT", timeout=60) or {}
+    trading = {x["symbol"] for x in info.get("symbols", []) if x.get("status") == "TRADING"}
+    btc = {b[0]: (b[1], b[4]) for b in _binance_daily_bulk("BTCUSDT", start, end)}
+    gaps = {"empty": 0}
+
+    def one(sym):
+        d1 = _binance_daily_bulk(sym, start, end)
+        if len(d1) < 30:
+            gaps["empty"] += 1
+            return []
+        rows = sc.gainer_fade_rows(sym, d1, btc)
+        for r in rows:
+            r["listed_today"] = sym in trading
+        return rows
+    rows = []
+    with ThreadPoolExecutor(workers) as ex:
+        for r in ex.map(one, syms):
+            rows += r
+    for r in rows:
+        r["split"] = sc.split_of(r["ts"], bounds)
+    weeks = (T(2026, 11) - T(2021)) / (7 * 86400)
+    hs = [f"h{h}" for h in sc.L8_HOLDS]
+    delisted = [r for r in rows if not r["listed_today"]]
+    summ = {"line": "l8b", "symbols_ever": len(syms), "symbols_trading_today": len(trading & set(syms)),
+            "btc_days": len(btc), "rows": len(rows), "rows_delisted_coins": len(delisted), "gaps": gaps,
+            "per_week": round(sum(1 for r in rows if r["split"] != "out") / weeks, 2),
+            "base": sc.judge(rows, hs, bounds, pick_trim=5),
+            "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L8_FEES + sc.L8_FUNDING_DAY * 3, pick_trim=5),
+            "delisted_only_base": sc.judge(delisted, hs, bounds, pick_trim=5) if delisted else None}
+    return summ, rows
+
+
 def study_l9_loser_bounce(_symbols, workers=6):
     """Pre-registered in RESULTS.md 'L9 screen': buy the day's >= 20% crypto losers at the next UTC open."""
     return study_l8_gainer_fade(_symbols, workers, kind="l9")
@@ -1549,7 +1640,7 @@ def study_probe_provider(_symbols):
     ids = sorted(m.get("id", "") for m in (d.get("data") or []))
     return {"models": len(ids), "deepseek": [i for i in ids if "deepseek" in i.lower()], "all": ids[:200]}, []
 
-STUDIES = {"l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+STUDIES = {"l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):
