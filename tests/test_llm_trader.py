@@ -25,7 +25,8 @@ class Base(unittest.TestCase):
                   mock.patch.object(lt.LlmTrader, "avg50", return_value=1e6),
                   mock.patch("core.llm_trader.archive_headlines", return_value=[]),
                   mock.patch("core.llm_trader.recent_news", return_value={}),
-                  mock.patch("core.llm_trader.buzz_symbols", return_value={})):
+                  mock.patch("core.llm_trader.buzz_symbols", return_value={}),
+                  mock.patch("core.llm_trader.ny_time", return_value=(5, (12, 0), "2026-11-28"))):
             p.start()
             self.addCleanup(p.stop)
         self.replies = []
@@ -183,6 +184,56 @@ class Trading(Base):
         self.assertEqual(self.t.due(now, False, idle=False), "position review")      # no quotes: old behaviour
         del self.t.acct.positions["NVDA"]
         del self.t.links["NVDA"]
+
+    def test_closed_market_headline_waits_for_the_briefing(self):
+        self.t.calls["last_idle"] = time.time()
+        with mock.patch("core.llm_trader.recent_news", return_value={"AAPL": {"title": "Apple wins deal", "source": "X",
+                                                                             "lexicon": 0.4, "seen": "2026-11-24T03:00"}}):
+            self.t.scan(self.market(AAPL=quote("AAPL", open_=False)))
+            self.t.scan(self.market(AAPL=quote("AAPL", open_=False)))
+        self.assertEqual(self.prompts, [])
+        self.assertEqual([r["title"] for r in self.t.calls["overnight"]["AAPL"]], ["Apple wins deal"])
+
+    def test_pre_open_briefing_runs_once_in_the_window(self):
+        self.t.calls["last_idle"] = time.time()
+        self.t.calls["overnight"] = {"AAPL": [{"title": "Apple wins deal"}]}
+        self.replies.append(json.dumps({"note": "quiet night", "watchlist": [
+            {"symbol": "AAPL", "bias": "long", "why": "deal"}, {"symbol": "NOT-A-SYMBOL", "bias": "long", "why": "x"}]}))
+        with mock.patch("core.llm_trader.ny_time", return_value=(1, (9, 15), "2026-11-24")):
+            self.t.scan(self.market())
+            self.t.scan(self.market())
+        self.assertEqual(len(self.prompts), 1)
+        self.assertTrue(self.prompts[0].startswith("Overnight data (JSON):"))
+        b = self.t.calls["briefing"]
+        self.assertEqual([w["symbol"] for w in b["watchlist"]], ["AAPL"])
+        self.assertEqual(self.t.calls["overnight"], {})
+        self.assertIn("pre_open_briefing", self.log_kinds())
+
+    def test_watchlist_starts_the_first_cycle_at_the_open(self):
+        now = time.time()
+        self.t.calls.update(last_idle=now, briefing={"date": "2026-11-24", "made_ts": now, "note": "n",
+                                                     "watchlist": [{"symbol": "CCC", "bias": "long", "why": "deal"}]})
+        with mock.patch("core.llm_trader.ny_time", return_value=(1, (9, 31), "2026-11-24")):
+            self.t.scan(self.market(SPY=quote("SPY")))
+            self.t.scan(self.market(SPY=quote("SPY")))
+        self.assertEqual(len(self.prompts), 1)
+        call = next(json.loads(l) for l in (Path(self.tmp.name) / "l.jsonl").read_text().splitlines() if '"kind": "call"' in l)
+        self.assertEqual(call["trigger"], "market open (pre-open watchlist)")
+        self.assertTrue(call["context"]["candidates"][0]["why"].startswith("pre-open watchlist"))
+        self.assertIn("pre_open_briefing", call["context"])
+
+    def test_unchanged_scheduled_scan_is_skipped(self):
+        self.t.calls.update(last_idle=0.0, last_ts=0.0)
+        m = self.market(AAA=quote("AAA", px=100, move=2))
+        self.t.scan(m)
+        self.assertEqual(len(self.prompts), 1)
+        self.t.calls.update(last_idle=0.0, last_ts=0.0)
+        self.t.scan(self.market(AAA=quote("AAA", px=100.1, move=2.1)))
+        self.assertEqual(len(self.prompts), 1)
+        self.assertIn("skip", self.log_kinds())
+        self.t.calls.update(last_idle=0.0, last_ts=0.0)
+        self.t.scan(self.market(AAA=quote("AAA", px=101, move=3)))
+        self.assertEqual(len(self.prompts), 2)                    # a real move: look again
 
     def test_model_failure_is_logged_and_nothing_trades(self):
         self.t.chat = lambda s, u: ("", "no provider")
