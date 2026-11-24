@@ -1,6 +1,701 @@
 {
- "calls": {},
- "open": [],
+ "calls": {
+  "0001062993-26-006263": {
+   "symbol": "DSNY",
+   "accession": "0001062993-26-006263",
+   "accepted": "2026-11-24T22:20:24.000Z",
+   "accepted_ts": 1795558824,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 0.0"
+  },
+  "0001437749-26-038204": {
+   "symbol": "EONR",
+   "accession": "0001437749-26-038204",
+   "accepted": "2026-11-24T22:19:43.000Z",
+   "accepted_ts": 1795558783,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 224665.9406259656"
+  },
+  "0001018840-26-000052": {
+   "symbol": "ANF",
+   "accession": "0001018840-26-000052",
+   "accepted": "2026-11-24T12:36:44.000Z",
+   "accepted_ts": 1795523804,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 15,
+   "reason": "The release content is missing, so the fundamentals cannot be verified, and a 19.69% opening gap with no visible earnings data is too large to trade on reliably."
+  },
+  "0001809519-26-000231": {
+   "symbol": "GDRX",
+   "accession": "0001809519-26-000231",
+   "accepted": "2026-11-24T21:32:08.000Z",
+   "accepted_ts": 1795555928,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "8.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 4122143.988800049"
+  },
+  "0000047217-26-000054": {
+   "symbol": "HPQ",
+   "accession": "0000047217-26-000054",
+   "accepted": "2026-11-24T21:17:57.000Z",
+   "accepted_ts": 1795555077,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "7.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "short",
+   "confidence": 55,
+   "reason": "Q4 core EPS only modestly beat once the larger tariff refund is stripped out, while the FY27 non-GAAP EPS guide of $3.15-3.45 sits below the roughly $3.71 FY26 base recast for the new SBC exclusion (about a 7-15% implied decline), FCF guidance of $2.9-3.1B is below FY26's $3.33B, and inventory rose ",
+   "legs_seen": {
+    "long": "HPQ261204C00029500",
+    "short": "HPQ261204P00026500"
+   }
+  },
+  "0001193125-26-475716": {
+   "symbol": "AMBA",
+   "accession": "0001193125-26-475716",
+   "accepted": "2026-11-24T21:13:44.000Z",
+   "accepted_ts": 1795554824,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 71819406.55441284"
+  },
+  "0001193125-26-475677": {
+   "symbol": "CLSK",
+   "accession": "0001193125-26-475677",
+   "accepted": "2026-11-24T21:10:14.000Z",
+   "accepted_ts": 1795554614,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 35,
+   "reason": "The headline profit swing is likely non-operational and much of the Sandersville lease and funding news was already known, but the expired Texas exclusivity and falling revenue are real negatives, so the -7.5% gap is larger than the mixed fundamentals justify, yet the direction is not clear enough t"
+  },
+  "0001738827-26-000089": {
+   "symbol": "KLXE",
+   "accession": "0001738827-26-000089",
+   "accepted": "2026-11-24T21:09:28.000Z",
+   "accepted_ts": 1795554568,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 449799.48887228966"
+  },
+  "0001571996-26-000050": {
+   "symbol": "DELL",
+   "accession": "0001571996-26-000050",
+   "accepted": "2026-11-24T21:09:13.000Z",
+   "accepted_ts": 1795554553,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "long",
+   "confidence": 50,
+   "reason": "The company beat its own Q3 guide by about 12% on revenue and 45% on non-GAAP EPS and raised FY27 revenue to $202B and non-GAAP EPS to $29.68, with backlog up to $132.3B, so an 11.8% gap down looks like it is mostly reacting to the sequential Q4 EPS step-down, flat AI orders, and weaker CSG, and cou",
+   "legs_seen": {
+    "long": "DELL261204C00312500",
+    "short": "DELL261204P00280000"
+   }
+  },
+  "0000769397-26-000069": {
+   "symbol": "ADSK",
+   "accession": "0000769397-26-000069",
+   "accepted": "2026-11-24T21:05:29.000Z",
+   "accepted_ts": 1795554329,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "7.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 10,
+   "reason": "The press release text with the financials and guidance is missing, so there is no basis to judge a surprise, and the small 0.14% gap after a -3.84% run-up does not justify a trade."
+  },
+  "0001327811-26-000057": {
+   "symbol": "WDAY",
+   "accession": "0001327811-26-000057",
+   "accepted": "2026-11-24T21:01:55.000Z",
+   "accepted_ts": 1795554115,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 15,
+   "reason": "Without the Exhibit 99.1 financials or any stated guidance change, there is no measurable surprise to price, and the 1.79% gap after a -9.27% run-up is not obviously mispriced."
+  },
+  "0001171843-26-007693": {
+   "symbol": "NTNX",
+   "accession": "0001171843-26-007693",
+   "accepted": "2026-11-24T21:01:15.000Z",
+   "accepted_ts": 1795554075,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "5.02",
+    "7.01",
+    "8.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 25,
+   "reason": "The headline is an abrupt CEO departure with no named successor and a search underway, while the -5.16% gap already reflects that news and the earnings numbers needed to judge a surprise are missing from the provided text."
+  },
+  "0001493152-26-053931": {
+   "symbol": "SURG",
+   "accession": "0001493152-26-053931",
+   "accepted": "2026-11-24T14:15:13.000Z",
+   "accepted_ts": 1795529713,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 364435.20463854074"
+  },
+  "0001628280-26-075612": {
+   "symbol": "MMED",
+   "accession": "0001628280-26-075612",
+   "accepted": "2026-11-24T12:54:11.000Z",
+   "accepted_ts": 1795524851,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "7.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "short",
+   "confidence": 42,
+   "reason": "The 14% gap prices in the NPS acceleration and positive free cash flow, but organic growth slowed to 9.7%, the reported FY27 Adjusted EBITDA margin guide was cut to 11.3% from 16% (the $162M Blackstone charge is excluded from the underlying 16%), and the reaffirmed 10.5% revenue guide implies H2 dec",
+   "legs_seen": {
+    "long": "MMED261218C00021000",
+    "short": "MMED261218P00017500"
+   }
+  },
+  "0001628280-26-075606": {
+   "symbol": "TITN",
+   "accession": "0001628280-26-075606",
+   "accepted": "2026-11-24T12:16:49.000Z",
+   "accepted_ts": 1795522609,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02"
+   ],
+   "skipped": "liquidity 3473190.0060653687"
+  },
+  "0001872789-26-000037": {
+   "symbol": "EMBC",
+   "accession": "0001872789-26-000037",
+   "accepted": "2026-11-24T12:05:12.000Z",
+   "accepted_ts": 1795521912,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 5173899.454855919"
+  },
+  "0000091419-26-000110": {
+   "symbol": "SJM",
+   "accession": "0000091419-26-000110",
+   "accepted": "2026-11-24T12:04:40.000Z",
+   "accepted_ts": 1795521880,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 35,
+   "reason": "The adjusted EPS raise to $10.80-$11.20 is mostly one-time tariff refunds, with net sales guidance unchanged and organic trends softening, and the -1.45% gap already reflects that low-quality beat, leaving no clear edge for the next 1-5 sessions."
+  },
+  "0000067215-26-000048": {
+   "symbol": "DY",
+   "accession": "0000067215-26-000048",
+   "accepted": "2026-11-24T12:03:52.000Z",
+   "accepted_ts": 1795521832,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 20,
+   "reason": "The 8-K text contains no financial figures or guidance numbers to confirm the cause of the -18% gap, so the move cannot be checked against fundamentals and the trade is not justified without the press release body."
+  },
+  "0000006281-26-000087": {
+   "symbol": "ADI",
+   "accession": "0000006281-26-000087",
+   "accepted": "2026-11-24T12:03:22.000Z",
+   "accepted_ts": 1795521802,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "long",
+   "confidence": 35,
+   "reason": "The quarter beat the company's own prior guide on revenue, margin, and EPS, and the Q1 guide is only a modest sequential step-down, so the -17% gap looks like it prices in a weaker outlook than the release supports, though without consensus estimates I cannot confirm the guide missed expectations.",
+   "legs_seen": {
+    "long": "ADI261204C00335000",
+    "short": "ADI261204P00292500"
+   }
+  },
+  "0001089063-26-000039": {
+   "symbol": "DKS",
+   "accession": "0001089063-26-000039",
+   "accepted": "2026-11-24T12:02:02.000Z",
+   "accepted_ts": 1795521722,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "8.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 40,
+   "reason": "The guidance raise is modest (non-GAAP EPS midpoint up about $0.38, largely helped by buybacks), Q3 non-GAAP EPS fell 6% year over year, and Foot Locker inventory rose 16%, so a 14.6% gap that follows a 9% pre-filing drop looks like it has overpriced the recovery, but consensus expectations are not "
+  },
+  "0000764478-26-000045": {
+   "symbol": "BBY",
+   "accession": "0000764478-26-000045",
+   "accepted": "2026-11-24T12:00:31.000Z",
+   "accepted_ts": 1795521631,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 10,
+   "reason": "Without the Exhibit 99 figures or guidance language, there is no basis for judging a surprise, so the 2.7% gap after a -6.14% run-up cannot be called mispriced and the trade should be skipped."
+  },
+  "0001193125-26-473133": {
+   "symbol": "KSS",
+   "accession": "0001193125-26-473133",
+   "accepted": "2026-11-24T12:00:10.000Z",
+   "accepted_ts": 1795521610,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "7.01",
+    "8.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 87034809.26074982"
+  },
+  "0000950142-26-003145": {
+   "symbol": "MOV",
+   "accession": "0000950142-26-003145",
+   "accepted": "2026-11-24T11:53:31.000Z",
+   "accepted_ts": 1795521211,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 3953025.6410598755"
+  },
+  "0001193125-26-473122": {
+   "symbol": "BURL",
+   "accession": "0001193125-26-473122",
+   "accepted": "2026-11-24T11:49:27.000Z",
+   "accepted_ts": 1795520967,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "short",
+   "confidence": 55,
+   "reason": "The release is a clear negative: comps and gross margin deteriorated, inventory grew 16% against 8% sales growth, full-year EPS guidance was cut at the midpoint, and Q4 EPS was lowered by $0.20, yet the stock gapped up 3.9% on a Q3 EPS beat versus the company's own lowered guidance and a new $750M b",
+   "legs_seen": {
+    "long": "BURL261204C00260000",
+    "short": "BURL261204P00230000"
+   }
+  },
+  "0001628280-26-075604": {
+   "symbol": "MDT",
+   "accession": "0001628280-26-075604",
+   "accepted": "2026-11-24T11:32:02.000Z",
+   "accepted_ts": 1795519922,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 40,
+   "reason": "The modest beat was overshadowed by reiterated (not raised) guidance that now has to absorb the Diabetes separation, a slowdown in Neuroscience to 3.2% organic growth, and y/y non-GAAP EPS decline, so the -4.6% gap looks roughly right and there is no clear edge for the next 1-5 sessions."
+  },
+  "0000935703-26-000136": {
+   "symbol": "DLTR",
+   "accession": "0000935703-26-000136",
+   "accepted": "2026-11-24T11:30:42.000Z",
+   "accepted_ts": 1795519842,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "7.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "short",
+   "confidence": 45,
+   "reason": "The beat is real on comps and traffic, but the fiscal-year EPS raise is mostly tariff refunds, underlying margins contracted, and an 11.2% opening gap appears to price in more durable improvement than the quarter shows, leaving room for a partial fade.",
+   "legs_seen": {
+    "long": "DLTR261204C00162500",
+    "short": "DLTR261204P00145000"
+   }
+  },
+  "0001193125-26-473085": {
+   "symbol": "SHOE",
+   "accession": "0001193125-26-473085",
+   "accepted": "2026-11-24T11:20:14.000Z",
+   "accepted_ts": 1795519214,
+   "protocol": "options-v1-earnings",
+   "items": [
+    "2.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 8922108.037185669"
+  }
+ },
+ "open": [
+  {
+   "symbol": "HPQ",
+   "accession": "0000047217-26-000054",
+   "ts": 1795555077,
+   "entry_date": "2026-11-24",
+   "spot": 27.94,
+   "model": {
+    "direction": "short",
+    "contract": "HPQ261204P00026500",
+    "strike": 26.5,
+    "expiry": 1796342400,
+    "entry_ask": 1.11,
+    "entry_bid": 0.8,
+    "entry_ts": 1795563949
+   },
+   "control": {
+    "direction": "long",
+    "contract": "HPQ261204C00029500",
+    "strike": 29.5,
+    "expiry": 1796342400,
+    "entry_ask": 1.3,
+    "entry_bid": 0.32,
+    "entry_ts": 1795563949
+   },
+   "control_direction": "long",
+   "both_sides": {
+    "long": {
+     "direction": "long",
+     "contract": "HPQ261204C00029500",
+     "strike": 29.5,
+     "expiry": 1796342400,
+     "entry_ask": 1.3,
+     "entry_bid": 0.32,
+     "entry_ts": 1795563949
+    },
+    "short": {
+     "direction": "short",
+     "contract": "HPQ261204P00026500",
+     "strike": 26.5,
+     "expiry": 1796342400,
+     "entry_ask": 1.11,
+     "entry_bid": 0.8,
+     "entry_ts": 1795563949
+    }
+   },
+   "protocol": "options-v1-earnings"
+  },
+  {
+   "symbol": "DELL",
+   "accession": "0001571996-26-000050",
+   "ts": 1795554553,
+   "entry_date": "2026-11-24",
+   "spot": 295.28,
+   "model": {
+    "direction": "long",
+    "contract": "DELL261204C00312500",
+    "strike": 312.5,
+    "expiry": 1796342400,
+    "entry_ask": 19.1,
+    "entry_bid": 16.9,
+    "entry_ts": 1795563970
+   },
+   "control": {
+    "direction": "short",
+    "contract": "DELL261204P00280000",
+    "strike": 280.0,
+    "expiry": 1796342400,
+    "entry_ask": 18.9,
+    "entry_bid": 17.45,
+    "entry_ts": 1795563970
+   },
+   "control_direction": "short",
+   "both_sides": {
+    "long": {
+     "direction": "long",
+     "contract": "DELL261204C00312500",
+     "strike": 312.5,
+     "expiry": 1796342400,
+     "entry_ask": 19.1,
+     "entry_bid": 16.9,
+     "entry_ts": 1795563970
+    },
+    "short": {
+     "direction": "short",
+     "contract": "DELL261204P00280000",
+     "strike": 280.0,
+     "expiry": 1796342400,
+     "entry_ask": 18.9,
+     "entry_bid": 17.45,
+     "entry_ts": 1795563970
+    }
+   },
+   "protocol": "options-v1-earnings"
+  },
+  {
+   "symbol": "MMED",
+   "accession": "0001628280-26-075612",
+   "ts": 1795524851,
+   "entry_date": "2026-11-24",
+   "spot": 19.07,
+   "model": {
+    "direction": "short",
+    "contract": "MMED261218P00017500",
+    "strike": 17.5,
+    "expiry": 1797552000,
+    "entry_ask": 0.75,
+    "entry_bid": 0.15,
+    "entry_ts": 1795563999
+   },
+   "control": {
+    "direction": "long",
+    "contract": "MMED261218C00021000",
+    "strike": 21.0,
+    "expiry": 1797552000,
+    "entry_ask": 0.55,
+    "entry_bid": 0.1,
+    "entry_ts": 1795563999
+   },
+   "control_direction": "long",
+   "both_sides": {
+    "long": {
+     "direction": "long",
+     "contract": "MMED261218C00021000",
+     "strike": 21.0,
+     "expiry": 1797552000,
+     "entry_ask": 0.55,
+     "entry_bid": 0.1,
+     "entry_ts": 1795563999
+    },
+    "short": {
+     "direction": "short",
+     "contract": "MMED261218P00017500",
+     "strike": 17.5,
+     "expiry": 1797552000,
+     "entry_ask": 0.75,
+     "entry_bid": 0.15,
+     "entry_ts": 1795563999
+    }
+   },
+   "protocol": "options-v1-earnings"
+  },
+  {
+   "symbol": "ADI",
+   "accession": "0000006281-26-000087",
+   "ts": 1795521802,
+   "entry_date": "2026-11-24",
+   "spot": 312.95,
+   "model": {
+    "direction": "long",
+    "contract": "ADI261204C00335000",
+    "strike": 335.0,
+    "expiry": 1796342400,
+    "entry_ask": 7.3,
+    "entry_bid": 4.9,
+    "entry_ts": 1795564032
+   },
+   "control": {
+    "direction": "long",
+    "contract": "ADI261204C00335000",
+    "strike": 335.0,
+    "expiry": 1796342400,
+    "entry_ask": 7.3,
+    "entry_bid": 4.9,
+    "entry_ts": 1795564032
+   },
+   "control_direction": "long",
+   "both_sides": {
+    "long": {
+     "direction": "long",
+     "contract": "ADI261204C00335000",
+     "strike": 335.0,
+     "expiry": 1796342400,
+     "entry_ask": 7.3,
+     "entry_bid": 4.9,
+     "entry_ts": 1795564032
+    },
+    "short": {
+     "direction": "short",
+     "contract": "ADI261204P00292500",
+     "strike": 292.5,
+     "expiry": 1796342400,
+     "entry_ask": 8.0,
+     "entry_bid": 5.7,
+     "entry_ts": 1795564032
+    }
+   },
+   "protocol": "options-v1-earnings"
+  },
+  {
+   "symbol": "BURL",
+   "accession": "0001193125-26-473122",
+   "ts": 1795520967,
+   "entry_date": "2026-11-24",
+   "spot": 244.34,
+   "model": {
+    "direction": "short",
+    "contract": "BURL261204P00230000",
+    "strike": 230.0,
+    "expiry": 1796342400,
+    "entry_ask": 5.0,
+    "entry_bid": 1.35,
+    "entry_ts": 1795564063
+   },
+   "control": {
+    "direction": "long",
+    "contract": "BURL261204C00260000",
+    "strike": 260.0,
+    "expiry": 1796342400,
+    "entry_ask": 5.5,
+    "entry_bid": 2.2,
+    "entry_ts": 1795564063
+   },
+   "control_direction": "long",
+   "both_sides": {
+    "long": {
+     "direction": "long",
+     "contract": "BURL261204C00260000",
+     "strike": 260.0,
+     "expiry": 1796342400,
+     "entry_ask": 5.5,
+     "entry_bid": 2.2,
+     "entry_ts": 1795564063
+    },
+    "short": {
+     "direction": "short",
+     "contract": "BURL261204P00230000",
+     "strike": 230.0,
+     "expiry": 1796342400,
+     "entry_ask": 5.0,
+     "entry_bid": 1.35,
+     "entry_ts": 1795564063
+    }
+   },
+   "protocol": "options-v1-earnings"
+  },
+  {
+   "symbol": "DLTR",
+   "accession": "0000935703-26-000136",
+   "ts": 1795519842,
+   "entry_date": "2026-11-24",
+   "spot": 154.65,
+   "model": {
+    "direction": "short",
+    "contract": "DLTR261204P00145000",
+    "strike": 145.0,
+    "expiry": 1796342400,
+    "entry_ask": 1.55,
+    "entry_bid": 0.98,
+    "entry_ts": 1795564082
+   },
+   "control": {
+    "direction": "short",
+    "contract": "DLTR261204P00145000",
+    "strike": 145.0,
+    "expiry": 1796342400,
+    "entry_ask": 1.55,
+    "entry_bid": 0.98,
+    "entry_ts": 1795564082
+   },
+   "control_direction": "short",
+   "both_sides": {
+    "long": {
+     "direction": "long",
+     "contract": "DLTR261204C00162500",
+     "strike": 162.5,
+     "expiry": 1796342400,
+     "entry_ask": 3.5,
+     "entry_bid": 0.37,
+     "entry_ts": 1795564082
+    },
+    "short": {
+     "direction": "short",
+     "contract": "DLTR261204P00145000",
+     "strike": 145.0,
+     "expiry": 1796342400,
+     "entry_ask": 1.55,
+     "entry_bid": 0.98,
+     "entry_ts": 1795564082
+    }
+   },
+   "protocol": "options-v1-earnings"
+  }
+ ],
  "closed": [],
- "gaps": []
+ "gaps": [],
+ "llm_cost_usd_by_protocol": {
+  "options-v1-earnings": 0.0
+ },
+ "last_run_ts": 1795563848
 }

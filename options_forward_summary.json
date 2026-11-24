@@ -3,11 +3,10 @@
   "verdict": "collecting (0/150 closed trades)",
   "n": 0
  },
- "open": 0,
+ "open": 6,
  "closed": 0,
  "late_exits": 0,
- "calls": 0,
- "gaps": 0,
+ "calls": 27,
  "account_whole_contracts": {
   "end_equity_usd": 147.0,
   "taken": 0,
@@ -26,5 +25,257 @@
   "worst_drawdown": 0.0,
   "affordable_at_start_stake": 0
  },
- "updated_utc": "2026-11-24T04:40:01Z"
+ "matched_whole_contract_wallets": {
+  "model": {
+   "base": {
+    "end_equity_usd": 147.0,
+    "taken": 0,
+    "unaffordable": 0,
+    "month_end_equity": {},
+    "months_3x": 0,
+    "worst_drawdown": 0.0,
+    "affordable_at_start_stake": 0
+   },
+   "stress": {
+    "end_equity_usd": 147.0,
+    "taken": 0,
+    "unaffordable": 0,
+    "month_end_equity": {},
+    "months_3x": 0,
+    "worst_drawdown": 0.0,
+    "affordable_at_start_stake": 0
+   }
+  },
+  "control": {
+   "base": {
+    "end_equity_usd": 147.0,
+    "taken": 0,
+    "unaffordable": 0,
+    "month_end_equity": {},
+    "months_3x": 0,
+    "worst_drawdown": 0.0,
+    "affordable_at_start_stake": 0
+   },
+   "stress": {
+    "end_equity_usd": 147.0,
+    "taken": 0,
+    "unaffordable": 0,
+    "month_end_equity": {},
+    "months_3x": 0,
+    "worst_drawdown": 0.0,
+    "affordable_at_start_stake": 0
+   }
+  }
+ },
+ "sequential": {
+  "protocol": "daily-v1",
+  "model": {
+   "n_units": 0,
+   "e_value_edge": 1.0,
+   "e_value_negative": 1.0,
+   "threshold": 20.0,
+   "decision": "continue",
+   "decided_at_unit": null,
+   "mean_scaled": null
+  },
+  "paired": {
+   "n_units": 0,
+   "e_value_edge": 1.0,
+   "e_value_negative": 1.0,
+   "threshold": 20.0,
+   "decision": "continue",
+   "decided_at_unit": null,
+   "mean_scaled": null
+  }
+ },
+ "llm_cost_usd_recorded": 0.0,
+ "protocol": "options-v1-earnings",
+ "by_protocol": {
+  "options-v1-earnings": {
+   "verdict": {
+    "verdict": "collecting (0/150 closed trades)",
+    "n": 0
+   },
+   "open": 6,
+   "closed": 0,
+   "late_exits": 0,
+   "calls": 27,
+   "account_whole_contracts": {
+    "end_equity_usd": 147.0,
+    "taken": 0,
+    "unaffordable": 0,
+    "month_end_equity": {},
+    "months_3x": 0,
+    "worst_drawdown": 0.0,
+    "affordable_at_start_stake": 0
+   },
+   "account_fractional": {
+    "end_equity_usd": 147.0,
+    "taken": 0,
+    "unaffordable": 0,
+    "month_end_equity": {},
+    "months_3x": 0,
+    "worst_drawdown": 0.0,
+    "affordable_at_start_stake": 0
+   },
+   "matched_whole_contract_wallets": {
+    "model": {
+     "base": {
+      "end_equity_usd": 147.0,
+      "taken": 0,
+      "unaffordable": 0,
+      "month_end_equity": {},
+      "months_3x": 0,
+      "worst_drawdown": 0.0,
+      "affordable_at_start_stake": 0
+     },
+     "stress": {
+      "end_equity_usd": 147.0,
+      "taken": 0,
+      "unaffordable": 0,
+      "month_end_equity": {},
+      "months_3x": 0,
+      "worst_drawdown": 0.0,
+      "affordable_at_start_stake": 0
+     }
+    },
+    "control": {
+     "base": {
+      "end_equity_usd": 147.0,
+      "taken": 0,
+      "unaffordable": 0,
+      "month_end_equity": {},
+      "months_3x": 0,
+      "worst_drawdown": 0.0,
+      "affordable_at_start_stake": 0
+     },
+     "stress": {
+      "end_equity_usd": 147.0,
+      "taken": 0,
+      "unaffordable": 0,
+      "month_end_equity": {},
+      "months_3x": 0,
+      "worst_drawdown": 0.0,
+      "affordable_at_start_stake": 0
+     }
+    }
+   },
+   "sequential": {
+    "protocol": "daily-v1",
+    "model": {
+     "n_units": 0,
+     "e_value_edge": 1.0,
+     "e_value_negative": 1.0,
+     "threshold": 20.0,
+     "decision": "continue",
+     "decided_at_unit": null,
+     "mean_scaled": null
+    },
+    "paired": {
+     "n_units": 0,
+     "e_value_edge": 1.0,
+     "e_value_negative": 1.0,
+     "threshold": 20.0,
+     "decision": "continue",
+     "decided_at_unit": null,
+     "mean_scaled": null
+    }
+   },
+   "llm_cost_usd_recorded": 0.0
+  },
+  "options-v2-sec": {
+   "verdict": {
+    "verdict": "collecting (0/150 closed trades)",
+    "n": 0
+   },
+   "open": 0,
+   "closed": 0,
+   "late_exits": 0,
+   "calls": 0,
+   "account_whole_contracts": {
+    "end_equity_usd": 147.0,
+    "taken": 0,
+    "unaffordable": 0,
+    "month_end_equity": {},
+    "months_3x": 0,
+    "worst_drawdown": 0.0,
+    "affordable_at_start_stake": 0
+   },
+   "account_fractional": {
+    "end_equity_usd": 147.0,
+    "taken": 0,
+    "unaffordable": 0,
+    "month_end_equity": {},
+    "months_3x": 0,
+    "worst_drawdown": 0.0,
+    "affordable_at_start_stake": 0
+   },
+   "matched_whole_contract_wallets": {
+    "model": {
+     "base": {
+      "end_equity_usd": 147.0,
+      "taken": 0,
+      "unaffordable": 0,
+      "month_end_equity": {},
+      "months_3x": 0,
+      "worst_drawdown": 0.0,
+      "affordable_at_start_stake": 0
+     },
+     "stress": {
+      "end_equity_usd": 147.0,
+      "taken": 0,
+      "unaffordable": 0,
+      "month_end_equity": {},
+      "months_3x": 0,
+      "worst_drawdown": 0.0,
+      "affordable_at_start_stake": 0
+     }
+    },
+    "control": {
+     "base": {
+      "end_equity_usd": 147.0,
+      "taken": 0,
+      "unaffordable": 0,
+      "month_end_equity": {},
+      "months_3x": 0,
+      "worst_drawdown": 0.0,
+      "affordable_at_start_stake": 0
+     },
+     "stress": {
+      "end_equity_usd": 147.0,
+      "taken": 0,
+      "unaffordable": 0,
+      "month_end_equity": {},
+      "months_3x": 0,
+      "worst_drawdown": 0.0,
+      "affordable_at_start_stake": 0
+     }
+    }
+   },
+   "sequential": {
+    "protocol": "daily-v1",
+    "model": {
+     "n_units": 0,
+     "e_value_edge": 1.0,
+     "e_value_negative": 1.0,
+     "threshold": 20.0,
+     "decision": "continue",
+     "decided_at_unit": null,
+     "mean_scaled": null
+    },
+    "paired": {
+     "n_units": 0,
+     "e_value_edge": 1.0,
+     "e_value_negative": 1.0,
+     "threshold": 20.0,
+     "decision": "continue",
+     "decided_at_unit": null,
+     "mean_scaled": null
+    }
+   },
+   "llm_cost_usd_recorded": 0.0
+  }
+ },
+ "gaps": 0,
+ "updated_utc": "2026-11-24T23:48:11Z"
 }
