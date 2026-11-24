@@ -285,6 +285,23 @@ class Trading(Base):
         self.assertTrue(lt.relevant("Semiconductor stocks slide as AMD drops", "SMH", "VanEck Semiconductor ETF"))
         self.assertTrue(lt.relevant("DLTR shares jump", "DLTR", "Dollar Tree, Inc."))
 
+    def test_similar_past_headlines_give_a_base_rate(self):
+        import tempfile as _tf
+        rows = [{"key": f"k{i}", "horizon": "1d", "symbol": f"S{i}", "abnormal": 0.02 if i % 2 else -0.01, "t0": i,
+                 "title": f"Acme rival beats third quarter EPS estimates and raises guidance {i}", "source": "x", "sentiment": 0}
+                for i in range(12)]
+        rows.append({"key": "z", "horizon": "1d", "symbol": "Z", "abnormal": 0.5, "t0": 1,
+                     "title": "Totally unrelated mining accident", "source": "x", "sentiment": 0})
+        with _tf.TemporaryDirectory() as d:
+            p = Path(d) / "labels.jsonl"
+            p.write_text("\n".join(json.dumps(r) for r in rows))
+            with mock.patch.object(lt.news_archive, "LABELS", p):
+                lt._LABELS.update(ts=0.0, rows=[], by_type={})
+                sim = lt.similar_past("Widget Co beats third quarter EPS estimates, raises guidance", "WID")
+        self.assertEqual(sim["n"], 8)
+        self.assertEqual(sim["type_base_rate"]["n"], 12)                  # all 12 earnings rows; the mining row is "other"
+        self.assertTrue(all("beats" in e["title"] for e in sim["examples"]))
+
     def test_news_type_classification(self):
         self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
         self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")

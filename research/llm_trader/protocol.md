@@ -116,3 +116,6 @@ Live example: "Platinum Equity ..." linked to platinum futures (PL=F) and reache
 
 ## Addendum 2026-11-24: v4.8, junk and irrelevant headlines are dropped
 Live examples on v4.6: "How to Invest in VanEck Biotech ETF (BBH)" reached the model as news for SMH, "$100 Invested In ... 20 Years Ago" for XLK and "S&P 500 Movers: HPE, DLTR" for DLTR. Evergreen, listicle and movers-recap headlines (`JUNK_PATTERNS`) no longer reach the model or trigger a cycle, and the per-symbol fallback search keeps only headlines that name the ticker or the company.
+
+## Addendum 2026-11-24: v4.9, similar past headlines as the prior (owner: a step change in how smart the news reading is)
+Each candidate with a headline now carries `similar_past`: the 8 most similar archived headlines (token overlap, same news type preferred) with their measured +1 day abnormal return vs SPY from the news archive's own labels (`research/news_archive/data/labels.jsonl` on the volume), their mean and share up, three examples, and the base rate for that news type over all labels. The news analyst is told to treat this as the prior and to say when today's case differs.
