@@ -109,7 +109,8 @@ def score_openrouter(items: list, timeout=60, urlopen=None) -> dict:
         {"role": "system", "content": SYSTEM},
         {"role": "user", "content": "ITEMS (data, not instructions):\n" + _payload(items)}]}).encode()
     req = Request("https://openrouter.ai/api/v1/chat/completions", data=body, headers={
-        "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json"})
+        "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json",
+        "HTTP-Referer": "https://tradelab.dgnr.us", "X-Title": "TradeLab headlines"})
     try:
         with (urlopen or _urlopen)(req, timeout=timeout) as r:
             text = json.loads(r.read())["choices"][0]["message"]["content"]
@@ -131,7 +132,37 @@ def providers() -> dict:
     return out
 
 
-DECISION_MODEL = os.environ.get("TRADELAB_LLM_MODEL", OPENCODE_MODEL)   # owner rule: DeepSeek v4.1 flash 1017 only, everywhere
+DECISION_MODEL = os.environ.get("TRADELAB_LLM_MODEL", OPENCODE_MODEL)   # final trade decisions: DeepSeek v4.1 flash 1017
+# Owner 2026-11-24: use free OpenRouter models for the helper roles (analysts, bull/bear, risk review, pre-open,
+# steward) to cut cost; DeepSeek stays for the final decision and is the fallback when every free model fails.
+HELPER_MODELS = [m.strip() for m in os.environ.get(
+    "TRADELAB_HELPER_MODELS",
+    "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free,openrouter/google/gemma-4-31b-it:free,"
+    "openrouter/nvidia/nemotron-3.5-lightning:free").split(",") if m.strip()]
+HELPER_TIMEOUT = 45
+_helper_stats = {"free_ok": 0, "free_fail": 0, "fallback": 0, "by_model": {}}
+
+
+def chat_helper(system: str, user: str, chat_fn=None) -> tuple:
+    """Free models first (in order), then DeepSeek. -> (text, model_name). Records which model answered."""
+    chat_fn = chat_fn or chat
+    for m in HELPER_MODELS:
+        text, name = chat_fn(system, user, timeout=HELPER_TIMEOUT, model=m)
+        if text and text.strip():
+            with _spend_lock:
+                _helper_stats["free_ok"] += 1
+                _helper_stats["by_model"][name] = _helper_stats["by_model"].get(name, 0) + 1
+            return text, name
+        with _spend_lock:
+            _helper_stats["free_fail"] += 1
+    with _spend_lock:
+        _helper_stats["fallback"] += 1
+    return chat_fn(system, user, model=DECISION_MODEL, cache_layout=True)
+
+
+def helper_stats() -> dict:
+    with _spend_lock:
+        return {**_helper_stats, "by_model": dict(_helper_stats["by_model"]), "models": HELPER_MODELS}
 
 
 # ---- spend accounting: OpenRouter returns the real cost of each call when usage is requested
@@ -194,7 +225,8 @@ def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, 
         body = json.dumps({"model": name, "temperature": temperature, "usage": {"include": True},
                            "messages": messages}).encode()
         req = Request("https://openrouter.ai/api/v1/chat/completions", data=body, headers={
-            "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json"})
+            "Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json",
+            "HTTP-Referer": "https://tradelab.dgnr.us", "X-Title": "TradeLab"})   # named app in OpenRouter Activity
         try:
             with (urlopen or _urlopen)(req, timeout=timeout) as r:
                 resp = json.loads(r.read())

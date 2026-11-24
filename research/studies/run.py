@@ -578,7 +578,8 @@ def study_probe_llm_cost(_symbols):
         body = {"model": "deepseek/deepseek-v4.1-flash-1017", "temperature": 0, "usage": {"include": True},
                 "messages": [{"role": "system", "content": st.LLM_SYSTEM}, {"role": "user", "content": user}], **extra}
         req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", data=json.dumps(body).encode(),
-                                     headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
+                                     headers={"Authorization": "Bearer " + key, "Content-Type": "application/json",
+                                              "HTTP-Referer": "https://tradelab.dgnr.us", "X-Title": "TradeLab research"})
         t0 = time.time()
         try:
             with urllib.request.urlopen(req, timeout=180) as r:

@@ -21,7 +21,7 @@ SYSTEM = ("You are the operations steward of a paper-trading research system (si
 
 
 def review(status: dict, chat=None, log_path=LOG) -> dict:
-    chat = chat or (lambda s, u: ai_news.chat(s, u, model=ai_news.DECISION_MODEL))
+    chat = chat or (lambda s, u: ai_news.chat_helper(s, u))   # free models first (owner 2026-11-24)
     raw, model = chat(SYSTEM, "Status (JSON):\n" + json.dumps(status, default=str)[:12000])
     out = {"ts": round(time.time()), "model": model, "ok": bool(raw)}
     try:

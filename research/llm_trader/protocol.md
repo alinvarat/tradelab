@@ -94,3 +94,6 @@ The owner asked for efficient model use **without a budget cap and without slowi
 
 ## Addendum 2026-11-24: daily sequential evidence
 Report [daily-v1](../sequential_protocol_20261124.md) separately per trading protocol. Each matched pair is timestamped when booked. Both series use the population of complete pairs first booked from November 25, 2026 UTC onward after this code deploys. Use the model and random control's net return on entry notional, including financing and fees. Older pairs that have no booking timestamp still count in the original fixed-sample evaluation.
+
+## Addendum 2026-11-24: v4.3, free models for the helper roles (owner: DeepSeek-only is too expensive)
+The three analysts, the bull/bear round and its rebuttal, the advisory risk review and the pre-open briefing call free OpenRouter models first, in the order of `ai_news.HELPER_MODELS` (nemotron-3-ultra-550b, gemma-4-31b, nemotron-3.5-lightning), 45 s each, then DeepSeek v4.1 flash 1017 if all fail or answer empty. The final decision call stays on DeepSeek v4.1 flash 1017. The model that answered each call is recorded; `/api/llm_trader` shows `helper_models` counts. Results are tagged v4.3 and kept apart from v4.2.

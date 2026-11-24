@@ -60,7 +60,7 @@ OVERNIGHT_MAX = 60
 MOVER_SHARE = 0.5
 EXT_MAX = 40                       # symbols re-quoted per pass in US extended hours                  # a "top mover" must have moved at least half its class's shock threshold
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
-PROTOCOL_VERSION = "v4.2"
+PROTOCOL_VERSION = "v4.3"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60
@@ -363,9 +363,11 @@ def parse_briefing(text: str, allowed: set) -> dict:
 
 
 class LlmTrader:
-    def __init__(self, state_path=STATE, log_path=LOG, chat=None, rng_seed=None):
+    def __init__(self, state_path=STATE, log_path=LOG, chat=None, rng_seed=None, helper=None):
         self.state_path, self.log_path = Path(state_path), Path(log_path)
         self.chat = chat or (lambda system, user: ai_news.chat(system, user, model=ai_news.DECISION_MODEL, cache_layout=True))
+        # v4.3: helper roles (analysts, bull/bear, risk, pre-open) use free models first; the decision stays on self.chat
+        self.helper = helper or (self.chat if chat else (lambda system, user: ai_news.chat_helper(system, user)))
         self.lock = threading.RLock()
         self.rng = random.Random(rng_seed)
         self.pool = ThreadPoolExecutor(16)
@@ -665,7 +667,7 @@ class LlmTrader:
         user = CACHE_HEADER + json.dumps({"market": ctx["market"], "candidates": ctx["candidates"]})
         out = {}
         with ThreadPoolExecutor(3) as ex:
-            replies = list(ex.map(lambda sys_: self.chat(sys_, user), (ANALYST_NEWS, ANALYST_PRICE, ANALYST_MACRO)))
+            replies = list(ex.map(lambda sys_: self.helper(sys_, user), (ANALYST_NEWS, ANALYST_PRICE, ANALYST_MACRO)))
         self._analyst_errors = [model for raw, model in replies if not raw]
         self._analysts_all_failed = len(self._analyst_errors) == len(replies)
         for name, (raw, model) in zip(("news", "price", "macro"), replies):
@@ -681,7 +683,7 @@ class LlmTrader:
         user = CACHE_HEADER + json.dumps(base)
         out = {}
         with ThreadPoolExecutor(2) as ex:      # bull and bear run at the same time: one round trip of latency, not two
-            replies = list(ex.map(lambda sys_: self.chat(sys_, user), (BULL, BEAR)))
+            replies = list(ex.map(lambda sys_: self.helper(sys_, user), (BULL, BEAR)))
         for name, (raw, model) in zip(("bull_case", "bear_case"), replies):
             out[name] = parse_arguments(raw, syms)
             self.record("debate", side=name, round=1, model=model, arguments=out[name], raw=raw[:2000],
@@ -690,7 +692,7 @@ class LlmTrader:
             user2 = CACHE_HEADER + json.dumps(
                 {**base, "bull_case": out["bull_case"], "bear_case": out["bear_case"]})
             with ThreadPoolExecutor(2) as ex:
-                replies = list(ex.map(lambda sys_: self.chat(sys_, user2),
+                replies = list(ex.map(lambda sys_: self.helper(sys_, user2),
                                       (BULL + " Rebuttal round: answer the bear's case directly and say what would change your mind.",
                                        BEAR + " Rebuttal round: answer the bull's case directly and say what would change your mind.")))
             for name, (raw, model) in zip(("bull_rebuttal", "bear_rebuttal"), replies):
@@ -716,7 +718,7 @@ class LlmTrader:
             return {}, None, None
         user = CACHE_HEADER + json.dumps(
             {"market": ctx["market"], "candidates": ctx.get("candidates", []), "account": ctx["account"], "proposals": props})
-        raw, model = self.chat(RISK, user)
+        raw, model = self.helper(RISK, user)
         return parse_reviews(raw, {p["symbol"] for p in props}), raw, model
 
     def decide(self, now, trigger, cands, quotes, movers):
@@ -1216,7 +1218,7 @@ class LlmTrader:
     def pre_open(self, now, brief_input):
         """One call before the US open; the watchlist starts the first cycle of the session."""
         spent0 = ai_news.spend()["total_usd"]
-        raw, model = self.chat(PREOPEN, "Overnight data (JSON):\n" + json.dumps(brief_input))
+        raw, model = self.helper(PREOPEN, "Overnight data (JSON):\n" + json.dumps(brief_input))
         self.calls["usd"] = self.calls.get("usd", 0.0) + max(0.0, ai_news.spend()["total_usd"] - spent0)
         allowed = {s for s in ALL if asset_class(s) in ("stock", "etf")}
         b = parse_briefing(raw, allowed)
@@ -1329,7 +1331,7 @@ class LlmTrader:
                     "control_equity_usd": control_equity,
                     "control_equity_thb": data.thb_at_open(control_equity, self.capital_usd, CAPITAL_THB),
                     "capital_usd": self.capital_usd, "paused": self.paused,
-                    "calls_today": self.calls["n"], "max_calls_day": MAX_CALLS_DAY, "error": self.last_error,
+                    "calls_today": self.calls["n"], "max_calls_day": MAX_CALLS_DAY, "error": self.last_error, "helper_models": ai_news.helper_stats(),
                     "usd_today": round(self.calls.get("usd", 0.0), 4),
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
                     "model": ai_news.DECISION_MODEL.split("/", 1)[-1],
