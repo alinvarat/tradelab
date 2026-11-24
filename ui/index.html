@@ -32,7 +32,7 @@
       <a href="#tools" data-view="tools">Risk tools</a>
     </nav>
     <span class="sim-flag" id="simflag">Simulated money</span>
-    <button class="sm lang-btn" id="lang-btn" type="button" aria-label="Language">ไทย</button>
+    <button class="sm lang-btn" id="lang-btn" type="button" aria-label="Switch to Thai">ไทย</button>
   </div>
 </header>
 <noscript><p>TradeLab needs JavaScript to load market data.</p></noscript>
@@ -55,7 +55,7 @@
       <p class="note">Each month it holds the assets with the strongest recent return, only if they beat cash; otherwise it holds cash. Costs 0.10% fee and 0.05% slippage per side. Past results do not predict future returns.</p></div>
     <div class="panel"><h2>This month's targets</h2><div id="auto-targets"></div></div>
   </div>
-  <div class="panel"><h2>Equity</h2><div class="chart-box" id="c-auto" style="height: 220px"></div></div>
+  <div class="panel"><h2>Equity</h2><div class="chart-box" id="c-auto" role="region" aria-label="Auto trader equity chart" style="height: 220px"></div></div>
   <div class="grid g-2">
     <div class="panel"><h2>Lessons from mistakes</h2><div id="auto-lessons"></div></div>
     <div class="panel"><h2>Activity</h2><div id="auto-log"></div></div>
@@ -107,9 +107,9 @@
   <div class="quote-head" id="qhead"></div>
   <div class="grid g-chart">
     <div>
-      <div class="chart-box" id="c-main"><div class="chart-legend" id="lg-main"></div></div>
-      <div class="chart-sub" id="c-rsi"><div class="chart-legend"><span><i class="k6"></i>RSI 14</span><span>30 / 70 bands</span></div></div>
-      <div class="chart-sub" id="c-macd"><div class="chart-legend"><span><i class="k1"></i>MACD</span><span><i class="k2"></i>Signal</span><span>Histogram</span></div></div>
+      <div class="chart-box" id="c-main" role="region" aria-label="Price and volume chart"><div class="chart-legend" id="lg-main"></div></div>
+      <div class="chart-sub" id="c-rsi" role="region" aria-label="RSI chart"><div class="chart-legend"><span><i class="k6"></i>RSI 14</span><span>30 / 70 bands</span></div></div>
+      <div class="chart-sub" id="c-macd" role="region" aria-label="MACD chart"><div class="chart-legend"><span><i class="k1"></i>MACD</span><span><i class="k2"></i>Signal</span><span>Histogram</span></div></div>
       <div class="grid g-2" style="margin-top: var(--space-lg)">
         <div class="panel"><h2>Technical signals</h2><div id="signals"></div></div>
         <div class="panel"><h2>Key levels</h2><div id="levels"></div></div>
@@ -134,7 +134,7 @@
 <section class="view" id="v-portfolio" hidden>
   <div class="view-head"><div><h1>Portfolio</h1><p>Paper account in USD. Fills at bid and ask with fees and slippage.</p></div><button class="sm" data-refresh="portfolio">Refresh</button></div>
   <div id="acct-figs"></div>
-  <div class="panel"><h2>Equity curve</h2><div class="chart-box" id="c-equity" style="height: 260px"></div></div>
+  <div class="panel"><h2>Equity curve</h2><div class="chart-box" id="c-equity" role="region" aria-label="Portfolio equity chart" style="height: 260px"></div></div>
   <div class="panel"><h2>Open positions</h2><div id="positions"></div></div>
   <div class="grid g-2">
     <div class="panel"><h2>Orders</h2><div id="orders"></div></div>

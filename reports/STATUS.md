@@ -60,5 +60,8 @@
 | #88 | หาแหล่งข้อมูล token unlock ฟรี (L2) | done (Claude) |
 | #89 | ทำให้ deploy บน Kuber เสถียร | dmgnr |
 
+## ความคืบหน้าหน้าเว็บ
+- PR #130 เพิ่มคำแปลไทยสำหรับ Auto/Markets/Chart/Portfolio/Backtest พร้อมเทสต์ Chrome ใน CI จากข้อมูลจำลอง รอรีวิวก่อนรวม หลัง deploy ให้ตรวจสลับภาษาไทย↔อังกฤษบน Kuber แบบอ่านอย่างเดียวทั้งห้าหน้า (รอบนี้ยังตรวจเว็บจริงไม่ได้: Chrome `Target closed` / Cloudflare Access 302 เมื่อไม่ได้ล็อกอิน)
+
 ## รอเจ้าของตัดสิน
 - ไม่มี
