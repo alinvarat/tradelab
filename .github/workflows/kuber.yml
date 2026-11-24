@@ -81,4 +81,15 @@ jobs:
           if [ -n "$TRADELAB_SEC_UA" ]; then printf 'TRADELAB_SEC_UA=%s\n' "$TRADELAB_SEC_UA" >> "$runtime_env"; fi
           unset OPENROUTER_API_KEY THIRX_API_KEY TRADELAB_SEC_UA
           export TRADELAB_RUNTIME_ENV_FILE="$runtime_env"
-          bunx --bun @dmgnr/kuber@2.7.1 ci --trust
+          # Kuber's build step has failed on the platform side ("The request could not be completed") and
+          # succeeded on a manual re-run since 2026-11-24. Retry the same command instead of failing the
+          # deploy on a transient platform error; a real code error still fails all three attempts.
+          for attempt in 1 2 3; do
+            if bunx --bun @dmgnr/kuber@2.7.1 ci --trust; then
+              exit 0
+            fi
+            echo "::warning::Deploy attempt ${attempt} of 3 failed; retrying in 60 s."
+            sleep 60
+          done
+          echo "::error::Deploy failed on all 3 attempts."
+          exit 1
