@@ -70,7 +70,8 @@ class Parsing(unittest.TestCase):
             {"symbol": "aaa", "action": "buy", "size_pct": 999, "reason": "x" * 500, "confidence": 7},
             {"symbol": "ZZZ", "action": "buy", "size_pct": 3},            # not a candidate
             {"symbol": "HHH", "action": "sell"},                          # no position
-            {"symbol": "AAA", "action": "short", "size_pct": 1},          # unknown action
+            {"symbol": "AAA", "action": "fly", "size_pct": 1},            # unknown action
+            {"symbol": "ZZZ", "action": "short", "size_pct": 1},          # short needs a candidate too
             {"symbol": "HELD", "action": "sell"}, {"foo": 1}, "junk"], "market_view": "m" * 500})
         out = lt.parse_decisions("noise " + text + " tail", {"AAA"}, {"HELD"})
         syms = [(d["symbol"], d["action"]) for d in out["decisions"]]
