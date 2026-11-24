@@ -125,3 +125,6 @@ Each candidate with a headline carries `playbook`: two or three sentences of gen
 
 ## Addendum 2026-11-24: v4.11, two live mislabels fixed
 Seen in a v4.9 cycle: "Zscaler receives multiple target hikes ahead of proposed acquisition by CrowdStrike" was (a) typed "other" because the m&a pattern matched "acquir" but not "acquisition", and (b) linked to Target (TGT) through the word "target". The news types now match acquisition/acquire forms and target-hike wording; company names that are ordinary words (Target, Visa, Oracle, Apple, Amazon; `core/entities.py` COMMON_WORD_NAMES) link only when capitalised and not in ordinary-word contexts (price target, target hikes, visa rules, ...). Linking is shared with the news archive, so new labels are linked the same way from now on.
+
+## Addendum 2026-11-24: v4.12, sector context
+Every stock candidate carries its sector ETF (`SECTOR_ETF` in `core/universe.py`: SMH, XLK, XLF, XLV, XLE, XLI, XLY, XLP, QQQ for communications), the ETF's move and `vs_sector_pct`, so the analyst can separate stock-specific news from a sector-wide move (for example NVDA -8% while SMH -7% is mostly the sector).
