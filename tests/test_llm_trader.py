@@ -253,6 +253,16 @@ class Trading(Base):
         self.t.scan(self.market(AAA=quote("AAA", px=102, move=5), BBB=quote("BBB", px=106, move=6)))
         self.assertIn("AAA", last_cands())                        # moved 2% since the hold: back in
 
+    def test_desk_stats_group_outcomes_by_source_and_action(self):
+        self.t.cands = ([{"symbol": "A", "why": "recent linked headline", "action": "buy", "out": {"86400": 0.02}}] * 3
+                        + [{"symbol": "B", "why": "recent linked headline", "action": "short", "out": {"86400": 0.03}}] * 2
+                        + [{"symbol": "C", "why": "new shock", "action": "hold", "out": {}}])
+        st = self.t.desk_stats(min_n=1)
+        self.assertEqual(st["news/buy"], {"n": 3, "mean_pct": 2.0, "hit": 1.0})
+        self.assertEqual(st["news/short"]["mean_pct"], -3.0)          # the stock beat SPY: the short lost
+        self.assertNotIn("shock/hold", st)                              # no outcome yet
+        self.assertEqual(self.t.desk_stats(), {})                       # nothing reaches 5 outcomes
+
     def test_scheduled_scan_needs_a_meaningful_mover(self):
         self.t.calls.update(last_idle=0.0, last_ts=0.0)
         self.t.scan(self.market())                                   # nothing moved: no call
