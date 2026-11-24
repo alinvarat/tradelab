@@ -2,7 +2,7 @@
 
 Locked 2026-11-24, before any forward data. Origin: L4 screen run 3 (`RESULTS.md`) passed its locked rule (T-3d pick: validation +6.3% per event, test +4.3%, both p 0.0005; T-1d validation +6.3%, test +5.9%). The forward test uses the shortest lead (1 day), which had the highest return per day of locked capital in every split.
 
-- **Markets:** open binary markets with volume >= $50k whose `endDate` is 12-36 hours away, polled every 30 minutes by the Kuber collector (Gamma `/markets/keyset`). One entry per market (the first poll where it qualifies).
+- **Markets:** open binary markets with volume >= $50k whose `endDate` is 12-36 hours away, polled every 30 minutes (Gamma `/markets/keyset`); addendum 2026-11-24 before the first entry: the poll runs on GitHub Actions (`l4f` job, state in branch `data/l4f-forward`) because Kuber gets a connection reset from the Polymarket API. One entry per market (the first poll where it qualifies).
 - **Entry:** if the YES mid ((bestBid+bestAsk)/2) is in [0.02, 0.10], sell YES at its best bid; if 1 - YES mid is in that range, sell NO at its bid (1 - YES best ask). This pays the spread (taker), which is stricter than the screen's maker assumption.
 - **Result:** at resolution (`closed` with outcome prices 0/1): +price per share if the sold side lost, -(1 - price) if it won; return on the locked collateral (1 - price per share). No fee (Polymarket charges none on most markets; any fee market is reported).
 - **Sizing:** 5% of a separate 147 USD L4f ledger as collateral per market; no leverage.

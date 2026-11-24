@@ -391,7 +391,7 @@ def l4f_once(now=None):
     return st
 
 def loop():
-    last_deribit = last_listing = last_l4f = 0.0
+    last_deribit = last_listing = 0.0
     while True:
         t0 = time.time()
         try:
@@ -406,12 +406,6 @@ def loop():
             except Exception as e:  # noqa: BLE001
                 STATUS["listings"]["errors"] += 1
                 STATUS["listings"]["last_error"] = repr(e)[:200]
-        if t0 - last_l4f >= L4F_EVERY:
-            last_l4f = t0
-            try:
-                l4f_once(t0)
-            except Exception as e:  # noqa: BLE001
-                STATUS["last_error"] = "l4f: " + repr(e)[:200]
         if t0 - last_deribit >= DERIBIT_EVERY:
             last_deribit = t0
             try:
@@ -427,4 +421,4 @@ def view() -> dict:
     if DIR.exists():
         for f in sorted(DIR.glob("*/*.jsonl.gz"))[-20:]:
             files[f"{f.parent.name}/{f.name}"] = f.stat().st_size
-    return {**STATUS, "files": files, "dir": str(DIR), "l1b": ledger_view("l1b"), "l1d": ledger_view("l1d"), "l1f": ledger_view("l1f"), "l4f": ledger_view("l4f")}
+    return {**STATUS, "files": files, "dir": str(DIR), "l1b": ledger_view("l1b"), "l1d": ledger_view("l1d"), "l1f": ledger_view("l1f")}
