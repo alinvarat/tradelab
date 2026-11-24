@@ -18,7 +18,7 @@
 | L1 listing | `ops/lines/L1_listings.md` | killed (ตามกฎ) → L1b | รอบ 2: กฎเลือก 7 วันแล้วไม่ผ่าน; ถือ 4 ชม. บวกทุกช่วง (validation +10.2% p 0.0075, test +9.3%) แต่มีเหตุการณ์แค่ราว 1 ครั้งต่อเดือน | L1b: ล็อกกติกาถือ 4 ชม. แบบเดินหน้า + เพิ่มตัวดึงประกาศหลาย exchange บน Kuber |
 | L2 unlock | `ops/lines/L2_unlocks.md` | todo | — | หาแหล่งข้อมูลฟรี (จำกัด 2 ชม.) |
 | L3 หุ้นเล็กมีข่าว | `ops/lines/L3_smallcap_news.md` | todo | — | ลงทะเบียนเกณฑ์ แล้วสร้างรายการ event 8-K นอกเวลา |
-| L4 Polymarket maker | `ops/lines/L4_polymarket_maker.md` | screening (รอบ 4) + L4f forward | รอบ 2–3 โมฆะ (นับตลาดซ้ำ) | อ่านผลรอบ 4 |
+| L4 Polymarket maker | `ops/lines/L4_polymarket_maker.md` | killed; L4f รันต่อ (ไม่มีค่าใช้จ่าย, ความสำคัญต่ำ) | รอบ 4: ราว break-even | — |
 | L5 ออปชันข่าวทุกประเภท | `ops/lines/L5_options_all_news.md` | forward | 0/150 | ตรวจรอบ 15:00 UTC; รีวิว PR #77, #79 |
 | L6 insider หุ้นเล็ก | `ops/lines/L6_smallcap_insider.md` | todo | — | หลัง L1–L4 |
 
@@ -41,7 +41,7 @@
 | 2j | v4.3: โมเดลฟรีสำหรับบทบาทผู้ช่วย, DeepSeek ตัดสินใจ | Claude | 1 | live | ดู helper_models ใน /api/llm_trader |
 | 2c | เพิ่มแหล่งประกาศ listing ที่ Kuber เข้าถึงได้ (Upbit ทางอื่น, Bithumb, OKX, Bybit, Coinbase) ด้วย addendum ก่อนเหตุการณ์แรก | เพื่อน (dmgnr) หรือ Claude | 2 | todo | เพิ่มความถี่ของ L1b |
 | 3 | ด่านคัดกรอง L3 | เพื่อน (dmgnr) | 1 | todo | issue #85 |
-| 4 | ด่านคัดกรอง L4 | Claude (รับแทน) | 1 | rerun | รอบ 3 เป็นโมฆะ (หน้าซ้ำ เหลือ 75 ตลาดจริง) แก้ cursor แล้วรันรอบ 4 |
+| 4 | ด่านคัดกรอง L4 | Claude (รับแทน) | 1 | killed | รอบ 4 (ข้อมูลไม่ซ้ำ 2,613 เหตุการณ์): validation +0.35%/ครั้ง p 0.39 |
 | 4b | L4f: ขาย longshot บน Polymarket 1 วันก่อนปิด (เดินหน้า, Actions ทุก 30 นาที) | Claude | 1 | forward | data/l4f-forward; 14:12 เข้า 2 ตลาด (Barcelona NO 0.09, BTC>56k NO 0.042) |
 | 5 | หาแหล่งข้อมูล L2 | เพื่อน (dmgnr) | 1 | todo | issue #88 |
 | 6 | deploy ให้เสถียร (registry DNS, ข้าม deploy เมื่อแก้แค่เอกสาร, แจ้งเตือน) | เพื่อน (dmgnr) | 1 | todo | issue #89, #80 |
