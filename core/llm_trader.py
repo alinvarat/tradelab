@@ -747,6 +747,7 @@ class LlmTrader:
         t0 = time.time()
         raw, model = self.chat(SYSTEM, user)
         parsed = parse_decisions(raw, set(quotes), held)
+        selling = {d["symbol"] for d in parsed["decisions"] if d["action"] == "sell"}
         for d in parsed["decisions"]:                       # refuse what cannot fill before paying for a risk review
             if d["action"] in ("buy", "short"):
                 q = quotes.get(d["symbol"]) or {}
@@ -756,10 +757,17 @@ class LlmTrader:
                     d["preflight"] = "market closed or stale quote"
                 elif d["symbol"] in self.pending:
                     d["preflight"] = "an entry order for this symbol is already waiting"
-                elif held_p and held_p.side != side:
+                elif held_p and held_p.side != side and d["symbol"] not in selling:
                     d["preflight"] = "opposite position open: sell it first"
         reviews, rraw, rmodel = self.risk_review([d for d in parsed["decisions"] if not d.get("preflight")], ctx) \
             if raw else ({}, None, None)
+        fresh_q = {}
+        if getattr(self, "async_decide", False):          # live: refresh quotes for orders, outside the lock
+            for d in parsed["decisions"]:
+                if d["action"] in ("buy", "short", "sell") and not d.get("preflight"):
+                    fq = self._live_quote(d["symbol"])
+                    if fq:
+                        fresh_q[d["symbol"]] = fq
         cycle_usd = max(0.0, ai_news.spend()["total_usd"] - spent0)
         with self.lock:
             self.calls["usd"] = self.calls.get("usd", 0.0) + cycle_usd
@@ -809,8 +817,8 @@ class LlmTrader:
                     self.record("skip", symbol=d["symbol"], action=d["action"], why=d["preflight"])
                     self.decisions[-1]["executed"] = {"status": "skipped", "why": d["preflight"]}
                     continue
-                if getattr(self, "async_decide", False) and d["action"] in ("buy", "short", "sell"):   # live: fresh quote
-                    fq = self._live_quote(d["symbol"])
+                if d["symbol"] in fresh_q:
+                    fq = fresh_q[d["symbol"]]
                     if fq:
                         quotes[d["symbol"]] = fq
                         if d["symbol"] in self.acct.positions or d["symbol"] in self.acct.last:
@@ -827,6 +835,9 @@ class LlmTrader:
     # ---------- execution ----------
     def _buy(self, d, quotes, now, side=1):
         sym, q = d["symbol"], quotes[d["symbol"]]
+        if sym in self.links and sym not in self.acct.positions:   # closed by a stop while the model was thinking
+            self._log_closed_trades()
+            self._book_pairs(now)
         why = self.risk_block(now)
         held = self.acct.positions.get(sym)
         if not why and held and held.side != side:
@@ -1127,7 +1138,8 @@ class LlmTrader:
                     cands.append({"symbol": s, "ratio": None, "why": "top mover in its asset class"})
             cands = cands[:MAX_CANDIDATES]
             idle = any(q.get("open") for q in quotes.values())
-            trigger = self.due(now, bool(fresh or news or buz or opening), idle, quotes)
+            busy = getattr(self, "_deciding", False)       # a cycle is still thinking: use nothing up now
+            trigger = None if busy else self.due(now, bool(fresh or news or buz or opening), idle, quotes)
             if trigger and opening:
                 trigger = "market open (pre-open watchlist)"
                 brief["used"] = now
@@ -1154,7 +1166,7 @@ class LlmTrader:
                     for k in list(seen_px)[:len(seen_px) - 400]:
                         seen_px.pop(k)
             make_brief = (wd < 5 and PREOPEN_WINDOW_ET[0] <= hm <= PREOPEN_WINDOW_ET[1]
-                          and brief.get("date") != ny_day and not trigger
+                          and brief.get("date") != ny_day and not trigger and not busy
                           and bool(night or self.acct.positions))           # nothing new overnight: no briefing call
             if make_brief:
                 self.calls["briefing"] = {"date": ny_day, "pending": True}
@@ -1357,10 +1369,11 @@ class LlmTrader:
                 hot_quotes[s] = q
                 self.last_quotes[s] = q
             with self.lock:
-                if s in self.acct.positions or s in self.acct.last:
-                    self.acct.on_quote(self._q(q))
-                if s in self.ctrl.positions or s in self.ctrl.last:
-                    self.ctrl.on_quote(self._q(q))
+                qq = self._q(q)
+                for acct in (self.acct, self.ctrl):
+                    prev = acct.last.get(s)
+                    if (s in acct.positions or prev is not None) and (prev is None or qq.ts >= prev.ts):
+                        acct.on_quote(qq)
                 self._log_closed_trades()
         if hot_quotes and self.hot_shock(hot_quotes):
             now = time.time()                            # only quotes received in the last minute may trigger or mark
