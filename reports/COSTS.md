@@ -1,7 +1,14 @@
-# AI costs
+# ค่าใช้จ่าย AI และข้อมูล
 
-| Work | Actual reported USD | Evidence |
-|---|---:|---|
-| TradeLab experiment model calls initiated by this sprint implementation, 2026-11-24 | $0.00 | No experiment was dispatched for these changes. |
+ให้บันทึกทุกงานที่เรียก LLM หรือใช้บริการเสียเงิน ใช้ค่า `usage.cost` จริงจาก OpenRouter ห้ามใช้ค่าประมาณ
+ค่าใช้จ่ายรายวันของบอทให้อ่านจาก `usd_today` ใน `/api/llm_trader`
 
-For scheduled options runs, the options summary on `data/options-forward` records cumulative `llm_cost_usd_recorded` by protocol. The provider may supply a charge or token usage for the existing estimate. Add observed run costs to this log when reviewing the results.
+| วันที่ (UTC) | งาน | USD | หมายเหตุ |
+|---|---|---|---|
+| 2026-11-23 | news_v2 (งานวิจัย) | 1.89 | เกินประมาณการเดิมที่ 0.6–0.9 |
+| 2026-11-24 | บอท DeepSeek | 0.40 | ค่า ณ 09:50 UTC จาก 72 calls |
+| 2026-11-24 | `probe_llm_cost` (รันโดยไม่ตั้งใจจาก push ไป research-run/l1_listings) | ยังไม่ทราบ | ยกเลิกงานอื่นทันที ตัวนี้รันจบไปก่อน |
+
+**กติกา:** ไม่มีเพดานงบ (เจ้าของตัดสินแล้ว) แต่ถ้างานใดใช้เกิน 2 เท่าของที่ประมาณไว้ ให้บันทึกสาเหตุไว้ในแถวของงานนั้น
+
+งานออปชันแบบเดินหน้าบันทึกค่า LLM สะสมแยกตามโปรโตคอลไว้ใน `llm_cost_usd_recorded` ของ summary ใน branch `data/options-forward` ให้คัดค่าจริงมาลงตารางนี้เมื่อรีวิวผล

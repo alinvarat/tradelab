@@ -775,7 +775,128 @@ def study_news_v2(_symbols, workers=6):
     return summ, rows
 
 
-STUDIES = {"news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+
+# ------------------------------------------------------------------ L1 listings screen (ops/lines/L1_listings.md)
+def _get_json(url, tries=4, timeout=20):
+    from urllib.request import Request, urlopen
+    for k in range(tries):
+        try:
+            with urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0 tradelab-research"}), timeout=timeout) as r:
+                return json.loads(r.read())
+        except Exception as e:                  # noqa: BLE001  a blocked or missing page is a gap
+            if k == tries - 1:
+                log(f"  get failed {url[:90]}: {e!r}"[:200])
+                return None
+            time.sleep(2 * (k + 1))
+
+
+def l1_events(start_ts, end_ts):
+    from core import screens as sc
+    ev, gaps = [], {}
+    page = 1
+    while page <= 60:
+        d = _get_json("https://www.binance.com/bapi/composite/v1/public/cms/article/list/query"
+                      f"?type=1&catalogId=48&pageNo={page}&pageSize=50")
+        arts = (((d or {}).get("data") or {}).get("catalogs") or [{}])[0].get("articles") or []
+        if not arts:
+            gaps["binance"] = f"stopped at page {page}" + ("" if d else " (request failed)")
+            break
+        for a in arts:
+            ts = a["releaseDate"] / 1000
+            if start_ts <= ts < end_ts:
+                for sym in sc.binance_listing_symbols(a.get("title", "")):
+                    ev.append({"venue": "binance", "symbol": sym, "ts": ts, "title": a["title"][:120]})
+        if arts[-1]["releaseDate"] / 1000 < start_ts:
+            break
+        page += 1
+    page = 1
+    from datetime import datetime
+    while page <= 60:
+        d = _get_json(f"https://api-manager.upbit.com/api/v1/announcements?os=web&page={page}&per_page=20&category=trade")
+        notes = ((d or {}).get("data") or {}).get("notices") or []
+        if not notes:
+            gaps["upbit"] = f"stopped at page {page}" + ("" if d else " (request failed)")
+            break
+        for n in notes:
+            ts = datetime.fromisoformat(n["first_listed_at"]).timestamp()
+            if start_ts <= ts < end_ts:
+                for sym in sc.upbit_listing_symbols(n.get("title", "")):
+                    ev.append({"venue": "upbit", "symbol": sym, "ts": ts, "title": n["title"][:120]})
+        if datetime.fromisoformat(notes[-1]["first_listed_at"]).timestamp() < start_ts:
+            break
+        page += 1
+    return ev, gaps
+
+
+def _binance_bars(sym, start_s, interval, n):
+    d = _get_json(f"https://data-api.binance.vision/api/v3/klines?symbol={sym}USDT&interval={interval}"
+                  f"&startTime={int(start_s * 1000)}&limit={n}")
+    return [(int(k[0]) // 1000, float(k[4])) for k in d] if isinstance(d, list) else []
+
+
+def _coinbase_bars(sym, start_s, gran, n):
+    iso = lambda t: time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(t))
+    d = _get_json(f"https://api.exchange.coinbase.com/products/{sym}-USD/candles?granularity={gran}"
+                  f"&start={iso(start_s)}&end={iso(start_s + gran * n)}")
+    return sorted((int(c[0]), float(c[4])) for c in d) if isinstance(d, list) else []
+
+
+def _kucoin_bars(sym, start_s, typ, width, n):
+    d = _get_json(f"https://api.kucoin.com/api/v1/market/candles?type={typ}&symbol={sym}-USDT"
+                  f"&startAt={int(start_s)}&endAt={int(start_s + width * n)}")
+    rows = (d or {}).get("data") if isinstance(d, dict) else None
+    return sorted((int(c[0]), float(c[2])) for c in rows) if rows else []
+
+
+def study_l1_listings(_symbols):
+    """Pre-registered in RESULTS.md 'L1 screen'. Binance listings are priced on Coinbase, Upbit listings on Binance spot;
+    the coin must already trade there before the announcement (a bar in the hour before)."""
+    from core import screens as sc
+    from datetime import datetime, timezone
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2024), T(2025)), "validation": (T(2025), T(2026)), "test": (T(2026), T(2026, 11))}
+    events, gaps = l1_events(T(2024), T(2026, 11))
+    log(f"L1 events: {len(events)} {gaps}")
+    bench_cache, rows, skipped = {}, [], {"not_trading_before": 0, "no_bars": 0}
+    for e in events:
+        ts, sym = e["ts"], e["symbol"]
+        if e["venue"] == "binance":
+            pre = _coinbase_bars(sym, ts - 3600, 60, 60)
+            e["price_venue"] = "coinbase"
+            if pre:
+                m1 = _coinbase_bars(sym, ts, 60, 290)
+                h1 = _coinbase_bars(sym, ts, 3600, 200)
+                bm1, bh1 = _coinbase_bars("BTC", ts, 60, 290), _coinbase_bars("BTC", ts, 3600, 200)
+            else:                               # addendum 2026-11-24: KuCoin USDT when Coinbase has no prior market
+                pre = _kucoin_bars(sym, ts - 3600, "1min", 60, 60)
+                e["price_venue"] = "kucoin"
+                m1 = _kucoin_bars(sym, ts, "1min", 60, 300)
+                h1 = _kucoin_bars(sym, ts, "1hour", 3600, 200)
+                bm1, bh1 = _kucoin_bars("BTC", ts, "1min", 60, 300), _kucoin_bars("BTC", ts, "1hour", 3600, 200)
+        else:
+            pre = _binance_bars(sym, ts - 3600, "1m", 60)
+            m1 = _binance_bars(sym, ts, "1m", 300)
+            h1 = _binance_bars(sym, ts, "1h", 200)
+            bm1, bh1 = _binance_bars("BTC", ts, "1m", 300), _binance_bars("BTC", ts, "1h", 200)
+        if not pre:
+            skipped["not_trading_before"] += 1
+            continue
+        ret = sc.listing_returns(ts, m1, h1, bm1, bh1)
+        if not ret:
+            skipped["no_bars"] += 1
+            continue
+        rows.append({**e, "split": sc.split_of(ts, bounds), "ret": ret})
+    hs = list(sc.L1_HORIZONS)
+    summ = {"events": len(events), "rows": len(rows), "skipped": skipped, "gaps": gaps,
+            "by_venue": {v: sum(1 for r in rows if r["venue"] == v) for v in ("binance", "upbit")},
+            "base_cost": sc.judge(rows, hs, bounds), "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L1_COST)}
+    for v in ("binance", "upbit"):
+        summ[f"only_{v}"] = sc.judge([r for r in rows if r["venue"] == v], hs, bounds)
+    for pv in ("coinbase", "kucoin"):
+        summ[f"priced_{pv}"] = sc.judge([r for r in rows if r.get("price_venue") == pv], hs, bounds)
+    return summ, rows
+
+STUDIES = {"l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):

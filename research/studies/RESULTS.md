@@ -129,3 +129,16 @@ There were 3,475 2.02 filings from 2026-10-20 to 2026-11-22. 2,097 passed the li
 
 - Paired per filing, v2 − v1 at H5 = **+1.56% (block p 0.008)**, H3 +0.77% (p 0.075). v2 reads clearly better than v1: on the same filings it avoided most of v1's losses.
 - **Locked verdict: "v2 not better"**, because v2's own H5 net is not significant (p 0.32) and its hit rate is 52% < 55%. Better than v1 is not yet profitable enough to use on its own.
+
+## L1 screen: new listings (pre-registered 2026-11-24, before any data was pulled)
+Spec: `ops/lines/L1_listings.md`; code: `core/screens.py` (`listing_returns`, `judge`), study `l1_listings`.
+- Events: Binance "Will List ..." notices (catalog 48) and Upbit KRW-market "디지털 자산 추가" notices, 2024-01-01 to 2026-10-31. A coin counts only if it already traded on the pricing venue in the hour before the notice (Binance notices priced on Coinbase USD, Upbit notices on Binance spot USDT).
+- Entry: close of the 1-minute bar containing notice + 60 s. Horizons 15m, 1h, 4h (1-minute bars), 1d, 7d (1-hour bars).
+- Return: coin minus BTC over the same window (control), minus 0.6% round trip; double cost reported too.
+- Splits: 2024 train, 2025 validation, 2026-01 to 2026-10 test. Horizon = best train mean. Block bootstrap by UTC day.
+- Pass: validation mean > 0 with p < 0.05, still > 0 without the best 1 and best 5 events, test mean > 0. Kill: validation mean <= 0, p > 0.2, or <= 0 without the best 1 or 5 events. Otherwise inconclusive.
+- **Run 1 (2026-11-24, Actions 45369639086): inconclusive.** 65 notices; 15 priced (all Binance notices on Coinbase), 50 had no prior Coinbase market; Upbit returned nothing from the US runner (request failed). Horizon picked on train: 4h. Net abnormal mean at 4h: train +37.4% (n 5, p 0.0005), validation +15.3% (n 4, p 0.064), test +9.5% (n 6, p 0.11); validation without the best event +3.8%. Double cost: validation +14.7% (p 0.08). 9 of 15 events positive at 4h; winners +20% to +57% (COW, ACX, ORCA, AVNT, ZKP, CFG), losers down to -10%. Too few events to pass.
+- **Addendum (2026-11-24, before run 2):** same rules, horizon and splits; Binance notices with no prior Coinbase market are priced on KuCoin USDT (1-minute and 1-hour candles), BTC benchmark on the same venue. Results reported in total and per pricing venue. Upbit stays out until a non-US fetcher exists.
+- **Run 2 (2026-11-24, Actions 45372512628): killed by the locked rule.** 31 of 65 notices priced (15 Coinbase, 16 KuCoin). The best train mean is now 7d (+183%, driven by ACT +2,073% raw on KuCoin in Nov 2024), and 7d fails: validation +8.4% (p 0.30), test -10.6%, validation without the best event -5.0%.
+- Observation, not a pass (the 4h horizon was not the rule's pick in run 2): 4h was positive in every split, train +118% (n 11), validation +10.2% (n 13, p 0.0075), test +9.3% (n 7, p 0.087), double cost validation +9.6% (p 0.014); 17 of 31 positive, median +2.4%. Notices are rare: 65 Binance "Will List" notices in 34 months, about 1 tradeable event a month, far too few for 3x a month alone.
+- Next (new hypothesis, to be locked before new data): L1b = fixed 4h hold after a listing notice, tested forward only, on more venues (Upbit, Bithumb, OKX, Coinbase, Bybit notices) to raise frequency; fetchers must run outside the US (Kuber), because Upbit refused the US runner.

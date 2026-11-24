@@ -15,6 +15,14 @@ const css = (v) => {
 };
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+function target3x(a) {
+  // Every account here is judged against one goal: 3x the starting capital. Closed pairs are only the evidence count.
+  const eq = a.equity_usd, cap = a.capital_usd, ev = a.evaluation || {};
+  if (eq == null || !cap) return "";
+  const pct = Math.max(0, Math.min(100, (eq - cap) / (2 * cap) * 100));
+  return `<div class="figure"><b>${eq.toFixed(2)} / ${(3 * cap).toFixed(2)} USD</b><span>toward the 3x goal (${pct.toFixed(0)}%) | closed pairs ${ev.closed_pairs ?? 0}</span></div>`;
+}
+
 async function api(path, body) {
   const r = await fetch("/api/" + path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
   const j = await r.json().catch(() => ({ error: "bad response" }));
@@ -843,7 +851,7 @@ views.llm = async () => {
   $("#llm-sub").textContent = `${l.model} | ${l.universe_size} symbols (${classes}) | calls today ${l.calls_today}/${l.max_calls_day} | next scheduled scan in ${l.next_scan_in_s ?? "?"} s${l.error ? " | " + l.error : ""}`;
   figs.innerHTML = `<div class="figures">
     ${accountComparison(l, "DeepSeek account")}
-    <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
+    ${target3x(l)}
     <div class="figure"><b>${l.paused ? "Paused" : "Running"}</b><span>last scan ${l.last_scan_age_s ?? "never"} s ago</span></div></div>
     ${accountBasis(l)}
     <p class="small muted">Protocol v4.1: the same paper account now runs three analyst calls (news, price, macro), a bull/bear debate with a rebuttal round, an advisory risk review that can only veto or cut size, 30-trade memory and up to 24 candidates, with a scheduled scan every 10 minutes. v4.2 keeps everything above but sends every call of a cycle with the same data block first, so the model's prompt cache makes the later calls cheaper and faster; the real cost per cycle is logged. Headlines on closed markets wait for a pre-open briefing (09:10-09:29 New York) whose watchlist starts the first cycle at the open, and a scheduled scan with nothing new is skipped. v4 rules are unchanged otherwise: the model sees US stocks, ETFs, commodity futures, FX and crypto, chooses whether to trade, the margin (0-100% of equity), leverage (1-20x, margin = notional / leverage), entry, stop, target and when to look again. The control account buys a random symbol in the same asset class with the same notional and leverage.</p>
@@ -918,7 +926,7 @@ views.events = async () => {
   figs.innerHTML = `<div class="figures">
     ${accountComparison(d, "Event trader account")}
     <div class="figure"><b>${d.n_events}</b><span>events (${d.n_up} up-shocks)</span></div>
-    <div class="figure"><b>${ev.closed_pairs ?? 0} / ${ev.needed ?? 30}</b><span>closed pairs needed</span></div>
+    ${target3x(d)}
     <div class="figure"><b>${d.paused ? "Paused" : "Running"}</b><span>${esc(d.rules.shock)}</span></div></div>
     ${accountBasis(d)}<p class="small muted"><b>Fixed rule, not the AI. No leverage (1x).</b> ${esc(d.rules.trade)}. A pair is counted only after both the stock and its random control have closed, so 0/30 with positions still open is normal.</p><p><b>Verdict:</b> ${esc(ev.verdict || "")}</p>`;
   $("#ev-pos").innerHTML = table([
@@ -1100,6 +1108,7 @@ try { LANG = localStorage.getItem("lang") || "en"; } catch (e) { /* private wind
 const NOTE_TH = [
   [/^Every account below is separate play money.*$/, "ทุกบัญชีใช้เงินจำลอง บัญชีสั่งเองแปลงเป็นบาทด้วยค่าเงินล่าสุด บัญชีบอทเริ่มที่ 5,000 บาท ส่วนยอดเงินบาทของบอทและบัญชีสุ่มเทียบใช้อัตราตอนเปิดบัญชีนั้น"],
   [/^(\d+\/\d+) pairs vs random control$/, "คู่ที่ปิดแล้ว $1 เทียบบัญชีสุ่ม"],
+  [/^toward the 3x goal \((\d+)%\) \| closed pairs (\d+)$/, "ความคืบหน้าสู่เป้า 3 เท่า $1% | คู่ที่ปิดแล้ว $2"],
   [/^Each card is one decision cycle.*$/, "แต่ละการ์ดคือการตัดสินใจหนึ่งรอบของ DeepSeek: สิ่งที่โมเดลเห็น การโต้แย้งฝั่งซื้อ/ค้าน การตัดสินใจและเหตุผลของทุกตัว (รวมทั้งที่ไม่ซื้อ) สิ่งที่ระบบทำ และผลหลังจากนั้น เรียงใหม่สุดก่อน"],
   [/^Event trader \(fixed rule\).*$/, "Event trader (กติกาตายตัว): ทุกหุ้นใหญ่ที่ขยับตั้งแต่ 5% พร้อมปริมาณซื้อขายจริง พร้อมข่าว สิ่งที่กติกาทำ และเหตุผลที่ไม่เทรด"],
   [/^No open positions right now\..*$/, "ตอนนี้ไม่มีตำแหน่งที่ถืออยู่ กติกาถือได้สูงสุด 3 ตัวพร้อมกัน เหตุการณ์ที่เกินจะขึ้นว่า 'max positions' ด้านล่าง"],
