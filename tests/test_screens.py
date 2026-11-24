@@ -66,5 +66,18 @@ class Judge(unittest.TestCase):
         self.assertEqual(j["verdict"], "killed")
 
 
+class L1bLedger(unittest.TestCase):
+    def test_new_events_are_returned_once(self):
+        seen = set()
+        ev = [{"venue": "binance", "symbol": "FOO", "ts": 100.4}]
+        self.assertEqual(len(sc.new_listing_events(seen, ev)), 1)
+        self.assertEqual(sc.new_listing_events(seen, ev), [])
+
+    def test_result_pays_spread_fees_and_removes_btc(self):
+        r = sc.l1b_result(entry_ask=10.0, exit_bid=11.0, btc_entry=100.0, btc_exit=102.0)
+        self.assertAlmostEqual(r["raw"], 0.10)
+        self.assertAlmostEqual(r["net"], 0.10 - 0.02 - 0.002)
+
+
 if __name__ == "__main__":
     unittest.main()

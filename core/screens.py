@@ -123,3 +123,24 @@ def judge(rows: list, horizons: list, bounds: dict, cost_extra: float = 0.0, see
     killed = val["mean"] is None or val["mean"] <= 0 or val["p"] > 0.2 or any(x <= 0 for x in robust.values())
     return {"table": table, "pick": pick, "robust": robust,
             "verdict": "passed" if passed else ("killed" if killed else "inconclusive")}
+
+
+# ------------------------------------------------------------------ L1b forward ledger (protocol_L1b_listings_forward.md)
+L1B_HOLD_S, L1B_DELAY_S, L1B_FEES, L1B_STAKE = 4 * 3600, 60, 0.002, 0.20
+
+
+def new_listing_events(seen: set, events: list) -> list:
+    """events: [{'venue','symbol','ts'}]; returns those whose key is not in `seen` and adds them to it."""
+    out = []
+    for e in events:
+        k = f"{e['venue']}:{e['symbol']}:{int(e['ts'])}"
+        if k not in seen:
+            seen.add(k)
+            out.append(e)
+    return out
+
+
+def l1b_result(entry_ask: float, exit_bid: float, btc_entry: float, btc_exit: float) -> dict:
+    raw = exit_bid / entry_ask - 1
+    abn = raw - (btc_exit / btc_entry - 1)
+    return {"raw": raw, "abn": abn, "net": abn - L1B_FEES}
