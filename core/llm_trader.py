@@ -46,8 +46,14 @@ MAX_HOLD_S = 180 * 24 * 3600     # safety cap only; the holding period is otherw
 DAILY_HALT = 1.0   # disabled (owner rule: no restrictions)
 MAX_CALLS_DAY, MIN_GAP_S, MAX_CANDIDATES = 300, 60, 24
 IDLE_CALL_S = 10 * 60            # v4.1: a scheduled whole-market look every 10 minutes
+# v4.2 (2026-11-24, cost): a daily spend budget measured from OpenRouter's own cost per call. Scheduled looks stop once
+# half the budget is used (the rest is kept for news, shocks and position reviews); everything stops at the budget.
+# New signals are batched: a new-signal cycle starts at most every SIGNAL_GAP_S, so a burst of headlines is one cycle.
+BUDGET_USD = float(os.environ.get("TRADELAB_LLM_BUDGET_USD", "1.0"))
+IDLE_BUDGET_SHARE = 0.5
+SIGNAL_GAP_S = 5 * 60
 DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal round
-PROTOCOL_VERSION = "v4.1"
+PROTOCOL_VERSION = "v4.2"
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60
@@ -429,12 +435,15 @@ class LlmTrader:
     def due(self, now, fresh, idle=False):
         c = self.calls
         if c["day"] != _day(now):
-            c.update(day=_day(now), n=0)
+            c.update(day=_day(now), n=0, usd=0.0)
         if c["n"] >= MAX_CALLS_DAY or now - c["last_ts"] < MIN_GAP_S:
             return None
-        if fresh:
+        usd = c.get("usd", 0.0)
+        if usd >= BUDGET_USD:
+            return None
+        if fresh and now - c["last_ts"] >= SIGNAL_GAP_S:
             return "new signals"
-        if idle and now - c.get("last_idle", 0) >= IDLE_CALL_S:
+        if idle and now - c.get("last_idle", 0) >= IDLE_CALL_S and usd < BUDGET_USD * IDLE_BUDGET_SHARE:
             return "scheduled scan"
         if any(l.get("review_at", 0) <= now for s, l in self.links.items() if s in self.acct.positions):
             return "position review"
@@ -602,6 +611,7 @@ class LlmTrader:
             if self.acct.positions:
                 self.calls["last_review"] = now
             calls_today = self.calls["n"]
+        spent0 = ai_news.spend()["total_usd"]
         if ctx["candidates"]:
             ctx["analysts"] = self.analysts(ctx)
             ctx.update(self.debate(ctx))
@@ -610,8 +620,11 @@ class LlmTrader:
         raw, model = self.chat(SYSTEM, user)
         parsed = parse_decisions(raw, set(quotes), held)
         reviews, rraw, rmodel = self.risk_review(parsed["decisions"], ctx) if raw else ({}, None, None)
+        cycle_usd = max(0.0, ai_news.spend()["total_usd"] - spent0)
         with self.lock:
+            self.calls["usd"] = self.calls.get("usd", 0.0) + cycle_usd
             self.record("call", trigger=trigger, model=model, seconds=round(time.time() - t0, 1), calls_today=calls_today,
+                        cost_usd=round(cycle_usd, 5), usd_today=round(self.calls["usd"], 4),
                         context=ctx, raw=raw[:RAW_LOG_CHARS], error=parsed.get("error") or (None if raw else model),
                         rejected=parsed["rejected"], market_view=parsed["market_view"])
             if rraw is not None or reviews:
@@ -1003,6 +1016,7 @@ class LlmTrader:
                     "control_equity_thb": data.thb_at_open(control_equity, self.capital_usd, CAPITAL_THB),
                     "capital_usd": self.capital_usd, "paused": self.paused,
                     "calls_today": self.calls["n"], "max_calls_day": MAX_CALLS_DAY, "error": self.last_error,
+                    "usd_today": round(self.calls.get("usd", 0.0), 4), "budget_usd": BUDGET_USD,
                     "last_scan_age_s": round(time.time() - self.last_scan) if self.last_scan else None,
                     "model": ai_news.DECISION_MODEL.split("/", 1)[-1],
                     "protocol": PROTOCOL_VERSION, "universe_size": len(ALL),

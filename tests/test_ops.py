@@ -101,3 +101,19 @@ class QuoteFast(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Spend(unittest.TestCase):
+    def test_usage_cost_is_counted_and_estimated_when_missing(self):
+        from core import ai_news
+        before = ai_news.spend()
+        c1 = ai_news.record_usage({"usage": {"prompt_tokens": 1000, "completion_tokens": 100, "cost": 0.0012,
+                                             "prompt_tokens_details": {"cached_tokens": 800}}})
+        c2 = ai_news.record_usage({"usage": {"prompt_tokens": 1_000_000, "completion_tokens": 0}})
+        after = ai_news.spend()
+        self.assertAlmostEqual(c1, 0.0012)
+        self.assertAlmostEqual(c2, ai_news.PRICE_IN)
+        self.assertAlmostEqual(after["total_usd"] - before["total_usd"], 0.0012 + ai_news.PRICE_IN)
+        self.assertEqual(after["tokens_cached"] - before["tokens_cached"], 800)
+        self.assertEqual(ai_news.record_usage({}), 0.0)
+

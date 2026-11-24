@@ -76,3 +76,10 @@ Owner direction: the model may decide leverage, entry price, size, number of pos
 - The control account mirrors the model's notional and leverage on a random non-shock stock, so the paired comparison stays fair at any leverage; stops, targets and exits of the control follow the model's sells.
 - Because leverage can wipe the account in minutes, an all-in outcome is a valid result; closed trades, liquidations and the model's stated reason for size/leverage are logged. The evaluation rule is unchanged (30 closed pairs, bootstrap).
 - Language: the model writes reasons, market view and bull/bear arguments in Thai (tickers, numbers, JSON keys in English). Thai text can be less precise than English; the decision fields are numeric and validated, so only the explanations are affected.
+
+## Addendum 2026-11-24: v4.2, cost control (written before any v4.2 decision)
+The owner asked for lower AI cost without dropping the v4.1 pipeline (3 analysts, 2-round debate, risk review, 30-trade memory, 24 candidates). Changes, applied only from deployment onward:
+- Daily budget `TRADELAB_LLM_BUDGET_USD`, default 1.0 USD per UTC day, measured from OpenRouter's reported cost per call (`usage.cost`; estimated from tokens at 0.30/1.20 USD per 1M when absent). Scheduled scans stop once half the budget is used. News, shocks and position reviews continue until the whole budget is used. Then nothing is called until the next UTC day; stops and targets still execute.
+- New-signal cycles start at most every 5 minutes, so a burst of headlines becomes one cycle. The 60 s minimum gap and the 300 cycles/day cap stay.
+- Decisions, links and pairs are tagged `v4.2`, so `by_protocol` keeps them apart from v4.1. The v4.1 and v4.2 samples are not pooled for any verdict without a statement that says so.
+- Cost per cycle and the day's total are logged with every call (`cost_usd`, `usd_today`) and shown on `/api/llm_trader` (`usd_today`, `budget_usd`).
