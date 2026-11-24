@@ -8,3 +8,5 @@ Collected by `core/market_collect.py` inside the app, stored on the volume at `/
 | `deribit` | every BTC/ETH option expiring within 30 days: bid, ask, mark, mark IV, underlying, open interest, volume | 30 min | 3 option-smile dislocations |
 
 Rules: a strategy on this data gets its own protocol **locked before** looking at the holdout. The holdout window Codex suggested is Jan–Mar 2027 (venues) and Jan–Jun 2027 (options). Data before the protocol date may be used to design the rule only.
+
+The one-month sprint has a separate [2026-11-24 protocol](protocol_sprint_20261124.md) for the venue, stablecoin and Deribit collector streams. It fixes the November 25–December 25 window before the first eligible observation. The January windows above remain available for later independent confirmation.
