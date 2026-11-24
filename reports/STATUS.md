@@ -32,6 +32,8 @@
 | 1 | deploy ผ่านและตรวจผ่าน Chrome | Claude | 1 | done | 09:47 |
 | 2 | ด่านคัดกรอง L1 | Claude | 1 | done | killed ตามกฎ; เปิด L1b |
 | 2b | L1b: protocol ถือ 4 ชม. + ตัวดึงประกาศ listing บน Kuber + บัญชีจำลอง | Claude | 2 | forward | ขึ้นระบบแล้ว (ตรวจ Chrome 10:52): Binance poll ทุก 30 วิ ไม่มี error, บัญชี 147/441 USD; Upbit ตอบ 403 จาก Kuber แม้ใช้ UA แบบเบราว์เซอร์ (น่าจะบล็อก IP) |
+| 2d | L1c ด่านคัดกรอง (Binance futures launch / Will Add) | Claude | 1 | killed | 115 เหตุการณ์ ซื้อแล้วลบทุกระยะ; 7 วันลบทุกช่วง → เปิด L1d |
+| 2e | L1d: short 7 วันหลังประกาศ futures launch (เดินหน้า) | Claude | 2 | forward | ขึ้นระบบแล้ว (ตรวจ Chrome 12:20): ledger l1d 147 USD ใน /api/collect |
 | 2c | เพิ่มแหล่งประกาศ listing ที่ Kuber เข้าถึงได้ (Upbit ทางอื่น, Bithumb, OKX, Bybit, Coinbase) ด้วย addendum ก่อนเหตุการณ์แรก | เพื่อน (dmgnr) หรือ Claude | 2 | todo | เพิ่มความถี่ของ L1b |
 | 3 | ด่านคัดกรอง L3 | เพื่อน (dmgnr) | 1 | todo | issue #85 |
 | 4 | ด่านคัดกรอง L4 | เพื่อน (dmgnr) | 1 | todo | issue #86 |
