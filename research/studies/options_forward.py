@@ -14,7 +14,7 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
 
-from core import ai_news, data, news_backtest as nb, options_forward as of, studies as st   # noqa: E402
+from core import ai_news, data, news_backtest as nb, options_forward as of, sequential, studies as st   # noqa: E402
 
 UA = "Mozilla/5.0 (X11; Linux x86_64)"
 
@@ -236,7 +236,7 @@ def run(state):
 
 
 def summary(state):
-    closed = []
+    closed, daily = [], []
     for t in state["closed"]:
         m, c = t["model"], t["control"]
         if m is None or m.get("exit_bid") is None:
@@ -246,17 +246,21 @@ def summary(state):
                        "ctrl_ret": of.trade_return(c["entry_ask"], c["exit_bid"])
                        if c and c.get("exit_bid") is not None else None,
                        "ret_haircut": of.trade_return(m["entry_ask"], m["exit_bid"], haircut=0.10)})
+        if m.get("entry_ts", 0) >= sequential.FORWARD_START_TS:
+            daily.append({"ts": t.get("closed_ts"), "model": closed[-1]["ret"], "control": closed[-1]["ctrl_ret"]})
     acct_trades = [{"entry_ts": t["model"]["entry_ts"], "exit_ts": t["model"]["exit_ts"],
                     "entry_ask": t["model"]["entry_ask"], "exit_bid": t["model"]["exit_bid"]}
                    for t in state["closed"] if t["model"] and t["model"].get("exit_bid") is not None]
     whole = of.simulate_account(acct_trades)
     frac = of.simulate_account(acct_trades, whole_contracts=False)
+    # Use the day the record became complete, so late exits cannot revise an earlier unit.
+    evidence = sequential.paired_daily(daily, start=sequential.FORWARD_START_TS, before=int(time.time()) // 86400 * 86400)
     return {"verdict": of.verdict(closed), "open": len(state["open"]), "closed": len(state["closed"]),
             "late_exits": sum(1 for t in state["closed"] if t.get("late")),
             "calls": len(state["calls"]), "gaps": len(state["gaps"]),
             "account_whole_contracts": {k: v for k, v in whole.items() if k != "curve"},
             "account_fractional": {k: v for k, v in frac.items() if k != "curve"},
-            "updated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+            "sequential": evidence, "updated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
 
 
 def main():

@@ -22,6 +22,9 @@ jobs:
   forward:
     name: llm_earnings_forward (weekly)
     if: (github.event_name == 'schedule' && github.event.schedule == '0 3 * * 0') || inputs.study == 'llm_earnings_forward'
+    concurrency:
+      group: tradelab-forward-earnings-state
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 240
     permissions:
@@ -39,8 +42,12 @@ jobs:
 
       - name: Restore the call cache from the data branch
         run: |
+          touch /tmp/previous_llm_earnings_forward.json
           if git fetch origin data/llm-earnings 2>/dev/null; then
             git show origin/data/llm-earnings:research/studies/llm_earnings_calls.json > research/studies/llm_earnings_calls.json
+            if git cat-file -e origin/data/llm-earnings:research/studies/llm_earnings_forward.json; then
+              git show origin/data/llm-earnings:research/studies/llm_earnings_forward.json > /tmp/previous_llm_earnings_forward.json
+            fi
           fi
 
       - name: Run forward study
@@ -48,7 +55,8 @@ jobs:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          python research/studies/run.py llm_earnings_forward --out /tmp/llm_earnings_forward.json > /tmp/llm_earnings_forward_summary.json
+          python research/studies/run.py llm_earnings_forward --previous-forward-results /tmp/previous_llm_earnings_forward.json \
+            --out /tmp/llm_earnings_forward.json > /tmp/llm_earnings_forward_summary.json
 
       - name: Push cache and results to data/llm-earnings
         run: |

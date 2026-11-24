@@ -80,3 +80,5 @@ sha256sum research/threefold_plan/pre_removal_results.json
   - หลัง deploy ผ่าน ให้ตรวจ `/api/llm_trader` (`usd_today`, side, skip) และ `/api/collect`
   - ตรวจรอบแรกที่ตลาดเปิดของการทดสอบออปชันหลัง 15:00 UTC วันที่ 24 พ.ย. ดู `git show origin/data/options-forward:options_forward_state.json` และ `gaps`
 - กติกา: ทำตาม `AGENTS.md` และเช็กลิสต์ใน `ROADMAP.md` ข้อ 4; เลื่อนแท็กโปรโตคอลทุกครั้งที่เปลี่ยนวิธีตัดสินใจ; บันทึกค่า AI ใน `reports/COSTS.md`; ห้ามรันโปรเจกต์บนเครื่องเจ้าของ
+
+**เตรียม sprint ข้อ 2 (24 พ.ย. 2026):** เพิ่มรายงาน `daily-v1` ของออปชัน ข่าวงบ H5 และผลคู่ของ DeepSeek พร้อม addendum ที่ล็อกช่วงเวลาและวิธีนับก่อนรับข้อมูล งานยังอยู่ใน branch สำหรับ CI ก่อนใช้จริง
