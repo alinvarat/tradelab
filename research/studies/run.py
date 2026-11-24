@@ -435,6 +435,32 @@ def study_probe_options(_symbols):
     except Exception as e:
         out["cboe"] = {"error": repr(e)[:200]}
     try:
+        import http.cookiejar
+        jar = http.cookiejar.CookieJar()
+        op = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
+        op.addheaders = [("User-Agent", "Mozilla/5.0 (X11; Linux x86_64)")]
+        try:
+            op.open("https://fc.yahoo.com", timeout=20).read()
+        except Exception:
+            pass                                    # fc.yahoo.com answers 404 but sets the cookie
+        crumb = op.open("https://query1.finance.yahoo.com/v1/test/getcrumb", timeout=20).read().decode()
+        d = json.loads(op.open(f"https://query1.finance.yahoo.com/v7/finance/options/AAPL?crumb={crumb}",
+                               timeout=20).read())
+        res = d["optionChain"]["result"][0]
+        calls = res["options"][0]["calls"]
+        out["yahoo"] = {"crumb_len": len(crumb), "expiries": len(res.get("expirationDates", [])),
+                        "n_calls_first_expiry": len(calls), "sample": calls[len(calls) // 2] if calls else None}
+    except Exception as e:
+        out["yahoo"] = {"error": repr(e)[:300]}
+    try:
+        code, body = get("https://api.nasdaq.com/api/quote/AAPL/option-chain?assetclass=stocks&limit=20",
+                         {"Accept": "application/json", "Accept-Language": "en-US"})
+        d = json.loads(body)
+        rows = ((d.get("data") or {}).get("table") or {}).get("rows") or []
+        out["nasdaq"] = {"status": code, "rows": len(rows), "sample": rows[1] if len(rows) > 1 else d.get("status")}
+    except Exception as e:
+        out["nasdaq"] = {"error": repr(e)[:300]}
+    try:
         code, body = get("https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=&dateb="
                          "&owner=include&start=0&count=40&output=atom", {"User-Agent": nb.SEC_UA})
         text = body.decode("utf-8", "replace")
