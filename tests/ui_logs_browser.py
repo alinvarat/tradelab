@@ -141,5 +141,121 @@ def check_log_refresh():
         browser.close()
 
 
+def check_page_translations():
+    stamp = 1795454141
+    account = {
+        "stats": {"equity": 100000, "trades": 2}, "positions": [],
+        "orders": [{"id": 1, "side": 1, "symbol": "BUY", "type": "limit", "status": "pending"}],
+        "trades": [], "allocation": {}, "cash_usd": 100000, "equity_curve": [],
+        "settings": {"initial": 100000, "leverage": 1, "fee_rate": 0.0005, "slippage": 0},
+    }
+    quote = {"symbol": "BUY", "name": "Markets", "price": 10, "bid": 9, "ask": 11,
+             "currency": "USD", "open": True, "source": "Test"}
+    responses = {
+        "/api/account": account,
+        "/api/alerts": {"alerts": [], "log": []},
+        "/api/auto": {"stats": {"equity": 150}, "equity_thb": 5000, "capital_thb": 5000,
+                      "targets": [], "lessons": [], "log": [{"ts": stamp, "text": "Running"}],
+                      "months": [], "positions": [], "grid": [], "equity_curve": []},
+        "/api/hunter": {"equity_thb": 5000, "capital_thb": 5000, "lev": 20,
+                        "positions": [], "months": [], "log": []},
+        "/api/quotes": {"watchlist": ["BUY"], "quotes": [quote]},
+        "/api/overview": {"groups": {}, "fear_greed": {"value": 25, "label": "Fear",
+                          "history": [{"v": 25}], "source": "Test"}},
+        "/api/news": {"summary": {"count": 1, "positive": 0, "negative": 0, "avg": 0},
+                      "items": [{"title": "Market closed", "summary": "Buy", "link": "https://example.test",
+                                 "source": "News", "sentiment": 0, "ts": stamp}]},
+        "/api/quote": quote,
+        "/api/chart": {"bars": [], "ind": {}, "meta": {"longName": "Markets", "currency": "USD"}, "interval": "1d"},
+        "/api/analysis": {"score": 100, "rating": "Strong buy", "signals": [], "as_of": stamp,
+                          "levels": {"resistance": [12], "support": [], "pivots": {}, "fib_52w": {}},
+                          "performance": {}, "risk": {}, "volatility": {}, "events": []},
+        "/api/strategies": {"sma_cross": {"name": "SMA crossover", "params": {"fast": 50, "slow": 200}}},
+    }
+
+    def offline(route):
+        url = urlsplit(route.request.url)
+        if url.hostname != "tradelab.test":
+            return route.abort()
+        if url.path in responses:
+            return route.fulfill(json=responses[url.path])
+        if url.path == "/api/backtest":
+            body = route.request.post_data_json
+            assert body["symbol"] == "BUY" and body["strategy"] == "sma_cross"
+            assert body["params"]["fast"] == 51
+            return route.fulfill(json={"symbol": "BUY", "strategy": "SMA crossover", "start": stamp, "end": stamp,
+                                       "metrics": {"trades": 0}, "bars": 60, "interval": "1d",
+                                       "costs": {"fee_pct_per_side": 0.05, "slippage_pct_per_side": 0.02},
+                                       "trades": [], "equity": [], "buy_hold": []})
+        file = UI / (url.path.lstrip("/") or "index.html")
+        return route.fulfill(path=file) if file.is_file() else route.fulfill(status=404)
+
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(channel="chrome")
+        page = browser.new_page()
+        page.route("**/*", offline)
+        page.goto(ORIGIN + "/#auto")
+        lang = page.locator("#lang-btn")
+        expect(page.locator("#auto-figs")).to_contain_text("Running")
+        lang.click()
+        expect(page.locator("#auto-figs")).to_contain_text("กำลังทำงาน")
+        expect(page.locator("#auto-log")).to_contain_text("Running")
+        expect(page.locator("#hunt-pos")).to_contain_text("ไม่มีสถานะ")
+        responses["/api/auto"]["paused"] = True
+        expect(page.locator("#auto-pause")).to_have_text("ทำงานต่อ", timeout=10000)
+        expect(page.locator("#auto-pause")).to_have_attribute("data-auto", "resume")
+
+        page.locator('[data-view="markets"]').click()
+        watch = page.locator("#watch-sym")
+        expect(watch).to_have_attribute("placeholder", "เพิ่มสัญลักษณ์ เช่น AMD")
+        expect(page.locator("#watchlist").get_by_role("button", name="นำ BUY ออก")).to_be_visible()
+        expect(page.locator("#watchlist .sym-name")).to_have_text("Markets")
+        expect(page.locator("#fng").get_by_role("img", name="ดัชนี 25 จาก 100")).to_be_visible()
+        expect(page.locator("#mk-news").get_by_role("link", name="Market closed")).to_be_visible()
+        watch.fill("BUY")
+        lang.click()
+        expect(watch).to_have_attribute("placeholder", "Add symbol, e.g. AMD")
+        expect(watch).to_have_value("BUY")
+        expect(page.locator("#watchlist").get_by_role("button", name="Remove BUY")).to_be_visible()
+        lang.click()
+
+        page.locator("#watchlist tr[data-sym]").click()
+        expect(page.locator("#qhead h1")).to_have_text("BUY")
+        expect(page.locator("#rating").get_by_text("ซื้อแรง", exact=True)).to_be_visible()
+        expect(page.locator("#ranges")).to_have_attribute("aria-label", "ช่วงเวลา")
+        expect(page.locator("#levels")).to_contain_text("แนวต้าน 1")
+        expect(page.locator("#place")).to_have_text("ซื้อ BUY")
+        page.locator('#order-form select[name="type"]').select_option("limit")
+        page.locator('#order-form input[name="price"]').fill("9.5")
+        lang.click()
+        expect(page.locator("#place")).to_have_text("Buy BUY")
+        expect(page.locator('#order-form select[name="type"]')).to_have_value("limit")
+        expect(page.locator('#order-form input[name="price"]')).to_have_value("9.5")
+        lang.click()
+
+        page.locator('[data-view="portfolio"]').click()
+        expect(page.locator("#orders")).to_contain_text("ซื้อ จำกัดราคา")
+        expect(page.locator("#orders")).to_contain_text("รอผล")
+        page.locator('#reset-form button[type="submit"]').click()
+        expect(page.locator('#reset-form button[type="submit"]')).to_have_text("กดอีกครั้งเพื่อล้างข้อมูล")
+        lang.click()
+        expect(page.locator('#reset-form button[type="submit"]')).to_have_text("Press again to erase")
+        lang.click()
+
+        page.locator('[data-view="backtest"]').click()
+        expect(page.locator("#bt-strat option")).to_have_text("SMA ตัดกัน")
+        page.locator('#bt-form [name="symbol"]').fill("BUY")
+        page.locator('#bt-form [data-p="fast"]').fill("51")
+        page.locator("#bt-form button").click()
+        expect(page.locator("#bt-out h2").first).to_contain_text("BUY, SMA ตัดกัน")
+        expect(page.locator("#bt-out")).to_contain_text("กติกาไม่ส่งคำสั่งในช่วงนี้")
+        lang.click()
+        expect(page.locator("#bt-strat")).to_have_value("sma_cross")
+        expect(page.locator('#bt-form [data-p="fast"]')).to_have_value("51")
+        expect(page.locator("#bt-out h2").first).to_contain_text("BUY, SMA crossover")
+        browser.close()
+
+
 if __name__ == "__main__":
     check_log_refresh()
+    check_page_translations()
