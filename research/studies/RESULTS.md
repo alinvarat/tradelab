@@ -192,4 +192,4 @@ Spec `ops/lines/L6_smallcap_insider.md`; code `core.screens.insider_rows`, study
 - Small cap at entry: previous close $1-20 and 20-day average dollar volume $0.5-20M. Up to 1,500 issuers (seeded sample if more), Yahoo 10-year daily bars.
 - Returns: open to close after 5 and 20 sessions, minus IWM over the same window, 1% round trip; double cost reported.
 - Splits: train 2019-2022, validation 2023-2024, test 2025-2026-10. Trimmed pick on train, data gate, pass/kill as in L1c.
-- Result: pending.
+- **Run 1 (2026-11-24, Actions 45416703411): killed.** Data gate ok: 3,857 rows, 3,857 unique, train 1,994 / validation 1,047 / test 816, no warnings. 31,399 qualifying purchases at 3,289 issuers; 1,500 issuers priced (seeded sample). Trimmed pick h5: train +0.3% (p 0.18), validation -0.4% (p 0.92), test +0.3%. h20: validation +1.0% (p 0.09), test +0.2%. Double cost: negative everywhere. No usable edge after costs.

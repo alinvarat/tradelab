@@ -20,7 +20,7 @@
 | L3 หุ้นเล็กมีข่าว | `ops/lines/L3_smallcap_news.md` | killed | ไม่มีกลุ่มผ่าน (Bonferroni) | — |
 | L4 Polymarket maker | `ops/lines/L4_polymarket_maker.md` | killed; L4f รันต่อ (ไม่มีค่าใช้จ่าย, ความสำคัญต่ำ) | รอบ 4: ราว break-even | — |
 | L5 ออปชันข่าวทุกประเภท | `ops/lines/L5_options_all_news.md` | forward | 0/150 | ตรวจรอบ 15:00 UTC; รีวิว PR #77, #79 |
-| L6 insider หุ้นเล็ก | `ops/lines/L6_smallcap_insider.md` | todo | — | หลัง L1–L4 |
+| L6 insider หุ้นเล็ก | `ops/lines/L6_smallcap_insider.md` | killed | ไม่มี edge หลังต้นทุน | — |
 
 สถานะที่ใช้ได้: `todo`, `screening`, `passed-screen`, `locked`, `forward`, `paper`, `done`, `killed`, `parked`
 
@@ -47,7 +47,7 @@
 | 6 | deploy ให้เสถียร (registry DNS, ข้าม deploy เมื่อแก้แค่เอกสาร, แจ้งเตือน) | เพื่อน (dmgnr) | 1 | todo | issue #89, #80 |
 | 7 | รีวิว PR #77–#79 ของ Codex | Claude | 1 | done | merge แล้ว: ออปชันอ่าน 8-K ทุกประเภทตั้งแต่ 25 พ.ย. (options-v2-sec) + e-process รายวัน |
 | 8 | หน้าเว็บแสดงความคืบหน้าสู่ 3 เท่าแทน "x/30 คู่" | Claude | 1 | done | ตรวจแล้วว่า app.js บนเว็บมี target3x |
-| 9 | ด่านคัดกรอง L6 | เพื่อน (dmgnr) | 2 | todo | issue #87 |
+| 9 | ด่านคัดกรอง L6 | Claude (รับแทน) | 2 | killed | 3,857 เหตุการณ์ข้อมูลสะอาด; validation h5 -0.4% |
 | 10 | ล็อก protocol ของเส้นที่ผ่าน | ผู้ทำเส้นนั้น | 2 | todo | |
 | 11 | ส่งสัญญาณของเส้นที่ผ่านเข้าบัญชีจำลองบน Kuber | Claude | 3 | todo | |
 
