@@ -61,6 +61,7 @@ jobs:
       - name: Push cache and results to data/llm-earnings
         run: |
           cp research/studies/llm_earnings_calls.json /tmp/calls.json
+          git restore --source=HEAD -- research/studies/llm_earnings_calls.json
           git config user.name tradelab-research
           git config user.email tradelab-research@users.noreply.github.com
           if git rev-parse --verify -q origin/data/llm-earnings; then

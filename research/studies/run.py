@@ -800,6 +800,10 @@ def main():
     ap.add_argument("--previous-forward-results", default="")
     a = ap.parse_args()
     symbols = [s.strip().upper() for s in a.symbols.split(",") if s.strip()] or list(universe.STOCKS)
+    previous = {}
+    if a.study == "llm_earnings_forward" and a.previous_forward_results and os.path.getsize(a.previous_forward_results):
+        with open(a.previous_forward_results) as f:
+            previous = json.load(f).get("sequential_state", {})
     t0 = time.time()
     summ, rows = STUDIES[a.study](symbols)
     summ.update(study=a.study, seconds=round(time.time() - t0, 1), n_symbols=len(symbols),
@@ -807,10 +811,6 @@ def main():
     out = a.out or os.path.join(os.path.dirname(os.path.abspath(__file__)), f"{a.study}.json")
     result = {"summary": summ, "rows": rows}
     if a.study == "llm_earnings_forward":
-        previous = {}
-        if a.previous_forward_results and os.path.getsize(a.previous_forward_results):
-            with open(a.previous_forward_results) as f:
-                previous = json.load(f).get("sequential_state", {})
         summ["sequential"], result["sequential_state"] = st.llm_forward_sequential(rows, time.time(), previous)
     with open(out, "w") as f:
         json.dump(result, f, ensure_ascii=False, default=str)
