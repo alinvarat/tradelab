@@ -48,7 +48,7 @@ class Storage(unittest.TestCase):
 class ListingLedger(unittest.TestCase):
     def test_notice_enters_after_delay_and_exits_after_four_hours(self):
         t0 = 1_800_000_000
-        notice = [{"venue": "binance", "symbol": "FOO", "ts": t0 - 30, "title": "Binance Will List Foo (FOO)"}]
+        notice = [{"kind": "listing", "venue": "binance", "symbol": "FOO", "ts": t0 - 30, "title": "Binance Will List Foo (FOO)"}]
         quotes = iter([("kucoin", 9.9, 10.0), ("kucoin", 11.0, 11.1)])
         btc = iter([100.0, 102.0])
         with tempfile.TemporaryDirectory() as d, mock.patch.object(mc, "DIR", Path(d)), \
@@ -58,7 +58,7 @@ class ListingLedger(unittest.TestCase):
             st = mc.listings_once(t0)
             self.assertEqual(len(st["pending"]), 1)
             st = mc.listings_once(t0 + 61)
-            self.assertEqual(st["pending"][0]["entry_ask"], 10.0)
+            self.assertEqual(st["pending"][0]["entry_px"], 10.0)
             self.assertAlmostEqual(st["pending"][0]["stake"], 29.4)
             st = mc.listings_once(t0 + 61 + 4 * 3600)
             self.assertEqual(st["pending"], [])
@@ -66,6 +66,22 @@ class ListingLedger(unittest.TestCase):
             self.assertAlmostEqual(st["closed"][0]["net"], net)
             self.assertAlmostEqual(st["equity"], round(147.0 + 29.4 * net, 4))
             self.assertEqual(mc.listings_view()["n_closed"], 1)
+
+    def test_futures_notice_goes_to_the_short_ledger_only(self):
+        t0 = 1_800_000_000
+        notice = [{"kind": "futures", "venue": "binance", "symbol": "BAR", "ts": t0 - 30, "title": "t"}]
+        quotes = iter([("kucoin", 10.0, 10.1), ("kucoin", 8.9, 9.0)])
+        btc = iter([100.0, 100.0])
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(mc, "DIR", Path(d)), \
+                mock.patch.object(mc, "listing_notices", return_value=notice), \
+                mock.patch.object(mc, "quote", side_effect=lambda s: next(quotes)), \
+                mock.patch.object(mc, "_btc_mid", side_effect=lambda v: next(btc)):
+            self.assertEqual(mc.listings_once(t0)["pending"], [])           # not a listing: L1b ignores it
+            mc.listings_once(t0 + 61)
+            self.assertEqual(mc._l1b_load("l1d")["pending"][0]["entry_px"], 10.0)   # short sells at the bid
+            mc.listings_once(t0 + 61 + 7 * 86400)
+            closed = mc._l1b_load("l1d")["closed"][0]
+            self.assertAlmostEqual(closed["net"], 0.10 - 0.002 - 0.007)       # bought back at the ask 9.0
 
     def test_old_notices_are_not_events(self):
         old = [{"venue": "upbit", "symbol": "BAR", "ts": 1_800_000_000 - 3600, "title": "t"}]

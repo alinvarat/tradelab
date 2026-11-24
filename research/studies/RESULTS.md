@@ -149,4 +149,5 @@ Code: `core/screens.py` (`binance_futures_symbols`, `binance_add_symbols`, `judg
 - Pricing: the first venue with a market in the hour before the notice, in the order Binance spot (data-api.binance.vision), Coinbase, KuCoin; BTC benchmark on the same venue.
 - Entry, horizons, cost (0.6% round trip), BTC control, splits (2024 / 2025 / 2026-01..10), block bootstrap by UTC day and pass/kill rules: as in L1.
 - One change from L1, fixed before data: the horizon is picked on train by the mean **without the best 5 train events**, so a single outlier (ACT in L1 run 2) cannot choose it.
-- Result: pending.
+- **Run 1 (2026-11-24, Actions 45379100863): killed.** 363 notices parsed (futures 361, add 2 priced of few); 117 priced (Binance spot 38, Coinbase 29, KuCoin 50), 78 with no prior market, 168 without bars at entry; 3.4 priced events a month. Trimmed pick 15m: train -1.8%, validation -1.4% (p 0.88), test -2.3%. No horizon is positive in train; 4h validation +2.1% (p 0.18) only.
+- Observation (post hoc, not a result): the 7d return is negative in every split, train -10.2% (n 37), validation -7.5% (n 62), test -8.5% (n 18), so coins tend to fall in the week after a Binance futures launch. This becomes hypothesis L1d (short), testable only on new events: `protocol_L1d_futures_short_forward.md`.

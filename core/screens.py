@@ -172,3 +172,10 @@ def l1b_result(entry_ask: float, exit_bid: float, btc_entry: float, btc_exit: fl
     raw = exit_bid / entry_ask - 1
     abn = raw - (btc_exit / btc_entry - 1)
     return {"raw": raw, "abn": abn, "net": abn - L1B_FEES}
+
+
+def ledger_result(side: int, entry_px: float, exit_px: float, btc_entry: float, btc_exit: float, extra: float = 0.0) -> dict:
+    """side +1 long (buy ask, sell bid), -1 short (sell bid, buy back ask); result relative to BTC, net of fees and extra."""
+    raw = side * (exit_px / entry_px - 1)
+    abn = raw - side * (btc_exit / btc_entry - 1)
+    return {"raw": raw, "abn": abn, "net": abn - L1B_FEES - extra}
