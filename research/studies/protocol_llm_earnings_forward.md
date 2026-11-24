@@ -11,3 +11,6 @@ Why: the all-market run (Oct–Nov 2026 season) failed at H1. H3/H5 showed post-
 **Reported at the evaluation, not used for the verdict.** A daily book on H5, holding five overlapping sleeves, each with 1/5 of equity, each day equal weight across that day's trades. Its leverage paths and its months at ≥ 3×.
 
 **Running.** `.github/workflows/research.yml` runs weekly. The call cache and the results are pushed to the branch `data/llm-earnings` (not `main`), so every call is made exactly once.
+
+## Addendum 2026-11-24, before any filing in the window: the reader becomes v2-single
+The held-out comparison (`protocol_news_v2.md`, run 45332709844) showed that the v2 inputs read earnings releases clearly better than v1 on the same filings: paired H5 +1.56% per filing, block p 0.008. From the first forward filing onward, the model gets the v2 message: the 5-session run-up, the gap at the first open, the previous 2.02 release (6,000 characters), the current release (12,000 characters), and `NEWS_V2_SYSTEM`. It is called **once at temperature 0**, instead of a 3-sample vote, to keep cost at about a third. Calls are tagged `"reader": "v2"`. The verdict rules are unchanged.

@@ -26,3 +26,6 @@ No threshold or rule changes. Corrections so the code matches the rules above:
 - The liquidity screen uses the true median of 20 completed sessions, ≥ 100M USD only.
 - A failed exit quote is a gap retried at the next run, never a zero. Exits after the 5th session are flagged `late`. Expired contracts settle at intrinsic value from the underlying's close on the expiry date.
 - The exit fee is always charged, even on a zero bid. Model statistics use every priced model exit; the paired statistic uses trades whose control is priced. The account replay processes exits before entries at the same time and reports months ≥ 3×, worst drawdown and one-contract affordability at the first 20% stake.
+
+## Addendum 2026-11-24 (before the first market-open run): v2-single reader
+Same reason as `protocol_llm_earnings_forward.md`. The model gets the v2 message: run-up over the 5 sessions to the last completed close, the move from that close to the option-chain spot at the run (what a trader can act on), the previous 2.02 release, and the current release. It uses `NEWS_V2_SYSTEM`, called once at temperature 0. Contract choice, exits and the verdict are unchanged.

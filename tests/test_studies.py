@@ -241,6 +241,12 @@ class NewsV2(unittest.TestCase):
         self.assertEqual(st.vote([K, K, L])["direction"], "skip")
         self.assertEqual(st.vote([])["direction"], "skip")
 
+    def test_v2_message_has_reaction_and_both_releases(self):
+        m = st.v2_message("AAA", "2026-12-02T21:05:00Z", 3.1, -1.2, "", "Revenue up")
+        self.assertIn("Opening gap at the first open after the filing (when a trader can act): -1.2%", m)
+        self.assertIn("(none found)", m)
+        self.assertTrue(m.endswith("Revenue up"))
+
     def test_reaction_features_use_only_what_is_known_at_entry(self):
         b = [{"t": i * 100, "o": 10.0 + i, "c": 10.0 + i} for i in range(10)]
         f = st.reaction_features(b, 750)                       # first bar at/after 750 is index 8
