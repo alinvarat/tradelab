@@ -356,7 +356,7 @@ def l4f_once(now=None):
     while pages < 5:
         d = get(f"{GAMMA}/markets/keyset?closed=false&active=true&limit=100&volume_num_min=50000"
                 f"&end_date_min={iso(now + 12 * 3600)}&end_date_max={iso(now + 36 * 3600)}"
-                + (f"&next_cursor={_q(cursor)}" if cursor else ""), 15)
+                + (f"&after_cursor={_q(cursor)}" if cursor else ""), 15)
         for m in d.get("markets") or []:
             pick = l4f_pick(m)
             if not pick or m["id"] in open_ids:

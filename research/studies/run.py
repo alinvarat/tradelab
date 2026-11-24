@@ -1031,14 +1031,18 @@ def study_l4_polymarket_longshot(_symbols, workers=8, max_markets=12000):
         while len(got) < max_markets // 3:
             page = _get_json("https://gamma-api.polymarket.com/markets/keyset?closed=true&limit=100&volume_num_min=50000"
                              f"&end_date_min={a}T00:00:00Z&end_date_max={b}T00:00:00Z"
-                             + (f"&next_cursor={_q(cursor)}" if cursor else ""))
+                             + (f"&after_cursor={_q(cursor)}" if cursor else ""))   # next_cursor= is ignored
             if not page or not page.get("markets"):
                 break
             got += page["markets"]
             cursor = page.get("next_cursor") or ""
             if not cursor:
                 break
-        log(f"L4 window {a}..{b}: {len(got)} markets")
+        uniq = {m["id"]: m for m in got}
+        if len(uniq) < len(got):
+            log(f"L4 window {a}..{b}: dropped {len(got) - len(uniq)} repeated markets")
+        got = list(uniq.values())
+        log(f"L4 window {a}..{b}: {len(got)} unique markets")
         markets += got
     log(f"L4 markets: {len(markets)}")
 
