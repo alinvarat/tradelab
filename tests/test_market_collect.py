@@ -101,6 +101,28 @@ class ListingLedger(unittest.TestCase):
             self.assertTrue(closed["stopped"])
             self.assertAlmostEqual(closed["net"], -0.30 - 0.002 - 0.001)
 
+    def test_l4f_sells_the_long_shot_side_and_books_resolution(self):
+        self.assertEqual(mc.l4f_pick({"bestBid": 0.05, "bestAsk": 0.06, "outcomes": '["Yes","No"]'}), ("yes", 0.05))
+        self.assertEqual(mc.l4f_pick({"bestBid": 0.93, "bestAsk": 0.95, "outcomes": '["Yes","No"]'}), ("no", 0.05))
+        self.assertIsNone(mc.l4f_pick({"bestBid": 0.40, "bestAsk": 0.42, "outcomes": '["Yes","No"]'}))
+        self.assertAlmostEqual(mc.l4f_result("yes", 0.05, yes_won=False), 0.05 / 0.95)
+        self.assertEqual(mc.l4f_result("no", 0.05, yes_won=False), -1.0)
+        t0 = 1_800_000_000
+        listing = {"markets": [{"id": "m1", "question": "q", "endDate": "x", "bestBid": 0.05, "bestAsk": 0.06,
+                                "outcomes": '["Yes","No"]', "volumeNum": 1e5}]}
+        resolved = {"closed": True, "outcomePrices": '["0", "1"]'}
+
+        def fake_get(url, timeout=8, headers=None):
+            return listing if "keyset" in url else resolved
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(mc, "DIR", Path(d)), \
+                mock.patch.object(mc, "get", side_effect=fake_get):
+            st = mc.l4f_once(t0)
+            self.assertEqual(st["closed"][0]["net"], 0.05 / 0.95)        # entered and resolved in the same poll here
+            self.assertAlmostEqual(st["equity"], 147.0 + 7.35 * 0.05 / 0.95)
+            st = mc.l4f_once(t0 + 1800)
+            self.assertEqual(len(st["closed"]), 1)                          # never re-entered
+            self.assertEqual(mc.ledger_view("l4f")["n_closed"], 1)
+
     def test_old_notices_are_not_events(self):
         old = [{"venue": "upbit", "symbol": "BAR", "ts": 1_800_000_000 - 3600, "title": "t"}]
         with tempfile.TemporaryDirectory() as d, mock.patch.object(mc, "DIR", Path(d)), \

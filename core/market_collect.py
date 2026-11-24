@@ -162,6 +162,8 @@ LEDGERS = {   # name -> state file, side, hold, extra cost (protocol files in re
             "kinds": ("listing",), "protocol": "research/studies/protocol_L1b_listings_forward.md"},
     "l1d": {"file": "futures_short_state.json", "side": -1, "hold_s": 7 * 86400, "extra": 0.007,
             "kinds": ("futures",), "protocol": "research/studies/protocol_L1d_futures_short_forward.md"},
+    "l4f": {"file": "polymarket_longshot_state.json", "side": 0, "hold_s": 0, "extra": 0.0, "kinds": (),
+            "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md", "lo": 1.0, "hi": 0.12},
     "l1f": {"file": "delist_short_state.json", "side": -1, "hold_s": 4 * 3600, "extra": 0.001, "stop": 0.25,
             "kinds": ("delist",), "protocol": "research/studies/protocol_L1f_delist_short_forward.md"},
 }
@@ -294,7 +296,7 @@ def listings_once(now=None):
     fresh = [e for e in fresh if e["ts"] >= now - MAX_NOTICE_AGE_S]   # old notices (first poll, restarts) are not events
     st["seen"] = sorted(seen)[-3000:]
     _l1b_save(st, "l1b")
-    out = {name: _ledger_step(name, fresh, now) for name in LEDGERS}
+    out = {name: _ledger_step(name, fresh, now) for name, cfg in LEDGERS.items() if cfg["kinds"]}   # l4f has its own loop
     STATUS["listings"]["polls"] += 1
     return out["l1b"]
 
@@ -303,7 +305,8 @@ def ledger_view(name) -> dict:
     from core import sequential as sq
     st = _l1b_load(name)
     done = [c for c in st["closed"] if "net" in c]
-    ev = sq.run(sq.daily_means([{"ts": c["ts"], "ret": c["net"]} for c in done]), lo=1.0, hi=5.0)
+    cfg = LEDGERS[name]
+    ev = sq.run(sq.daily_means([{"ts": c["ts"], "ret": c["net"]} for c in done]), lo=cfg.get("lo", 1.0), hi=cfg.get("hi", 5.0))
     return {"equity_usd": st["equity"], "start_usd": L1B_START_EQUITY, "goal_usd": 3 * L1B_START_EQUITY,
             "pending": st["pending"], "closed": st["closed"][-30:], "n_closed": len(done), "sequential": ev,
             "protocol": LEDGERS[name]["protocol"]}
@@ -313,8 +316,82 @@ def listings_view() -> dict:
     return ledger_view("l1b")
 
 
+
+# ------------------------------------------------------------------ L4f Polymarket long-shot selling (forward paper ledger)
+# research/studies/protocol_L4f_polymarket_longshot_forward.md
+L4F_EVERY, L4F_STAKE, L4F_LO, L4F_HI = 30 * 60, 0.05, 0.02, 0.10
+GAMMA = "https://gamma-api.polymarket.com"
+
+
+def l4f_pick(m: dict):
+    """-> (side, price) to sell, or None. Uses the YES best bid/ask; selling NO is priced at 1 - YES ask."""
+    bb, ba = m.get("bestBid"), m.get("bestAsk")
+    try:
+        outs = json.loads(m.get("outcomes") or "[]")
+    except Exception:  # noqa: BLE001
+        return None
+    if bb is None or ba is None or len(outs) != 2 or not 0 < bb <= ba < 1:
+        return None
+    mid = (bb + ba) / 2
+    if L4F_LO <= mid <= L4F_HI:
+        return "yes", float(bb)
+    if L4F_LO <= 1 - mid <= L4F_HI:
+        return "no", round(1 - float(ba), 6)
+    return None
+
+
+def l4f_result(side: str, price: float, yes_won: bool) -> float:
+    """Return on collateral (1 - price) for selling `side` at `price`."""
+    lost = (side == "yes" and not yes_won) or (side == "no" and yes_won)
+    return price / (1 - price) if lost else -1.0
+
+
+def l4f_once(now=None):
+    from urllib.parse import quote as _q
+    now = now or time.time()
+    st = _l1b_load("l4f")
+    open_ids = {p["id"] for p in st["pending"]} | {c.get("id") for c in st["closed"]}
+    iso = lambda t: time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(t))
+    cursor, pages = "", 0
+    while pages < 5:
+        d = get(f"{GAMMA}/markets/keyset?closed=false&active=true&limit=100&volume_num_min=50000"
+                f"&end_date_min={iso(now + 12 * 3600)}&end_date_max={iso(now + 36 * 3600)}"
+                + (f"&next_cursor={_q(cursor)}" if cursor else ""), 15)
+        for m in d.get("markets") or []:
+            pick = l4f_pick(m)
+            if not pick or m["id"] in open_ids:
+                continue
+            side, price = pick
+            stake = round(st["equity"] * L4F_STAKE, 4)
+            row = {"id": m["id"], "question": (m.get("question") or "")[:120], "end": m.get("endDate"), "side": side,
+                   "price": price, "stake": stake, "entry_ts": now, "volume": m.get("volumeNum")}
+            st["pending"].append(row)
+            open_ids.add(m["id"])
+            append("ledger_l4f_events", row, now)
+        cursor, pages = d.get("next_cursor") or "", pages + 1
+        if not cursor:
+            break
+    keep = []
+    for p in st["pending"]:
+        try:
+            m = get(f"{GAMMA}/markets/{p['id']}", 15)
+            prices = json.loads(m.get("outcomePrices") or "[]")
+            if m.get("closed") and sorted(prices) == ["0", "1"]:
+                r = l4f_result(p["side"], p["price"], prices[0] == "1")
+                st["equity"] = round(st["equity"] + p["stake"] * r, 4)
+                row = {**p, "net": r, "ts": now, "yes_won": prices[0] == "1", "equity_after": st["equity"]}
+                st["closed"].append(row)
+                append("ledger_l4f_trades", row, now)
+                continue
+        except Exception as e:  # noqa: BLE001  retry next poll
+            STATUS["listings"]["last_error"] = repr(e)[:200]
+        keep.append(p)
+    st["pending"] = keep
+    _l1b_save(st, "l4f")
+    return st
+
 def loop():
-    last_deribit = last_listing = 0.0
+    last_deribit = last_listing = last_l4f = 0.0
     while True:
         t0 = time.time()
         try:
@@ -329,6 +406,12 @@ def loop():
             except Exception as e:  # noqa: BLE001
                 STATUS["listings"]["errors"] += 1
                 STATUS["listings"]["last_error"] = repr(e)[:200]
+        if t0 - last_l4f >= L4F_EVERY:
+            last_l4f = t0
+            try:
+                l4f_once(t0)
+            except Exception as e:  # noqa: BLE001
+                STATUS["last_error"] = "l4f: " + repr(e)[:200]
         if t0 - last_deribit >= DERIBIT_EVERY:
             last_deribit = t0
             try:
@@ -344,4 +427,4 @@ def view() -> dict:
     if DIR.exists():
         for f in sorted(DIR.glob("*/*.jsonl.gz"))[-20:]:
             files[f"{f.parent.name}/{f.name}"] = f.stat().st_size
-    return {**STATUS, "files": files, "dir": str(DIR), "l1b": ledger_view("l1b"), "l1d": ledger_view("l1d"), "l1f": ledger_view("l1f")}
+    return {**STATUS, "files": files, "dir": str(DIR), "l1b": ledger_view("l1b"), "l1d": ledger_view("l1d"), "l1f": ledger_view("l1f"), "l4f": ledger_view("l4f")}
