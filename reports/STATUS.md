@@ -36,6 +36,9 @@
 | 2e | L1d: short 7 วันหลังประกาศ futures launch (เดินหน้า) | Claude | 2 | forward | ขึ้นระบบแล้ว (ตรวจ Chrome 12:20): ledger l1d 147 USD ใน /api/collect |
 | 2f | L1e ด่านคัดกรอง short หลังประกาศ delist | Claude | 1 | killed (ตามกฎ) → L1f | กฎเลือก 7 วัน ALPACA squeeze; ถือ 4 ชม. บวก 91/105 ครั้ง ทุกช่วง (test +11.2% p 0.0005) |
 | 2g | L1f: short 4 ชม. หลังประกาศ delist, stop 25% (เดินหน้า) | Claude | 2 | forward | ขึ้นระบบแล้ว (ตรวจ Chrome 12:33): ledger l1f 147 USD; Binance delist poll ไม่มี error |
+| 2h | L1g ด่านคัดกรอง short หลัง Binance Alpha removal | Claude | 1 | no verdict | หาราคาได้ 13/132 (ปี 2026 เท่านั้น) ต้องมีแหล่งราคา DEX |
+| 2i | บอทกติกาแบบกว้าง broad-v1 (จักรวาลเดียวกับ DeepSeek) | Claude | 1 | forward | ขึ้นระบบ 13:40, /api/events_broad 5 เหตุการณ์ 147.28 USD |
+| 2j | v4.3: โมเดลฟรีสำหรับบทบาทผู้ช่วย, DeepSeek ตัดสินใจ | Claude | 1 | live | ดู helper_models ใน /api/llm_trader |
 | 2c | เพิ่มแหล่งประกาศ listing ที่ Kuber เข้าถึงได้ (Upbit ทางอื่น, Bithumb, OKX, Bybit, Coinbase) ด้วย addendum ก่อนเหตุการณ์แรก | เพื่อน (dmgnr) หรือ Claude | 2 | todo | เพิ่มความถี่ของ L1b |
 | 3 | ด่านคัดกรอง L3 | เพื่อน (dmgnr) | 1 | todo | issue #85 |
 | 4 | ด่านคัดกรอง L4 | เพื่อน (dmgnr) | 1 | todo | issue #86 |
