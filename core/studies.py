@@ -139,6 +139,116 @@ def momentum_rows(bars_by_symbol: dict, top_frac: float = 0.1, min_names: int = 
     return rows
 
 
+# ------------------------------------------------------------------ swing timing (protocol_pit_swing.md)
+SWING = {"slots": 10, "drop": -0.05, "lookback": 3, "trend": 200, "fast": 5, "max_hold": 10, "cost": 0.0009}
+
+
+def _day_str(ts):
+    return time.strftime("%Y-%m-%d", time.gmtime(ts))
+
+
+def swing_books(bars_by_symbol: dict, members=None, cost: float = SWING["cost"], p: dict = SWING) -> dict:
+    """Simulate the strategy book and the random-pick control book day by day. Returns daily equity of both and
+    the trades. Signals use closes up to day d; fills are at day d+1's open."""
+    idx = {s: {_day_str(b["t"]): i for i, b in enumerate(bs)} for s, bs in bars_by_symbol.items()}
+    days = sorted(set().union(*[set(v) for v in idx.values()])) if idx else []
+
+    cum = {}
+    for s, bs in bars_by_symbol.items():               # rolling sums once, so each day's check is O(1)
+        acc, run = [0.0], 0.0
+        for b in bs:
+            run += b["c"] or 0.0
+            acc.append(run)
+        cum[s] = acc
+
+    def sma(s, i, n):
+        return (cum[s][i + 1] - cum[s][i + 1 - n]) / n if i >= n - 1 else None
+
+    def state(s, day):
+        bs, i = bars_by_symbol[s], idx[s].get(day)
+        if i is None or i < p["trend"]:
+            return None
+        c = bs[i]["c"]
+        t, f = sma(s, i, p["trend"]), sma(s, i, p["fast"])
+        r = c / bs[i - p["lookback"]]["c"] - 1 if bs[i - p["lookback"]]["c"] else 0
+        return {"up": c > t, "below_fast": c < f, "above_fast": c > f, "ret": r}
+
+    books = {"strategy": {"cash": 1.0, "pos": {}, "curve": [], "trades": []},
+             "control": {"cash": 1.0, "pos": {}, "curve": [], "trades": []}}
+    pending = {"strategy": [], "control": []}
+    for d_i, day in enumerate(days):
+        for name, bk in books.items():
+            # 1) fills at today's open: exits first, then entries decided yesterday
+            for s in [s for s, ps in bk["pos"].items() if ps.get("exit_next")]:
+                ps = bk["pos"].pop(s)
+                i = idx[s].get(day)
+                px = bars_by_symbol[s][i]["o"] if i is not None else ps["last"]
+                bk["cash"] += ps["qty"] * px * (1 - cost)
+                bk["trades"].append({"symbol": s, "entry_day": ps["day"], "exit_day": day,
+                                     "ret": px * (1 - cost) / (ps["entry"] * (1 + cost)) - 1, "held": ps["held"]})
+            equity = bk["cash"] + sum(ps["qty"] * ps["last"] for ps in bk["pos"].values())
+            for s in pending[name]:
+                if len(bk["pos"]) >= p["slots"] or s in bk["pos"]:
+                    continue
+                i = idx[s].get(day)
+                if i is None or not bars_by_symbol[s][i].get("o"):
+                    continue
+                spend = min(bk["cash"], equity / p["slots"])
+                if spend <= 0:
+                    continue
+                px = bars_by_symbol[s][i]["o"]
+                bk["cash"] -= spend
+                bk["pos"][s] = {"qty": spend / (px * (1 + cost)), "entry": px, "day": day, "held": 0, "last": px}
+            pending[name] = []
+            # 2) marks and exit decisions at today's close
+            for s, ps in bk["pos"].items():
+                i = idx[s].get(day)
+                if i is None:
+                    continue
+                ps["last"] = bars_by_symbol[s][i]["c"]
+                ps["held"] += 1
+                st_ = state(s, day)
+                if (st_ and st_["above_fast"]) or ps["held"] >= p["max_hold"]:
+                    ps["exit_next"] = True
+            bk["curve"].append((day, bk["cash"] + sum(ps["qty"] * ps["last"] for ps in bk["pos"].values())))
+        if d_i == len(days) - 1:
+            break
+        # 3) signals at today's close for tomorrow
+        mem = members(day) if callable(members) else None
+        sig, up = [], []
+        for s in bars_by_symbol:
+            if mem is not None and s not in mem:
+                continue
+            st_ = state(s, day)
+            if not st_ or not st_["up"]:
+                continue
+            up.append(s)
+            if st_["ret"] <= p["drop"] and st_["below_fast"]:
+                sig.append((st_["ret"], s))
+        sig.sort()
+        free = p["slots"] - sum(1 for ps in books["strategy"]["pos"].values() if not ps.get("exit_next"))
+        picks = [s for _, s in sig if s not in books["strategy"]["pos"]][:max(0, free)]
+        pending["strategy"] = picks
+        if picks:
+            pool = sorted(s for s in up if s not in books["control"]["pos"])
+            rng = random.Random(f"ctl:{day}")
+            pending["control"] = rng.sample(pool, min(len(picks), len(pool)))
+    return books
+
+
+def monthly_returns(curve: list) -> dict:
+    """[(day, equity)] -> {'YYYY-MM': return of that month}."""
+    last = {}
+    for day, eq in curve:
+        last[day[:7]] = eq
+    out, prev = {}, None
+    for m in sorted(last):
+        if prev is not None and prev > 0:
+            out[m] = last[m] / prev - 1
+        prev = last[m]
+    return out
+
+
 # ------------------------------------------------------------------ (a) 8-K items
 ITEMS = ("2.02", "1.01", "5.02")
 
