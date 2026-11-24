@@ -18,6 +18,28 @@ class ListingParsers(unittest.TestCase):
         self.assertEqual(sc.upbit_listing_symbols("거래 유의 종목 지정 안내 (FOO)"), [])
 
 
+class BinanceKinds(unittest.TestCase):
+    def test_futures_launch_symbols(self):
+        f = sc.binance_futures_symbols
+        self.assertEqual(f("Binance Futures Will Launch USDⓈ-Margined BANUSDT and AKTUSDT Perpetual Contracts With up to 75x Leverage"),
+                         ["BAN", "AKT"])
+        self.assertEqual(f("Binance Futures Will Launch USDⓈ-Margined 1000CATUSDT Perpetual Contract With up to 75x Leverage"), ["CAT"])
+        self.assertEqual(f("Binance Futures Will Launch USDⓈ-Margined TSLAUSDT Equity Perpetual Contract (2026-01-28)"), [])
+        self.assertEqual(f("Binance Futures Will Launch USDⓈ-Margined KATUSDT Perpetual Contract Pre-Market Trading (2026-03-02)"), [])
+        self.assertEqual(f("Binance Futures Will Launch Multiple TradFi USDⓈ-Margined Perpetual Contracts (2026-11-20)"), [])
+
+    def test_add_notice_symbols(self):
+        self.assertEqual(sc.binance_add_symbols("Binance Will Add Cow Protocol (COW) and Cetus Protocol (CETUS) on Earn, Buy Crypto, Convert, Margin & Futures"),
+                         ["COW", "CETUS"])
+        self.assertEqual(sc.binance_add_symbols("Binance Will Add 7 New Pairs"), [])
+
+    def test_trimmed_pick_ignores_one_outlier(self):
+        bounds = {"train": (0, 100), "validation": (100, 200)}
+        rows = [{"ts": i, "symbol": "S", "ret": {"a": {"net": 0.01}, "b": {"net": 5.0 if i == 0 else -0.01}}} for i in range(10)]
+        self.assertEqual(sc.judge(rows, ["a", "b"], bounds)["pick"], "b")
+        self.assertEqual(sc.judge(rows, ["a", "b"], bounds, pick_trim=5)["pick"], "a")
+
+
 class Returns(unittest.TestCase):
     def test_close_at_finds_the_containing_bar(self):
         bars = [(0, 1.0), (60, 2.0), (180, 4.0)]

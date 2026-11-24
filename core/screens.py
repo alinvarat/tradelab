@@ -29,6 +29,29 @@ def binance_listing_symbols(title: str) -> list:
     return _paren_symbols(title)
 
 
+_SKIP_FUT = ("TradFi", "Equity", "Pre-Market", "Pre-IPO", "Multiple", "COIN-M", "Delivery", "Copy Trading")
+
+
+def binance_futures_symbols(title: str) -> list:
+    """'Binance Futures Will Launch USDⓈ-Margined BANUSDT and AKTUSDT Perpetual Contracts ...' -> ['BAN', 'AKT'].
+    TradFi, equity, pre-market, pre-IPO, multi-contract, coin-margined and delivery notices give []."""
+    if not title.startswith("Binance Futures Will Launch") or any(k in title for k in _SKIP_FUT):
+        return []
+    out = []
+    for tok in re.findall(r"\b([A-Z0-9]+)USDT\b", title):
+        tok = re.sub(r"^(1000000|1000)", "", tok)
+        if _TICK.match(tok) and tok not in out:
+            out.append(tok)
+    return out
+
+
+def binance_add_symbols(title: str) -> list:
+    """'Binance Will Add Cow Protocol (COW) and Cetus Protocol (CETUS) on Earn, Buy Crypto, ...' -> ['COW', 'CETUS']."""
+    if not title.startswith("Binance Will Add") or " on " not in title:
+        return []
+    return _paren_symbols(title.split(" on ")[0])
+
+
 def upbit_listing_symbols(title: str) -> list:
     """Upbit KRW-market additions: '로켓풀(RPL), 아큐라스트(ACU) 원화 마켓 디지털 자산 추가' or
     'KRW, BTC 마켓 디지털 자산 추가 (NEAR, YGG)'. BTC/USDT-market-only additions give []."""
@@ -88,7 +111,7 @@ def day_key(row: dict) -> str:
     return time.strftime("%Y-%m-%d", time.gmtime(row["ts"]))
 
 
-def judge(rows: list, horizons: list, bounds: dict, cost_extra: float = 0.0, seed: int = 7) -> dict:
+def judge(rows: list, horizons: list, bounds: dict, cost_extra: float = 0.0, seed: int = 7, pick_trim: int = 0) -> dict:
     """rows: [{'ts', 'symbol', 'venue', 'ret': {h: {'net': x}}}]. Pick the horizon with the best train mean, then
     report validation mean / block p (cluster = UTC day) and test mean, plus the result without the best 1 and 5 events."""
     rng = random.Random(seed)
@@ -108,7 +131,12 @@ def judge(rows: list, horizons: list, bounds: dict, cost_extra: float = 0.0, see
     train_ok = [h for h in horizons if table[h]["train"]["mean"] is not None]
     if not train_ok:
         return {"table": table, "pick": None, "verdict": "no data"}
-    pick = max(train_ok, key=lambda h: table[h]["train"]["mean"])
+    def train_score(h):                 # pick_trim > 0: mean without the best pick_trim train events (L1c rule)
+        v, _ = vals("train", h)
+        v = sorted(v)[:-pick_trim] if pick_trim and len(v) > pick_trim else v
+        return sum(v) / len(v)
+
+    pick = max(train_ok, key=train_score)
     v, k = vals("validation", pick)
     robust = {}
     for drop in (1, 5):
