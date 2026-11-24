@@ -240,7 +240,8 @@ def _chat_custom(system, user, timeout, urlopen, cache_layout, temperature):
         record_usage(resp)
         return resp["choices"][0]["message"]["content"], "custom/" + str(resp.get("model") or CUSTOM_MODEL)
     except Exception as exc:  # noqa: BLE001
-        return "", f"custom provider error: {type(exc).__name__}"[:200]   # no body: it could echo request headers
+        code = getattr(exc, "code", "")      # status only, never the body (it could echo request headers)
+        return "", f"custom provider error: {type(exc).__name__} {code}".strip()[:200]
 
 
 def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, model=None, cache_layout=False,
