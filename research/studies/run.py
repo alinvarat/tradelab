@@ -1807,8 +1807,9 @@ def study_factory_us_pit_1(_symbols):
             continue
         bars[s], divs[s], splits[s] = b, dv, sp
     log(f"bars: {len(bars)} symbols, {len(missing)} missing, {len(rejected)} rejected (not daily)")
-    if fu.BENCH not in bars:
-        raise RuntimeError("no SPY bars")
+    lost = [x for x in extra if x not in bars]
+    if lost:                                    # B1 would silently trade nothing: a void run, not "not passed"
+        raise RuntimeError(f"benchmark, VIX or sector ETF bars missing: {lost}")
     tick = nb.sec_company_tickers()
     stocks = [s for s in bars if s not in extra]
     ciks = {s: tick[s] for s in stocks if s in tick}

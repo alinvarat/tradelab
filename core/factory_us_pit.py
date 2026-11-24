@@ -261,6 +261,8 @@ def _increments(P: dict, t: dict, cost: float, borrow_day: float):
         elif t.get("div") and f == "o" and (i, f) == pts[-1]:
             p = p + P["div"][s].get(i, 0.0)
         h = spy[f][i] if spy[f][i] is not None else hprev
+        if t.get("div") and f == "o" and (i, f) == pts[-1] and spy[f][i] is not None:
+            h = h + P["div"].get(BENCH, {}).get(i, 0.0)      # the SPY leg owes its own dividend too
         inc = side * w * (p - prev) / p0
         if beta:
             inc -= side * w * beta * (h - hprev) / h0
@@ -431,8 +433,8 @@ def b2_trades(P: dict, feats: dict, members: list, cik_ok: set, t202: dict, rng=
             f = feats.get(s)
             if f is None or s not in cik_ok:
                 continue
-            if f["miss"][i + 2] - f["miss"][i - 21] or f["split"][i + 2] - f["split"][i - 20]:
-                continue                         # needs bars i-21..i+1, no split date in i-20..i+1
+            if f["miss"][i + 1] - f["miss"][i - 21] or f["split"][i + 2] - f["split"][i - 20]:
+                continue                         # needs bars i-21..i (known at i), no split date in i-20..i+1
             if P["c"][s][i - 1] < 10:
                 continue
             a = adv(P, s, i - 20, i - 1)
@@ -606,31 +608,31 @@ def b4_trades(P: dict, events: list, members: list, cik_ok: set, hold: int = 5, 
     rng = rng or random.Random(SEED)
     by_day = {}
     for D, s, e in events:
-        if D + hold < P["n"] and _ok(P, s, D + 1, "o"):
+        if D + hold < P["n"]:
             by_day.setdefault(D, []).append((-abs(e), s))
     trades, ctrl, open_ = [], [], []
     for D in sorted(by_day):
         e0 = D + 1
         open_ = [x for x in open_ if x >= e0]
-        taken = []
-        for _, s in sorted(by_day[D]):
-            if len(open_) >= cap_n:
-                break
+        chosen = [s for _, s in sorted(by_day[D])][:max(0, cap_n - len(open_))]   # decided at D's close
+        for s in chosen:
+            if not _ok(P, s, e0, "o"):
+                continue                         # no bar at entry: that slot stays in cash
             i1 = stop_exit(P, s, e0, D + hold, side)
             open_.append(i1)
-            taken.append(s)
             trades.append({"sym": s, "i0": e0, "f0": "o", "i1": i1, "f1": "c", "w": w, "side": side, "beta": 1.0,
                            "signal_i": D})
-        if taken:
+        if chosen:
             pool = []
             for m in sorted(members[D]):
-                if m in cik_ok and m not in taken and m in P["c"] and _ok(P, m, e0, "o"):
+                if m in cik_ok and m not in chosen and m in P["c"]:
                     x = ear(P, m, D)
                     if x is not None and abs(x) < 0.01:
                         pool.append(m)
-            for m in rng.sample(pool, min(len(taken), len(pool))):
-                ctrl.append({"sym": m, "i0": e0, "f0": "o", "i1": stop_exit(P, m, e0, D + hold, side), "f1": "c",
-                             "w": w, "side": side, "beta": 1.0, "signal_i": D})
+            for m in rng.sample(pool, min(len(chosen), len(pool))):
+                if _ok(P, m, e0, "o"):
+                    ctrl.append({"sym": m, "i0": e0, "f0": "o", "i1": stop_exit(P, m, e0, D + hold, side),
+                                 "f1": "c", "w": w, "side": side, "beta": 1.0, "signal_i": D})
     return trades, ctrl
 
 

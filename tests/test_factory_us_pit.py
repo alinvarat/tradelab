@@ -105,7 +105,7 @@ class Ledger(unittest.TestCase):
             "SPY": [(100, 100, 100, 100, 1), (100, 101, 99, 101, 1), (102, 102, 102, 102, 1), (102, 103, 101, 103, 1),
                     (103, 103, 103, 103, 1), (103, 103, 103, 103, 1)],
             "A": [(10, 10, 10, 10, 1), (10, 11, 10, 11, 1), (12, 12, 12, 12, 1), None, (9, 9, 9, 9, 1),
-                  (9, 9, 9, 9, 1)]}, divs={"A": {self.days[2]: 0.5}})
+                  (9, 9, 9, 9, 1)]}, divs={"A": {self.days[2]: 0.5}, "SPY": {self.days[2]: 1.0}})
 
     def test_marks(self):
         self.assertEqual(fu.marks(1, "o", 3, "c"), [(1, "o"), (1, "c"), (2, "c"), (3, "c")])
@@ -128,7 +128,8 @@ class Ledger(unittest.TestCase):
 
     def test_dividend_added_to_overnight_exit(self):
         t = {"sym": "A", "i0": 1, "f0": "c", "i1": 2, "f1": "o", "w": 1.0, "side": 1, "beta": 1.0, "div": True}
-        self.assertAlmostEqual(fu.trade_return(self.P, t, 0.0), (12.5 / 11 - 1) - (102 / 101 - 1))
+        # both legs get their own dividend: A 12 + 0.5 over 11, SPY 102 + 1 over 101
+        self.assertAlmostEqual(fu.trade_return(self.P, t, 0.0), (12.5 / 11 - 1) - (103 / 101 - 1))
         t["div"] = False
         self.assertAlmostEqual(fu.trade_return(self.P, t, 0.0), (12 / 11 - 1) - (102 / 101 - 1))
 
@@ -275,6 +276,16 @@ class B2(unittest.TestCase):
         t202 = {"N2": [fu.et_ts(days[29], 8)]}
         self.assertEqual(self.picks(P, t202)[0], ["N1", "N5"])
 
+    def test_missing_next_bar_does_not_change_picks(self):
+        days, P = self.world()
+        before = self.picks(P)[0]
+        P["o"]["N1"][31] = P["h"]["N1"][31] = P["l"]["N1"][31] = P["c"]["N1"][31] = P["v"]["N1"][31] = None
+        got, _, tr = self.picks(P)
+        self.assertEqual(got, before)
+        t = [x for x in tr if x["signal_i"] == 30 and x["sym"] == "N1"][0]
+        spy = P["o"]["SPY"][31] / P["c"]["SPY"][30] - 1
+        self.assertAlmostEqual(fu.trade_return(P, t, 0.0), -spy)       # no exit bar: the last price is carried
+
     def test_ex_dividend_overnight_left_out(self):
         days, P = self.world(divs={"N1": {bdays("2021-03-01", 40)[25]: 1.0}})
         f = fu.b2_features(P, ["N1"])["N1"]
@@ -311,6 +322,25 @@ class B3(unittest.TestCase):
         tr, _ = fu.b3_trades(P, sorted(cands + [(108, "N24", 115), (109, "N23", 115)]), {}, [set(names)] * 400)
         self.assertEqual([t["sym"] for t in tr][20:], ["N24", "N23"])   # exits at 108's close free slots for 108
 
+    def test_top_half_filter_uses_completed_windows_only(self):
+        P = panel(self.days, {"SPY": flat(400), "A": [(50 * 1.01 ** i,) * 4 + (1e6,) for i in range(400)],
+                              "B": [(50 * 0.99 ** i,) * 4 + (1e6,) for i in range(400)]})
+        cands = sorted((d, s, d + 5) for d in (10, 30, 50, 70, 90) for s in ("A", "B"))
+        tr, _ = fu.b3_trades(P, cands, {}, [{"A", "B"}] * 400, filter_top_half=True)
+        self.assertEqual([(t["sym"], t["i0"]) for t in tr], [("A", 90)])
+
+    def test_control_entry_sits_mid_quarter_without_a_release(self):
+        ts_list = [fu.et_ts(self.days[10 + 63 * k], 7) for k in range(6)]
+        sess = [10 + 63 * k for k in range(6)]
+        for seed in range(5):
+            j = fu.b3_control_entry(self.P, "A", 250, 5, ts_list, self.members, random.Random(seed))
+            self.assertIsNotNone(j)
+            last = max(s for s in sess if s <= j)
+            self.assertTrue(30 <= j - last <= 60, j)
+            self.assertFalse(any(j <= s <= j + 6 for s in sess), j)
+            self.assertLessEqual(abs(j - 250), 252)
+        self.assertIsNone(fu.b3_control_entry(self.P, "A", 250, 5, [], self.members, random.Random(1)))
+
 
 class B4(unittest.TestCase):
     def setUp(self):
@@ -342,6 +372,17 @@ class B4(unittest.TestCase):
         self.P["c"]["A"][33] = 110 * 0.93
         tr, _ = fu.b4_trades(self.P, ev, self.m, self.cik, rng=random.Random(1))
         self.assertEqual(tr[0]["i1"], 33)
+
+    def test_short_stop_and_missing_entry_keeps_slot_in_cash(self):
+        days = bdays("2022-01-03", 5)
+        P = panel(days, {"SPY": flat(5), "A": [(100,) * 5, (100, 103, 100, 103, 1), (103, 107, 103, 106.5, 1),
+                                                (106, 106, 106, 106, 1), (106, 106, 106, 106, 1)]})
+        self.assertEqual(fu.stop_exit(P, "A", 1, 4, side=-1), 2)
+        self.assertEqual(fu.stop_exit(P, "A", 1, 4, side=1), 4)
+        self.P["o"]["A"][31] = None                             # the top event has no bar at entry
+        ev = [(30, "A", 0.10), (30, "B", 0.06)]
+        tr, _ = fu.b4_trades(self.P, ev, self.m, self.cik, rng=random.Random(1), cap_n=1)
+        self.assertEqual(tr, [])                                # B does not take A's slot (decided at D's close)
 
     def test_future_bars_do_not_change_entries(self):
         ev = fu.b4_events(self.P, {"A": [fu.et_ts(self.days[30], 7)]}, self.m, self.cik)
