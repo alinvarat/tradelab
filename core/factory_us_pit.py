@@ -58,8 +58,9 @@ BOUNDS = {k: (bound_ts(a), bound_ts(b)) for k, (a, b) in BOUNDS_DAYS.items()}
 
 # ------------------------------------------------------------------ parsing (Yahoo chart, SEC submissions)
 def parse_chart(res: dict) -> tuple:
-    """Yahoo chart 'result[0]' with events=div,split -> (bars, {ny_date: dividend}, {ny_date of split}).
-    OHLC are Yahoo's split-adjusted (not dividend-adjusted) quote arrays; bars with a missing price are dropped."""
+    """Yahoo chart 'result[0]' with events=div,split -> (bars, {ny_date: dividend}, {ny_date of split: ratio}).
+    OHLC are Yahoo's split-adjusted (not dividend-adjusted) quote arrays; bars with a missing price are dropped.
+    ratio = numerator / denominator (2.0 for a 2-for-1 split), used to recover the price as traded."""
     q = res["indicators"]["quote"][0]
     bars = []
     for i, t in enumerate(res.get("timestamp") or []):
@@ -73,7 +74,12 @@ def parse_chart(res: dict) -> tuple:
         if x.get("date") and x.get("amount"):
             d = ny_date(x["date"])
             divs[d] = divs.get(d, 0.0) + float(x["amount"])
-    splits = {ny_date(x["date"]) for x in (ev.get("splits") or {}).values() if x.get("date")}
+    splits = {}
+    for x in (ev.get("splits") or {}).values():
+        if x.get("date"):
+            num, den = float(x.get("numerator") or 0), float(x.get("denominator") or 0)
+            d = ny_date(x["date"])
+            splits[d] = splits.get(d, 1.0) * (num / den if num > 0 and den > 0 else 1.0)
     return bars, divs, splits
 
 
@@ -143,12 +149,15 @@ def any_in(sorted_ts: list, a: float, b: float) -> bool:
 # ------------------------------------------------------------------ panel
 def build_panel(bars_by_sym: dict, divs=None, splits=None, calendar_sym=BENCH) -> dict:
     """Aligns every symbol on the calendar symbol's sessions (New York dates). Arrays hold None where a symbol has
-    no bar. open_ts / close_ts are 09:30 / 16:00 ET of each session."""
+    no bar. open_ts / close_ts are 09:30 / 16:00 ET of each session. splits: {sym: {ny_date: ratio}} (a plain set of
+    dates means ratio 1); P['sf'][sym][i] = product of the ratios of splits after session i, so c * sf is the close as
+    traded on that day (the $ price floors use it, so a later split never decides an earlier eligibility)."""
     days = sorted({ny_date(b["t"]) for b in bars_by_sym[calendar_sym]})
     idx = {d: i for i, d in enumerate(days)}
     n = len(days)
     P = {"days": days, "idx": idx, "n": n, "open_ts": [et_ts(d, 9, 30) for d in days],
-         "close_ts": [et_ts(d, 16) for d in days], "o": {}, "h": {}, "l": {}, "c": {}, "v": {}, "div": {}, "split": {}}
+         "close_ts": [et_ts(d, 16) for d in days], "o": {}, "h": {}, "l": {}, "c": {}, "v": {}, "div": {}, "split": {},
+         "sf": {}}
     for s, rows in bars_by_sym.items():
         arr = {k: [None] * n for k in "ohlcv"}
         for b in rows:
@@ -159,8 +168,26 @@ def build_panel(bars_by_sym: dict, divs=None, splits=None, calendar_sym=BENCH) -
         for k in "ohlcv":
             P[k][s] = arr[k]
         P["div"][s] = {idx[d]: a for d, a in ((divs or {}).get(s) or {}).items() if d in idx}
-        P["split"][s] = {idx[d] for d in ((splits or {}).get(s) or ()) if d in idx}
+        sp = (splits or {}).get(s) or {}
+        ratios = sp if isinstance(sp, dict) else {d: 1.0 for d in sp}
+        P["split"][s] = {idx[d] for d in ratios if d in idx}
+        sf, f = [1.0] * n, 1.0
+        later = {}
+        for d, r in ratios.items():
+            k = bisect.bisect_left(days, d)          # first session on/after the split date (n: after the last)
+            later[k] = later.get(k, 1.0) * r
+        for i in range(n - 1, -1, -1):
+            f *= later.get(i + 1, 1.0)
+            sf[i] = f
+        P["sf"][s] = sf
     return P
+
+
+def raw_close(P: dict, s: str, i: int):
+    """Close of s on session i as it traded (undoing the split adjustment for splits after i); None without a bar."""
+    c = P["c"][s][i]
+    sf = P.get("sf", {}).get(s)
+    return None if c is None else c * (sf[i] if sf else 1.0)
 
 
 def session_after(P: dict, ts: float) -> int:
@@ -253,7 +280,8 @@ def _increments(P: dict, t: dict, cost: float, borrow_day: float):
     p0 = arr[pts[0][1]][pts[0][0]]
     h0 = spy[pts[0][1]][pts[0][0]]
     prev, hprev = p0, h0
-    yield t["i0"], -w * cost
+    leg = w * (1 + abs(beta)) * cost              # the stock leg and the SPY hedge leg both pay the per-side cost
+    yield t["i0"], -leg
     for i, f in pts[1:]:
         p = arr[f][i]
         if p is None:
@@ -270,14 +298,15 @@ def _increments(P: dict, t: dict, cost: float, borrow_day: float):
             inc -= w * borrow_day
         yield i, inc
         prev, hprev = p, h
-    yield t["i1"], -w * cost
+    yield t["i1"], -leg
 
 
 def book(P: dict, trades: list, cost: float, borrow_day: float = BORROW_DAY) -> list:
     """Daily P&L per session (list of length n) of fixed-notional positions. Trade: {'sym','i0','f0','i1','f1','w',
     'side' (+1/-1), 'beta' (SPY hedge ratio, 0 = none), 'div' (add the dividend to an exit at an open)}.
     Over a hold a position earns side*w*(exit/entry-1) minus beta*w*side*(SPY exit/entry-1), minus w*cost at entry
-    and at exit (short_gain semantics for side=-1); a missing bar carries the last price (0 P&L)."""
+    and at exit on the stock leg and w*|beta|*cost on the hedge leg (amendment 2026-11-25 b), short_gain semantics
+    for side=-1; a missing bar carries the last price (0 P&L)."""
     pnl = [0.0] * P["n"]
     for t in trades:
         for i, x in _increments(P, t, cost, borrow_day):
@@ -310,6 +339,22 @@ def adv(P, s, a, b):
             return None
         xs.append(c[k] * v[k])
     return sum(xs) / len(xs)
+
+
+def one_per_issuer(ciks: dict, member_days: dict) -> tuple:
+    """Share classes of one company (GOOG/GOOGL, FOX/FOXA, NWS/NWSA) share a CIK and so the same 8-Ks: keep one
+    ticker per CIK, the one with the most member sessions, then the alphabetically first (amendment 2026-11-25 a).
+    -> (kept tickers, {dropped ticker: kept ticker})."""
+    by = {}
+    for s, c in ciks.items():
+        by.setdefault(c, []).append(s)
+    keep, dropped = set(), {}
+    for c, ss in by.items():
+        ss.sort(key=lambda s: (-member_days.get(s, 0), s))
+        keep.add(ss[0])
+        for s in ss[1:]:
+            dropped[s] = ss[0]
+    return keep, dropped
 
 
 # ------------------------------------------------------------------ B1 residual reversal, no news
@@ -366,8 +411,8 @@ def b1_trades(P: dict, scores: dict, members: list, cik_ok: set, any8k: dict, ho
         for s in members[i]:
             if s not in cik_ok or s not in scores or i not in scores[s]:
                 continue
-            c = P["c"][s][i]
-            if c is None or c < 5:
+            c = raw_close(P, s, i)
+            if c is None or c < 5:                  # $ floor on the price as traded on D
                 continue
             a = adv(P, s, i - 19, i)
             if a is None or a < 20e6 or any_in(any8k.get(s, []), lo, hi):
@@ -435,7 +480,7 @@ def b2_trades(P: dict, feats: dict, members: list, cik_ok: set, t202: dict, rng=
                 continue
             if f["miss"][i + 1] - f["miss"][i - 21] or f["split"][i + 2] - f["split"][i - 20]:
                 continue                         # needs bars i-21..i (known at i), no split date in i-20..i+1
-            if P["c"][s][i - 1] < 10:
+            if raw_close(P, s, i - 1) < 10:          # $ floor on the price as traded on D-1
                 continue
             a = adv(P, s, i - 20, i - 1)
             if a is None or a < 50e6 or any_in(t202.get(s, []), lo, hi):
@@ -458,10 +503,11 @@ def b2_trades(P: dict, feats: dict, members: list, cik_ok: set, t202: dict, rng=
 
 
 # ------------------------------------------------------------------ B3 earnings premium on the predicted date
-def b3_candidates(P: dict, ev202: dict, members: list, cik_ok: set) -> list:
+def b3_candidates(P: dict, ev202: dict, members: list, cik_ok: set, t202: dict | None = None) -> list:
     """[(i, sym, i1)] sorted by (i, sym): on session i the name is predicted to report at session i+5 (P = a past
     2.02's date + 364 days, first session on/after it, from a filing 351-379 days before i) and has no 2.02 in the
-    last 60 calendar days. Exit i1 = close of the first session whose open is after the next 2.02, capped at i+10."""
+    last 60 calendar days (t202: 8-K or 8-K/A, the filter definition; ev202 when not given). Exit i1 = close of the
+    first session whose open is after the next 2.02 8-K, capped at i+10."""
     out = set()
     days = P["days"]
     for s, ts_list in ev202.items():
@@ -478,7 +524,8 @@ def b3_candidates(P: dict, ev202: dict, members: list, cik_ok: set) -> list:
                 continue
             if s not in members[i] or P["c"][s][i] is None:
                 continue
-            if any_in(ts_list, et_ts(add_days(days[i], -60), 0), P["close_ts"][i]):
+            block = ts_list if t202 is None else t202.get(s, ts_list)
+            if any_in(block, et_ts(add_days(days[i], -60), 0), P["close_ts"][i]):
                 continue
             k = bisect.bisect_left(ts_list, P["close_ts"][i])
             i1 = i + 10
@@ -502,7 +549,8 @@ def b3_trades(P: dict, cands: list, ev202: dict, members: list, rng=None, filter
               cap_n: int = 20, w: float = 0.05) -> tuple:
     """Capacity-limited entries at the candidate's close, ticker order on the same day. With filter_top_half, only
     the top half (ceil) of the day's candidates by mean SPY-adjusted return over their last 4 completed windows
-    (names without 4 are out). Returns (trades, control trades)."""
+    (names without 4 are out). A candidate whose name is still held is skipped and takes no slot
+    (amendment 2026-11-25 c). Returns (trades, control trades)."""
     rng = rng or random.Random(SEED)
     hist = {}
     by_day = {}
@@ -526,11 +574,13 @@ def b3_trades(P: dict, cands: list, ev202: dict, members: list, rng=None, filter
             r = window_ret(P, s, i, i1)
             if r is not None:
                 hist.setdefault(s, []).append((i1, r))
-        open_ = [x for x in open_ if x > i]
+        open_ = [x for x in open_ if x[0] > i]
         for s, i1 in pick:
             if len(open_) >= cap_n:
                 break
-            open_.append(i1)
+            if any(s == k for _, k in open_):
+                continue                         # already held: one position per name
+            open_.append((i1, s))
             trades.append({"sym": s, "i0": i, "f0": "c", "i1": i1, "f1": "c", "w": w, "side": 1, "beta": 1.0,
                            "signal_i": i})
     for t in trades:
@@ -604,7 +654,8 @@ def stop_exit(P: dict, s: str, e: int, hold_to: int, side: int, stop: float = 0.
 def b4_trades(P: dict, events: list, members: list, cik_ok: set, hold: int = 5, side: int = 1, rng=None,
               cap_n: int = 10, w: float = 0.10) -> tuple:
     """Entry at the D+1 open, exit at the D+hold close or the 6% stop; at most cap_n open, same-day events by
-    |EAR| descending. Control: a random member on the same D with |EAR| < 1%."""
+    |EAR| descending. An event whose name is still held at D+1's open is skipped and takes no slot
+    (amendment 2026-11-25 c). Control: a random member on the same D with |EAR| < 1%."""
     rng = rng or random.Random(SEED)
     by_day = {}
     for D, s, e in events:
@@ -613,13 +664,14 @@ def b4_trades(P: dict, events: list, members: list, cik_ok: set, hold: int = 5, 
     trades, ctrl, open_ = [], [], []
     for D in sorted(by_day):
         e0 = D + 1
-        open_ = [x for x in open_ if x >= e0]
-        chosen = [s for _, s in sorted(by_day[D])][:max(0, cap_n - len(open_))]   # decided at D's close
+        open_ = [x for x in open_ if x[0] >= e0]
+        held = {k for _, k in open_}
+        chosen = [s for _, s in sorted(by_day[D]) if s not in held][:max(0, cap_n - len(open_))]  # at D's close
         for s in chosen:
             if not _ok(P, s, e0, "o"):
                 continue                         # no bar at entry: that slot stays in cash
             i1 = stop_exit(P, s, e0, D + hold, side)
-            open_.append(i1)
+            open_.append((i1, s))
             trades.append({"sym": s, "i0": e0, "f0": "o", "i1": i1, "f1": "c", "w": w, "side": side, "beta": 1.0,
                            "signal_i": D})
         if chosen:

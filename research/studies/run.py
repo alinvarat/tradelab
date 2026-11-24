@@ -1822,7 +1822,7 @@ def study_factory_us_pit_1(_symbols):
             log(f"  sec failed {s}: {e}")
         if k % 100 == 0:
             log(f"  sec {k}/{len(ciks)}")
-    cik_ok = set(filings)
+    have_sec = set(filings)                     # data coverage: a bar, a CIK and its 8-Ks
     sets = {s: fu.filing_sets(f) for s, f in filings.items()}
     any8k = {s: x["any"] for s, x in sets.items()}
     t202 = {s: x["t202"] for s, x in sets.items()}
@@ -1836,7 +1836,22 @@ def study_factory_us_pit_1(_symbols):
                 hours[h] = hours.get(h, 0) + 1
     P = fu.build_panel(bars, divs, splits)
     members = fu.members_by_session(P, spells)
-    cov = fu.coverage(P, members, cik_ok)
+    cov = fu.coverage(P, members, have_sec)
+    member_days = {}
+    for ms in members:
+        for m in ms:
+            member_days[m] = member_days.get(m, 0) + 1
+    keep, same_issuer = fu.one_per_issuer({s: ciks[s] for s in have_sec}, member_days)
+    cik_ok = keep                               # one ticker per CIK: share classes share every 8-K (amendment a)
+    log(f"share classes dropped (same CIK): {same_issuer}")
+    quiet = []                                  # member years with no 8-K at all (a wrong or changed CIK looks like this)
+    for s in sorted(cik_ok):
+        yrs = {}
+        for i, ms in enumerate(members):
+            if s in ms:
+                yrs[P["days"][i][:4]] = yrs.get(P["days"][i][:4], 0) + 1
+        filed = {fu.ny_date(t)[:4] for t in any8k.get(s, [])}
+        quiet += [f"{s}:{y}" for y, k in sorted(yrs.items()) if k >= 200 and y not in filed]
     log(f"panel: {P['n']} sessions {P['days'][0]}..{P['days'][-1]}; coverage {cov}")
 
     def pack(trades, ctrl, cost, nightly=False):
@@ -1876,7 +1891,7 @@ def study_factory_us_pit_1(_symbols):
              for i, v in sorted(nights.items())]
     del feats
     log("B2 done")
-    cands = fu.b3_candidates(P, ev202, members, cik_ok)
+    cands = fu.b3_candidates(P, ev202, members, cik_ok, t202)
     counts["b3_candidates"] = len(cands)
     c = fu.COST["B3"]
     tr, ct = fu.b3_trades(P, cands, ev202, members, rng=R())
@@ -1902,6 +1917,8 @@ def study_factory_us_pit_1(_symbols):
             "coverage": cov, "counts": counts, "tickers_wanted": len(names), "tickers_with_bars": len(stocks),
             "bars_missing": len(missing), "bars_rejected_not_daily": rejected, "ciks": len(ciks),
             "sec_failed": len(sec_failed), "sec_failed_tickers": sec_failed[:50], "filings_8k_by_year": by_year,
+            "same_issuer_dropped": same_issuer, "member_years_without_8k": len(quiet),
+            "member_years_without_8k_list": quiet[:100],
             "t202_stamp_hour_as_read": hours, "sessions": P["n"], "first_day": P["days"][0], "last_day": P["days"][-1]}
     v = summ["verdict"]
     log("factory_us_pit_1 passed: " + (", ".join(v["passed"]) or "none"))

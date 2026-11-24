@@ -51,7 +51,16 @@ class Parsing(unittest.TestCase):
         bars, divs, splits = fu.parse_chart(res)
         self.assertEqual(len(bars), 1)
         self.assertEqual(divs, {"2024-05-01": 0.2})
-        self.assertEqual(splits, {"2024-05-02"})
+        self.assertEqual(splits, {"2024-05-02": 2.0})
+
+    def test_price_as_traded_undoes_later_splits_only(self):
+        days = bdays("2024-01-02", 6)
+        P = panel(days, {"SPY": flat(6), "A": flat(6, 50.0)}, splits={"A": {days[3]: 2.0, "2024-02-01": 3.0}})
+        # a 2:1 split on day 3 and a 3:1 split after the last bar: Yahoo adjusts every earlier bar for both
+        self.assertEqual([fu.raw_close(P, "A", i) for i in range(6)], [300.0, 300.0, 300.0, 150.0, 150.0, 150.0])
+        self.assertEqual(P["split"]["A"], {3})
+        P = panel(days, {"SPY": flat(6), "A": flat(6, 50.0)}, splits={"A": {days[3]}})   # dates only: ratio 1
+        self.assertEqual(fu.raw_close(P, "A", 0), 50.0)
 
     def test_monthly_bars_rejected(self):
         daily = [{"t": k * 86400} for k in range(40)]
@@ -116,15 +125,26 @@ class Ledger(unittest.TestCase):
         t = {"sym": "A", "i0": 1, "f0": "o", "i1": 2, "f1": "c", "w": 0.5, "side": 1, "beta": 1.0}
         pnl = fu.book(self.P, [t], cost=0.001)
         # A: 10 -> 11 (day 1) -> 12 (day 2) = +20%; SPY 100 -> 101 -> 102 = +2%
-        self.assertAlmostEqual(pnl[1], 0.5 * (0.1 - 0.01) - 0.0005)
-        self.assertAlmostEqual(pnl[2], 0.5 * (0.1 - 0.01) - 0.0005)
-        self.assertAlmostEqual(sum(pnl), 0.5 * (0.2 - 0.02) - 0.001)
-        self.assertAlmostEqual(fu.trade_return(self.P, t, 0.001), 0.2 - 0.02 - 0.002)
+        # cost per side: 0.001 on the stock leg (0.5) and on the hedge leg (0.5 x beta 1) = 0.001
+        self.assertAlmostEqual(pnl[1], 0.5 * (0.1 - 0.01) - 0.001)
+        self.assertAlmostEqual(pnl[2], 0.5 * (0.1 - 0.01) - 0.001)
+        self.assertAlmostEqual(sum(pnl), 0.5 * (0.2 - 0.02) - 0.002)
+        self.assertAlmostEqual(fu.trade_return(self.P, t, 0.001), 0.2 - 0.02 - 0.004)
+        t["beta"] = 0.5
+        self.assertAlmostEqual(fu.trade_return(self.P, t, 0.001), 0.2 - 0.5 * 0.02 - 2 * 1.5 * 0.001)
 
     def test_short_gain_is_one_minus_exit_over_entry(self):
         t = {"sym": "A", "i0": 1, "f0": "c", "i1": 4, "f1": "c", "w": 1.0, "side": -1, "beta": 0.0}
         r = fu.trade_return(self.P, t, 0.0, borrow_day=0.0)
         self.assertAlmostEqual(r, 1 - 9 / 11)          # day 3 has no bar: carried, then the day-4 close
+
+    def test_short_pays_cost_and_borrow(self):
+        t = {"sym": "A", "i0": 1, "f0": "c", "i1": 4, "f1": "c", "w": 1.0, "side": -1, "beta": 0.0}
+        r = fu.trade_return(self.P, t, 0.001, borrow_day=0.0001)
+        self.assertAlmostEqual(r, (1 - 9 / 11) - 2 * 0.001 - 3 * 0.0001)   # 3 held closes (days 2, 3, 4)
+        pnl = fu.book(self.P, [dict(t, w=0.5)], 0.001, borrow_day=0.0001)
+        self.assertAlmostEqual(sum(pnl), 0.5 * r)
+        self.assertAlmostEqual(pnl[1], -0.0005)                            # entry cost only on the entry day
 
     def test_dividend_added_to_overnight_exit(self):
         t = {"sym": "A", "i0": 1, "f0": "c", "i1": 2, "f1": "o", "w": 1.0, "side": 1, "beta": 1.0, "div": True}
@@ -302,6 +322,17 @@ class B2(unittest.TestCase):
         spy = P["o"]["SPY"][31] / P["c"]["SPY"][30] - 1
         self.assertAlmostEqual(fu.trade_return(P, t, 0.0), -spy)       # no exit bar: the last price is carried
 
+    def test_price_floor_uses_the_price_as_traded(self):
+        days, P0 = self.world()
+        want = self.picks(P0)[0]
+        for splits, expect in ((None, ["N2", "N5"]), ({"N1": {days[35]: 20.0}}, want)):
+            _, P = self.world(splits=splits)
+            for i in range(P["n"]):                  # N1 adjusted for a later 20:1 split: about $5, volume x20
+                for k in "ohlc":
+                    P[k]["N1"][i] *= 0.05
+                P["v"]["N1"][i] *= 20
+            self.assertEqual(self.picks(P)[0], expect)
+
     def test_ex_dividend_overnight_left_out(self):
         days, P = self.world(divs={"N1": {bdays("2021-03-01", 40)[25]: 1.0}})
         f = fu.b2_features(P, ["N1"])["N1"]
@@ -328,6 +359,19 @@ class B3(unittest.TestCase):
     def test_recent_202_blocks(self):
         recent = fu.et_ts(self.days[self.pi - 20], 7)
         self.assertEqual(fu.b3_candidates(self.P, {"A": [self.f1, recent]}, self.members, {"A"}), [])
+
+    def test_recent_8ka_202_blocks_when_filter_set_given(self):
+        recent = fu.et_ts(self.days[self.pi - 20], 7)                   # an 8-K/A with item 2.02: a filter, not an event
+        ev = {"A": [self.f1]}
+        self.assertEqual(len(fu.b3_candidates(self.P, ev, self.members, {"A"})), 1)
+        self.assertEqual(fu.b3_candidates(self.P, ev, self.members, {"A"}, {"A": sorted([self.f1, recent])}), [])
+
+    def test_name_already_held_is_not_bought_again(self):
+        P = panel(self.days, {"SPY": flat(400), "A": flat(400), "B": flat(400)})
+        tr, _ = fu.b3_trades(P, [(100, "A", 108), (103, "A", 110), (103, "B", 110)], {}, [{"A", "B"}] * 400, cap_n=2)
+        self.assertEqual([(t["sym"], t["i0"]) for t in tr], [("A", 100), ("B", 103)])
+        tr, _ = fu.b3_trades(P, [(100, "A", 108), (108, "A", 115)], {}, [{"A"}] * 400)
+        self.assertEqual([t["i0"] for t in tr], [100, 108])             # exited at 108's close: free again
 
     def test_capacity_and_ticker_order(self):
         names = [f"N{j:02d}" for j in range(25)]
@@ -400,6 +444,11 @@ class B4(unittest.TestCase):
         tr, _ = fu.b4_trades(self.P, ev, self.m, self.cik, rng=random.Random(1), cap_n=1)
         self.assertEqual(tr, [])                                # B does not take A's slot (decided at D's close)
 
+    def test_name_already_held_is_skipped(self):
+        tr, _ = fu.b4_trades(self.P, [(30, "A", 0.10), (32, "A", 0.08), (32, "B", 0.06)], self.m, self.cik,
+                             rng=random.Random(1), cap_n=2)
+        self.assertEqual([(t["sym"], t["i0"]) for t in tr], [("A", 31), ("B", 33)])   # A held: B takes the slot
+
     def test_future_bars_do_not_change_entries(self):
         ev = fu.b4_events(self.P, {"A": [fu.et_ts(self.days[30], 7)]}, self.m, self.cik)
         ser = {k: list(v) for k, v in self.ser.items()}
@@ -407,6 +456,14 @@ class B4(unittest.TestCase):
             ser["A"][i] = (50, 200, 10, 60, 9e6)
         ev2 = fu.b4_events(panel(self.days, ser), {"A": [fu.et_ts(self.days[30], 7)]}, self.m, self.cik)
         self.assertEqual(ev, ev2)
+
+
+class Issuer(unittest.TestCase):
+    def test_one_ticker_per_cik(self):
+        keep, dropped = fu.one_per_issuer({"GOOG": 1, "GOOGL": 1, "FOX": 2, "FOXA": 2, "AAPL": 3},
+                                          {"GOOG": 100, "GOOGL": 100, "FOX": 50, "FOXA": 90, "AAPL": 10})
+        self.assertEqual(keep, {"GOOG", "FOXA", "AAPL"})                # most member days, then alphabetical
+        self.assertEqual(dropped, {"GOOGL": "GOOG", "FOX": "FOXA"})
 
 
 class Judge(unittest.TestCase):
@@ -431,6 +488,32 @@ class Judge(unittest.TestCase):
         self.assertEqual(out["passed"], [])
         d = fu.judge_all(rules, primary=False)
         self.assertNotIn("passed", d)
+
+    def test_each_gate_alone_fails_a_rule(self):
+        days = bdays("2017-01-02", 2560)
+        ts = [fu.et_ts(d, 16) for d in days]
+        rng = random.Random(6)
+        va, vb = fu.BOUNDS["validation"]
+        te = fu.BOUNDS["test"][0]
+        good = [(t, 0.002 + rng.gauss(0, 0.005)) for t in ts]
+        noise = [(t, rng.gauss(0, 0.01)) for t in ts]
+        vmean = sum(r for t, r in noise if va <= t < vb) / sum(1 for t, _ in noise if va <= t < vb)
+        weak = [(t, r - vmean + 0.00005 if va <= t < vb else 0.002) for t, r in noise]   # tiny edge: p far above bar
+        test_neg = [(t, -0.002 if t >= te else r) for t, r in good]
+        zero = [(t, 0.0) for t in ts]
+        rules = {"good": {"series": good, "series2x": good, "control": zero, "entries": ts},
+                 "dies_at_2x": {"series": good, "series2x": [(t, r - 0.003) for t, r in good], "control": zero,
+                                "entries": ts},
+                 "test_negative": {"series": test_neg, "series2x": test_neg, "control": zero, "entries": ts},
+                 "weak_p": {"series": weak, "series2x": weak, "control": zero, "entries": ts}}
+        out = fu.judge_all(rules)
+        self.assertAlmostEqual(out["bonferroni_bar"], 0.0125)
+        self.assertEqual(out["passed"], ["good"])
+        w = out["rules"]["weak_p"]["validation"]
+        self.assertGreater(w["mean_day"], 0)
+        self.assertGreater(w["p_block"], 0.0125)
+        self.assertLess(out["rules"]["dies_at_2x"]["validation"]["p_block"], 0.0125)
+        self.assertLess(out["rules"]["test_negative"]["test"]["mean_day"], 0)
 
     def test_block_p_direction(self):
         rng = random.Random(8)
