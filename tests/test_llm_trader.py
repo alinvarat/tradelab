@@ -233,8 +233,8 @@ class Trading(Base):
         self.assertEqual(len(self.prompts), 1)
         self.assertIn("skip", self.log_kinds())
         self.t.calls.update(last_idle=0.0, last_ts=0.0)
-        self.t.scan(self.market(AAA=quote("AAA", px=101, move=4)))
-        self.assertEqual(len(self.prompts), 2)                    # a real move: look again
+        self.t.scan(self.market(AAA=quote("AAA", px=102, move=4)))
+        self.assertEqual(len(self.prompts), 2)                    # 2% >= a quarter of the 5% stock threshold
 
     def test_scheduled_scan_needs_a_meaningful_mover(self):
         self.t.calls.update(last_idle=0.0, last_ts=0.0)
@@ -287,6 +287,20 @@ class Trading(Base):
              mock.patch("core.llm_trader.data.quote_ext") as qe2:
             self.t._extended({"AAPL": quote("AAPL", open_=False)})
         qe2.assert_not_called()
+
+    def test_sell_while_closed_is_queued_and_fills_at_the_open(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "stop_pct": 5, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=12)))
+        self.assertIn("AAA", self.t.acct.positions)
+        self.t.acct.on_quote(self.t._q(quote("AAA", px=100, open_=False)))
+        out = self.t._sell("AAA", "model sell", time.time())
+        self.assertEqual(out["status"], "queued for the open")
+        self.assertIn("AAA", self.t.acct.positions)
+        self.assertTrue(self.t.view()["positions"][0]["exit_queued"])
+        self.t.calls.update(last_idle=time.time(), last_ts=time.time())
+        self.t.scan(self.market(AAA=quote("AAA", px=101, move=1)))
+        self.assertNotIn("AAA", self.t.acct.positions)
+        self.assertIn("exit_queued", self.log_kinds())
 
     def test_model_failure_is_logged_and_nothing_trades(self):
         self.t.chat = lambda s, u: ("", "no provider")
