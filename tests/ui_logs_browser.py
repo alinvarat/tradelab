@@ -147,7 +147,7 @@ def check_page_translations():
         "stats": {"equity": 100000, "trades": 2}, "positions": [],
         "orders": [{"id": 1, "side": 1, "symbol": "BUY", "type": "limit", "status": "pending"}],
         "trades": [], "allocation": {}, "cash_usd": 100000, "equity_curve": [],
-        "settings": {"initial": 100000, "leverage": 1, "fee_rate": 0.0005, "slippage": 0},
+        "settings": {"initial": 100000, "leverage": 1, "fee_rate": 0.0005, "slippage": 0, "min_fee": 0},
     }
     quote = {"symbol": "BUY", "name": "Markets", "price": 10, "bid": 9, "ask": 11,
              "currency": "USD", "open": True, "source": "Test"}
@@ -170,6 +170,7 @@ def check_page_translations():
         "/api/analysis": {"score": 100, "rating": "Strong buy", "signals": [], "as_of": stamp,
                           "levels": {"resistance": [12], "support": [], "pivots": {}, "fib_52w": {}},
                           "performance": {}, "risk": {}, "volatility": {}, "events": []},
+        "/api/ai": {"text": "Strong buy", "model": "Running", "seconds": 1},
         "/api/strategies": {"sma_cross": {"name": "SMA crossover", "params": {"fast": 50, "slow": 200}}},
     }
 
@@ -179,6 +180,8 @@ def check_page_translations():
             return route.abort()
         if url.path in responses:
             return route.fulfill(json=responses[url.path])
+        if url.path == "/api/search":
+            return route.fulfill(status=503, json={"error": "Market closed"})
         if url.path == "/api/backtest":
             body = route.request.post_data_json
             assert body["symbol"] == "BUY" and body["strategy"] == "sma_cross"
@@ -198,6 +201,8 @@ def check_page_translations():
         lang = page.locator("#lang-btn")
         expect(page.locator("#auto-figs")).to_contain_text("Running")
         lang.click()
+        expect(page.locator("html")).to_have_attribute("lang", "th")
+        expect(lang).to_have_attribute("aria-label", "เปลี่ยนภาษาเป็นอังกฤษ")
         expect(page.locator("#auto-figs")).to_contain_text("กำลังทำงาน")
         expect(page.locator("#auto-log")).to_contain_text("Running")
         expect(page.locator("#hunt-pos")).to_contain_text("ไม่มีสถานะ")
@@ -221,16 +226,30 @@ def check_page_translations():
 
         page.locator("#watchlist tr[data-sym]").click()
         expect(page.locator("#qhead h1")).to_have_text("BUY")
+        expect(page.locator("#qhead")).to_contain_text("ไม่มีประวัติราคาในช่วงนี้")
         expect(page.locator("#rating").get_by_text("ซื้อแรง", exact=True)).to_be_visible()
         expect(page.locator("#ranges")).to_have_attribute("aria-label", "ช่วงเวลา")
         expect(page.locator("#levels")).to_contain_text("แนวต้าน 1")
+        page.locator("#sym-input").fill("BUY")
+        expect(page.locator("#chart-search .suggest")).to_contain_text("โหลดไม่สำเร็จ: Market closed")
+        page.locator("#sym-input").press("Escape")
+        page.locator("#ai-q").fill("Buy")
+        page.locator("#ai-form button").click()  # fulfilled by the offline route, never an LLM call
+        expect(page.locator("#ai-out > [translate=no]")).to_have_text("Strong buy")
+        expect(page.locator("#ai-out .note")).to_have_text("Running, 1 วินาที")
+        expect(page.locator("#ai-q")).to_have_value("Buy")
         expect(page.locator("#place")).to_have_text("ซื้อ BUY")
         page.locator('#order-form select[name="type"]').select_option("limit")
-        page.locator('#order-form input[name="price"]').fill("9.5")
-        lang.click()
+        price = page.locator('#order-form input[name="price"]')
+        price.fill("9.5")
+        original_price = price.element_handle()
+        assert original_price is not None
+        lang.evaluate("(element) => element.click()")
         expect(page.locator("#place")).to_have_text("Buy BUY")
         expect(page.locator('#order-form select[name="type"]')).to_have_value("limit")
-        expect(page.locator('#order-form input[name="price"]')).to_have_value("9.5")
+        expect(price).to_have_value("9.5")
+        expect(price).to_be_focused()
+        assert original_price.evaluate("(element) => element.isConnected")
         lang.click()
 
         page.locator('[data-view="portfolio"]').click()
