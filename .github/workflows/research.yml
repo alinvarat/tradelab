@@ -177,6 +177,9 @@ jobs:
 
   study:
     name: ${{ matrix.study }}
+    # Only on a manual run. Without this, every schedule tick (about 50 a day, mostly the 30-minute L4f cron) started
+    # all matrix jobs just to skip their steps, and each one is billed as at least one runner minute.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 240
     strategy:
