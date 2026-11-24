@@ -31,13 +31,14 @@
 |---|---|---|---|---|---|
 | 1 | deploy ผ่านและตรวจผ่าน Chrome | Claude | 1 | done | 09:47 |
 | 2 | ด่านคัดกรอง L1 | Claude | 1 | done | killed ตามกฎ; เปิด L1b |
-| 2b | L1b: protocol ถือ 4 ชม. + ตัวดึงประกาศ listing (Binance, Upbit, Bithumb, OKX, Coinbase, Bybit) บน Kuber + บัญชีจำลอง | Claude | 2 | todo | |
+| 2b | L1b: protocol ถือ 4 ชม. + ตัวดึงประกาศ listing บน Kuber + บัญชีจำลอง | Claude | 2 | forward | ขึ้นระบบแล้ว (ตรวจ Chrome 10:52): Binance poll ทุก 30 วิ ไม่มี error, บัญชี 147/441 USD; Upbit ตอบ 403 จาก Kuber แม้ใช้ UA แบบเบราว์เซอร์ (น่าจะบล็อก IP) |
+| 2c | เพิ่มแหล่งประกาศ listing ที่ Kuber เข้าถึงได้ (Upbit ทางอื่น, Bithumb, OKX, Bybit, Coinbase) ด้วย addendum ก่อนเหตุการณ์แรก | เพื่อน (dmgnr) หรือ Claude | 2 | todo | เพิ่มความถี่ของ L1b |
 | 3 | ด่านคัดกรอง L3 | เพื่อน (dmgnr) | 1 | todo | issue #85 |
 | 4 | ด่านคัดกรอง L4 | เพื่อน (dmgnr) | 1 | todo | issue #86 |
 | 5 | หาแหล่งข้อมูล L2 | เพื่อน (dmgnr) | 1 | todo | issue #88 |
 | 6 | deploy ให้เสถียร (registry DNS, ข้าม deploy เมื่อแก้แค่เอกสาร, แจ้งเตือน) | เพื่อน (dmgnr) | 1 | todo | issue #89, #80 |
-| 7 | รีวิว PR #77–#79 ของ Codex | Claude | 1 | todo | |
-| 8 | หน้าเว็บแสดงความคืบหน้าสู่ 3 เท่าแทน "x/30 คู่" | Claude | 1 | in-progress | PR app/target-3x |
+| 7 | รีวิว PR #77–#79 ของ Codex | Claude | 1 | done | merge แล้ว: ออปชันอ่าน 8-K ทุกประเภทตั้งแต่ 25 พ.ย. (options-v2-sec) + e-process รายวัน |
+| 8 | หน้าเว็บแสดงความคืบหน้าสู่ 3 เท่าแทน "x/30 คู่" | Claude | 1 | done | ตรวจแล้วว่า app.js บนเว็บมี target3x |
 | 9 | ด่านคัดกรอง L6 | เพื่อน (dmgnr) | 2 | todo | issue #87 |
 | 10 | ล็อก protocol ของเส้นที่ผ่าน | ผู้ทำเส้นนั้น | 2 | todo | |
 | 11 | ส่งสัญญาณของเส้นที่ผ่านเข้าบัญชีจำลองบน Kuber | Claude | 3 | todo | |
