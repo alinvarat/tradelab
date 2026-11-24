@@ -157,6 +157,22 @@ class Stats(unittest.TestCase):
         self.assertAlmostEqual(corr, sxy / math.sqrt(sxx * syy), places=9)
         self.assertAlmostEqual(sd, math.sqrt(ssr / 18), places=9)
 
+    def test_coverage_counts_member_days_with_bar_and_cik(self):
+        days = bdays("2021-03-01", 10)
+        b = flat(10)
+        b[4] = None
+        P = panel(days, {"SPY": flat(10), "A": flat(10), "B": b})
+        cov = fu.coverage(P, [{"A", "B", "X"}] * 10, {"A", "B"})      # X: member without bars or CIK
+        self.assertEqual(cov["validation"]["member_days"], 30)
+        self.assertAlmostEqual(cov["validation"]["usable_share"], 19 / 30)
+        self.assertTrue(cov["validation"]["flag_under_70"])
+        self.assertIsNone(cov["train"]["usable_share"])
+        self.assertFalse(cov["train"]["flag_under_70"])
+        cov = fu.coverage(P, [{"A", "B"}] * 10, {"A", "B"})
+        self.assertFalse(cov["validation"]["flag_under_70"])
+        m = fu.members_by_session(P, {"A": [("2021-03-02", "2021-03-04"), ("2021-03-10", None)], "B": []})
+        self.assertEqual([("A" in x) for x in m], [False, True, True, False, False, False, False, True, True, True])
+
     def test_vix_gross(self):
         days = bdays("2020-01-02", 260)
         vix = [(20, 20, 20, x, 1) for x in [15.0] * 130 + [25.0] * 129 + [30.0]]
