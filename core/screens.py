@@ -142,10 +142,44 @@ def day_key(row: dict) -> str:
     return time.strftime("%Y-%m-%d", time.gmtime(row["ts"]))
 
 
+MIN_SPLIT_N = 10
+
+
+def row_key(r: dict) -> tuple:
+    return (r.get("symbol"), r.get("market"), round(r.get("ts") or 0, 1), r.get("kind"))
+
+
+def integrity(rows: list, horizons: list, bounds: dict, min_split_n: int = MIN_SPLIT_N) -> dict:
+    """Data checks every screen must pass before any verdict (RUNBOOK 'data gate'). Problems make the verdict invalid;
+    warnings are printed with the result. Added 2026-11-24 after L4 counted 75 markets about 40 times each."""
+    keys = [row_key(r) for r in rows]
+    dup = len(keys) - len(set(keys))
+    per_split = {sp: sum(1 for r in rows if split_of(r["ts"], bounds) == sp) for sp in bounds}
+    problems, warnings = [], []
+    if dup:
+        problems.append(f"{dup} duplicate rows of {len(rows)} ({dup / len(rows):.0%})")
+    for sp, n in per_split.items():
+        if n < min_split_n:     # train and validation decide; a thin test split is only a warning
+            (problems if sp in ("train", "validation") else warnings).append(f"split {sp} has {n} rows (< {min_split_n})")
+    out_of_range = sum(1 for r in rows if split_of(r["ts"], bounds) == "out")
+    if out_of_range:
+        warnings.append(f"{out_of_range} rows outside every split")
+    for h in horizons:
+        for sp in bounds:
+            v = [r["ret"][h]["net"] for r in rows if split_of(r["ts"], bounds) == sp and h in r["ret"]]
+            if len(v) >= min_split_n and min(v) >= 0:
+                warnings.append(f"{h}/{sp}: no losing event in {len(v)} (check the data before believing it)")
+            if len(set(round(x, 9) for x in v)) < max(1, len(v) // 4):
+                warnings.append(f"{h}/{sp}: only {len(set(round(x, 9) for x in v))} distinct values in {len(v)} rows")
+    return {"rows": len(rows), "unique": len(set(keys)), "per_split": per_split, "problems": problems,
+            "warnings": warnings, "ok": not problems}
+
+
 def judge(rows: list, horizons: list, bounds: dict, cost_extra: float = 0.0, seed: int = 7, pick_trim: int = 0) -> dict:
     """rows: [{'ts', 'symbol', 'venue', 'ret': {h: {'net': x}}}]. Pick the horizon with the best train mean, then
     report validation mean / block p (cluster = UTC day) and test mean, plus the result without the best 1 and 5 events."""
     rng = random.Random(seed)
+    check = integrity(rows, horizons, bounds)
 
     def vals(split, h):
         r = [x for x in rows if split_of(x["ts"], bounds) == split and h in x["ret"]]
@@ -159,9 +193,12 @@ def judge(rows: list, horizons: list, bounds: dict, cost_extra: float = 0.0, see
             t[split] = {"n": len(v), "mean": round(sum(v) / len(v), 5) if v else None,
                         "p": round(block_bootstrap_p(v, k, rng), 4) if v else None}
         table[h] = t
+    if not check["ok"]:
+        return {"table": table, "pick": None, "integrity": check,
+                "verdict": "invalid data: " + "; ".join(check["problems"])}
     train_ok = [h for h in horizons if table[h]["train"]["mean"] is not None]
     if not train_ok:
-        return {"table": table, "pick": None, "verdict": "no data"}
+        return {"table": table, "pick": None, "verdict": "no data", "integrity": check}
     def train_score(h):                 # pick_trim > 0: mean without the best pick_trim train events (L1c rule)
         v, _ = vals("train", h)
         v = sorted(v)[:-pick_trim] if pick_trim and len(v) > pick_trim else v
@@ -180,7 +217,7 @@ def judge(rows: list, horizons: list, bounds: dict, cost_extra: float = 0.0, see
               and all(x > 0 for x in robust.values())
               and (test.get("mean") is None or test["mean"] > 0))
     killed = val["mean"] is None or val["mean"] <= 0 or val["p"] > 0.2 or any(x <= 0 for x in robust.values())
-    return {"table": table, "pick": pick, "robust": robust,
+    return {"table": table, "pick": pick, "robust": robust, "integrity": check,
             "verdict": "passed" if passed else ("killed" if killed else "inconclusive")}
 
 
