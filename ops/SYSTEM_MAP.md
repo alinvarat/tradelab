@@ -14,6 +14,7 @@
 | ออปชันแบบเดินหน้า | `research/studies/options_forward.py`, `core/options_forward.py` | Actions job `options` | จ.–ศ. 15:00 UTC | branch `data/options-forward` | `git show origin/data/options-forward:options_forward_summary.json` |
 | ข่าวงบแบบเดินหน้า | `run.py llm_earnings_forward` | Actions job `forward` | อาทิตย์ 03:00 UTC | branch `data/llm-earnings` | ไฟล์ใน branch นั้น |
 | ด่านคัดกรองย้อนหลัง | `research/studies/run.py` (`STUDIES`), `core/screens.py` | Actions job `study` | สั่งรันเองเท่านั้น | artifact `study-<name>` | `gh run download <id> -n study-<name>` |
+| ด่านคัดกรองแบบแบ่ง shard | `run.py` (`rows_<study>`, `summarize_<study>`), `research/studies/sharding.py`, `binance_vision.py` | `.github/workflows/research_sharded.yml` (plan → shard ×N → merge) | สั่งรันเองเท่านั้น (`gh workflow run research_sharded.yml -f study=<name> -f shards=20`) | artifact `part-<study>-<i>`, `study-<study>` | `gh run download <id> -n study-<study>` |
 | อื่นๆ บน Kuber | autotrader, hunter, buzz, news archive, DVOL, steward | Kuber | ตามโค้ด | volume | `/healthz` |
 
 - **Deploy:** push เข้า `main` จะรัน `.github/workflows/kuber.yml` (Test แล้ว Deploy) ถ้าล้มที่ฝั่ง Kuber ให้ทำตาม RUNBOOK ข้อ 6.1
