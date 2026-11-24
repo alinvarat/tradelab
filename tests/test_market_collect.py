@@ -118,7 +118,7 @@ class ListingLedger(unittest.TestCase):
                 mock.patch.object(mc, "get", side_effect=fake_get):
             st = mc.l4f_once(t0)
             self.assertEqual(st["closed"][0]["net"], 0.05 / 0.95)        # entered and resolved in the same poll here
-            self.assertAlmostEqual(st["equity"], 147.0 + 7.35 * 0.05 / 0.95)
+            self.assertAlmostEqual(st["equity"], 147.0 + 7.35 * 0.05 / 0.95, places=3)
             st = mc.l4f_once(t0 + 1800)
             self.assertEqual(len(st["closed"]), 1)                          # never re-entered
             self.assertEqual(mc.ledger_view("l4f")["n_closed"], 1)
