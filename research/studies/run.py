@@ -1183,7 +1183,39 @@ def study_l6_smallcap_insider(_symbols, max_symbols=1500, workers=6):
             "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L6_COST, pick_trim=5)}
     return summ, rows
 
-STUDIES = {"l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
+
+def study_l2_unlocks(_symbols, workers=6):
+    """Pre-registered in RESULTS.md 'L2 screen': short around cliff unlocks >= 1% of circulating supply."""
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime, timezone
+    from core import screens as sc
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2024), T(2025)), "validation": (T(2025), T(2026)), "test": (T(2026), T(2026, 11))}
+    idx = (_get_json("https://defillama-datasets.llama.fi/emissionsIndex", timeout=120) or {}).get("data") or []
+    events = [e for entry in idx for e in sc.unlock_events(entry, T(2024), T(2026, 10, 20))]
+    log(f"L2 tokens {len(idx)}, events {len(events)}")
+
+    def one(e):
+        start = e["ts"] - 20 * 86400
+        for venue, fn in (("binance", lambda sy: _binance_bars(sy, start, "1d", 40)),
+                          ("kucoin", lambda sy: _kucoin_bars(sy, start, "1day", 86400, 40))):
+            d1 = fn(e["symbol"])
+            if len(d1) >= 25:
+                ret = sc.unlock_short_returns(e["ts"], d1, fn("BTC"))
+                if ret:
+                    return {**e, "kind": "unlock", "price_venue": venue, "split": sc.split_of(e["ts"], bounds), "ret": ret}
+        return None
+    with ThreadPoolExecutor(workers) as ex:
+        rows = [r for r in ex.map(one, events) if r]
+    hs = list(sc.L2_WINDOWS)
+    summ = {"tokens": len(idx), "events": len(events), "rows": len(rows),
+            "by_venue": {v: sum(1 for r in rows if r["price_venue"] == v) for v in ("binance", "kucoin")},
+            "per_month": round(len(rows) / 34, 2),
+            "base": sc.judge(rows, hs, bounds, pick_trim=5),
+            "double_cost": sc.judge(rows, hs, bounds, cost_extra=sc.L2_FEES + sc.L2_FUNDING_DAY * 21, pick_trim=5)}
+    return summ, rows
+
+STUDIES = {"l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4}
 
 
 def brief(summ, prefix=""):

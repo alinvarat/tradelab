@@ -193,3 +193,11 @@ Spec `ops/lines/L6_smallcap_insider.md`; code `core.screens.insider_rows`, study
 - Returns: open to close after 5 and 20 sessions, minus IWM over the same window, 1% round trip; double cost reported.
 - Splits: train 2019-2022, validation 2023-2024, test 2025-2026-10. Trimmed pick on train, data gate, pass/kill as in L1c.
 - **Run 1 (2026-11-24, Actions 45416703411): killed.** Data gate ok: 3,857 rows, 3,857 unique, train 1,994 / validation 1,047 / test 816, no warnings. 31,399 qualifying purchases at 3,289 issuers; 1,500 issuers priced (seeded sample). Trimmed pick h5: train +0.3% (p 0.18), validation -0.4% (p 0.92), test +0.3%. h20: validation +1.0% (p 0.09), test +0.2%. Double cost: negative everywhere. No usable edge after costs.
+
+## L2 screen: short around large cliff token unlocks (pre-registered 2026-11-24, before any price data was pulled)
+Spec `ops/lines/L2_unlocks.md`; data source found for #88: `https://defillama-datasets.llama.fi/emissionsIndex` (free; `api.llama.fi` needs a paid plan). Code `core.screens.unlock_events`, `unlock_short_returns`, study `l2_unlocks`.
+- Events: cliff unlocks (`unlockEvents[].summary.totalTokensCliff`) from 2024-01-01 to 2026-10-20 whose size is >= 1% of the token's current circulating supply (current, not point-in-time: a known bias that overstates old unlocks' size relative to supply then).
+- Price: daily closes, Binance spot (`data-api.binance.vision`) else KuCoin, BTC on the same venue. Windows: short from day -14 to +7 (the spec), -7 to 0, and 0 to +7 relative to the unlock day.
+- Return: -(coin - BTC) minus 0.2% fees and assumed funding 0.09% a day (0.03% per 8 h paid by the short; real funding is not fetched). Double cost adds the same again.
+- Splits 2024 / 2025 / 2026, trimmed pick, data gate and pass/kill as in L1c.
+- Result: pending.

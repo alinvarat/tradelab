@@ -176,7 +176,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_8k_other, probe_options, polymarket_llm, probe_llm_cost, pit_swing, news_v2, l1_listings, l1c_binance_notices, l1e_binance_delist, l1g_alpha_remove, l4_polymarket_longshot, l3_smallcap_news, l6_smallcap_insider]
+        study: [tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_8k_other, probe_options, polymarket_llm, probe_llm_cost, pit_swing, news_v2, l1_listings, l1c_binance_notices, l1e_binance_delist, l1g_alpha_remove, l4_polymarket_longshot, l3_smallcap_news, l6_smallcap_insider, l2_unlocks]
     steps:
       - name: Check out repository
         if: inputs.study == 'all' || inputs.study == matrix.study

@@ -217,5 +217,24 @@ class Insider(unittest.TestCase):
         self.assertAlmostEqual(rows[0]["ret"]["h5"]["net"], 0.10 - 0.01)
 
 
+class Unlocks(unittest.TestCase):
+    def test_large_cliffs_only(self):
+        entry = {"tokenPrice": [{"symbol": "foo"}], "circSupply": 1000, "protocolSlug": "foo",
+                 "unlockEvents": [{"timestamp": 100, "summary": {"totalTokensCliff": 50}},
+                                  {"timestamp": 200, "summary": {"totalTokensCliff": 5}},
+                                  {"timestamp": 10_000, "summary": {"totalTokensCliff": 50}}]}
+        ev = sc.unlock_events(entry, 0, 1000)
+        self.assertEqual([(e["symbol"], e["ts"], e["frac"]) for e in ev], [("FOO", 100, 0.05)])
+
+    def test_short_return_net_of_btc_fees_and_funding(self):
+        day = 86400
+        ts = 30 * day
+        coin = [(k * day, 100.0 if k < 30 else 80.0) for k in range(60)]
+        btc = [(k * day, 50.0) for k in range(60)]
+        r = sc.unlock_short_returns(ts, coin, btc)
+        self.assertAlmostEqual(r["pre14_post7"]["net"], 0.20 - 0.002 - 0.0009 * 21)
+        self.assertAlmostEqual(r["pre7_0"]["net"], 0.20 - 0.002 - 0.0009 * 7)   # the close of day 30 is already 80
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -356,3 +356,36 @@ def insider_rows(symbol: str, bars: list, events: list, bench: dict, px=(1.0, 20
             out.append({"symbol": symbol, "market": e["accession"], "ts": b["t"], "kind": "form4_buy",
                         "value": e.get("value"), "ret": ret})
     return out
+
+
+# ------------------------------------------------------------------ L2 short around large cliff token unlocks
+L2_FUNDING_DAY, L2_FEES, L2_MIN_FRAC = 0.0009, 0.002, 0.01
+L2_WINDOWS = {"pre14_post7": (-14, 7), "pre7_0": (-7, 0), "post0_7": (0, 7)}
+
+
+def unlock_events(entry: dict, start_ts: float, end_ts: float, min_frac: float = L2_MIN_FRAC) -> list:
+    """One DefiLlama emissionsIndex entry -> cliff unlocks in [start, end) whose size is >= min_frac of the current
+    circulating supply (a known size bias: supply today, not at the event). Returns [{'symbol','ts','frac'}]."""
+    sym = ((entry.get("tokenPrice") or [{}])[0].get("symbol") or "").upper()
+    circ = entry.get("circSupply") or 0
+    out = []
+    if not sym or circ <= 0:
+        return out
+    for e in entry.get("unlockEvents") or []:
+        amt = (e.get("summary") or {}).get("totalTokensCliff") or 0
+        ts = e.get("timestamp") or 0
+        if start_ts <= ts < end_ts and amt / circ >= min_frac:
+            out.append({"symbol": sym, "ts": ts, "frac": round(amt / circ, 4), "market": entry.get("protocolSlug")})
+    return out
+
+
+def unlock_short_returns(ts: float, d1: list, bench_d1: list) -> dict:
+    """Daily closes [(open_ts, close)] -> short return minus BTC, fees and assumed funding, for each window around ts."""
+    out = {}
+    for name, (a, b) in L2_WINDOWS.items():
+        p0, p1 = close_at(d1, ts + a * 86400, 86400), close_at(d1, ts + b * 86400, 86400)
+        b0, b1 = close_at(bench_d1, ts + a * 86400, 86400), close_at(bench_d1, ts + b * 86400, 86400)
+        if p0 and p1 and b0 and b1:
+            abn = -((p1 / p0 - 1) - (b1 / b0 - 1))
+            out[name] = {"net": abn - L2_FEES - L2_FUNDING_DAY * (b - a)}
+    return out
