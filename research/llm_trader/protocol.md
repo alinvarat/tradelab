@@ -137,3 +137,6 @@ Every context carries `news_principles` (news vs no-news moves, stale news, smal
 
 ## Addendum 2026-11-24: v4.15, what the day-trading courses agree on
 `news_principles` adds the one rule the popular courses share (catalyst plus relative volume >= 2-5x before a stock is "in play") and labels their other rules as untested; sources and our own tests in `ops/knowledge/news_trading.md`. The Sykes "first red day" fade of multi-day runners is queued as screen L7.
+
+## Addendum 2026-11-24: v4.16, DeepSeek for every role
+Owner: the alternative provider (ai.thirx.com) is cheap, so every role (analysts, bull/bear, risk, pre-open, steward and the decision) now uses DeepSeek v4.1 flash 1017 there; the free OpenRouter models are used only when that provider is not configured. OpenRouter is out of credit (402 since 2026-11-24 16:59 UTC).
