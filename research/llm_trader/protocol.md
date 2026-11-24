@@ -83,3 +83,4 @@ The owner asked for efficient model use **without a budget cap and without slowi
 - Real cost per cycle is logged (`cost_usd`, `usd_today`) from OpenRouter `usage.cost`, and shown on `/api/llm_trader`, so the saving can be checked.
 - Decisions, links and pairs are tagged `v4.2`, because the prompt layout changed. v4.1 and v4.2 are not pooled without saying so.
 - No free models: none of the free OpenRouter models is a DeepSeek model, and their rate limits are below this bot's call volume.
+- 2026-11-24 (v4.2, same tag): a position review that comes due while that position's own market is closed now waits for the open. Before this, reviews of US stocks ran overnight on stale closing prices and cost full cycles. Stops and targets are unaffected. Scheduled scans and news cycles are unchanged, so crypto, FX and futures are still watched around the clock.

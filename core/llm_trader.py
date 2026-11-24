@@ -430,7 +430,9 @@ class LlmTrader:
         return ""
 
     # ---------- decision call ----------
-    def due(self, now, fresh, idle=False):
+    def due(self, now, fresh, idle=False, quotes=None):
+        """quotes (optional): a position is only reviewed while its own market is open; a review asked for while
+        the market is closed waits for the open (no new prices means nothing to review, and it costs a cycle)."""
         c = self.calls
         if c["day"] != _day(now):
             c.update(day=_day(now), n=0, usd=0.0)
@@ -440,7 +442,10 @@ class LlmTrader:
             return "new signals"
         if idle and now - c.get("last_idle", 0) >= IDLE_CALL_S:
             return "scheduled scan"
-        if any(l.get("review_at", 0) <= now for s, l in self.links.items() if s in self.acct.positions):
+        def market_open(s):
+            q = (quotes or {}).get(s)
+            return True if quotes is None or q is None else bool(q.get("open"))
+        if any(l.get("review_at", 0) <= now and market_open(s) for s, l in self.links.items() if s in self.acct.positions):
             return "position review"
         return None
 
@@ -906,7 +911,7 @@ class LlmTrader:
                     cands.append({"symbol": s, "ratio": None, "why": "top mover in its asset class"})
             cands = cands[:MAX_CANDIDATES]
             idle = any(q.get("open") for q in quotes.values())
-            trigger = self.due(now, bool(fresh or news or buz), idle)
+            trigger = self.due(now, bool(fresh or news or buz), idle, quotes)
             if trigger:
                 for s in {s for s, _ in fresh} | set(news) | set(buz):
                     self.seen.add(f"{day}:{s}")

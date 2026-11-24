@@ -173,6 +173,17 @@ class Trading(Base):
         for u in texts:
             self.assertTrue(u.startswith(shared), u[:200])
 
+    def test_position_review_waits_for_its_market_to_open(self):
+        now = time.time()
+        self.t.acct.positions["NVDA"] = object()
+        self.t.links["NVDA"] = {"review_at": now - 1}
+        self.t.calls.update(last_ts=0.0, last_idle=now)
+        self.assertIsNone(self.t.due(now, False, idle=False, quotes={"NVDA": {"open": False}}))
+        self.assertEqual(self.t.due(now, False, idle=False, quotes={"NVDA": {"open": True}}), "position review")
+        self.assertEqual(self.t.due(now, False, idle=False), "position review")      # no quotes: old behaviour
+        del self.t.acct.positions["NVDA"]
+        del self.t.links["NVDA"]
+
     def test_model_failure_is_logged_and_nothing_trades(self):
         self.t.chat = lambda s, u: ("", "no provider")
         self.t.scan(self.market(AAA=quote("AAA", move=12)))
