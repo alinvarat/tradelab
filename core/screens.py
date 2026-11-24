@@ -60,6 +60,34 @@ def upbit_listing_symbols(title: str) -> list:
     return [s for s in _paren_symbols(title) if s not in ("KRW", "BTC", "USDT")]
 
 
+_KUCOIN_SPOT_SKIP = ("futures", "copy trading", "perpetual", "tokenized stock", "xstock", "pre-market", "pre-ipo",
+                     "index", "margin", "delist", "campaign", "airdrop", "trading bot", "convert", "earn", "loan")
+
+
+def kucoin_listing_symbols(title: str) -> list:
+    """'World Premiere: infiniFi (INFI) Listed on KuCoin' -> ['INFI']. Futures, copy-trading, tokenized-stock,
+    pre-market, margin and delisting notices give []."""
+    t = title.strip()
+    low = t.lower()
+    if any(k in low for k in _KUCOIN_SPOT_SKIP) or not re.search(r"\b[Ll]ist(ed|s)?\b", t):
+        return []
+    return _paren_symbols(t)
+
+
+_BITGET_SPOT_SKIP = ("stock", "perp", "futures", "copy trading", "margin", "pre-market", "pre-ipo", "index",
+                     "tokenized", "delist", "campaign", "airdrop", "trading bot", "convert", "earn", "loan")
+
+
+def bitget_listing_symbols(title: str) -> list:
+    """'Bitget Announcement on the Listing of Cow Protocol (COW)' -> ['COW']. Futures, stock-perp, copy-trading,
+    margin and delisting notices give []."""
+    t = title.strip()
+    low = t.lower()
+    if any(k in low for k in _BITGET_SPOT_SKIP) or "list" not in low:
+        return []
+    return _paren_symbols(t)
+
+
 def close_at(bars: list, t: float, width: int):
     """bars: [(open_ts_s, close)] sorted. Close of the bar that contains t, or None when that bar is missing."""
     lo, hi = 0, len(bars) - 1
