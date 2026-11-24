@@ -302,6 +302,37 @@ class Trading(Base):
         self.assertNotIn("AAA", self.t.acct.positions)
         self.assertIn("exit_queued", self.log_kinds())
 
+    def test_missing_quote_does_not_start_a_review(self):
+        now = time.time()
+        self.t.acct.positions["NVDA"] = object()
+        self.t.links["NVDA"] = {"review_at": now - 1}
+        self.t.calls.update(last_ts=0.0, last_idle=now)
+        self.assertIsNone(self.t.due(now, False, quotes={}))
+        del self.t.acct.positions["NVDA"]
+        del self.t.links["NVDA"]
+
+    def test_no_briefing_call_without_overnight_input(self):
+        self.t.calls.update(last_idle=time.time(), overnight={})
+        with mock.patch("core.llm_trader.ny_time", return_value=(1, (9, 15), "2026-11-24")):
+            self.t.scan(self.market())
+        self.assertEqual(self.prompts, [])
+
+    def test_all_analysts_failing_stops_the_cycle(self):
+        real = self.t.chat
+        calls = []
+        def chat(s, u):
+            calls.append(s)
+            return ("", "rate limited") if s in (lt.ANALYST_NEWS, lt.ANALYST_PRICE, lt.ANALYST_MACRO) else real(s, u)
+        self.t.chat = chat
+        self.t.scan(self.market(AAA=quote("AAA", move=12)))
+        self.assertEqual(len(calls), 3)                          # only the three analysts
+        self.assertEqual(self.t.last_error, "rate limited")
+
+    def test_short_target_is_capped_below_100(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "stop_pct": 5, "target_pct": 150, "reason": "r"})
+        self.t.scan(self.market(AAA=quote("AAA", px=100, move=-12)))
+        self.assertGreater(self.t.acct.positions["AAA"].tp, 0)
+
     def test_model_failure_is_logged_and_nothing_trades(self):
         self.t.chat = lambda s, u: ("", "no provider")
         self.t.scan(self.market(AAA=quote("AAA", move=12)))

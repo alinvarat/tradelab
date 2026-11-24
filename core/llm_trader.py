@@ -510,13 +510,17 @@ class LlmTrader:
             c.update(day=_day(now), n=0, usd=0.0)
         if c["n"] >= MAX_CALLS_DAY or now - c["last_ts"] < MIN_GAP_S:
             return None
+        if not self.acct.positions and self.risk_block(now):    # cannot open anything and nothing to manage
+            return None
         if fresh:
             return "new signals"
         if idle and now - c.get("last_idle", 0) >= IDLE_CALL_S:
             return "scheduled scan"
         def market_open(s):
-            q = (quotes or {}).get(s)
-            return True if quotes is None or q is None else bool(q.get("open"))
+            if quotes is None:
+                return True
+            q = quotes.get(s)
+            return bool(q and q.get("open"))                 # a missing quote is not an open market
         if any(l.get("review_at", 0) <= now and market_open(s) for s, l in self.links.items() if s in self.acct.positions):
             return "position review"
         return None
@@ -549,9 +553,10 @@ class LlmTrader:
 
         def macro(sym, label):
             q = self.context.get(sym)
-            return {"name": label, "price": q.get("price") if q else None,
-                    "move_pct": round(q["change_pct"], 2) if q and q.get("change_pct") is not None else None,
-                    "market_open": bool(q and q.get("open"))}
+            mv = round(q["change_pct"], 2) if q and q.get("change_pct") is not None else None
+            live = bool(q and q.get("open"))
+            return {"name": label, "price": q.get("price") if q else None, "market_open": live,
+                    "move_pct": mv if live else None, "last_session_move_pct": None if live else mv}
         out = {"protocol": PROTOCOL_VERSION, "time_utc": time.strftime("%Y-%m-%d %H:%M", time.gmtime(now)),
                "market": {"spy": macro("SPY", "S&P 500 ETF"), "vix": vix["price"] if vix else None,
                           "dollar_index": macro("DX-Y.NYB", "US dollar index"), "us10y_yield": macro("^TNX", "US 10y yield"),
@@ -634,6 +639,8 @@ class LlmTrader:
         out = {}
         with ThreadPoolExecutor(3) as ex:
             replies = list(ex.map(lambda sys_: self.chat(sys_, user), (ANALYST_NEWS, ANALYST_PRICE, ANALYST_MACRO)))
+        self._analyst_errors = [model for raw, model in replies if not raw]
+        self._analysts_all_failed = len(self._analyst_errors) == len(replies)
         for name, (raw, model) in zip(("news", "price", "macro"), replies):
             out[name] = parse_arguments(raw, syms)
             self.record("analyst", name=name, model=model, notes=out[name], raw=raw[:2000], error=None if raw else model)
@@ -699,6 +706,14 @@ class LlmTrader:
         spent0 = ai_news.spend()["total_usd"]
         if ctx["candidates"]:
             ctx["analysts"] = self.analysts(ctx)
+            if getattr(self, "_analysts_all_failed", False):  # provider down or rate-limited: do not fan out further
+                err = (self._analyst_errors or ["model unavailable"])[0]
+                with self.lock:
+                    self.last_error = err
+                    self.record("call", trigger=trigger, model=None, seconds=0, calls_today=calls_today, context=ctx,
+                                raw="", error=err, rejected=[], market_view="",
+                                note="all analyst calls failed; debate and decision not called")
+                return
             ctx.update(self.debate(ctx))
         shared = {"market": ctx["market"], "candidates": ctx["candidates"]}
         user = CACHE_HEADER + json.dumps({**shared, **{k: v for k, v in ctx.items() if k not in shared}})
@@ -798,6 +813,8 @@ class LlmTrader:
             return {"status": "skipped", "why": "limits"}
         margin = notional / lev
         qty = notional / ref
+        if side < 0 and target:
+            target = min(target, 95.0)                  # a short's target must stay above zero
         stop_px = ref * (1 - side * stop)
         target_px = ref * (1 + side * target / 100) if target else None
         self.acct.on_quote(self._q(q))                  # a market order must fill on today's quote, not the last one the account saw
@@ -961,6 +978,7 @@ class LlmTrader:
             link = self.links.get(sym)
             if link is not None:
                 link["exit_at_open"] = reason
+            self.pending.pop(sym, None)                   # no scale-in may fill after an exit was asked for
             self.record("exit_queued", symbol=sym, reason=reason, why="market closed: sells at the next open")
             return {"status": "queued for the open"}
         _, err = self.acct.close(sym, reason=reason)
@@ -987,8 +1005,11 @@ class LlmTrader:
                     self._sell(s, "safety exit (180 days)", now)
             for s, link in list(self.links.items()):     # queued market-on-open exits
                 if link.get("exit_at_open") and s in self.acct.positions and (quotes.get(s) or {}).get("open"):
-                    reason = link.pop("exit_at_open")
-                    self._sell(s, f"{reason} (at the open)", now)
+                    self.pending.pop(s, None)
+                    self.acct.on_quote(self._q(quotes[s]))
+                    out = self._sell(s, f"{link['exit_at_open']} (at the open)", now)
+                    if out.get("status") == "closed":
+                        link.pop("exit_at_open", None)
             self._log_closed_trades()
             self._check_pending(now, quotes)
             self._charge_financing(now)
@@ -1023,8 +1044,9 @@ class LlmTrader:
             wd, hm, ny_day = ny_time(now)
             brief = self.calls.get("briefing") or {}
             us_open = is_open("SPY")
-            opening = (us_open and brief.get("date") == ny_day and not brief.get("used")
-                       and brief.get("watchlist"))
+            spy_regular = us_open and (quotes.get("SPY") or {}).get("session") in (None, "regular")
+            opening = (spy_regular and brief.get("date") == ny_day and not brief.get("used")
+                       and any(is_open(w["symbol"]) for w in brief.get("watchlist") or []))
             cands = []
             if opening:                                     # first look at the open starts from the prepared watchlist
                 cands = [{"symbol": w["symbol"], "ratio": None, "why": f"pre-open watchlist ({w['bias']}): {w['why']}"[:120]}
@@ -1063,7 +1085,8 @@ class LlmTrader:
                 else:
                     self.calls["last_sched"] = snap
             make_brief = (wd < 5 and PREOPEN_WINDOW_ET[0] <= hm <= PREOPEN_WINDOW_ET[1]
-                          and brief.get("date") != ny_day and not trigger)
+                          and brief.get("date") != ny_day and not trigger
+                          and bool(night or self.acct.positions))           # nothing new overnight: no briefing call
             if make_brief:
                 self.calls["briefing"] = {"date": ny_day, "pending": True}
                 brief_input = {"time_new_york": f"{ny_day} {hm[0]:02d}:{hm[1]:02d}",
