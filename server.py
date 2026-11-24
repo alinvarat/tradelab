@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from core.universe import TICKERS
-from core import buzz, dvol_collect, event_trader, llm_trader, market_collect, news_archive, news_latency, steward
+from core import buzz, dvol_collect, event_trader, event_trader_broad, llm_trader, market_collect, news_archive, news_latency, steward
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 from core.storage import write_json_atomic
@@ -59,6 +59,7 @@ status = {"last_poll": 0, "errors": {}}
 auto: autotrader.AutoTrader | None = None
 hunt: hunter.Hunter | None = None
 evt: event_trader.EventTrader | None = None
+evb: event_trader_broad.BroadEventTrader | None = None
 llm: llm_trader.LlmTrader | None = None
 buzzmon: buzz.BuzzMonitor | None = None
 
@@ -347,6 +348,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200, hunt.view())
             if p == "events":
                 return self._send(200, evt.view())
+            if p == "events_broad":
+                return self._send(200, evb.view() if evb else {"disabled": True})
             if p == "llm_log":
                 lines = llm_trader.read_log_tail(llm_trader.LOG)
                 return self._send(200, llm_trader.build_cycles(lines, int(q.get("n", 40))))
@@ -665,6 +668,8 @@ if __name__ == "__main__":
     start("hunter", hunter.loop, hunt)
     evt = event_trader.EventTrader()
     start("event_trader", event_trader.loop, evt)
+    evb = event_trader_broad.BroadEventTrader()
+    start("event_trader_broad", event_trader_broad.loop, evb)
     if os.environ.get("TRADELAB_BUZZ", "1") == "1":  # read-only analysis; on by default
         buzzmon = buzz.BuzzMonitor()
         start("buzz", buzz.loop, buzzmon)
