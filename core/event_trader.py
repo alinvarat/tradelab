@@ -43,6 +43,7 @@ class EventTrader:
         self.state_path, self.log_path = Path(state_path), Path(log_path)
         self.lock = threading.RLock()
         self.rng = random.Random(rng_seed)
+        self.tickers = list(TICKERS)
         self.pool = ThreadPoolExecutor(10)
         self.avg_vol: dict[str, tuple[float, float]] = {}
         self.last_scan, self.last_error = 0.0, None
@@ -136,9 +137,9 @@ class EventTrader:
                     return data.quote_fast(s, ttl=1.5)
                 except Exception:  # noqa: BLE001
                     return None
-            got = list(self.pool.map(get, TICKERS))
-            quotes = {s: q for s, q in zip(TICKERS, got) if q}
-            if sum(q is None for q in got) > 0.3 * len(TICKERS):   # rate-limited or source down: back off, do not hammer
+            got = list(self.pool.map(get, self.tickers))
+            quotes = {s: q for s, q in zip(self.tickers, got) if q}
+            if sum(q is None for q in got) > 0.3 * len(self.tickers):   # rate-limited or source down: back off, do not hammer
                 self.last_error = "quote source failing; backing off 30 s"
                 time.sleep(30)
             for extra in ("SPY", "^VIX"):  # market context only; never traded, never counted as shocks
