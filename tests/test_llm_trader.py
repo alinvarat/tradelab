@@ -256,11 +256,12 @@ class Trading(Base):
     def test_desk_stats_group_outcomes_by_source_and_action(self):
         self.t.cands = ([{"symbol": "A", "why": "recent linked headline", "action": "buy", "out": {"86400": 0.02}}] * 3
                         + [{"symbol": "B", "why": "recent linked headline", "action": "short", "out": {"86400": 0.03}}] * 2
-                        + [{"symbol": "C", "why": "new shock", "action": "hold", "out": {}}])
+                        + [{"symbol": "C", "why": "new shock", "action": "hold", "out": {"3600": -0.01}}])
         st = self.t.desk_stats(min_n=1)
-        self.assertEqual(st["news/buy"], {"n": 3, "mean_pct": 2.0, "hit": 1.0})
-        self.assertEqual(st["news/short"]["mean_pct"], -3.0)          # the stock beat SPY: the short lost
-        self.assertNotIn("shock/hold", st)                              # no outcome yet
+        self.assertEqual(st["news/buy/1d"], {"n": 3, "mean_pct": 2.0, "hit": 1.0})
+        self.assertEqual(st["news/short/1d"]["mean_pct"], -3.0)       # the stock beat SPY: the short lost
+        self.assertNotIn("shock/hold/1d", st)                           # no outcome yet
+        self.assertEqual(st["shock/hold/1h"]["mean_pct"], -1.0)
         self.assertEqual(self.t.desk_stats(), {})                       # nothing reaches 5 outcomes
 
     def test_scheduled_scan_needs_a_meaningful_mover(self):
