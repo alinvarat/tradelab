@@ -1,0 +1,42 @@
+{
+ "verdict": {
+  "n": 100,
+  "hit": 0.41,
+  "mean_ret": 0.15528310707196652,
+  "mean_ret_stress": 0.0807534269627244,
+  "mean_diff": 0.17812179099345798,
+  "n_paired": 98,
+  "p_ret_block": 0.17091454272863568,
+  "p_diff_block": 0.17391304347826086,
+  "brier_model": 0.25124102090001,
+  "brier_market": 0.2320071125,
+  "verdict": "no edge shown"
+ },
+ "markets_priced": 219,
+ "answered": 219,
+ "models_served": [
+  "deepseek/deepseek-v4.1-flash-1017"
+ ],
+ "account_10pct": {
+  "end_equity": 0.0,
+  "worst_drawdown": -1.0,
+  "months_3x": 0,
+  "month_end": {
+   "2026-10": 416.83148307351195,
+   "2026-11": 0.0
+  }
+ },
+ "account_20pct": {
+  "end_equity": 0.0,
+  "worst_drawdown": -1.0,
+  "months_3x": 1,
+  "month_end": {
+   "2026-10": 560.6989823435069,
+   "2026-11": 0.0
+  }
+ },
+ "study": "polymarket_llm",
+ "seconds": 575.5,
+ "n_symbols": 148,
+ "run_utc": "2026-11-24T04:54:02Z"
+}
