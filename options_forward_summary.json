@@ -5,19 +5,26 @@
  },
  "open": 0,
  "closed": 0,
+ "late_exits": 0,
  "calls": 0,
  "gaps": 0,
  "account_whole_contracts": {
   "end_equity_usd": 147.0,
   "taken": 0,
   "unaffordable": 0,
-  "month_end_equity": {}
+  "month_end_equity": {},
+  "months_3x": 0,
+  "worst_drawdown": 0.0,
+  "affordable_at_start_stake": 0
  },
  "account_fractional": {
   "end_equity_usd": 147.0,
   "taken": 0,
   "unaffordable": 0,
-  "month_end_equity": {}
+  "month_end_equity": {},
+  "months_3x": 0,
+  "worst_drawdown": 0.0,
+  "affordable_at_start_stake": 0
  },
- "updated_utc": "2026-11-24T04:20:17Z"
+ "updated_utc": "2026-11-24T04:40:01Z"
 }
