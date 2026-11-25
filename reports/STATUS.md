@@ -8,11 +8,19 @@
 
 ## ด่วน (2026-11-25 line/h1_basis_snapback)
 - **H1 (perp ต่ำกว่า index แล้วเด้งกลับ + ฝั่งตรงข้าม):** ลงทะเบียนกติกาใน `research/studies/RESULTS.md` แล้ว (ก่อนดึงข้อมูล); โค้ด `core.screens.basis_snap_rows` + `rows_/summarize_h1_basis_snapback` ใน `run.py`; เทสต์ `tests/test_h1_basis.py`; ยังไม่ได้รัน → หลัง merge: `gh workflow run research_sharded.yml -f study=h1_basis_snapback -f shards=20`
+## ด่วน (2026-11-25 ผลด่าน H1-H4 และ factory_crypto_2)
+- **ผลทั้ง 5 ด่านลง `research/studies/RESULTS.md` แล้ว** (PR #173, #172, #170, #174, #164 merge เข้า main; ตัวเลขจาก summary JSON ของ Actions): ไม่มีเส้นไหนผ่าน ไม่มีอะไรให้ทดสอบเดินหน้า
+- **H1 `long_discount` = inconclusive** (run 45515874060): 47,964 เหตุการณ์; validation +0.614% p 0.0005, ต้นทุน 2 เท่า +0.414%, แต่ test -0.075% (n 35,018) และเฉลี่ยรายปีลดจาก 2024 +1.02% → 2025 +0.06% → 2026 -0.16%; control ออกเมื่อครบ 4 ชม. validation +1.19% test +0.20% p 0.34 → edge หายในช่วง test จึงไม่ทดสอบเดินหน้า เว้นแต่มีสมมติฐานใหม่ที่ลงทะเบียนก่อน; `short_premium` killed (validation -0.724%)
+- **H2 killed ทั้งสองฝั่ง** (run 45515954945): long d7 validation -1.519% (p 0.945), short d1 validation -0.924%, ต้นทุน 2 เท่าติดลบทั้งคู่
+- **H3 killed** (run 45515911822): market making แบบ passive ขาดทุนสุทธิทุกช่วงและทุกระยะ k (k8 validation -0.343 clip ต่อ symbol-day, p 1.0; แย่กว่าวันที่กลับเวลา -0.143)
+- **H4 killed** (run 45515772654): ทุกการถือ (15/30/60 นาที) ติดลบทุกช่วง (m30 validation -0.265%); มีเหตุการณ์ 1.84 ครั้งต่อสัปดาห์ น้อยกว่าเกณฑ์ 3
+- **factory_crypto_2 รอบ 2 killed 0/7** (run 45518490639): validation เฉลี่ยรายวันติดลบทั้ง 7 กติกา (A1 -0.0035%, A6 -1.34%); ครอบคลุมข้อมูลครบแล้ว (898 perps มีแท่ง, ดาวน์โหลดล้ม 0) ผลเท่ารอบ 1
 
 ## ด่วน (2026-11-25 ops/sharded-runner)
 - **ตัวรันแบบแบ่ง shard:** workflow `research_sharded.yml` กระจายหนึ่งด่านไปหลาย job พร้อมกัน (ค่าเริ่ม 20) แล้วรวมผล; ด่านที่จะใช้ต้องมี `rows_<study>(symbols_slice)` และ `summarize_<study>(all_rows)` ใน `run.py`; ยังไม่ได้ทดสอบบน Actions จริง (workflow_dispatch ใช้ได้หลัง merge เข้า main) → หลัง merge ให้รัน `study=selftest_shard` ก่อน
 
 ## ด่วน (2026-11-24 23:30 UTC)
+- **factory_crypto_3 (2026-11-25, run 45524122159):** กติกา trend/event 10 ข้อบน perp สภาพคล่องสูง 6 ตัว ไม่ผ่านทั้งหมด (validation p ดีสุด 0.17 เทียบเกณฑ์ 0.005); เดือน 3x มี 2 เดือนที่ 8x แต่ median 0.95x จึงเป็นความแปรปรวน ปิดตระกูลนี้ รายละเอียดใน RESULTS.md
 - **เครดิต DeepSeek หมด:** probe บน Actions (run 45509191649) เรียก `api.deepseek.com` model `deepseek-flash` ได้ HTTP 402 Payment Required ทุกครั้ง → N1 news_v3 สองรอบไม่ได้เรียกโมเดลเลย (v3 = 0 เทรด, ผลใช้ไม่ได้) และบอท DeepSeek บน Kuber ก็เรียกไม่ได้เช่นกัน; ต้องให้เจ้าของเติมเครดิตหรือเลือกโมเดลอื่นด้วย protocol ใหม่
 - **ผลวันนี้:** L12 ผ่านบนทุกเหรียญ แต่ L12b (เฉพาะเหรียญที่ short ได้จริง + funding จริง) ไม่ผ่าน; factory ชุด 1 ไม่ผ่านทั้ง 11 กติกา; workflow ค้นไอเดีย 4 มุมกำลังเขียน `factory_crypto_2` และ `factory_us_pit_1`
 
