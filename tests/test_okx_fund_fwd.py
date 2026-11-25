@@ -8,7 +8,7 @@ from core import okx_fund_fwd as of
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTO = ROOT / "research" / "studies" / "protocol_fundwin_okx_fwd_20261125.md"
-T = 1_800_000_000 // of.DAY8 * of.DAY8
+T = 1_800_000_000 // of.GRID * of.GRID
 
 
 class Lock(unittest.TestCase):
@@ -47,8 +47,9 @@ class Parsing(unittest.TestCase):
 
     def test_next_settlement(self):
         self.assertEqual(of.next_settlement(T - 1800), T)
-        self.assertEqual(of.next_settlement(T - 30), T + of.DAY8)            # under a minute of lead: take the next one
-        self.assertEqual(of.next_settlement(T + 10), T + of.DAY8)
+        self.assertEqual(of.next_settlement(T - 30), T + of.GRID)            # under a minute of lead: take the next one
+        self.assertEqual(of.next_settlement(T + 10), T + of.GRID)
+        self.assertEqual(of.GRID, 14400)
 
 
 class Trades(unittest.TestCase):
@@ -80,8 +81,8 @@ class Trades(unittest.TestCase):
         self.assertAlmostEqual(tb["net"], (10.5 / 10.1 - 1) - 0.001 + 0.0061)
 
     def test_control_is_deterministic_and_balanced(self):
-        sides = [of.control_side(T + k * of.DAY8, f"I{k}-USDT-SWAP", "m1_t0.005") for k in range(400)]
-        self.assertEqual(sides, [of.control_side(T + k * of.DAY8, f"I{k}-USDT-SWAP", "m1_t0.005") for k in range(400)])
+        sides = [of.control_side(T + k * of.GRID, f"I{k}-USDT-SWAP", "m1_t0.005") for k in range(400)]
+        self.assertEqual(sides, [of.control_side(T + k * of.GRID, f"I{k}-USDT-SWAP", "m1_t0.005") for k in range(400)])
         self.assertTrue(150 < sum(1 for s in sides if s > 0) < 250)
 
     def trades(self, model, ctrl, n=3):
@@ -150,11 +151,23 @@ class Runner(unittest.TestCase):
             self.assertEqual(len((Path(td) / "preds.jsonl").read_text().splitlines()), 1)      # append-only, nothing duplicated
 
 
+class Addendum(unittest.TestCase):
+    ADD = ROOT / "research" / "studies" / "protocol_fundwin_okx_fwd_addendum_20261125.md"
+
+    def test_addendum_unchanged_and_names_the_grid(self):
+        self.assertEqual(hashlib.sha256(self.ADD.read_bytes()).hexdigest(), self.ADD.with_suffix(".sha256").read_text().strip(),
+                         "the addendum is locked; write a new dated one instead")
+        text = self.ADD.read_text()
+        self.assertIn("4-hour grid", text)
+        self.assertIn("1795622400", text)                     # the probe's evidence
+        self.assertEqual(of.GRID, 14400)
+
+
 class KeeperAndWorkflow(unittest.TestCase):
     def test_keeper_dispatches_the_ledger(self):
         k = (ROOT / ".github" / "workflows" / "keeper.yml").read_text()
         self.assertIn("fundwin_okx.yml", k)
-        self.assertIn("23:30|07:30|15:30", k)
+        self.assertIn("03:30|07:30|11:30|15:30|19:30|23:30", k)
         w = (ROOT / ".github" / "workflows" / "fundwin_okx.yml").read_text()
         self.assertIn("data/okx-fwd", w)
         self.assertNotIn("\t", w)
