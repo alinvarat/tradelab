@@ -177,3 +177,90 @@ def load_bars(paths, sym):
                 D[c].append(v / dv)
     D["bad"] = bad
     return D
+
+
+# ------------------------------------------------------------------ HistData.com source (tick quotes -> 1m bid/ask bars)
+HD_BASE = "https://www.histdata.com/download-free-forex-historical-data/?/ascii/tick-data-quotes/"
+HD_EST_TO_UTC = 5 * 3600                  # HistData stamps are EST without DST (UTC-5 all year)
+
+
+def hd_month(sym, y, m, tries=4):
+    """-> (REC bytes of 1-minute bid/ask bars for the month, status 'ok' | 'closed' | 'fail'). Built from the free tick-quote file
+    (bid, ask, ms stamps): one zip per month, form token scraped from the page. 'closed' = the page has no file (month not released)."""
+    import io
+    import re
+    import zipfile
+    from urllib.parse import urlencode
+    page = f"{HD_BASE}{sym.lower()}/{y}/{m}"
+    dv = DIV.get(sym, 1e5)
+    for k in range(tries):
+        try:
+            with urlopen(Request(page, headers=UA), timeout=60) as r:
+                t = r.read().decode("utf8", "replace")
+            form = {}
+            for nm in ("tk", "date", "datemonth", "platform", "timeframe", "fxpair"):
+                mm = re.search(r'name="%s" id="%s" value="([^"]*)"' % (nm, nm), t)
+                form[nm] = mm.group(1) if mm else ""
+            if not form["tk"]:
+                return b"", "closed"
+            hdr = dict(UA)
+            hdr.update({"Referer": page, "Content-Type": "application/x-www-form-urlencoded"})
+            with urlopen(Request("https://www.histdata.com/get.php", data=urlencode(form).encode(), headers=hdr), timeout=300) as r:
+                zbytes = r.read()
+            z = zipfile.ZipFile(io.BytesIO(zbytes))
+            name = [n for n in z.namelist() if n.lower().endswith(".csv")][0]
+            out, bases = [], {}
+            cur = None
+            bo = bh = bl = bc = ao = ah = al = ac = 0
+            with z.open(name) as f:
+                for line in f:
+                    p = line.split(b",")
+                    if len(p) < 3:
+                        continue
+                    s = p[0]
+                    ds = s[:8]
+                    base = bases.get(ds)
+                    if base is None:
+                        base = bases[ds] = int(datetime(int(ds[:4]), int(ds[4:6]), int(ds[6:8]), tzinfo=timezone.utc).timestamp())
+                    mn = base + int(s[9:11]) * 3600 + int(s[11:13]) * 60 + HD_EST_TO_UTC
+                    bid, ask = float(p[1]), float(p[2])
+                    if bid <= 0 or ask < bid:
+                        continue
+                    if mn != cur:
+                        if cur is not None:
+                            out.append(REC.pack(cur, round(bo * dv), round(bh * dv), round(bl * dv), round(bc * dv),
+                                                round(ao * dv), round(ah * dv), round(al * dv), round(ac * dv)))
+                        cur, bo, bh, bl, bc, ao, ah, al, ac = mn, bid, bid, bid, bid, ask, ask, ask, ask
+                    else:
+                        bh, bl, bc = max(bh, bid), min(bl, bid), bid
+                        ah, al, ac = max(ah, ask), min(al, ask), ask
+            if cur is not None:
+                out.append(REC.pack(cur, round(bo * dv), round(bh * dv), round(bl * dv), round(bc * dv),
+                                    round(ao * dv), round(ah * dv), round(al * dv), round(ac * dv)))
+            return b"".join(out), ("ok" if out else "closed")
+        except Exception as e:  # noqa: BLE001
+            log("hd_month", sym, y, m, "try", k, type(e).__name__, str(e)[:100])
+            time.sleep(5 * (k + 1))
+    return b"", "fail"
+
+
+def fetch_range_hd(sym, start, end, path, workers=2):
+    """Chunk of whole months from HistData (the months touching [start, end]); rows are sorted by minute; same file format as fetch_range."""
+    from concurrent.futures import ThreadPoolExecutor
+    months, y, m = [], start.year, start.month
+    while (y, m) <= (end.year, end.month):
+        months.append((y, m))
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    with ThreadPoolExecutor(workers) as ex:
+        res = list(ex.map(lambda ym: hd_month(sym, *ym), months))
+    n = {"days": len(months), "ok": 0, "closed": 0, "fail": 0, "failed_days": []}
+    buf = []
+    for ym, (b, st) in zip(months, res):
+        n[st] += 1
+        if st == "fail":
+            n["failed_days"].append("%d-%02d" % ym)
+        buf.append(b)
+        log(sym, ym, st, len(b) // REC.size, "bars")
+    with gzip.open(path, "wb", 6) as f:
+        f.write(b"".join(buf))
+    return n

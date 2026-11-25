@@ -22,7 +22,7 @@ def quarters(y0, q0):
 
 
 def main(mode):
-    pilot = mode == "pilot"
+    pilot = mode.startswith("pilot")
     syms = ["XAUUSD"] if pilot else SYMS
     qs = quarters(2023, 4) if pilot else quarters(2018, 1)
     years = [2023, 2024, 2025, 2026] if pilot else list(range(2018, 2027))
