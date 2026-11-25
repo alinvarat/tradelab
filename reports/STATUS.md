@@ -3,6 +3,9 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-25 line/thin-a)
+- **Thin A (ตลาดคริปโตรอง KuCoin/MEXC/Bitget/Gate):** กติกา 6 ข้อ ลงทะเบียนก่อนดึงข้อมูลใน RESULTS.md ("Thin A"); run 45523510003: A1/A2 (ซื้อเหรียญลิสต์ใหม่) ผ่านตามตัวเลขแต่**ไม่รับ** เพราะกำไรมาจาก MEXC เหรียญมีมไม่กี่ตัว (ตัดบนสุด 5% แล้วติดลบ), A3/A6 inconclusive, A4/A5 ตัด. ไม่มีข้อมูลเหรียญที่ถูก delist (ทุกที่ไม่ให้) จึงเปิดตัวเก็บแบบเดินหน้า F1-F3 (job `thin_a`, branch `data/thin-a-forward`, ตัวจับเวลา systemd ฝั่งเครื่องเจ้าของ `tradelab-dispatch-thin_a_forward.timer` ทุกชั่วโมงที่ :23)
+
 ## ด่วน (2026-11-25 line/h1_basis_snapback)
 - **H1 (perp ต่ำกว่า index แล้วเด้งกลับ + ฝั่งตรงข้าม):** ลงทะเบียนกติกาใน `research/studies/RESULTS.md` แล้ว (ก่อนดึงข้อมูล); โค้ด `core.screens.basis_snap_rows` + `rows_/summarize_h1_basis_snapback` ใน `run.py`; เทสต์ `tests/test_h1_basis.py`; ยังไม่ได้รัน → หลัง merge: `gh workflow run research_sharded.yml -f study=h1_basis_snapback -f shards=20`
 
