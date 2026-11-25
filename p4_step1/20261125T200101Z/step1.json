@@ -1,0 +1,6158 @@
+{
+ "run_utc": "2026-11-25T20:00:59Z",
+ "venues": {
+  "okx": {
+   "http": 200,
+   "contracts_with_listing_time": 539
+  },
+  "gate": {
+   "http": 200,
+   "contracts_with_listing_time": 1042
+  },
+  "mexc": {
+   "http": 200,
+   "contracts_with_listing_time": 1098
+  },
+  "bitget": {
+   "http": 200,
+   "contracts_with_listing_time": 0
+  },
+  "kucoin_fut": {
+   "http": 200,
+   "contracts_with_listing_time": 720
+  },
+  "hyperliquid": {
+   "http": 200,
+   "contracts_with_listing_time": 163
+  }
+ },
+ "bases_listed_in_window": 1356,
+ "binance_symbols": 918,
+ "dropped": {
+  "binance_first_or_same_week": 346,
+  "binance_check_failed": 0
+ },
+ "eligible_clusters": 1010,
+ "kill1_fired": false,
+ "by_first_venue": {
+  "kucoin_fut": 26,
+  "gate": 351,
+  "mexc": 557,
+  "okx": 63,
+  "hyperliquid": 13
+ },
+ "by_split": {
+  "train": 63,
+  "validation": 95,
+  "test": 852
+ },
+ "by_month": {
+  "2023-01": 4,
+  "2023-02": 5,
+  "2023-03": 2,
+  "2023-04": 5,
+  "2023-05": 4,
+  "2023-07": 4,
+  "2023-08": 2,
+  "2023-09": 2,
+  "2023-10": 1,
+  "2023-11": 3,
+  "2023-12": 5,
+  "2024-01": 1,
+  "2024-02": 2,
+  "2024-03": 3,
+  "2024-04": 7,
+  "2024-05": 1,
+  "2024-06": 4,
+  "2024-07": 6,
+  "2024-08": 2,
+  "2024-09": 5,
+  "2024-10": 10,
+  "2024-11": 10,
+  "2024-12": 11,
+  "2025-01": 10,
+  "2025-02": 7,
+  "2025-03": 3,
+  "2025-04": 11,
+  "2025-05": 3,
+  "2025-06": 3,
+  "2025-07": 14,
+  "2025-08": 8,
+  "2025-09": 17,
+  "2025-10": 13,
+  "2025-11": 9,
+  "2025-12": 18,
+  "2026-01": 51,
+  "2026-02": 21,
+  "2026-03": 62,
+  "2026-04": 69,
+  "2026-05": 40,
+  "2026-06": 124,
+  "2026-07": 101,
+  "2026-08": 146,
+  "2026-09": 97,
+  "2026-10": 84
+ },
+ "clusters": [
+  {
+   "base": "2U2",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1785742200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "4STOCK",
+   "first_venue": "gate",
+   "first_ts": 1788849138.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AAL",
+   "first_venue": "gate",
+   "first_ts": 1782879321.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AALSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781756665.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AAOI",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779096600.0,
+   "binance_ts": 1780909200.0
+  },
+  {
+   "base": "AAOISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779870620.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AAPL",
+   "first_venue": "okx",
+   "first_ts": 1772612100.0,
+   "binance_ts": 1775480400.0
+  },
+  {
+   "base": "AAPLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1753432062.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AAPU",
+   "first_venue": "gate",
+   "first_ts": 1784771944.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ABBV",
+   "first_venue": "gate",
+   "first_ts": 1777256045.0,
+   "binance_ts": 1793005200.0
+  },
+  {
+   "base": "ABBVSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772796753.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ABNB",
+   "first_venue": "gate",
+   "first_ts": 1782965043.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ABNBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1783403017.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ABTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1776422332.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ACCELINK",
+   "first_venue": "gate",
+   "first_ts": 1787121900.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ACN",
+   "first_venue": "gate",
+   "first_ts": 1769414838.0,
+   "binance_ts": 1790672400.0
+  },
+  {
+   "base": "ACNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1765366530.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ACNX",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1791190800.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ACTSOL",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1731405600.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ADBE",
+   "first_venue": "okx",
+   "first_ts": 1780479000.0,
+   "binance_ts": 1781168400.0
+  },
+  {
+   "base": "ADBESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1758113666.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ADI",
+   "first_venue": "gate",
+   "first_ts": 1781839256.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ADISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789393574.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ADPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1793022336.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ADSK",
+   "first_venue": "gate",
+   "first_ts": 1782098513.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ADVANTESTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782444998.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AEHR",
+   "first_venue": "okx",
+   "first_ts": 1785143700.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AEHRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782716906.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AEON",
+   "first_venue": "okx",
+   "first_ts": 1785151800.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AEON1",
+   "first_venue": "mexc",
+   "first_ts": 1785148866.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AERO",
+   "first_venue": "gate",
+   "first_ts": 1711458269.0,
+   "binance_ts": 1733320800.0
+  },
+  {
+   "base": "AGG",
+   "first_venue": "gate",
+   "first_ts": 1769749571.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AGPUSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789722351.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AIXBT",
+   "first_venue": "mexc",
+   "first_ts": 1733226467.0,
+   "binance_ts": 1734717600.0
+  },
+  {
+   "base": "AJINOMOTOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788323753.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AKAMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1783601771.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AKE",
+   "first_venue": "mexc",
+   "first_ts": 1755675381.0,
+   "binance_ts": 1758888000.0
+  },
+  {
+   "base": "AKESO",
+   "first_venue": "gate",
+   "first_ts": 1776140578.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AKESOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790755557.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AKT",
+   "first_venue": "gate",
+   "first_ts": 1713863569.0,
+   "binance_ts": 1731927600.0
+  },
+  {
+   "base": "ALABSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781786482.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ALB",
+   "first_venue": "gate",
+   "first_ts": 1777343430.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ALCHIPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791435221.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ALLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792415125.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ALNYSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788871315.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ALT",
+   "first_venue": "mexc",
+   "first_ts": 1674880480.0,
+   "binance_ts": 1706191200.0
+  },
+  {
+   "base": "ALUMINUM",
+   "first_venue": "mexc",
+   "first_ts": 1774874959.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AMAT",
+   "first_venue": "gate",
+   "first_ts": 1778738180.0,
+   "binance_ts": 1780909200.0
+  },
+  {
+   "base": "AMATSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1768540513.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AMC",
+   "first_venue": "okx",
+   "first_ts": 1788511500.0,
+   "binance_ts": 1789722000.0
+  },
+  {
+   "base": "AMCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781159324.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AMD",
+   "first_venue": "gate",
+   "first_ts": 1769749187.0,
+   "binance_ts": 1778072400.0
+  },
+  {
+   "base": "AMDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1758113286.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AMEC",
+   "first_venue": "gate",
+   "first_ts": 1785818376.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AMGN",
+   "first_venue": "gate",
+   "first_ts": 1782098898.0,
+   "binance_ts": 1793268000.0
+  },
+  {
+   "base": "AMGNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785820551.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AMKR",
+   "first_venue": "gate",
+   "first_ts": 1782879351.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AMTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791886384.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AMZNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1753443817.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AMZU",
+   "first_venue": "gate",
+   "first_ts": 1784772003.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ANDURIL",
+   "first_venue": "gate",
+   "first_ts": 1776074199.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ANET",
+   "first_venue": "gate",
+   "first_ts": 1777432493.0,
+   "binance_ts": 1789722000.0
+  },
+  {
+   "base": "ANETSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782273154.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ANSEM",
+   "first_venue": "mexc",
+   "first_ts": 1782630262.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ANTA",
+   "first_venue": "gate",
+   "first_ts": 1776141361.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ANTHROPIC",
+   "first_venue": "mexc",
+   "first_ts": 1776135866.0,
+   "binance_ts": 1780372800.0
+  },
+  {
+   "base": "AONSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785392360.0,
+   "binance_ts": null
+  },
+  {
+   "base": "APD",
+   "first_venue": "gate",
+   "first_ts": 1782879473.0,
+   "binance_ts": null
+  },
+  {
+   "base": "APDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782273451.0,
+   "binance_ts": null
+  },
+  {
+   "base": "APEX",
+   "first_venue": "hyperliquid",
+   "first_ts": 1758931200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "APH",
+   "first_venue": "gate",
+   "first_ts": 1777343528.0,
+   "binance_ts": null
+  },
+  {
+   "base": "APHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784199592.0,
+   "binance_ts": null
+  },
+  {
+   "base": "APLD",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779440400.0,
+   "binance_ts": 1789722000.0
+  },
+  {
+   "base": "APLDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1754046574.0,
+   "binance_ts": null
+  },
+  {
+   "base": "APPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1758113173.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ARCSOL",
+   "first_venue": "mexc",
+   "first_ts": 1734331313.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ARIA",
+   "first_venue": "mexc",
+   "first_ts": 1755744775.0,
+   "binance_ts": 1756897200.0
+  },
+  {
+   "base": "ARK",
+   "first_venue": "mexc",
+   "first_ts": 1692073240.0,
+   "binance_ts": 1695139200.0
+  },
+  {
+   "base": "ARKK",
+   "first_venue": "mexc",
+   "first_ts": 1782824283.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ARKM",
+   "first_venue": "mexc",
+   "first_ts": 1689671849.0,
+   "binance_ts": 1690509600.0
+  },
+  {
+   "base": "ARM",
+   "first_venue": "gate",
+   "first_ts": 1769675544.0,
+   "binance_ts": 1779800400.0
+  },
+  {
+   "base": "ARMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1765864108.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ASESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790762718.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ASML",
+   "first_venue": "gate",
+   "first_ts": 1769673191.0,
+   "binance_ts": 1781168400.0
+  },
+  {
+   "base": "ASMLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1763986314.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ASR",
+   "first_venue": "mexc",
+   "first_ts": 1727662971.0,
+   "binance_ts": 1746522000.0
+  },
+  {
+   "base": "ASTS",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779440400.0,
+   "binance_ts": 1780318800.0
+  },
+  {
+   "base": "ASTSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1776242830.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ASX",
+   "first_venue": "gate",
+   "first_ts": 1782879503.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ATH",
+   "first_venue": "gate",
+   "first_ts": 1718191675.0,
+   "binance_ts": 1743606000.0
+  },
+  {
+   "base": "AUD",
+   "first_venue": "mexc",
+   "first_ts": 1745567870.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AUS200",
+   "first_venue": "gate",
+   "first_ts": 1770174748.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AVA",
+   "first_venue": "mexc",
+   "first_ts": 1733193772.0,
+   "binance_ts": 1734094800.0
+  },
+  {
+   "base": "AVAAI",
+   "first_venue": "mexc",
+   "first_ts": 1735810132.0,
+   "binance_ts": 1737118800.0
+  },
+  {
+   "base": "AVCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790763950.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AVGO",
+   "first_venue": "gate",
+   "first_ts": 1769747043.0,
+   "binance_ts": 1776690000.0
+  },
+  {
+   "base": "AVGOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1757591219.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AXIS",
+   "first_venue": "mexc",
+   "first_ts": 1792555263.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AXONSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781259492.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AXP",
+   "first_venue": "gate",
+   "first_ts": 1793079559.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AXPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782122492.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AXTISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1780905830.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AZNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782793218.0,
+   "binance_ts": null
+  },
+  {
+   "base": "AZOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790778508.0,
+   "binance_ts": null
+  },
+  {
+   "base": "B200",
+   "first_venue": "gate",
+   "first_ts": 1788922407.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BA",
+   "first_venue": "gate",
+   "first_ts": 1772505994.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BABA",
+   "first_venue": "gate",
+   "first_ts": 1769414931.0,
+   "binance_ts": 1776690000.0
+  },
+  {
+   "base": "BABAHKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791523835.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BABASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1758113611.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BABYDOGE",
+   "first_venue": "mexc",
+   "first_ts": 1721892656.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BAC",
+   "first_venue": "gate",
+   "first_ts": 1783313517.0,
+   "binance_ts": 1792573200.0
+  },
+  {
+   "base": "BACSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1768367182.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BANANA",
+   "first_venue": "hyperliquid",
+   "first_ts": 1694649600.0,
+   "binance_ts": 1723687200.0
+  },
+  {
+   "base": "BANANAS31",
+   "first_venue": "gate",
+   "first_ts": 1733109091.0,
+   "binance_ts": 1742634000.0
+  },
+  {
+   "base": "BASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1768366965.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1780299771.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BDX",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1765447200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BE",
+   "first_venue": "gate",
+   "first_ts": 1776997567.0,
+   "binance_ts": 1779800400.0
+  },
+  {
+   "base": "BEAT",
+   "first_venue": "mexc",
+   "first_ts": 1761983050.0,
+   "binance_ts": 1762948800.0
+  },
+  {
+   "base": "BEIGENE",
+   "first_venue": "gate",
+   "first_ts": 1787025092.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779431938.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BHP",
+   "first_venue": "gate",
+   "first_ts": 1789025066.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BIANRENSHENG",
+   "first_venue": "mexc",
+   "first_ts": 1759812191.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BIIB",
+   "first_venue": "gate",
+   "first_ts": 1786589666.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BIIBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785993027.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BINANCELIFE",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1761030000.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BIWIN",
+   "first_venue": "gate",
+   "first_ts": 1787025194.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BIZLINKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790773082.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BKNG",
+   "first_venue": "gate",
+   "first_ts": 1782098572.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BKNGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782880558.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BLEND",
+   "first_venue": "mexc",
+   "first_ts": 1777016933.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BLKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782122421.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BLSH",
+   "first_venue": "gate",
+   "first_ts": 1790215540.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BLUEFOCUS",
+   "first_venue": "gate",
+   "first_ts": 1785818478.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BLUR",
+   "first_venue": "gate",
+   "first_ts": 1676419200.0,
+   "binance_ts": 1682683200.0
+  },
+  {
+   "base": "BMNR",
+   "first_venue": "gate",
+   "first_ts": 1773824742.0,
+   "binance_ts": 1781168400.0
+  },
+  {
+   "base": "BMNRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1755058341.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BMT",
+   "first_venue": "mexc",
+   "first_ts": 1741596810.0,
+   "binance_ts": 1742216400.0
+  },
+  {
+   "base": "BMYSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790689981.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BNCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784096786.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BOE",
+   "first_venue": "gate",
+   "first_ts": 1785992317.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BONK",
+   "first_venue": "gate",
+   "first_ts": 1672790400.0,
+   "binance_ts": 1700661600.0
+  },
+  {
+   "base": "BOT",
+   "first_venue": "okx",
+   "first_ts": 1782986400.0,
+   "binance_ts": 1783605600.0
+  },
+  {
+   "base": "BOTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1783937754.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BOTZ",
+   "first_venue": "gate",
+   "first_ts": 1785219527.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BP",
+   "first_venue": "gate",
+   "first_ts": 1773657150.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791974709.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BRETT",
+   "first_venue": "mexc",
+   "first_ts": 1714138305.0,
+   "binance_ts": 1724148000.0
+  },
+  {
+   "base": "BRKBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1778823410.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BRL",
+   "first_venue": "mexc",
+   "first_ts": 1744013799.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BROCCOLI",
+   "first_venue": "mexc",
+   "first_ts": 1739467160.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BROCCOLIF3B",
+   "first_venue": "mexc",
+   "first_ts": 1739963083.0,
+   "binance_ts": 1742547600.0
+  },
+  {
+   "base": "BSB",
+   "first_venue": "mexc",
+   "first_ts": 1772612482.0,
+   "binance_ts": 1774436400.0
+  },
+  {
+   "base": "BSPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782986652.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BSX",
+   "first_venue": "gate",
+   "first_ts": 1782269849.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BSXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791974926.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BTGO",
+   "first_venue": "gate",
+   "first_ts": 1788166844.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BTW",
+   "first_venue": "mexc",
+   "first_ts": 1772427612.0,
+   "binance_ts": 1780581600.0
+  },
+  {
+   "base": "BUD",
+   "first_venue": "gate",
+   "first_ts": 1782964604.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BULLA",
+   "first_venue": "mexc",
+   "first_ts": 1749208117.0,
+   "binance_ts": 1751619600.0
+  },
+  {
+   "base": "BVOL",
+   "first_venue": "gate",
+   "first_ts": 1785306598.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BWXT",
+   "first_venue": "gate",
+   "first_ts": 1776997516.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1780905726.0,
+   "binance_ts": null
+  },
+  {
+   "base": "BYD",
+   "first_venue": "gate",
+   "first_ts": 1785739060.0,
+   "binance_ts": 1788746400.0
+  },
+  {
+   "base": "BZ",
+   "first_venue": "okx",
+   "first_ts": 1774346400.0,
+   "binance_ts": 1775034000.0
+  },
+  {
+   "base": "CAHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792061807.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CAMBRICON",
+   "first_venue": "gate",
+   "first_ts": 1785818066.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CARDS",
+   "first_venue": "mexc",
+   "first_ts": 1756879394.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CARR",
+   "first_venue": "gate",
+   "first_ts": 1776997676.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CARTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1793107287.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CARV",
+   "first_venue": "mexc",
+   "first_ts": 1728547387.0,
+   "binance_ts": 1754582400.0
+  },
+  {
+   "base": "CASHCAT",
+   "first_venue": "mexc",
+   "first_ts": 1783519263.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CAT",
+   "first_venue": "mexc",
+   "first_ts": 1724335573.0,
+   "binance_ts": 1782982800.0
+  },
+  {
+   "base": "CATE",
+   "first_venue": "mexc",
+   "first_ts": 1726410428.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CATL",
+   "first_venue": "gate",
+   "first_ts": 1785739087.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CATSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1770097985.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CBRSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1778815325.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792583186.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CCISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791886544.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CCJ",
+   "first_venue": "gate",
+   "first_ts": 1776997401.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CCJSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782273365.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CCL",
+   "first_venue": "gate",
+   "first_ts": 1782964551.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CCLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781619023.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CCTC",
+   "first_venue": "gate",
+   "first_ts": 1786071441.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CDESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786006550.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CDNSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784551041.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CEG",
+   "first_venue": "gate",
+   "first_ts": 1776997361.0,
+   "binance_ts": 1792573200.0
+  },
+  {
+   "base": "CEGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788870862.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CETUS",
+   "first_venue": "gate",
+   "first_ts": 1683789294.0,
+   "binance_ts": 1730901600.0
+  },
+  {
+   "base": "CFG",
+   "first_venue": "mexc",
+   "first_ts": 1732071950.0,
+   "binance_ts": 1773666000.0
+  },
+  {
+   "base": "CGNX",
+   "first_venue": "okx",
+   "first_ts": 1781257500.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CGPT",
+   "first_venue": "mexc",
+   "first_ts": 1681188070.0,
+   "binance_ts": 1734721200.0
+  },
+  {
+   "base": "CHEEMS",
+   "first_venue": "mexc",
+   "first_ts": 1729852886.0,
+   "binance_ts": 1732532400.0
+  },
+  {
+   "base": "CHF",
+   "first_venue": "mexc",
+   "first_ts": 1745567729.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CIEN",
+   "first_venue": "okx",
+   "first_ts": 1781169300.0,
+   "binance_ts": 1782133200.0
+  },
+  {
+   "base": "CIENSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781073019.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CIFR",
+   "first_venue": "gate",
+   "first_ts": 1786589489.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CIFRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788870972.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CIG",
+   "first_venue": "gate",
+   "first_ts": 1787121979.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CITIC",
+   "first_venue": "gate",
+   "first_ts": 1776140653.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CJS",
+   "first_venue": "gate",
+   "first_ts": 1786071209.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CL",
+   "first_venue": "okx",
+   "first_ts": 1772626500.0,
+   "binance_ts": 1775034000.0
+  },
+  {
+   "base": "CLANKER",
+   "first_venue": "mexc",
+   "first_ts": 1732793947.0,
+   "binance_ts": 1762948800.0
+  },
+  {
+   "base": "CLAUDIA",
+   "first_venue": "mexc",
+   "first_ts": 1791784603.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CLS",
+   "first_venue": "gate",
+   "first_ts": 1777432662.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CLSK",
+   "first_venue": "gate",
+   "first_ts": 1786589698.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CLSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789393665.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CMCSA",
+   "first_venue": "gate",
+   "first_ts": 1782965004.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CMCSASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781619083.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CMESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787140642.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CMGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1793107437.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CMI",
+   "first_venue": "gate",
+   "first_ts": 1777343561.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CMISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792671634.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CMOC",
+   "first_venue": "gate",
+   "first_ts": 1785818448.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CNPY",
+   "first_venue": "gate",
+   "first_ts": 1788783056.0,
+   "binance_ts": null
+  },
+  {
+   "base": "COF",
+   "first_venue": "gate",
+   "first_ts": 1782269909.0,
+   "binance_ts": null
+  },
+  {
+   "base": "COFSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782880653.0,
+   "binance_ts": null
+  },
+  {
+   "base": "COHR",
+   "first_venue": "gate",
+   "first_ts": 1770370195.0,
+   "binance_ts": 1779800400.0
+  },
+  {
+   "base": "COHRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774330219.0,
+   "binance_ts": null
+  },
+  {
+   "base": "COINBASE",
+   "first_venue": "mexc",
+   "first_ts": 1753278662.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CONL",
+   "first_venue": "gate",
+   "first_ts": 1789723016.0,
+   "binance_ts": null
+  },
+  {
+   "base": "COP",
+   "first_venue": "gate",
+   "first_ts": 1782269880.0,
+   "binance_ts": null
+  },
+  {
+   "base": "COPPER",
+   "first_venue": "mexc",
+   "first_ts": 1769684930.0,
+   "binance_ts": 1772787600.0
+  },
+  {
+   "base": "COPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772705919.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CORE",
+   "first_venue": "gate",
+   "first_ts": 1675814400.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CORZ",
+   "first_venue": "gate",
+   "first_ts": 1790215720.0,
+   "binance_ts": null
+  },
+  {
+   "base": "COST",
+   "first_venue": "gate",
+   "first_ts": 1772506545.0,
+   "binance_ts": 1780995600.0
+  },
+  {
+   "base": "COSTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1766471511.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CP",
+   "first_venue": "gate",
+   "first_ts": 1788324539.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CPNG",
+   "first_venue": "gate",
+   "first_ts": 1784689015.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CRCLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1753701675.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CRDOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1780905783.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CRMLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790690187.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CRMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1768366898.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CRWD",
+   "first_venue": "okx",
+   "first_ts": 1779787800.0,
+   "binance_ts": 1780909200.0
+  },
+  {
+   "base": "CRWDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1771923546.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CRWV",
+   "first_venue": "okx",
+   "first_ts": 1775822400.0,
+   "binance_ts": 1779109200.0
+  },
+  {
+   "base": "CRWVSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774507413.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CSCO",
+   "first_venue": "gate",
+   "first_ts": 1769670427.0,
+   "binance_ts": 1778850000.0
+  },
+  {
+   "base": "CSCOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1763986825.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1775730989.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CSX",
+   "first_venue": "gate",
+   "first_ts": 1793079513.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CTSHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785391823.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CVNASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1754046797.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CVS",
+   "first_venue": "gate",
+   "first_ts": 1781839324.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CVSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790597962.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CVXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772522940.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CXMT",
+   "first_venue": "gate",
+   "first_ts": 1784113607.0,
+   "binance_ts": 1787029200.0
+  },
+  {
+   "base": "CXMTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784117814.0,
+   "binance_ts": null
+  },
+  {
+   "base": "CYPHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789721622.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DALSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790077171.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DASHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790597648.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DATA",
+   "first_venue": "mexc",
+   "first_ts": 1703129165.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DDOG",
+   "first_venue": "gate",
+   "first_ts": 1777432810.0,
+   "binance_ts": 1788343200.0
+  },
+  {
+   "base": "DDOGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782880746.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DEEP",
+   "first_venue": "mexc",
+   "first_ts": 1728899122.0,
+   "binance_ts": 1745308800.0
+  },
+  {
+   "base": "DEEPTECH",
+   "first_venue": "gate",
+   "first_ts": 1776141449.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DELL",
+   "first_venue": "gate",
+   "first_ts": 1777343592.0,
+   "binance_ts": 1780477200.0
+  },
+  {
+   "base": "DELLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779956196.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DELTAELECSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790222347.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DEMINGLI",
+   "first_venue": "gate",
+   "first_ts": 1787025224.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787736384.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DEXE",
+   "first_venue": "mexc",
+   "first_ts": 1721906898.0,
+   "binance_ts": 1735038000.0
+  },
+  {
+   "base": "DFDVX",
+   "first_venue": "gate",
+   "first_ts": 1751714355.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DGAI",
+   "first_venue": "gate",
+   "first_ts": 1787622373.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DHR",
+   "first_venue": "gate",
+   "first_ts": 1792736692.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DHRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787226012.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DIASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792415549.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DISCOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787630790.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DISSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1778830984.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DJTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787643325.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DKNGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781079610.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DNA",
+   "first_venue": "gate",
+   "first_ts": 1792148683.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DOGS",
+   "first_venue": "gate",
+   "first_ts": 1722412327.0,
+   "binance_ts": 1724673600.0
+  },
+  {
+   "base": "DRAM",
+   "first_venue": "okx",
+   "first_ts": 1778230800.0,
+   "binance_ts": 1779112800.0
+  },
+  {
+   "base": "DRIFT",
+   "first_venue": "mexc",
+   "first_ts": 1716290182.0,
+   "binance_ts": 1731078000.0
+  },
+  {
+   "base": "DSBJ",
+   "first_venue": "gate",
+   "first_ts": 1785992582.0,
+   "binance_ts": null
+  },
+  {
+   "base": "DVNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786451113.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EBAYSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1754046699.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EDGE",
+   "first_venue": "mexc",
+   "first_ts": 1743679412.0,
+   "binance_ts": 1773928800.0
+  },
+  {
+   "base": "EDGEX",
+   "first_venue": "gate",
+   "first_ts": 1773929957.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EEM",
+   "first_venue": "gate",
+   "first_ts": 1781671648.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EIGEN",
+   "first_venue": "hyperliquid",
+   "first_ts": 1714435200.0,
+   "binance_ts": 1727762400.0
+  },
+  {
+   "base": "ELITEMATSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790765987.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ELSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787308928.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ELVSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1793022630.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EMRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1793022394.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ENTGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786537490.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EOGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792415193.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EOPTOLINK",
+   "first_venue": "gate",
+   "first_ts": 1785818099.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EQTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1793003537.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ESE",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1784710800.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ESIM",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1782464400.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ESPORTS",
+   "first_venue": "mexc",
+   "first_ts": 1752912127.0,
+   "binance_ts": 1753783200.0
+  },
+  {
+   "base": "ETNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782273239.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EUL",
+   "first_venue": "gate",
+   "first_ts": 1679363272.0,
+   "binance_ts": 1760364000.0
+  },
+  {
+   "base": "EURUSD",
+   "first_venue": "gate",
+   "first_ts": 1769489699.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EVOL",
+   "first_venue": "gate",
+   "first_ts": 1785306626.0,
+   "binance_ts": null
+  },
+  {
+   "base": "EWJ",
+   "first_venue": "okx",
+   "first_ts": 1773223200.0,
+   "binance_ts": 1773925200.0
+  },
+  {
+   "base": "EWT",
+   "first_venue": "gate",
+   "first_ts": 1774446195.0,
+   "binance_ts": 1780318800.0
+  },
+  {
+   "base": "F",
+   "first_venue": "mexc",
+   "first_ts": 1733386164.0,
+   "binance_ts": 1750248000.0
+  },
+  {
+   "base": "FANUCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787892099.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FARTCOIN",
+   "first_venue": "mexc",
+   "first_ts": 1729825854.0,
+   "binance_ts": 1734717600.0
+  },
+  {
+   "base": "FASTRETAILING",
+   "first_venue": "gate",
+   "first_ts": 1792557078.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FASTRETAILSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788323521.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FASTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784111494.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FCX",
+   "first_venue": "gate",
+   "first_ts": 1782186787.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FCXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782122327.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FENGHUA",
+   "first_venue": "gate",
+   "first_ts": 1785992276.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FICOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791886693.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FII",
+   "first_venue": "gate",
+   "first_ts": 1785818239.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FIX",
+   "first_venue": "gate",
+   "first_ts": 1782269493.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FIXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792145830.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FLEXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782986749.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FLNCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779096354.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FLOCK",
+   "first_venue": "mexc",
+   "first_ts": 1735296163.0,
+   "binance_ts": 1757397600.0
+  },
+  {
+   "base": "FLOKI",
+   "first_venue": "mexc",
+   "first_ts": 1674880667.0,
+   "binance_ts": 1683388800.0
+  },
+  {
+   "base": "FLR",
+   "first_venue": "gate",
+   "first_ts": 1673308800.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FLUID",
+   "first_venue": "mexc",
+   "first_ts": 1734578576.0,
+   "binance_ts": 1758708000.0
+  },
+  {
+   "base": "FLY",
+   "first_venue": "okx",
+   "first_ts": 1785144600.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FN",
+   "first_venue": "gate",
+   "first_ts": 1777343489.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FOGO",
+   "first_venue": "hyperliquid",
+   "first_ts": 1765411200.0,
+   "binance_ts": 1768053600.0
+  },
+  {
+   "base": "FOXA",
+   "first_venue": "gate",
+   "first_ts": 1782964951.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FOXASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781619222.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FSLR",
+   "first_venue": "gate",
+   "first_ts": 1776997602.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FTNTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785921153.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FUJIKURASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787202708.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FURUKAWASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787202846.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FUTUON",
+   "first_venue": "gate",
+   "first_ts": 1762936173.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FUTUSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1763987259.0,
+   "binance_ts": null
+  },
+  {
+   "base": "FWDISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784096851.0,
+   "binance_ts": null
+  },
+  {
+   "base": "G",
+   "first_venue": "mexc",
+   "first_ts": 1721906708.0,
+   "binance_ts": 1723723200.0
+  },
+  {
+   "base": "GANG",
+   "first_venue": "mexc",
+   "first_ts": 1738337751.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GBP",
+   "first_venue": "mexc",
+   "first_ts": 1745567590.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GBPUSD",
+   "first_venue": "gate",
+   "first_ts": 1769489762.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GD",
+   "first_venue": "gate",
+   "first_ts": 1772505573.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GDX",
+   "first_venue": "gate",
+   "first_ts": 1781751233.0,
+   "binance_ts": 1786971600.0
+  },
+  {
+   "base": "GE",
+   "first_venue": "gate",
+   "first_ts": 1769746974.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GEELY",
+   "first_venue": "gate",
+   "first_ts": 1776056404.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GENSCRIPTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790755498.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GER40",
+   "first_venue": "gate",
+   "first_ts": 1772506632.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1765366354.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GEV",
+   "first_venue": "okx",
+   "first_ts": 1779354000.0,
+   "binance_ts": 1783670400.0
+  },
+  {
+   "base": "GEVSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774330012.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GFS",
+   "first_venue": "gate",
+   "first_ts": 1786510530.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GFSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785836751.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GGLL",
+   "first_venue": "gate",
+   "first_ts": 1784772034.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GIGADEVSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785820471.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GIGGLE",
+   "first_venue": "mexc",
+   "first_ts": 1758529356.0,
+   "binance_ts": 1760000400.0
+  },
+  {
+   "base": "GILD",
+   "first_venue": "gate",
+   "first_ts": 1785219668.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GILDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785242697.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GLD",
+   "first_venue": "gate",
+   "first_ts": 1781670616.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GLM",
+   "first_venue": "gate",
+   "first_ts": 1691660863.0,
+   "binance_ts": 1708596000.0
+  },
+  {
+   "base": "GLOBALWFRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790772927.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GLW",
+   "first_venue": "gate",
+   "first_ts": 1777343457.0,
+   "binance_ts": 1781168400.0
+  },
+  {
+   "base": "GLWSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779094133.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GME",
+   "first_venue": "okx",
+   "first_ts": 1778232600.0,
+   "binance_ts": 1781082000.0
+  },
+  {
+   "base": "GMESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1778233987.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792583095.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GNRC",
+   "first_venue": "gate",
+   "first_ts": 1790216260.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GOAT",
+   "first_venue": "mexc",
+   "first_ts": 1729159808.0,
+   "binance_ts": 1729774800.0
+  },
+  {
+   "base": "GOLDCIRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790772863.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GOOGL",
+   "first_venue": "okx",
+   "first_ts": 1772610300.0,
+   "binance_ts": 1774533600.0
+  },
+  {
+   "base": "GOOGLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1753443730.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GPNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786712349.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GPROSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788260715.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GPS",
+   "first_venue": "mexc",
+   "first_ts": 1736936783.0,
+   "binance_ts": 1739811600.0
+  },
+  {
+   "base": "GRAL",
+   "first_venue": "gate",
+   "first_ts": 1792397614.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GRAM",
+   "first_venue": "mexc",
+   "first_ts": 1781532547.0,
+   "binance_ts": 1782979200.0
+  },
+  {
+   "base": "GRASS",
+   "first_venue": "mexc",
+   "first_ts": 1729850300.0,
+   "binance_ts": 1731078000.0
+  },
+  {
+   "base": "GRIFFAIN",
+   "first_venue": "mexc",
+   "first_ts": 1734331396.0,
+   "binance_ts": 1735822800.0
+  },
+  {
+   "base": "GS",
+   "first_venue": "gate",
+   "first_ts": 1781751159.0,
+   "binance_ts": 1785315600.0
+  },
+  {
+   "base": "GSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1768540391.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GTLBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788342134.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GUA",
+   "first_venue": "mexc",
+   "first_ts": 1764127879.0,
+   "binance_ts": 1766311200.0
+  },
+  {
+   "base": "GUCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790766519.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GVZ",
+   "first_venue": "gate",
+   "first_ts": 1773297954.0,
+   "binance_ts": null
+  },
+  {
+   "base": "GWEI",
+   "first_venue": "mexc",
+   "first_ts": 1768979668.0,
+   "binance_ts": 1769662800.0
+  },
+  {
+   "base": "H100",
+   "first_venue": "gate",
+   "first_ts": 1788922345.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HAJIMI",
+   "first_venue": "mexc",
+   "first_ts": 1760165091.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HANMISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786622399.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HANWHAAEROSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788502317.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HCASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791453317.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1778830912.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HENGRUI",
+   "first_venue": "gate",
+   "first_ts": 1787025170.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HHGRACE",
+   "first_venue": "gate",
+   "first_ts": 1785739027.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HIMS",
+   "first_venue": "okx",
+   "first_ts": 1777301100.0,
+   "binance_ts": 1780995600.0
+  },
+  {
+   "base": "HIMSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1773294654.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HITACHISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787203060.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HK50",
+   "first_venue": "gate",
+   "first_ts": 1769490843.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787225917.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HLT",
+   "first_venue": "gate",
+   "first_ts": 1792736850.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HLTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792671719.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HONSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792757716.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HPE",
+   "first_venue": "gate",
+   "first_ts": 1777343631.0,
+   "binance_ts": 1780909200.0
+  },
+  {
+   "base": "HPESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1780399025.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HPQSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788871407.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HPSP",
+   "first_venue": "gate",
+   "first_ts": 1782276192.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HSBC",
+   "first_venue": "gate",
+   "first_ts": 1777256077.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HSCHKD",
+   "first_venue": "gate",
+   "first_ts": 1770175812.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HTGD",
+   "first_venue": "gate",
+   "first_ts": 1785992451.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HUAGONGTECH",
+   "first_venue": "gate",
+   "first_ts": 1787121941.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HUTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785242920.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HYGON",
+   "first_venue": "gate",
+   "first_ts": 1787025017.0,
+   "binance_ts": null
+  },
+  {
+   "base": "HYPE",
+   "first_venue": "hyperliquid",
+   "first_ts": 1733356800.0,
+   "binance_ts": 1748599200.0
+  },
+  {
+   "base": "HYUNDAISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1780372344.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IAU",
+   "first_venue": "gate",
+   "first_ts": 1769748008.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IBB",
+   "first_venue": "gate",
+   "first_ts": 1785219586.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IBIDENSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787203155.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IBIT",
+   "first_venue": "gate",
+   "first_ts": 1781839190.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IBKRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782793477.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IBM",
+   "first_venue": "gate",
+   "first_ts": 1769670224.0,
+   "binance_ts": 1780477200.0
+  },
+  {
+   "base": "IBMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1769753126.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IDOL",
+   "first_venue": "mexc",
+   "first_ts": 1749550457.0,
+   "binance_ts": 1751619600.0
+  },
+  {
+   "base": "IEFA",
+   "first_venue": "gate",
+   "first_ts": 1769749267.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IEIT",
+   "first_venue": "gate",
+   "first_ts": 1785818155.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IGV",
+   "first_venue": "mexc",
+   "first_ts": 1788184731.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ILMNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789552457.0,
+   "binance_ts": null
+  },
+  {
+   "base": "INDA",
+   "first_venue": "mexc",
+   "first_ts": 1783510837.0,
+   "binance_ts": null
+  },
+  {
+   "base": "INFQ",
+   "first_venue": "okx",
+   "first_ts": 1779786900.0,
+   "binance_ts": null
+  },
+  {
+   "base": "INNOLUXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790772751.0,
+   "binance_ts": null
+  },
+  {
+   "base": "INNOVENTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790755429.0,
+   "binance_ts": null
+  },
+  {
+   "base": "INTCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1761739031.0,
+   "binance_ts": null
+  },
+  {
+   "base": "INTU",
+   "first_venue": "gate",
+   "first_ts": 1781839099.0,
+   "binance_ts": null
+  },
+  {
+   "base": "INTUSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772084348.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IONQ",
+   "first_venue": "gate",
+   "first_ts": 1781751351.0,
+   "binance_ts": 1787907600.0
+  },
+  {
+   "base": "IONQSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1776242917.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IREN",
+   "first_venue": "gate",
+   "first_ts": 1777433054.0,
+   "binance_ts": 1780477200.0
+  },
+  {
+   "base": "IRENSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772705589.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ISRG",
+   "first_venue": "okx",
+   "first_ts": 1781170200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ISRGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781674049.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IVV",
+   "first_venue": "gate",
+   "first_ts": 1781586119.0,
+   "binance_ts": null
+  },
+  {
+   "base": "IWM",
+   "first_venue": "okx",
+   "first_ts": 1775822400.0,
+   "binance_ts": 1780909200.0
+  },
+  {
+   "base": "JBLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786537560.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JCI",
+   "first_venue": "gate",
+   "first_ts": 1777256108.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JD",
+   "first_venue": "gate",
+   "first_ts": 1788166585.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1765864150.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JELLYJELLY",
+   "first_venue": "mexc",
+   "first_ts": 1738200507.0,
+   "binance_ts": 1743004800.0
+  },
+  {
+   "base": "JEPQ",
+   "first_venue": "gate",
+   "first_ts": 1790215916.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JIO",
+   "first_venue": "gate",
+   "first_ts": 1791979457.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JMKE",
+   "first_venue": "gate",
+   "first_ts": 1785739289.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JNJ",
+   "first_venue": "gate",
+   "first_ts": 1777255974.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JNJSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1769058305.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JP225",
+   "first_venue": "mexc",
+   "first_ts": 1776927340.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JPM",
+   "first_venue": "gate",
+   "first_ts": 1769415049.0,
+   "binance_ts": 1779109200.0
+  },
+  {
+   "base": "JPMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1766471429.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JPN225",
+   "first_venue": "gate",
+   "first_ts": 1769490915.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JPY",
+   "first_venue": "mexc",
+   "first_ts": 1745567676.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JUNZHENG",
+   "first_venue": "gate",
+   "first_ts": 1787122019.0,
+   "binance_ts": null
+  },
+  {
+   "base": "JUP",
+   "first_venue": "hyperliquid",
+   "first_ts": 1701561600.0,
+   "binance_ts": 1706724000.0
+  },
+  {
+   "base": "JUSUNG",
+   "first_venue": "gate",
+   "first_ts": 1782276214.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KAIA",
+   "first_venue": "mexc",
+   "first_ts": 1730348222.0,
+   "binance_ts": 1733320800.0
+  },
+  {
+   "base": "KALSHI",
+   "first_venue": "gate",
+   "first_ts": 1776074279.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KBFINSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788502260.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KBHLD",
+   "first_venue": "gate",
+   "first_ts": 1782454614.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KBLAM",
+   "first_venue": "gate",
+   "first_ts": 1782454648.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KBLAMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790755228.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KCS",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1737964800.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KEYENCESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787289128.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KEYSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792145768.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KII",
+   "first_venue": "gate",
+   "first_ts": 1790241417.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KIMCHI",
+   "first_venue": "mexc",
+   "first_ts": 1792596007.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KIMISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785984696.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KINSUSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790659425.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KIOXIA",
+   "first_venue": "okx",
+   "first_ts": 1782437400.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KIOXIASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781520623.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KKRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786537699.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KLACSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774330304.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KMBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792145707.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KMISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792498481.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KMNO",
+   "first_venue": "mexc",
+   "first_ts": 1728473364.0,
+   "binance_ts": 1734721200.0
+  },
+  {
+   "base": "KO",
+   "first_venue": "gate",
+   "first_ts": 1769748144.0,
+   "binance_ts": 1786006800.0
+  },
+  {
+   "base": "KOKUSAISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789992536.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KOSPI",
+   "first_venue": "mexc",
+   "first_ts": 1785731249.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1770873855.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KR200",
+   "first_venue": "gate",
+   "first_ts": 1782276103.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790778383.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KUAISHOU",
+   "first_venue": "gate",
+   "first_ts": 1776053030.0,
+   "binance_ts": 1786413600.0
+  },
+  {
+   "base": "KUAISHOUSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786438994.0,
+   "binance_ts": null
+  },
+  {
+   "base": "KWEB",
+   "first_venue": "gate",
+   "first_ts": 1774446296.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LAOPU",
+   "first_venue": "gate",
+   "first_ts": 1788410727.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LARGANSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790767471.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LASERTECSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784700678.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LEAD",
+   "first_venue": "mexc",
+   "first_ts": 1774875339.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LEN",
+   "first_venue": "gate",
+   "first_ts": 1791805810.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LENOVO",
+   "first_venue": "gate",
+   "first_ts": 1776140480.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LETTALL",
+   "first_venue": "gate",
+   "first_ts": 1786071594.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LIN",
+   "first_venue": "gate",
+   "first_ts": 1781839287.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LINSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774507426.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LITE",
+   "first_venue": "gate",
+   "first_ts": 1770370307.0,
+   "binance_ts": 1778850000.0
+  },
+  {
+   "base": "LITESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1777561002.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LLY",
+   "first_venue": "gate",
+   "first_ts": 1769673248.0,
+   "binance_ts": 1780318800.0
+  },
+  {
+   "base": "LLYSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1763986612.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LMT",
+   "first_venue": "gate",
+   "first_ts": 1769748207.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LMTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772707283.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LONGSYS",
+   "first_venue": "gate",
+   "first_ts": 1785992614.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LONGXIA",
+   "first_venue": "mexc",
+   "first_ts": 1773038959.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LQD",
+   "first_venue": "gate",
+   "first_ts": 1781671809.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LQTY",
+   "first_venue": "gate",
+   "first_ts": 1677542400.0,
+   "binance_ts": 1678449600.0
+  },
+  {
+   "base": "LRCXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1768367134.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LSK",
+   "first_venue": "mexc",
+   "first_ts": 1704335109.0,
+   "binance_ts": 1706191200.0
+  },
+  {
+   "base": "LULU",
+   "first_venue": "gate",
+   "first_ts": 1791806094.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LULUSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787140534.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LUMIA",
+   "first_venue": "mexc",
+   "first_ts": 1729242045.0,
+   "binance_ts": 1734519600.0
+  },
+  {
+   "base": "LUNR",
+   "first_venue": "okx",
+   "first_ts": 1780306200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "LUXSHARE",
+   "first_venue": "gate",
+   "first_ts": 1786071373.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MAGMA",
+   "first_venue": "mexc",
+   "first_ts": 1765866551.0,
+   "binance_ts": 1767186000.0
+  },
+  {
+   "base": "MAR",
+   "first_venue": "gate",
+   "first_ts": 1782965076.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MARASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782965604.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MARSCOIN",
+   "first_venue": "mexc",
+   "first_ts": 1785416050.0,
+   "binance_ts": 1788253200.0
+  },
+  {
+   "base": "MARSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781619152.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1765366347.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MAVIA",
+   "first_venue": "mexc",
+   "first_ts": 1707362232.0,
+   "binance_ts": 1708509600.0
+  },
+  {
+   "base": "MCD",
+   "first_venue": "gate",
+   "first_ts": 1769675582.0,
+   "binance_ts": 1791277200.0
+  },
+  {
+   "base": "MCDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1753443617.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MCHP",
+   "first_venue": "gate",
+   "first_ts": 1782269690.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MCHPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792671990.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MCKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792061876.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MDB",
+   "first_venue": "gate",
+   "first_ts": 1777432923.0,
+   "binance_ts": 1788343200.0
+  },
+  {
+   "base": "MDBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791544763.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MDLZSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792498551.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MDTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790778561.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MEDIATEKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790222107.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MEGA",
+   "first_venue": "hyperliquid",
+   "first_ts": 1761091200.0,
+   "binance_ts": 1769774400.0
+  },
+  {
+   "base": "MEITUAN",
+   "first_venue": "gate",
+   "first_ts": 1776052718.0,
+   "binance_ts": 1786413600.0
+  },
+  {
+   "base": "MEITUANSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786438921.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MELCOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787892197.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MELI",
+   "first_venue": "gate",
+   "first_ts": 1782186460.0,
+   "binance_ts": 1793268000.0
+  },
+  {
+   "base": "MELISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772084249.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MERL",
+   "first_venue": "okx",
+   "first_ts": 1713522300.606,
+   "binance_ts": 1748505600.0
+  },
+  {
+   "base": "META",
+   "first_venue": "okx",
+   "first_ts": 1772613000.0,
+   "binance_ts": 1774533600.0
+  },
+  {
+   "base": "METASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1753443671.0,
+   "binance_ts": null
+  },
+  {
+   "base": "METIS",
+   "first_venue": "okx",
+   "first_ts": 1703757300.614,
+   "binance_ts": 1710230400.0
+  },
+  {
+   "base": "METU",
+   "first_venue": "gate",
+   "first_ts": 1784771970.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MEW",
+   "first_venue": "gate",
+   "first_ts": 1712464602.0,
+   "binance_ts": 1718632800.0
+  },
+  {
+   "base": "MIDEA",
+   "first_venue": "gate",
+   "first_ts": 1787025043.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MINIMAX",
+   "first_venue": "gate",
+   "first_ts": 1776140194.0,
+   "binance_ts": 1784257200.0
+  },
+  {
+   "base": "MINIMAXHKD",
+   "first_venue": "gate",
+   "first_ts": 1784621688.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MINIMAXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781757095.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MITSUBISHISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786948058.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MMMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792757811.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MMT",
+   "first_venue": "mexc",
+   "first_ts": 1761565274.0,
+   "binance_ts": 1762257600.0
+  },
+  {
+   "base": "MNSTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787579169.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MNT",
+   "first_venue": "mexc",
+   "first_ts": 1689589426.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MO",
+   "first_venue": "gate",
+   "first_ts": 1786589455.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MOCA",
+   "first_venue": "mexc",
+   "first_ts": 1720784433.0,
+   "binance_ts": 1734346800.0
+  },
+  {
+   "base": "MOG",
+   "first_venue": "mexc",
+   "first_ts": 1717472418.0,
+   "binance_ts": 1730980800.0
+  },
+  {
+   "base": "MONAD",
+   "first_venue": "mexc",
+   "first_ts": 1759900772.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MONTAGE",
+   "first_venue": "gate",
+   "first_ts": 1785818200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MOODENG",
+   "first_venue": "mexc",
+   "first_ts": 1727326929.0,
+   "binance_ts": 1729850400.0
+  },
+  {
+   "base": "MOONSHOT",
+   "first_venue": "okx",
+   "first_ts": 1786957200.0,
+   "binance_ts": 1790064000.0
+  },
+  {
+   "base": "MORPHO",
+   "first_venue": "mexc",
+   "first_ts": 1732003704.0,
+   "binance_ts": 1732716000.0
+  },
+  {
+   "base": "MOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787736432.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MOUTAI",
+   "first_venue": "gate",
+   "first_ts": 1787025130.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MP",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779958800.0,
+   "binance_ts": 1790672400.0
+  },
+  {
+   "base": "MPCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786451061.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790690261.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MPWR",
+   "first_venue": "gate",
+   "first_ts": 1782186599.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MPWRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789991923.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MRK",
+   "first_venue": "gate",
+   "first_ts": 1781839222.0,
+   "binance_ts": 1787907600.0
+  },
+  {
+   "base": "MRKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787579231.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MRNASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787152276.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MRSHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791974773.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MRVL",
+   "first_venue": "gate",
+   "first_ts": 1769675327.0,
+   "binance_ts": 1778853600.0
+  },
+  {
+   "base": "MRVLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1765366176.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MSCI",
+   "first_venue": "gate",
+   "first_ts": 1792736789.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MSCISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792583378.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MSFT",
+   "first_venue": "gate",
+   "first_ts": 1769670077.0,
+   "binance_ts": 1776690000.0
+  },
+  {
+   "base": "MSFTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1757591370.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MSFU",
+   "first_venue": "gate",
+   "first_ts": 1784771893.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784200003.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MSTRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1757591593.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MSTU",
+   "first_venue": "mexc",
+   "first_ts": 1783402784.0,
+   "binance_ts": 1791795600.0
+  },
+  {
+   "base": "MTSISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786094937.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MU",
+   "first_venue": "gate",
+   "first_ts": 1770370069.0,
+   "binance_ts": 1775566800.0
+  },
+  {
+   "base": "MUFG",
+   "first_venue": "gate",
+   "first_ts": 1784689046.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MUFGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784265421.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MURATASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786948211.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MUSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1761739091.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MUU",
+   "first_venue": "gate",
+   "first_ts": 1782963710.0,
+   "binance_ts": 1784192400.0
+  },
+  {
+   "base": "MXL",
+   "first_venue": "gate",
+   "first_ts": 1792736743.0,
+   "binance_ts": null
+  },
+  {
+   "base": "MYX",
+   "first_venue": "mexc",
+   "first_ts": 1746501198.0,
+   "binance_ts": 1750248000.0
+  },
+  {
+   "base": "NANYAPCBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790659611.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NANYAPLSTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790659558.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NANYATECHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790769561.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NAS100",
+   "first_venue": "gate",
+   "first_ts": 1769171676.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NAURA",
+   "first_venue": "gate",
+   "first_ts": 1785818345.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NAVERSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786622102.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NBIS",
+   "first_venue": "gate",
+   "first_ts": 1777433129.0,
+   "binance_ts": 1779800400.0
+  },
+  {
+   "base": "NBISSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774938305.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NECSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787630992.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NEE",
+   "first_venue": "gate",
+   "first_ts": 1782186849.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NEIROCTO",
+   "first_venue": "mexc",
+   "first_ts": 1726475766.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NEMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782099157.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NES",
+   "first_venue": "mexc",
+   "first_ts": 1782295827.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NETSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785750773.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NEURALINK",
+   "first_venue": "gate",
+   "first_ts": 1784107261.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NEX",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779334200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NFLX",
+   "first_venue": "okx",
+   "first_ts": 1773223200.0,
+   "binance_ts": 1780995600.0
+  },
+  {
+   "base": "NFLXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1757591519.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NG",
+   "first_venue": "okx",
+   "first_ts": 1773133200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NGAS",
+   "first_venue": "mexc",
+   "first_ts": 1769743078.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NICKEL",
+   "first_venue": "mexc",
+   "first_ts": 1774875441.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NIL",
+   "first_venue": "gate",
+   "first_ts": 1741089556.0,
+   "binance_ts": 1742821200.0
+  },
+  {
+   "base": "NINTENDOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787288894.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NIOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782716691.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NIULAI",
+   "first_venue": "mexc",
+   "first_ts": 1786851532.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NKE",
+   "first_venue": "gate",
+   "first_ts": 1782964881.0,
+   "binance_ts": 1790672400.0
+  },
+  {
+   "base": "NKESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1766471492.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NOC",
+   "first_venue": "gate",
+   "first_ts": 1772505841.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NOCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792583446.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NOKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779870676.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NOWSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1766471545.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NPC",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1769569200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NTAPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781259558.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NTRASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786364624.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NUSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782902812.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NVD",
+   "first_venue": "mexc",
+   "first_ts": 1784796694.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NVDA",
+   "first_venue": "okx",
+   "first_ts": 1772607600.0,
+   "binance_ts": 1774533600.0
+  },
+  {
+   "base": "NVDL",
+   "first_venue": "mexc",
+   "first_ts": 1783676974.0,
+   "binance_ts": 1788343200.0
+  },
+  {
+   "base": "NVIDIA",
+   "first_venue": "mexc",
+   "first_ts": 1753281902.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NVOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1780309170.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NXPISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792415335.0,
+   "binance_ts": null
+  },
+  {
+   "base": "NXT",
+   "first_venue": "gate",
+   "first_ts": 1776997640.0,
+   "binance_ts": null
+  },
+  {
+   "base": "O",
+   "first_venue": "mexc",
+   "first_ts": 1781691031.0,
+   "binance_ts": 1782298800.0
+  },
+  {
+   "base": "OFC",
+   "first_venue": "okx",
+   "first_ts": 1775732400.0,
+   "binance_ts": null
+  },
+  {
+   "base": "OG",
+   "first_venue": "gate",
+   "first_ts": 1680924599.0,
+   "binance_ts": 1747040400.0
+  },
+  {
+   "base": "OKLO",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779267600.0,
+   "binance_ts": 1790586000.0
+  },
+  {
+   "base": "OKLOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781699245.0,
+   "binance_ts": null
+  },
+  {
+   "base": "OKTA",
+   "first_venue": "okx",
+   "first_ts": 1785402000.0,
+   "binance_ts": null
+  },
+  {
+   "base": "OKTASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788184799.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ONDSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772705984.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ONG",
+   "first_venue": "gate",
+   "first_ts": 1689234396.0,
+   "binance_ts": 1701090000.0
+  },
+  {
+   "base": "ONSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784199899.0,
+   "binance_ts": null
+  },
+  {
+   "base": "OPENAI",
+   "first_venue": "gate",
+   "first_ts": 1776073985.0,
+   "binance_ts": 1779782400.0
+  },
+  {
+   "base": "OPENLEDGER",
+   "first_venue": "mexc",
+   "first_ts": 1757087821.0,
+   "binance_ts": null
+  },
+  {
+   "base": "OPN",
+   "first_venue": "mexc",
+   "first_ts": 1770807588.0,
+   "binance_ts": 1771686000.0
+  },
+  {
+   "base": "ORCA",
+   "first_venue": "mexc",
+   "first_ts": 1721629020.0,
+   "binance_ts": 1733497200.0
+  },
+  {
+   "base": "ORCL",
+   "first_venue": "okx",
+   "first_ts": 1773223200.0,
+   "binance_ts": 1778850000.0
+  },
+  {
+   "base": "ORCLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1758113110.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ORDER",
+   "first_venue": "mexc",
+   "first_ts": 1724681631.0,
+   "binance_ts": 1758888000.0
+  },
+  {
+   "base": "ORDI",
+   "first_venue": "gate",
+   "first_ts": 1683518617.0,
+   "binance_ts": 1699358400.0
+  },
+  {
+   "base": "OSCR",
+   "first_venue": "okx",
+   "first_ts": 1783332000.0,
+   "binance_ts": null
+  },
+  {
+   "base": "OURASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790049371.0,
+   "binance_ts": null
+  },
+  {
+   "base": "OUST",
+   "first_venue": "gate",
+   "first_ts": 1786510625.0,
+   "binance_ts": null
+  },
+  {
+   "base": "OUSTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781159213.0,
+   "binance_ts": null
+  },
+  {
+   "base": "OXYSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772707359.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PANASONICSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787288769.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PANW",
+   "first_venue": "gate",
+   "first_ts": 1781235311.0,
+   "binance_ts": 1784624400.0
+  },
+  {
+   "base": "PANWSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1771923665.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PAPER",
+   "first_venue": "gate",
+   "first_ts": 1792374704.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PATHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789721015.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PAYPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774280221.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PBR",
+   "first_venue": "gate",
+   "first_ts": 1792397905.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PBRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791545044.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PCVXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791453606.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PDD",
+   "first_venue": "gate",
+   "first_ts": 1782879383.0,
+   "binance_ts": 1787907600.0
+  },
+  {
+   "base": "PDDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774507291.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PEAQ",
+   "first_venue": "mexc",
+   "first_ts": 1731399714.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PENDLE",
+   "first_venue": "mexc",
+   "first_ts": 1688372212.0,
+   "binance_ts": 1690509600.0
+  },
+  {
+   "base": "PENG",
+   "first_venue": "okx",
+   "first_ts": 1783675800.0,
+   "binance_ts": 1784624400.0
+  },
+  {
+   "base": "PENGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782902623.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PEP",
+   "first_venue": "gate",
+   "first_ts": 1769746926.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PEPE",
+   "first_venue": "mexc",
+   "first_ts": 1681900341.0,
+   "binance_ts": 1683302400.0
+  },
+  {
+   "base": "PEPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1765366228.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PERIC",
+   "first_venue": "gate",
+   "first_ts": 1786071621.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PFE",
+   "first_venue": "gate",
+   "first_ts": 1782098798.0,
+   "binance_ts": 1793268000.0
+  },
+  {
+   "base": "PFESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790243069.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PG",
+   "first_venue": "gate",
+   "first_ts": 1769748053.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PGRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790690067.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774938155.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PHA",
+   "first_venue": "gate",
+   "first_ts": 1710839468.0,
+   "binance_ts": 1735556400.0
+  },
+  {
+   "base": "PHAROS",
+   "first_venue": "mexc",
+   "first_ts": 1777386114.0,
+   "binance_ts": 1778734800.0
+  },
+  {
+   "base": "PHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792498315.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PI",
+   "first_venue": "mexc",
+   "first_ts": 1739511352.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PIPPIN",
+   "first_venue": "mexc",
+   "first_ts": 1736393992.0,
+   "binance_ts": 1737712800.0
+  },
+  {
+   "base": "PLDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791974587.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PLTRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1757591422.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PLUME",
+   "first_venue": "mexc",
+   "first_ts": 1737384364.0,
+   "binance_ts": 1742562000.0
+  },
+  {
+   "base": "PMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791544848.0,
+   "binance_ts": null
+  },
+  {
+   "base": "POET",
+   "first_venue": "okx",
+   "first_ts": 1781603100.0,
+   "binance_ts": null
+  },
+  {
+   "base": "POL",
+   "first_venue": "mexc",
+   "first_ts": 1725435422.0,
+   "binance_ts": 1726228800.0
+  },
+  {
+   "base": "POLYMARKET",
+   "first_venue": "gate",
+   "first_ts": 1776074352.0,
+   "binance_ts": null
+  },
+  {
+   "base": "POLYMARKETSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789994897.0,
+   "binance_ts": null
+  },
+  {
+   "base": "POLYX",
+   "first_venue": "gate",
+   "first_ts": 1682002040.0,
+   "binance_ts": 1698199200.0
+  },
+  {
+   "base": "PONS",
+   "first_venue": "mexc",
+   "first_ts": 1784105050.0,
+   "binance_ts": 1788674400.0
+  },
+  {
+   "base": "POPCAT",
+   "first_venue": "mexc",
+   "first_ts": 1712028120.0,
+   "binance_ts": 1724331600.0
+  },
+  {
+   "base": "POPMART",
+   "first_venue": "gate",
+   "first_ts": 1782454745.0,
+   "binance_ts": 1784772000.0
+  },
+  {
+   "base": "POPMARTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784776050.0,
+   "binance_ts": null
+  },
+  {
+   "base": "POWER",
+   "first_venue": "mexc",
+   "first_ts": 1736320216.0,
+   "binance_ts": 1765011600.0
+  },
+  {
+   "base": "POWERCHIPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790772997.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PRL",
+   "first_venue": "mexc",
+   "first_ts": 1774427136.0,
+   "binance_ts": 1775037600.0
+  },
+  {
+   "base": "PROS",
+   "first_venue": "okx",
+   "first_ts": 1777384800.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PSXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787140588.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PUMPFUN",
+   "first_venue": "mexc",
+   "first_ts": 1752114584.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PURR",
+   "first_venue": "hyperliquid",
+   "first_ts": 1730678400.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PUYA",
+   "first_venue": "gate",
+   "first_ts": 1787121920.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PWRSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789393921.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PYBOBO",
+   "first_venue": "mexc",
+   "first_ts": 1763608951.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PYPLSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1771923602.0,
+   "binance_ts": null
+  },
+  {
+   "base": "PYTH",
+   "first_venue": "hyperliquid",
+   "first_ts": 1699920000.0,
+   "binance_ts": 1700661600.0
+  },
+  {
+   "base": "QCOMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1761739047.0,
+   "binance_ts": null
+  },
+  {
+   "base": "QLD",
+   "first_venue": "gate",
+   "first_ts": 1789722990.0,
+   "binance_ts": null
+  },
+  {
+   "base": "QNTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1780026679.0,
+   "binance_ts": null
+  },
+  {
+   "base": "QQQ",
+   "first_venue": "okx",
+   "first_ts": 1772613900.0,
+   "binance_ts": 1775480400.0
+  },
+  {
+   "base": "QQQSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1761739215.0,
+   "binance_ts": null
+  },
+  {
+   "base": "QUANT",
+   "first_venue": "okx",
+   "first_ts": 1790841600.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RAM",
+   "first_venue": "okx",
+   "first_ts": 1782985500.0,
+   "binance_ts": 1787648400.0
+  },
+  {
+   "base": "RATS",
+   "first_venue": "gate",
+   "first_ts": 1700309874.0,
+   "binance_ts": 1702648800.0
+  },
+  {
+   "base": "RBLXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786712288.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RBRKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785921486.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RDDT",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779267600.0,
+   "binance_ts": 1786006800.0
+  },
+  {
+   "base": "RDDTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1765863734.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RDW",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779958800.0,
+   "binance_ts": 1791795600.0
+  },
+  {
+   "base": "RDWSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779898559.0,
+   "binance_ts": null
+  },
+  {
+   "base": "READY",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1783933200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RECRUITSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787289008.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RED",
+   "first_venue": "mexc",
+   "first_ts": 1740485506.0,
+   "binance_ts": 1741276800.0
+  },
+  {
+   "base": "REDSTONE",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1741273200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "REGN",
+   "first_venue": "gate",
+   "first_ts": 1786589732.0,
+   "binance_ts": null
+  },
+  {
+   "base": "REGNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785392518.0,
+   "binance_ts": null
+  },
+  {
+   "base": "REKT",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1783328400.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RENESASSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787630904.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RIF",
+   "first_venue": "gate",
+   "first_ts": 1683271441.0,
+   "binance_ts": 1697889600.0
+  },
+  {
+   "base": "RIO",
+   "first_venue": "gate",
+   "first_ts": 1789025105.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RIOT",
+   "first_venue": "okx",
+   "first_ts": 1786522500.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RIOTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784796472.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RIVER",
+   "first_venue": "mexc",
+   "first_ts": 1758529306.0,
+   "binance_ts": 1760709600.0
+  },
+  {
+   "base": "RIVNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781079553.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RKLBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774507214.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ROBINHOOD",
+   "first_venue": "mexc",
+   "first_ts": 1753282275.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ROK",
+   "first_venue": "okx",
+   "first_ts": 1781256600.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ROKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1783403087.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ROSTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790597715.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RPL",
+   "first_venue": "gate",
+   "first_ts": 1675987200.0,
+   "binance_ts": 1725883200.0
+  },
+  {
+   "base": "RRCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1793107366.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RT",
+   "first_venue": "mexc",
+   "first_ts": 1792668263.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RTX",
+   "first_venue": "gate",
+   "first_ts": 1772505521.0,
+   "binance_ts": null
+  },
+  {
+   "base": "RTXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772705830.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SAFE",
+   "first_venue": "gate",
+   "first_ts": 1713868883.0,
+   "binance_ts": 1729857600.0
+  },
+  {
+   "base": "SAMSUNGEM",
+   "first_venue": "gate",
+   "first_ts": 1782276128.0,
+   "binance_ts": 1786672800.0
+  },
+  {
+   "base": "SAMSUNGEMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786622227.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SAMSUNGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779333889.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SATS",
+   "first_venue": "gate",
+   "first_ts": 1699598750.0,
+   "binance_ts": 1702389600.0
+  },
+  {
+   "base": "SBP",
+   "first_venue": "gate",
+   "first_ts": 1776141097.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SBUX",
+   "first_venue": "gate",
+   "first_ts": 1791805851.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SBUXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1777561097.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SCHW",
+   "first_venue": "gate",
+   "first_ts": 1782098690.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SDGR",
+   "first_venue": "gate",
+   "first_ts": 1790215298.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHAZ",
+   "first_venue": "okx",
+   "first_ts": 1783674000.0,
+   "binance_ts": 1784624400.0
+  },
+  {
+   "base": "SHAZSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784727055.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHEIN",
+   "first_venue": "gate",
+   "first_ts": 1787905194.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHEINHKD",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1788233400.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHEINSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787628506.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHELSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791544986.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHENHUA",
+   "first_venue": "gate",
+   "first_ts": 1787024956.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHINETSUSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788323853.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHLD",
+   "first_venue": "okx",
+   "first_ts": 1778580000.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHOP",
+   "first_venue": "gate",
+   "first_ts": 1782186279.0,
+   "binance_ts": 1786971600.0
+  },
+  {
+   "base": "SHOPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1770788569.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SHTECH",
+   "first_venue": "gate",
+   "first_ts": 1785992387.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SI",
+   "first_venue": "mexc",
+   "first_ts": 1790426609.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SILVER",
+   "first_venue": "mexc",
+   "first_ts": 1766977977.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SIMO",
+   "first_venue": "okx",
+   "first_ts": 1783331100.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SINOCERA",
+   "first_venue": "gate",
+   "first_ts": 1786071303.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SKDD",
+   "first_venue": "gate",
+   "first_ts": 1785219614.0,
+   "binance_ts": 1787648400.0
+  },
+  {
+   "base": "SKHY",
+   "first_venue": "gate",
+   "first_ts": 1783052798.0,
+   "binance_ts": 1783695600.0
+  },
+  {
+   "base": "SKHYNIXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779333937.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SKHYSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1783611387.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SKINNOVSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788502206.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SKSQUARE",
+   "first_venue": "gate",
+   "first_ts": 1782276162.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SKSQUARESTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786948017.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SKUU",
+   "first_venue": "gate",
+   "first_ts": 1785219640.0,
+   "binance_ts": 1787648400.0
+  },
+  {
+   "base": "SKY",
+   "first_venue": "mexc",
+   "first_ts": 1755656896.0,
+   "binance_ts": 1757401200.0
+  },
+  {
+   "base": "SKYAI",
+   "first_venue": "mexc",
+   "first_ts": 1745157193.0,
+   "binance_ts": 1747126800.0
+  },
+  {
+   "base": "SLBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782099247.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SLSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782824159.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SLV",
+   "first_venue": "gate",
+   "first_ts": 1788166964.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SMCI",
+   "first_venue": "gate",
+   "first_ts": 1777343662.0,
+   "binance_ts": 1782133200.0
+  },
+  {
+   "base": "SMCISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1770266378.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SMH",
+   "first_venue": "mexc",
+   "first_ts": 1781583447.0,
+   "binance_ts": 1785315600.0
+  },
+  {
+   "base": "SMIC",
+   "first_venue": "gate",
+   "first_ts": 1785738994.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SMICSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790577992.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SMTCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787140469.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SNDK",
+   "first_venue": "gate",
+   "first_ts": 1772608513.0,
+   "binance_ts": 1775566800.0
+  },
+  {
+   "base": "SNDKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1773987722.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SNOW",
+   "first_venue": "gate",
+   "first_ts": 1777432779.0,
+   "binance_ts": 1783670400.0
+  },
+  {
+   "base": "SNOWSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772084303.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SNPSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784550998.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SO",
+   "first_venue": "gate",
+   "first_ts": 1782269557.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SOFISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782902479.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SOFTBANK",
+   "first_venue": "okx",
+   "first_ts": 1782970200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SOFTBANKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786948102.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SOLAYER",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1739289600.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SONYSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782131191.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SOONNETWORK",
+   "first_venue": "mexc",
+   "first_ts": 1747728311.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SOXS",
+   "first_venue": "mexc",
+   "first_ts": 1781583648.0,
+   "binance_ts": 1784192400.0
+  },
+  {
+   "base": "SOXX",
+   "first_venue": "mexc",
+   "first_ts": 1777357628.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SPCH",
+   "first_venue": "gate",
+   "first_ts": 1786510505.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SPCX",
+   "first_venue": "okx",
+   "first_ts": 1778144400.0,
+   "binance_ts": 1779336000.0
+  },
+  {
+   "base": "SPCXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1779350783.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SPGISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792671842.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SPOT",
+   "first_venue": "gate",
+   "first_ts": 1782186502.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SPOTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1770788546.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SPX",
+   "first_venue": "mexc",
+   "first_ts": 1730196039.0,
+   "binance_ts": 1733832000.0
+  },
+  {
+   "base": "SPX500",
+   "first_venue": "gate",
+   "first_ts": 1769170664.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SPY",
+   "first_venue": "okx",
+   "first_ts": 1772614800.0,
+   "binance_ts": 1775480400.0
+  },
+  {
+   "base": "SPYM",
+   "first_venue": "gate",
+   "first_ts": 1781586218.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SQD",
+   "first_venue": "mexc",
+   "first_ts": 1736997357.0,
+   "binance_ts": 1749643200.0
+  },
+  {
+   "base": "SQQQ",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779183000.0,
+   "binance_ts": 1782738000.0
+  },
+  {
+   "base": "SSPC",
+   "first_venue": "gate",
+   "first_ts": 1786510437.0,
+   "binance_ts": null
+  },
+  {
+   "base": "STEEM",
+   "first_venue": "gate",
+   "first_ts": 1680822562.0,
+   "binance_ts": 1699452000.0
+  },
+  {
+   "base": "STM",
+   "first_venue": "gate",
+   "first_ts": 1782186702.0,
+   "binance_ts": 1793005200.0
+  },
+  {
+   "base": "STMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784199657.0,
+   "binance_ts": null
+  },
+  {
+   "base": "STO",
+   "first_venue": "mexc",
+   "first_ts": 1743661070.0,
+   "binance_ts": 1744466400.0
+  },
+  {
+   "base": "STONK",
+   "first_venue": "mexc",
+   "first_ts": 1785992802.0,
+   "binance_ts": null
+  },
+  {
+   "base": "STRCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782986721.0,
+   "binance_ts": null
+  },
+  {
+   "base": "STXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774938382.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SUMIELECSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782445102.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SUNAC",
+   "first_venue": "gate",
+   "first_ts": 1776140995.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SUNGROW",
+   "first_venue": "gate",
+   "first_ts": 1785818411.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SYK",
+   "first_venue": "gate",
+   "first_ts": 1782098845.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SYKSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1793022527.0,
+   "binance_ts": null
+  },
+  {
+   "base": "SYN",
+   "first_venue": "mexc",
+   "first_ts": 1677126582.0,
+   "binance_ts": 1723809600.0
+  },
+  {
+   "base": "SYRUP",
+   "first_venue": "mexc",
+   "first_ts": 1733106742.0,
+   "binance_ts": 1746604800.0
+  },
+  {
+   "base": "SYTECH",
+   "first_venue": "gate",
+   "first_ts": 1786071474.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TAG",
+   "first_venue": "mexc",
+   "first_ts": 1749435551.0,
+   "binance_ts": 1753441200.0
+  },
+  {
+   "base": "TAIJI",
+   "first_venue": "gate",
+   "first_ts": 1787025264.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TAIKO",
+   "first_venue": "mexc",
+   "first_ts": 1717595866.0,
+   "binance_ts": 1749643200.0
+  },
+  {
+   "base": "TAIYOYUDEN",
+   "first_venue": "gate",
+   "first_ts": 1792557155.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TAIYOYUDENSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788323658.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TAKE",
+   "first_venue": "mexc",
+   "first_ts": 1756103679.0,
+   "binance_ts": 1756897200.0
+  },
+  {
+   "base": "TAKEDASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787892385.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TAO",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1703671200.0,
+   "binance_ts": 1712844000.0
+  },
+  {
+   "base": "TEAMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788342193.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TEMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782099354.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TENCENT",
+   "first_venue": "gate",
+   "first_ts": 1776052342.0,
+   "binance_ts": 1784689200.0
+  },
+  {
+   "base": "TENCENTHKD",
+   "first_venue": "gate",
+   "first_ts": 1784621808.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TENCENTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784266729.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TER",
+   "first_venue": "okx",
+   "first_ts": 1781601300.0,
+   "binance_ts": 1782982800.0
+  },
+  {
+   "base": "TERSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781786546.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TESLA",
+   "first_venue": "mexc",
+   "first_ts": 1753279074.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TFC",
+   "first_venue": "gate",
+   "first_ts": 1785992420.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TFME",
+   "first_venue": "gate",
+   "first_ts": 1786071513.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TGTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787226080.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TIA",
+   "first_venue": "hyperliquid",
+   "first_ts": 1697673600.0,
+   "binance_ts": 1698775200.0
+  },
+  {
+   "base": "TJX",
+   "first_venue": "gate",
+   "first_ts": 1782269593.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TJXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790597892.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TLNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791453458.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TLT",
+   "first_venue": "gate",
+   "first_ts": 1769749528.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TM",
+   "first_venue": "gate",
+   "first_ts": 1784689077.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TMO",
+   "first_venue": "gate",
+   "first_ts": 1781839351.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TMOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790242784.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TMUS",
+   "first_venue": "gate",
+   "first_ts": 1782269635.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TMUSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791886614.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TOKYOELSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782445235.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TONGGUAN",
+   "first_venue": "gate",
+   "first_ts": 1787121998.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TOSHI",
+   "first_venue": "gate",
+   "first_ts": 1732680899.0,
+   "binance_ts": 1758085200.0
+  },
+  {
+   "base": "TOYOTASTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787202942.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TQQQ",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1779096600.0,
+   "binance_ts": 1782738000.0
+  },
+  {
+   "base": "TQQQX",
+   "first_venue": "gate",
+   "first_ts": 1761400670.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TRADOOR",
+   "first_venue": "mexc",
+   "first_ts": 1756968116.0,
+   "binance_ts": 1758283200.0
+  },
+  {
+   "base": "TRAHK",
+   "first_venue": "gate",
+   "first_ts": 1778560453.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TRUMPOFFICIAL",
+   "first_venue": "mexc",
+   "first_ts": 1737171820.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TRY",
+   "first_venue": "mexc",
+   "first_ts": 1744013845.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TSCOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792757882.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TSEM",
+   "first_venue": "okx",
+   "first_ts": 1782384300.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TSEMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1783402964.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TSLL",
+   "first_venue": "mexc",
+   "first_ts": 1783676931.0,
+   "binance_ts": 1788343200.0
+  },
+  {
+   "base": "TSM",
+   "first_venue": "gate",
+   "first_ts": 1772506199.0,
+   "binance_ts": 1775484000.0
+  },
+  {
+   "base": "TSMCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790222206.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TSMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1772522835.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TSTBSC",
+   "first_venue": "gate",
+   "first_ts": 1739066949.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791974836.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TTMI",
+   "first_venue": "okx",
+   "first_ts": 1782209700.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TTWOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782986785.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TUCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790772808.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TUNGSTEN",
+   "first_venue": "gate",
+   "first_ts": 1786071335.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TURBO",
+   "first_venue": "mexc",
+   "first_ts": 1683287158.0,
+   "binance_ts": 1717081200.0
+  },
+  {
+   "base": "TW88",
+   "first_venue": "gate",
+   "first_ts": 1770174678.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TWLO",
+   "first_venue": "okx",
+   "first_ts": 1781254800.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TWLOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781259767.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TWSTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1787579069.0,
+   "binance_ts": null
+  },
+  {
+   "base": "TXN",
+   "first_venue": "gate",
+   "first_ts": 1781751317.0,
+   "binance_ts": 1782982800.0
+  },
+  {
+   "base": "TXNSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1777357565.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UALSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792671920.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UBERSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1765863494.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UK100",
+   "first_venue": "gate",
+   "first_ts": 1769170767.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UKOIL",
+   "first_venue": "mexc",
+   "first_ts": 1769743000.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UMC",
+   "first_venue": "gate",
+   "first_ts": 1791805980.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UMCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790222282.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UNH",
+   "first_venue": "gate",
+   "first_ts": 1769675470.0,
+   "binance_ts": 1790672400.0
+  },
+  {
+   "base": "UNHSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1763987097.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UNIMICRONSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790768502.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UNIS",
+   "first_venue": "gate",
+   "first_ts": 1785992343.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UNITREE",
+   "first_venue": "mexc",
+   "first_ts": 1785481868.0,
+   "binance_ts": 1787104800.0
+  },
+  {
+   "base": "UNPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792061741.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UP",
+   "first_venue": "okx",
+   "first_ts": 1775646000.0,
+   "binance_ts": null
+  },
+  {
+   "base": "UPSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1793107485.0,
+   "binance_ts": null
+  },
+  {
+   "base": "URISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792145627.0,
+   "binance_ts": null
+  },
+  {
+   "base": "URNM",
+   "first_venue": "okx",
+   "first_ts": 1779354900.0,
+   "binance_ts": 1780995600.0
+  },
+  {
+   "base": "US100",
+   "first_venue": "okx",
+   "first_ts": 1789031700.0,
+   "binance_ts": null
+  },
+  {
+   "base": "US2000",
+   "first_venue": "gate",
+   "first_ts": 1770174575.0,
+   "binance_ts": null
+  },
+  {
+   "base": "US30",
+   "first_venue": "gate",
+   "first_ts": 1769490756.0,
+   "binance_ts": null
+  },
+  {
+   "base": "US500",
+   "first_venue": "okx",
+   "first_ts": 1789030800.0,
+   "binance_ts": null
+  },
+  {
+   "base": "USAR",
+   "first_venue": "okx",
+   "first_ts": 1777298400.0,
+   "binance_ts": 1778072400.0
+  },
+  {
+   "base": "USARSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1778059505.0,
+   "binance_ts": null
+  },
+  {
+   "base": "USD1",
+   "first_venue": "gate",
+   "first_ts": 1771857705.0,
+   "binance_ts": null
+  },
+  {
+   "base": "USDG",
+   "first_venue": "kucoin_fut",
+   "first_ts": 1772528400.0,
+   "binance_ts": null
+  },
+  {
+   "base": "USELESS",
+   "first_venue": "mexc",
+   "first_ts": 1747028762.0,
+   "binance_ts": 1755259200.0
+  },
+  {
+   "base": "USO",
+   "first_venue": "okx",
+   "first_ts": 1778493600.0,
+   "binance_ts": null
+  },
+  {
+   "base": "USOIL",
+   "first_venue": "mexc",
+   "first_ts": 1769742974.0,
+   "binance_ts": null
+  },
+  {
+   "base": "USTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1789393847.0,
+   "binance_ts": null
+  },
+  {
+   "base": "V",
+   "first_venue": "gate",
+   "first_ts": 1777255940.0,
+   "binance_ts": 1779109200.0
+  },
+  {
+   "base": "VALE",
+   "first_venue": "gate",
+   "first_ts": 1789025151.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VCX",
+   "first_venue": "gate",
+   "first_ts": 1774459872.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VEEVSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785921556.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VELO",
+   "first_venue": "gate",
+   "first_ts": 1680137141.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VGT",
+   "first_venue": "mexc",
+   "first_ts": 1785936491.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VICR",
+   "first_venue": "okx",
+   "first_ts": 1791970200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VIRTUAL",
+   "first_venue": "mexc",
+   "first_ts": 1730457954.0,
+   "binance_ts": 1733832000.0
+  },
+  {
+   "base": "VIST",
+   "first_venue": "gate",
+   "first_ts": 1792397861.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VKTXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790597814.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VLO",
+   "first_venue": "gate",
+   "first_ts": 1792557258.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VLOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786451011.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VOLX",
+   "first_venue": "gate",
+   "first_ts": 1780717181.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VOO",
+   "first_venue": "gate",
+   "first_ts": 1781586249.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VRT",
+   "first_venue": "gate",
+   "first_ts": 1777256137.0,
+   "binance_ts": 1783670400.0
+  },
+  {
+   "base": "VRTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1773295205.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VRTX",
+   "first_venue": "gate",
+   "first_ts": 1786590188.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VRTXSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785993103.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1761739144.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VSTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782122004.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VTHO",
+   "first_venue": "gate",
+   "first_ts": 1708009352.0,
+   "binance_ts": 1737536400.0
+  },
+  {
+   "base": "VUG",
+   "first_venue": "mexc",
+   "first_ts": 1785936533.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VZ",
+   "first_venue": "gate",
+   "first_ts": 1782098646.0,
+   "binance_ts": null
+  },
+  {
+   "base": "VZSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1770874004.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WANGSU",
+   "first_venue": "gate",
+   "first_ts": 1787121960.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WCT",
+   "first_venue": "gate",
+   "first_ts": 1740484821.0,
+   "binance_ts": 1744714800.0
+  },
+  {
+   "base": "WDAYSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785242783.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WDC",
+   "first_venue": "gate",
+   "first_ts": 1776997711.0,
+   "binance_ts": 1779800400.0
+  },
+  {
+   "base": "WDCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1774330124.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WEN",
+   "first_venue": "okx",
+   "first_ts": 1782383400.0,
+   "binance_ts": 1783605600.0
+  },
+  {
+   "base": "WENSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782401992.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WFC",
+   "first_venue": "gate",
+   "first_ts": 1782186756.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WFCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1776318596.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WIF",
+   "first_venue": "hyperliquid",
+   "first_ts": 1703203200.0,
+   "binance_ts": 1705586400.0
+  },
+  {
+   "base": "WINBONDSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790772693.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WMBSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791886471.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1792498388.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WMT",
+   "first_venue": "gate",
+   "first_ts": 1772506277.0,
+   "binance_ts": 1779109200.0
+  },
+  {
+   "base": "WMTSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1766471443.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WOTAMALAILE",
+   "first_venue": "mexc",
+   "first_ts": 1767925060.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WUXIAPPTEC",
+   "first_venue": "gate",
+   "first_ts": 1785992542.0,
+   "binance_ts": null
+  },
+  {
+   "base": "WUXIBIOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790755310.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XAL",
+   "first_venue": "gate",
+   "first_ts": 1769497020.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XAU",
+   "first_venue": "okx",
+   "first_ts": 1744192800.563,
+   "binance_ts": 1765440000.0
+  },
+  {
+   "base": "XBI",
+   "first_venue": "mexc",
+   "first_ts": 1782196376.0,
+   "binance_ts": 1783605600.0
+  },
+  {
+   "base": "XCU",
+   "first_venue": "gate",
+   "first_ts": 1769497069.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XDC",
+   "first_venue": "gate",
+   "first_ts": 1732503471.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XDP",
+   "first_venue": "mexc",
+   "first_ts": 1790603273.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XIAOMI",
+   "first_venue": "gate",
+   "first_ts": 1776052766.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XIAOMIHKD",
+   "first_venue": "gate",
+   "first_ts": 1784621869.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XIAOMISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1784266659.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XIECHUANG",
+   "first_venue": "gate",
+   "first_ts": 1787122054.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XLE",
+   "first_venue": "okx",
+   "first_ts": 1778494500.0,
+   "binance_ts": 1781082000.0
+  },
+  {
+   "base": "XLF",
+   "first_venue": "gate",
+   "first_ts": 1781671607.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XLI",
+   "first_venue": "mexc",
+   "first_ts": 1785936412.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XLK",
+   "first_venue": "gate",
+   "first_ts": 1781671496.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XLU",
+   "first_venue": "mexc",
+   "first_ts": 1781673900.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XLV",
+   "first_venue": "gate",
+   "first_ts": 1785219560.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XNI",
+   "first_venue": "gate",
+   "first_ts": 1769497367.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XNY",
+   "first_venue": "gate",
+   "first_ts": 1753253432.0,
+   "binance_ts": 1755082800.0
+  },
+  {
+   "base": "XOM",
+   "first_venue": "gate",
+   "first_ts": 1777255891.0,
+   "binance_ts": 1790586000.0
+  },
+  {
+   "base": "XOMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1768367056.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XPB",
+   "first_venue": "gate",
+   "first_ts": 1769497458.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XPIN",
+   "first_venue": "mexc",
+   "first_ts": 1756872952.0,
+   "binance_ts": 1757664000.0
+  },
+  {
+   "base": "XPSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1791453546.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XTEN",
+   "first_venue": "hyperliquid",
+   "first_ts": 1793059200.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XUNCE",
+   "first_venue": "gate",
+   "first_ts": 1776056853.0,
+   "binance_ts": null
+  },
+  {
+   "base": "XYZSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1785750842.0,
+   "binance_ts": null
+  },
+  {
+   "base": "YAGEOSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790659481.0,
+   "binance_ts": null
+  },
+  {
+   "base": "YANGTZE",
+   "first_venue": "gate",
+   "first_ts": 1787024990.0,
+   "binance_ts": null
+  },
+  {
+   "base": "YJTECH",
+   "first_venue": "gate",
+   "first_ts": 1785992647.0,
+   "binance_ts": null
+  },
+  {
+   "base": "YMTCSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788416357.0,
+   "binance_ts": null
+  },
+  {
+   "base": "YOFC",
+   "first_venue": "gate",
+   "first_ts": 1785739147.0,
+   "binance_ts": null
+  },
+  {
+   "base": "YONGDING",
+   "first_venue": "gate",
+   "first_ts": 1787122075.0,
+   "binance_ts": null
+  },
+  {
+   "base": "YPF",
+   "first_venue": "gate",
+   "first_ts": 1792397794.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZBCN",
+   "first_venue": "gate",
+   "first_ts": 1732936367.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZCAT",
+   "first_venue": "gate",
+   "first_ts": 1788756342.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZEREBRO",
+   "first_venue": "gate",
+   "first_ts": 1733989986.0,
+   "binance_ts": 1735826400.0
+  },
+  {
+   "base": "ZEST",
+   "first_venue": "mexc",
+   "first_ts": 1779189244.0,
+   "binance_ts": 1780581600.0
+  },
+  {
+   "base": "ZHENDINGSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1790659658.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZHIPU",
+   "first_venue": "gate",
+   "first_ts": 1776056775.0,
+   "binance_ts": 1784257200.0
+  },
+  {
+   "base": "ZHIPUHKD",
+   "first_venue": "gate",
+   "first_ts": 1784622024.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZHIPUSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1782099413.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZHONGJISTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1786685197.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZIJINMINING",
+   "first_venue": "gate",
+   "first_ts": 1785739113.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZINC",
+   "first_venue": "mexc",
+   "first_ts": 1774875311.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZK",
+   "first_venue": "gate",
+   "first_ts": 1710844985.0,
+   "binance_ts": 1718622000.0
+  },
+  {
+   "base": "ZKSYNC",
+   "first_venue": "mexc",
+   "first_ts": 1718623625.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZMSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1781079505.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZORA",
+   "first_venue": "mexc",
+   "first_ts": 1745312875.0,
+   "binance_ts": 1753441200.0
+  },
+  {
+   "base": "ZRO",
+   "first_venue": "hyperliquid",
+   "first_ts": 1694044800.0,
+   "binance_ts": 1718892000.0
+  },
+  {
+   "base": "ZSSTOCK",
+   "first_venue": "mexc",
+   "first_ts": 1788342072.0,
+   "binance_ts": null
+  },
+  {
+   "base": "ZTT",
+   "first_venue": "gate",
+   "first_ts": 1786071562.0,
+   "binance_ts": null
+  },
+  {
+   "base": "\u54c8\u57fa\u7c73",
+   "first_venue": "gate",
+   "first_ts": 1788674835.0,
+   "binance_ts": null
+  },
+  {
+   "base": "\u5e01\u5b89\u4eba\u751f",
+   "first_venue": "gate",
+   "first_ts": 1761103412.0,
+   "binance_ts": null
+  },
+  {
+   "base": "\u725b\u6765",
+   "first_venue": "gate",
+   "first_ts": 1787042476.0,
+   "binance_ts": null
+  },
+  {
+   "base": "\u9f99\u867e",
+   "first_venue": "gate",
+   "first_ts": 1773138212.0,
+   "binance_ts": null
+  }
+ ]
+}
