@@ -1,0 +1,44 @@
+name: FX and gold tick (family 5)
+
+# Family 5: gold and FX intraday on Dukascopy 1m bid/ask candles and ticks at XM costs.
+# mode comes from the dispatch input, or (push on the line branch) from research/studies/fxgold_mode.txt.
+# State and per-trade rows live on the data branch data/fxgold-tick-rows.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe | fetch | analyze"
+        default: probe
+  push:
+    branches: [line/fxgold-tick]
+    paths: [research/studies/fxgold_mode.txt]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tradelab-fxgold-tick
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - id: m
+        run: |
+          M="${{ inputs.mode }}"
+          [ -n "$M" ] || M="$(tr -d ' \n' < research/studies/fxgold_mode.txt)"
+          echo "mode=$M" >> "$GITHUB_OUTPUT"
+      - name: Probe
+        if: steps.m.outputs.mode == 'probe'
+        run: python research/studies/fxgold_probe.py | tee /tmp/probe.json
+      - uses: actions/upload-artifact@v4
+        if: steps.m.outputs.mode == 'probe'
+        with:
+          name: fxgold-probe
+          path: /tmp/probe.json
