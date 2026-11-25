@@ -37,7 +37,7 @@ class ResearchWorkflow(unittest.TestCase):
         self.assertEqual(self.block("inputs", 4), ["study"])
 
     def test_jobs(self):
-        self.assertEqual(sorted(self.block("jobs", 0)), ["forward", "l4f", "options", "study", "thin_a"])
+        self.assertEqual(sorted(self.block("jobs", 0)), ["forward", "fwd_crypto", "l4f", "options", "study", "thin_a"])
 
     def test_every_matrix_study_exists_in_run_py(self):
         run = (WF.parent.parent / "research" / "studies" / "run.py").read_text()
