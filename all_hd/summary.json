@@ -1,0 +1,97 @@
+{
+ "cells": 212,
+ "gate_ok": 0,
+ "passed": 0,
+ "family": {
+  "holm_m": 0,
+  "bonferroni_bar": null,
+  "alpha": 0.05
+ },
+ "gate_fail_reasons": {
+  "train net mean": 205,
+  "train trades 21": 1,
+  "volatility/cost 6.6 <": 1,
+  "volatility/cost 7.2 <": 1,
+  "train trades 28": 4
+ },
+ "by_family": {
+  "A": {
+   "cells": 144,
+   "gate_ok": 0
+  },
+  "B": {
+   "cells": 16,
+   "gate_ok": 0
+  },
+  "D": {
+   "cells": 16,
+   "gate_ok": 0
+  },
+  "E": {
+   "cells": 4,
+   "gate_ok": 0
+  },
+  "C": {
+   "cells": 32,
+   "gate_ok": 0
+  }
+ },
+ "top": [],
+ "best_x_survivors": [],
+ "best_x_all": [
+  [
+   0.007,
+   "macro_mom_4_300|EURUSD",
+   "volatility/cost 7.2 < 10"
+  ],
+  [
+   0.0022,
+   "macro_mom_2_300|EURUSD",
+   "volatility/cost 6.6 < 10"
+  ],
+  [
+   -0.0026,
+   "macro_fade_4_60|USDJPY",
+   "train net mean not above 0 and the reversed-side placebo"
+  ],
+  [
+   -0.0059,
+   "macro_mom_4_300|XAUUSD",
+   "train net mean not above 0 and the reversed-side placebo"
+  ],
+  [
+   -0.0059,
+   "macro_fade_4_60|EURUSD",
+   "train net mean not above 0 and the reversed-side placebo"
+  ],
+  [
+   -0.0062,
+   "macro_mom_2_300|GBPUSD",
+   "train net mean not above 0 and the reversed-side placebo"
+  ],
+  [
+   -0.0085,
+   "macro_fade_2_60|EURUSD",
+   "train net mean not above 0 and the reversed-side placebo"
+  ],
+  [
+   -0.0093,
+   "macro_mom_4_60|EURUSD",
+   "train net mean not above 0 and the reversed-side placebo"
+  ]
+ ],
+ "bounds": {
+  "train": [
+   1451606400.0,
+   1640995200.0
+  ],
+  "validation": [
+   1640995200.0,
+   1719792000.0
+  ],
+  "test": [
+   1719792000.0,
+   1795132800.0
+  ]
+ }
+}
