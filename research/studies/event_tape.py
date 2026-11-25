@@ -9,6 +9,7 @@ import json
 import os
 import random
 import sys
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
@@ -60,61 +61,52 @@ def okx_notices(gaps):
     return out
 
 
-def bybit_notices(gaps):
-    out = []
-    for typ in ("new_crypto", "delistings", "product_updates", "latest_bybit_news", "latest_activities"):
-        page = 1
-        while page <= 150:
-            d = get(f"https://api.bybit.com/v5/announcements/index?locale=en-US&type={typ}&limit=50&page={page}")
-            lst = ((d or {}).get("result") or {}).get("list") or []
-            if not lst:
-                if not d:
-                    gaps[f"bybit:{typ}"] = f"failed at page {page}"
-                break
-            for a in lst:
-                out.append({"venue": "bybit", "title": a.get("title", ""), "ts": int(a.get("dateTimestamp") or a.get("publishTime")) / 1000})
-            if min(int(a.get("dateTimestamp") or a.get("publishTime")) for a in lst) / 1000 < START:
-                break
-            page += 1
-    return out
-
-
 def kucoin_notices(gaps):
-    out = []
-    for typ in ("new-listings", "delistings", "product-updates", "latest-announcements"):
-        page = 1
-        while page <= 150:
-            d = get(f"https://api.kucoin.com/api/v3/announcements?language=en_US&type={typ}&pageSize=50&currentPage={page}")
-            items = ((d or {}).get("data") or {}).get("items") or []
-            if not items:
-                if not d:
-                    gaps[f"kucoin:{typ}"] = f"failed at page {page}"
-                break
-            for a in items:
-                out.append({"venue": "kucoin", "title": a.get("annTitle", ""), "ts": int(a["cTime"]) / 1000})
-            if min(int(a["cTime"]) for a in items) / 1000 < START:
-                break
-            page += 1
+    """Monthly windows (the `type` filter alone returns only the latest 127 items); window paging 50 per page."""
+    out, seen = [], set()
+    t = END
+    while t > START:
+        a = max(START, t - 31 * 86400)
+        for typ in ("new-listings", "delistings", "latest-announcements"):
+            page = 1
+            while page <= 20:
+                d = get("https://api.kucoin.com/api/v3/announcements?language=en_US&type=" + typ + "&pageSize=50"
+                        f"&currentPage={page}&startTime={int(a * 1000)}&endTime={int(t * 1000)}")
+                items = ((d or {}).get("data") or {}).get("items") or []
+                if not items:
+                    if d is None:
+                        gaps[f"kucoin:{typ}"] = f"failed window {time.strftime('%Y-%m', time.gmtime(a))}"
+                    break
+                for n in items:
+                    k = n.get("annId") or (n.get("annTitle"), n.get("cTime"))
+                    if k in seen:
+                        continue
+                    seen.add(k)
+                    out.append({"venue": "kucoin", "title": n.get("annTitle", ""), "ts": int(n["cTime"]) / 1000})
+                if page >= int(((d or {}).get("data") or {}).get("totalPage") or 1):
+                    break
+                page += 1
+        t = a
     return out
 
 
 def bitget_notices(gaps):
+    """Bitget serves only the last 30 days (probe 2026-11-25: 'query time range is not within the last 30 days')."""
     out = []
+    gaps["bitget"] = "history limited to the last 30 days by the API"
     for typ in ("coin_listings", "symbol_delisting", "product_updates", "latest_news"):
-        t = END
-        while t > START:
-            a = t - 30 * 86400
-            d = get("https://api.bitget.com/api/v2/public/annoucements?language=en_US&annType=" + typ
-                    + f"&startTime={int(a * 1000)}&endTime={int(t * 1000)}")
-            if d is None:
-                gaps[f"bitget:{typ}"] = f"failed window {time.strftime('%Y-%m', time.gmtime(a))}"
-            for n in (d or {}).get("data") or []:
-                out.append({"venue": "bitget", "title": n.get("annTitle", ""), "ts": float(n["cTime"]) / 1000})
-            t = a
+        d = get("https://api.bitget.com/api/v2/public/annoucements?language=en_US&annType=" + typ
+                + f"&startTime={int((END if END < time.time() else time.time()) * 1000 - 29 * 86400 * 1000)}"
+                f"&endTime={int(time.time() * 1000)}")
+        for n in (d or {}).get("data") or []:
+            out.append({"venue": "bitget", "title": n.get("annTitle", ""), "ts": float(n["cTime"]) / 1000})
     return out
 
 
-FEEDS = {"okx": okx_notices, "bybit": bybit_notices, "kucoin": kucoin_notices, "bitget": bitget_notices}
+FEEDS = {"okx": okx_notices, "kucoin": kucoin_notices, "bitget": bitget_notices}
+GAPS_KNOWN = {"bybit": "announcements API 403 from GitHub runners (CloudFront country block)",
+              "coinbase": "no public historic notice feed (blog is behind Cloudflare 403)",
+              "bithumb": "notice page 403 (Cloudflare)", "upbit": "403 from GitHub runners"}
 
 
 def build_events(gaps):
@@ -141,46 +133,90 @@ def build_events(gaps):
     return ev, reach
 
 
-# ---------------------------------------------------------------- perp prices (Bybit linear 1-minute)
-def bybit_bars(base, t0, t1):
-    """[(open_ts, high, low, close)] 1-minute bars of <base>USDT linear perp over [t0, t1), or None on failure, [] none."""
-    out, cur = {}, t0
-    for _ in range(8):
-        end = min(t1, cur + 1000 * 60)
-        d = get(f"https://api.bybit.com/v5/market/kline?category=linear&symbol={base}USDT&interval=1"
-                f"&start={int(cur * 1000)}&end={int(end * 1000 - 1)}&limit=1000")
-        if not d or d.get("retCode") != 0:
-            return None
-        for k in d["result"]["list"]:
-            out[int(k[0]) // 1000] = (float(k[2]), float(k[3]), float(k[4]))
-        cur = end
-        if cur >= t1:
+# ---------------------------------------------------------------- perp prices: OKX swap 1m, fallback Binance USDT-M vision
+_LOCK = threading.Lock()
+_LAST = [0.0]
+
+
+def _pace(gap=0.13):
+    with _LOCK:
+        w = _LAST[0] + gap - time.time()
+        _LAST[0] = max(time.time(), _LAST[0] + gap)
+    if w > 0:
+        time.sleep(w)
+
+
+def okx_bars(base, t0, t1):
+    """[(open_ts, high, low, close)] 1-minute bars of <base>-USDT-SWAP over [t0, t1); [] when the instrument has none,
+    None on failure. history-candles returns <= 100 bars, newest first, older than `after`."""
+    out, after = {}, int(t1 * 1000)
+    for _ in range(80):
+        _pace()
+        d = get(f"https://www.okx.com/api/v5/market/history-candles?instId={base}-USDT-SWAP&bar=1m&after={after}&limit=100",
+                tries=3)
+        if not d or d.get("code") != "0":
+            return None if not d else []
+        rows = d.get("data") or []
+        if not rows:
             break
-    return sorted((t, *v) for t, v in out.items())
+        for k in rows:
+            out[int(k[0]) // 1000] = (float(k[2]), float(k[3]), float(k[4]))
+        oldest = min(int(k[0]) for k in rows)
+        if oldest / 1000 <= t0:
+            break
+        after = oldest
+    return sorted((t, *v) for t, v in out.items() if t0 <= t < t1)
+
+
+_VISION = {}
+
+
+def vision_bars(base, t0, t1):
+    """Same shape from data.binance.vision USDT-M monthly 1-minute files (delisted perps stay there)."""
+    from research.studies import binance_vision as bv
+    sym = base + "USDT"
+    rows, failed = bv.klines(sym, t0, t1, "1m", market="futures/um")
+    if failed and not rows:
+        return None
+    return [(r[0], r[2], r[3], r[4]) for r in rows]
+
+
+def btc_bars(t0, t1):
+    from research.studies import binance_vision as bv
+    out = {}
+    m0 = int(t0 // (86400 * 28))
+    for chunk in range(m0, int(t1 // (86400 * 28)) + 1):
+        c0, c1 = chunk * 86400 * 28, (chunk + 1) * 86400 * 28
+        key = (c0 // 86400 // 28)
+        if key not in _VISION:
+            rows, failed = bv.klines("BTCUSDT", c0, c1, "1m", market="futures/um")
+            _VISION[key] = {r[0]: r[4] for r in rows}
+        out.update(_VISION[key])
+    return out
 
 
 def event_path(e):
     """Perp 1-minute path (index 0 = minute of the notice) and BTC closes aligned to it, or a skip reason."""
     ts = int(e["ts"] // 60 * 60)
-    for cand in (e["symbol"], "1000" + e["symbol"]):
-        bars = bybit_bars(cand, ts - PRE_S, ts + POST_S)
-        if bars is None:
-            return None, "bars_failed"
+    bars, src = None, None
+    for fn, name in ((okx_bars, "okx"), (vision_bars, "binance_um")):
+        for cand in (e["symbol"],) if name == "okx" else (e["symbol"], "1000" + e["symbol"]):
+            b = fn(cand, ts - PRE_S, ts + POST_S)
+            if b:
+                bars, src = b, name
+                break
         if bars:
             break
-    else:
+    if not bars:
         return None, "no_perp"
     if not any(t < ts for t, *_ in bars):
         return None, "not_trading_before"
     by = {t: (h, lo, c) for t, h, lo, c in bars}
     n = POST_S // 60
     path = [by.get(ts + 60 * k) for k in range(n)]
-    btc = bybit_bars("BTC", ts, ts + POST_S)
-    if not btc:
-        return None, "btc_failed"
-    bb = {t: c for t, h, lo, c in btc}
+    bb = btc_bars(ts, ts + POST_S + 3600)
     bench = [bb.get(ts + 60 * k) for k in range(n)]
-    return {"path": [[round(x, 8) for x in p] if p else None for p in path], "bench": bench, "price_venue": "bybit"}, None
+    return {"path": [[round(x, 8) for x in p] if p else None for p in path], "bench": bench, "price_venue": src}, None
 
 
 def evaluate(rows):
@@ -218,7 +254,7 @@ def main():
     def one(e):
         p, why = event_path(e)
         return e, p, why
-    with ThreadPoolExecutor(8) as ex:
+    with ThreadPoolExecutor(6) as ex:
         for e, p, why in ex.map(one, events):
             if p is None:
                 skipped[why] = skipped.get(why, 0) + 1
@@ -252,7 +288,7 @@ def main():
     by_class = {c: sum(1 for r in rows if r["cls"] == c) for c in nt.CLASSES}
     by_venue = {v: sum(1 for r in rows if r["venue"] == v) for v in FEEDS}
     summ = {"run_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "events": len(events), "priced": len(rows),
-            "skipped": skipped, "gaps": gaps, "reach": reach, "by_class": by_class, "by_venue": by_venue,
+            "skipped": skipped, "gaps": {**GAPS_KNOWN, **gaps}, "reach": reach, "by_class": by_class, "by_venue": by_venue,
             "family_size": len(cells), "passed": passed, "top_x_cells": [{"cell": k, "x": x, **{kk: table[k].get(kk) for kk in ("n", "mean", "s", "per_month", "adj_p", "pass")}} for x, k in best],
             "cells_with_n_ge_30": sum(1 for v in table.values() if v.get("n", 0) >= nt.MIN_N)}
     with open(os.path.join(out_dir, "tape", "summary.json"), "w") as f:
