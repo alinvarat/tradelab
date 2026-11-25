@@ -73,54 +73,69 @@ def study_probe_thin_b(_symbols):
 STUDIES = {"probe_thin_b": study_probe_thin_b}
 
 
-def study_probe_thin_b2(_symbols):
-    """Second probe: Polymarket v2 trades (recorded fills), gamma event/market fields, hourly price history of a thin
-    resolved market, Kalshi trades/candlesticks/historical cutoff, Manifold bets."""
+def study_probe_thin_b3(_symbols):
+    """Third probe: price history with start/end windows, v2 prices-history, trade counts of thin resolved markets,
+    Kalshi historical markets/trades/candlesticks, mutually exclusive Kalshi events, Manifold bets of a resolved market."""
     out = {}
 
     def rec(name, url, timeout=30):
         st_, body, sec = http(url, timeout)
         out[name] = {"status": st_, "sec": sec, "shape": shape(body) if isinstance(body, (dict, list)) else body}
         return body
-    oa = rec("pm_v2_openapi", "https://data-api.polymarket.com/v2/openapi.json")
+    oa = http("https://data-api.polymarket.com/v2/openapi.json")[1]
     if isinstance(oa, dict):
-        tr = (oa.get("paths") or {}).get("/v2/trades") or {}
-        out["pm_v2_trades_params"] = [(p.get("name"), (p.get("schema") or {}).get("type"), (p.get("schema") or {}).get("maximum")) for p in (tr.get("get") or {}).get("parameters", [])]
-        out["pm_v2_paths"] = sorted((oa.get("paths") or {}))[:40]
-    ks = http("https://gamma-api.polymarket.com/markets/keyset?closed=true&limit=5&volume_num_min=5000&volume_num_max=40000&end_date_min=2026-06-01T00:00:00Z&end_date_max=2026-10-01T00:00:00Z")[1]
-    ms = (ks or {}).get("markets") or [] if isinstance(ks, dict) else []
-    if ms:
-        m = ms[0]
-        out["gamma_market_keys"] = sorted(m.keys())
-        out["gamma_market_sample"] = {k: m.get(k) for k in ("id", "question", "conditionId", "volumeNum", "liquidityNum", "negRisk", "closedTime", "endDate", "umaResolutionStatus", "enableOrderBook", "outcomes", "outcomePrices", "events") if k in m}
+        for path in ("/v2/prices-history", "/v2/resolutions", "/v2/tokens"):
+            g = ((oa.get("paths") or {}).get(path) or {}).get("get") or {}
+            out["oa" + path] = [(p.get("name"), (p.get("schema") or {}).get("type")) for p in g.get("parameters", [])]
+    ks = http("https://gamma-api.polymarket.com/markets/keyset?closed=true&limit=20&volume_num_min=5000&volume_num_max=40000&end_date_min=2025-09-01T00:00:00Z&end_date_max=2026-02-01T00:00:00Z")[1]
+    ms = ks.get("markets") if isinstance(ks, dict) else []
+    probes = []
+    for m in ms[:6]:
         toks = json.loads(m.get("clobTokenIds") or "[]")
-        if toks:
-            rec("pm_prices_60", f"https://clob.polymarket.com/prices-history?market={toks[0]}&interval=max&fidelity=60")
-            rec("pm_prices_1", f"https://clob.polymarket.com/prices-history?market={toks[0]}&interval=max&fidelity=1")
-        rec("pm_v2_trades_cond", f"https://data-api.polymarket.com/v2/trades?condition={m['conditionId']}&limit=20")
-        rec("pm_v2_trades_cond_b", f"https://data-api.polymarket.com/v2/trades?market={m['conditionId']}&limit=20")
-    ev = http("https://gamma-api.polymarket.com/events?closed=true&limit=5&order=volume&ascending=false&end_date_min=2026-01-01T00:00:00Z")[1]
-    if isinstance(ev, list) and ev:
-        e0 = ev[0]
-        out["gamma_event_keys"] = sorted(e0.keys())
-        out["gamma_event_sample"] = {k: e0.get(k) for k in ("id", "title", "negRisk", "enableNegRisk", "closed", "volume", "liquidity", "openInterest") if k in e0}
-        out["gamma_event_markets_n"] = len(e0.get("markets") or [])
-    rec("kalshi_market_one", "https://api.elections.kalshi.com/trade-api/v2/markets?status=settled&limit=1")
-    km = http("https://api.elections.kalshi.com/trade-api/v2/markets?status=settled&limit=200&min_close_ts=1780000000")[1]
-    kms = km.get("markets") if isinstance(km, dict) else []
-    if kms:
-        out["kalshi_market_keys"] = sorted(kms[0].keys())
-        out["kalshi_market_sample"] = {k: kms[0].get(k) for k in kms[0] if any(w in k for w in ("ticker", "volume", "liquidity", "result", "close", "settle", "price", "interest"))}
-        t = kms[0]["ticker"]
-        rec("kalshi_trades_ticker", f"https://api.elections.kalshi.com/trade-api/v2/markets/trades?ticker={t}&limit=50")
-        et = kms[0].get("event_ticker")
-        st_ = (et or "").split("-")[0]
-        rec("kalshi_candles", f"https://api.elections.kalshi.com/trade-api/v2/series/{st_}/markets/{t}/candlesticks?start_ts=1780000000&end_ts=1795000000&period_interval=60")
-        rec("kalshi_event_one", f"https://api.elections.kalshi.com/trade-api/v2/events/{et}")
-    rec("kalshi_hist_cutoff", "https://api.elections.kalshi.com/trade-api/v2/historical/cutoff")
-    rec("kalshi_hist_markets", "https://api.elections.kalshi.com/trade-api/v2/historical/markets?limit=2")
-    rec("manifold_resolved", "https://api.manifold.markets/v0/search-markets?term=&filter=resolved&sort=most-popular&limit=2&contractType=BINARY")
-    return {"line": "probe_thin_b2", **out}, []
+        if not toks or not m.get("closedTime"):
+            continue
+        from datetime import datetime
+        ct = int(datetime.fromisoformat(m["closedTime"].replace("+00", "+00:00")).timestamp())
+        r = {"q": m["question"][:60], "closed": m["closedTime"], "vol": m.get("volumeNum")}
+        for fid, extra in ((1440, "&interval=max"), (60, "&interval=max"), (60, f"&startTs={ct - 14 * 86400}&endTs={ct}"), (5, f"&startTs={ct - 2 * 86400}&endTs={ct}")):
+            h = http(f"https://clob.polymarket.com/prices-history?market={toks[0]}&fidelity={fid}{extra}")[1]
+            r[f"hist_{fid}_{'win' if 'startTs' in extra else 'max'}"] = len((h or {}).get("history") or []) if isinstance(h, dict) else str(h)[:80]
+        n, cur = 0, ""
+        for _ in range(12):
+            t = http(f"https://data-api.polymarket.com/v2/trades?condition={m['conditionId']}&limit=1000" + (f"&cursor={cur}" if cur else ""))[1]
+            if not isinstance(t, dict):
+                r["trades_err"] = str(t)[:100]
+                break
+            n += len(t.get("data") or [])
+            cur = (t.get("pagination") or {}).get("next_cursor") or ""
+            if not cur or not (t.get("pagination") or {}).get("has_more"):
+                break
+        r["trades_total"] = n
+        if n:
+            r["trade_sample"] = (t.get("data") or [None])[0]
+        probes.append(r)
+        time.sleep(0.2)
+    out["pm_thin_markets"] = probes
+    rec("kalshi_hist_markets_big", "https://api.elections.kalshi.com/trade-api/v2/historical/markets?limit=1000")
+    hm = http("https://api.elections.kalshi.com/trade-api/v2/historical/markets?limit=1000")[1]
+    nonmve = [x for x in (hm.get("markets") if isinstance(hm, dict) else []) if not x.get("mve_collection_ticker") and float(x.get("volume_fp") or 0) > 100]
+    out["kalshi_hist_nonmve_with_volume"] = len(nonmve)
+    if nonmve:
+        x = nonmve[0]
+        out["kalshi_hist_sample"] = {k: x.get(k) for k in ("ticker", "event_ticker", "volume_fp", "open_interest_fp", "result", "close_time", "settlement_ts", "yes_bid_dollars", "yes_ask_dollars", "last_price_dollars")}
+        rec("kalshi_hist_trades", f"https://api.elections.kalshi.com/trade-api/v2/historical/trades?ticker={x['ticker']}&limit=20")
+        rec("kalshi_hist_candles", f"https://api.elections.kalshi.com/trade-api/v2/historical/markets/{x['ticker']}/candlesticks?start_ts=1700000000&end_ts=1790000000&period_interval=60")
+        rec("kalshi_events_one", f"https://api.elections.kalshi.com/trade-api/v2/events/{x['event_ticker']}?with_nested_markets=true")
+    rec("kalshi_events_settled_nested", "https://api.elections.kalshi.com/trade-api/v2/events?status=settled&limit=200&with_nested_markets=true&min_close_ts=1788000000")
+    ev = http("https://api.elections.kalshi.com/trade-api/v2/events?status=settled&limit=200&with_nested_markets=true&min_close_ts=1788000000")[1]
+    evs = ev.get("events") if isinstance(ev, dict) else []
+    out["kalshi_settled_events"] = len(evs)
+    out["kalshi_mutex_events"] = sum(1 for e in evs if e.get("mutually_exclusive"))
+    out["kalshi_series_sample"] = sorted({e.get("series_ticker") for e in evs})[:25]
+    rm = http("https://api.manifold.markets/v0/search-markets?term=&filter=resolved&sort=most-popular&limit=1&contractType=BINARY")[1]
+    if isinstance(rm, list) and rm:
+        rec("manifold_bets_market", f"https://api.manifold.markets/v0/bets?contractId={rm[0]['id']}&limit=5")
+    return {"line": "probe_thin_b3", **out}, []
 
 
-STUDIES["probe_thin_b2"] = study_probe_thin_b2
+STUDIES["probe_thin_b3"] = study_probe_thin_b3
