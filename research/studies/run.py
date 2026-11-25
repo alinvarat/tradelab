@@ -2334,6 +2334,9 @@ STUDIES.update({"fxcom_1": study_fxcom_1})
 STUDIES.update({"factory_crypto_3": study_factory_crypto_3})
 STUDIES.update(__import__("research.studies.indicators_1", fromlist=["STUDIES"]).STUDIES)   # indicators_1 + its depth probe
 
+from research.sweeps import hooks as _sweep_hooks   # noqa: E402  config-driven sweeps: research/sweeps/<family>.json
+globals().update(_sweep_hooks.shard_functions())
+
 
 # ---- sharded studies: rows_<study>(symbols_slice) and summarize_<study>(all_rows), looked up by name below ----
 
