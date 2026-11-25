@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-25T08:11Z",
+ "asof": "2026-11-25T08:16Z",
  "events": 0,
  "event_days": null,
  "events_by_gap": {
@@ -231,15 +231,24 @@
    "train trades 0": 50
   },
   "train_days": 70.3,
-  "now": 1795594317.5818326
+  "now": 1795594607.578882
  },
  "scan": {
   "funnel": {
    "days": 365784,
    "px_ok": 185497,
-   "day_has_pre": 210004,
-   "has_pm": 91457,
-   "gap_ok": 351
+   "day_has_pre": 210001,
+   "has_pm": 91454,
+   "gap_ok": 351,
+   "gap_pm_bars_10": 324,
+   "gap_pm_bars_7": 3,
+   "gap_pm_bars_2": 6,
+   "gap_pm_bars_1": 7,
+   "gap_pm_bars_5": 3,
+   "gap_pm_bars_3": 4,
+   "gap_pm_bars_6": 1,
+   "gap_pm_bars_4": 2,
+   "gap_pm_bars_8": 1
   },
   "symbols": 7081,
   "fetched": 7036,
