@@ -104,7 +104,7 @@ jobs:
           retention-days: 3
 
   sim:
-    needs: [fetch, events]
+    needs: [plan, fetch, events]
     if: always() && needs.plan.outputs.mode == 'all' && needs.fetch.result != 'cancelled'
     runs-on: ubuntu-latest
     timeout-minutes: 170
@@ -135,7 +135,7 @@ jobs:
           retention-days: 7
 
   merge:
-    needs: sim
+    needs: [plan, sim]
     if: always() && needs.sim.result != 'cancelled' && needs.plan.outputs.mode == 'all'
     runs-on: ubuntu-latest
     timeout-minutes: 60
