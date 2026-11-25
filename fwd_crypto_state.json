@@ -1,0 +1,23 @@
+{
+ "version": 1,
+ "start_ts": 1795564800.0,
+ "h_next": 1795564800.0,
+ "d_next": 1795651200.0,
+ "gap_hours_missed": 0,
+ "lines": {
+  "L12B_F": {
+   "equity": 147.0,
+   "open": [],
+   "closed": [],
+   "last_event": {},
+   "skipped_cap": 0
+  },
+  "L8B_F": {
+   "equity": 147.0,
+   "open": [],
+   "closed": [],
+   "last_event": {},
+   "skipped_cap": 0
+  }
+ }
+}
