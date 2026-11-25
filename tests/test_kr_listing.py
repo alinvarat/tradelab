@@ -19,6 +19,17 @@ class Parsers(unittest.TestCase):
             self.assertFalse(kl.listing_title(t), t)
         self.assertEqual(kl.listing_symbols("[마켓 추가] 오르빗 체인(ORC) 원화 마켓 추가"), ["ORC"])
 
+    def test_edited_suffix_notes(self):
+        for t in ("레이어제로(ZRO) 신규 거래지원 안내 (KRW, BTC, USDT 마켓) (거래지원 개시 시점 연기 안내)",
+                  "Market Support for Jupiter(JUP) (KRW, BTC, USDT Market) (Delay in start of Market Support)",
+                  "마켓 추가 NEW 버추얼 프로토콜(VIRTUAL) 원화 마켓 추가 (입금 오픈 시간 변경)",
+                  "[마켓 추가] 스타크넷(STRK) 원화 마켓 추가 및 재단 에어드랍 안내 (거래 오픈 오후 10:40)"):
+            self.assertTrue(kl.listing_title(t), t)
+        self.assertFalse(kl.listing_title("[거래] 아비트럼(ARB) KRW 마켓 추가 (취소 안내)"))
+        self.assertFalse(kl.listing_title("KRW 마켓 호가 단위 변경 안내"))
+        self.assertFalse(kl.listing_title("업비트 NFT 신규 거래지원 컬렉션 안내 (Sappy Seals 컬렉션)"))
+        self.assertEqual(kl.listing_symbols("Market Support for Ondo Finance(ONDO) (KRW, BTC, USDT Market)"), ["ONDO"])
+
     def test_dedupe_first_across_venues(self):
         ev = [{"sym": "A", "ts": 100 + kl.DEDUPE_S + 5, "src": "u"}, {"sym": "A", "ts": 200, "src": "b"}, {"sym": "A", "ts": 100, "src": "u"}]
         out = kl.dedupe(ev)

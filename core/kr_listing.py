@@ -32,16 +32,36 @@ def family_rules():
 
 _KRW = re.compile(r"원화|KRW", re.I)
 _ADD = re.compile(r"마켓\s*추가|디지털\s*자산\s*추가|신규\s*거래\s*지원|신규\s*상장|신규\s*디지털|market\s*add|add(?:ed|ing)?\s+.*market|new\s+listing|support\s+for", re.I)
-_NOT = re.compile(r"종료|폐지|유의|해제|해지|변경|연기|취소|유예|재개|중단|점검|이벤트|에어드랍|에어드롭|입출금|출금|입금|상장\s*기념|"
+_NOT = re.compile(r"종료|폐지|유의|해제|해지|변경|연기|취소|유예|재개|중단|점검|이벤트|지급|입출금|출금|입금|상장\s*기념|"
                   r"delist|terminat|cancel|postpone|suspend|resum|event|airdrop|maintenance|warning|caution|lifted|change", re.I)
+
+
+_NOTE = re.compile(r"\s*\([^()]*(?:안내|연기|변경|재개|오픈|출금|입금|정상화|지연|delay|notice|change|schedule|update)[^()]*\)\s*$", re.I)
+
+
+def strip_notes(title: str) -> str:
+    """Addendum 20261126: notices are edited after posting with a trailing note such as '(거래지원 개시 시점 연기 안내)'; the first capture can already
+    carry it. Trailing parenthetical notes with schedule/withdrawal words are removed before the exclusion test; a note with cancel/terminate words is kept (and excludes)."""
+    t = title or ""
+    while True:
+        m = _NOTE.search(t)
+        if not m or _CANCEL.search(m.group(0)):
+            return t
+        t = t[:m.start()]
+
+
+_CANCEL = re.compile(r"취소|종료|폐지|cancel|terminat", re.I)
 
 
 def listing_title(title: str) -> bool:
     """True for a notice that opens a KRW (원화) market for a coin. BTC-only / USDT-only markets, events, caution, delist,
     change, postpone and cancel notices are not events."""
-    if not title or _NOT.search(title):
+    if not title:
         return False
-    return bool(_KRW.search(title) and _ADD.search(title))
+    t = strip_notes(title)
+    if _NOT.search(t):
+        return False
+    return bool(_KRW.search(t) and _ADD.search(t))
 
 
 def listing_symbols(title: str) -> list:
