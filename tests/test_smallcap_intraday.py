@@ -12,7 +12,7 @@ def reg_day(prices):
     """prices: list of closes per 5m bar from 09:30; open = previous close."""
     out, prev = [], prices[0]
     for k, c in enumerate(prices):
-        out.append(bar(570 + 5 * k, prev, c=c))
+        out.append(bar(570 + 5 * k, prev, c=c, v=20000))
         prev = c
     return out
 
@@ -29,7 +29,7 @@ class T(unittest.TestCase):
             d = f"2026-10-{k + 1:02d}"
             days[d] = {"pre": [], "reg": [bar(570 + 5 * j, 5.0, v=40000) for j in range(78)]}
         d = "2026-10-13"
-        days[d] = {"pre": [bar(300, 6.5, v=20000), bar(555, 6.4, v=20000)], "reg": reg_day([6.5] * 78)}
+        days[d] = {"pre": [bar(300, 6.5), bar(540, 6.5), bar(555, 6.4)], "reg": reg_day([6.5] * 78)}
         ev = si.find_events("ABC", days, [], "2026-10-20", True)
         self.assertEqual(len(ev), 1)
         self.assertAlmostEqual(ev[0]["gap"], 0.28, places=2)

@@ -8,7 +8,7 @@ Pre-registered rules (locked before the first scan; see ops/lines/F7_smallcap_in
       buy the first 5-minute bar open after resumption, hold 15 min / 60 min, with or without an 8% hard stop.
   (c) catalyst-tagged gaps (8-K / press-release keywords, no LLM): gap >= 20%, ORB 15 min, by tag.
 Point-in-time universe: prior close 1-20 USD, 20-session average dollar volume 0.5-50 MUSD from sessions BEFORE the event day,
-premarket dollar volume >= 50k USD by 09:25 ET. A bar is [minute_of_day_ET, open, high, low, close, volume].
+premarket activity (>= 3 five-minute prints) and first-bar dollar volume >= 50k USD. A bar is [minute_of_day_ET, open, high, low, close, volume].
 Costs: half-spread/slippage per side SLIP plus Webull regulatory fees (no commission); the 2x stress doubles the cost.
 """
 import math
@@ -25,7 +25,8 @@ EOD_MIN = 955                                                  # exit at the clo
 SLIP = 0.005                                                   # per side, EST (small-cap spread + breakout slippage)
 PX_LO, PX_HI = 1.0, 20.0
 ADV_LO, ADV_HI, ADV_SPLIT = 0.5e6, 50e6, 5e6
-PM_DV_MIN = 50_000.0
+PM_BARS_MIN = 3           # Yahoo premarket bars carry no volume: >= 3 five-minute bars with a print by 09:25 stand in for activity
+DV5_MIN = 50_000.0        # dollar volume of the first regular 5m bar (known at 09:35, before the earliest entry at 09:40)
 MIN_PRIOR_SESSIONS = 10
 PICK_K = 3                                                     # at most 3 positions per day (account split in 3)
 GAPS = (0.20, 0.40)
@@ -144,8 +145,10 @@ def find_events(sym, days, splits, today, after_close, gap_min=0.20, funnel=None
         if any(b[5] for b in pm):
             hit("gap_pm_any_vol")
         hit("gap_pm_bars_%d" % min(len(pm), 10))
-        pm_dv = _dv(pm)
-        if pm_dv < PM_DV_MIN:
+        if len(pm) < PM_BARS_MIN:
+            continue
+        dv5 = _dv(reg[:1])
+        if dv5 < DV5_MIN:
             continue
         hit("pm_dv_ok")
         prior = [_dv(days[x]["reg"]) for x in dates[max(0, k - 20):k]]
@@ -156,7 +159,7 @@ def find_events(sym, days, splits, today, after_close, gap_min=0.20, funnel=None
             continue
         hit("event")
         out.append({"sym": sym, "date": d, "prev_date": pd_, "prev_close": prev_close, "pm_px": pm[-1][4], "gap": round(gap, 5),
-                    "pm_dv": round(pm_dv, 0), "adv20": round(adv, 0), "open": reg[0][1], "reg": reg})
+                    "pm_bars": len(pm), "dv5": round(dv5, 0), "adv20": round(adv, 0), "open": reg[0][1], "reg": reg})
     return out
 
 
@@ -311,7 +314,7 @@ def halt_event_trade(h, rule):
 
 def trades_for_rules(events, halts, rules=None):
     """{rule id: [trade dicts]} over the archived events/halts. Events are filtered by the rule's gap, band and tag, then at most
-    3 per day are taken by premarket dollar volume (known at 09:25)."""
+    3 per day are taken by first-bar dollar volume (known at 09:35)."""
     rules = rules or build_rules()
     out = {}
     for r in rules:
@@ -319,7 +322,7 @@ def trades_for_rules(events, halts, rules=None):
         if r["fam"] == "orb":
             el = [e for e in events if e["gap"] >= r["gap"] and band_ok(e["adv20"], r["band"])
                   and (r["tag"] is None or (e.get("tag") or "none") == r["tag"])]
-            for e in pick_per_day(el, key=lambda z: z["pm_dv"]):
+            for e in pick_per_day(el, key=lambda z: z["dv5"]):
                 t = orb_trade(e, r)
                 if t:
                     ts.append(t)
