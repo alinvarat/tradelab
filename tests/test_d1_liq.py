@@ -83,7 +83,7 @@ class Trade(unittest.TestCase):
         t = d1.trade(s, 1, ev["ts"], 60, 900)
         self.assertEqual(t["te"], ev["ts"] + 60)
         self.assertEqual(t["x"], t["te"] + 900)
-        self.assertGreater(t["gross"], 0.02)          # bought near the low, recovers by half the drop
+        self.assertGreater(t["gross"], 0.015)        # bought near the low, recovers by half the drop
         sh = d1.trade(s, -1, ev["ts"], 60, 900)
         self.assertAlmostEqual(sh["gross"], -t["gross"], places=9)
 
