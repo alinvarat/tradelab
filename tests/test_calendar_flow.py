@@ -78,6 +78,10 @@ class Basics(unittest.TestCase):
         self.assertTrue(cf.sane([{"symbol": "A", "ts": 1, "ret": {"h": bad}}]))
         wrong = dict(good, net=good["net"] + 0.5)
         self.assertTrue(cf.sane([{"symbol": "A", "ts": 1, "ret": {"h": wrong}}]))
+        pump = cf.make_trade(1, 100.0, 260.0, 0.0014)                     # a long that gains +160% is real, not an error
+        self.assertEqual(cf.sane([{"symbol": "A", "ts": 1, "ctl": {"h": pump}}]), [])
+        impossible = dict(cf.make_trade(-1, 100.0, 90.0, 0.0014), exit=-5.0)
+        self.assertTrue(cf.sane([{"symbol": "A", "ts": 1, "ret": {"h": impossible}}]))
 
 
 class Stable(unittest.TestCase):

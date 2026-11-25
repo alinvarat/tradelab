@@ -139,7 +139,8 @@ def run_leg(bars, side, stop_px, target_px, step, fund, btc=None, fund_btc=None,
 
 
 def sane(rows, limit=20):
-    """Problems that void a verdict: entry/exit <= 0, a short leg above +100%, net not equal to gross - cost + funding."""
+    """Problems that void a verdict (protocol S0): entry/exit <= 0, a short leg above +100%, net not equal to gross - cost + funding.
+    A long leg (the long side of a gap fade, or the random-control long of a new perp) can legitimately gain over +100%."""
     bad = []
     for r in rows:
         for part in ("ret", "ctl"):
@@ -152,8 +153,6 @@ def sane(rows, limit=20):
                     bad.append(f"{tag}: non-positive price {px}")
                 elif t["side"] < 0 and leg_gain(-1, t["entry"], t["exit"]) > 1.0:
                     bad.append(f"{tag}: short gain above +100%")
-                elif t["net"] > 1.0:
-                    bad.append(f"{tag}: net above +100%")
                 elif abs(t["net"] - (t["gross"] - t["cost"] + t["fund"])) > 1e-9:
                     bad.append(f"{tag}: net != gross - cost + fund")
         if len(bad) >= limit:
