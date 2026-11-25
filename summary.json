@@ -1,12 +1,12 @@
 {
- "asof": "2026-11-25T08:26Z",
- "events": 156,
+ "asof": "2026-11-25T21:49Z",
+ "events": 159,
  "event_days": [
   "2026-09-16",
-  "2026-11-23"
+  "2026-11-25"
  ],
  "events_by_gap": {
-  "20": 156,
+  "20": 159,
   "40": 55
  },
  "tags": {
@@ -14,12 +14,12 @@
   "fda": 9,
   "earnings": 18,
   "offering": 4,
-  "none": 122,
+  "none": 125,
   "other": 2
  },
- "halts_archived": 29,
- "halts_with_bars": 0,
- "trade_rows": 628,
+ "halts_archived": 129,
+ "halts_with_bars": 53,
+ "trade_rows": 640,
  "per_rule": {
   "a_gap20_orb5_stoporb_eod_low": {
    "n": 25,
@@ -280,16 +280,28 @@
    "x_per_month": -1.5662765525343847
   },
   "b_halt_t15_nostop": {
-   "n": 0
+   "n": 3,
+   "mean": -0.05929443445695342,
+   "sd": 0.07276498076881367,
+   "x_per_month": -59.76205652807588
   },
   "b_halt_t15_stop8": {
-   "n": 0
+   "n": 3,
+   "mean": -0.051273599985336954,
+   "sd": 0.0645596947261645,
+   "x_per_month": -56.76847071602658
   },
   "b_halt_t60_nostop": {
-   "n": 0
+   "n": 3,
+   "mean": -0.15214960093414562,
+   "sd": 0.12138003977327878,
+   "x_per_month": -141.41308402071434
   },
   "b_halt_t60_stop8": {
-   "n": 0
+   "n": 3,
+   "mean": -0.09378688291571595,
+   "sd": 0.0064526029270582565,
+   "x_per_month": -19013.270711907826
   }
  },
  "eval": {
@@ -301,13 +313,13 @@
   "top_train_x": [
    {
     "n_train": 30,
-    "tpm": 12.793,
+    "tpm": 12.692,
     "w": 0.3333333333333333,
     "shortable": true,
     "train_mean": -0.028414,
     "placebo_mean": 0.008277,
     "vol_cost": 17.18,
-    "x": -0.3454,
+    "x": -0.3426,
     "reason": "train net mean not above 0 and the reversed-side placebo",
     "id": "c_none_gap20_orb15_stoporb_eod",
     "control_mean_train": -0.007232308023006176,
@@ -334,13 +346,13 @@
    },
    {
     "n_train": 39,
-    "tpm": 16.631,
+    "tpm": 16.5,
     "w": 0.3333333333333333,
     "shortable": true,
     "train_mean": -0.016572,
     "placebo_mean": -0.003559,
     "vol_cost": 10.0,
-    "x": -0.4515,
+    "x": -0.4479,
     "reason": "train net mean not above 0 and the reversed-side placebo",
     "id": "a_gap20_orb5_trail8_eod_high",
     "control_mean_train": -0.0034091810660672175,
@@ -367,13 +379,13 @@
    },
    {
     "n_train": 39,
-    "tpm": 16.631,
+    "tpm": 16.5,
     "w": 0.3333333333333333,
     "shortable": true,
     "train_mean": -0.05005,
     "placebo_mean": 0.02992,
     "vol_cost": 17.86,
-    "x": -1.2919,
+    "x": -1.2818,
     "reason": "train net mean not above 0 and the reversed-side placebo",
     "id": "a_gap20_orb5_stoporb_1130_high",
     "control_mean_train": 0.011549905467511211,
@@ -400,13 +412,13 @@
    },
    {
     "n_train": 30,
-    "tpm": 12.793,
+    "tpm": 12.692,
     "w": 0.3333333333333333,
     "shortable": true,
     "train_mean": -0.018455,
     "placebo_mean": -0.001681,
     "vol_cost": 5.49,
-    "x": -1.4262,
+    "x": -1.415,
     "reason": "train net mean not above 0 and the reversed-side placebo",
     "id": "c_none_gap20_orb15_trail8_eod",
     "control_mean_train": -0.0043582459466606745,
@@ -433,13 +445,13 @@
    },
    {
     "n_train": 39,
-    "tpm": 16.631,
+    "tpm": 16.5,
     "w": 0.3333333333333333,
     "shortable": true,
     "train_mean": -0.080724,
     "placebo_mean": 0.060594,
     "vol_cost": 14.99,
-    "x": -4.7709,
+    "x": -4.7333,
     "reason": "train net mean not above 0 and the reversed-side placebo",
     "id": "a_gap20_orb5_stoporb_eod_high",
     "control_mean_train": -0.06006742630177928,
@@ -478,24 +490,25 @@
    "train trades 9": 3,
    "train trades 6": 3,
    "train trades 7": 3,
-   "train trades 0": 8,
+   "train trades 0": 4,
    "train trades 1": 2,
-   "train trades 4": 2
+   "train trades 4": 2,
+   "train trades 3": 4
   },
-  "train_days": 70.4,
-  "now": 1795595175.284088
+  "train_days": 70.9,
+  "now": 1795643362.4548204
  },
  "scan": {
   "funnel": {
-   "days": 365784,
-   "px_ok": 185497,
-   "day_has_pre": 210001,
-   "has_pm": 91454,
-   "gap_ok": 351,
-   "gap_pm_bars_10": 324,
-   "pm_dv_ok": 330,
+   "days": 366026,
+   "px_ok": 185539,
+   "day_has_pre": 208299,
+   "has_pm": 90589,
+   "gap_ok": 352,
+   "gap_pm_bars_10": 325,
+   "pm_dv_ok": 331,
    "gap_pm_bars_7": 3,
-   "event": 156,
+   "event": 157,
    "gap_pm_bars_2": 6,
    "gap_pm_bars_1": 7,
    "gap_pm_bars_5": 3,
@@ -505,8 +518,8 @@
    "gap_pm_bars_8": 1
   },
   "symbols": 7081,
-  "fetched": 7036,
-  "failed": 45,
+  "fetched": 7038,
+  "failed": 43,
   "timeout": false
  }
 }
