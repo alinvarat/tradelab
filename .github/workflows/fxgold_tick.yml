@@ -1,0 +1,242 @@
+name: FX and gold tick (family 5)
+
+# Family 5: gold and FX intraday on Dukascopy 1m bid/ask candles and ticks at XM costs (protocol_fxgold_tick_20261125.md).
+# mode comes from the dispatch input, or (push on the line branch) from research/studies/fxgold_mode.txt: probe | probe2 | probe3 | pilot | pilot_hd | all | all_hd | candles_hd.
+# pilot = same rules on gold only, 2023Q4..2026Q4, shorter splits (protocol addendum), diagnostic only.
+# Candle chunks are quarters cached by key (a rerun only fetches chunks that failed); rows and summaries go to data/fxgold-tick-rows.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe | probe2 | probe3 | pilot | pilot_hd | all | all_hd | candles_hd"
+        default: all
+  push:
+    branches: [line/fxgold-tick]
+    paths: [research/studies/fxgold_mode.txt]
+
+permissions:
+  contents: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      mode: ${{ steps.m.outputs.mode }}
+      fetch: ${{ steps.mx.outputs.fetch }}
+      events: ${{ steps.mx.outputs.events }}
+      sims: ${{ steps.mx.outputs.sims }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - id: m
+        run: |
+          M="${{ inputs.mode }}"
+          [ -n "$M" ] || M="$(tr -d ' \n' < research/studies/fxgold_mode.txt)"
+          echo "mode=$M" >> "$GITHUB_OUTPUT"
+      - name: Probe
+        if: steps.m.outputs.mode == 'probe'
+        run: python research/studies/fxgold_probe.py | tee /tmp/probe.json
+      - name: Probe 3
+        if: steps.m.outputs.mode == 'probe3'
+        run: python -m research.studies.fxgold_probe3 | tee /tmp/probe.json
+      - name: Probe 2
+        if: steps.m.outputs.mode == 'probe2'
+        run: python -m research.studies.fxgold_probe2 | tee /tmp/probe.json
+      - uses: actions/upload-artifact@v4
+        if: startsWith(steps.m.outputs.mode, 'probe')
+        with:
+          name: fxgold-probe
+          path: /tmp/probe.json
+      - name: Matrix
+        id: mx
+        if: (steps.m.outputs.mode == 'all' || startsWith(steps.m.outputs.mode, 'pilot') || steps.m.outputs.mode == 'all_hd' || steps.m.outputs.mode == 'candles_hd')
+        run: |
+          J="$(python -m research.studies.fxgold_matrix ${{ steps.m.outputs.mode }})"
+          echo "fetch=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["fetch"]))')" >> "$GITHUB_OUTPUT"
+          echo "events=$(echo "$J" | python -c 'import json,sys;e=json.load(sys.stdin)["events"];print(json.dumps(e) if e else "")')" >> "$GITHUB_OUTPUT"
+          echo "sims=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["sims"]))')" >> "$GITHUB_OUTPUT"
+
+  calendar:
+    needs: plan
+    if: needs.plan.outputs.fetch != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ok: ${{ steps.c.outputs.ok }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/cache@v4
+        with:
+          path: /tmp/events.csv
+          key: fxcal-v1
+      - id: c
+        run: |
+          [ -s /tmp/events.csv ] || timeout 60 python -m research.studies.fxgold_calendar /tmp/events.csv || true
+          if [ -s /tmp/events.csv ]; then echo "ok=true" >> "$GITHUB_OUTPUT"; else echo "ok=false" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/upload-artifact@v4
+        if: steps.c.outputs.ok == 'true'
+        with:
+          name: fx-calendar-${{ needs.plan.outputs.mode }}
+          path: /tmp/events.csv
+
+  fetch:
+    needs: plan
+    if: needs.plan.outputs.fetch != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        c: ${{ fromJSON(needs.plan.outputs.fetch) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: /tmp/fx
+          key: fxchunk-v1-${{ endsWith(needs.plan.outputs.mode, '_hd') && 'hd-' || '' }}${{ matrix.c.sym }}-${{ matrix.c.chunk }}
+      - name: Restore finished days of an earlier attempt
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/fxd
+          key: fxday-v1-${{ matrix.c.sym }}-${{ matrix.c.chunk }}-none
+          restore-keys: fxday-v1-${{ matrix.c.sym }}-${{ matrix.c.chunk }}-
+      - name: Fetch chunk
+        if: steps.cache.outputs.cache-hit != 'true'
+        env:
+          FXGOLD_DAYDIR: /tmp/fxd
+          FXGOLD_SOURCE: ${{ endsWith(needs.plan.outputs.mode, '_hd') && 'hd' || 'duka' }}
+        run: python -m research.studies.fxgold_tick fetch ${{ matrix.c.sym }} ${{ matrix.c.chunk }} ${{ matrix.c.start }} ${{ matrix.c.end }} /tmp/fx
+      - name: Save finished days
+        if: always() && steps.cache.outputs.cache-hit != 'true'
+        continue-on-error: true
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/fxd
+          key: fxday-v1-${{ matrix.c.sym }}-${{ matrix.c.chunk }}-${{ github.run_id }}-${{ github.run_attempt }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fx-${{ matrix.c.sym }}-${{ matrix.c.chunk }}-${{ needs.plan.outputs.mode }}
+          path: /tmp/fx
+          retention-days: 3
+          if-no-files-found: ignore
+
+  events:
+    needs: [plan, calendar]
+    if: always() && needs.calendar.outputs.ok == 'true' && needs.plan.outputs.events != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        e: ${{ fromJSON(needs.plan.outputs.events) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          name: fx-calendar-${{ needs.plan.outputs.mode }}
+          path: /tmp/cal
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: /tmp/ev
+          key: fxev-v1-${{ matrix.e.sym }}-${{ matrix.e.year }}
+      - name: Fetch release ticks
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: python -m research.studies.fxgold_tick events ${{ matrix.e.sym }} /tmp/cal/events.csv ${{ matrix.e.year }} /tmp/ev
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fxev-${{ matrix.e.sym }}-${{ matrix.e.year }}-${{ needs.plan.outputs.mode }}
+          path: /tmp/ev
+          retention-days: 3
+          if-no-files-found: ignore
+
+  sim:
+    needs: [plan, fetch, events]
+    if: always() && needs.plan.outputs.sims != '' && needs.fetch.result != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    strategy:
+      fail-fast: false
+      matrix:
+        sym: ${{ fromJSON(needs.plan.outputs.sims) }}
+    env:
+      FXGOLD_PILOT: ${{ startsWith(needs.plan.outputs.mode, 'pilot') && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: fx-${{ matrix.sym }}-*-${{ needs.plan.outputs.mode }}
+          merge-multiple: true
+          path: /tmp/data
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: fxev-${{ matrix.sym }}-*-${{ needs.plan.outputs.mode }}
+          merge-multiple: true
+          path: /tmp/data
+      - run: python -m research.studies.fxgold_tick sim ${{ matrix.sym }} /tmp/data /tmp/sim
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sim-${{ matrix.sym }}-${{ needs.plan.outputs.mode }}
+          path: /tmp/sim
+          retention-days: 7
+
+  merge:
+    needs: [plan, sim]
+    if: always() && needs.plan.outputs.sims != '' && needs.sim.result != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      FXGOLD_PILOT: ${{ startsWith(needs.plan.outputs.mode, 'pilot') && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: sim-*-${{ needs.plan.outputs.mode }}
+          merge-multiple: true
+          path: /tmp/all
+      - run: python -m research.studies.fxgold_tick merge /tmp/all | tee /tmp/merge.out | head -c 8000
+      - name: Push rows and summary to data/fxgold-tick-rows
+        if: always()
+        run: |
+          [ -d /tmp/all ] || exit 0
+          D="${{ needs.plan.outputs.mode }}"
+          mkdir -p /tmp/out/$D && cp /tmp/all/rows_*.jsonl.gz /tmp/all/summary.json /tmp/all/cells_all.json /tmp/all/fetch_*.json /tmp/out/$D/ 2>/dev/null || true
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/fxgold-tick-rows; then
+            git checkout -q -B data/fxgold-tick-rows origin/data/fxgold-tick-rows
+          else
+            git checkout -q --orphan data/fxgold-tick-rows && git rm -rq --cached . && git clean -fdq
+          fi
+          mkdir -p $D && cp /tmp/out/$D/* $D/
+          git add -A $D
+          git commit -qm "fxgold tick $D rows $(date -u +%FT%TZ)" || echo "nothing new"
+          git pull -q --rebase origin data/fxgold-tick-rows 2>/dev/null || true
+          git push -q origin data/fxgold-tick-rows
