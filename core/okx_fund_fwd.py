@@ -11,6 +11,7 @@ import math
 
 from core import sequential as sq
 
+GRID = 4 * 3600                    # settlements of OKX swaps fall on a 4-hour grid (addendum 2026-11-25: 8-hour and 4-hour interval swaps)
 DAY8 = 8 * 3600
 ENTRY_MINUTES = (15, 5, 1)
 THRESHOLDS = (0.003, 0.005)
@@ -30,9 +31,9 @@ COHORTS = [(cohort_id(m, t), m, t) for m in ENTRY_MINUTES for t in THRESHOLDS]
 
 
 def next_settlement(now, min_lead=60):
-    """First 8-hour grid time (00:00, 08:00, 16:00 UTC) at least `min_lead` seconds ahead."""
-    t = (int(now) // DAY8 + 1) * DAY8
-    return t if t - now >= min_lead else t + DAY8
+    """First 4-hour grid time (00:00, 04:00, ... 20:00 UTC) at least `min_lead` seconds ahead."""
+    t = (int(now) // GRID + 1) * GRID
+    return t if t - now >= min_lead else t + GRID
 
 
 def _f(x):
