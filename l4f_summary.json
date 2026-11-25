@@ -92,6 +92,56 @@
    "stake": 7.4313,
    "entry_ts": 1795628838.5644197,
    "volume": 51908.538111
+  },
+  {
+   "id": "6994161",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T17:45:00Z",
+   "side": "yes",
+   "price": 0.05,
+   "stake": 7.4313,
+   "entry_ts": 1795630723.0308065,
+   "volume": 80102
+  },
+  {
+   "id": "6994327",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T17:45:00Z",
+   "side": "yes",
+   "price": 0.04,
+   "stake": 7.4313,
+   "entry_ts": 1795630723.0308065,
+   "volume": 92902
+  },
+  {
+   "id": "6995614",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T17:45:00Z",
+   "side": "yes",
+   "price": 0.001,
+   "stake": 7.4313,
+   "entry_ts": 1795630723.0308065,
+   "volume": 55950
+  },
+  {
+   "id": "6995752",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T17:45:00Z",
+   "side": "yes",
+   "price": 0.001,
+   "stake": 7.4313,
+   "entry_ts": 1795630723.0308065,
+   "volume": 118770
+  },
+  {
+   "id": "6995844",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T17:45:00Z",
+   "side": "yes",
+   "price": 0.001,
+   "stake": 7.4313,
+   "entry_ts": 1795630723.0308065,
+   "volume": 92226
   }
  ],
  "n_closed": 3,
