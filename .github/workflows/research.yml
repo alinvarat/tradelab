@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       study:
-        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, fwd_crypto_spikes, polymarket_llm, l7_first_red_day or all"
+        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, fwd_crypto_spikes, polymarket_llm, l7_first_red_day, factory_crypto_2 or all"
         default: all
   schedule:
     - cron: "0 3 * * 0"        # Sundays 03:00 UTC: forward DeepSeek earnings reader
@@ -259,7 +259,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        study: ${{ fromJSON(inputs.study == 'all' && '["tom","momentum","items","form4","pit_momentum","llm_earnings","llm_earnings_wide","llm_8k_other","probe_options","polymarket_llm","probe_llm_cost","pit_swing","news_v2","l1_listings","l1c_binance_notices","l1e_binance_delist","l1g_alpha_remove","l4_polymarket_longshot","l3_smallcap_news","l6_smallcap_insider","l2_unlocks","probe_provider","probe_claude","news_v3","l7_first_red_day","l8_gainer_fade","l9_loser_bounce","l10_gap_fade","l11_funding_short","factory_crypto_1","l8b_gainer_fade_all","l12_hour_shocks","l12b_perp_fade","factory_us_pit_1"]' || format('["{0}"]', inputs.study)) }}
+        study: ${{ fromJSON(inputs.study == 'all' && '["tom","momentum","items","form4","pit_momentum","llm_earnings","llm_earnings_wide","llm_8k_other","probe_options","polymarket_llm","probe_llm_cost","pit_swing","news_v2","l1_listings","l1c_binance_notices","l1e_binance_delist","l1g_alpha_remove","l4_polymarket_longshot","l3_smallcap_news","l6_smallcap_insider","l2_unlocks","probe_provider","probe_claude","news_v3","l7_first_red_day","l8_gainer_fade","l9_loser_bounce","l10_gap_fade","l11_funding_short","factory_crypto_1","factory_crypto_2","l8b_gainer_fade_all","l12_hour_shocks","l12b_perp_fade","factory_us_pit_1"]' || format('["{0}"]', inputs.study)) }}
     steps:
       - name: Check out repository
         if: inputs.study == 'all' || inputs.study == matrix.study
