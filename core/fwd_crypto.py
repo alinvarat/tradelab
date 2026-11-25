@@ -98,16 +98,6 @@ def control_order(line: str, entry_ts: float, event_symbol: str, pool: list) -> 
     return cands
 
 
-LIQUIDATION = 2.0                   # 1x short collateral is gone when the price reaches 2x the entry
-
-
-def exit_price(entry: float, bars: list, exit_close: float) -> tuple:
-    """(price, liquidated): the exit close, or 2x entry if any bar in the hold reached it (high >= 2x entry)."""
-    if any(b[2] >= LIQUIDATION * entry for b in bars):
-        return LIQUIDATION * entry, True
-    return exit_close, False
-
-
 def exit_bar_ts(line: str, entry_ts: float) -> float:
     """Open time of the bar whose close is the exit price (the last bar of the 24 h hold)."""
     return entry_ts + LINES[line]["hold"] - LINES[line]["step"]
@@ -117,7 +107,8 @@ def exit_bar_ts(line: str, entry_ts: float) -> float:
 def new_state(now: float) -> dict:
     hour = now - now % HOUR
     day_ceil = now - now % DAY + (DAY if now % DAY else 0)
-    return {"version": 1, "start_ts": hour, "h_next": hour - HOUR, "d_next": day_ceil - DAY, "gap_hours_missed": 0,
+    # first shock bar is the hour (day) that opens at or after start_ts, so no bar that began before the protocol counts
+    return {"version": 1, "start_ts": hour, "h_next": hour, "d_next": day_ceil, "gap_hours_missed": 0,
             "lines": {k: {"equity": START_EQUITY, "open": [], "closed": [], "last_event": {}, "skipped_cap": 0}
                       for k in LINES}}
 
@@ -145,57 +136,54 @@ def due(pos: dict, now: float, grace: float = 60.0) -> bool:
 
 
 def close_position(state: dict, pos: dict, exit_px: float, btc_exit: float, fund: float, now: float,
-                   control_exit: dict = None) -> dict:
+                   control_exit: dict = None, liquidated: bool = False) -> dict:
     """Close a position: net return, ledger equity (taken trades only), control result. control_exit:
     {"exit_px", "btc_exit", "funding"} for the control coin, or None (control unavailable)."""
     ln = state["lines"][pos["line"]]
-    net = max(-1.0, trade_return(pos["entry_px"], exit_px, pos["btc_entry"], btc_exit, fund))   # 1x collateral: at most all of it
+    net = trade_return(pos["entry_px"], exit_px, pos["btc_entry"], btc_exit, fund)
     ctrl = None
     c = pos.get("control")
     if c and control_exit:
-        ctrl = max(-1.0, trade_return(c["entry_px"], control_exit["exit_px"], c["btc_entry"], control_exit["btc_exit"],
-                                      control_exit["funding"]))
+        ctrl = trade_return(c["entry_px"], control_exit["exit_px"], c["btc_entry"], control_exit["btc_exit"], control_exit["funding"])
     pnl = round(pos["stake"] * net, 4)
     ln["equity"] = round(ln["equity"] + pnl, 4)
     row = {**pos, "exit_px": exit_px, "btc_exit": btc_exit, "funding": fund, "net": net, "control_net": ctrl,
-           "pnl_usd": pnl, "ts": now, "equity_after": ln["equity"]}
+           "liquidated": liquidated, "pnl_usd": pnl, "ts": now, "equity_after": ln["equity"]}
     ln["open"] = [p for p in ln["open"] if p["id"] != pos["id"]]
     ln["closed"].append(row)
     return row
 
 
-def _clip(x: float) -> float:
-    return max(-1.0, min(3.0, x))
-
-
 def evidence(closed: list, max_events: int = MAX_EVENTS) -> dict:
-    """Sequential evidence per protocol. One unit per UTC exit day (mean over that day's closed events, taken or not).
-    Returns are bounded below by -1 (1x collateral, liquidated at +100%), so core.sequential's hard-bound rule holds:
-    model EProcess(lo=1, hi=3) and a paired (model - control) EProcess(lo=1, hi=3, paired=True), both on values clipped
-    to [-1, 3]. Early verdict: `edge` only when BOTH reach 20; `no edge` when either negative side reaches 20. At
-    max_events without an early verdict, a one-time fixed-sample read: both day-cluster bootstrap p < 0.05 -> `positive
-    at max`, else `inconclusive at max`. (Total false-positive rate is at most about 0.10; stated in the protocol.)"""
-    import random
-    import time
-    day = lambda r: time.strftime("%Y-%m-%d", time.gmtime(r["ts"]))   # noqa: E731
-    model = [{"ts": r["ts"], "ret": _clip(r["net"])} for r in closed]
-    paired = [{"ts": r["ts"], "ret": _clip(r["net"]) - _clip(r["control_net"])} for r in closed if r.get("control_net") is not None]
-    m = sequential.run(sequential.daily_means(model), lo=1.0, hi=3.0)
-    p = sequential.run(sequential.daily_means(paired), lo=1.0, hi=3.0, paired=True)
-    fixed = None
+    """Sequential evidence per protocol: core.sequential.paired_daily over closed events (every event counts, taken or
+    not), one unit per UTC exit day. Verdict: `edge` only when both the model and the model-minus-control e-process
+    reach 20; `no edge` when either negative side reaches 20; at max_events without either: `inconclusive at max`."""
+    rows = [{"ts": r["ts"], "model": r["net"], "control": r.get("control_net")} for r in closed]
+    res = sequential.paired_daily(rows, start=0, before=float("inf"))
+    m, p = res["model"], res["paired"]
     if m["decision"] == "edge" and p["decision"] == "edge":
         verdict = "edge (forward test of an inconclusive screen, not a pass of the screen)"
     elif m["decision"].startswith("no edge") or p["decision"].startswith("no edge"):
         verdict = "no edge"
     elif len(closed) >= max_events:
-        rng = random.Random(7)
-        pm = sc.block_bootstrap_p([x["ret"] for x in model], [day(x) for x in closed], rng)
-        pp = sc.block_bootstrap_p([x["ret"] for x in paired], [day(r) for r in closed if r.get("control_net") is not None], rng)
-        fixed = {"p_model_gt0": round(pm, 4), "p_paired_gt0": round(pp, 4)}
-        verdict = "positive at max (fixed-sample read)" if pm < 0.05 and pp < 0.05 else "inconclusive at max"
+        verdict = "inconclusive at max"
     else:
         verdict = "continue"
-    return {"n_closed": len(closed), "max_events": max_events, "verdict": verdict, "model": m, "paired": p, "fixed_at_max": fixed}
+    return {"n_closed": len(closed), "max_events": max_events, "verdict": verdict, "model": m, "paired": p}
+
+
+def line_active(state: dict, line: str) -> bool:
+    """A line keeps opening events only while its verdict is `continue` (open trades still close after a stop)."""
+    return evidence(state["lines"][line]["closed"])["verdict"] == "continue"
+
+
+def drawdown(state: dict, line: str) -> float:
+    """Worst peak-to-trough fall of the line's realized equity, as a fraction of the peak (0 when none)."""
+    peak, worst = START_EQUITY, 0.0
+    for r in state["lines"][line]["closed"]:
+        peak = max(peak, r["equity_after"])
+        worst = max(worst, 1 - r["equity_after"] / peak)
+    return round(worst, 4)
 
 
 def line_summary(state: dict, line: str) -> dict:
@@ -206,7 +194,12 @@ def line_summary(state: dict, line: str) -> dict:
     taken = [r for r in c if r["stake"] > 0]
     return {"equity_usd": ln["equity"], "start_usd": START_EQUITY, "open": len(ln["open"]),
             "open_taken": sum(1 for p in ln["open"] if p["stake"] > 0), "closed": len(c), "closed_taken": len(taken),
-            "skipped_cap": ln["skipped_cap"],
+            "skipped_cap": ln["skipped_cap"], "worst_drawdown": drawdown(state, line),
+            "liquidated": sum(1 for r in c if r.get("liquidated")),
+            "funding_usd_taken": round(sum(r["stake"] * r["funding"] for r in taken), 4),
+            "mean_funding": round(sum(r["funding"] for r in c) / len(c), 5) if c else None,
+            "equity_double_cost_usd": round(START_EQUITY + sum(r["pnl_usd"] - r["stake"] * FEES for r in taken), 4),
+            "mean_net_double_cost": round(sum(nets) / len(nets) - FEES, 5) if nets else None,
             "mean_net": round(sum(nets) / len(nets), 5) if nets else None,
             "mean_control": round(sum(ctrl) / len(ctrl), 5) if ctrl else None,
             "hit_rate": round(sum(1 for x in nets if x > 0) / len(nets), 3) if nets else None,

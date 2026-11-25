@@ -122,9 +122,10 @@ def process_line(state, now, line, perp_syms):
         else:
             full = {s: bars[s] for s in cands}
         fund = many(funding, cands, workers=1)
+        bad = [s for s in cands if not full.get(s) or fund.get(s) is None]
+        if bad:      # never advance past an event we could not evaluate: the next hourly run retries
+            raise RuntimeError(f"{line}: data missing for candidates {bad[:5]}; not advancing")
         for s in cands:
-            if not full.get(s) or fund.get(s) is None:
-                continue
             last = state["lines"][line]["last_event"].get(s, 0.0)
             if line == "L12B_F":
                 events += fc.detect_hourly(s, full[s], btc, fund[s], min_ev, last)
@@ -156,9 +157,9 @@ def exit_fetch(symbol, entry_px, line, entry_ts, now):
     bb = klines("BTCUSDT", cfg["interval"], limit=1, start=bt, now=now)
     if len(hold) != nb or hold[-1][0] != bt or not bb or bb[0][0] != bt or bt + cfg["step"] > now:
         return None
-    px, _liq = fc.exit_price(entry_px, hold, hold[-1][4])
+    px, liq = fc.exit_price(entry_px, hold, hold[-1][4])
     f = funding(symbol)
-    return px, bb[0][4], fc.funding_paid(f, entry_ts, entry_ts + cfg["hold"])
+    return px, bb[0][4], fc.funding_paid(f, entry_ts, entry_ts + cfg["hold"]), liq
 
 
 def close_due(state, now):
@@ -185,7 +186,7 @@ def close_due(state, now):
                     ERRORS.append(f"close control {pos['id']}: {e}"[:200])
                 if cexit is None and now < pos["entry_ts"] + fc.LINES[line]["hold"] + 3 * HOUR:
                     continue    # wait up to 3 h for the control's data, then close without a control
-            fc.close_position(state, pos, main[0], main[1], main[2], now, cexit)
+            fc.close_position(state, pos, main[0], main[1], main[2], now, cexit, main[3])
             closed += 1
     return closed
 
@@ -208,6 +209,9 @@ def main():
             raise RuntimeError(f"only {len(perp_syms)} perps matched; refusing to run")
         out["closed_now"] = close_due(state, now)
         for line in fc.LINES:
+            if not fc.line_active(state, line):
+                out[line] = {"stopped": fc.evidence(state["lines"][line]["closed"])["verdict"]}
+                continue
             try:
                 out[line] = process_line(state, now, line, perp_syms)
             except Exception as e:   # noqa: BLE001

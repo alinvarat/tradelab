@@ -210,9 +210,6 @@ Code `core.screens.perp_shock_rows`, study `l12b_perp_fade`. Same events, entry,
 - Reading: most of L12's edge sat in coins with no perp (unshortable) and in the understated funding. On the shortable set it is too thin after realistic costs. No forward ledger. Any retest would need a new idea (e.g. skip events where funding is already strongly negative), not a relabel.
 
 
-## Forward tests of L12b and L8b (protocol 2026-11-25, `protocol_fwd_crypto_spikes_20261125.md`)
-Both screens stay "inconclusive"; this is a forward paper test only (lines L12B_F and L8B_F, 147 USD ledger each, same-time random control, e-process stop with a 150-event maximum). Data swap: Binance fapi answers 451 from Actions, so spot bars come from `data-api.binance.vision` and perp existence and funding from OKX. State: branch `data/fwd-crypto-spikes`. No result yet.
-
 ## Factory crypto 1: 11 portfolio rules at once (pre-registered 2026-11-25, before any panel was built)
 Code `core/factory.py`, study `factory_crypto_1`. No LLM, no cost. Owner feedback 2026-11-25: research was too slow and too narrow, so this screens many styles in one run on one panel, with a Bonferroni bar so trying many does not manufacture a pass.
 - Panel: daily bars of every Binance USDT coin ever listed (delisted included), 2020-11 to 2026-10; a coin is tradable on a day when it has >= 31 days of history and 20-day average quote volume >= 2M USDT. Weights are set with data up to day i's close and earn day i to i+1 close-to-close.

@@ -11,7 +11,6 @@
 | บอทกติกาแบบกว้าง (broad-v1) | `core/event_trader_broad.py` | Kuber | 30 วิ | `event_trader_broad.json` | `/api/events_broad` |
 | ตัวเก็บข้อมูลตลาด + บัญชี L1b/L1d/L1f | `core/market_collect.py` | Kuber | venues 5 วิ, ประกาศ 30 วิ, Deribit 30 นาที | `/app/data/collect/` | `/api/collect` (`listings`, `l1b`, `l1d`, `l1f`) |
 | บัญชี L4f (Polymarket) | `core/market_collect.py` (`l4f_once`) + `research/studies/l4f_forward.py` | GitHub Actions job `l4f` | ทุก 30 นาที (:17, :47) | branch `data/l4f-forward` | `git show origin/data/l4f-forward:l4f_summary.json` |
-| บัญชี forward L12B_F / L8B_F (spike ชอร์ตคริปโต) | `core/fwd_crypto.py` + `research/studies/fwd_crypto_spikes.py` | GitHub Actions job `fwd_crypto` (`study=fwd_crypto_spikes`) | ทุกชั่วโมงนาทีที่ 5 (systemd timer บนเครื่องเจ้าของ) | branch `data/fwd-crypto-spikes` | `git show origin/data/fwd-crypto-spikes:fwd_crypto_summary.json` |
 | ออปชันแบบเดินหน้า | `research/studies/options_forward.py`, `core/options_forward.py` | Actions job `options` | จ.–ศ. 15:00 UTC | branch `data/options-forward` | `git show origin/data/options-forward:options_forward_summary.json` |
 | ข่าวงบแบบเดินหน้า | `run.py llm_earnings_forward` | Actions job `forward` | อาทิตย์ 03:00 UTC | branch `data/llm-earnings` | ไฟล์ใน branch นั้น |
 | ด่านคัดกรองย้อนหลัง | `research/studies/run.py` (`STUDIES`), `core/screens.py` | Actions job `study` | สั่งรันเองเท่านั้น | artifact `study-<name>` | `gh run download <id> -n study-<name>` |
