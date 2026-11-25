@@ -1,0 +1,58 @@
+name: D1 liquidation fade
+
+# PLAN_20261126 direction D1 (branch line/d1-liq-fade). Modes: probe (counts and structure only, no returns), run (locked protocol).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe or run"
+        required: true
+        default: "probe"
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    concurrency:
+      group: tradelab-d1-liq
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Probe
+        if: inputs.mode == 'probe'
+        run: python research/studies/d1_probe.py out
+      - name: Run
+        if: inputs.mode == 'run'
+        run: python research/studies/d1_liq.py out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d1-liq-${{ inputs.mode }}
+          path: out/
+      - name: Keep outputs on data/d1-liq
+        if: always()
+        run: |
+          [ -d out ] && [ "$(ls out)" ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/d1-liq 2>/dev/null; then
+            git checkout -q -B data/d1-liq origin/data/d1-liq
+          else
+            git checkout -q --orphan data/d1-liq && git rm -rq --cached . && git clean -fdq
+          fi
+          d=${{ inputs.mode }}/$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d
+          cp /tmp/keep/* $d/
+          git add -A ${{ inputs.mode }}
+          git commit -qm "D1 ${{ inputs.mode }}: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/d1-liq && break; git fetch -q origin data/d1-liq; git rebase -q origin/data/d1-liq; done
