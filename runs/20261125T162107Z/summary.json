@@ -1,0 +1,4439 @@
+{
+ "run_utc": "2026-11-25T16:21:03Z",
+ "months": 33.91,
+ "gaps": {},
+ "archive_stats": {
+  "upbit_snapshots": {
+   "single": 796,
+   "list": 581
+  },
+  "upbit_notices": 1955,
+  "upbit_time_after_capture_dropped": 0,
+  "bithumb_notice_pages": 1504,
+  "bithumb_samples": [
+   {
+    "title": "\uc0ac\uace0 \ud53c\ud574 \uae08\uc561 \ubc0f \ud68c\uc6d0 \ubcf4\uc0c1 \uc774\ubca4\ud2b8 \uc548\ub0b4",
+    "when": "2018-06-28 07:40:00"
+   },
+   {
+    "title": "\ub9c8\ucf13 \ucd94\uac00/\uc774\ubca4\ud2b8 \ucf58\ud150\ud1a0\uc2a4(COS) \uc0c1\uc7a5 \uae30\ub150 \uc5d0\uc5b4\ub4dc\ub78d \uc774\ubca4\ud2b8 \uc9c0\uae09 \uc548\ub0b4",
+    "when": "2020-03-20 14:22:22"
+   },
+   {
+    "title": "\ub9c8\ucf13 \ucd94\uac00/\uc774\ubca4\ud2b8 \uc5d8\ub9ac\uc2dc\uc544(EL) \uc2e0\uaddc \uc0c1\uc7a5 \uae30\ub150 \uc0ac\uc804\uc774\ubca4\ud2b8 \uc548\ub0b4",
+    "when": "2020-03-20 17:53:52"
+   },
+   {
+    "title": "\ub9c8\ucf13 \ucd94\uac00/\uc774\ubca4\ud2b8 \ucf54\uc2a4\ubaa8\ucf54\uc778(COSM) \uc0c1\uc7a5 \uae30\ub150 \uc5d0\uc5b4\ub4dc\ub78d \uc774\ubca4\ud2b8 \uc9c0\uae09 \uc548\ub0b4",
+    "when": "2020-03-26 15:25:01"
+   },
+   {
+    "title": "\ub9c8\ucf13 \ucd94\uac00/\uc774\ubca4\ud2b8 \ubca0\uc774\uc9c1(BASIC) \uc2e0\uaddc \uc0c1\uc7a5 \uae30\ub150 \uc0ac\uc804\uc774\ubca4\ud2b8 \uc548\ub0b4",
+    "when": "2020-03-27 17:50:03"
+   },
+   {
+    "title": "\uac70\ub798\uc720\uc758 \ucf54\ub10c(CON) \ud22c\uc790\uc720\uc758\uc885\ubaa9 \uc9c0\uc815 \ubc0f \ubbf9\uc2a4\ub9c8\ube14(MIX) \uc9c0\uc815 \ud574\uc9c0",
+    "when": "2020-04-02 13:40:27"
+   },
+   {
+    "title": "\ub9c8\ucf13 \ucd94\uac00/\uc774\ubca4\ud2b8 \uc5d8\ub9ac\uc2dc\uc544(EL) \uc0c1\uc7a5 \uae30\ub150 \uc5d0\uc5b4\ub4dc\ub78d \uc774\ubca4\ud2b8 \uc9c0\uae09 \uc548\ub0b4",
+    "when": "2020-04-03 15:07:31"
+   },
+   {
+    "title": "\ub9c8\ucf13 \ucd94\uac00/\uc774\ubca4\ud2b8 \ubca0\uc774\uc9c1(BASIC) \uc0c1\uc7a5 \uae30\ub150 \uc5d0\uc5b4\ub4dc\ub78d \uc774\ubca4\ud2b8 \uc9c0\uae09 \uc548\ub0b4",
+    "when": "2020-04-10 13:34:54"
+   }
+  ],
+  "bithumb_parsed": 1286,
+  "bithumb_time_after_capture_dropped": 0,
+  "bybit_articles": 433,
+  "bybit_debug": [
+   {
+    "title": "\ud83d\udce2 Spot Pre-Market Trading to be Delisted",
+    "date": "2025-06-18T05:57:00.000Z",
+    "html_dates": [
+     "2025-06-18T05:57",
+     "2025-06-18T05:57"
+    ]
+   },
+   {
+    "title": "Delisting of Certain Leveraged  Tokens",
+    "date": "2024-04-09T05:33:48.000Z",
+    "html_dates": [
+     "2024-04-09T05:33",
+     "2024-04-09T05:33",
+     "2024-04-30T05:33"
+    ]
+   },
+   {
+    "title": "Bybit Alpha: 5 tokens to be removed \u2014 Apr 23, 2026",
+    "date": "2026-04-17T10:00:00.000Z",
+    "html_dates": [
+     "2026-04-17T10:00",
+     "2026-04-17T10:00",
+     "2026-05-31T10:00"
+    ]
+   },
+   {
+    "title": "Bybit Alpha: Delisting of ARENA",
+    "date": "2026-01-15T08:30:00.000Z",
+    "html_dates": [
+     "2026-01-15T08:30",
+     "2026-01-15T08:30",
+     "2026-06-15T08:30"
+    ]
+   },
+   {
+    "title": "Bybit Alpha: Delisting of HODL, TATA and WHITEPEPE",
+    "date": "2026-03-04T08:00:00.000Z",
+    "html_dates": [
+     "2026-03-04T08:00",
+     "2026-03-04T08:00",
+     "2026-08-04T08:00"
+    ]
+   },
+   {
+    "title": "Bybit Alpha: Notice of removal of 1 tokens \u2014 Jul 16, 2026, 8:00AM UTC",
+    "date": "2026-07-16T07:08:22Z",
+    "html_dates": [
+     "2026-07-16T07:08",
+     "2026-07-16T07:08",
+     "2026-07-16T07:08"
+    ]
+   }
+  ],
+  "bybit_time_after_capture_dropped": 6,
+  "bybit_dated": 215,
+  "fetch_failures": {
+   "upbit": 14,
+   "bithumb": 176,
+   "bybit": 134
+  },
+  "fetch_error_kinds": {
+   "503HTTPError": 2,
+   "ConnectionResetError": 1,
+   "URLError": 1631,
+   "404HTTPError": 59,
+   "TimeoutError": 1
+  }
+ },
+ "event_counts": {
+  "mon_tag": {
+   "events": 135,
+   "notices": 25,
+   "overlap_l1f": 4,
+   "train": 63,
+   "validation": 12,
+   "test": 60
+  },
+  "bithumb_caution": {
+   "events": 86,
+   "notices": 71,
+   "overlap_l1f": 1,
+   "train": 25,
+   "validation": 35,
+   "test": 26
+  },
+  "upbit_caution": {
+   "events": 57,
+   "notices": 56,
+   "overlap_l1f": 0,
+   "train": 11,
+   "validation": 16,
+   "test": 30
+  },
+  "bybit_delist": {
+   "events": 345,
+   "notices": 195,
+   "overlap_l1f": 6,
+   "train": 148,
+   "validation": 118,
+   "test": 79
+  },
+  "bithumb_delist": {
+   "events": 62,
+   "notices": 50,
+   "overlap_l1f": 1,
+   "train": 18,
+   "validation": 21,
+   "test": 23
+  },
+  "upbit_delist": {
+   "events": 20,
+   "notices": 20,
+   "overlap_l1f": 1,
+   "train": 5,
+   "validation": 1,
+   "test": 14
+  },
+  "fut_delist": {
+   "events": 64,
+   "notices": 29,
+   "overlap_l1f": 4,
+   "train": 6,
+   "validation": 36,
+   "test": 22
+  },
+  "okx_delist": {
+   "events": 42,
+   "notices": 13,
+   "overlap_l1f": 1,
+   "train": 0,
+   "validation": 26,
+   "test": 16
+  }
+ },
+ "families": {
+  "l1f_ref": {
+   "coverage": {
+    "events": 107,
+    "overlap_l1f": 0,
+    "priced_rows": 65,
+    "by_src": {
+     "binance_um": 65,
+     "no_perp": 42
+    },
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "l1f_ref|h4h|d1m",
+    "n": 65,
+    "mean": 0.04676,
+    "sd": 0.149,
+    "s": 0.3139,
+    "per_month": 1.917,
+    "x": 0.1889,
+    "hit": 0.677,
+    "notice_level": {
+     "n": 24,
+     "mean": 0.03299,
+     "sd": 0.14612,
+     "s": 0.2258,
+     "per_month": 0.708,
+     "x": 0.0361,
+     "hit": 0.708
+    },
+    "control_mean": -0.0071852153846153856,
+    "placebo_mean": -0.058765,
+    "corr_daily_with_l1f": 1.0,
+    "x_with_l1f_added": null
+   },
+   "rules": {
+    "l1f_ref|h1h|d1m": {
+     "gate": {
+      "n_train": 21,
+      "tpm": 1.152,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": -0.057376,
+      "placebo_mean": 0.045376,
+      "vol_cost": 25.78,
+      "x": -0.1585,
+      "reason": "train net mean not above 0 and the reversed-side placebo",
+      "id": "l1f_ref|h1h|d1m",
+      "control_mean_train": -0.011612666666666669,
+      "notice_level_train": {
+       "n": 11,
+       "mean": -0.05947,
+       "sd": 0.15212,
+       "s": -0.3909,
+       "per_month": 0.612,
+       "x": 0.0935,
+       "hit": 0.364
+      }
+     },
+     "stats_all": {
+      "n": 65,
+      "mean": 0.00445,
+      "sd": 0.12973,
+      "s": 0.0343,
+      "per_month": 1.917,
+      "x": 0.0023,
+      "hit": 0.538
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": -0.00709,
+      "sd": 0.12878,
+      "s": -0.055,
+      "per_month": 0.708,
+      "x": 0.0021,
+      "hit": 0.458
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 21,
+       "mean": -0.05738,
+       "sd": 0.15467,
+       "s": -0.371,
+       "per_month": 1.169,
+       "x": 0.1608,
+       "hit": 0.429
+      },
+      "validation": {
+       "n": 12,
+       "mean": 0.08849,
+       "sd": 0.12973,
+       "s": 0.6821,
+       "per_month": 1.503,
+       "x": 0.6994,
+       "hit": 0.917
+      },
+      "test": {
+       "n": 32,
+       "mean": 0.01352,
+       "sd": 0.08907,
+       "s": 0.1518,
+       "per_month": 4.025,
+       "x": 0.0927,
+       "hit": 0.469
+      }
+     },
+     "control_mean_all": -0.011313630769230771,
+     "placebo_mean_all": -0.016454215384615386,
+     "ok": false
+    },
+    "l1f_ref|h1h|d5m": {
+     "gate": {
+      "n_train": 21,
+      "tpm": 1.152,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": -0.015309,
+      "placebo_mean": 0.003309,
+      "vol_cost": 23.39,
+      "x": -0.0137,
+      "reason": "train net mean not above 0 and the reversed-side placebo",
+      "id": "l1f_ref|h1h|d5m",
+      "control_mean_train": -0.012854047619047617,
+      "notice_level_train": {
+       "n": 11,
+       "mean": -0.02826,
+       "sd": 0.13757,
+       "s": -0.2054,
+       "per_month": 0.612,
+       "x": 0.0258,
+       "hit": 0.364
+      }
+     },
+     "stats_all": {
+      "n": 65,
+      "mean": -0.00274,
+      "sd": 0.10576,
+      "s": -0.0259,
+      "per_month": 1.917,
+      "x": 0.0013,
+      "hit": 0.508
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": -0.00822,
+      "sd": 0.10258,
+      "s": -0.0801,
+      "per_month": 0.708,
+      "x": 0.0045,
+      "hit": 0.458
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 21,
+       "mean": -0.01531,
+       "sd": 0.14031,
+       "s": -0.1091,
+       "per_month": 1.169,
+       "x": 0.0139,
+       "hit": 0.524
+      },
+      "validation": {
+       "n": 12,
+       "mean": 0.02207,
+       "sd": 0.09943,
+       "s": 0.222,
+       "per_month": 1.503,
+       "x": 0.0741,
+       "hit": 0.75
+      },
+      "test": {
+       "n": 32,
+       "mean": -0.0038,
+       "sd": 0.08083,
+       "s": -0.0471,
+       "per_month": 4.025,
+       "x": 0.0089,
+       "hit": 0.406
+      }
+     },
+     "control_mean_all": -0.011639769230769231,
+     "placebo_mean_all": -0.009256061538461539,
+     "ok": false
+    },
+    "l1f_ref|h4h|d1m": {
+     "gate": {
+      "n_train": 21,
+      "tpm": 1.152,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": -0.032925,
+      "placebo_mean": 0.020925,
+      "vol_cost": 30.4,
+      "x": -0.0375,
+      "reason": "train net mean not above 0 and the reversed-side placebo",
+      "id": "l1f_ref|h4h|d1m",
+      "control_mean_train": -0.015184523809523811,
+      "notice_level_train": {
+       "n": 11,
+       "mean": -0.02977,
+       "sd": 0.18253,
+       "s": -0.1631,
+       "per_month": 0.612,
+       "x": 0.0163,
+       "hit": 0.545
+      }
+     },
+     "stats_all": {
+      "n": 65,
+      "mean": 0.04676,
+      "sd": 0.149,
+      "s": 0.3139,
+      "per_month": 1.917,
+      "x": 0.1889,
+      "hit": 0.677
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": 0.03299,
+      "sd": 0.14612,
+      "s": 0.2258,
+      "per_month": 0.708,
+      "x": 0.0361,
+      "hit": 0.708
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 21,
+       "mean": -0.03293,
+       "sd": 0.18243,
+       "s": -0.1805,
+       "per_month": 1.169,
+       "x": 0.0381,
+       "hit": 0.476
+      },
+      "validation": {
+       "n": 12,
+       "mean": 0.1392,
+       "sd": 0.15831,
+       "s": 0.8793,
+       "per_month": 1.503,
+       "x": 1.1622,
+       "hit": 0.917
+      },
+      "test": {
+       "n": 32,
+       "mean": 0.0644,
+       "sd": 0.08683,
+       "s": 0.7417,
+       "per_month": 4.025,
+       "x": 2.214,
+       "hit": 0.719
+      }
+     },
+     "control_mean_all": -0.0071852153846153856,
+     "placebo_mean_all": -0.058765,
+     "ok": false
+    },
+    "l1f_ref|h4h|d5m": {
+     "gate": {
+      "n_train": 21,
+      "tpm": 1.152,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": 0.016363,
+      "placebo_mean": -0.028363,
+      "vol_cost": 25.96,
+      "x": 0.0127,
+      "reason": "monthly contribution x 0.013 < 0.2",
+      "id": "l1f_ref|h4h|d5m",
+      "control_mean_train": -0.015428380952380952,
+      "notice_level_train": {
+       "n": 11,
+       "mean": 0.01527,
+       "sd": 0.14813,
+       "s": 0.1031,
+       "per_month": 0.612,
+       "x": 0.0065,
+       "hit": 0.545
+      }
+     },
+     "stats_all": {
+      "n": 65,
+      "mean": 0.03851,
+      "sd": 0.12351,
+      "s": 0.3118,
+      "per_month": 1.917,
+      "x": 0.1863,
+      "hit": 0.646
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": 0.03544,
+      "sd": 0.10698,
+      "s": 0.3313,
+      "per_month": 0.708,
+      "x": 0.0777,
+      "hit": 0.708
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 21,
+       "mean": 0.01636,
+       "sd": 0.15573,
+       "s": 0.1051,
+       "per_month": 1.169,
+       "x": 0.0129,
+       "hit": 0.524
+      },
+      "validation": {
+       "n": 12,
+       "mean": 0.06547,
+       "sd": 0.1442,
+       "s": 0.454,
+       "per_month": 1.503,
+       "x": 0.3099,
+       "hit": 0.75
+      },
+      "test": {
+       "n": 32,
+       "mean": 0.04293,
+       "sd": 0.08851,
+       "s": 0.485,
+       "per_month": 4.025,
+       "x": 0.9467,
+       "hit": 0.688
+      }
+     },
+     "control_mean_all": -0.007352061538461539,
+     "placebo_mean_all": -0.050506861538461546,
+     "ok": false
+    },
+    "l1f_ref|h24h|d1m": {
+     "gate": {
+      "n_train": 21,
+      "tpm": 1.152,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": -0.008729,
+      "placebo_mean": -0.003271,
+      "vol_cost": 39.52,
+      "x": -0.0016,
+      "reason": "train net mean not above 0 and the reversed-side placebo",
+      "id": "l1f_ref|h24h|d1m",
+      "control_mean_train": -0.011680857142857146,
+      "notice_level_train": {
+       "n": 11,
+       "mean": -0.03136,
+       "sd": 0.21447,
+       "s": -0.1462,
+       "per_month": 0.612,
+       "x": 0.0131,
+       "hit": 0.545
+      }
+     },
+     "stats_all": {
+      "n": 65,
+      "mean": 0.03852,
+      "sd": 0.20334,
+      "s": 0.1894,
+      "per_month": 1.917,
+      "x": 0.0688,
+      "hit": 0.569
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": 0.0202,
+      "sd": 0.17933,
+      "s": 0.1127,
+      "per_month": 0.708,
+      "x": 0.009,
+      "hit": 0.667
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 21,
+       "mean": -0.00873,
+       "sd": 0.23713,
+       "s": -0.0368,
+       "per_month": 1.169,
+       "x": 0.0016,
+       "hit": 0.429
+      },
+      "validation": {
+       "n": 12,
+       "mean": 0.10686,
+       "sd": 0.22472,
+       "s": 0.4755,
+       "per_month": 1.503,
+       "x": 0.3398,
+       "hit": 0.75
+      },
+      "test": {
+       "n": 32,
+       "mean": 0.0439,
+       "sd": 0.16679,
+       "s": 0.2632,
+       "per_month": 4.025,
+       "x": 0.2789,
+       "hit": 0.594
+      }
+     },
+     "control_mean_all": -0.0036842923076923096,
+     "placebo_mean_all": -0.050520076923076924,
+     "ok": false
+    },
+    "l1f_ref|h24h|d5m": {
+     "gate": {
+      "n_train": 21,
+      "tpm": 1.152,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": 0.050762,
+      "placebo_mean": -0.062762,
+      "vol_cost": 35.79,
+      "x": 0.0644,
+      "reason": "monthly contribution x 0.064 < 0.2",
+      "id": "l1f_ref|h24h|d5m",
+      "control_mean_train": -0.011354523809523811,
+      "notice_level_train": {
+       "n": 11,
+       "mean": 0.02733,
+       "sd": 0.18618,
+       "s": 0.1468,
+       "per_month": 0.612,
+       "x": 0.0132,
+       "hit": 0.636
+      }
+     },
+     "stats_all": {
+      "n": 65,
+      "mean": 0.04122,
+      "sd": 0.18387,
+      "s": 0.2242,
+      "per_month": 1.917,
+      "x": 0.0963,
+      "hit": 0.585
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": 0.03433,
+      "sd": 0.15039,
+      "s": 0.2282,
+      "per_month": 0.708,
+      "x": 0.0369,
+      "hit": 0.625
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 21,
+       "mean": 0.05076,
+       "sd": 0.21472,
+       "s": 0.2364,
+       "per_month": 1.169,
+       "x": 0.0653,
+       "hit": 0.571
+      },
+      "validation": {
+       "n": 12,
+       "mean": 0.02991,
+       "sd": 0.2113,
+       "s": 0.1415,
+       "per_month": 1.503,
+       "x": 0.0301,
+       "hit": 0.667
+      },
+      "test": {
+       "n": 32,
+       "mean": 0.0392,
+       "sd": 0.15521,
+       "s": 0.2525,
+       "per_month": 4.025,
+       "x": 0.2567,
+       "hit": 0.562
+      }
+     },
+     "control_mean_all": -0.004203953846153847,
+     "placebo_mean_all": -0.053218984615384615,
+     "ok": false
+    }
+   }
+  },
+  "mon_tag": {
+   "coverage": {
+    "events": 135,
+    "overlap_l1f": 4,
+    "priced_rows": 93,
+    "by_src": {
+     "binance_um": 93,
+     "no_perp": 42
+    },
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "mon_tag|h4h|d1m",
+    "n": 89,
+    "mean": 0.02699,
+    "sd": 0.10303,
+    "s": 0.262,
+    "per_month": 2.625,
+    "x": 0.1802,
+    "hit": 0.629,
+    "notice_level": {
+     "n": 24,
+     "mean": 0.00788,
+     "sd": 0.08982,
+     "s": 0.0877,
+     "per_month": 0.708,
+     "x": 0.0054,
+     "hit": 0.625
+    },
+    "control_mean": -0.004831438202247192,
+    "placebo_mean": -0.038992550561797755,
+    "corr_daily_with_l1f": -0.0021710754028865602,
+    "x_with_l1f_added": 0.3662
+   },
+   "rules": {
+    "mon_tag|h1h|d1m": {
+     "gate": {
+      "n_train": 35,
+      "tpm": 1.92,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": 0.002539,
+      "placebo_mean": -0.014539,
+      "vol_cost": 22.05,
+      "x": 0.0007,
+      "reason": "monthly contribution x 0.001 < 0.2",
+      "id": "mon_tag|h1h|d1m",
+      "control_mean_train": -0.006253942857142857,
+      "notice_level_train": {
+       "n": 10,
+       "mean": -0.01773,
+       "sd": 0.12515,
+       "s": -0.1417,
+       "per_month": 0.556,
+       "x": 0.0112,
+       "hit": 0.6
+      }
+     },
+     "stats_all": {
+      "n": 89,
+      "mean": 0.01164,
+      "sd": 0.09007,
+      "s": 0.1292,
+      "per_month": 2.625,
+      "x": 0.0438,
+      "hit": 0.551
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": -0.00298,
+      "sd": 0.08365,
+      "s": -0.0356,
+      "per_month": 0.708,
+      "x": 0.0009,
+      "hit": 0.625
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 35,
+       "mean": 0.00254,
+       "sd": 0.1323,
+       "s": 0.0192,
+       "per_month": 1.948,
+       "x": 0.0007,
+       "hit": 0.514
+      },
+      "validation": {
+       "n": 8,
+       "mean": 0.01752,
+       "sd": 0.0221,
+       "s": 0.7928,
+       "per_month": 1.002,
+       "x": 0.6299,
+       "hit": 0.625
+      },
+      "test": {
+       "n": 46,
+       "mean": 0.01753,
+       "sd": 0.0496,
+       "s": 0.3535,
+       "per_month": 5.786,
+       "x": 0.7231,
+       "hit": 0.565
+      }
+     },
+     "control_mean_all": -0.0076358089887640455,
+     "placebo_mean_all": -0.023635966292134828,
+     "ok": false
+    },
+    "mon_tag|h1h|d5m": {
+     "gate": {
+      "n_train": 35,
+      "tpm": 1.92,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": 0.0025,
+      "placebo_mean": -0.0145,
+      "vol_cost": 19.48,
+      "x": 0.0009,
+      "reason": "monthly contribution x 0.001 < 0.2",
+      "id": "mon_tag|h1h|d5m",
+      "control_mean_train": -0.007305914285714287,
+      "notice_level_train": {
+       "n": 10,
+       "mean": -0.01856,
+       "sd": 0.11691,
+       "s": -0.1588,
+       "per_month": 0.556,
+       "x": 0.014,
+       "hit": 0.5
+      }
+     },
+     "stats_all": {
+      "n": 89,
+      "mean": 0.00872,
+      "sd": 0.0795,
+      "s": 0.1096,
+      "per_month": 2.625,
+      "x": 0.0315,
+      "hit": 0.562
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": -0.00593,
+      "sd": 0.07809,
+      "s": -0.076,
+      "per_month": 0.708,
+      "x": 0.0041,
+      "hit": 0.542
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 35,
+       "mean": 0.0025,
+       "sd": 0.1169,
+       "s": 0.0214,
+       "per_month": 1.948,
+       "x": 0.0009,
+       "hit": 0.514
+      },
+      "validation": {
+       "n": 8,
+       "mean": 0.00215,
+       "sd": 0.02747,
+       "s": 0.0782,
+       "per_month": 1.002,
+       "x": 0.0061,
+       "hit": 0.5
+      },
+      "test": {
+       "n": 46,
+       "mean": 0.01459,
+       "sd": 0.04296,
+       "s": 0.3396,
+       "per_month": 5.786,
+       "x": 0.6672,
+       "hit": 0.609
+      }
+     },
+     "control_mean_all": -0.007871292134831462,
+     "placebo_mean_all": -0.020715955056179777,
+     "ok": false
+    },
+    "mon_tag|h4h|d1m": {
+     "gate": {
+      "n_train": 35,
+      "tpm": 1.92,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": 0.029015,
+      "placebo_mean": -0.041015,
+      "vol_cost": 25.04,
+      "x": 0.0716,
+      "reason": "monthly contribution x 0.072 < 0.2",
+      "id": "mon_tag|h4h|d1m",
+      "control_mean_train": 0.000273942857142857,
+      "notice_level_train": {
+       "n": 10,
+       "mean": 0.00126,
+       "sd": 0.13493,
+       "s": 0.0094,
+       "per_month": 0.556,
+       "x": 0.0,
+       "hit": 0.7
+      }
+     },
+     "stats_all": {
+      "n": 89,
+      "mean": 0.02699,
+      "sd": 0.10303,
+      "s": 0.262,
+      "per_month": 2.625,
+      "x": 0.1802,
+      "hit": 0.629
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": 0.00788,
+      "sd": 0.08982,
+      "s": 0.0877,
+      "per_month": 0.708,
+      "x": 0.0054,
+      "hit": 0.625
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 35,
+       "mean": 0.02902,
+       "sd": 0.15026,
+       "s": 0.1931,
+       "per_month": 1.948,
+       "x": 0.0726,
+       "hit": 0.571
+      },
+      "validation": {
+       "n": 8,
+       "mean": 0.03164,
+       "sd": 0.0373,
+       "s": 0.8482,
+       "per_month": 1.002,
+       "x": 0.7209,
+       "hit": 0.75
+      },
+      "test": {
+       "n": 46,
+       "mean": 0.02465,
+       "sd": 0.0589,
+       "s": 0.4185,
+       "per_month": 5.786,
+       "x": 1.0131,
+       "hit": 0.652
+      }
+     },
+     "control_mean_all": -0.004831438202247192,
+     "placebo_mean_all": -0.038992550561797755,
+     "ok": false
+    },
+    "mon_tag|h4h|d5m": {
+     "gate": {
+      "n_train": 35,
+      "tpm": 1.92,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": 0.027754,
+      "placebo_mean": -0.039754,
+      "vol_cost": 22.48,
+      "x": 0.0813,
+      "reason": "monthly contribution x 0.081 < 0.2",
+      "id": "mon_tag|h4h|d5m",
+      "control_mean_train": -0.001754171428571429,
+      "notice_level_train": {
+       "n": 10,
+       "mean": -0.00077,
+       "sd": 0.12677,
+       "s": -0.0061,
+       "per_month": 0.556,
+       "x": 0.0,
+       "hit": 0.7
+      }
+     },
+     "stats_all": {
+      "n": 89,
+      "mean": 0.02248,
+      "sd": 0.09242,
+      "s": 0.2432,
+      "per_month": 2.625,
+      "x": 0.1553,
+      "hit": 0.629
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": 0.00399,
+      "sd": 0.08369,
+      "s": 0.0476,
+      "per_month": 0.708,
+      "x": 0.0016,
+      "hit": 0.667
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 35,
+       "mean": 0.02775,
+       "sd": 0.1349,
+       "s": 0.2057,
+       "per_month": 1.948,
+       "x": 0.0824,
+       "hit": 0.629
+      },
+      "validation": {
+       "n": 8,
+       "mean": 0.01693,
+       "sd": 0.02911,
+       "s": 0.5815,
+       "per_month": 1.002,
+       "x": 0.3389,
+       "hit": 0.75
+      },
+      "test": {
+       "n": 46,
+       "mean": 0.01943,
+       "sd": 0.05276,
+       "s": 0.3682,
+       "per_month": 5.786,
+       "x": 0.7845,
+       "hit": 0.609
+      }
+     },
+     "control_mean_all": -0.005962033707865169,
+     "placebo_mean_all": -0.03447748314606742,
+     "ok": false
+    },
+    "mon_tag|h24h|d1m": {
+     "gate": {
+      "n_train": 35,
+      "tpm": 1.92,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": 0.045555,
+      "placebo_mean": -0.057555,
+      "vol_cost": 26.59,
+      "x": 0.1565,
+      "reason": "monthly contribution x 0.157 < 0.2",
+      "id": "mon_tag|h24h|d1m",
+      "control_mean_train": -0.020545542857142857,
+      "notice_level_train": {
+       "n": 10,
+       "mean": 0.03092,
+       "sd": 0.14225,
+       "s": 0.2174,
+       "per_month": 0.556,
+       "x": 0.0263,
+       "hit": 0.8
+      }
+     },
+     "stats_all": {
+      "n": 89,
+      "mean": 0.03701,
+      "sd": 0.11922,
+      "s": 0.3104,
+      "per_month": 2.625,
+      "x": 0.253,
+      "hit": 0.64
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": 0.01651,
+      "sd": 0.10063,
+      "s": 0.1641,
+      "per_month": 0.708,
+      "x": 0.0191,
+      "hit": 0.708
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 35,
+       "mean": 0.04555,
+       "sd": 0.15954,
+       "s": 0.2855,
+       "per_month": 1.948,
+       "x": 0.1588,
+       "hit": 0.629
+      },
+      "validation": {
+       "n": 8,
+       "mean": 0.01277,
+       "sd": 0.14583,
+       "s": 0.0876,
+       "per_month": 1.002,
+       "x": 0.0077,
+       "hit": 0.625
+      },
+      "test": {
+       "n": 46,
+       "mean": 0.03473,
+       "sd": 0.07136,
+       "s": 0.4866,
+       "per_month": 5.786,
+       "x": 1.37,
+       "hit": 0.652
+      }
+     },
+     "control_mean_all": -0.0023102471910112373,
+     "placebo_mean_all": -0.049010573033707865,
+     "ok": false
+    },
+    "mon_tag|h24h|d5m": {
+     "gate": {
+      "n_train": 35,
+      "tpm": 1.92,
+      "w": 1.0,
+      "shortable": true,
+      "train_mean": 0.041936,
+      "placebo_mean": -0.053936,
+      "vol_cost": 25.18,
+      "x": 0.1479,
+      "reason": "monthly contribution x 0.148 < 0.2",
+      "id": "mon_tag|h24h|d5m",
+      "control_mean_train": -0.023211714285714283,
+      "notice_level_train": {
+       "n": 10,
+       "mean": 0.02254,
+       "sd": 0.13731,
+       "s": 0.1642,
+       "per_month": 0.556,
+       "x": 0.015,
+       "hit": 0.7
+      }
+     },
+     "stats_all": {
+      "n": 89,
+      "mean": 0.0319,
+      "sd": 0.11392,
+      "s": 0.28,
+      "per_month": 2.625,
+      "x": 0.2058,
+      "hit": 0.64
+     },
+     "notice_level_all": {
+      "n": 24,
+      "mean": 0.0094,
+      "sd": 0.09805,
+      "s": 0.0959,
+      "per_month": 0.708,
+      "x": 0.0065,
+      "hit": 0.625
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 35,
+       "mean": 0.04194,
+       "sd": 0.15107,
+       "s": 0.2776,
+       "per_month": 1.948,
+       "x": 0.1501,
+       "hit": 0.629
+      },
+      "validation": {
+       "n": 8,
+       "mean": 0.00245,
+       "sd": 0.14045,
+       "s": 0.0175,
+       "per_month": 1.002,
+       "x": 0.0003,
+       "hit": 0.625
+      },
+      "test": {
+       "n": 46,
+       "mean": 0.02938,
+       "sd": 0.06947,
+       "s": 0.4229,
+       "per_month": 5.786,
+       "x": 1.0348,
+       "hit": 0.652
+      }
+     },
+     "control_mean_all": -0.0035673707865168545,
+     "placebo_mean_all": -0.04389830337078652,
+     "ok": false
+    }
+   }
+  },
+  "fut_delist": {
+   "coverage": {
+    "events": 64,
+    "overlap_l1f": 4,
+    "priced_rows": 63,
+    "by_src": {
+     "no_perp": 1,
+     "binance_um": 62,
+     "binance_um_prefixed": 1
+    },
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "fut_delist|h4h|d1m",
+    "n": 59,
+    "mean": 0.06175,
+    "sd": 0.15824,
+    "s": 0.3902,
+    "per_month": 1.74,
+    "x": 0.265,
+    "hit": 0.678,
+    "notice_level": {
+     "n": 27,
+     "mean": 0.07328,
+     "sd": 0.18268,
+     "s": 0.4011,
+     "per_month": 0.796,
+     "x": 0.1281,
+     "hit": 0.667
+    },
+    "control_mean": -0.004095186440677966,
+    "placebo_mean": -0.07374894915254238,
+    "corr_daily_with_l1f": -0.004172140195117272,
+    "x_with_l1f_added": 0.4537
+   },
+   "rules": {
+    "fut_delist|h1h|d1m": {
+     "gate": {
+      "n_train": 6,
+      "tpm": 0.329,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 6 < 20",
+      "id": "fut_delist|h1h|d1m",
+      "control_mean_train": -0.010449166666666667,
+      "notice_level_train": {
+       "n": 2,
+       "mean": -0.02761,
+       "sd": 0.03478,
+       "s": -0.7938,
+       "per_month": 0.111,
+       "x": 0.0701,
+       "hit": 0.0
+      }
+     },
+     "stats_all": {
+      "n": 59,
+      "mean": 0.04375,
+      "sd": 0.14034,
+      "s": 0.3117,
+      "per_month": 1.74,
+      "x": 0.1691,
+      "hit": 0.712
+     },
+     "notice_level_all": {
+      "n": 27,
+      "mean": 0.05152,
+      "sd": 0.15889,
+      "s": 0.3243,
+      "per_month": 0.796,
+      "x": 0.0837,
+      "hit": 0.667
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 6,
+       "mean": -0.02761,
+       "sd": 0.03074,
+       "s": -0.8981,
+       "per_month": 0.334,
+       "x": 0.2693,
+       "hit": 0.167
+      },
+      "validation": {
+       "n": 32,
+       "mean": 0.05566,
+       "sd": 0.16677,
+       "s": 0.3337,
+       "per_month": 4.008,
+       "x": 0.4465,
+       "hit": 0.812
+      },
+      "test": {
+       "n": 21,
+       "mean": 0.04599,
+       "sd": 0.1096,
+       "s": 0.4196,
+       "per_month": 2.641,
+       "x": 0.4651,
+       "hit": 0.714
+      }
+     },
+     "control_mean_all": -0.007092389830508475,
+     "placebo_mean_all": -0.05575116949152542,
+     "ok": false
+    },
+    "fut_delist|h1h|d5m": {
+     "gate": {
+      "n_train": 6,
+      "tpm": 0.329,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 6 < 20",
+      "id": "fut_delist|h1h|d5m",
+      "control_mean_train": -0.011841833333333334,
+      "notice_level_train": {
+       "n": 2,
+       "mean": -0.03332,
+       "sd": 0.02976,
+       "s": -1.1195,
+       "per_month": 0.111,
+       "x": 0.1395,
+       "hit": 0.0
+      }
+     },
+     "stats_all": {
+      "n": 59,
+      "mean": 0.04488,
+      "sd": 0.10833,
+      "s": 0.4143,
+      "per_month": 1.74,
+      "x": 0.2986,
+      "hit": 0.661
+     },
+     "notice_level_all": {
+      "n": 27,
+      "mean": 0.05596,
+      "sd": 0.13049,
+      "s": 0.4288,
+      "per_month": 0.796,
+      "x": 0.1464,
+      "hit": 0.704
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 6,
+       "mean": -0.03332,
+       "sd": 0.02731,
+       "s": -1.2203,
+       "per_month": 0.334,
+       "x": 0.4971,
+       "hit": 0.0
+      },
+      "validation": {
+       "n": 32,
+       "mean": 0.07241,
+       "sd": 0.12851,
+       "s": 0.5635,
+       "per_month": 4.008,
+       "x": 1.2727,
+       "hit": 0.844
+      },
+      "test": {
+       "n": 21,
+       "mean": 0.02526,
+       "sd": 0.06926,
+       "s": 0.3647,
+       "per_month": 2.641,
+       "x": 0.3512,
+       "hit": 0.571
+      }
+     },
+     "control_mean_all": -0.007643915254237289,
+     "placebo_mean_all": -0.05687705084745762,
+     "ok": false
+    },
+    "fut_delist|h4h|d1m": {
+     "gate": {
+      "n_train": 6,
+      "tpm": 0.329,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 6 < 20",
+      "id": "fut_delist|h4h|d1m",
+      "control_mean_train": -0.011872333333333332,
+      "notice_level_train": {
+       "n": 2,
+       "mean": -0.00652,
+       "sd": 0.00379,
+       "s": -1.722,
+       "per_month": 0.111,
+       "x": 0.33,
+       "hit": 0.0
+      }
+     },
+     "stats_all": {
+      "n": 59,
+      "mean": 0.06175,
+      "sd": 0.15824,
+      "s": 0.3902,
+      "per_month": 1.74,
+      "x": 0.265,
+      "hit": 0.678
+     },
+     "notice_level_all": {
+      "n": 27,
+      "mean": 0.07328,
+      "sd": 0.18268,
+      "s": 0.4011,
+      "per_month": 0.796,
+      "x": 0.1281,
+      "hit": 0.667
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 6,
+       "mean": -0.00652,
+       "sd": 0.02173,
+       "s": -0.3,
+       "per_month": 0.334,
+       "x": 0.03,
+       "hit": 0.5
+      },
+      "validation": {
+       "n": 32,
+       "mean": 0.07951,
+       "sd": 0.18707,
+       "s": 0.425,
+       "per_month": 4.008,
+       "x": 0.724,
+       "hit": 0.719
+      },
+      "test": {
+       "n": 21,
+       "mean": 0.05419,
+       "sd": 0.12761,
+       "s": 0.4246,
+       "per_month": 2.641,
+       "x": 0.4763,
+       "hit": 0.667
+      }
+     },
+     "control_mean_all": -0.004095186440677966,
+     "placebo_mean_all": -0.07374894915254238,
+     "ok": false
+    },
+    "fut_delist|h4h|d5m": {
+     "gate": {
+      "n_train": 6,
+      "tpm": 0.329,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 6 < 20",
+      "id": "fut_delist|h4h|d5m",
+      "control_mean_train": -0.0119135,
+      "notice_level_train": {
+       "n": 2,
+       "mean": -0.00855,
+       "sd": 0.00572,
+       "s": -1.4948,
+       "per_month": 0.111,
+       "x": 0.2487,
+       "hit": 0.0
+      }
+     },
+     "stats_all": {
+      "n": 59,
+      "mean": 0.06393,
+      "sd": 0.13264,
+      "s": 0.482,
+      "per_month": 1.74,
+      "x": 0.4042,
+      "hit": 0.695
+     },
+     "notice_level_all": {
+      "n": 27,
+      "mean": 0.08079,
+      "sd": 0.15676,
+      "s": 0.5154,
+      "per_month": 0.796,
+      "x": 0.2115,
+      "hit": 0.741
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 6,
+       "mean": -0.00855,
+       "sd": 0.02166,
+       "s": -0.3945,
+       "per_month": 0.334,
+       "x": 0.052,
+       "hit": 0.167
+      },
+      "validation": {
+       "n": 32,
+       "mean": 0.10319,
+       "sd": 0.15468,
+       "s": 0.6671,
+       "per_month": 4.008,
+       "x": 1.7839,
+       "hit": 0.844
+      },
+      "test": {
+       "n": 21,
+       "mean": 0.02481,
+       "sd": 0.09039,
+       "s": 0.2744,
+       "per_month": 2.641,
+       "x": 0.1989,
+       "hit": 0.619
+      }
+     },
+     "control_mean_all": -0.004892389830508474,
+     "placebo_mean_all": -0.07592983050847459,
+     "ok": false
+    },
+    "fut_delist|h24h|d1m": {
+     "gate": {
+      "n_train": 6,
+      "tpm": 0.329,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 6 < 20",
+      "id": "fut_delist|h24h|d1m",
+      "control_mean_train": -0.057746,
+      "notice_level_train": {
+       "n": 2,
+       "mean": -0.08639,
+       "sd": 0.09009,
+       "s": -0.959,
+       "per_month": 0.111,
+       "x": 0.1023,
+       "hit": 0.0
+      }
+     },
+     "stats_all": {
+      "n": 59,
+      "mean": 0.05363,
+      "sd": 0.21333,
+      "s": 0.2514,
+      "per_month": 1.74,
+      "x": 0.11,
+      "hit": 0.593
+     },
+     "notice_level_all": {
+      "n": 27,
+      "mean": 0.06319,
+      "sd": 0.2258,
+      "s": 0.2799,
+      "per_month": 0.796,
+      "x": 0.0624,
+      "hit": 0.556
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 6,
+       "mean": -0.08639,
+       "sd": 0.09635,
+       "s": -0.8967,
+       "per_month": 0.334,
+       "x": 0.2684,
+       "hit": 0.167
+      },
+      "validation": {
+       "n": 32,
+       "mean": 0.12011,
+       "sd": 0.22184,
+       "s": 0.5414,
+       "per_month": 4.008,
+       "x": 1.175,
+       "hit": 0.719
+      },
+      "test": {
+       "n": 21,
+       "mean": -0.00767,
+       "sd": 0.19099,
+       "s": -0.0402,
+       "per_month": 2.641,
+       "x": 0.0043,
+       "hit": 0.524
+      }
+     },
+     "control_mean_all": -0.008816355932203392,
+     "placebo_mean_all": -0.06562688135593221,
+     "ok": false
+    },
+    "fut_delist|h24h|d5m": {
+     "gate": {
+      "n_train": 6,
+      "tpm": 0.329,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 6 < 20",
+      "id": "fut_delist|h24h|d5m",
+      "control_mean_train": -0.057177,
+      "notice_level_train": {
+       "n": 2,
+       "mean": -0.08526,
+       "sd": 0.08824,
+       "s": -0.9663,
+       "per_month": 0.111,
+       "x": 0.1039,
+       "hit": 0.0
+      }
+     },
+     "stats_all": {
+      "n": 59,
+      "mean": 0.0523,
+      "sd": 0.19649,
+      "s": 0.2662,
+      "per_month": 1.74,
+      "x": 0.1233,
+      "hit": 0.61
+     },
+     "notice_level_all": {
+      "n": 27,
+      "mean": 0.06913,
+      "sd": 0.21157,
+      "s": 0.3267,
+      "per_month": 0.796,
+      "x": 0.085,
+      "hit": 0.593
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 6,
+       "mean": -0.08526,
+       "sd": 0.09883,
+       "s": -0.8628,
+       "per_month": 0.334,
+       "x": 0.2485,
+       "hit": 0.167
+      },
+      "validation": {
+       "n": 32,
+       "mean": 0.12957,
+       "sd": 0.19878,
+       "s": 0.6518,
+       "per_month": 4.008,
+       "x": 1.703,
+       "hit": 0.812
+      },
+      "test": {
+       "n": 21,
+       "mean": -0.02614,
+       "sd": 0.16306,
+       "s": -0.1603,
+       "per_month": 2.641,
+       "x": 0.0679,
+       "hit": 0.429
+      }
+     },
+     "control_mean_all": -0.007985525423728814,
+     "placebo_mean_all": -0.0643002372881356,
+     "ok": false
+    }
+   }
+  },
+  "pair_rm": {
+   "coverage": {
+    "events": 0,
+    "overlap_l1f": 0,
+    "priced_rows": 0,
+    "by_src": {},
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "pair_rm|h4h|d1m",
+    "n": 0,
+    "notice_level": {
+     "n": 0
+    },
+    "control_mean": null,
+    "placebo_mean": null,
+    "corr_daily_with_l1f": null,
+    "x_with_l1f_added": 0.1889
+   },
+   "rules": {
+    "pair_rm|h1h|d1m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "pair_rm|h1h|d1m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 0
+     },
+     "notice_level_all": {
+      "n": 0
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 0
+      }
+     },
+     "control_mean_all": null,
+     "placebo_mean_all": null,
+     "ok": false
+    },
+    "pair_rm|h1h|d5m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "pair_rm|h1h|d5m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 0
+     },
+     "notice_level_all": {
+      "n": 0
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 0
+      }
+     },
+     "control_mean_all": null,
+     "placebo_mean_all": null,
+     "ok": false
+    },
+    "pair_rm|h4h|d1m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "pair_rm|h4h|d1m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 0
+     },
+     "notice_level_all": {
+      "n": 0
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 0
+      }
+     },
+     "control_mean_all": null,
+     "placebo_mean_all": null,
+     "ok": false
+    },
+    "pair_rm|h4h|d5m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "pair_rm|h4h|d5m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 0
+     },
+     "notice_level_all": {
+      "n": 0
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 0
+      }
+     },
+     "control_mean_all": null,
+     "placebo_mean_all": null,
+     "ok": false
+    },
+    "pair_rm|h24h|d1m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "pair_rm|h24h|d1m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 0
+     },
+     "notice_level_all": {
+      "n": 0
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 0
+      }
+     },
+     "control_mean_all": null,
+     "placebo_mean_all": null,
+     "ok": false
+    },
+    "pair_rm|h24h|d5m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "pair_rm|h24h|d5m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 0
+     },
+     "notice_level_all": {
+      "n": 0
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 0
+      }
+     },
+     "control_mean_all": null,
+     "placebo_mean_all": null,
+     "ok": false
+    }
+   }
+  },
+  "okx_delist": {
+   "coverage": {
+    "events": 42,
+    "overlap_l1f": 1,
+    "priced_rows": 18,
+    "by_src": {
+     "no_perp": 24,
+     "binance_um": 17,
+     "binance_um_prefixed": 1
+    },
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "okx_delist|h4h|d1m",
+    "n": 17,
+    "mean": -0.00497,
+    "sd": 0.01223,
+    "s": -0.4068,
+    "per_month": 0.501,
+    "x": 0.083,
+    "hit": 0.235,
+    "notice_level": {
+     "n": 7,
+     "mean": -0.00557,
+     "sd": 0.00449,
+     "s": -1.2402,
+     "per_month": 0.206,
+     "x": 0.3175,
+     "hit": 0.143
+    },
+    "control_mean": -0.004417176470588236,
+    "placebo_mean": -0.007025529411764706,
+    "corr_daily_with_l1f": 0.002700536031828267,
+    "x_with_l1f_added": 0.1744
+   },
+   "rules": {
+    "okx_delist|h1h|d1m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "okx_delist|h1h|d1m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 17,
+      "mean": -0.00852,
+      "sd": 0.00996,
+      "s": -0.8558,
+      "per_month": 0.501,
+      "x": 0.3672,
+      "hit": 0.059
+     },
+     "notice_level_all": {
+      "n": 7,
+      "mean": -0.0082,
+      "sd": 0.0029,
+      "s": -2.8248,
+      "per_month": 0.206,
+      "x": 1.6474,
+      "hit": 0.0
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 12,
+       "mean": -0.00916,
+       "sd": 0.01195,
+       "s": -0.7664,
+       "per_month": 1.503,
+       "x": 0.8828,
+       "hit": 0.083
+      },
+      "test": {
+       "n": 5,
+       "mean": -0.007,
+       "sd": 0.0,
+       "s": -7218430399662292.0,
+       "per_month": 0.629,
+       "x": 3.2767941801049027e+31,
+       "hit": 0.0
+      }
+     },
+     "control_mean_all": -0.006840529411764706,
+     "placebo_mean_all": -0.0034769411764705885,
+     "ok": false
+    },
+    "okx_delist|h1h|d5m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "okx_delist|h1h|d5m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 17,
+      "mean": -0.00723,
+      "sd": 0.00729,
+      "s": -0.9917,
+      "per_month": 0.501,
+      "x": 0.4931,
+      "hit": 0.118
+     },
+     "notice_level_all": {
+      "n": 7,
+      "mean": -0.00733,
+      "sd": 0.00261,
+      "s": -2.8036,
+      "per_month": 0.206,
+      "x": 1.6228,
+      "hit": 0.0
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 12,
+       "mean": -0.00733,
+       "sd": 0.00879,
+       "s": -0.8334,
+       "per_month": 1.503,
+       "x": 1.044,
+       "hit": 0.167
+      },
+      "test": {
+       "n": 5,
+       "mean": -0.007,
+       "sd": 0.0,
+       "s": -7218430399662292.0,
+       "per_month": 0.629,
+       "x": 3.2767941801049027e+31,
+       "hit": 0.0
+      }
+     },
+     "control_mean_all": -0.008055176470588236,
+     "placebo_mean_all": -0.0047680000000000005,
+     "ok": false
+    },
+    "okx_delist|h4h|d1m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "okx_delist|h4h|d1m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 17,
+      "mean": -0.00497,
+      "sd": 0.01223,
+      "s": -0.4068,
+      "per_month": 0.501,
+      "x": 0.083,
+      "hit": 0.235
+     },
+     "notice_level_all": {
+      "n": 7,
+      "mean": -0.00557,
+      "sd": 0.00449,
+      "s": -1.2402,
+      "per_month": 0.206,
+      "x": 0.3175,
+      "hit": 0.143
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 12,
+       "mean": -0.00413,
+       "sd": 0.01466,
+       "s": -0.2818,
+       "per_month": 1.503,
+       "x": 0.1194,
+       "hit": 0.333
+      },
+      "test": {
+       "n": 5,
+       "mean": -0.007,
+       "sd": 0.0,
+       "s": -7218430399662292.0,
+       "per_month": 0.629,
+       "x": 3.2767941801049027e+31,
+       "hit": 0.0
+      }
+     },
+     "control_mean_all": -0.004417176470588236,
+     "placebo_mean_all": -0.007025529411764706,
+     "ok": false
+    },
+    "okx_delist|h4h|d5m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "okx_delist|h4h|d5m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 17,
+      "mean": -0.00367,
+      "sd": 0.00939,
+      "s": -0.391,
+      "per_month": 0.501,
+      "x": 0.0767,
+      "hit": 0.235
+     },
+     "notice_level_all": {
+      "n": 7,
+      "mean": -0.00475,
+      "sd": 0.00461,
+      "s": -1.029,
+      "per_month": 0.206,
+      "x": 0.2186,
+      "hit": 0.143
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 12,
+       "mean": -0.00228,
+       "sd": 0.011,
+       "s": -0.2076,
+       "per_month": 1.503,
+       "x": 0.0648,
+       "hit": 0.333
+      },
+      "test": {
+       "n": 5,
+       "mean": -0.007,
+       "sd": 0.0,
+       "s": -7218430399662292.0,
+       "per_month": 0.629,
+       "x": 3.2767941801049027e+31,
+       "hit": 0.0
+      }
+     },
+     "control_mean_all": -0.003228411764705883,
+     "placebo_mean_all": -0.008328294117647059,
+     "ok": false
+    },
+    "okx_delist|h24h|d1m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "okx_delist|h24h|d1m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 17,
+      "mean": 0.00664,
+      "sd": 0.03343,
+      "s": 0.1985,
+      "per_month": 0.501,
+      "x": 0.0198,
+      "hit": 0.294
+     },
+     "notice_level_all": {
+      "n": 7,
+      "mean": 0.00094,
+      "sd": 0.01802,
+      "s": 0.0524,
+      "per_month": 0.206,
+      "x": 0.0006,
+      "hit": 0.286
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 12,
+       "mean": 0.01315,
+       "sd": 0.03831,
+       "s": 0.3433,
+       "per_month": 1.503,
+       "x": 0.1771,
+       "hit": 0.417
+      },
+      "test": {
+       "n": 5,
+       "mean": -0.009,
+       "sd": 0.0,
+       "s": 0.0,
+       "per_month": 0.629,
+       "x": 0.0,
+       "hit": 0.0
+      }
+     },
+     "control_mean_all": 0.02634470588235294,
+     "placebo_mean_all": -0.018636,
+     "ok": false
+    },
+    "okx_delist|h24h|d5m": {
+     "gate": {
+      "n_train": 0,
+      "tpm": 0.0,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 0 < 20",
+      "id": "okx_delist|h24h|d5m",
+      "control_mean_train": null,
+      "notice_level_train": {
+       "n": 0
+      }
+     },
+     "stats_all": {
+      "n": 17,
+      "mean": 0.0083,
+      "sd": 0.03423,
+      "s": 0.2426,
+      "per_month": 0.501,
+      "x": 0.0295,
+      "hit": 0.353
+     },
+     "notice_level_all": {
+      "n": 7,
+      "mean": 0.00204,
+      "sd": 0.01888,
+      "s": 0.108,
+      "per_month": 0.206,
+      "x": 0.0024,
+      "hit": 0.429
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 0
+      },
+      "validation": {
+       "n": 12,
+       "mean": 0.01551,
+       "sd": 0.03887,
+       "s": 0.399,
+       "per_month": 1.503,
+       "x": 0.2393,
+       "hit": 0.5
+      },
+      "test": {
+       "n": 5,
+       "mean": -0.009,
+       "sd": 0.0,
+       "s": 0.0,
+       "per_month": 0.629,
+       "x": 0.0,
+       "hit": 0.0
+      }
+     },
+     "control_mean_all": 0.025080588235294115,
+     "placebo_mean_all": -0.02030264705882353,
+     "ok": false
+    }
+   }
+  },
+  "upbit_delist": {
+   "coverage": {
+    "events": 20,
+    "overlap_l1f": 1,
+    "priced_rows": 10,
+    "by_src": {
+     "no_perp": 10,
+     "binance_um_prefixed": 1,
+     "binance_um": 9
+    },
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "upbit_delist|h4h|d1m",
+    "n": 9,
+    "mean": 0.01418,
+    "sd": 0.0492,
+    "s": 0.2882,
+    "per_month": 0.265,
+    "x": 0.0221,
+    "hit": 0.444,
+    "notice_level": {
+     "n": 9,
+     "mean": 0.01418,
+     "sd": 0.0492,
+     "s": 0.2882,
+     "per_month": 0.265,
+     "x": 0.0221,
+     "hit": 0.444
+    },
+    "control_mean": -0.010588555555555554,
+    "placebo_mean": -0.02618022222222222,
+    "corr_daily_with_l1f": -0.0014692273325683258,
+    "x_with_l1f_added": 0.2015
+   },
+   "rules": {
+    "upbit_delist|h1h|d1m": {
+     "gate": {
+      "n_train": 1,
+      "tpm": 0.055,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 1 < 20",
+      "id": "upbit_delist|h1h|d1m",
+      "control_mean_train": -0.022735,
+      "notice_level_train": {
+       "n": 1
+      }
+     },
+     "stats_all": {
+      "n": 9,
+      "mean": 0.01378,
+      "sd": 0.04587,
+      "s": 0.3004,
+      "per_month": 0.265,
+      "x": 0.0239,
+      "hit": 0.444
+     },
+     "notice_level_all": {
+      "n": 9,
+      "mean": 0.01378,
+      "sd": 0.04587,
+      "s": 0.3004,
+      "per_month": 0.265,
+      "x": 0.0239,
+      "hit": 0.444
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 1
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 8,
+       "mean": 0.01638,
+       "sd": 0.04833,
+       "s": 0.3389,
+       "per_month": 1.006,
+       "x": 0.1155,
+       "hit": 0.5
+      }
+     },
+     "control_mean_all": -0.009080999999999999,
+     "placebo_mean_all": -0.025778999999999996,
+     "ok": false
+    },
+    "upbit_delist|h1h|d5m": {
+     "gate": {
+      "n_train": 1,
+      "tpm": 0.055,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 1 < 20",
+      "id": "upbit_delist|h1h|d5m",
+      "control_mean_train": -0.022735,
+      "notice_level_train": {
+       "n": 1
+      }
+     },
+     "stats_all": {
+      "n": 9,
+      "mean": 0.0012,
+      "sd": 0.03528,
+      "s": 0.0341,
+      "per_month": 0.265,
+      "x": 0.0003,
+      "hit": 0.333
+     },
+     "notice_level_all": {
+      "n": 9,
+      "mean": 0.0012,
+      "sd": 0.03528,
+      "s": 0.0341,
+      "per_month": 0.265,
+      "x": 0.0003,
+      "hit": 0.333
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 1
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 8,
+       "mean": 0.00223,
+       "sd": 0.03757,
+       "s": 0.0594,
+       "per_month": 1.006,
+       "x": 0.0035,
+       "hit": 0.375
+      }
+     },
+     "control_mean_all": -0.010156555555555556,
+     "placebo_mean_all": -0.013204777777777777,
+     "ok": false
+    },
+    "upbit_delist|h4h|d1m": {
+     "gate": {
+      "n_train": 1,
+      "tpm": 0.055,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 1 < 20",
+      "id": "upbit_delist|h4h|d1m",
+      "control_mean_train": -0.039106999999999996,
+      "notice_level_train": {
+       "n": 1
+      }
+     },
+     "stats_all": {
+      "n": 9,
+      "mean": 0.01418,
+      "sd": 0.0492,
+      "s": 0.2882,
+      "per_month": 0.265,
+      "x": 0.0221,
+      "hit": 0.444
+     },
+     "notice_level_all": {
+      "n": 9,
+      "mean": 0.01418,
+      "sd": 0.0492,
+      "s": 0.2882,
+      "per_month": 0.265,
+      "x": 0.0221,
+      "hit": 0.444
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 1
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 8,
+       "mean": 0.01683,
+       "sd": 0.05191,
+       "s": 0.3242,
+       "per_month": 1.006,
+       "x": 0.1058,
+       "hit": 0.5
+      }
+     },
+     "control_mean_all": -0.010588555555555554,
+     "placebo_mean_all": -0.02618022222222222,
+     "ok": false
+    },
+    "upbit_delist|h4h|d5m": {
+     "gate": {
+      "n_train": 1,
+      "tpm": 0.055,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 1 < 20",
+      "id": "upbit_delist|h4h|d5m",
+      "control_mean_train": -0.039106999999999996,
+      "notice_level_train": {
+       "n": 1
+      }
+     },
+     "stats_all": {
+      "n": 9,
+      "mean": -0.00127,
+      "sd": 0.03362,
+      "s": -0.0377,
+      "per_month": 0.265,
+      "x": 0.0004,
+      "hit": 0.222
+     },
+     "notice_level_all": {
+      "n": 9,
+      "mean": -0.00127,
+      "sd": 0.03362,
+      "s": -0.0377,
+      "per_month": 0.265,
+      "x": 0.0004,
+      "hit": 0.222
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 1
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 8,
+       "mean": -0.00055,
+       "sd": 0.03587,
+       "s": -0.0154,
+       "per_month": 1.006,
+       "x": 0.0002,
+       "hit": 0.25
+      }
+     },
+     "control_mean_all": -0.011245888888888889,
+     "placebo_mean_all": -0.010731444444444444,
+     "ok": false
+    },
+    "upbit_delist|h24h|d1m": {
+     "gate": {
+      "n_train": 1,
+      "tpm": 0.055,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 1 < 20",
+      "id": "upbit_delist|h24h|d1m",
+      "control_mean_train": 0.0029620000000000002,
+      "notice_level_train": {
+       "n": 1
+      }
+     },
+     "stats_all": {
+      "n": 9,
+      "mean": 0.0387,
+      "sd": 0.05668,
+      "s": 0.6828,
+      "per_month": 0.265,
+      "x": 0.1237,
+      "hit": 0.667
+     },
+     "notice_level_all": {
+      "n": 9,
+      "mean": 0.0387,
+      "sd": 0.05668,
+      "s": 0.6828,
+      "per_month": 0.265,
+      "x": 0.1237,
+      "hit": 0.667
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 1
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 8,
+       "mean": 0.04466,
+       "sd": 0.0575,
+       "s": 0.7767,
+       "per_month": 1.006,
+       "x": 0.6071,
+       "hit": 0.75
+      }
+     },
+     "control_mean_all": -0.017293666666666666,
+     "placebo_mean_all": -0.05069866666666666,
+     "ok": false
+    },
+    "upbit_delist|h24h|d5m": {
+     "gate": {
+      "n_train": 1,
+      "tpm": 0.055,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 1 < 20",
+      "id": "upbit_delist|h24h|d5m",
+      "control_mean_train": 0.0029620000000000002,
+      "notice_level_train": {
+       "n": 1
+      }
+     },
+     "stats_all": {
+      "n": 9,
+      "mean": 0.02493,
+      "sd": 0.03599,
+      "s": 0.6926,
+      "per_month": 0.265,
+      "x": 0.1273,
+      "hit": 0.667
+     },
+     "notice_level_all": {
+      "n": 9,
+      "mean": 0.02493,
+      "sd": 0.03599,
+      "s": 0.6926,
+      "per_month": 0.265,
+      "x": 0.1273,
+      "hit": 0.667
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 1
+      },
+      "validation": {
+       "n": 0
+      },
+      "test": {
+       "n": 8,
+       "mean": 0.02917,
+       "sd": 0.03599,
+       "s": 0.8104,
+       "per_month": 1.006,
+       "x": 0.6608,
+       "hit": 0.75
+      }
+     },
+     "control_mean_all": -0.01726288888888889,
+     "placebo_mean_all": -0.03692566666666666,
+     "ok": false
+    }
+   }
+  },
+  "upbit_caution": {
+   "coverage": {
+    "events": 57,
+    "overlap_l1f": 0,
+    "priced_rows": 36,
+    "by_src": {
+     "binance_um": 35,
+     "no_perp": 21,
+     "binance_um_prefixed": 1
+    },
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "upbit_caution|h4h|d1m",
+    "n": 36,
+    "mean": 0.01019,
+    "sd": 0.08576,
+    "s": 0.1188,
+    "per_month": 1.062,
+    "x": 0.015,
+    "hit": 0.556,
+    "notice_level": {
+     "n": 36,
+     "mean": 0.01019,
+     "sd": 0.08576,
+     "s": 0.1188,
+     "per_month": 1.062,
+     "x": 0.015,
+     "hit": 0.556
+    },
+    "control_mean": -0.008827805555555556,
+    "placebo_mean": -0.022187611111111113,
+    "corr_daily_with_l1f": -0.00245142704523092,
+    "x_with_l1f_added": 0.1983
+   },
+   "rules": {
+    "upbit_caution|h1h|d1m": {
+     "gate": {
+      "n_train": 5,
+      "tpm": 0.274,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 5 < 20",
+      "id": "upbit_caution|h1h|d1m",
+      "control_mean_train": -0.0015902,
+      "notice_level_train": {
+       "n": 5,
+       "mean": -0.00019,
+       "sd": 0.00953,
+       "s": -0.0199,
+       "per_month": 0.278,
+       "x": 0.0001,
+       "hit": 0.4
+      }
+     },
+     "stats_all": {
+      "n": 36,
+      "mean": 0.00649,
+      "sd": 0.07082,
+      "s": 0.0917,
+      "per_month": 1.062,
+      "x": 0.0089,
+      "hit": 0.472
+     },
+     "notice_level_all": {
+      "n": 36,
+      "mean": 0.00649,
+      "sd": 0.07082,
+      "s": 0.0917,
+      "per_month": 1.062,
+      "x": 0.0089,
+      "hit": 0.472
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 5,
+       "mean": -0.00019,
+       "sd": 0.00953,
+       "s": -0.0199,
+       "per_month": 0.278,
+       "x": 0.0001,
+       "hit": 0.4
+      },
+      "validation": {
+       "n": 8,
+       "mean": -0.01135,
+       "sd": 0.11012,
+       "s": -0.1031,
+       "per_month": 1.002,
+       "x": 0.0107,
+       "hit": 0.5
+      },
+      "test": {
+       "n": 23,
+       "mean": 0.01415,
+       "sd": 0.06258,
+       "s": 0.2261,
+       "per_month": 2.893,
+       "x": 0.1479,
+       "hit": 0.478
+      }
+     },
+     "control_mean_all": -0.007130472222222222,
+     "placebo_mean_all": -0.018491555555555553,
+     "ok": false
+    },
+    "upbit_caution|h1h|d5m": {
+     "gate": {
+      "n_train": 5,
+      "tpm": 0.274,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 5 < 20",
+      "id": "upbit_caution|h1h|d5m",
+      "control_mean_train": -0.0015411999999999997,
+      "notice_level_train": {
+       "n": 5,
+       "mean": 0.00042,
+       "sd": 0.01019,
+       "s": 0.0412,
+       "per_month": 0.278,
+       "x": 0.0005,
+       "hit": 0.4
+      }
+     },
+     "stats_all": {
+      "n": 36,
+      "mean": 0.00377,
+      "sd": 0.06226,
+      "s": 0.0606,
+      "per_month": 1.062,
+      "x": 0.0039,
+      "hit": 0.417
+     },
+     "notice_level_all": {
+      "n": 36,
+      "mean": 0.00377,
+      "sd": 0.06226,
+      "s": 0.0606,
+      "per_month": 1.062,
+      "x": 0.0039,
+      "hit": 0.417
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 5,
+       "mean": 0.00042,
+       "sd": 0.01019,
+       "s": 0.0412,
+       "per_month": 0.278,
+       "x": 0.0005,
+       "hit": 0.4
+      },
+      "validation": {
+       "n": 8,
+       "mean": -0.02138,
+       "sd": 0.10139,
+       "s": -0.2109,
+       "per_month": 1.002,
+       "x": 0.0446,
+       "hit": 0.375
+      },
+      "test": {
+       "n": 23,
+       "mean": 0.01325,
+       "sd": 0.05051,
+       "s": 0.2623,
+       "per_month": 2.893,
+       "x": 0.1991,
+       "hit": 0.435
+      }
+     },
+     "control_mean_all": -0.007119777777777779,
+     "placebo_mean_all": -0.015772472222222222,
+     "ok": false
+    },
+    "upbit_caution|h4h|d1m": {
+     "gate": {
+      "n_train": 5,
+      "tpm": 0.274,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 5 < 20",
+      "id": "upbit_caution|h4h|d1m",
+      "control_mean_train": 0.0014023999999999998,
+      "notice_level_train": {
+       "n": 5,
+       "mean": 0.00781,
+       "sd": 0.0272,
+       "s": 0.2872,
+       "per_month": 0.278,
+       "x": 0.0229,
+       "hit": 0.4
+      }
+     },
+     "stats_all": {
+      "n": 36,
+      "mean": 0.01019,
+      "sd": 0.08576,
+      "s": 0.1188,
+      "per_month": 1.062,
+      "x": 0.015,
+      "hit": 0.556
+     },
+     "notice_level_all": {
+      "n": 36,
+      "mean": 0.01019,
+      "sd": 0.08576,
+      "s": 0.1188,
+      "per_month": 1.062,
+      "x": 0.015,
+      "hit": 0.556
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 5,
+       "mean": 0.00781,
+       "sd": 0.0272,
+       "s": 0.2872,
+       "per_month": 0.278,
+       "x": 0.0229,
+       "hit": 0.4
+      },
+      "validation": {
+       "n": 8,
+       "mean": 0.00056,
+       "sd": 0.14691,
+       "s": 0.0038,
+       "per_month": 1.002,
+       "x": 0.0,
+       "hit": 0.625
+      },
+      "test": {
+       "n": 23,
+       "mean": 0.01405,
+       "sd": 0.06818,
+       "s": 0.2061,
+       "per_month": 2.893,
+       "x": 0.1229,
+       "hit": 0.565
+      }
+     },
+     "control_mean_all": -0.008827805555555556,
+     "placebo_mean_all": -0.022187611111111113,
+     "ok": false
+    },
+    "upbit_caution|h4h|d5m": {
+     "gate": {
+      "n_train": 5,
+      "tpm": 0.274,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 5 < 20",
+      "id": "upbit_caution|h4h|d5m",
+      "control_mean_train": 0.0025250000000000003,
+      "notice_level_train": {
+       "n": 5,
+       "mean": 0.01183,
+       "sd": 0.02955,
+       "s": 0.4005,
+       "per_month": 0.278,
+       "x": 0.0446,
+       "hit": 0.4
+      }
+     },
+     "stats_all": {
+      "n": 36,
+      "mean": 0.00725,
+      "sd": 0.07695,
+      "s": 0.0943,
+      "per_month": 1.062,
+      "x": 0.0094,
+      "hit": 0.528
+     },
+     "notice_level_all": {
+      "n": 36,
+      "mean": 0.00725,
+      "sd": 0.07695,
+      "s": 0.0943,
+      "per_month": 1.062,
+      "x": 0.0094,
+      "hit": 0.528
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 5,
+       "mean": 0.01183,
+       "sd": 0.02955,
+       "s": 0.4005,
+       "per_month": 0.278,
+       "x": 0.0446,
+       "hit": 0.4
+      },
+      "validation": {
+       "n": 8,
+       "mean": -0.00952,
+       "sd": 0.13254,
+       "s": -0.0718,
+       "per_month": 1.002,
+       "x": 0.0052,
+       "hit": 0.5
+      },
+      "test": {
+       "n": 23,
+       "mean": 0.01209,
+       "sd": 0.05951,
+       "s": 0.2032,
+       "per_month": 2.893,
+       "x": 0.1194,
+       "hit": 0.565
+      }
+     },
+     "control_mean_all": -0.008604138888888889,
+     "placebo_mean_all": -0.019253277777777782,
+     "ok": false
+    },
+    "upbit_caution|h24h|d1m": {
+     "gate": {
+      "n_train": 5,
+      "tpm": 0.274,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 5 < 20",
+      "id": "upbit_caution|h24h|d1m",
+      "control_mean_train": -0.026802000000000003,
+      "notice_level_train": {
+       "n": 5,
+       "mean": 0.00224,
+       "sd": 0.08078,
+       "s": 0.0278,
+       "per_month": 0.278,
+       "x": 0.0002,
+       "hit": 0.2
+      }
+     },
+     "stats_all": {
+      "n": 36,
+      "mean": 0.01209,
+      "sd": 0.11155,
+      "s": 0.1083,
+      "per_month": 1.062,
+      "x": 0.0125,
+      "hit": 0.5
+     },
+     "notice_level_all": {
+      "n": 36,
+      "mean": 0.01209,
+      "sd": 0.11155,
+      "s": 0.1083,
+      "per_month": 1.062,
+      "x": 0.0125,
+      "hit": 0.5
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 5,
+       "mean": 0.00224,
+       "sd": 0.08078,
+       "s": 0.0278,
+       "per_month": 0.278,
+       "x": 0.0002,
+       "hit": 0.2
+      },
+      "validation": {
+       "n": 8,
+       "mean": 0.02132,
+       "sd": 0.15325,
+       "s": 0.1391,
+       "per_month": 1.002,
+       "x": 0.0194,
+       "hit": 0.625
+      },
+      "test": {
+       "n": 23,
+       "mean": 0.01102,
+       "sd": 0.10527,
+       "s": 0.1046,
+       "per_month": 2.893,
+       "x": 0.0317,
+       "hit": 0.522
+      }
+     },
+     "control_mean_all": -0.014105972222222223,
+     "placebo_mean_all": -0.024085722222222227,
+     "ok": false
+    },
+    "upbit_caution|h24h|d5m": {
+     "gate": {
+      "n_train": 5,
+      "tpm": 0.274,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 5 < 20",
+      "id": "upbit_caution|h24h|d5m",
+      "control_mean_train": -0.023935599999999998,
+      "notice_level_train": {
+       "n": 5,
+       "mean": 0.00733,
+       "sd": 0.08069,
+       "s": 0.0908,
+       "per_month": 0.278,
+       "x": 0.0023,
+       "hit": 0.2
+      }
+     },
+     "stats_all": {
+      "n": 36,
+      "mean": 0.00794,
+      "sd": 0.10615,
+      "s": 0.0748,
+      "per_month": 1.062,
+      "x": 0.0059,
+      "hit": 0.444
+     },
+     "notice_level_all": {
+      "n": 36,
+      "mean": 0.00794,
+      "sd": 0.10615,
+      "s": 0.0748,
+      "per_month": 1.062,
+      "x": 0.0059,
+      "hit": 0.444
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 5,
+       "mean": 0.00733,
+       "sd": 0.08069,
+       "s": 0.0908,
+       "per_month": 0.278,
+       "x": 0.0023,
+       "hit": 0.2
+      },
+      "validation": {
+       "n": 8,
+       "mean": 0.00789,
+       "sd": 0.13918,
+       "s": 0.0567,
+       "per_month": 1.002,
+       "x": 0.0032,
+       "hit": 0.5
+      },
+      "test": {
+       "n": 23,
+       "mean": 0.00809,
+       "sd": 0.10286,
+       "s": 0.0787,
+       "per_month": 2.893,
+       "x": 0.0179,
+       "hit": 0.478
+      }
+     },
+     "control_mean_all": -0.013839666666666667,
+     "placebo_mean_all": -0.01994086111111111,
+     "ok": false
+    }
+   }
+  },
+  "bithumb_delist": {
+   "coverage": {
+    "events": 62,
+    "overlap_l1f": 1,
+    "priced_rows": 20,
+    "by_src": {
+     "binance_um": 20,
+     "no_perp": 42
+    },
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "bithumb_delist|h4h|d1m",
+    "n": 19,
+    "mean": 0.00235,
+    "sd": 0.04138,
+    "s": 0.0569,
+    "per_month": 0.56,
+    "x": 0.0018,
+    "hit": 0.263,
+    "notice_level": {
+     "n": 19,
+     "mean": 0.00235,
+     "sd": 0.04138,
+     "s": 0.0569,
+     "per_month": 0.56,
+     "x": 0.0018,
+     "hit": 0.263
+    },
+    "control_mean": -0.00859284210526316,
+    "placebo_mean": -0.014353105263157894,
+    "corr_daily_with_l1f": -0.0004246736215861621,
+    "x_with_l1f_added": 0.1873
+   },
+   "rules": {
+    "bithumb_delist|h1h|d1m": {
+     "gate": {
+      "n_train": 4,
+      "tpm": 0.219,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 4 < 20",
+      "id": "bithumb_delist|h1h|d1m",
+      "control_mean_train": -0.0014235000000000003,
+      "notice_level_train": {
+       "n": 4,
+       "mean": -0.00355,
+       "sd": 0.01497,
+       "s": -0.2374,
+       "per_month": 0.223,
+       "x": 0.0125,
+       "hit": 0.25
+      }
+     },
+     "stats_all": {
+      "n": 19,
+      "mean": 0.00097,
+      "sd": 0.04336,
+      "s": 0.0225,
+      "per_month": 0.56,
+      "x": 0.0003,
+      "hit": 0.263
+     },
+     "notice_level_all": {
+      "n": 19,
+      "mean": 0.00097,
+      "sd": 0.04336,
+      "s": 0.0225,
+      "per_month": 0.56,
+      "x": 0.0003,
+      "hit": 0.263
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 4,
+       "mean": -0.00355,
+       "sd": 0.01497,
+       "s": -0.2374,
+       "per_month": 0.223,
+       "x": 0.0125,
+       "hit": 0.25
+      },
+      "validation": {
+       "n": 6,
+       "mean": 0.00376,
+       "sd": 0.02487,
+       "s": 0.1514,
+       "per_month": 0.752,
+       "x": 0.0172,
+       "hit": 0.333
+      },
+      "test": {
+       "n": 9,
+       "mean": 0.00113,
+       "sd": 0.06119,
+       "s": 0.0184,
+       "per_month": 1.132,
+       "x": 0.0004,
+       "hit": 0.222
+      }
+     },
+     "control_mean_all": -0.007403315789473685,
+     "placebo_mean_all": -0.012974052631578947,
+     "ok": false
+    },
+    "bithumb_delist|h1h|d5m": {
+     "gate": {
+      "n_train": 4,
+      "tpm": 0.219,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 4 < 20",
+      "id": "bithumb_delist|h1h|d5m",
+      "control_mean_train": -0.0014235000000000003,
+      "notice_level_train": {
+       "n": 4,
+       "mean": 0.01181,
+       "sd": 0.02329,
+       "s": 0.5072,
+       "per_month": 0.223,
+       "x": 0.0573,
+       "hit": 0.75
+      }
+     },
+     "stats_all": {
+      "n": 19,
+      "mean": -0.00422,
+      "sd": 0.02455,
+      "s": -0.1721,
+      "per_month": 0.56,
+      "x": 0.0166,
+      "hit": 0.316
+     },
+     "notice_level_all": {
+      "n": 19,
+      "mean": -0.00422,
+      "sd": 0.02455,
+      "s": -0.1721,
+      "per_month": 0.56,
+      "x": 0.0166,
+      "hit": 0.316
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 4,
+       "mean": 0.01181,
+       "sd": 0.02329,
+       "s": 0.5072,
+       "per_month": 0.223,
+       "x": 0.0573,
+       "hit": 0.75
+      },
+      "validation": {
+       "n": 6,
+       "mean": -0.00618,
+       "sd": 0.00776,
+       "s": -0.7955,
+       "per_month": 0.752,
+       "x": 0.4756,
+       "hit": 0.167
+      },
+      "test": {
+       "n": 9,
+       "mean": -0.01005,
+       "sd": 0.03075,
+       "s": -0.3269,
+       "per_month": 1.132,
+       "x": 0.121,
+       "hit": 0.222
+      }
+     },
+     "control_mean_all": -0.007403315789473685,
+     "placebo_mean_all": -0.007775105263157895,
+     "ok": false
+    },
+    "bithumb_delist|h4h|d1m": {
+     "gate": {
+      "n_train": 4,
+      "tpm": 0.219,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 4 < 20",
+      "id": "bithumb_delist|h4h|d1m",
+      "control_mean_train": -0.00934075,
+      "notice_level_train": {
+       "n": 4,
+       "mean": -0.00753,
+       "sd": 0.01324,
+       "s": -0.5685,
+       "per_month": 0.223,
+       "x": 0.0719,
+       "hit": 0.5
+      }
+     },
+     "stats_all": {
+      "n": 19,
+      "mean": 0.00235,
+      "sd": 0.04138,
+      "s": 0.0569,
+      "per_month": 0.56,
+      "x": 0.0018,
+      "hit": 0.263
+     },
+     "notice_level_all": {
+      "n": 19,
+      "mean": 0.00235,
+      "sd": 0.04138,
+      "s": 0.0569,
+      "per_month": 0.56,
+      "x": 0.0018,
+      "hit": 0.263
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 4,
+       "mean": -0.00753,
+       "sd": 0.01324,
+       "s": -0.5685,
+       "per_month": 0.223,
+       "x": 0.0719,
+       "hit": 0.5
+      },
+      "validation": {
+       "n": 6,
+       "mean": 0.01486,
+       "sd": 0.03527,
+       "s": 0.4213,
+       "per_month": 0.752,
+       "x": 0.1334,
+       "hit": 0.333
+      },
+      "test": {
+       "n": 9,
+       "mean": -0.00159,
+       "sd": 0.05316,
+       "s": -0.0299,
+       "per_month": 1.132,
+       "x": 0.001,
+       "hit": 0.111
+      }
+     },
+     "control_mean_all": -0.00859284210526316,
+     "placebo_mean_all": -0.014353105263157894,
+     "ok": false
+    },
+    "bithumb_delist|h4h|d5m": {
+     "gate": {
+      "n_train": 4,
+      "tpm": 0.219,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 4 < 20",
+      "id": "bithumb_delist|h4h|d5m",
+      "control_mean_train": -0.00934075,
+      "notice_level_train": {
+       "n": 4,
+       "mean": 0.0077,
+       "sd": 0.01453,
+       "s": 0.5297,
+       "per_month": 0.223,
+       "x": 0.0624,
+       "hit": 0.75
+      }
+     },
+     "stats_all": {
+      "n": 19,
+      "mean": 0.00091,
+      "sd": 0.02847,
+      "s": 0.0321,
+      "per_month": 0.56,
+      "x": 0.0006,
+      "hit": 0.368
+     },
+     "notice_level_all": {
+      "n": 19,
+      "mean": 0.00091,
+      "sd": 0.02847,
+      "s": 0.0321,
+      "per_month": 0.56,
+      "x": 0.0006,
+      "hit": 0.368
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 4,
+       "mean": 0.0077,
+       "sd": 0.01453,
+       "s": 0.5297,
+       "per_month": 0.223,
+       "x": 0.0624,
+       "hit": 0.75
+      },
+      "validation": {
+       "n": 6,
+       "mean": 0.01063,
+       "sd": 0.02395,
+       "s": 0.4436,
+       "per_month": 0.752,
+       "x": 0.1479,
+       "hit": 0.5
+      },
+      "test": {
+       "n": 9,
+       "mean": -0.00858,
+       "sd": 0.0345,
+       "s": -0.2486,
+       "per_month": 1.132,
+       "x": 0.0699,
+       "hit": 0.111
+      }
+     },
+     "control_mean_all": -0.00859284210526316,
+     "placebo_mean_all": -0.012913684210526315,
+     "ok": false
+    },
+    "bithumb_delist|h24h|d1m": {
+     "gate": {
+      "n_train": 4,
+      "tpm": 0.219,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 4 < 20",
+      "id": "bithumb_delist|h24h|d1m",
+      "control_mean_train": -0.004546,
+      "notice_level_train": {
+       "n": 4,
+       "mean": -0.05626,
+       "sd": 0.14389,
+       "s": -0.391,
+       "per_month": 0.223,
+       "x": 0.034,
+       "hit": 0.25
+      }
+     },
+     "stats_all": {
+      "n": 19,
+      "mean": -0.0163,
+      "sd": 0.10355,
+      "s": -0.1574,
+      "per_month": 0.56,
+      "x": 0.0139,
+      "hit": 0.316
+     },
+     "notice_level_all": {
+      "n": 19,
+      "mean": -0.0163,
+      "sd": 0.10355,
+      "s": -0.1574,
+      "per_month": 0.56,
+      "x": 0.0139,
+      "hit": 0.316
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 4,
+       "mean": -0.05626,
+       "sd": 0.14389,
+       "s": -0.391,
+       "per_month": 0.223,
+       "x": 0.034,
+       "hit": 0.25
+      },
+      "validation": {
+       "n": 6,
+       "mean": 0.01647,
+       "sd": 0.07347,
+       "s": 0.2242,
+       "per_month": 0.752,
+       "x": 0.0378,
+       "hit": 0.333
+      },
+      "test": {
+       "n": 9,
+       "mean": -0.02038,
+       "sd": 0.1066,
+       "s": -0.1912,
+       "per_month": 1.132,
+       "x": 0.0414,
+       "hit": 0.333
+      }
+     },
+     "control_mean_all": -0.014298526315789475,
+     "placebo_mean_all": 0.00429821052631579,
+     "ok": false
+    },
+    "bithumb_delist|h24h|d5m": {
+     "gate": {
+      "n_train": 4,
+      "tpm": 0.219,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 4 < 20",
+      "id": "bithumb_delist|h24h|d5m",
+      "control_mean_train": -0.004546,
+      "notice_level_train": {
+       "n": 4,
+       "mean": -0.04898,
+       "sd": 0.15215,
+       "s": -0.3219,
+       "per_month": 0.223,
+       "x": 0.0231,
+       "hit": 0.25
+      }
+     },
+     "stats_all": {
+      "n": 19,
+      "mean": -0.0179,
+      "sd": 0.09898,
+      "s": -0.1809,
+      "per_month": 0.56,
+      "x": 0.0183,
+      "hit": 0.316
+     },
+     "notice_level_all": {
+      "n": 19,
+      "mean": -0.0179,
+      "sd": 0.09898,
+      "s": -0.1809,
+      "per_month": 0.56,
+      "x": 0.0183,
+      "hit": 0.316
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 4,
+       "mean": -0.04898,
+       "sd": 0.15215,
+       "s": -0.3219,
+       "per_month": 0.223,
+       "x": 0.0231,
+       "hit": 0.25
+      },
+      "validation": {
+       "n": 6,
+       "mean": 0.01553,
+       "sd": 0.05825,
+       "s": 0.2666,
+       "per_month": 0.752,
+       "x": 0.0534,
+       "hit": 0.333
+      },
+      "test": {
+       "n": 9,
+       "mean": -0.02638,
+       "sd": 0.09918,
+       "s": -0.2659,
+       "per_month": 1.132,
+       "x": 0.0801,
+       "hit": 0.333
+      }
+     },
+     "control_mean_all": -0.014298526315789475,
+     "placebo_mean_all": 0.005901526315789475,
+     "ok": false
+    }
+   }
+  },
+  "bithumb_caution": {
+   "coverage": {
+    "events": 86,
+    "overlap_l1f": 1,
+    "priced_rows": 39,
+    "by_src": {
+     "binance_um": 38,
+     "no_perp": 47,
+     "binance_um_prefixed": 1
+    },
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "bithumb_caution|h4h|d1m",
+    "n": 38,
+    "mean": -0.00762,
+    "sd": 0.08883,
+    "s": -0.0858,
+    "per_month": 1.121,
+    "x": 0.0082,
+    "hit": 0.447,
+    "notice_level": {
+     "n": 34,
+     "mean": 0.00105,
+     "sd": 0.08369,
+     "s": 0.0126,
+     "per_month": 1.003,
+     "x": 0.0002,
+     "hit": 0.5
+    },
+    "control_mean": -0.014477421052631579,
+    "placebo_mean": -0.004378657894736843,
+    "corr_daily_with_l1f": -0.0002782525426903565,
+    "x_with_l1f_added": 0.1238
+   },
+   "rules": {
+    "bithumb_caution|h1h|d1m": {
+     "gate": {
+      "n_train": 7,
+      "tpm": 0.384,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 7 < 20",
+      "id": "bithumb_caution|h1h|d1m",
+      "control_mean_train": -0.0033735714285714293,
+      "notice_level_train": {
+       "n": 7,
+       "mean": 0.00504,
+       "sd": 0.02491,
+       "s": 0.2023,
+       "per_month": 0.39,
+       "x": 0.0159,
+       "hit": 0.571
+      }
+     },
+     "stats_all": {
+      "n": 38,
+      "mean": -0.00404,
+      "sd": 0.06112,
+      "s": -0.0661,
+      "per_month": 1.121,
+      "x": 0.0049,
+      "hit": 0.474
+     },
+     "notice_level_all": {
+      "n": 34,
+      "mean": -0.0,
+      "sd": 0.06161,
+      "s": -0.0001,
+      "per_month": 1.003,
+      "x": 0.0,
+      "hit": 0.5
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 7,
+       "mean": 0.00504,
+       "sd": 0.02491,
+       "s": 0.2023,
+       "per_month": 0.39,
+       "x": 0.0159,
+       "hit": 0.571
+      },
+      "validation": {
+       "n": 13,
+       "mean": -0.00462,
+       "sd": 0.08565,
+       "s": -0.0539,
+       "per_month": 1.628,
+       "x": 0.0047,
+       "hit": 0.538
+      },
+      "test": {
+       "n": 18,
+       "mean": -0.00715,
+       "sd": 0.05184,
+       "s": -0.1379,
+       "per_month": 2.264,
+       "x": 0.0431,
+       "hit": 0.389
+      }
+     },
+     "control_mean_all": -0.008604342105263158,
+     "placebo_mean_all": -0.00796128947368421,
+     "ok": false
+    },
+    "bithumb_caution|h1h|d5m": {
+     "gate": {
+      "n_train": 7,
+      "tpm": 0.384,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 7 < 20",
+      "id": "bithumb_caution|h1h|d5m",
+      "control_mean_train": -0.0033735714285714293,
+      "notice_level_train": {
+       "n": 7,
+       "mean": -0.00038,
+       "sd": 0.01435,
+       "s": -0.0263,
+       "per_month": 0.39,
+       "x": 0.0003,
+       "hit": 0.286
+      }
+     },
+     "stats_all": {
+      "n": 38,
+      "mean": -0.00584,
+      "sd": 0.05829,
+      "s": -0.1001,
+      "per_month": 1.121,
+      "x": 0.0112,
+      "hit": 0.395
+     },
+     "notice_level_all": {
+      "n": 34,
+      "mean": -0.00197,
+      "sd": 0.05773,
+      "s": -0.0342,
+      "per_month": 1.003,
+      "x": 0.0012,
+      "hit": 0.441
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 7,
+       "mean": -0.00038,
+       "sd": 0.01435,
+       "s": -0.0263,
+       "per_month": 0.39,
+       "x": 0.0003,
+       "hit": 0.286
+      },
+      "validation": {
+       "n": 13,
+       "mean": -0.01131,
+       "sd": 0.07957,
+       "s": -0.1421,
+       "per_month": 1.628,
+       "x": 0.0329,
+       "hit": 0.462
+      },
+      "test": {
+       "n": 18,
+       "mean": -0.00401,
+       "sd": 0.05304,
+       "s": -0.0756,
+       "per_month": 2.264,
+       "x": 0.0129,
+       "hit": 0.389
+      }
+     },
+     "control_mean_all": -0.008683815789473685,
+     "placebo_mean_all": -0.006164026315789474,
+     "ok": false
+    },
+    "bithumb_caution|h4h|d1m": {
+     "gate": {
+      "n_train": 7,
+      "tpm": 0.384,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 7 < 20",
+      "id": "bithumb_caution|h4h|d1m",
+      "control_mean_train": -0.0029984285714285716,
+      "notice_level_train": {
+       "n": 7,
+       "mean": 0.00806,
+       "sd": 0.04221,
+       "s": 0.191,
+       "per_month": 0.39,
+       "x": 0.0142,
+       "hit": 0.429
+      }
+     },
+     "stats_all": {
+      "n": 38,
+      "mean": -0.00762,
+      "sd": 0.08883,
+      "s": -0.0858,
+      "per_month": 1.121,
+      "x": 0.0082,
+      "hit": 0.447
+     },
+     "notice_level_all": {
+      "n": 34,
+      "mean": 0.00105,
+      "sd": 0.08369,
+      "s": 0.0126,
+      "per_month": 1.003,
+      "x": 0.0002,
+      "hit": 0.5
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 7,
+       "mean": 0.00806,
+       "sd": 0.04221,
+       "s": 0.191,
+       "per_month": 0.39,
+       "x": 0.0142,
+       "hit": 0.429
+      },
+      "validation": {
+       "n": 13,
+       "mean": 0.00658,
+       "sd": 0.11628,
+       "s": 0.0566,
+       "per_month": 1.628,
+       "x": 0.0052,
+       "hit": 0.615
+      },
+      "test": {
+       "n": 18,
+       "mean": -0.02398,
+       "sd": 0.0804,
+       "s": -0.2983,
+       "per_month": 2.264,
+       "x": 0.2014,
+       "hit": 0.333
+      }
+     },
+     "control_mean_all": -0.014477421052631579,
+     "placebo_mean_all": -0.004378657894736843,
+     "ok": false
+    },
+    "bithumb_caution|h4h|d5m": {
+     "gate": {
+      "n_train": 7,
+      "tpm": 0.384,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 7 < 20",
+      "id": "bithumb_caution|h4h|d5m",
+      "control_mean_train": -0.0029984285714285716,
+      "notice_level_train": {
+       "n": 7,
+       "mean": 0.00575,
+       "sd": 0.03395,
+       "s": 0.1694,
+       "per_month": 0.39,
+       "x": 0.0112,
+       "hit": 0.429
+      }
+     },
+     "stats_all": {
+      "n": 38,
+      "mean": -0.01055,
+      "sd": 0.08157,
+      "s": -0.1294,
+      "per_month": 1.121,
+      "x": 0.0188,
+      "hit": 0.421
+     },
+     "notice_level_all": {
+      "n": 34,
+      "mean": -0.00148,
+      "sd": 0.07473,
+      "s": -0.0198,
+      "per_month": 1.003,
+      "x": 0.0004,
+      "hit": 0.471
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 7,
+       "mean": 0.00575,
+       "sd": 0.03395,
+       "s": 0.1694,
+       "per_month": 0.39,
+       "x": 0.0112,
+       "hit": 0.429
+      },
+      "validation": {
+       "n": 13,
+       "mean": -0.00064,
+       "sd": 0.10402,
+       "s": -0.0062,
+       "per_month": 1.628,
+       "x": 0.0001,
+       "hit": 0.538
+      },
+      "test": {
+       "n": 18,
+       "mean": -0.02406,
+       "sd": 0.07785,
+       "s": -0.309,
+       "per_month": 2.264,
+       "x": 0.2162,
+       "hit": 0.333
+      }
+     },
+     "control_mean_all": -0.014774657894736842,
+     "placebo_mean_all": -0.0014450263157894739,
+     "ok": false
+    },
+    "bithumb_caution|h24h|d1m": {
+     "gate": {
+      "n_train": 7,
+      "tpm": 0.384,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 7 < 20",
+      "id": "bithumb_caution|h24h|d1m",
+      "control_mean_train": -0.01327557142857143,
+      "notice_level_train": {
+       "n": 7,
+       "mean": -0.00022,
+       "sd": 0.09464,
+       "s": -0.0023,
+       "per_month": 0.39,
+       "x": 0.0,
+       "hit": 0.286
+      }
+     },
+     "stats_all": {
+      "n": 38,
+      "mean": -0.01736,
+      "sd": 0.11916,
+      "s": -0.1457,
+      "per_month": 1.121,
+      "x": 0.0238,
+      "hit": 0.368
+     },
+     "notice_level_all": {
+      "n": 34,
+      "mean": -0.00381,
+      "sd": 0.11272,
+      "s": -0.0338,
+      "per_month": 1.003,
+      "x": 0.0011,
+      "hit": 0.412
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 7,
+       "mean": -0.00022,
+       "sd": 0.09464,
+       "s": -0.0023,
+       "per_month": 0.39,
+       "x": 0.0,
+       "hit": 0.286
+      },
+      "validation": {
+       "n": 13,
+       "mean": 0.01722,
+       "sd": 0.12328,
+       "s": 0.1397,
+       "per_month": 1.628,
+       "x": 0.0318,
+       "hit": 0.538
+      },
+      "test": {
+       "n": 18,
+       "mean": -0.049,
+       "sd": 0.12215,
+       "s": -0.4011,
+       "per_month": 2.264,
+       "x": 0.3643,
+       "hit": 0.278
+      }
+     },
+     "control_mean_all": -0.019619684210526317,
+     "placebo_mean_all": 0.005357342105263157,
+     "ok": false
+    },
+    "bithumb_caution|h24h|d5m": {
+     "gate": {
+      "n_train": 7,
+      "tpm": 0.384,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 7 < 20",
+      "id": "bithumb_caution|h24h|d5m",
+      "control_mean_train": -0.01327557142857143,
+      "notice_level_train": {
+       "n": 7,
+       "mean": -0.00364,
+       "sd": 0.08711,
+       "s": -0.0418,
+       "per_month": 0.39,
+       "x": 0.0007,
+       "hit": 0.286
+      }
+     },
+     "stats_all": {
+      "n": 38,
+      "mean": -0.02021,
+      "sd": 0.11311,
+      "s": -0.1786,
+      "per_month": 1.121,
+      "x": 0.0358,
+      "hit": 0.316
+     },
+     "notice_level_all": {
+      "n": 34,
+      "mean": -0.0072,
+      "sd": 0.10577,
+      "s": -0.0681,
+      "per_month": 1.003,
+      "x": 0.0046,
+      "hit": 0.353
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 7,
+       "mean": -0.00364,
+       "sd": 0.08711,
+       "s": -0.0418,
+       "per_month": 0.39,
+       "x": 0.0007,
+       "hit": 0.286
+      },
+      "validation": {
+       "n": 13,
+       "mean": 0.00961,
+       "sd": 0.11147,
+       "s": 0.0862,
+       "per_month": 1.628,
+       "x": 0.0121,
+       "hit": 0.462
+      },
+      "test": {
+       "n": 18,
+       "mean": -0.04818,
+       "sd": 0.12156,
+       "s": -0.3964,
+       "per_month": 2.264,
+       "x": 0.3557,
+       "hit": 0.222
+      }
+     },
+     "control_mean_all": -0.019974368421052633,
+     "placebo_mean_all": 0.008206157894736842,
+     "ok": false
+    }
+   }
+  },
+  "bybit_delist": {
+   "coverage": {
+    "events": 345,
+    "overlap_l1f": 6,
+    "priced_rows": 80,
+    "by_src": {
+     "no_perp": 265,
+     "binance_um": 78,
+     "binance_um_prefixed": 2
+    },
+    "rows_with_dropped_rules": 0,
+    "dropped_rule_instances": 0
+   },
+   "headline_4h_1m": {
+    "rule": "bybit_delist|h4h|d1m",
+    "n": 74,
+    "mean": -0.01078,
+    "sd": 0.04416,
+    "s": -0.244,
+    "per_month": 2.183,
+    "x": 0.13,
+    "hit": 0.203,
+    "notice_level": {
+     "n": 69,
+     "mean": -0.01106,
+     "sd": 0.04561,
+     "s": -0.2425,
+     "per_month": 2.035,
+     "x": 0.1197,
+     "hit": 0.203
+    },
+    "control_mean": -0.005032851351351351,
+    "placebo_mean": -0.0012233918918918918,
+    "corr_daily_with_l1f": 0.0007256859011330038,
+    "x_with_l1f_added": 0.0877
+   },
+   "rules": {
+    "bybit_delist|h1h|d1m": {
+     "gate": {
+      "n_train": 16,
+      "tpm": 0.878,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 16 < 20",
+      "id": "bybit_delist|h1h|d1m",
+      "control_mean_train": -0.0011721250000000006,
+      "notice_level_train": {
+       "n": 15,
+       "mean": -0.01644,
+       "sd": 0.02395,
+       "s": -0.6865,
+       "per_month": 0.835,
+       "x": 0.3933,
+       "hit": 0.067
+      }
+     },
+     "stats_all": {
+      "n": 74,
+      "mean": -0.01239,
+      "sd": 0.02262,
+      "s": -0.5479,
+      "per_month": 2.183,
+      "x": 0.6551,
+      "hit": 0.081
+     },
+     "notice_level_all": {
+      "n": 69,
+      "mean": -0.01271,
+      "sd": 0.02339,
+      "s": -0.5435,
+      "per_month": 2.035,
+      "x": 0.6011,
+      "hit": 0.087
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 16,
+       "mean": -0.01587,
+       "sd": 0.02327,
+       "s": -0.6819,
+       "per_month": 0.89,
+       "x": 0.4139,
+       "hit": 0.062
+      },
+      "validation": {
+       "n": 24,
+       "mean": -0.01596,
+       "sd": 0.03344,
+       "s": -0.4772,
+       "per_month": 3.006,
+       "x": 0.6844,
+       "hit": 0.125
+      },
+      "test": {
+       "n": 34,
+       "mean": -0.00824,
+       "sd": 0.00858,
+       "s": -0.9608,
+       "per_month": 4.276,
+       "x": 3.9478,
+       "hit": 0.059
+      }
+     },
+     "control_mean_all": -0.005575175675675676,
+     "placebo_mean_all": 0.00039270270270270227,
+     "ok": false
+    },
+    "bybit_delist|h1h|d5m": {
+     "gate": {
+      "n_train": 16,
+      "tpm": 0.878,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 16 < 20",
+      "id": "bybit_delist|h1h|d5m",
+      "control_mean_train": -0.0029159375,
+      "notice_level_train": {
+       "n": 15,
+       "mean": -0.01455,
+       "sd": 0.03941,
+       "s": -0.3691,
+       "per_month": 0.835,
+       "x": 0.1137,
+       "hit": 0.067
+      }
+     },
+     "stats_all": {
+      "n": 74,
+      "mean": -0.01146,
+      "sd": 0.02747,
+      "s": -0.4172,
+      "per_month": 2.183,
+      "x": 0.3799,
+      "hit": 0.068
+     },
+     "notice_level_all": {
+      "n": 69,
+      "mean": -0.01171,
+      "sd": 0.02843,
+      "s": -0.4119,
+      "per_month": 2.035,
+      "x": 0.3453,
+      "hit": 0.072
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 16,
+       "mean": -0.01403,
+       "sd": 0.03814,
+       "s": -0.3679,
+       "per_month": 0.89,
+       "x": 0.1205,
+       "hit": 0.062
+      },
+      "validation": {
+       "n": 24,
+       "mean": -0.01549,
+       "sd": 0.03645,
+       "s": -0.425,
+       "per_month": 3.006,
+       "x": 0.543,
+       "hit": 0.042
+      },
+      "test": {
+       "n": 34,
+       "mean": -0.0074,
+       "sd": 0.00704,
+       "s": -1.0517,
+       "per_month": 4.276,
+       "x": 4.7299,
+       "hit": 0.088
+      }
+     },
+     "control_mean_all": -0.005611378378378378,
+     "placebo_mean_all": -0.0005392297297297299,
+     "ok": false
+    },
+    "bybit_delist|h4h|d1m": {
+     "gate": {
+      "n_train": 16,
+      "tpm": 0.878,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 16 < 20",
+      "id": "bybit_delist|h4h|d1m",
+      "control_mean_train": 0.0034691874999999996,
+      "notice_level_train": {
+       "n": 15,
+       "mean": -0.00852,
+       "sd": 0.04731,
+       "s": -0.1802,
+       "per_month": 0.835,
+       "x": 0.0271,
+       "hit": 0.267
+      }
+     },
+     "stats_all": {
+      "n": 74,
+      "mean": -0.01078,
+      "sd": 0.04416,
+      "s": -0.244,
+      "per_month": 2.183,
+      "x": 0.13,
+      "hit": 0.203
+     },
+     "notice_level_all": {
+      "n": 69,
+      "mean": -0.01106,
+      "sd": 0.04561,
+      "s": -0.2425,
+      "per_month": 2.035,
+      "x": 0.1197,
+      "hit": 0.203
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 16,
+       "mean": -0.00731,
+       "sd": 0.04597,
+       "s": -0.1589,
+       "per_month": 0.89,
+       "x": 0.0225,
+       "hit": 0.312
+      },
+      "validation": {
+       "n": 24,
+       "mean": -0.0093,
+       "sd": 0.06047,
+       "s": -0.1537,
+       "per_month": 3.006,
+       "x": 0.071,
+       "hit": 0.292
+      },
+      "test": {
+       "n": 34,
+       "mean": -0.01345,
+       "sd": 0.0281,
+       "s": -0.4788,
+       "per_month": 4.276,
+       "x": 0.9804,
+       "hit": 0.088
+      }
+     },
+     "control_mean_all": -0.005032851351351351,
+     "placebo_mean_all": -0.0012233918918918918,
+     "ok": false
+    },
+    "bybit_delist|h4h|d5m": {
+     "gate": {
+      "n_train": 16,
+      "tpm": 0.878,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 16 < 20",
+      "id": "bybit_delist|h4h|d5m",
+      "control_mean_train": 0.0012796875,
+      "notice_level_train": {
+       "n": 15,
+       "mean": -0.00461,
+       "sd": 0.05673,
+       "s": -0.0813,
+       "per_month": 0.835,
+       "x": 0.0055,
+       "hit": 0.333
+      }
+     },
+     "stats_all": {
+      "n": 74,
+      "mean": -0.01025,
+      "sd": 0.04618,
+      "s": -0.2219,
+      "per_month": 2.183,
+      "x": 0.1074,
+      "hit": 0.203
+     },
+     "notice_level_all": {
+      "n": 69,
+      "mean": -0.01056,
+      "sd": 0.04767,
+      "s": -0.2215,
+      "per_month": 2.035,
+      "x": 0.0998,
+      "hit": 0.203
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 16,
+       "mean": -0.00333,
+       "sd": 0.05505,
+       "s": -0.0605,
+       "per_month": 0.89,
+       "x": 0.0033,
+       "hit": 0.375
+      },
+      "validation": {
+       "n": 24,
+       "mean": -0.01,
+       "sd": 0.059,
+       "s": -0.1695,
+       "per_month": 3.006,
+       "x": 0.0864,
+       "hit": 0.25
+      },
+      "test": {
+       "n": 34,
+       "mean": -0.01367,
+       "sd": 0.02964,
+       "s": -0.4612,
+       "per_month": 4.276,
+       "x": 0.9098,
+       "hit": 0.088
+      }
+     },
+     "control_mean_all": -0.00495195945945946,
+     "placebo_mean_all": -0.0017530270270270272,
+     "ok": false
+    },
+    "bybit_delist|h24h|d1m": {
+     "gate": {
+      "n_train": 16,
+      "tpm": 0.878,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 16 < 20",
+      "id": "bybit_delist|h24h|d1m",
+      "control_mean_train": 0.006390812499999997,
+      "notice_level_train": {
+       "n": 15,
+       "mean": -0.00243,
+       "sd": 0.13503,
+       "s": -0.018,
+       "per_month": 0.835,
+       "x": 0.0003,
+       "hit": 0.267
+      }
+     },
+     "stats_all": {
+      "n": 74,
+      "mean": 0.00081,
+      "sd": 0.08105,
+      "s": 0.0101,
+      "per_month": 2.183,
+      "x": 0.0002,
+      "hit": 0.257
+     },
+     "notice_level_all": {
+      "n": 69,
+      "mean": 0.00088,
+      "sd": 0.08363,
+      "s": 0.0105,
+      "per_month": 2.035,
+      "x": 0.0002,
+      "hit": 0.261
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 16,
+       "mean": 0.00081,
+       "sd": 0.13123,
+       "s": 0.0061,
+       "per_month": 0.89,
+       "x": 0.0,
+       "hit": 0.312
+      },
+      "validation": {
+       "n": 24,
+       "mean": 0.01574,
+       "sd": 0.08498,
+       "s": 0.1852,
+       "per_month": 3.006,
+       "x": 0.1031,
+       "hit": 0.375
+      },
+      "test": {
+       "n": 34,
+       "mean": -0.00971,
+       "sd": 0.03732,
+       "s": -0.2603,
+       "per_month": 4.276,
+       "x": 0.2897,
+       "hit": 0.147
+      }
+     },
+     "control_mean_all": -0.0022504864864864877,
+     "placebo_mean_all": -0.012814648648648647,
+     "ok": false
+    },
+    "bybit_delist|h24h|d5m": {
+     "gate": {
+      "n_train": 16,
+      "tpm": 0.878,
+      "w": 1.0,
+      "shortable": true,
+      "reason": "train trades 16 < 20",
+      "id": "bybit_delist|h24h|d5m",
+      "control_mean_train": 0.0059443749999999965,
+      "notice_level_train": {
+       "n": 15,
+       "mean": 0.00455,
+       "sd": 0.13802,
+       "s": 0.0329,
+       "per_month": 0.835,
+       "x": 0.0009,
+       "hit": 0.267
+      }
+     },
+     "stats_all": {
+      "n": 74,
+      "mean": 0.00192,
+      "sd": 0.0821,
+      "s": 0.0234,
+      "per_month": 2.183,
+      "x": 0.0012,
+      "hit": 0.27
+     },
+     "notice_level_all": {
+      "n": 69,
+      "mean": 0.00205,
+      "sd": 0.0847,
+      "s": 0.0243,
+      "per_month": 2.035,
+      "x": 0.0012,
+      "hit": 0.275
+     },
+     "stats_by_split": {
+      "train": {
+       "n": 16,
+       "mean": 0.00743,
+       "sd": 0.13402,
+       "s": 0.0554,
+       "per_month": 0.89,
+       "x": 0.0027,
+       "hit": 0.312
+      },
+      "validation": {
+       "n": 24,
+       "mean": 0.01555,
+       "sd": 0.08541,
+       "s": 0.182,
+       "per_month": 3.006,
+       "x": 0.0996,
+       "hit": 0.458
+      },
+      "test": {
+       "n": 34,
+       "mean": -0.01029,
+       "sd": 0.03689,
+       "s": -0.2788,
+       "per_month": 4.276,
+       "x": 0.3325,
+       "hit": 0.118
+      }
+     },
+     "control_mean_all": -0.002401729729729731,
+     "placebo_mean_all": -0.013922391891891891,
+     "ok": false
+    }
+   }
+  }
+ },
+ "l1f_ref_perp_priced": {
+  "events": 107,
+  "priced_trades": 65,
+  "n": 65,
+  "mean": 0.04676,
+  "sd": 0.149,
+  "s": 0.3139,
+  "per_month": 1.917,
+  "x": 0.1889,
+  "hit": 0.677
+ },
+ "rules_tested": 54,
+ "event_gate": {
+  "stage0_survivors": 0,
+  "holm": {
+   "holm_m": 0
+  },
+  "passed": [],
+  "evaluated": []
+ },
+ "sweep_strict_gate": {
+  "stage0_survivors": 0,
+  "holm": {
+   "holm_m": 0
+  },
+  "passed": [],
+  "evaluated": []
+ }
+}
