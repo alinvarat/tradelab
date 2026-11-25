@@ -1,14 +1,14 @@
 name: FX and gold tick (family 5)
 
 # Family 5: gold and FX intraday on Dukascopy 1m bid/ask candles and ticks at XM costs (protocol_fxgold_tick_20261125.md).
-# mode comes from the dispatch input, or (push on the line branch) from research/studies/fxgold_mode.txt: probe | probe2 | probe3 | pilot | pilot_hd | all | all_hd.
+# mode comes from the dispatch input, or (push on the line branch) from research/studies/fxgold_mode.txt: probe | probe2 | probe3 | pilot | pilot_hd | all | all_hd | candles_hd.
 # pilot = same rules on gold only, 2023Q4..2026Q4, shorter splits (protocol addendum), diagnostic only.
 # Candle chunks are quarters cached by key (a rerun only fetches chunks that failed); rows and summaries go to data/fxgold-tick-rows.
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe | probe2 | probe3 | pilot | pilot_hd | all | all_hd"
+        description: "probe | probe2 | probe3 | pilot | pilot_hd | all | all_hd | candles_hd"
         default: all
   push:
     branches: [line/fxgold-tick]
@@ -52,11 +52,11 @@ jobs:
           path: /tmp/probe.json
       - name: Matrix
         id: mx
-        if: (steps.m.outputs.mode == 'all' || startsWith(steps.m.outputs.mode, 'pilot') || steps.m.outputs.mode == 'all_hd')
+        if: (steps.m.outputs.mode == 'all' || startsWith(steps.m.outputs.mode, 'pilot') || steps.m.outputs.mode == 'all_hd' || steps.m.outputs.mode == 'candles_hd')
         run: |
           J="$(python -m research.studies.fxgold_matrix ${{ steps.m.outputs.mode }})"
           echo "fetch=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["fetch"]))')" >> "$GITHUB_OUTPUT"
-          echo "events=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["events"]))')" >> "$GITHUB_OUTPUT"
+          echo "events=$(echo "$J" | python -c 'import json,sys;e=json.load(sys.stdin)["events"];print(json.dumps(e) if e else "")')" >> "$GITHUB_OUTPUT"
           echo "sims=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["sims"]))')" >> "$GITHUB_OUTPUT"
 
   calendar:

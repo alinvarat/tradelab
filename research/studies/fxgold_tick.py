@@ -84,6 +84,8 @@ def do_sim(sym, data, out):
     for rid, spec in ft.build_rules().items():
         if sym not in spec["syms"]:
             continue
+        if spec["fam"] == "C" and not events:                 # candle-only run: release-minute cells are left to the run that has the ticks
+            continue
         t0 = time.time()
         if spec["fam"] == "C":
             mode, th, hold = spec["args"]

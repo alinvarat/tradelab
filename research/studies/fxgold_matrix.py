@@ -27,7 +27,7 @@ def main(mode):
     qs = quarters(2023, 4) if pilot else quarters(2018, 1)
     years = [2023, 2024, 2025, 2026] if pilot else list(range(2018, 2027))
     print(json.dumps({"fetch": [{"sym": s, "chunk": c, "start": a, "end": b} for s in syms for c, a, b in qs],
-                      "events": [{"sym": s, "year": y} for s in syms for y in years], "sims": syms}))
+                      "events": [] if mode == "candles_hd" else [{"sym": s, "year": y} for s in syms for y in years], "sims": syms}))
 
 
 if __name__ == "__main__":
