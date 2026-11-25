@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       study:
-        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, polymarket_llm, l7_first_red_day or all"
+        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, fwd_crypto_spikes, polymarket_llm, l7_first_red_day or all"
         default: all
   schedule:
     - cron: "0 3 * * 0"        # Sundays 03:00 UTC: forward DeepSeek earnings reader
@@ -196,11 +196,64 @@ jobs:
           git commit -qm "L4f ledger: $(date -u +%FT%TZ)" || echo "nothing new"
           git push -q origin data/l4f-forward
 
+  fwd_crypto:
+    name: fwd_crypto_spikes (hourly)
+    if: inputs.study == 'fwd_crypto_spikes' || inputs.study == 'fwd_probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: tradelab-fwd-crypto-state
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Probe data hosts
+        if: inputs.study == 'fwd_probe'
+        run: python research/studies/fwd_probe.py
+
+      - name: Restore state
+        if: inputs.study == 'fwd_crypto_spikes'
+        run: |
+          mkdir -p /tmp/fwd
+          if git fetch origin data/fwd-crypto-spikes 2>/dev/null; then
+            git show origin/data/fwd-crypto-spikes:fwd_crypto_state.json > /tmp/fwd/fwd_crypto_state.json || rm -f /tmp/fwd/fwd_crypto_state.json
+          fi
+
+      - name: Run
+        if: inputs.study == 'fwd_crypto_spikes'
+        run: python research/studies/fwd_crypto_spikes.py /tmp/fwd
+
+      - name: Push state to data/fwd-crypto-spikes
+        if: always() && inputs.study == 'fwd_crypto_spikes'
+        run: |
+          [ -f /tmp/fwd/fwd_crypto_state.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/fwd-crypto-spikes; then
+            git checkout -q -B data/fwd-crypto-spikes origin/data/fwd-crypto-spikes
+          else
+            git checkout -q --orphan data/fwd-crypto-spikes && git rm -rq --cached . && git clean -fdq
+          fi
+          cp /tmp/fwd/fwd_crypto_state.json /tmp/fwd/fwd_crypto_summary.json .
+          git add fwd_crypto_state.json fwd_crypto_summary.json
+          git commit -qm "Forward crypto spikes ledger: $(date -u +%FT%TZ)" || echo "nothing new"
+          git push -q origin data/fwd-crypto-spikes
+
   study:
     name: ${{ matrix.study }}
     # Only on a manual run, and only the requested study: before, each dispatch started all ~25 matrix jobs just to
     # skip their steps, and every job is billed as at least one runner minute.
-    if: github.event_name == 'workflow_dispatch' && !contains(fromJSON('["llm_earnings_forward","options_forward","l4f_forward"]'), inputs.study)
+    if: github.event_name == 'workflow_dispatch' && !contains(fromJSON('["llm_earnings_forward","options_forward","l4f_forward","fwd_crypto_spikes","fwd_probe"]'), inputs.study)
     runs-on: ubuntu-latest
     timeout-minutes: 240
     strategy:
