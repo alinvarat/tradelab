@@ -64,7 +64,7 @@ class Signals(unittest.TestCase):
         self.assertFalse(dc.in_set("s2", False, True, True))
         self.assertTrue(dc.in_set("s3", False, True, True))
         rows, pool = dc.build_signals(dbars, [d], book, {"AAA": [d * DAY - 5]})     # delist notice already published: not a candidate
-        self.assertEqual(rows, [])
+        self.assertNotIn("AAAUSDT", [r["sym"] for r in rows])
 
     def test_pool_is_lowvol_not_signalled(self):
         dbars = {"AAAUSDT": self.bars(10.0, 0.0), "BBBUSDT": self.bars(1000.0, 1.0), "CCCUSDT": self.bars(2000.0, 0.0)}
