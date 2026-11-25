@@ -237,6 +237,22 @@ def run_shard(item, workers=8):
 
 def probe():
     out = {"t": datetime.now(timezone.utc).isoformat()}
+    if "--quick" in sys.argv:
+        gaps = {}
+        evs = list_events("bitcoin", _ts(2026, 10, 10), _ts(2026, 10, 11), gaps)
+        pat = {}
+        for e in evs:
+            sl = re.sub(r"\d+", "N", e.get("slug") or "")
+            kind = "hourly" if HOURLY.match(e.get("slug") or "") else "daily" if DAILY.match(e.get("slug") or "") else None
+            x = pat.setdefault(sl, {"events": 0, "markets": 0, "kind": kind, "ex": None})
+            x["events"] += 1
+            x["markets"] += len(e.get("markets") or [])
+            if x["ex"] is None and e.get("markets"):
+                m0 = e["markets"][0]
+                x["ex"] = [e.get("slug"), m0.get("question"), m0.get("groupItemTitle"), (e.get("eventMetadata") or {})]
+        out["patterns"] = pat
+        out["gaps"] = gaps
+        return out
     st, ser = http(f"{GAMMA}/series?slug=bitcoin-up-or-down-hourly&limit=5")
     out["series_by_slug"] = [st, json.dumps(ser)[:1500]]
     sid = None
