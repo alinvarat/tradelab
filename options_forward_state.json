@@ -406,6 +406,403 @@
     "9.01"
    ],
    "skipped": "liquidity 8922108.037185669"
+  },
+  "0001213900-26-123975": {
+   "symbol": "HCTI",
+   "accession": "0001213900-26-123975",
+   "accepted": "2026-11-25T14:30:12.000Z",
+   "accepted_ts": 1795617012,
+   "protocol": "options-v2-sec",
+   "items": [
+    "3.01"
+   ],
+   "skipped": "liquidity 77812.50166893005"
+  },
+  "0001477932-26-007297": {
+   "symbol": "MRDN",
+   "accession": "0001477932-26-007297",
+   "accepted": "2026-11-25T14:01:00.000Z",
+   "accepted_ts": 1795615260,
+   "protocol": "options-v2-sec",
+   "items": [
+    "1.02",
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 272592.00830459595"
+  },
+  "0001206774-26-000614": {
+   "symbol": "MAYS",
+   "accession": "0001206774-26-000614",
+   "accepted": "2026-11-25T14:00:36.000Z",
+   "accepted_ts": 1795615236,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.07"
+   ],
+   "skipped": "liquidity 78403.49884033203"
+  },
+  "0001299709-26-000092": {
+   "symbol": "AX",
+   "accession": "0001299709-26-000092",
+   "accepted": "2026-11-25T14:00:23.000Z",
+   "accepted_ts": 1795615223,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02"
+   ],
+   "skipped": "liquidity 27007083.644866943"
+  },
+  "0001628280-26-075883": {
+   "symbol": "GEVO",
+   "accession": "0001628280-26-075883",
+   "accepted": "2026-11-25T13:59:22.000Z",
+   "accepted_ts": 1795615162,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02"
+   ],
+   "skipped": "liquidity 4513743.107914925"
+  },
+  "0001193125-26-476920": {
+   "symbol": "BODI",
+   "accession": "0001193125-26-476920",
+   "accepted": "2026-11-25T13:57:27.000Z",
+   "accepted_ts": 1795615047,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02",
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 84628.00114154816"
+  },
+  "0001193125-26-476917": {
+   "symbol": "FLO",
+   "accession": "0001193125-26-476917",
+   "accepted": "2026-11-25T13:55:17.000Z",
+   "accepted_ts": 1795614917,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02"
+   ],
+   "skipped": "liquidity 51233301.92537308"
+  },
+  "0001493152-26-054131": {
+   "symbol": "BMNR",
+   "accession": "0001493152-26-054131",
+   "accepted": "2026-11-25T13:45:14.000Z",
+   "accepted_ts": 1795614314,
+   "protocol": "options-v2-sec",
+   "items": [
+    "7.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 20,
+   "reason": "The filing is a routine $0.01 per-share dividend announcement with immaterial content, and the sharp five-session decline gives no clear directional signal for the next five sessions."
+  },
+  "0001437749-26-038246": {
+   "symbol": "IRT",
+   "accession": "0001437749-26-038246",
+   "accepted": "2026-11-25T13:42:22.000Z",
+   "accepted_ts": 1795614142,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02",
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 44385824.751996994"
+  },
+  "0000720005-26-000088": {
+   "symbol": "RJF",
+   "accession": "0000720005-26-000088",
+   "accepted": "2026-11-25T13:35:59.000Z",
+   "accepted_ts": 1795613759,
+   "protocol": "options-v2-sec",
+   "items": [
+    "7.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 30,
+   "reason": "The October operating data is mixed: client assets grew 1% sequentially and sweep balances rebounded to about $58.2B by November 23, but sweep balances fell 3% month over month, and the company warns that the data has limited correlation to earnings, so there is no clear directional signal."
+  },
+  "0001740797-26-000028": {
+   "symbol": "AVAI",
+   "accession": "0001740797-26-000028",
+   "accepted": "2026-11-25T13:35:23.000Z",
+   "accepted_ts": 1795613723,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 4485.000047460198"
+  },
+  "0001140361-26-045592": {
+   "symbol": "WEX",
+   "accession": "0001140361-26-045592",
+   "accepted": "2026-11-25T13:31:11.000Z",
+   "accepted_ts": 1795613471,
+   "protocol": "options-v2-sec",
+   "items": [
+    "1.01",
+    "2.03",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 20,
+   "reason": "The 8-K is a routine refinancing that reprices about $1.2B of term loans at SOFR+0.75% with no earnings, guidance, or operational news, so the evidence gives no clear directional edge over the next five sessions."
+  },
+  "0001213900-26-123932": {
+   "symbol": "BRLS",
+   "accession": "0001213900-26-123932",
+   "accepted": "2026-11-25T13:30:32.000Z",
+   "accepted_ts": 1795613432,
+   "protocol": "options-v2-sec",
+   "items": [
+    "1.01",
+    "1.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 3194.499957561493"
+  },
+  "0001140361-26-045589": {
+   "symbol": "LAB",
+   "accession": "0001140361-26-045589",
+   "accepted": "2026-11-25T13:25:17.000Z",
+   "accepted_ts": 1795613117,
+   "protocol": "options-v2-sec",
+   "items": [
+    "3.03",
+    "5.03",
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 591985.5093717575"
+  },
+  "0001849820-26-000177": {
+   "symbol": "KITT",
+   "accession": "0001849820-26-000177",
+   "accepted": "2026-11-25T13:17:31.000Z",
+   "accepted_ts": 1795612651,
+   "protocol": "options-v2-sec",
+   "items": [
+    "8.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 73050.9997189045"
+  },
+  "0001437749-26-038233": {
+   "symbol": "LOOP",
+   "accession": "0001437749-26-038233",
+   "accepted": "2026-11-25T13:15:13.000Z",
+   "accepted_ts": 1795612513,
+   "protocol": "options-v2-sec",
+   "items": [
+    "8.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 15024.300009012222"
+  },
+  "0001683168-26-009108": {
+   "symbol": "CPMD",
+   "accession": "0001683168-26-009108",
+   "accepted": "2026-11-25T13:03:09.000Z",
+   "accepted_ts": 1795611789,
+   "protocol": "options-v2-sec",
+   "items": [
+    "8.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 604.8700228449889"
+  },
+  "0001193125-26-476850": {
+   "symbol": "FE",
+   "accession": "0001193125-26-476850",
+   "accepted": "2026-11-25T12:40:45.000Z",
+   "accepted_ts": 1795610445,
+   "protocol": "options-v2-sec",
+   "items": [
+    "1.01",
+    "3.02",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 30,
+   "reason": "The filing mixes a likely negative overhang (about 6.3M shares, roughly $300M, with a resale registration right) against a positive funding offset from an in-kind pension contribution, and the modest 0.64% run-up and 0.34% move give no clear directional signal."
+  },
+  "0001437749-26-038232": {
+   "symbol": "IMKTA",
+   "accession": "0001437749-26-038232",
+   "accepted": "2026-11-25T12:35:10.000Z",
+   "accepted_ts": 1795610110,
+   "protocol": "options-v2-sec",
+   "items": [
+    "2.02",
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 7734681.6818237305"
+  },
+  "0001437749-26-038231": {
+   "symbol": "LYTS",
+   "accession": "0001437749-26-038231",
+   "accepted": "2026-11-25T12:30:40.000Z",
+   "accepted_ts": 1795609840,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02",
+    "5.07"
+   ],
+   "skipped": "liquidity 7681114.852714539"
+  },
+  "0001493152-26-054121": {
+   "symbol": "BFRG",
+   "accession": "0001493152-26-054121",
+   "accepted": "2026-11-25T12:30:35.000Z",
+   "accepted_ts": 1795609835,
+   "protocol": "options-v2-sec",
+   "items": [
+    "8.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 75169.59977149963"
+  },
+  "0001193125-26-476825": {
+   "symbol": "DFIN",
+   "accession": "0001193125-26-476825",
+   "accepted": "2026-11-25T12:30:14.000Z",
+   "accepted_ts": 1795609814,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 16617106.755065918"
+  },
+  "0000049938-26-000054": {
+   "symbol": "IMO",
+   "accession": "0000049938-26-000054",
+   "accepted": "2026-11-25T11:58:33.000Z",
+   "accepted_ts": 1795607913,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02",
+    "9.01"
+   ],
+   "skipped": "liquidity 63434237.69836426"
+  },
+  "0001319947-26-000052": {
+   "symbol": "DBI",
+   "accession": "0001319947-26-000052",
+   "accepted": "2026-11-25T11:46:57.000Z",
+   "accepted_ts": 1795607217,
+   "protocol": "options-v2-sec",
+   "items": [
+    "8.01"
+   ],
+   "skipped": "liquidity 2239264.0016555786"
+  },
+  "0001493152-26-054102": {
+   "symbol": "BEEP",
+   "accession": "0001493152-26-054102",
+   "accepted": "2026-11-25T11:35:32.000Z",
+   "accepted_ts": 1795606532,
+   "protocol": "options-v2-sec",
+   "items": [
+    "8.01"
+   ],
+   "skipped": "liquidity 37870.49814462662"
+  },
+  "0001104659-26-131797": {
+   "symbol": "SW",
+   "accession": "0001104659-26-131797",
+   "accepted": "2026-11-25T11:30:34.000Z",
+   "accepted_ts": 1795606234,
+   "protocol": "options-v2-sec",
+   "items": [
+    "2.03",
+    "8.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 30,
+   "reason": "The 8-K is a routine debt issuance and refinancing of existing WRKCo notes (Item 2.03) with no clear earnings or operational surprise, so the evidence does not support a directional five-day call."
+  },
+  "0001628280-26-075861": {
+   "symbol": "COOK",
+   "accession": "0001628280-26-075861",
+   "accepted": "2026-11-25T11:28:38.000Z",
+   "accepted_ts": 1795606118,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02",
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 3032859.979248047"
+  },
+  "0001104659-26-131741": {
+   "symbol": "DE",
+   "accession": "0001104659-26-131741",
+   "accepted": "2026-11-25T11:00:47.000Z",
+   "accepted_ts": 1795604447,
+   "protocol": "options-v2-sec",
+   "items": [
+    "2.02",
+    "7.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 35,
+   "reason": "The FY27 range of $4.50-5.25B is wide and its midpoint is roughly flat to FY26 only because it absorbs a $0.25-0.40B pension charge, while Q4 margins and Financial Services weakened, so the modest +1.1% gap after a -5.5% pre-filing run-up looks fairly sized and the net edge is unclear."
+  },
+  "0001213900-26-123863": {
+   "symbol": "PLAG",
+   "accession": "0001213900-26-123863",
+   "accepted": "2026-11-25T02:30:54.000Z",
+   "accepted_ts": 1795573854,
+   "protocol": "options-v2-sec",
+   "items": [
+    "1.01",
+    "3.02",
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 46622.499875724316"
+  },
+  "0001104659-26-131732": {
+   "symbol": "SGRY",
+   "accession": "0001104659-26-131732",
+   "accepted": "2026-11-25T02:01:27.000Z",
+   "accepted_ts": 1795572087,
+   "protocol": "options-v2-sec",
+   "items": [
+    "1.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 75724657.654953"
+  },
+  "0001213900-26-123836": {
+   "symbol": "BTBT",
+   "accession": "0001213900-26-123836",
+   "accepted": "2026-11-25T01:08:27.000Z",
+   "accepted_ts": 1795568907,
+   "protocol": "options-v2-sec",
+   "items": [
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 14416155.07747829"
   }
  },
  "open": [
@@ -695,7 +1092,8 @@
  "closed": [],
  "gaps": [],
  "llm_cost_usd_by_protocol": {
-  "options-v1-earnings": 0.0
+  "options-v1-earnings": 0.0,
+  "options-v2-sec": 0.0
  },
- "last_run_ts": 1795563848
+ "last_run_ts": 1795618839
 }

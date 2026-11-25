@@ -3,10 +3,35 @@
   "verdict": "collecting (0/150 closed trades)",
   "n": 0
  },
- "open": 6,
+ "webull_cost_variant": {
+  "cost_model": "webull-us-options-v1 (no commission; ORF, OCC, CAT, FINRA TAF, SEC; estimates marked in costs.md)",
+  "verdict": {
+   "verdict": "collecting (0/150 closed trades)",
+   "n": 0
+  },
+  "account_whole_contracts": {
+   "end_equity_usd": 147.0,
+   "taken": 0,
+   "unaffordable": 0,
+   "month_end_equity": {},
+   "months_3x": 0,
+   "worst_drawdown": 0.0,
+   "affordable_at_start_stake": 0
+  },
+  "account_fractional": {
+   "end_equity_usd": 147.0,
+   "taken": 0,
+   "unaffordable": 0,
+   "month_end_equity": {},
+   "months_3x": 0,
+   "worst_drawdown": 0.0,
+   "affordable_at_start_stake": 0
+  }
+ },
+ "open": 0,
  "closed": 0,
  "late_exits": 0,
- "calls": 27,
+ "calls": 31,
  "account_whole_contracts": {
   "end_equity_usd": 147.0,
   "taken": 0,
@@ -89,12 +114,37 @@
   }
  },
  "llm_cost_usd_recorded": 0.0,
- "protocol": "options-v1-earnings",
+ "protocol": "options-v2-sec",
  "by_protocol": {
   "options-v1-earnings": {
    "verdict": {
     "verdict": "collecting (0/150 closed trades)",
     "n": 0
+   },
+   "webull_cost_variant": {
+    "cost_model": "webull-us-options-v1 (no commission; ORF, OCC, CAT, FINRA TAF, SEC; estimates marked in costs.md)",
+    "verdict": {
+     "verdict": "collecting (0/150 closed trades)",
+     "n": 0
+    },
+    "account_whole_contracts": {
+     "end_equity_usd": 147.0,
+     "taken": 0,
+     "unaffordable": 0,
+     "month_end_equity": {},
+     "months_3x": 0,
+     "worst_drawdown": 0.0,
+     "affordable_at_start_stake": 0
+    },
+    "account_fractional": {
+     "end_equity_usd": 147.0,
+     "taken": 0,
+     "unaffordable": 0,
+     "month_end_equity": {},
+     "months_3x": 0,
+     "worst_drawdown": 0.0,
+     "affordable_at_start_stake": 0
+    }
    },
    "open": 6,
    "closed": 0,
@@ -188,10 +238,35 @@
     "verdict": "collecting (0/150 closed trades)",
     "n": 0
    },
+   "webull_cost_variant": {
+    "cost_model": "webull-us-options-v1 (no commission; ORF, OCC, CAT, FINRA TAF, SEC; estimates marked in costs.md)",
+    "verdict": {
+     "verdict": "collecting (0/150 closed trades)",
+     "n": 0
+    },
+    "account_whole_contracts": {
+     "end_equity_usd": 147.0,
+     "taken": 0,
+     "unaffordable": 0,
+     "month_end_equity": {},
+     "months_3x": 0,
+     "worst_drawdown": 0.0,
+     "affordable_at_start_stake": 0
+    },
+    "account_fractional": {
+     "end_equity_usd": 147.0,
+     "taken": 0,
+     "unaffordable": 0,
+     "month_end_equity": {},
+     "months_3x": 0,
+     "worst_drawdown": 0.0,
+     "affordable_at_start_stake": 0
+    }
+   },
    "open": 0,
    "closed": 0,
    "late_exits": 0,
-   "calls": 0,
+   "calls": 31,
    "account_whole_contracts": {
     "end_equity_usd": 147.0,
     "taken": 0,
@@ -277,5 +352,5 @@
   }
  },
  "gaps": 0,
- "updated_utc": "2026-11-24T23:48:11Z"
+ "updated_utc": "2026-11-25T15:02:17Z"
 }
