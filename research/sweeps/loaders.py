@@ -25,6 +25,12 @@ def log(*a):
     print(*a, file=sys.stderr, flush=True)
 
 
+def _parse_metrics(f):
+    """binance_vision.parse_metrics for files that quote empty cells (a field of '""' made the stock parser raise)."""
+    from research.studies import binance_vision as bv
+    return bv.parse_metrics([x.strip().strip('"').strip() for x in f])
+
+
 def _cached(key, producer, cache_dir=None):
     """producer() -> (value, ok). The value is cached only when ok."""
     cache_dir = cache_dir or CACHE_DIR
@@ -156,7 +162,7 @@ def load_binance(spec, workers=16):
         met = None
         if "metrics" in extras:
             def prod_m():
-                rows, fl = bv.metrics(sym, start_s, end_s)
+                rows, fl = bv.series("futures/um", "metrics", sym, start_s, end_s, None, "daily", _parse_metrics)
                 return {"rows": [[r["ts"]] + [r.get(f) for f in METRIC_FIELDS] for r in rows], "failed": fl}, not fl
             m = _cached(f"bvm|{sym}|{start_s}|{end_s}", prod_m)
             met, failed = m["rows"], failed + m["failed"]

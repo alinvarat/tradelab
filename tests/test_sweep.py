@@ -627,6 +627,13 @@ class Metrics(unittest.TestCase):
         self.assertIsNone(d2["m"])
         self.assertIsNone(loaders.resample(d2, 4)["m"])
 
+    def test_parse_metrics_tolerates_quoted_empty_cells(self):
+        from research.sweeps import loaders
+        r = loaders._parse_metrics(["2024-01-01 00:05:00", "BTCUSDT", "100.5", "2000.0", '""', "1.2", "0.9", ""])
+        self.assertEqual(r["sum_open_interest"], 100.5)
+        self.assertIsNone(r["count_toptrader_long_short_ratio"])
+        self.assertEqual(r["count_long_short_ratio"], 0.9)
+
     def test_metric_features_and_validation(self):
         d = from_closes([100.0] * 6)
         d["m"] = {k: [1.0, 2.0, 4.0, 8.0, 16.0, 32.0] for k in se.METRIC_NAMES}
