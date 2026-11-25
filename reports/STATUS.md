@@ -3,6 +3,9 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-25 line/h1_basis_snapback)
+- **H1 (perp ต่ำกว่า index แล้วเด้งกลับ + ฝั่งตรงข้าม):** ลงทะเบียนกติกาใน `research/studies/RESULTS.md` แล้ว (ก่อนดึงข้อมูล); โค้ด `core.screens.basis_snap_rows` + `rows_/summarize_h1_basis_snapback` ใน `run.py`; เทสต์ `tests/test_h1_basis.py`; ยังไม่ได้รัน → หลัง merge: `gh workflow run research_sharded.yml -f study=h1_basis_snapback -f shards=20`
+
 ## ด่วน (2026-11-25 ops/sharded-runner)
 - **ตัวรันแบบแบ่ง shard:** workflow `research_sharded.yml` กระจายหนึ่งด่านไปหลาย job พร้อมกัน (ค่าเริ่ม 20) แล้วรวมผล; ด่านที่จะใช้ต้องมี `rows_<study>(symbols_slice)` และ `summarize_<study>(all_rows)` ใน `run.py`; ยังไม่ได้ทดสอบบน Actions จริง (workflow_dispatch ใช้ได้หลัง merge เข้า main) → หลัง merge ให้รัน `study=selftest_shard` ก่อน
 
@@ -75,6 +78,7 @@
 | 3 | ด่านคัดกรอง L3 | Claude (รับแทน) | 1 | killed | 315 เหตุการณ์; กลุ่ม 2.02 ไม่ผ่าน, กลุ่มอื่นน้อยเกิน |
 | 4 | ด่านคัดกรอง L4 | Claude (รับแทน) | 1 | killed | รอบ 4 (ข้อมูลไม่ซ้ำ 2,613 เหตุการณ์): validation +0.35%/ครั้ง p 0.39 |
 | 4b | L4f: ขาย longshot บน Polymarket 1 วันก่อนปิด (เดินหน้า, Actions ทุก 30 นาที) | Claude | 1 | forward | data/l4f-forward; 14:12 เข้า 2 ตลาด (Barcelona NO 0.09, BTC>56k NO 0.042) |
+| 4c | forward L12B_F (short หลังแท่ง 1 ชม. ขึ้น ≥ 8%) และ L8B_F (short หลังวัน UTC ขึ้น ≥ 20%): ทดสอบเดินหน้าของ screen ที่ยังไม่สรุป ไม่ใช่การผ่าน | Claude | 1 | forward | protocol_fwd_crypto_spikes_20261125.md; ราคา spot data-api.binance.vision + perp/funding OKX (fapi 451); data/fwd-crypto-spikes; ทุกชม. นาทีที่ 5 |
 | 5 | หาแหล่งข้อมูล L2 | Claude | 1 | done | DefiLlama datasets (ฟรี) |
 | 6 | deploy ให้เสถียร (registry DNS, ข้าม deploy เมื่อแก้แค่เอกสาร, แจ้งเตือน) | เพื่อน (dmgnr) | 1 | todo | issue #89, #80 |
 | 7 | รีวิว PR #77–#79 ของ Codex | Claude | 1 | done | merge แล้ว: ออปชันอ่าน 8-K ทุกประเภทตั้งแต่ 25 พ.ย. (options-v2-sec) + e-process รายวัน |
