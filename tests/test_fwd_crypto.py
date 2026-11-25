@@ -45,7 +45,7 @@ class Detection(unittest.TestCase):
 
     def test_hourly_event_found_once_with_next_open_entry(self):
         bars = self.series(730)
-        ev = fc.detect_hourly("AAAUSDT", bars, btc_flat(bars), [(bars[700][0], 0.0001)], bars[730][0])
+        ev = fc.detect_hourly("AAAUSDT", bars, btc_flat(bars), [(bars[725][0], 0.0001)], bars[730][0])
         self.assertEqual(len(ev), 1)
         self.assertEqual(ev[0]["entry_ts"], bars[731][0])
         self.assertEqual(ev[0]["line"], "L12B_F")
@@ -54,15 +54,15 @@ class Detection(unittest.TestCase):
         bars = self.series(730)
         b = btc_flat(bars)
         self.assertEqual(fc.detect_hourly("AAAUSDT", bars, b, [], bars[730][0]), [])              # no perp
-        self.assertEqual(fc.detect_hourly("AAAUSDT", bars, b, [(bars[700][0], 0.0)], bars[731][0]), [])  # shock hour before window
-        self.assertEqual(fc.detect_hourly("AAAUSDT", bars, b, [(bars[700][0], 0.0)], bars[730][0], last_event_ts=bars[731][0] - 5 * H), [])
+        self.assertEqual(fc.detect_hourly("AAAUSDT", bars, b, [(bars[725][0], 0.0)], bars[731][0]), [])  # shock hour before window
+        self.assertEqual(fc.detect_hourly("AAAUSDT", bars, b, [(bars[725][0], 0.0)], bars[730][0], last_event_ts=bars[731][0] - 5 * H), [])
         small = self.series(730, move=1.05)                                                         # +5% only
-        self.assertEqual(fc.detect_hourly("AAAUSDT", small, btc_flat(small), [(small[700][0], 0.0)], small[730][0]), [])
+        self.assertEqual(fc.detect_hourly("AAAUSDT", small, btc_flat(small), [(small[725][0], 0.0)], small[730][0]), [])
         thin = [(x[0], x[1], x[2], x[3], x[4], 1e3) for x in bars]                                  # volume below 200k
-        self.assertEqual(fc.detect_hourly("AAAUSDT", thin, b, [(bars[700][0], 0.0)], bars[730][0]), [])
+        self.assertEqual(fc.detect_hourly("AAAUSDT", thin, b, [(bars[725][0], 0.0)], bars[730][0]), [])
         # BTC rose the same 10%: not 6 points beyond BTC
         bb = {x[0]: (100.0, 110.0) if x[0] == bars[730][0] else (100.0, 100.0) for x in bars}
-        self.assertEqual(fc.detect_hourly("AAAUSDT", bars, bb, [(bars[700][0], 0.0)], bars[730][0]), [])
+        self.assertEqual(fc.detect_hourly("AAAUSDT", bars, bb, [(bars[725][0], 0.0)], bars[730][0]), [])
 
     def test_daily_event(self):
         d = [(T0 + i * D, 1.0, 1.0, 1.0, 1.0, 3e6) for i in range(40)]
@@ -139,12 +139,53 @@ class EvidenceAndParsers(unittest.TestCase):
 
     def test_verdicts(self):
         self.assertEqual(fc.evidence([])["verdict"], "continue")
-        loss = fc.evidence(self.closed([-0.05] * 60, [0.0] * 60))
+        loss = fc.evidence(self.closed([-0.5, -0.4] * 60, [0.0] * 120))
         self.assertEqual(loss["verdict"], "no edge")
-        win = fc.evidence(self.closed([0.06, 0.05, 0.07] * 40, [0.0, -0.01, 0.01] * 40))
+        win = fc.evidence(self.closed([0.5, 0.4] * 60, [0.0, -0.01] * 60))
         self.assertTrue(win["verdict"].startswith("edge"))
+        # model wins but the control wins just as much: no edge over the control, so no early "edge"
+        same = fc.evidence(self.closed([0.5, 0.4] * 60, [0.5, 0.4] * 60))
+        self.assertFalse(same["verdict"].startswith("edge"))
         flat = fc.evidence(self.closed([0.001, -0.001] * 3, [0.0] * 6), max_events=6)
         self.assertEqual(flat["verdict"], "inconclusive at max")
+        self.assertIsNotNone(flat["fixed_at_max"])
+
+    def test_stop_and_truncation(self):
+        s = fc.new_state(T0)
+        s["lines"]["L12B_F"]["closed"] = self.closed([-0.5, -0.4] * 60, [0.0] * 120)
+        self.assertEqual(fc.evidence(s["lines"]["L12B_F"]["closed"])["verdict"], "no edge")
+        self.assertFalse(fc.line_active(s, "L12B_F"))
+        self.assertTrue(fc.line_active(s, "L8B_F"))
+        # past the maximum only the first max_events rows count: later rows cannot flip the read
+        rows = self.closed([0.001, -0.001] * 3, [0.0] * 6)
+        a = fc.evidence(rows, max_events=6)
+        b = fc.evidence(rows + self.closed([0.9] * 20, [0.0] * 20), max_events=6)
+        self.assertEqual((a["verdict"], a["fixed_at_max"]), (b["verdict"], b["fixed_at_max"]))
+        self.assertEqual(b["n_closed"], 6)
+
+    def test_summary_fields(self):
+        s = fc.new_state(T0)
+        ln = s["lines"]["L12B_F"]
+        for i in range(2):
+            fc.open_event(s, {"line": "L12B_F", "symbol": f"S{i}USDT", "entry_ts": T0 + H + i * H}, 1.0, 100.0)
+        fc.close_position(s, ln["open"][0], 0.9, 100.0, 0.01, T0 + 2 * D)
+        fc.close_position(s, ln["open"][0], 1.5, 100.0, -0.02, T0 + 3 * D, liquidated=False)
+        out = fc.line_summary(s, "L12B_F")
+        self.assertEqual(out["closed"], 2)
+        self.assertGreater(out["worst_drawdown"], 0)
+        self.assertAlmostEqual(out["mean_funding"], -0.005)
+        self.assertLess(out["equity_double_cost_usd"], out["equity_usd"])
+        self.assertEqual(out["liquidated"], 0)
+
+    def test_loss_is_bounded_and_liquidation(self):
+        px, liq = fc.exit_price(1.0, [(0, 1, 1.5, 1, 1.4, 1), (1, 1.4, 2.1, 1.4, 1.2, 1)], 1.2)
+        self.assertEqual((px, liq), (2.0, True))
+        self.assertEqual(fc.exit_price(1.0, [(0, 1, 1.5, 1, 1.4, 1)], 1.4), (1.4, False))
+        s = fc.new_state(T0 + 5)
+        fc.open_event(s, {"line": "L12B_F", "symbol": "XUSDT", "entry_ts": T0 + H, "move": 0.1}, 1.0, 100.0)
+        row = fc.close_position(s, s["lines"]["L12B_F"]["open"][0], 4.7, 100.0, 0.0, T0 + 2 * D)   # price x4.7: -370%
+        self.assertEqual(row["net"], -1.0)
+        self.assertAlmostEqual(s["lines"]["L12B_F"]["equity"], 147 - 14.7)
 
     def test_parsers(self):
         k = [[T0 * 1000, "1", "2", "0.5", "1.5", "10", (T0 + H) * 1000 - 1, "15"], [(T0 + H) * 1000, "1", "1", "1", "1", "1", (T0 + 2 * H) * 1000 - 1, "1"]]

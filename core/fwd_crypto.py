@@ -98,6 +98,16 @@ def control_order(line: str, entry_ts: float, event_symbol: str, pool: list) -> 
     return cands
 
 
+LIQUIDATION = 2.0                   # 1x short collateral is gone when the price reaches 2x the entry
+
+
+def exit_price(entry: float, bars: list, exit_close: float) -> tuple:
+    """(price, liquidated): the exit close, or 2x entry if any bar in the hold reached it (high >= 2x entry)."""
+    if any(b[2] >= LIQUIDATION * entry for b in bars):
+        return LIQUIDATION * entry, True
+    return exit_close, False
+
+
 def exit_bar_ts(line: str, entry_ts: float) -> float:
     """Open time of the bar whose close is the exit price (the last bar of the 24 h hold)."""
     return entry_ts + LINES[line]["hold"] - LINES[line]["step"]
@@ -140,11 +150,12 @@ def close_position(state: dict, pos: dict, exit_px: float, btc_exit: float, fund
     """Close a position: net return, ledger equity (taken trades only), control result. control_exit:
     {"exit_px", "btc_exit", "funding"} for the control coin, or None (control unavailable)."""
     ln = state["lines"][pos["line"]]
-    net = trade_return(pos["entry_px"], exit_px, pos["btc_entry"], btc_exit, fund)
+    net = max(-1.0, trade_return(pos["entry_px"], exit_px, pos["btc_entry"], btc_exit, fund))   # 1x collateral: at most all of it
     ctrl = None
     c = pos.get("control")
     if c and control_exit:
-        ctrl = trade_return(c["entry_px"], control_exit["exit_px"], c["btc_entry"], control_exit["btc_exit"], control_exit["funding"])
+        ctrl = max(-1.0, trade_return(c["entry_px"], control_exit["exit_px"], c["btc_entry"], control_exit["btc_exit"],
+                                      control_exit["funding"]))
     pnl = round(pos["stake"] * net, 4)
     ln["equity"] = round(ln["equity"] + pnl, 4)
     row = {**pos, "exit_px": exit_px, "btc_exit": btc_exit, "funding": fund, "net": net, "control_net": ctrl,
@@ -154,22 +165,39 @@ def close_position(state: dict, pos: dict, exit_px: float, btc_exit: float, fund
     return row
 
 
+def _clip(x: float) -> float:
+    return max(-1.0, min(3.0, x))
+
+
 def evidence(closed: list, max_events: int = MAX_EVENTS) -> dict:
-    """Sequential evidence per protocol: core.sequential.paired_daily over closed events (every event counts, taken or
-    not), one unit per UTC exit day. Verdict: `edge` only when both the model and the model-minus-control e-process
-    reach 20; `no edge` when either negative side reaches 20; at max_events without either: `inconclusive at max`."""
-    rows = [{"ts": r["ts"], "model": r["net"], "control": r.get("control_net")} for r in closed]
-    res = sequential.paired_daily(rows, start=0, before=float("inf"))
-    m, p = res["model"], res["paired"]
+    """Sequential evidence per protocol. One unit per UTC exit day (mean over that day's closed events, taken or not).
+    Returns are bounded below by -1 (1x collateral, liquidated at +100%), so core.sequential's hard-bound rule holds:
+    model EProcess(lo=1, hi=3) and a paired (model - control) EProcess(lo=1, hi=3, paired=True), both on values clipped
+    to [-1, 3]. Early verdict: `edge` only when BOTH reach 20; `no edge` when either negative side reaches 20. At
+    max_events without an early verdict, a one-time fixed-sample read: both day-cluster bootstrap p < 0.05 -> `positive
+    at max`, else `inconclusive at max`. (Total false-positive rate is at most about 0.10; stated in the protocol.)"""
+    import random
+    import time
+    closed = closed[:max_events]            # the test is exactly the first max_events closed events
+    day = lambda r: time.strftime("%Y-%m-%d", time.gmtime(r["ts"]))   # noqa: E731
+    model = [{"ts": r["ts"], "ret": _clip(r["net"])} for r in closed]
+    paired = [{"ts": r["ts"], "ret": _clip(r["net"]) - _clip(r["control_net"])} for r in closed if r.get("control_net") is not None]
+    m = sequential.run(sequential.daily_means(model), lo=1.0, hi=3.0)
+    p = sequential.run(sequential.daily_means(paired), lo=1.0, hi=3.0, paired=True)
+    fixed = None
     if m["decision"] == "edge" and p["decision"] == "edge":
         verdict = "edge (forward test of an inconclusive screen, not a pass of the screen)"
     elif m["decision"].startswith("no edge") or p["decision"].startswith("no edge"):
         verdict = "no edge"
     elif len(closed) >= max_events:
-        verdict = "inconclusive at max"
+        rng = random.Random(7)
+        pm = sc.block_bootstrap_p([x["ret"] for x in model], [day(x) for x in closed], rng)
+        pp = sc.block_bootstrap_p([x["ret"] for x in paired], [day(r) for r in closed if r.get("control_net") is not None], rng)
+        fixed = {"p_model_gt0": round(pm, 4), "p_paired_gt0": round(pp, 4)}
+        verdict = "positive at max (fixed-sample read)" if pm < 0.05 and pp < 0.05 else "inconclusive at max"
     else:
         verdict = "continue"
-    return {"n_closed": len(closed), "max_events": max_events, "verdict": verdict, "model": m, "paired": p}
+    return {"n_closed": len(closed), "max_events": max_events, "verdict": verdict, "model": m, "paired": p, "fixed_at_max": fixed}
 
 
 def line_active(state: dict, line: str) -> bool:
