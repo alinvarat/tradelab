@@ -14,10 +14,14 @@ reported separately, not re-tested here). Plan: `research/plans/PLAN_20261125_fa
 - Window 2024-01-01 to 2026-10-31 (as far back as each feed reaches; the reach per venue is reported).
 - Five notice classes from the title (`core.notice_tape.classify_title`): listing, delist (spot), perp_delist, monitoring
   tag, funding-interval change. Titles about TradFi, stocks, ETFs, campaigns, earn, maintenance and similar are dropped.
-- Tradeable: the coin has a live USDT perpetual at notice time, i.e. 1-minute bars exist before the notice. Pricing order:
-  OKX `<COIN>-USDT-SWAP` 1-minute candles (history-candles), else Binance USDT-M 1-minute files from data.binance.vision
-  (also with the `1000` prefix). The BTC control is Binance USDT-M BTCUSDT 1-minute. Coins without a perp are skipped and
-  counted.
+- Tradeable: the coin has a live OKX USDT perpetual at notice time, i.e. `<COIN>-USDT-SWAP` 1-minute candles
+  (history-candles) exist before the notice. The judged family uses OKX-priced events only. Events with no OKX candles
+  are priced from Binance USDT-M 1-minute files (data.binance.vision, also with the `1000` prefix) and reported
+  separately as descriptive (events, mean, s, x of their best cells), never judged and never counted in Holm. The BTC
+  control is Binance USDT-M BTCUSDT 1-minute. Skips are counted by reason and class (OKX may not serve candles for
+  delisted swaps; that blind spot is reported).
+- A titles-only pass (class by venue counts, reach, a random 5% sample of unclassified titles; no prices) runs first and
+  only fixes parser bugs (one fix, the family and grid do not change).
 - One event = one (venue, class, notice time, coin). Duplicate (class, coin) pairs closer than 6 hours are the same event.
 
 ## Grid (the family)
@@ -31,8 +35,9 @@ reported separately, not re-tested here). Plan: `research/plans/PLAN_20261125_fa
   -(stop + 0.5%) minus cost and are not BTC-adjusted.
 
 ## Test and pass rule
-- One-sided block-bootstrap p (cluster = UTC day, `core.screens.block_bootstrap_p`) for mean net > 0 per cell over the whole
-  window; Holm step-down over all 192 cells at 0.05.
+- One-sided block-bootstrap p (cluster = UTC day, `core.news_backtest.block_bootstrap_p`, 2,000 draws; a cell at the
+  floor p <= 0.004 is redone with 200,000 draws so that p can fall below the Holm bar 0.05/192 = 0.00026) for mean net > 0
+  per cell over the whole window; Holm step-down over all 192 cells at 0.05.
 - A cell PASSES only if: n >= 30 events; Holm-adjusted p < 0.05; mean > 0 in both halves (2024-01..2025-06 and
   2025-07..2026-10); mean > 0 after removing the best 3 events; x = events/month * s^2 >= 0.2 (s = mean / sd of the net
   return). Cells with n < 30 are reported "too few" and count in the Holm family.

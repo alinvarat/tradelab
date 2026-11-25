@@ -17,34 +17,46 @@ MIN_N = 30                    # events needed for a cell to be able to pass
 HOLM_ALPHA = 0.05
 
 _TICK = re.compile(r"^[A-Z0-9]{2,12}$")
-_STABLE = {"USDT", "USDC", "USD", "BTC", "ETH", "KRW", "EUR", "USDⓈ", "PERP", "SPOT"}
+_STABLE = {"USDT", "USDC", "USD", "BTC", "ETH", "KRW", "EUR", "PERP", "SPOT", "AND", "THE", "FOR", "NEW", "ALL", "API",
+           "KYC", "UTC", "OKX", "BYBIT", "KUCOIN", "BITGET", "ST", "ETF", "USDE"}
+_VERB = re.compile(r"\b(?:delisting of|listing of|delist|delists|list|lists|listed|adds?|removes?|removal of|support|supports|"
+                   r"monitoring tag (?:for|to|on)|tag (?:for|to|on))\s+(.+)", re.I)
 
 
 def _clean(tokens) -> list:
     out = []
     for t in tokens:
-        t = re.sub(r"^(1000000|10000|1000)", "", t.strip().upper())
+        t = re.sub(r"^(1000000|10000|1000)(?=[A-Z])", "", t.strip())
         if _TICK.match(t) and t not in _STABLE and t not in out:
             out.append(t)
     return out
 
 
 def title_symbols(title: str) -> list:
-    """Tickers named in a notice title: 'XXXUSDT', 'XXX/USDT', 'XXX-USDT(-SWAP)', or parenthesised '(XXX)'."""
+    """Tickers named in a notice title. Only upper-case tokens count, so 'Cow Protocol' never becomes a ticker.
+    Sources, in order: pair names (XXXUSDT, XXX/USDT, XXX-USDT), a ticker list after a verb ('delist DORA, ICX and ELF
+    spot ...'), and parenthesised tickers ('(JELLYJELLY)')."""
     toks = re.findall(r"\b([A-Z0-9]{2,12})(?:USDT|USDC)\b", title)
     toks += re.findall(r"\b([A-Z0-9]{2,12})[/-](?:USDT|USDC|USD)\b", title)
     for grp in re.findall(r"\(([^()]*)\)", title):
-        toks += [g for g in re.split(r"[,\s]+", grp.strip()) if g]
-    if not toks:
-        m = re.search(r"(?:list|delist|adds?|remove|tag(?: for| to)?)\s+([A-Z0-9]{2,12})\b", title)
-        if m:
-            toks.append(m.group(1))
+        parts = [g for g in re.split(r"[,\s/]+", grp.strip()) if g]
+        if parts and all(_TICK.match(g) for g in parts):
+            toks += parts
+    m = _VERB.search(title)
+    if m:
+        for w in re.split(r"[\s,]+", m.group(1)):
+            if w.lower() in ("and", "&", ""):
+                continue
+            if _TICK.match(w) and w not in _STABLE:
+                toks.append(w)
+            else:
+                break
     return _clean(toks)
 
 
 _SKIP = ("tradfi", "stock", "equity", "pre-market", "premarket", "pre-ipo", "etf", "index", "copy trading",
          "trading bot", "campaign", "airdrop", "earn", "loan", "convert", "launchpool", "launchpad", "giveaway",
-         "competition", "reward", "maintenance", "wallet", "deposit", "withdraw")
+         "competition", "reward", "bot trading", "trading bot", "maintenance", "wallet", "deposit", "withdraw")
 
 
 def classify_title(title: str) -> list:

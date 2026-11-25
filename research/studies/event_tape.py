@@ -43,8 +43,7 @@ def get(url, timeout=25, tries=4):
 # ---------------------------------------------------------------- announcement feeds -> [{venue, title, ts}]
 def okx_notices(gaps):
     out = []
-    for typ in ("announcements-new-listings", "announcements-delistings", "announcements-latest-announcements",
-                "announcements-api", "announcements-others"):
+    for typ in ("announcements-new-listings", "announcements-delistings", "trading-updates-us-aus", "announcements-api"):
         page = 1
         while page <= 150:
             d = get(f"https://www.okx.com/api/v5/support/announcements?annType={typ}&page={page}")
@@ -122,8 +121,13 @@ def build_events(gaps):
                        "last": time.strftime("%Y-%m-%d", time.gmtime(max((g["ts"] for g in got), default=0)))}
         raw += got
     ev, seen = [], {}
+    build_events.unclassified = []
+    rr = random.Random(7)
     for g in sorted(raw, key=lambda g: g["ts"]):
-        for cls, syms in nt.classify_title(g["title"]):
+        cl = nt.classify_title(g["title"])
+        if not cl and rr.random() < 0.05:
+            build_events.unclassified.append({"venue": g["venue"], "title": g["title"][:120]})
+        for cls, syms in cl:
             for s in syms:
                 k = (cls, s)
                 if k in seen and g["ts"] - seen[k] < 6 * 3600:
@@ -239,32 +243,70 @@ def evaluate(rows):
 
 
 def block_p(values, days, rng):
+    """One-sided block-bootstrap p. 2,000 draws floor the p at ~0.0005, too coarse for Holm over 192 cells, so a cell
+    that hits the floor is redone with 200,000 draws (floor 5e-6)."""
     from core.news_backtest import block_bootstrap_p
-    return block_bootstrap_p(values, days, rng)
+    p = block_bootstrap_p(values, days, rng)
+    if p <= 0.004:
+        p = block_bootstrap_p(values, days, rng, 200000)
+    return p
+
+
+def titles_summary(events, reach, gaps, raw_unclassified):
+    by = {}
+    for e in events:
+        by.setdefault(e["venue"], {}).setdefault(e["cls"], 0)
+        by[e["venue"]][e["cls"]] += 1
+    return {"run_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "events": len(events), "by_venue_class": by,
+            "reach": reach, "gaps": {**GAPS_KNOWN, **gaps}, "unclassified_samples": raw_unclassified}
 
 
 def main():
     out_dir = sys.argv[1]
+    mode = sys.argv[2] if len(sys.argv) > 2 else "full"          # titles: notices only, no prices; full: + prices + grid
     os.makedirs(os.path.join(out_dir, "tape"), exist_ok=True)
     gaps = {}
     events, reach = build_events(gaps)
+    unclassified = build_events.unclassified[:60]
     print("events", len(events), reach, gaps, flush=True)
-    skipped, rows = {}, []
+    with open(os.path.join(out_dir, "tape", "events.json"), "w") as f:
+        json.dump(events, f, ensure_ascii=False)
+    with open(os.path.join(out_dir, "tape", "titles_summary.json"), "w") as f:
+        json.dump(titles_summary(events, reach, gaps, unclassified), f, indent=1, ensure_ascii=False)
+    print(json.dumps(titles_summary(events, reach, gaps, unclassified), ensure_ascii=False)[:3000], flush=True)
+    if mode == "titles":
+        return
+    skipped, rows, part, part_n = {}, [], 0, 0
+    skipped_cls = {}
 
     def one(e):
         p, why = event_path(e)
         return e, p, why
+
+    def flush_part(buf, idx):
+        with gzip.open(os.path.join(out_dir, "tape", f"rows_{idx:03d}.jsonl.gz"), "wt", encoding="utf-8") as f:
+            for r in buf:
+                f.write(json.dumps(r, ensure_ascii=False, separators=(",", ":")) + "\n")
+    buf = []
     with ThreadPoolExecutor(6) as ex:
         for e, p, why in ex.map(one, events):
             if p is None:
                 skipped[why] = skipped.get(why, 0) + 1
+                k = f"{why}:{e['cls']}"
+                skipped_cls[k] = skipped_cls.get(k, 0) + 1
             else:
-                rows.append({**e, **p})
+                r = {**e, **p}
+                rows.append(r)
+                buf.append(r)
+                if len(buf) >= 100:             # checkpoint: a part file per 100 priced events (<= ~10 MB each)
+                    flush_part(buf, part)
+                    part, buf = part + 1, []
+    if buf:
+        flush_part(buf, part)
     print("priced rows", len(rows), skipped, flush=True)
-    with gzip.open(os.path.join(out_dir, "tape", "rows.jsonl.gz"), "wt", encoding="utf-8") as f:
-        for r in rows:
-            f.write(json.dumps(r, ensure_ascii=False, separators=(",", ":")) + "\n")
-    cells = evaluate(rows)
+    primary = [r for r in rows if r["price_venue"] == "okx"]          # judged family: OKX perps only
+    secondary = [r for r in rows if r["price_venue"] != "okx"]        # descriptive: Binance USDT-M priced (not judged)
+    cells = evaluate(primary)
     rng = random.Random(20261125)
     pvals, table = {}, {}
     for k, vals in cells.items():
@@ -273,7 +315,6 @@ def main():
             pvals[k] = None
             continue
         days = [time.strftime("%Y-%m-%d", time.gmtime(t)) for t, _ in vals]
-        # one-sided: block-bootstrap p that mean <= 0 (the screens helper tests mean > 0 the same way)
         pvals[k] = block_p(v, days, rng)
     adj = nt.holm(pvals)
     for k, vals in cells.items():
@@ -281,16 +322,22 @@ def main():
         h1 = [x for t, x in vals if t < MID]
         h2 = [x for t, x in vals if t >= MID]
         table[k] = nt.cell_verdict(v, (h1, h2), MONTHS, adj[k][0])
-        table[k]["p"] = None if pvals[k] is None else round(pvals[k], 5)
+        table[k]["p"] = None if pvals[k] is None else round(pvals[k], 6)
         table[k]["holm_reject"] = adj[k][1]
+    sec_cells = evaluate(secondary)
+    sec = {k: nt.stats([x for _, x in v], MONTHS) for k, v in sec_cells.items() if len(v) >= 10}
+    sec_top = sorted(sec.items(), key=lambda kv: -kv[1].get("x", 0))[:10]
     passed = sorted(k for k, v in table.items() if v.get("pass"))
     best = sorted(((v.get("x", 0), k) for k, v in table.items() if v.get("n", 0) >= nt.MIN_N), reverse=True)[:15]
-    by_class = {c: sum(1 for r in rows if r["cls"] == c) for c in nt.CLASSES}
-    by_venue = {v: sum(1 for r in rows if r["venue"] == v) for v in FEEDS}
     summ = {"run_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "events": len(events), "priced": len(rows),
-            "skipped": skipped, "gaps": {**GAPS_KNOWN, **gaps}, "reach": reach, "by_class": by_class, "by_venue": by_venue,
-            "family_size": len(cells), "passed": passed, "top_x_cells": [{"cell": k, "x": x, **{kk: table[k].get(kk) for kk in ("n", "mean", "s", "per_month", "adj_p", "pass")}} for x, k in best],
-            "cells_with_n_ge_30": sum(1 for v in table.values() if v.get("n", 0) >= nt.MIN_N)}
+            "priced_okx": len(primary), "priced_binance_um_descriptive": len(secondary), "skipped": skipped,
+            "skipped_by_class": skipped_cls, "gaps": {**GAPS_KNOWN, **gaps}, "reach": reach,
+            "by_class_okx": {c: sum(1 for r in primary if r["cls"] == c) for c in nt.CLASSES},
+            "by_venue_okx": {v: sum(1 for r in primary if r["venue"] == v) for v in FEEDS},
+            "family_size": len(cells), "passed": passed,
+            "top_x_cells": [{"cell": k, "x": x, **{kk: table[k].get(kk) for kk in ("n", "mean", "s", "per_month", "adj_p", "pass")}} for x, k in best],
+            "cells_with_n_ge_30": sum(1 for v in table.values() if v.get("n", 0) >= nt.MIN_N),
+            "descriptive_binance_um_top_x": sec_top}
     with open(os.path.join(out_dir, "tape", "summary.json"), "w") as f:
         json.dump({"summary": summ, "table": table}, f, indent=1, default=str)
     print(json.dumps(summ, default=str, indent=1))

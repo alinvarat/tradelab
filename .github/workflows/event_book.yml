@@ -3,13 +3,14 @@ name: Event book
 # Combined event book work (research/plans/PLAN_20261125_fable.md). Modes:
 #   probe   - check public announcement/price endpoints from a runner
 #   rows    - per-event rows for L1, L1f, L1g, kept as jsonl.gz on branch data/event-rows
+#   titles  - notice tape titles only (no prices)
 #   tape    - exchange-notice tape screen (protocol_notice_tape_20261125.md), rows kept on data/event-rows
 #   forward - one poll of the forward event book paper ledger (protocol_event_book_20261125.md), state on data/event-book
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe, rows, tape or forward"
+        description: "probe, rows, titles, tape or forward"
         required: true
         default: "probe"
 
@@ -77,7 +78,7 @@ jobs:
           git push -q origin data/event-rows
 
   tape:
-    if: inputs.mode == 'tape'
+    if: inputs.mode == 'tape' || inputs.mode == 'titles'
     runs-on: ubuntu-latest
     timeout-minutes: 340
     concurrency:
@@ -93,16 +94,16 @@ jobs:
         with:
           python-version: "3.13"
       - name: Notice tape screen
-        run: python research/studies/event_tape.py out
+        run: python research/studies/event_tape.py out ${{ inputs.mode == 'titles' && 'titles' || 'full' }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: event-tape
-          path: out/tape/summary.json
+          path: out/tape/
       - name: Keep rows on data/event-rows
         if: always()
         run: |
-          [ -f out/tape/rows.jsonl.gz ] || exit 0
+          [ -d out/tape ] || exit 0
           git config user.name tradelab-research
           git config user.email tradelab-research@users.noreply.github.com
           cp -r out /tmp/keep
@@ -112,7 +113,7 @@ jobs:
             git checkout -q --orphan data/event-rows && git rm -rq --cached . && git clean -fdq
           fi
           mkdir -p tape
-          cp /tmp/keep/tape/rows.jsonl.gz /tmp/keep/tape/summary.json tape/
+          cp /tmp/keep/tape/* tape/
           git add -A tape
           git commit -qm "Notice tape rows: $(date -u +%FT%TZ)" || echo "nothing new"
           git push -q origin data/event-rows

@@ -20,7 +20,9 @@ FEE_ROUND = 0.0011         # Bybit taker 0.055% per side
 EXTRA_COST = 0.001         # assumed funding / borrow, as in protocol L1f
 STOP_SLIP = 0.005          # fill beyond the stop level
 MIN_NOTIONAL_USD = 5.0     # Bybit linear minimum order value (the live instrument value is used when known)
-E_CLIP = 0.5               # daily log-return difference clipped to +-0.5 for the e-process
+MAX_UNITS = 2              # open risk units at once (real ledger); worst real day = 2 stop-outs = ln(0.53) = -0.63
+E_LO = 1.8                 # hard lower bound of the daily paired difference: real >= -0.7, control mean <= ln 3 = 1.1
+E_HI = 1.2                 # wins above E_HI are clipped (safe side); scale E_LO + E_HI = 3
 
 
 # ---------------------------------------------------------------- sizing
@@ -152,7 +154,7 @@ def paired_series(trades: list, day0: float, day1: float, n_controls: int = N_CO
     out = []
     for k in real:
         c = sum(x[k] for x in ctrl) / max(1, len(ctrl))
-        out.append(max(-E_CLIP, min(E_CLIP, real[k] - c)))
+        out.append(max(-E_LO, min(E_HI, real[k] - c)))
     return out
 
 

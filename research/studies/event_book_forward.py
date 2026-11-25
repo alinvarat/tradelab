@@ -174,6 +174,9 @@ def open_trades(st, conf, ven, ev, now, rng):
     for c in match(conf, ev):
         if ev["ts"] < c["effective_from"]:
             continue
+        if len({t["key"] for t in st["open"]}) >= eb.MAX_UNITS:
+            skipped[f"{c['name']}:cap_open_units"] = skipped.get(f"{c['name']}:cap_open_units", 0) + 1
+            continue
         sym_list = ev["symbols"]
         coins = [(s, ven.resolve(s)) for s in sym_list]
         tradable = [(s, b) for s, b in coins if b]
@@ -286,7 +289,7 @@ def view(d: Path, conf: dict, st: dict) -> dict:
         out["cohorts"] = eb.cohort_outcomes(trades, starts, now)
     if day1 > day0 and trades:
         series = eb.paired_series(trades, day0, day1)
-        e = sq.EProcess(paired=True, lo=eb.E_CLIP, hi=eb.E_CLIP)
+        e = sq.EProcess(paired=True, lo=eb.E_LO, hi=eb.E_HI)
         for v in series:
             e.update(v)
         out["e_process"] = e.view()
