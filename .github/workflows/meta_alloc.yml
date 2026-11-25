@@ -1,0 +1,36 @@
+name: Meta allocator (family meta1)
+
+# Family meta1 over the kept per-trade rows (branches data/sweep-rows, data/event-rows, data/poly-fv-rows). Config: research/sweeps/meta/meta1.json.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  meta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Check out the three row branches
+        run: |
+          for b in sweep-rows event-rows poly-fv-rows; do
+            git fetch -q origin data/$b
+            git worktree add -q /tmp/$b origin/data/$b
+          done
+      - name: Run meta1
+        run: python research/sweeps/meta_alloc.py /tmp/sweep-rows /tmp/event-rows /tmp/poly-fv-rows out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: meta1
+          path: |
+            out/
+            reports/LEADERBOARD.*
+          if-no-files-found: warn
