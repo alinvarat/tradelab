@@ -2332,6 +2332,8 @@ from research.studies.thin_a import rows_thin_a, summarize_thin_a, symbols_thin_
 STUDIES.update({"factory_us_pit_1": study_factory_us_pit_1})
 STUDIES.update({"fxcom_1": study_fxcom_1})
 STUDIES.update({"factory_crypto_3": study_factory_crypto_3})
+from research.sweeps import hooks as _sweep_hooks   # noqa: E402  config-driven sweeps: research/sweeps/<family>.json
+globals().update(_sweep_hooks.shard_functions())
 
 
 # ---- sharded studies: rows_<study>(symbols_slice) and summarize_<study>(all_rows), looked up by name below ----
