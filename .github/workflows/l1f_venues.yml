@@ -1,0 +1,68 @@
+name: L1f venues
+
+# Where can the Binance delist-notice coins be shorted (branch line/l1f-short-venues). Modes: probe (existence only, no prices), margin, price.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe, margin or price"
+        required: true
+        default: "probe"
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    concurrency:
+      group: tradelab-l1f-venues
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Frozen L1f notices (107)
+        run: |
+          git fetch origin data/forced-flow
+          git show origin/data/forced-flow:events/latest.json > /tmp/frozen_events.json
+      - name: Probe
+        if: inputs.mode == 'probe'
+        run: python research/studies/l1f_venues.py out probe /tmp/frozen_events.json
+      - name: Margin evidence
+        if: inputs.mode == 'margin'
+        run: python research/studies/l1f_venues.py out margin
+      - name: Price
+        if: inputs.mode == 'price'
+        run: |
+          git fetch origin data/l1f-venues
+          git show origin/data/l1f-venues:probe/probe.json > /tmp/probe.json
+          python research/studies/l1f_venues.py out price /tmp/frozen_events.json /tmp/probe.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: l1f-venues-${{ inputs.mode }}
+          path: out/
+      - name: Keep outputs on data/l1f-venues
+        if: always()
+        run: |
+          [ -d out ] && [ "$(ls out)" ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/l1f-venues 2>/dev/null; then
+            git checkout -q -B data/l1f-venues origin/data/l1f-venues
+          else
+            git checkout -q --orphan data/l1f-venues && git rm -rq --cached . && git clean -fdq
+          fi
+          d=${{ inputs.mode }}; mkdir -p $d
+          cp /tmp/keep/* $d/
+          git add -A $d
+          git commit -qm "L1f venues ${{ inputs.mode }}: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/l1f-venues && break; git fetch -q origin data/l1f-venues; git rebase -q origin/data/l1f-venues; done
