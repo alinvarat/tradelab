@@ -75,14 +75,14 @@ jobs:
           cp /tmp/keep/summary.json runs/rows_$(date -u +%Y%m%dT%H%M%SZ).json
           git add -A rows runs
           git commit -qm "Event rows: $(date -u +%FT%TZ)" || echo "nothing new"
-          git push -q origin data/event-rows
+          for i in 1 2 3 4; do git push -q origin data/event-rows && break; git fetch -q origin data/event-rows; git rebase -q origin/data/event-rows; done
 
   tape:
     if: inputs.mode == 'tape' || inputs.mode == 'titles'
     runs-on: ubuntu-latest
     timeout-minutes: 340
     concurrency:
-      group: tradelab-event-rows
+      group: tradelab-event-tape
       cancel-in-progress: false
     permissions:
       contents: write
@@ -116,7 +116,7 @@ jobs:
           cp /tmp/keep/tape/* tape/
           git add -A tape
           git commit -qm "Notice tape rows: $(date -u +%FT%TZ)" || echo "nothing new"
-          git push -q origin data/event-rows
+          for i in 1 2 3 4; do git push -q origin data/event-rows && break; git fetch -q origin data/event-rows; git rebase -q origin/data/event-rows; done
 
   forward:
     if: inputs.mode == 'forward'
