@@ -2,12 +2,13 @@ name: Forced flow
 
 # Forced-selling event families shaped like L1f (branch line/forced-flow-*). Modes:
 #   probe - stage A: announcement titles and archive/mirror probes, no prices
+#   probe2 - stage A2: archive snapshot structure and yield (Bybit, Upbit, Bithumb), Binance article bodies
 #   run   - stage B: build events, price, apply the locked protocol, keep rows on data/forced-flow
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe or run"
+        description: "probe, probe2 or run"
         required: true
         default: "probe"
 
@@ -30,4 +31,21 @@ jobs:
         if: always()
         with:
           name: forced-flow-probe
+          path: out/
+
+  probe2:
+    if: inputs.mode == 'probe2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Archive structure probe
+        run: python research/studies/forced_flow_probe2.py out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: forced-flow-probe2
           path: out/
