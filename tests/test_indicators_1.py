@@ -102,9 +102,9 @@ class Judge(unittest.TestCase):
     def test_pass_and_fail(self):
         days = [(86400 * k, 0.01 + (0.002 if k % 2 else -0.002)) for k in range(300)]
         b = {"train": (0, 86400 * 100), "validation": (86400 * 100, 86400 * 200), "test": (86400 * 200, 86400 * 300)}
-        good = I.judge_cell(days, days, [(t, -r) for t, r in days], b, 0.001, 365, n_boot=500)
+        good = I.judge_cell(days, days, [(t, -r) for t, r in days], b, 0.001, 365, n_boot=5000)
         self.assertTrue(good["passed"], good)
-        bad = I.judge_cell([(t, -r) for t, r in days], days, days, b, 0.001, 365, n_boot=500)
+        bad = I.judge_cell([(t, -r) for t, r in days], days, days, b, 0.001, 365, n_boot=5000)
         self.assertFalse(bad["passed"])
 
 
