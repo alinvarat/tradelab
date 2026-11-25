@@ -67,7 +67,7 @@ class Economics(unittest.TestCase):
     def test_high_cost_is_worse(self):
         b, h = ov.side_econ(self.row(59000.0), "base"), ov.side_econ(self.row(59000.0), "high")
         self.assertLess(h["credit"], b["credit"])
-        self.assertAlmostEqual(h["credit"], 45 - 75 - 11.25 - 18.75)       # haircut 25%, fees x2
+        self.assertAlmostEqual(h["credit"], 45 - 37.5 - 11.25 - 9.375)    # haircut 25%, fees x2
 
     def test_struct_max_loss_and_condor(self):
         e = ov.struct_econ([self.row(59000.0)], "base", "BTC")
