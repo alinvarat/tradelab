@@ -466,11 +466,11 @@ class Config(unittest.TestCase):
         files = hooks.family_files()
         self.assertIn("sweep_mix1", files)
         self.assertIn("sweep_price_action1", files)
-        for n in ("sweep_fundwin1", "sweep_fundwin2", "sweep_metrics1", "sweep_taker_cont2"):
+        for n in ("sweep_fundwin1", "sweep_fundwin2", "sweep_fundwin3", "sweep_metrics1", "sweep_taker_cont2"):
             self.assertIn(n, files)
         for name, path in files.items():
             cfg, sha = sc.load(path)
-            if cfg.get("kind") == "funding_window":
+            if cfg.get("kind") in ("funding_window", "funding_window_pred"):
                 continue
             rules = sc.expand(cfg)
             self.assertEqual(len({r["id"] for r in rules}), len(rules), name)
@@ -822,6 +822,158 @@ class FundingWindow(unittest.TestCase):
                 json.dump({"summary": summ, "rows": events}, f)
             n = hooks.export_trades(merged, os.path.join(td, "o.jsonl.gz"))
             self.assertGreater(n, 100)
+
+
+class FundingPredicted(unittest.TestCase):
+    def cfg(self):
+        return {"family": "fw3", "version": 1, "kind": "funding_window_pred", "alpha": 0.05, "account_usd": 147,
+                "gate": {"min_train_trades": 5, "min_vol_cost": 0, "min_x": 0, "target_multiple": 0},
+                "pass": {"min_val_trades": 5, "min_test_trades": 5},
+                "data": {"min_abs_funding": 0.001, "cand_min": 0.0008, "start": "2024-01-01", "end": "2025-07-01"},
+                "splits": {"train": ["2024-01-01", "2024-07-01"], "validation": ["2024-07-01", "2025-01-01"], "test": ["2025-01-01", "2025-07-01"]},
+                "grid": {"thr": [0.001, 0.003], "mode": ["fade_payer", "hedged"], "entry": [-60, -15, -5, -1], "exit": [1, 15, 60], "delay": [0, 5]},
+                "size": {"lev": 1, "k": 1}, "cost": {"model": "perp", "fee": 0.0005, "spot_fee": 0.001, "spread_floor": 0.0004}}
+
+    def test_formula_and_cap(self):
+        from core import sweep_events as sev
+        self.assertAlmostEqual(sev.funding_formula(0.0008, 8), 0.0008 + (-0.0005))      # clamp(0.0001 - 0.0008) = -0.0005
+        self.assertAlmostEqual(sev.funding_formula(0.00005, 8), 0.0001)                   # inside the clamp: P + (I - P) = I
+        self.assertAlmostEqual(sev.funding_formula(0.0008, 4), 0.0008 + max(-0.00025, 0.00005 - 0.0008))
+        self.assertAlmostEqual(sev.funding_formula(0.02, 8, cap=0.0075), 0.0075)
+        self.assertAlmostEqual(sev.funding_formula(-0.02, 8, cap=0.0075), -0.0075)
+
+    def test_predict_uses_only_minutes_before_the_prediction_time(self):
+        from core import sweep_events as sev
+        ps = FW_TS - 8 * 3600
+        prem = {m: 0.004 for m in range(ps, FW_TS - 3600, 60)}
+        prem.update({m: 0.01 for m in range(FW_TS - 3600, FW_TS + 3600, 60)})
+        early = sev.predict_rate(prem, ps, FW_TS - 3600, 8.0)
+        self.assertAlmostEqual(early, 0.004 - 0.0005)                                     # the 0.01 minutes are in the future
+        late = sev.predict_rate(prem, ps, FW_TS - 60, 8.0)
+        self.assertGreater(late, early)
+        self.assertIsNone(sev.predict_rate({m: 0.004 for m in range(ps, ps + 3600, 60)}, ps, FW_TS, 8.0))     # under 90% of the minutes
+        self.assertIsNone(sev.predict_rate(prem, ps, ps, 8.0))
+
+    def test_cs_spread(self):
+        from core import sweep_events as sev
+        flat = {FW_TS + i * 60: (100.0, 100.0, 100.0, 100.0) for i in range(5)}
+        self.assertEqual(sev.cs_spread(flat), 0.0)
+        r = math.log(1.01)
+        wide = {FW_TS + i * 60: (100.0, 101.0, 100.0, 100.5) for i in range(6)}
+        self.assertAlmostEqual(sev.cs_spread(wide), 2 * math.tanh(r / 2), places=5)
+        self.assertIsNone(sev.cs_spread({FW_TS: (1, 1, 1, 1), FW_TS + 600: (1, 1, 1, 1)}))      # no adjacent minutes
+
+    def make(self, f=0.004, est=0.004, drift=-0.02, spot_drift=None, ts=FW_TS):
+        from core import sweep_events as sev
+        bars = fw_bars(ts, drift)
+        ev = sev.make_event("X", ts, f, bars, 0.004, sev.PAIRS3)
+        ev["est"] = {str(e): est for e in sev.OFFS_E3}
+        ev["sp"] = 0.002
+        sb = fw_bars(ts, drift if spot_drift is None else spot_drift)
+        ev["vs"], ev["sps"] = sev.spot_values(ts, sb, sev.PAIRS3), 0.001
+        return ev
+
+    def test_events_pred_for_symbol_no_lookahead_and_candidates(self):
+        from core import sweep_events as sev
+        t0 = FW_TS - 8 * 3600
+        funding = [(t0, 0.004), (FW_TS + 0.3, 0.004), (FW_TS + 8 * 3600, 0.0001)]
+        hourly = {h: 0.004 for h in range(t0 // 3600 * 3600, FW_TS + 8 * 3600, 3600)}
+        calls = {"prem": 0}
+
+        def prem_fn(ps, ts):
+            calls["prem"] += 1
+            return {m: (0.004 if m < ts - 3600 else 0.01) for m in range(ps, ts + 3600, 60)}
+        ev, st = sev.events_pred_for_symbol("X", funding, hourly, prem_fn, lambda ts: fw_bars(ts), lambda ts: fw_bars(ts, 0.01),
+                                            0.0008, 0, FW_TS + 10 * 3600)
+        self.assertEqual(len(ev), 2)
+        e = ev[0]
+        self.assertEqual(e["ts"], FW_TS)
+        self.assertAlmostEqual(e["est"]["-60"], 0.0035)
+        self.assertGreater(e["est"]["-1"], e["est"]["-60"])
+        self.assertIsNotNone(e["sp"])
+        self.assertIn("-15:15", e["vs"])
+        self.assertEqual(e["fp"], 0.004)
+        self.assertEqual(st["with_spot"], 2)
+        # the quiet last settlement has a hourly premium of 0.004 too, so it is a candidate (its predicted rate is high, the settled one low)
+        self.assertAlmostEqual(ev[1]["f"], 0.0001)
+        self.assertGreater(ev[1]["est"]["-60"], 0.003)
+
+    def test_trades_selected_and_signed_by_the_prediction(self):
+        from core import sweep_events as sev
+        rules = {r["id"]: r for r in sev.expand_pred(self.cfg())}
+        fade = rules[sev.rule_id(0.003, "fade_payer", -15, 15, 0, "pred")]
+        ev = self.make(f=0.0001, est=0.004)                                    # settled low, predicted high: still traded, funding is what settled
+        t = sev.trades_pred(fade, [ev])[0]
+        self.assertEqual(t["side"], -1)
+        self.assertAlmostEqual(t["fund"], -0.0001)
+        self.assertAlmostEqual(t["cost"], 0.001 + 0.002)                        # two taker fees + the symbol's own spread estimate
+        self.assertEqual(sev.trades_pred(fade, [self.make(f=0.01, est=0.0005)]), [])      # big settled rate, small prediction: not selected
+        neg = sev.trades_pred(fade, [self.make(f=-0.004, est=-0.004)])[0]
+        self.assertEqual(neg["side"], 1)
+        hedged = rules[sev.rule_id(0.003, "hedged", -15, 15, 0, "pred")]
+        h = sev.trades_pred(hedged, [self.make(spot_drift=-0.02)])[0]
+        self.assertEqual(h["side"], -1)
+        self.assertAlmostEqual(h["gross"], 0.0, places=6)                      # perp and spot move together: delta neutral
+        self.assertAlmostEqual(h["cost"], 0.001 + 0.002 + 0.002 + 0.001)       # both venues pay
+        self.assertAlmostEqual(h["fund"], -0.004)
+        self.assertEqual(sev.trades_pred(hedged, [self.make(f=-0.004, est=-0.004)]), [])    # no hedge for negative funding (needs a spot short)
+        nospot = self.make()
+        nospot["vs"] = {}
+        self.assertEqual(sev.trades_pred(hedged, [nospot]), [])
+        after = rules[sev.rule_id(0.003, "fade_payer", -5, 15, 5, "pred")]
+        self.assertEqual(after["E"], 0)
+        self.assertEqual(sev.trades_pred(after, [self.make()])[0]["fund"], 0.0)            # entered at the settlement: no funding
+
+    def test_expand_pred_counts(self):
+        from core import sweep_events as sev
+        with open(hooks.family_files()["sweep_fundwin3"]) as f:
+            rules = sev.expand_pred(json.load(f))
+        self.assertEqual(len(rules), 184)
+        ids = {r["id"] for r in rules}
+        self.assertNotIn(sev.rule_id(0.001, "hedged", -1, 1, 5, "pred"), ids)             # entry +4 is after exit +1
+        self.assertIn(sev.rule_id(0.001, "hedged", -5, 1, 5, "pred"), ids)
+        self.assertEqual({r["mode"] for r in rules}, {"fade_payer", "hedged"})
+
+    def test_tracking_error(self):
+        from core import sweep_events as sev
+        evs = []
+        for k in range(6):
+            f = 0.001 * (k + 1)
+            evs.append({"ts": FW_TS + k * 28800, "f": f, "est": {str(e): f + 0.0001 for e in sev.OFFS_E3}})
+        tr = sev.tracking_error(evs, FW_TS, FW_TS + 10**7)
+        self.assertEqual(tr["-60"]["n"], 6)
+        self.assertAlmostEqual(tr["-60"]["median_abs_err"], 0.0001)
+        self.assertAlmostEqual(tr["-60"]["bias"], 0.0001)
+        self.assertAlmostEqual(tr["-60"]["corr"], 1.0)
+        self.assertEqual(sev.tracking_error([], 0, 1)["-1"], {"n": 0})
+
+    def test_summarize_end_to_end(self):
+        from core import sweep_events as sev
+        events = []
+        t = sc.day("2024-01-01") + 3600
+        end = sc.day("2025-07-01")
+        while t < end - 7200:
+            events.append(self.make(f=0.01, est=0.01, ts=int(t) // 60 * 60))
+            t += 12 * 3600
+        with tempfile.TemporaryDirectory() as td:
+            path = os.path.join(td, "fw3.json")
+            with open(path, "w") as f:
+                json.dump(self.cfg(), f)
+            fns = hooks.make_fw_functions("sweep_fw3", path, pred=True)
+            with mock.patch.object(hooks, "on_actions", lambda: False), \
+                    mock.patch.object(ss, "p_adaptive", lambda v: ss.block_p(v, n_boot=500)):
+                summ = fns["summarize_sweep_fw3"](events, write_board=False)
+            by = {r["id"]: r for r in summ["rule_rows"]}
+            self.assertEqual(summ["n_rules"], 92)
+            fade = by[sev.rule_id(0.003, "fade_payer", -15, 15, 0, "pred")]
+            self.assertEqual(fade["status"], "ok", fade.get("reason"))
+            self.assertTrue(fade["criteria"]["survives_5min_delay"])
+            self.assertTrue(fade["criteria"]["no_lookahead"])
+            hedged = by[sev.rule_id(0.003, "hedged", -15, 15, 0, "pred")]
+            self.assertEqual(hedged["status"], "ok", hedged.get("reason"))
+            self.assertGreater(hedged["validation"]["mean"], 0.0)
+            self.assertGreater(summ["tracking_train"]["-60"]["n"], 100)
+            self.assertEqual(summ["n_events_with_spot"], len(events))
 
 
 if __name__ == "__main__":
