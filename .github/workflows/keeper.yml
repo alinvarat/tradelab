@@ -1,0 +1,42 @@
+name: Keeper (forward-test scheduler)
+# GitHub cron is unreliable here (2 schedule runs, then none), and the owner's PC is off at night.
+# This job loops for ~5h40m, dispatches each forward study when due, then dispatches itself again.
+# workflow_dispatch by GITHUB_TOKEN is allowed to start new runs.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 */6 * * *"   # backup restart if the chain ever breaks
+concurrency:
+  group: tradelab-keeper
+  cancel-in-progress: false
+permissions:
+  actions: write
+  contents: read
+jobs:
+  keep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    env:
+      GH_TOKEN: ${{ github.token }}
+      R: ${{ github.repository }}
+    steps:
+      - name: Dispatch due forward studies
+        run: |
+          set -u
+          run() { gh workflow run research.yml -R "$R" --ref main -f study="$1" && echo "$(date -u +%FT%TZ) dispatched $1" || echo "dispatch $1 failed"; }
+          end=$(( $(date +%s) + 340*60 ))
+          last=""
+          while [ "$(date +%s)" -lt "$end" ]; do
+            m=$(date -u +%M); h=$(date -u +%H); dow=$(date -u +%u); key=$(date -u +%F-%H-%M)
+            if [ "$key" != "$last" ]; then
+              last=$key
+              [ "$m" = "05" ] && run fwd_crypto_spikes
+              { [ "$m" = "17" ] || [ "$m" = "47" ]; } && run l4f_forward
+              [ "$h:$m" = "15:00" ] && [ "$dow" -le 5 ] && run options_forward
+              [ "$h:$m" = "03:00" ] && [ "$dow" = "7" ] && run llm_earnings_forward
+            fi
+            sleep 20
+          done
+      - name: Chain the next keeper run
+        if: always()
+        run: gh workflow run keeper.yml -R "$R" --ref main
