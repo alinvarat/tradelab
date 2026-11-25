@@ -163,19 +163,19 @@ class Summary(unittest.TestCase):
     def test_good_rule_passes_all_checks(self):
         rows = self.rows("oi_flush_long", {"train": 400, "validation": 400, "test": 400}, 0.03)
         s = sc.oi_flush_summary(rows)["oi_flush_long"]
-        self.assertTrue(s["passed"], s["checks"])
+        self.assertTrue(s["passed"], s["gates"])
         self.assertGreaterEqual(s["per_week"], 3)
 
     def test_costly_rule_fails_double_cost(self):
         rows = self.rows("oi_flush_long", {"train": 400, "validation": 400, "test": 400}, 0.003, spread=0.0005)
         s = sc.oi_flush_summary(rows)["oi_flush_long"]
-        self.assertFalse(s["checks"]["double_cost_validation_positive"])
+        self.assertFalse(s["gates"]["double_cost_validation_positive"])
         self.assertFalse(s["passed"])
 
     def test_rare_rule_fails_three_a_week_and_losing_rule_fails(self):
         rare = self.rows("oi_flush_short", {"train": 30, "validation": 30, "test": 30}, 0.05)
         s = sc.oi_flush_summary(rare)["oi_flush_short"]
-        self.assertFalse(s["checks"]["three_a_week"])
+        self.assertFalse(s["gates"]["three_a_week"])
         self.assertFalse(s["passed"])
         lose = self.rows("oi_flush_short", {"train": 400, "validation": 400, "test": 400}, -0.02)
         self.assertFalse(sc.oi_flush_summary(lose)["oi_flush_short"]["passed"])

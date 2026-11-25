@@ -815,11 +815,11 @@ def oi_flush_summary(all_rows: list) -> dict:
                     hs, bounds, pick_trim=5)
         per_week = sum(1 for r in rows if r["split"] != "out") / weeks
         pick = base.get("pick")
-        checks = {}
+        gates = {}
         if pick:
             val, test = base["table"][pick]["validation"], base["table"][pick].get("test", {})
             dval = dbl["table"][pick]["validation"]
-            checks = {"base_judge_passed": base["verdict"] == "passed",
+            gates = {"base_judge_passed": base["verdict"] == "passed",
                       "validation_p_below_bonferroni": val["p"] is not None and val["p"] < H2_ALPHA,
                       "double_cost_validation_positive": dval["mean"] is not None and dval["mean"] > 0,
                       "test_positive": test.get("mean") is not None and test["mean"] > 0,
@@ -829,8 +829,8 @@ def oi_flush_summary(all_rows: list) -> dict:
             by_day[day_key(r)] = by_day.get(day_key(r), 0) + 1
         summ[kind] = {"rows": len(rows), "per_week": round(per_week, 2), "coins": len({r["symbol"] for r in rows}),
                       "max_events_one_day": max(by_day.values(), default=0), "base": base, "double_cost": dbl,
-                      "unhedged_descriptive": unh, "checks": checks,
+                      "unhedged_descriptive": unh, "gates": gates,
                       "mean_funding": round(sum(v["funding"] for r in rows for v in r["ret"].values())
                                             / max(1, sum(len(r["ret"]) for r in rows)), 5),
-                      "passed": bool(checks) and all(checks.values())}
+                      "passed": bool(gates) and all(gates.values())}
     return summ
