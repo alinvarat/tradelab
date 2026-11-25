@@ -74,7 +74,7 @@ def run_rule(rule, ctx, cfg, keep_trades=True):
     missing = [s for s in rule["data"]["symbols"] if s not in ctx.bars]
     if missing:
         return dict(row, status="error", reason=f"data missing for {missing}")
-    trades = se.rule_trades(ctx, rule, rule["data"]["symbols"], b["train"][0], b["test"][1])
+    trades = se.rule_trades(ctx, rule, rule.get("trade") or rule["data"]["symbols"], b["train"][0], b["test"][1])
     train = ss.in_split(trades, *b["train"])
     ok, info = ss.gate(train, rule, cfg, (b["train"][1] - b["train"][0]) / 86400.0, min_notional(rule, train))
     row["gate"] = info

@@ -564,7 +564,7 @@ def _price_at(d, pt):
 
 
 def simulate_symbol(d, sym, long_sig, short_sig, rule, t_from, t_to, cost_fn):
-    """Trades of one symbol: list of dicts {sym, side, t (signal bar ts), x (exit bar ts), ep, xp, gross, cost, fund, net,
+    """Trades of one symbol: list of dicts {sym, side, t (signal bar ts), te (entry ts), x (exit bar ts), ep, xp, gross, cost, fund, net,
     mfe, mae, reason}. Signals only inside [t_from, t_to); one open trade per symbol at a time."""
     ts, o, h, l, c = d["ts"], d["o"], d["h"], d["l"], d["c"]
     n = len(ts)
@@ -649,7 +649,7 @@ def simulate_symbol(d, sym, long_sig, short_sig, rule, t_from, t_to, cost_fn):
         cost = cost_fn(sym, ep, days)
         fcost = s * (fp[end_k + 1] - fp[first]) if end_k >= first else 0.0
         gross = s * (xp / ep - 1)
-        out.append({"sym": sym, "side": s, "t": ts[i], "x": ts[exit_bar], "ep": ep, "xp": xp, "gross": gross,
+        out.append({"sym": sym, "side": s, "t": ts[i], "te": ts[i] if close_entry else ts[i + 1], "x": ts[exit_bar], "ep": ep, "xp": xp, "gross": gross,
                     "cost": cost, "fund": fcost, "net": gross - cost - fcost, "mfe": mfe, "mae": mae, "reason": reason})
         j = (ex_pt // 2) if close_entry else ((ex_pt + 1) // 2 - 1)
         i = max(i + 1, j)
@@ -657,10 +657,10 @@ def simulate_symbol(d, sym, long_sig, short_sig, rule, t_from, t_to, cost_fn):
 
 
 def apply_cap(trades, k):
-    """At most k trades open at once across symbols, earliest signal first (ties by symbol)."""
+    """At most k trades open at once across symbols, earliest entry first (ties by symbol); a slot frees at the exit time."""
     keep, open_x = [], []
-    for tr in sorted(trades, key=lambda z: (z["t"], z["sym"])):
-        open_x = [x for x in open_x if x > tr["t"]]
+    for tr in sorted(trades, key=lambda z: (z["te"], z["sym"])):
+        open_x = [x for x in open_x if x > tr["te"]]
         if len(open_x) < k:
             keep.append(tr)
             open_x.append(tr["x"])

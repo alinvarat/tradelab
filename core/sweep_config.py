@@ -139,6 +139,9 @@ def validate(rule):
             bad(f"{name} needs data.extras funding on futures/um")
         if name in se.NEEDS_PREMIUM and ("premium" not in extras or data["source"] != "binance_vision"):
             bad(f"{name} needs data.extras premium")
+    tr = rule.get("trade")
+    if tr is not None and (not tr or any(x not in data["symbols"] for x in tr)):
+        bad("trade must be a non-empty subset of data.symbols")
     ex = rule.get("exit") or {}
     if not isinstance(ex.get("time"), int) or ex["time"] < 1:
         bad("exit.time must be an integer >= 1")
@@ -182,8 +185,6 @@ def expand(cfg):
                 if key not in r:
                     raise ConfigError(f"{r['id']}: missing {key}")
                 r[key] = _ref(defs, kind, r[key])
-            if isinstance(r["cost"], dict) and "model" not in r["cost"] and "model" in defs.get("cost", {}):
-                pass
             if r["id"] in seen:
                 raise ConfigError(f"duplicate rule id {r['id']}")
             seen.add(r["id"])

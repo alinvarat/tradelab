@@ -192,7 +192,7 @@ def split_metrics(trades, w, a, b, with_p=False):
     tr = in_split(trades, a, b)
     out = {"n": len(tr)}
     if not tr:
-        return dict(out, mean=None, mean_2x=None, mean_day=None, win=None)
+        return dict(out, mean=None, mean_2x=None, mean_day=None, win=None, sign_p=1.0, p=1.0, mult30={"n": 0})
     nets = [t["net"] for t in tr]
     out.update(mean=mean(nets), mean_2x=mean([t["net"] - t["cost"] for t in tr]),
                win=sum(1 for x in nets if x > 0) / len(nets), sign_p=sign_p(nets))
