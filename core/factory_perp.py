@@ -38,6 +38,13 @@ def eligible_symbol(sym: str, skip=()) -> bool:
     return sym.endswith("USDT") and "_" not in sym and base_of(sym) not in skip
 
 
+def vision_path(path: str) -> str:
+    """Percent-encode a data.binance.vision key or prefix (some perps have non-ASCII names such as Chinese
+    tickers; urlopen cannot send them raw, which silently dropped those perps from run 1). '/' is kept."""
+    from urllib.parse import quote
+    return quote(path, safe="/")
+
+
 def _sec(t: int) -> float:
     """Epoch milliseconds or microseconds (files from 2025 on) -> seconds."""
     return t / 1_000_000 if t > 10**14 else t / 1000
@@ -767,3 +774,19 @@ def a7_random_control(trades, months, hc: dict, seed=20261125) -> list:
 def events_per_week(event_ts, a, b) -> float:
     n = sum(1 for t in event_ts if a <= t < b)
     return n / ((b - a) / (7 * DAY)) if b > a else 0.0
+
+
+def apply_event_gate(judged: dict, extra: dict, min_events=3.0) -> dict:
+    """Pre-registered last pass condition: a rule that passes factory.judge_all also needs >= min_events a week on
+    validation. Adds the per-rule extras and 'passed_with_events'; judged['passed'] keeps only those rules."""
+    for name, row in judged["strategies"].items():
+        row.update(extra.get(name, {}))
+        row["passed_with_events"] = bool(row["passed"] and row.get("events_per_week_validation", 0) >= min_events)
+    judged["passed"] = [n for n, r in judged["strategies"].items() if r["passed_with_events"]]
+    return judged
+
+
+def last_month_gaps(bad, last_month: dict) -> int:
+    """Funding-gap coin-months that are the coin's last kline month (a delisting month): a gap there removes the
+    coin before its final move, so it is reported as a survivorship diagnostic. last_month {sym: 'YYYY-MM'}."""
+    return sum(1 for s, m in bad if last_month.get(s) == m)

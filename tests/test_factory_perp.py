@@ -32,6 +32,12 @@ class Parsers(unittest.TestCase):
         self.assertEqual(fp.parse_kline_csv(txt), [(1700006400, 1.0, 2.0, 0.5, 1.5, 100.0, 60.0),
                                                    (1735689600, 2.0, 3.0, 1.0, 2.5, 200.0, 50.0)])
 
+    def test_vision_path_encodes_non_ascii_symbols(self):
+        self.assertEqual(fp.vision_path("klines/\u5e01\u5b89\u4eba\u751fUSDT/1d/"),
+                         "klines/%E5%B8%81%E5%AE%89%E4%BA%BA%E7%94%9FUSDT/1d/")
+        self.assertEqual(fp.vision_path("data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2024-01.zip"),
+                         "data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2024-01.zip")
+
     def test_funding_csv_rounds_jitter_to_the_minute(self):
         txt = "calc_time,funding_interval_hours,last_funding_rate\n1700006400005,8,0.0001\n1700035199998,8,-0.0002\n"
         self.assertEqual(fp.parse_funding_csv(txt), [(1700006400, 0.0001), (1700035200, -0.0002)])
@@ -87,6 +93,20 @@ class RunPerp(unittest.TestCase):
         sh = fp.run_perp(days, close, feats, lambda f, i: {"AUSDT": -1.0}, self.fund, hedge=False)
         self.assertAlmostEqual(sh[1][1], 0.001)                  # a short receives positive funding
         self.assertEqual(s1[0][0], days[1])
+
+    def test_short_return_is_one_minus_exit_over_entry(self):
+        days, close = flat_panel(3)
+        close[days[1]]["AUSDT"] = 12.0                             # 10 -> 12 while short
+        s = fp.run_perp(days, close, [{}] * 3, lambda f, i: {"AUSDT": -1.0} if i == 0 else {}, self.fund,
+                        hedge=False)
+        self.assertAlmostEqual(s[0][1], (1 - 12.0 / 10.0) + 0.001 - 0.002)   # -0.2, funding received, cost
+        self.assertAlmostEqual(s[1][1], -0.002)                    # closing the short costs turnover
+
+    def test_hedge_leg_pays_measured_funding(self):
+        days, close = flat_panel(3)
+        fund = fp.Funding({"AUSDT": [(T0 + 2 * DAY, 0.001)], "BTCUSDT": [(T0 + 2 * DAY, 0.002)]})
+        s = fp.run_perp(days, close, [{}] * 3, lambda f, i: {"AUSDT": 1.0}, fund, hedge=True)
+        self.assertAlmostEqual(s[0][1], -0.001 + 0.002 - 2 * 0.002)    # long A pays, short BTC hedge receives
 
     def test_hedge_leg_pays_turnover(self):
         days, close = flat_panel(4)
@@ -299,13 +319,21 @@ class Hourly(unittest.TestCase):
         self.assertIsNone(fp.same_hour_score(cs, cnt, 19 * 24 + 5))
         self.assertAlmostEqual(fp.same_hour_score(cs, cnt, 23 * 24 + 5), (19 * 0.01 + 0.5) / 20)
 
-    def _run(self, placebo):
+    def _run(self, placebo, fund=None):
         n = 24 * 23
         hc = {f"C{j}USDT": hourly_closes(n, (lambda j: lambda t: 0.002 * j if t % 24 == 5 else 0.0)(j))
               for j in range(10)}
         prep = {s: fp.same_hour_cumsum(a) for s, a in hc.items()}
         adv_at = {T0 + d * DAY: {s: 1e7 for s in hc} for d in range(23)}
-        return fp.run_hour_of_day(hc, prep, adv_at, fp.Funding({}), T0, n, set(), placebo=placebo)
+        fund = fund or fp.Funding({})
+        return fp.run_hour_of_day(hc, prep, adv_at, fund, T0, n, fund.settle_hours(T0, n), placebo=placebo)
+
+    def test_hour_of_day_charges_measured_funding(self):
+        t = 20 * 24 + 5
+        fund = fp.Funding({"C9USDT": [(T0 + (t + 1) * H, 0.01)],          # settles at the close of hour t
+                           "C0USDT": [(T0 + t * H, 0.5)]})                 # at its open: belongs to hour t-1
+        pnl, turn, st = self._run(False, fund)
+        self.assertAlmostEqual(pnl[t], 0.005 - 0.1 * 0.01)                 # long C9 at 0.1 pays 1%
 
     def test_gate_book_and_closing_cost(self):
         pnl, turn, st = self._run(False)
@@ -364,6 +392,12 @@ class Pairs(unittest.TestCase):
         self.assertLessEqual(ab[0]["t"], -3.90)
         self.assertTrue(4 <= ab[0]["hl"] <= 72)
 
+    def test_form_pairs_limit_keeps_the_anchor_first(self):
+        logs = {s: [0.001 * k * (j + 1) + (0.01 if k % 2 else 0.0) for k in range(200)]
+                for j, s in enumerate(("ETHUSDT", "BTCUSDT", "XUSDT"))}
+        pairs = fp.form_pairs(logs, {"BTCUSDT": 3, "ETHUSDT": 2, "XUSDT": 1}, n_pairs=1)
+        self.assertEqual([(p["A"], p["B"]) for p in pairs], [("ETHUSDT", "BTCUSDT")])
+
     def test_select_universe(self):
         qv30 = {"X": 10e6, "Y": 6e6, "Z": 1e6, "ETHUSDT": 50e6, "BTCUSDT": 60e6}
         full = {"X", "Z", "ETHUSDT", "BTCUSDT"}
@@ -401,6 +435,28 @@ class Pairs(unittest.TestCase):
         tr = fp.a7_schedule(hc, months, entry=1.0, stop=1.5, win=3, max_hold=2)
         self.assertEqual([(x["et"], x["xt"], x["sign"]) for x in tr], [(5, 7, -1), (8, 10, 1)])
 
+    def test_schedule_month_end_exit(self):
+        hc = self._hc(self.S)
+        months = [(3, 7, [{"A": "A", "B": "B", "b": 1.0}])]
+        tr = fp.a7_schedule(hc, months, entry=1.0, stop=1.5, win=3)
+        self.assertEqual([(x["et"], x["xt"], x["sign"]) for x in tr], [(5, 6, -1)])
+
+    def test_schedule_max_open(self):
+        hc = self._hc(self.S)
+        p = {"A": "A", "B": "B", "b": 1.0}
+        capped = fp.a7_schedule(hc, [(3, 12, [p, dict(p)])], entry=1.0, stop=1.5, win=3, max_open=1)
+        self.assertEqual([(x["et"], x["xt"], x["sign"]) for x in capped], [(5, 8, -1), (8, 11, 1)])
+        free = fp.a7_schedule(hc, [(3, 12, [p, dict(p)])], entry=1.0, stop=1.5, win=3)
+        self.assertEqual([(x["et"], x["xt"]) for x in free], [(5, 8), (5, 8)])
+
+    def test_schedule_stop_exit(self):
+        hc = self._hc([0, 1, 0, 1, 1, 9, 9, 9])
+        months = [(3, 8, [{"A": "A", "B": "B", "b": 1.0}])]
+        tr = fp.a7_schedule(hc, months, entry=0.5, stop=1.6, win=4)
+        # t=3: window [0,1,0,1] z=1 -> short the spread; t=5: [0,1,1,9] z=6.25/sqrt(13.1875)=1.72 -> stop;
+        # t=6: [1,1,9,9] z=1 -> new entry; t=7 is the month's last hour
+        self.assertEqual([(x["et"], x["xt"], x["sign"]) for x in tr], [(3, 5, -1), (6, 7, -1)])
+
     def test_schedule_vanished_leg(self):
         hc = self._hc(self.S)
         hc["A"][7] = NAN
@@ -433,6 +489,20 @@ class Pairs(unittest.TestCase):
 
     def test_events_per_week(self):
         self.assertAlmostEqual(fp.events_per_week([T0 + k * DAY for k in range(14)], T0, T0 + 14 * DAY), 7.0)
+
+    def test_event_gate_is_the_last_pass_condition(self):
+        judged = {"strategies": {"A": {"passed": True}, "B": {"passed": True}, "C": {"passed": False}},
+                  "passed": ["A", "B"]}
+        extra = {"A": {"events_per_week_validation": 3.0}, "B": {"events_per_week_validation": 2.99},
+                 "C": {"events_per_week_validation": 50.0}}
+        out = fp.apply_event_gate(judged, extra)
+        self.assertEqual(out["passed"], ["A"])
+        self.assertFalse(out["strategies"]["C"]["passed_with_events"])
+        self.assertEqual(out["strategies"]["B"]["events_per_week_validation"], 2.99)
+
+    def test_last_month_gaps(self):
+        bad = {("X", "2024-03"), ("X", "2024-01"), ("Y", "2024-05")}
+        self.assertEqual(fp.last_month_gaps(bad, {"X": "2024-03", "Y": "2024-06"}), 1)
 
 
 if __name__ == "__main__":

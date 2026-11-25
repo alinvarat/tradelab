@@ -1511,22 +1511,25 @@ def study_factory_crypto_1(_symbols, workers=16):
 
 def _s3_list(prefix, keys=False):
     """Common prefixes (keys=False) or object keys (keys=True) under `prefix` on data.binance.vision; None on failure."""
+    from urllib.parse import quote
     from urllib.request import Request, urlopen
     base = ("https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?"
-            + ("" if keys else "delimiter=/&") + "prefix=" + prefix)
+            + ("" if keys else "delimiter=/&") + "prefix=" + quote(prefix, safe=""))
     tag = "Key" if keys else "Prefix"
-    out, marker = [], ""
+    out, marker, err = [], "", None
     for _ in range(500):
         xml = None
         for k in range(3):
             try:
-                with urlopen(Request(base + (f"&marker={marker}" if marker else ""),
+                with urlopen(Request(base + (f"&marker={quote(marker, safe='')}" if marker else ""),
                                      headers={"User-Agent": "Mozilla/5.0 tradelab-research"}), timeout=60) as r:
                     xml = r.read().decode()
                 break
-            except Exception:  # noqa: BLE001
+            except Exception as e:  # noqa: BLE001
+                err = e
                 time.sleep(2 * (k + 1))
         if xml is None:
+            log(f"  s3 listing failed {prefix[:90]}: {err!r}"[:200])
             return None
         items = [x for x in re.findall(rf"<{tag}>([^<]+)</{tag}>", xml) if x != prefix]
         out += items
@@ -1540,7 +1543,9 @@ def _s3_list(prefix, keys=False):
 def _binance_all_um_symbols():
     """Every USDT-M futures symbol that ever had monthly klines (delisted included), quarterlies ('_') excluded."""
     pre = "data/futures/um/monthly/klines/"
-    got = _s3_list(pre) or []
+    got = _s3_list(pre)
+    if not got or len(got) < 300:                # a failed listing must not shrink the universe silently
+        raise RuntimeError(f"USDT-M symbol listing failed or short: {len(got or [])} prefixes")
     syms = [p[len(pre):].strip("/") for p in got if p.startswith(pre)]
     return sorted({s for s in syms if s.endswith("USDT") and "_" not in s})
 
@@ -1563,7 +1568,11 @@ def _zip_text(url):
     import io
     import zipfile
     from urllib.request import Request, urlopen
-    for k in range(3):
+    from core import factory_perp as fp
+    pre = "https://data.binance.vision/"
+    if url.startswith(pre):
+        url = pre + fp.vision_path(url[len(pre):])        # non-ASCII perp names
+    for k in range(4):
         try:
             with urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0 tradelab-research"}), timeout=30) as r:
                 z = zipfile.ZipFile(io.BytesIO(r.read()))
@@ -1571,7 +1580,9 @@ def _zip_text(url):
         except Exception as e:  # noqa: BLE001
             if getattr(e, "code", None) == 404:
                 return ""
-            time.sleep(2 * (k + 1))
+            if k == 3:
+                log(f"  zip failed {url[:120]}: {e!r}"[:220])
+            time.sleep(3 * (k + 1))
     return None
 
 
@@ -1667,7 +1678,7 @@ def study_factory_crypto_2(_symbols, workers=16):
         months = km if km is not None else {(time.gmtime(r[0]).tm_year, time.gmtime(r[0]).tm_mon) for r in rows}
         fund, gaps = _um_funding(sym, months, int(T(2020, 10)), end) if rows else ([], {})
         return sym, rows, failed, km is None, fund, gaps
-    bars, frows, bad = {}, {}, set()
+    bars, frows, bad, last_kline = {}, {}, set(), {}
     with ThreadPoolExecutor(workers) as ex:
         for sym, rows, failed, nolist, fund, gaps in ex.map(load_daily, syms):
             cov["kline_month_failures"] += failed
@@ -1675,14 +1686,19 @@ def study_factory_crypto_2(_symbols, workers=16):
             for (y, m), why in gaps.items():
                 bad.add((sym, f"{y}-{m:02d}"))
                 cov["funding_gap_" + why] += 1
+            if rows:
+                last_kline[sym] = fp.ym(rows[-1][0])
             if len(rows) >= 31 or sym == "BTCUSDT":
                 bars[sym], frows[sym] = rows, fund
     cov["perps_with_bars"] = len(bars)
+    cov["funding_gap_in_last_kline_month"] = fp.last_month_gaps(bad, last_kline)
     log(f"daily: {len(bars)} perps with bars, funding gaps {len(bad)}")
     funding = fp.Funding(frows, bad)
     days, close, qv, taker = fp.panel_perp(bars)
     feats = fp.perp_features(days, close, qv, taker, funding)
-    btc_long, _ = _binance_um_bulk("BTCUSDT", int(T(2019, 9)), end, "1d")
+    btc_long, btc_failed = _binance_um_bulk("BTCUSDT", int(T(2019, 9)), end, "1d")
+    if btc_failed or not bars.get("BTCUSDT"):    # the hedge leg and the A3 regime need every BTC month
+        raise RuntimeError(f"BTCUSDT daily bars incomplete ({btc_failed} failed months)")
     dvol = _deribit_dvol_daily(T(2021, 3), end)
     cov["dvol_days"] = len(dvol)
     ctx = {"days": days, "close": close, "feats": feats, "funding": funding,
@@ -1765,11 +1781,7 @@ def study_factory_crypto_2(_symbols, workers=16):
     cov["a7_months_formed"] = len(months)
     cov["a7_mean_pairs"] = round(sum(npairs) / len(npairs), 2) if npairs else 0
 
-    judged = fa.judge_all(results, bounds)
-    for name, row in judged["strategies"].items():
-        row.update(extra.get(name, {}))
-        row["passed_with_events"] = bool(row["passed"] and row.get("events_per_week_validation", 0) >= 3)
-    judged["passed"] = [n_ for n_, r in judged["strategies"].items() if r["passed_with_events"]]
+    judged = fp.apply_event_gate(fa.judge_all(results, bounds), extra)
     descriptive = fa.judge_all(desc, bounds)
     for name, row in descriptive["strategies"].items():
         row.update(extra.get(name, {}))
