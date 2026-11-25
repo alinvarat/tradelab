@@ -230,12 +230,14 @@ def criteria(row, cfg):
     v, t = row["validation"], row["test"]
     pos = lambda x: x is not None and x > 0   # noqa: E731
     fl = row["folds"]
-    return {"val_net_positive": pos(v["mean"]), "test_net_positive": pos(t["mean"]),
+    base = {"val_net_positive": pos(v["mean"]), "test_net_positive": pos(t["mean"]),
             "val_2x_positive": pos(v["mean_2x"]), "test_2x_positive": pos(t["mean_2x"]),
             "enough_trades": v["n"] >= int(pc.get("min_val_trades", 30)) and t["n"] >= int(pc.get("min_test_trades", 20)),
             "significant_holm": row.get("p_adj") is not None and row["p_adj"] < float(cfg.get("alpha", 0.05)),
             "folds_70pct_positive": fl["with_trades"] > 0 and fl["positive"] / fl["n"] >= 0.7,
             "last12_2x_positive": pos(fl["last12_mean_2x"])}
+    base.update(row.get("extra_criteria") or {})
+    return base
 
 
 def judge_family(rows, cfg):

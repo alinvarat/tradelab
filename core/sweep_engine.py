@@ -423,6 +423,35 @@ def f_rnd(ctx, sym, p):
     return [(x % step) / step for x in c]
 
 
+METRIC_NAMES = ("lsr_acct", "top_acct", "top_pos", "taker_ratio", "oi")
+
+
+def _metric(ctx, sym, p):
+    m = ctx.bars[sym].get("m")
+    name = p["m"]
+    if m is None or name not in m:
+        return [NAN] * len(ctx.bars[sym]["ts"])
+    return m[name]
+
+
+def f_mval(ctx, sym, p):
+    return list(_metric(ctx, sym, p))
+
+
+def f_mz(ctx, sym, p):
+    """z-score of a positioning metric (binance_vision metrics, hourly last value) against its previous n bars."""
+    return _z(_metric(ctx, sym, p), int(p.get("n", 168)))
+
+
+def f_mchg(ctx, sym, p):
+    x, n = _metric(ctx, sym, p), int(p.get("n", 24))
+    out = [NAN] * len(x)
+    for i in range(n, len(x)):
+        if x[i] == x[i] and x[i - n] == x[i - n] and x[i - n] > 0:
+            out[i] = x[i] / x[i - n] - 1
+    return out
+
+
 # name -> (function, sign). signed: the mirror (short) of "x > v" is "x < -v". sym: unchanged under mirror.
 # none: no meaningful mirror (calendar, one-sided features): a short rule must list its own conditions.
 FEATURES = {
@@ -437,8 +466,9 @@ FEATURES = {
     "xret": (f_xret, "signed"), "xzret": (f_xzret, "signed"), "rel": (f_rel, "signed"),
     "ratio_mom": (f_ratio_mom, "signed"), "sma_dist": (f_sma_dist, "signed"),
     "pd_sweep": (f_pd_sweep, "signed"), "asia_sweep": (f_asia_sweep, "signed"), "orb": (f_orb, "signed"),
-    "rnd": (f_rnd, "none"),
+    "rnd": (f_rnd, "none"), "mval": (f_mval, "signed"), "mz": (f_mz, "signed"), "mchg": (f_mchg, "signed"),
 }
+NEEDS_METRICS = frozenset(("mval", "mz", "mchg"))
 NEEDS_REF = frozenset(("xret", "xzret", "rel", "ratio_mom"))
 NEEDS_FUNDING = frozenset(("fundlast", "fsum", "fz"))
 NEEDS_PREMIUM = frozenset(("prem", "premz"))

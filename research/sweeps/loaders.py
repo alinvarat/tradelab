@@ -13,6 +13,12 @@ from core import sweep_config as sc
 CACHE_DIR = os.environ.get("SWEEP_CACHE", os.path.join(sc.ROOT, ".sweepcache"))
 HOUR = 3600
 MAX_MISSING = 0.03
+NAN_ = float("nan")
+# metrics file columns -> sweep names: count_long_short_ratio (all accounts), count_toptrader_long_short_ratio (top accounts),
+# sum_toptrader_long_short_ratio (top positions), sum_taker_long_short_vol_ratio, sum_open_interest_value
+METRIC_FIELDS = ("count_long_short_ratio", "count_toptrader_long_short_ratio", "sum_toptrader_long_short_ratio",
+                 "sum_taker_long_short_vol_ratio", "sum_open_interest_value")
+METRIC_KEYS = ("lsr_acct", "top_acct", "top_pos", "taker_ratio", "oi")
 
 
 def log(*a):
@@ -39,7 +45,7 @@ def _cached(key, producer, cache_dir=None):
     return val
 
 
-def to_grid(rows, fund, prem, start_s, end_s):
+def to_grid(rows, fund, prem, start_s, end_s, metrics=None):
     """rows [(ts, o, h, l, c, v, tb)] hourly -> (bars dict on a regular hourly grid, missing hours). A missing hour is flat
     at the previous close with zero volume. fund [(ts, rate)] is summed into the hour bucket; prem [(ts, close)]."""
     by = {int(r[0]): r for r in rows if start_s <= r[0] < end_s}
@@ -69,6 +75,17 @@ def to_grid(rows, fund, prem, start_s, end_s):
     else:
         pm = {int(t): v for t, v in prem}
         d["prem"] = [pm.get(t, float("nan")) for t in d["ts"]]
+    if metrics is None:
+        d["m"] = None
+    else:
+        d["m"] = {k: [NAN_] * len(d["ts"]) for k in METRIC_KEYS}
+        idx = {t: i for i, t in enumerate(d["ts"])}
+        for r in metrics:                      # rows sorted by time: the last value inside an hour is the hour's value
+            i = idx.get(int(r[0]) // HOUR * HOUR)
+            if i is not None:
+                for k, v in zip(METRIC_KEYS, r[1:]):
+                    if v is not None:
+                        d["m"][k][i] = v
     return d, miss
 
 
@@ -76,7 +93,9 @@ def resample(d, k):
     """k-hour bars aligned to UTC multiples of k hours; only complete blocks."""
     if k == 1:
         return d
-    out = {key: [] for key in d if d[key] is not None}
+    out = {key: [] for key in d if d[key] is not None and key != "m"}
+    if d.get("m") is not None:
+        out["m"] = {k: [] for k in METRIC_KEYS}
     ts = d["ts"]
     n, i = len(ts), 0
     while i + k <= n:
@@ -90,6 +109,9 @@ def resample(d, k):
             out["v"].append(sum(d["v"][i:j]))
             out["tb"].append(sum(d["tb"][i:j]))
             out["fund"].append(sum(d["fund"][i:j]))
+            if d.get("m") is not None:
+                for k in METRIC_KEYS:
+                    out["m"][k].append(d["m"][k][j - 1])
             if d.get("prem") is not None:
                 out["prem"].append(d["prem"][j - 1])
             i = j
@@ -97,10 +119,12 @@ def resample(d, k):
             i += 1
     if d.get("prem") is None:
         out["prem"] = None
+    if d.get("m") is None:
+        out["m"] = None
     return out
 
 
-def load_binance(spec, workers=8):
+def load_binance(spec, workers=16):
     """({sym: bars}, {sym: reason dropped}) for a binance_vision group."""
     from concurrent.futures import ThreadPoolExecutor
     from research.studies import binance_vision as bv
@@ -129,22 +153,31 @@ def load_binance(spec, workers=8):
                 return {"rows": [[r[0], r[4]] for r in rows], "failed": fl}, not fl
             p = _cached(f"bvp|{sym}|{start_s}|{end_s}", prod_p)
             prem, failed = p["rows"], failed + p["failed"]
-        return sym, k["rows"], fund, prem, failed
+        met = None
+        if "metrics" in extras:
+            def prod_m():
+                rows, fl = bv.metrics(sym, start_s, end_s)
+                return {"rows": [[r["ts"]] + [r.get(f) for f in METRIC_FIELDS] for r in rows], "failed": fl}, not fl
+            m = _cached(f"bvm|{sym}|{start_s}|{end_s}", prod_m)
+            met, failed = m["rows"], failed + m["failed"]
+        return sym, k["rows"], fund, prem, failed, met
 
     with ThreadPoolExecutor(workers) as ex:
         loaded = list(ex.map(one, spec["symbols"]))
     bars, dropped = {}, {}
-    for sym, rows, fund, prem, failed in loaded:
+    for sym, rows, fund, prem, failed, met in loaded:
         if failed:
             dropped[sym] = f"download failed {failed[:3]}"
             continue
-        d, miss = to_grid(rows, fund, prem, start_s, end_s)
+        d, miss = to_grid(rows, fund, prem, start_s, end_s, met)
         if d is None:
             dropped[sym] = "no bars"
         elif miss / len(d["ts"]) > MAX_MISSING:
             dropped[sym] = f"missing hours {miss}/{len(d['ts'])}"
         elif fund is not None and len(fund) < 0.9 * len(d["ts"]) / 8:
             dropped[sym] = f"funding settlements {len(fund)} < 90% of {len(d['ts']) / 8:.0f}"
+        elif met is not None and sum(1 for v in d["m"]["lsr_acct"] if v == v) < 0.8 * len(d["ts"]):
+            dropped[sym] = "metrics cover under 80% of hours"
         else:
             bars[sym] = resample(d, sc.TFS[spec["tf"]])
     return bars, dropped
