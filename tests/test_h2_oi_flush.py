@@ -36,6 +36,11 @@ def oi_series(n=1300, dips=(), base=1000.0, usd=1e7, dip=0.8):
     return oi
 
 
+def grid(extra=(), n=1300):
+    """Settled funding every 8 h (rate 0, stamped a few ms after the hour like the real files) plus extra (ts, rate)."""
+    return [(T0 + k * 8 * H + 0.008, 0.0) for k in range(n // 8 + 1)] + list(extra)
+
+
 def btc(n=1300):
     return {T0 + k * H: (100.0, 100.0) for k in range(n)}
 
@@ -44,9 +49,9 @@ class OiFlushLong(unittest.TestCase):
     def test_long_after_down_flush_with_measured_funding(self):
         h1 = build({800: 0.88}, drift_after=0.01)
         e = T0 + 802 * H
-        funding = [(e - 8 * H, 0.0100),            # before entry: not counted
-                   (e + H, 0.0002),                # inside the 1-day hold
-                   (e + 30 * H, 0.0003)]           # day 2: inside the 3-day hold only
+        funding = grid([(e - 8 * H + 1, 0.0100),   # before entry: not counted
+                        (e + H + 1, 0.0002),       # inside the 1-day hold
+                        (e + 30 * H + 1, 0.0003)])  # day 2: inside the 3-day hold only
         r = sc.oi_flush_rows("X", h1, oi_series(dips=[800]), btc(), funding)
         self.assertEqual(len(r), 1)
         self.assertEqual((r[0]["ts"], r[0]["kind"]), (e, "oi_flush_long"))
@@ -55,9 +60,9 @@ class OiFlushLong(unittest.TestCase):
         self.assertAlmostEqual(r[0]["oi_drop"], -0.2)
         self.assertAlmostEqual(r[0]["move"], -0.12)
         x1 = h1[802 + 23][4]
-        self.assertAlmostEqual(r[0]["ret"]["d1"]["net"], x1 / entry - 1 - sc.H2_FEES - 0.0002, places=9)
+        self.assertAlmostEqual(r[0]["ret"]["d1"]["net"], x1 / entry - 1 - sc.H2_FEES - sc.H2_HEDGE_FEES - 0.0002, places=9)
         x3 = h1[802 + 71][4]
-        self.assertAlmostEqual(r[0]["ret"]["d3"]["net"], x3 / entry - 1 - sc.H2_FEES - 0.0005, places=9)
+        self.assertAlmostEqual(r[0]["ret"]["d3"]["net"], x3 / entry - 1 - sc.H2_FEES - sc.H2_HEDGE_FEES - 0.0005, places=9)
         self.assertAlmostEqual(r[0]["ret"]["d7"]["funding"], -0.0005, places=12)
 
     def test_btc_leg_is_subtracted_but_not_in_unhedged(self):
@@ -66,9 +71,9 @@ class OiFlushLong(unittest.TestCase):
         e = T0 + 802 * H
         b[e] = (100.0, 100.0)
         b[T0 + (802 + 23) * H] = (100.0, 102.0)         # BTC +2% close at the d1 exit
-        r = sc.oi_flush_rows("X", h1, oi_series(dips=[800]), b, [])
+        r = sc.oi_flush_rows("X", h1, oi_series(dips=[800]), b, grid())
         entry, x1 = h1[802][1], h1[802 + 23][4]
-        self.assertAlmostEqual(r[0]["ret"]["d1"]["net"], (x1 / entry - 1) - 0.02 - sc.H2_FEES, places=9)
+        self.assertAlmostEqual(r[0]["ret"]["d1"]["net"], (x1 / entry - 1) - 0.02 - sc.H2_FEES - sc.H2_HEDGE_FEES, places=9)
         self.assertAlmostEqual(r[0]["ret"]["d1"]["net_unhedged"], (x1 / entry - 1) - sc.H2_FEES, places=9)
 
 
@@ -76,18 +81,19 @@ class OiFlushShort(unittest.TestCase):
     def test_short_after_up_flush_receives_funding(self):
         h1 = build({800: 1.12}, drift_after=-0.01)
         e = T0 + 802 * H
-        r = sc.oi_flush_rows("X", h1, oi_series(dips=[800]), btc(), [(e + 5 * H, 0.0004)])
+        r = sc.oi_flush_rows("X", h1, oi_series(dips=[800]), btc(), grid([(e + 5 * H + 1, 0.0004)]))
         self.assertEqual(len(r), 1)
         self.assertEqual(r[0]["kind"], "oi_flush_short")
         entry, x1 = h1[802][1], h1[802 + 23][4]
-        self.assertAlmostEqual(r[0]["ret"]["d1"]["net"], 1 - x1 / entry - sc.H2_FEES + 0.0004, places=9)
+        self.assertAlmostEqual(r[0]["ret"]["d1"]["net"], 1 - x1 / entry - sc.H2_FEES - sc.H2_HEDGE_FEES + 0.0004, places=9)
         self.assertLess(1 - x1 / entry, 1.0)                       # short gain is 1 - exit/entry, never above 100%
-        self.assertAlmostEqual(r[0]["ret"]["d7"]["net"], 1 - h1[802 + 167][4] / entry - sc.H2_FEES + 0.0004, places=9)
+        self.assertAlmostEqual(r[0]["ret"]["d7"]["net"], 1 - h1[802 + 167][4] / entry - sc.H2_FEES - sc.H2_HEDGE_FEES + 0.0004, places=9)
 
 
 class OiFlushFilters(unittest.TestCase):
-    def rows(self, h1=None, oi=None, start_ts=0.0, b=None):
-        return sc.oi_flush_rows("X", h1 or build({800: 0.88}), oi or oi_series(dips=[800]), b or btc(), [], start_ts)
+    def rows(self, h1=None, oi=None, start_ts=0.0, b=None, funding=None, data_end=None):
+        return sc.oi_flush_rows("X", h1 or build({800: 0.88}), oi or oi_series(dips=[800]), b or btc(),
+                                grid() if funding is None else funding, start_ts, data_end)
 
     def test_baseline_fires_once(self):
         self.assertEqual(len(self.rows()), 1)
@@ -124,13 +130,41 @@ class OiFlushFilters(unittest.TestCase):
 
     def test_cooldown_is_seven_days(self):
         h1 = build({800: 0.88, 900: 0.88, 1000: 0.88})
-        r = sc.oi_flush_rows("X", h1, oi_series(dips=[800, 900, 1000]), btc(), [])
+        r = sc.oi_flush_rows("X", h1, oi_series(dips=[800, 900, 1000]), btc(), grid())
         self.assertEqual([x["ts"] for x in r], [T0 + 802 * H, T0 + 1002 * H])
 
     def test_holds_cut_off_at_end_of_data(self):
         r = self.rows(h1=build({800: 0.88}, n=802 + 24 * 3 + 5), oi=oi_series(n=1000, dips=[800]))
         self.assertEqual(sorted(r[0]["ret"]), ["d1", "d3"])
         self.assertEqual(self.rows(h1=build({800: 0.88}, n=802 + 10), oi=oi_series(n=1000, dips=[800])), [])
+
+
+    def test_zero_open_interest_snapshot_is_missing_not_a_flush(self):
+        oi = oi_series(dips=[800])
+        oi[T0 + 801 * H] = (0.0, 0.0)
+        self.assertEqual(self.rows(oi=oi), [])
+
+    def test_missing_funding_drops_the_hold_instead_of_zero_funding(self):
+        self.assertEqual(self.rows(funding=[]), [])
+        e = T0 + 802 * H
+        only_first_day = [(e + k * 8 * H + 1, 0.0) for k in range(3)]       # 3 settlements: d1 only
+        self.assertEqual(sorted(self.rows(funding=only_first_day)[0]["ret"]), ["d1"])
+
+    def test_missing_btc_hour_drops_the_hold(self):
+        b = btc()
+        del b[T0 + (802 + 23) * H]
+        self.assertEqual(sorted(self.rows(b=b)[0]["ret"]), ["d3", "d7"])
+
+    def test_delisted_perp_closes_at_last_close_but_window_end_is_dropped(self):
+        n = 802 + 30
+        h1 = build({800: 0.88}, n=n, drift_after=-0.02)
+        end_of_data = T0 + n * H
+        live = self.rows(h1=h1, oi=oi_series(n=1000, dips=[800]), data_end=end_of_data)       # data reaches window end
+        self.assertEqual(sorted(live[0]["ret"]), ["d1"])
+        gone = self.rows(h1=h1, oi=oi_series(n=1000, dips=[800]), data_end=end_of_data + 40 * H)
+        self.assertEqual(sorted(gone[0]["ret"]), ["d1", "d3", "d7"])
+        entry = h1[802][1]
+        self.assertAlmostEqual(gone[0]["ret"]["d7"]["net"] + sc.H2_FEES + sc.H2_HEDGE_FEES, h1[-1][4] / entry - 1, places=9)
 
 
 class HourlyParser(unittest.TestCase):

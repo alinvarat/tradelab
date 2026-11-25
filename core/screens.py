@@ -710,6 +710,7 @@ H2_MOVE = 0.10                  # and the hourly close down (up) >= 10% over the
 H2_MIN_QV = 2e5                 # 30-day (720 h) average hourly perp quote volume before the decision hour (USDT)
 H2_MIN_OI_USD = 1e6             # open interest value 24 h earlier (USDT)
 H2_FEES = 0.004                 # round trip, taker + slippage (perp)
+H2_HEDGE_FEES = 0.001           # round trip on the BTC hedge leg (taker both ways + slippage); BTC hedge funding is ignored
 H2_HOLDS = (1, 3, 7)            # days held
 H2_COOLDOWN_H = 168             # one row per coin per 7 days
 H2_ALPHA = 0.05 / 2             # Bonferroni across the two rules (long after a down flush, short after an up flush)
@@ -736,7 +737,8 @@ def oi_hourly_row(fields):
     return (ts, a, b)
 
 
-def oi_flush_rows(symbol: str, h1: list, oi: dict, btc: dict, funding: list, start_ts: float = 0.0) -> list:
+def oi_flush_rows(symbol: str, h1: list, oi: dict, btc: dict, funding: list, start_ts: float = 0.0,
+                  data_end: float = None) -> list:
     """Perp open-interest flush. h1: hourly perp klines [(open_ts, o, h, l, c, quote_vol)], oldest first; oi: hour
     timestamp -> (open_interest, open_interest_value) snapshot taken at that hour; btc: open_ts -> (o, c) of the BTCUSDT
     perp hours; funding: [(ts, rate)] settled rates (positive = longs pay shorts).
@@ -762,7 +764,8 @@ def oi_flush_rows(symbol: str, h1: list, oi: dict, btc: dict, funding: list, sta
             i += 1
             continue
         now, then = oi.get(D), oi.get(D - 86400)
-        if not (now and then and then[0] > 0 and then[1] >= H2_MIN_OI_USD and now[0] / then[0] - 1 <= -H2_DROP):
+        if not (now and then and now[0] > 0 and now[1] > 0 and then[0] > 0 and then[1] >= H2_MIN_OI_USD
+                and now[0] / then[0] - 1 <= -H2_DROP):      # a zero snapshot is missing data, not a 100% flush
             i += 1
             continue
         e = h1[i + 2]
@@ -776,15 +779,21 @@ def oi_flush_rows(symbol: str, h1: list, oi: dict, btc: dict, funding: list, sta
         ret = {}
         for d in H2_HOLDS:
             j = i + 2 + 24 * d - 1
-            if j >= len(h1) or h1[j][0] - e[0] != (24 * d - 1) * 3600 or h1[j][0] not in btc:
+            if j >= len(h1):
+                if data_end is None or h1[-1][0] + 3600 >= data_end:
+                    continue
+                j = len(h1) - 1
+            if h1[j][0] - e[0] != (j - i - 2) * 3600 or h1[j][0] not in btc:
                 continue
             a, b = bisect.bisect_left(times, e[0]), bisect.bisect_left(times, h1[j][0] + 3600)
+            if b - a < (h1[j][0] + 3600 - e[0]) // (8 * 3600):
+                continue
             paid = sum(r for _, r in fts[a:b])
             if side > 0:
                 coin, bt, fund = h1[j][4] / e[1] - 1, btc[h1[j][0]][1] / btc[e[0]][0] - 1, -paid
             else:
                 coin, bt, fund = short_gain(e[1], h1[j][4]), short_gain(btc[e[0]][0], btc[h1[j][0]][1]), paid
-            ret[f"d{d}"] = {"net": coin - bt - H2_FEES + fund, "net_unhedged": coin - H2_FEES + fund, "funding": fund}
+            ret[f"d{d}"] = {"net": coin - bt - H2_FEES - H2_HEDGE_FEES + fund, "net_unhedged": coin - H2_FEES + fund, "funding": fund}
         if ret:
             out.append({"symbol": symbol, "market": f"{D}{symbol}{side}", "ts": e[0],
                         "kind": "oi_flush_long" if side > 0 else "oi_flush_short",

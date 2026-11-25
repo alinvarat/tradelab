@@ -1779,9 +1779,9 @@ def summarize_selftest_shard(all_rows):
 
 
 def symbols_h2_oi_flush():
-    """Every USDT perp ever listed (S3 listing of futures/um klines, delisted included), minus L8_SKIP and leveraged tokens."""
-    return [x for x in _binance_all_usdt_symbols("futures/um")
-            if x[:-4] not in L8_SKIP and not re.search(r"(UP|DOWN|BULL|BEAR)$", x[:-4])]
+    """Every USDT perp ever listed (S3 listing of futures/um klines, delisted included), minus L8_SKIP. No UP/DOWN name
+    filter: perps have no leveraged tokens and the spot regex would drop real coins (JUP, SYRUP)."""
+    return [x for x in _binance_all_usdt_symbols("futures/um") if x[:-4] not in L8_SKIP]
 
 
 def rows_h2_oi_flush(symbols_slice, workers=16):
@@ -1828,7 +1828,7 @@ def rows_h2_oi_flush(symbols_slice, workers=16):
         if not oi:
             g["symbols_without_oi"] += 1
             return [], g
-        return sc.oi_flush_rows(sym, h1, oi, btc, funding, start_ts=first), g
+        return sc.oi_flush_rows(sym, h1, oi, btc, funding, start_ts=first, data_end=end), g
     rows, gaps = [], {}
     with ThreadPoolExecutor(workers) as ex:
         for r, g in ex.map(one, symbols_slice):
