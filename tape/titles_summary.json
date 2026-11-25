@@ -1,15 +1,15 @@
 {
- "run_utc": "2026-11-25T06:43:13Z",
- "events": 1670,
+ "run_utc": "2026-11-25T07:27:57Z",
+ "events": 1281,
  "by_venue_class": {
   "kucoin": {
-   "listing": 1060,
-   "perp_delist": 185,
-   "delist": 35,
-   "funding_interval": 295
+   "listing": 789,
+   "perp_delist": 172,
+   "delist": 23,
+   "funding_interval": 224
   },
   "okx": {
-   "listing": 53,
+   "listing": 31,
    "delist": 41,
    "perp_delist": 1
   }
@@ -36,7 +36,8 @@
   "coinbase": "no public historic notice feed (blog is behind Cloudflare 403)",
   "bithumb": "notice page 403 (Cloudflare)",
   "upbit": "403 from GitHub runners",
-  "kucoin:latest-announcements": "failed window 2025-08",
+  "kucoin:latest-announcements": "failed window 2025-01",
+  "kucoin:delistings": "failed window 2024-05",
   "bitget": "history limited to the last 30 days by the API"
  },
  "unclassified_samples": [
@@ -50,23 +51,27 @@
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Margin Trading: Interest-Free Event is now live!"
+   "title": "Exclusive Earn Products for New Users And VIPs: 100,000 USDT Worth of Rate-Up Coupons To Be Shared"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Will Suspend NTVRK/USDT and NTVRK/USDC Trading Pairs for Netvrk (NTVRK)"
+   "title": "KuCoin Isolated Margin Adds MANTA Trading Pair"
   },
   {
    "venue": "kucoin",
-   "title": "GT Protocol (GTAI) Listing Campaign, Join To Share $58,000 in GTAI!"
+   "title": "KuCoin Futures Has Launched the USDT-Margined NFP Contract"
   },
   {
    "venue": "kucoin",
-   "title": "Notice of Service Interruption Due to the Maintenance by Our Third-Party Provider, Cointr"
+   "title": "KuCoin Will Adjust Several Trading Pairs"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Convert Adds JUP and KALT"
+   "title": "KuCoin Will Adjustment the Price Increment of LINK3S"
+  },
+  {
+   "venue": "kucoin",
+   "title": "KuCoin Margin Spot Index Components Will Be Changed"
   },
   {
    "venue": "kucoin",
@@ -74,139 +79,159 @@
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Earn Will Delist USDD Products"
+   "title": "Notification of API Service Updates"
   },
   {
    "venue": "kucoin",
-   "title": "Spring Festival Celebration, Grab Your KuCoin Red Envelope and More!"
+   "title": "Lends (LENDS) Listing Campaign, Join To Share $28,000 in LENDS!"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Futures: Year of the Dragon Celebration"
+   "title": "Important Notice : Temporary Issue with KuCard Online Shopping via 3D Secure OTP System"
   },
   {
    "venue": "kucoin",
-   "title": "Chat (DECHAT) Listing Campaign, $58,000 in DECHAT to Giveaway!"
+   "title": "KuCoin Futures Has Launched the USDT-Margined PORTAL Contract"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Affiliate: Invite New Affiliates, Grab Up to 15 USDT"
+   "title": "KuCoin Will Adjust the Price Increment of DOGE3S and SOL3S"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Will Merge the PEPEDOWN and NEAR3S Leverage Tokens"
+   "title": "Notification of Service Disruption Due to Maintenance by Our Third-Party Provider, Cointr"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Affiliate: Invite New Affiliates, Grab Up to 15 USDT"
+   "title": "KuCoin Will Adjust the Price Increment of ADA3S and INJDOWN"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Will Adjust the Tick Size for Certain Spot Trading Pairs"
+   "title": "KuCoin P2P: Buy 1 USDT for 1 INR, 1 NGN, 1 AED, 1 TRY, 1 BDT, or 1 PKR"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Futures Has Launched the USDT-Margined ETHFI Contract"
+   "title": "Deposit USDT on the Asset Hub (Polkadot) Network, Win a Share of $20,000 in DOT!"
   },
   {
    "venue": "kucoin",
-   "title": "Bitcoin Halving: Subscribe to BTC-Related Products to Share $5,000 in BTC"
+   "title": "KuCoin Affiliate: NETVR Trading Campaign, Share 10,000 USDT in NETVR"
   },
   {
    "venue": "kucoin",
-   "title": "Transform Ethereum with Ethena (ENA): Dive into Pre-Market for the First Yield-Bearing Stablecoin!"
+   "title": "KuCoin Futures Loyalty Gratitude Rewards, Win a Share of 200,000 USDT!"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Will Support the AllianceBlock Nexera (NXRA) Rebranding to Nexera Foundation (NXRA)"
+   "title": "3 Million Users Will Receive $20 Million Airdrops"
   },
   {
    "venue": "kucoin",
-   "title": "BlockGames (BLOCK) Listing Campaign, Win a Share of 58,000 USDC！"
+   "title": "DYM Staking is Now Supported on KuCoin Earn"
   },
   {
    "venue": "kucoin",
-   "title": "Foxy (FOXY) Listing Campaign, $28,000 in FOXY to Giveaway!"
+   "title": "Introducing KuCoin GemSPACE: Where All Crypto Gem New Listings Happen"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Will Adjust the Price Increment of SUSHI3L"
+   "title": "KuCoin Convert Adds 5 Tokens"
   },
   {
    "venue": "kucoin",
-   "title": "Playbux (PBUX) is Available on BurningDrop"
+   "title": "KuCoin Futures Will Delist USDT-Margined POGAI Contract"
   },
   {
    "venue": "kucoin",
-   "title": "ST: KuCoin Will Delist a Certain Project"
+   "title": "Subscribe to KuCoin Earn PoS (Proof of Stake) Products, Share 5,000 USDT in Rewards"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin SEPA Top-up and Withdrawal Service Additional KYC Upgrade Notice"
+   "title": "Doge to the moon! Trade Memecoins to Win up to 90,000 USDT!"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Convert Adds MSN"
+   "title": "KuCoin Convert Adds SAFE"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Futures Has Launched the USDT-Margined KMNO Contract"
+   "title": "KuCoin's GBP Withdrawal and GBP Balance Trading Services Will Undergo Maintenance"
   },
   {
    "venue": "kucoin",
-   "title": "ATEM Quiz Campaign Join To Get a Share of $1,000 in ATEM!"
+   "title": "Token 2049 Carnival，Win a Share of a $50,000 Prize Pool"
   },
   {
    "venue": "kucoin",
-   "title": "Lifeform (LFT) Quiz Campaign: Learn and Earn a Share of 100,000 LFT!"
+   "title": "KuCoin Futures Has Launched the USDT-Margined REZ Contract"
   },
   {
    "venue": "kucoin",
-   "title": "Cross The Ages (CTA) is Available on BurningDrop"
+   "title": "Notification of KuCoin Spot API Update"
   },
   {
    "venue": "kucoin",
-   "title": "Near USD Coin (USDC) Is Now Supported on KuCoin"
+   "title": "KuCoin Convert Adds HBAR"
   },
   {
    "venue": "kucoin",
-   "title": "VAI Flexible Promotion, Enjoy an APR of 24%!​"
+   "title": "KuCoin Will Adjust the Price Increment of TRBDOWN"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Convert Adds NOT"
+   "title": "KuCoin Earn Will Be Launching 8 New Saving Coins"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Will Support the ALEX Lab (ALEX) Token Swap"
+   "title": "PEPE is Now Supported on KuCoin Dual Investment"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Will Update the Polyhedra Network's Trading Ticker from ZK to ZKJ"
+   "title": "SCPT Trading Campaign: Trade and Share $10,000 in SCPT"
   },
   {
    "venue": "kucoin",
-   "title": "NexGami (NEXG) Listing Campaign, $33,000 in NEXG to Giveaway!"
+   "title": "KuCoin Futures Has Launched the USDT-Margined BRETT Contract"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Trading Bot Will Delist FET, AGIX and OCEAN Projects"
+   "title": "Temporary Suspension of SEPA Withdrawal Services on KuCoin Due to Maintenance"
   },
   {
    "venue": "kucoin",
-   "title": "Pre-Market Closure and Delivery Schedule for ionet (IO)"
+   "title": "The KuCoin Leveraged Tokens System Upgrade on June 5, 2024 Extension Notification"
   },
   {
    "venue": "kucoin",
-   "title": "Postponement of ionet (IO) Delivery Schedule"
+   "title": "【Updated】 KuCoin Futures Will Delist USDT-Margined FETUSDT,  AGIXUSDT and OCEANUSDT Perpetual Contracts"
   },
   {
    "venue": "kucoin",
-   "title": "Subscribe to Earn Products via API，Win Up to 1,000 USDT & VIP Voucher"
+   "title": "KuCoin Futures will Update the Tick Size for the VGXUSDT Perpetual Contract on June 14, 2024"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Futures Has Launched the USDT-Margined ZRO Contract"
+   "title": "KuCoin Futures Has Launched the COIN-Margined BTC Quarterly 0927 Delivery Contract"
+  },
+  {
+   "venue": "kucoin",
+   "title": "KuCoin Affiliate: Invite New users, Grab Up to 15 USDT"
+  },
+  {
+   "venue": "kucoin",
+   "title": "Artfi (ARTFI) Listing Campaign, $54,000 in ARTFI to Giveaway!"
+  },
+  {
+   "venue": "kucoin",
+   "title": "KuCoin Futures Will Update the Tick Size for Multiple USDT-Margined Perpetual Contracts on June 21, 2024"
+  },
+  {
+   "venue": "kucoin",
+   "title": "Pre-Market Closure and Delivery Schedule for LayerZero (ZRO)"
+  },
+  {
+   "venue": "kucoin",
+   "title": "KuCoin Isolated Margin Adds the ZRO, LISTA Trading Pairs"
   },
   {
    "venue": "kucoin",
@@ -214,27 +239,7 @@
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Will Adjust Several Spot Trading Pairs"
-  },
-  {
-   "venue": "kucoin",
-   "title": "KuCoin Futures Has Launched the USDT-Margined BLAST Contract"
-  },
-  {
-   "venue": "kucoin",
-   "title": "KuCoin Convert Adds BLAST"
-  },
-  {
-   "venue": "kucoin",
-   "title": "Teleport System Token (TST) Listing Campaign, $29,500 in TST to Giveaway!"
-  },
-  {
-   "venue": "kucoin",
-   "title": "ST: KuCoin Will Delist a Certain Project"
-  },
-  {
-   "venue": "kucoin",
-   "title": "KuCoin Futures Has Launched the USDT-Margined CVX Contract"
+   "title": "KuCoin Isolated Margin Adds the Blast (BLAST) Trading Pair"
   },
   {
    "venue": "kucoin",
@@ -242,15 +247,19 @@
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Has Completed the Token Migration of Synternet (NOIA) to Synternet (SYNT)"
+   "title": "KuCoin Has Completed the Token Swap and Rebranding of ATOR Protocol (ATOR) to ANyONe Protocol (ANYONE)"
   },
   {
    "venue": "kucoin",
-   "title": "Futures Trading Week: Win Up to 5,000 USDT and Join Our Vip Clone Plan!"
+   "title": "KuCoin Futures Has Launched the USDT-Margined PONKE Contract"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Community Marathon | Join to Win $60,000!"
+   "title": "KuCard Celebrates the Olympics 2024:  Win a Free Trip to Italy! "
+  },
+  {
+   "venue": "kucoin",
+   "title": "KuCoin Trading Bot Will Delist the ZKX/USDT Trading Pair"
   },
   {
    "venue": "kucoin",
@@ -258,27 +267,19 @@
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Has Temporarily Closed the Deposit Service of Meson.Network(MSN)"
+   "title": "KuCoin Futures Has Launched the USDT-Margined MAX Contract"
   },
   {
    "venue": "kucoin",
-   "title": "Earn Wednesday Week 60: USDT, APT& MATIC"
+   "title": "Upcoming System Update for Margin Trading, Trading Bots, Crypto Lending Pro, Leveraged Tokens, and Convert"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Affiliate Event: Claim Your Share of 1 Million USDT with Prizes Up to 10,000 USDT"
+   "title": "KuCoin Trading Bot Will Delist the BLOCKUSDT Perpetual Contract"
   },
   {
    "venue": "kucoin",
-   "title": "KuCoin Trading Bot Will Delist the Frontier (FRONT) Project"
-  },
-  {
-   "venue": "kucoin",
-   "title": "The KuCoin Weekend Half-Price Promotion is coming in a big way, please stay tuned!"
-  },
-  {
-   "venue": "kucoin",
-   "title": "deBridge (DBR) is on KuCoin Pre-Market: Strategize Before the Market Opens"
+   "title": "KuCoin Trading Bot Will Delist the KMNOUSDT, DMAILUSDT and VENOMUSDT Perpetual Contracts"
   }
  ]
 }
