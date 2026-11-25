@@ -70,7 +70,7 @@ def fetch_day(sym, d):
     return b"".join(recs), ("ok" if recs else "closed")
 
 
-def fetch_range(sym, start, end, path, workers=6):
+def fetch_range(sym, start, end, path, workers=6, daydir=None):
     """Download every Mon-Fri and Sunday (UTC) from start to end (dates, inclusive) into one gzip file; returns dict(days, ok, closed, fail)."""
     from concurrent.futures import ThreadPoolExecutor
     days = []
@@ -82,7 +82,15 @@ def fetch_range(sym, start, end, path, workers=6):
     t0, done = time.time(), [0]
 
     def one(x):
-        r = fetch_day(sym, x)
+        dp = os.path.join(daydir, f"{sym}_{x.isoformat()}.bin") if daydir else None
+        if dp and os.path.exists(dp):                  # finished earlier (cache of a failed or cancelled job): reuse
+            b = open(dp, "rb").read()
+            r = (b, "ok" if b else "closed")
+        else:
+            r = fetch_day(sym, x)
+            if dp and r[1] != "fail":
+                os.makedirs(daydir, exist_ok=True)
+                open(dp, "wb").write(r[0])
         done[0] += 1
         if done[0] % 10 == 0 or done[0] == len(days):
             log(f"{sym} {start}..{end}: {done[0]}/{len(days)} days, {time.time() - t0:.0f}s, last status {r[1]}")

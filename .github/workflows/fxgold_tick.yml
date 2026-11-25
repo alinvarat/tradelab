@@ -39,6 +39,9 @@ jobs:
       - name: Probe
         if: steps.m.outputs.mode == 'probe'
         run: python research/studies/fxgold_probe.py | tee /tmp/probe.json
+      - name: Probe 3
+        if: steps.m.outputs.mode == 'probe3'
+        run: python -m research.studies.fxgold_probe3 | tee /tmp/probe.json
       - name: Probe 2
         if: steps.m.outputs.mode == 'probe2'
         run: python -m research.studies.fxgold_probe2 | tee /tmp/probe.json
@@ -86,9 +89,10 @@ jobs:
     needs: plan
     if: needs.plan.outputs.fetch != ''
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 350
     strategy:
       fail-fast: false
+      max-parallel: 3
       matrix:
         c: ${{ fromJSON(needs.plan.outputs.fetch) }}
     steps:
@@ -101,9 +105,25 @@ jobs:
         with:
           path: /tmp/fx
           key: fxchunk-v1-${{ matrix.c.sym }}-${{ matrix.c.chunk }}
+      - name: Restore finished days of an earlier attempt
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/fxd
+          key: fxday-v1-${{ matrix.c.sym }}-${{ matrix.c.chunk }}-none
+          restore-keys: fxday-v1-${{ matrix.c.sym }}-${{ matrix.c.chunk }}-
       - name: Fetch chunk
         if: steps.cache.outputs.cache-hit != 'true'
+        env:
+          FXGOLD_DAYDIR: /tmp/fxd
         run: python -m research.studies.fxgold_tick fetch ${{ matrix.c.sym }} ${{ matrix.c.chunk }} ${{ matrix.c.start }} ${{ matrix.c.end }} /tmp/fx
+      - name: Save finished days
+        if: always() && steps.cache.outputs.cache-hit != 'true'
+        continue-on-error: true
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/fxd
+          key: fxday-v1-${{ matrix.c.sym }}-${{ matrix.c.chunk }}-${{ github.run_id }}-${{ github.run_attempt }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
