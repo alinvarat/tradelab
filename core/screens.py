@@ -843,3 +843,135 @@ def oi_flush_summary(all_rows: list) -> dict:
                                             / max(1, sum(len(r["ret"]) for r in rows)), 5),
                       "passed": bool(gates) and all(gates.values())}
     return summ
+
+
+# ------------------------------------------------------------------ H1: perp-vs-index snapback (RESULTS.md "H1 screen")
+BS_STEP = 300                       # 5-minute bars
+BS_PREM, BS_EXIT_PREM = 0.005, 0.001
+BS_LAG_BARS, BS_LAG_GAP = 6, 0.002  # perp must have moved 0.2 pp more than spot over the last 30 minutes
+BS_MAX_BARS = 48                    # 4 hours
+BS_MIN_QV = 100_000.0               # perp quote volume over the last 12 bars (1 hour)
+BS_COST = 0.002                     # 0.05% fee + 0.05% slippage per side
+BS_KINDS = {1: "long_discount", -1: "short_premium"}
+BS_ALPHA = 0.05 / 2                 # Bonferroni across the 2 rules
+
+
+def basis_window_months(t: float) -> set:
+    """(year, month) of every file an event decided at bar-open `t` can touch: 24 h back (funding check, lookbacks)
+    to the 4-hour exit fill."""
+    a, b = time.gmtime(t - 86400), time.gmtime(t + (BS_MAX_BARS + 2) * BS_STEP)
+    return {(a.tm_year, a.tm_mon), (b.tm_year, b.tm_mon)}
+
+
+def basis_snap_rows(symbol: str, side: int, prem: dict, perp: dict, spot: dict, funding: list, blocked=()) -> tuple:
+    """Perp-below-index snapback (side +1, buy) or perp-above-index (side -1, short). Pure, no network.
+    prem: {bar_open_s: premium-index close}; perp: {bar_open_s: (open, close, quote_volume)} of the USDT perp;
+    spot: {bar_open_s: close} of the same-name spot pair; funding: [(settle_ts, rate)] (positive = longs pay shorts);
+    blocked: {(year, month)} whose files failed to download (events touching them are dropped, not guessed).
+    Returns (rows, stats). The decision is taken at the close of bar t (premium and the 30-minute perp-minus-spot
+    return known), entry is the perp open of the next bar, the exit signal is a premium close back inside
+    BS_EXIT_PREM (fill at the next open) or, failing that, the open 48 bars after the entry bar."""
+    import bisect
+    fts = sorted(funding)
+    times = [x[0] for x in fts]
+    stats = {k: 0 for k in ("candidates", "busy", "blocked", "incomplete", "spot_lag", "illiquid", "no_funding", "events")}
+    rows, free_at = [], 0
+    for t in sorted(prem):
+        p = prem[t]
+        if not (p <= -BS_PREM if side > 0 else p >= BS_PREM):
+            continue
+        stats["candidates"] += 1
+        entry_ts = t + BS_STEP
+        if entry_ts < free_at:
+            stats["busy"] += 1
+            continue
+        if blocked and basis_window_months(t) & set(blocked):
+            stats["blocked"] += 1
+            continue
+        back = [t - k * BS_STEP for k in range(12)]
+        if any(b not in perp for b in back) or t not in spot or (t - BS_LAG_BARS * BS_STEP) not in spot:
+            stats["incomplete"] += 1
+            continue
+        lag = (perp[t][1] / perp[t - BS_LAG_BARS * BS_STEP][1] - 1) - (spot[t] / spot[t - BS_LAG_BARS * BS_STEP] - 1)
+        if not (lag <= -BS_LAG_GAP if side > 0 else lag >= BS_LAG_GAP):
+            stats["spot_lag"] += 1
+            continue
+        if sum(perp[b][2] for b in back) < BS_MIN_QV:
+            stats["illiquid"] += 1
+            continue
+        if any(t + j * BS_STEP not in prem for j in range(1, BS_MAX_BARS + 1)) or \
+                any(t + j * BS_STEP not in perp for j in range(1, BS_MAX_BARS + 2)):
+            stats["incomplete"] += 1
+            continue
+        k0 = bisect.bisect_left(times, entry_ts - 86400)
+        if k0 >= len(times) or times[k0] >= entry_ts:
+            stats["no_funding"] += 1            # no settled funding in the 24 h before: the perp was not live
+            continue
+        jx, signalled = BS_MAX_BARS, False
+        for j in range(1, BS_MAX_BARS + 1):
+            q = prem[t + j * BS_STEP]
+            if (q >= -BS_EXIT_PREM) if side > 0 else (q <= BS_EXIT_PREM):
+                jx, signalled = j, True
+                break
+        entry = perp[entry_ts][0]
+        exit_ts = t + (jx + 1) * BS_STEP
+        end_ts = t + (BS_MAX_BARS + 1) * BS_STEP
+        ret = {}
+        for name, e_ts in (("snap", exit_ts), ("timed", end_ts)):
+            px = perp[e_ts][0]
+            paid = sum(r for _, r in fts[bisect.bisect_left(times, entry_ts):bisect.bisect_left(times, e_ts)])
+            gross = (px / entry - 1) if side > 0 else short_gain(entry, px)
+            ret[name] = {"net": gross - BS_COST - side * paid, "gross": gross, "funding": paid}
+        rows.append({"ts": entry_ts, "symbol": symbol, "market": "perp", "kind": BS_KINDS[side], "side": side,
+                     "premium": p, "lag": lag, "entry": entry, "exit": perp[exit_ts][0], "hold_bars": jx,
+                     "by_premium": signalled,
+                     "ret": ret})
+        stats["events"] += 1
+        free_at = exit_ts
+    return rows, stats
+
+
+def basis_snap_summary(rows: list, bounds: dict, weeks: float) -> dict:
+    """Verdict for each line (pass rule in RESULTS.md 'H1 screen'): judge passed AND validation block p < BS_ALPHA AND
+    double-cost validation mean > 0 AND >= 3 events a week. `timed` (always exit at 4 h) is a control, not the verdict."""
+    out = {}
+    for side, kind in BS_KINDS.items():
+        r = [x for x in rows if x.get("kind") == kind]
+        n_in = sum(1 for x in r if split_of(x["ts"], bounds) != "out")
+        per_week = n_in / weeks
+        base = judge(r, ["snap"], bounds)
+        dbl = judge(r, ["snap"], bounds, cost_extra=BS_COST)
+        timed = judge(r, ["timed"], bounds)
+        val, dval = base["table"]["snap"]["validation"], dbl["table"]["snap"]["validation"]
+        bonf = val["p"] is not None and val["p"] < BS_ALPHA
+        dbl_ok = dval["mean"] is not None and dval["mean"] > 0
+        if base["verdict"] == "no data" or base["verdict"].startswith("invalid"):
+            verdict = base["verdict"]
+        elif base["verdict"] == "passed" and bonf and dbl_ok and per_week >= 3:
+            verdict = "passed"
+        elif base["verdict"] == "killed" or not dbl_ok or per_week < 3:
+            verdict = "killed"
+        else:
+            verdict = "inconclusive"
+        years = {}
+        for x in r:
+            y = time.strftime("%Y", time.gmtime(x["ts"]))
+            years.setdefault(y, []).append(x["ret"]["snap"]["net"])
+        by_day, by_sym = {}, {}
+        for x in r:
+            by_day[day_key(x)] = by_day.get(day_key(x), 0) + 1
+            by_sym[x["symbol"]] = by_sym.get(x["symbol"], 0) + 1
+        top5 = sum(sorted(by_sym.values())[-5:])
+        out[kind] = {
+            "verdict": verdict, "rows": len(r), "per_week": round(per_week, 2), "bonferroni_alpha": BS_ALPHA,
+            "validation_p_below_alpha": bonf, "double_cost_validation_positive": dbl_ok,
+            "base": base, "double_cost": dbl, "control_timed_exit": timed,
+            "by_year": {y: {"n": len(v), "mean": round(sum(v) / len(v), 5), "hit": round(sum(1 for z in v if z > 0) / len(v), 3)}
+                        for y, v in sorted(years.items())},
+            "share_exit_by_premium": round(sum(1 for x in r if x["by_premium"]) / len(r), 3) if r else None,
+            "mean_funding": round(sum(x["ret"]["snap"]["funding"] for x in r) / len(r), 6) if r else None,
+            "mean_gross": round(sum(x["ret"]["snap"]["gross"] for x in r) / len(r), 5) if r else None,
+            "busiest_day_share": round(max(by_day.values()) / len(r), 3) if r else None,
+            "top5_symbol_share": round(top5 / len(r), 3) if r else None,
+            "symbols": len(by_sym)}
+    return out
