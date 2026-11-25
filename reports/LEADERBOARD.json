@@ -100,16 +100,116 @@
      "vol_cost": 27.63
     }
    ]
+  },
+  {
+   "family": "price_action1",
+   "version": 1,
+   "config_sha256": "4e953419ea7adee4218eae60bf3e2ed2efb4bb1a97ca3e73689ecdfd25afce66",
+   "config_commit": "d66f4b4fa6fe6831464039919a49d267ecda3b13",
+   "preregistered": true,
+   "run_id": "45564746426",
+   "sha": "d66f4b4fa6fe6831464039919a49d267ecda3b13",
+   "utc": "2026-11-25T07:02:12Z",
+   "n_rules": 76,
+   "n_gate_dropped": 76,
+   "n_evaluated": 0,
+   "n_errors": 0,
+   "n_passed": 0,
+   "holm_m": 0,
+   "bonferroni_bar": null,
+   "top": [],
+   "near_miss": [
+    {
+     "id": "pd_sweep_1h[exit.time=24,exit.stop.atr=2,exit.target=None]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.0065,
+     "train_mean": -0.000357,
+     "n_train": 4860,
+     "vol_cost": 31.5
+    },
+    {
+     "id": "pd_sweep_4h[exit.time=6,exit.stop.atr=2,exit.target={\"atr\":3}]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.0149,
+     "train_mean": -0.000667,
+     "n_train": 3937,
+     "vol_cost": 35.09
+    },
+    {
+     "id": "pd_sweep_4h[exit.time=6,exit.stop.atr=2,exit.target=None]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.0321,
+     "train_mean": -0.001016,
+     "n_train": 3784,
+     "vol_cost": 35.73
+    },
+    {
+     "id": "pd_sweep_4h[exit.time=12,exit.stop.atr=2,exit.target={\"atr\":3}]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.0413,
+     "train_mean": -0.00174,
+     "n_train": 2558,
+     "vol_cost": 44.3
+    },
+    {
+     "id": "pd_sweep_4h[exit.time=6,exit.stop.atr=1.5,exit.target={\"atr\":3}]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.042,
+     "train_mean": -0.001016,
+     "n_train": 4256,
+     "vol_cost": 33.12
+    },
+    {
+     "id": "pd_sweep_4h[exit.time=12,exit.stop.atr=2,exit.target=None]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.0518,
+     "train_mean": -0.002117,
+     "n_train": 2318,
+     "vol_cost": 45.91
+    },
+    {
+     "id": "pd_sweep_4h[exit.time=6,exit.stop.atr=1.5,exit.target=None]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.0519,
+     "train_mean": -0.001183,
+     "n_train": 4076,
+     "vol_cost": 33.96
+    },
+    {
+     "id": "pd_sweep_1h[exit.time=24,exit.stop.atr=1.5,exit.target=None]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.0621,
+     "train_mean": -0.00096,
+     "n_train": 5598,
+     "vol_cost": 29.51
+    },
+    {
+     "id": "pd_sweep_4h[exit.time=6,exit.stop.atr=1,exit.target=None]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.0835,
+     "train_mean": -0.001285,
+     "n_train": 4775,
+     "vol_cost": 31.47
+    },
+    {
+     "id": "pd_sweep_4h[exit.time=6,exit.stop.atr=1,exit.target={\"atr\":3}]",
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "x": -0.1098,
+     "train_mean": -0.001356,
+     "n_train": 5017,
+     "vol_cost": 29.64
+    }
+   ]
   }
  ],
  "top10": [],
  "totals": {
-  "n_rules": 309,
-  "n_gate_dropped": 309,
+  "n_rules": 385,
+  "n_gate_dropped": 385,
   "n_evaluated": 0,
   "n_errors": 0,
   "n_passed": 0,
-  "runs": 1
+  "runs": 2
  },
  "updated": "2026-11-25T06:58:55Z"
 }
