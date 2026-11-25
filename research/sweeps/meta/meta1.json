@@ -1,0 +1,4 @@
+{"family":"meta1","version":1,"kind":"meta","window":60,"bins":10,"draws":2000,"seed":20261125,"min_trades":30,"alpha":0.00625,
+ "splits":{"train":["2020-01-01","2024-07-01"],"validation":["2024-07-01","2025-07-01"],"test":["2025-07-01","2026-12-01"]},
+ "pools":["sweep","event","poly","all"],
+ "sweep_rows":{"exclude_studies":["sweep_fundwin1"],"require_substring":{"sweep_fundwin2":"sig=prev"}}}
