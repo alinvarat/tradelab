@@ -139,3 +139,45 @@ def study_probe_thin_b3(_symbols):
 
 
 STUDIES["probe_thin_b3"] = study_probe_thin_b3
+
+
+def study_probe_thin_b4(_symbols):
+    """Fourth probe: Kalshi usable markets only (settled, non-combo, mutually exclusive events with volume)."""
+    out = {}
+    base = "https://api.elections.kalshi.com/trade-api/v2"
+    ev = http(f"{base}/events?status=settled&limit=200&with_nested_markets=true&min_close_ts=1788000000")[1]
+    evs = [e for e in (ev.get("events") if isinstance(ev, dict) else []) if e.get("mutually_exclusive")]
+    cand = []
+    for e in evs:
+        mk = [m for m in e.get("markets") or [] if float(m.get("volume_fp") or 0) > 0]
+        if len(mk) >= 3:
+            cand.append((e, mk))
+    out["mutex_with_volume"] = len(cand)
+    out["mutex_examples"] = [{"event": e["event_ticker"], "title": e.get("title"), "n_markets": len(e.get("markets") or []),
+                              "vols": [m.get("volume_fp") for m in mk][:6], "results": [m.get("result") for m in mk][:6]} for e, mk in cand[:5]]
+    if cand:
+        e, mk = cand[0]
+        m = mk[0]
+        out["market_fields"] = {k: m.get(k) for k in ("ticker", "volume_fp", "open_interest_fp", "result", "close_time", "settlement_ts", "yes_bid_dollars", "yes_ask_dollars", "last_price_dollars", "open_time")}
+        ser = e["series_ticker"]
+        for nm, u in (("trades", f"{base}/markets/trades?ticker={m['ticker']}&limit=100"),
+                      ("candles_live", f"{base}/series/{ser}/markets/{m['ticker']}/candlesticks?start_ts={int(time.time()) - 60 * 86400}&end_ts={int(time.time())}&period_interval=60"),
+                      ("hist_trades", f"{base}/historical/trades?ticker={m['ticker']}&limit=100"),
+                      ("hist_market", f"{base}/historical/markets/{m['ticker']}")):
+            st_, body, sec = http(u)
+            out[nm] = {"status": st_, "shape": shape(body) if isinstance(body, (dict, list)) else body}
+            if isinstance(body, dict) and body.get("candlesticks"):
+                out[nm]["candle0"] = body["candlesticks"][0]
+            if isinstance(body, dict) and body.get("trades"):
+                out[nm]["trade0"] = body["trades"][0]
+    # older settled events through the historical cutoff
+    he = http(f"{base}/historical/markets?limit=1000&event_ticker=")[1]
+    out["hist_markets_probe"] = shape(he) if isinstance(he, (dict, list)) else he
+    old = http(f"{base}/events?status=settled&limit=50&with_nested_markets=true&max_close_ts=1780000000")[1]
+    oe = old.get("events") if isinstance(old, dict) else []
+    out["settled_events_before_cutoff_n"] = len(oe)
+    out["settled_before_cutoff_sample"] = [(e.get("event_ticker"), e.get("mutually_exclusive")) for e in oe[:8]]
+    return {"line": "probe_thin_b4", **out}, []
+
+
+STUDIES["probe_thin_b4"] = study_probe_thin_b4
