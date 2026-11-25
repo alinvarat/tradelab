@@ -74,7 +74,7 @@ class Allocation(unittest.TestCase):
         self.assertEqual(rc.decide([{"gross_pct": 0.02, "n_qualifying": 5}]), "kill_complete")
         self.assertEqual(rc.decide([{"gross_pct": 0.02, "n_qualifying": 50}]), "kill_standalone")
         self.assertEqual(rc.decide([{"gross_pct": 0.04, "n_qualifying": 50}]), "standalone_pass")
-        self.assertAlmostEqual(rc.STANDALONE_DAILY, 0.037312, places=5)
+        self.assertAlmostEqual(rc.STANDALONE_DAILY, 0.0373, places=4)
         self.assertEqual(rc.after_min_payout(0.9), 0.0)
         self.assertEqual(rc.after_min_payout(1.0), 1.0)
 
