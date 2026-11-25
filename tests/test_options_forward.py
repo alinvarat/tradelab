@@ -106,6 +106,37 @@ class Account(unittest.TestCase):
         self.assertAlmostEqual(r["end_equity_usd"], 80 + n * (30 - of.FEE))
 
 
+class WebullVariant(unittest.TestCase):
+    def test_default_costs_are_unchanged_and_variant_is_cheaper(self):
+        self.assertAlmostEqual(of.trade_return(1.0, 2.0), (200 - 0.65) / (100 + 0.65) - 1)    # locked model untouched
+        wb = {"buy_fee": of.webull_buy_fee, "sell_fee": of.webull_sell_fee}
+        self.assertGreater(of.trade_return(1.0, 2.0, **wb), of.trade_return(1.0, 2.0))
+        cost = of.webull_buy_fee(1.0)
+        proceeds_fee = of.webull_sell_fee(2.0)
+        self.assertAlmostEqual(of.trade_return(1.0, 2.0, **wb), (200 - proceeds_fee) / (100 + cost) - 1)
+        self.assertGreater(of.webull_sell_fee(0.0), 0)          # a zero bid still pays the per-contract fees
+
+    def test_account_with_webull_fees(self):
+        trades = [{"entry_ts": 1, "exit_ts": 2, "entry_ask": 0.10, "exit_bid": 0.30}]
+        r = of.simulate_account(trades, start=100, whole_contracts=False,
+                                buy_fee=of.webull_buy_fee, sell_fee=of.webull_sell_fee)
+        unit = 10 + of.webull_buy_fee(0.10)
+        n = 20 / unit
+        self.assertAlmostEqual(r["end_equity_usd"], 80 + n * (30 - of.webull_sell_fee(0.30)))
+        self.assertGreater(r["end_equity_usd"], of.simulate_account(trades, start=100, whole_contracts=False)["end_equity_usd"])
+
+    def test_summary_reports_variant_without_touching_verdict(self):
+        start = of.ALL_ITEMS_START_TS
+        model = {"entry_ts": start, "exit_ts": start + 86400, "entry_ask": 0.20, "exit_bid": 0.40}
+        trade = {"symbol": "AAA", "ts": start, "model": model, "control": {**model, "exit_bid": 0.10}}
+        out = runner.protocol_summary({"open": [], "closed": [trade], "calls": []})
+        self.assertIn("webull_cost_variant", out)
+        v = out["webull_cost_variant"]
+        self.assertGreater(v["account_whole_contracts"]["end_equity_usd"], out["account_whole_contracts"]["end_equity_usd"])
+        self.assertTrue(v["verdict"]["verdict"].startswith("collecting"))
+        self.assertTrue(out["verdict"]["verdict"].startswith("collecting"))
+
+
 class AccountOrder(unittest.TestCase):
     def test_exit_cash_funds_an_entry_at_the_same_time(self):
         trades = [{"entry_ts": 1, "exit_ts": 5, "entry_ask": 0.2, "exit_bid": 0.4},
