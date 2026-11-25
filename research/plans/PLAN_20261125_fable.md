@@ -44,7 +44,10 @@ Status: plan only. Each component still needs its own locked protocol and forwar
 ## 5. Process changes
 Keep every per-event row (jsonl.gz on a data branch); automatic stage-0 screen; discovery at family level with BH q = 0.10 plus a forward e-process; rolling 6-month folds; robust horizon picks (trim the best events); gate on x >= 0.2 instead of events a week; assume 5-minute latency; kill rule: one run and one fix per family; 20 parallel paper ledgers driven by the keeper.
 
-## 6. Implementation record (this PR line `line/event-book`)
-- `research/studies/event_rows.py`, `.github/workflows/event_book.yml` (mode rows): per-event rows for L1, L1f, L1g on branch `data/event-rows`.
-- `research/studies/protocol_notice_tape_20261125.md` + `core/notice_tape.py`: family-1 screen, spec committed before the run.
-- `research/studies/protocol_event_book_20261125.md` + `core/event_book.py`: forward book, dispatched by the keeper.
+## 6. Implementation record and results (2026-11-25, PRs #189, #192, #193 and later; branches `line/event-book-*`)
+- Rows (run 45562238880, branch `data/event-rows`, `rows/*.jsonl.gz` with 240-minute paths): 4 h net return after 0.6% round trip, coin minus BTC.
+  l1f n 105, mean +14.5%, sd 18.1%, s 0.80, 3.09 events a month, x = 1.98 (2.24 with the 25% stop on 1-minute closes; train 1.79, validation 0.09, test 2.11).
+  l1 n 31, mean +48% but sd 193% (ACT +2,073%), s 0.25, 0.91 a month, x = 0.057 (validation s 0.52, x 0.10). l1g n 13 (test split only), s 0.99, 0.38 a month, x = 0.37.
+  Sum of x = 2.41 in-sample (not tradable as such: l1g has no OKX perp, l1 is outlier-driven); a forward test is the only confirmation.
+- Notice tape (run 45567857959, `data/event-rows/tape/`): 1,281 classified events from KuCoin (6,823 notices, 2024-01 on) and OKX (131 notices, only from 2025-06); Bybit, Coinbase, Bithumb, Upbit gaps (403 / no feed), Bitget serves 30 days only. 149 events had OKX perp candles (judged family), 290 only Binance USDT-M (descriptive). Family of 192 cells: **no cell passes**; 72 cells had n >= 30, 22 of them a positive mean, the best raw one-sided p was 0.12 (funding-interval change, short 72 h), Holm-adjusted 1.0. Monitoring-tag notices: none found; spot delist and perp-delist notices: 1 and 3 OKX-priced events (too few; KuCoin perp-delist shorts priced on Binance USDT-M lost 1.1% a trade).
+- Forward event book: protocol `research/studies/protocol_event_book_20261125.md` (SHA-locked), components l1f weight 1.0 and l1_4h weight 0.0631, OKX swaps, started 2026-11-25 12:00 UTC, dispatched by the keeper.

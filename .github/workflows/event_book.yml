@@ -155,6 +155,6 @@ jobs:
           fi
           cp /tmp/eb/state.json . && cp /tmp/eb/trades.jsonl . 2>/dev/null || true
           cp /tmp/eb/summary.json . 2>/dev/null || true
-          git add -A state.json trades.jsonl summary.json 2>/dev/null || git add state.json
+          git add -A
           git commit -qm "Event book: $(date -u +%FT%TZ)" || echo "nothing new"
-          git push -q origin data/event-book
+          for i in 1 2 3; do git push -q origin data/event-book && break; git fetch -q origin data/event-book; git rebase -q origin/data/event-book || git rebase --abort; done
