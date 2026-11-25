@@ -137,6 +137,9 @@ def validate(rule):
         if name in se.NEEDS_FUNDING and ("funding" not in extras or data["source"] != "binance_vision"
                                          or data.get("market", "futures/um") != "futures/um"):
             bad(f"{name} needs data.extras funding on futures/um")
+        if name in se.NEEDS_METRICS and ("metrics" not in extras or c.get("m") not in se.METRIC_NAMES
+                                         or data["source"] != "binance_vision"):
+            bad(f"{name} needs data.extras metrics and m in {se.METRIC_NAMES}")
         if name in se.NEEDS_PREMIUM and ("premium" not in extras or data["source"] != "binance_vision"):
             bad(f"{name} needs data.extras premium")
     tr = rule.get("trade")

@@ -82,6 +82,7 @@ class Features(unittest.TestCase):
         da, db = from_closes(a), from_closes(b)
         da["fund"] = [0.0001 if i % 8 == 0 else 0.0 for i in range(n)]
         da["prem"] = [0.001 * math.sin(i / 7) for i in range(n)]
+        da["m"] = {k: [1.0 + 0.5 * math.sin(i / (5 + j)) for i in range(n)] for j, k in enumerate(se.METRIC_NAMES)}
         return se.Ctx({"A": da, "B": db})
 
     CONDS = [{"f": "ret", "n": 3}, {"f": "zret", "n": 2, "vol_n": 20}, {"f": "atrp", "n": 10}, {"f": "atr_ratio", "a": 3, "b": 20},
@@ -91,12 +92,17 @@ class Features(unittest.TestCase):
              {"f": "fundlast"}, {"f": "fsum", "n": 8}, {"f": "fz", "n": 30}, {"f": "prem"}, {"f": "premz", "n": 20},
              {"f": "xret", "ref": "B", "n": 2}, {"f": "xzret", "ref": "B", "n": 2, "vol_n": 20}, {"f": "rel", "ref": "B", "n": 4},
              {"f": "ratio_mom", "ref": "B", "n": 5}, {"f": "sma_dist", "n": 20}, {"f": "pd_sweep"}, {"f": "asia_sweep"},
-             {"f": "orb", "hours": 4}, {"f": "rnd", "step": 5.0}]
+             {"f": "orb", "hours": 4}, {"f": "rnd", "step": 5.0}, {"f": "mval", "m": "oi"},
+             {"f": "mz", "m": "top_pos", "n": 20}, {"f": "mchg", "m": "oi", "n": 3}]
 
     def test_no_lookahead(self):
         full = self.ctx(400)
         cut = 260
-        part = se.Ctx({k: {kk: (vv[:cut] if vv is not None else None) for kk, vv in d.items()} for k, d in full.bars.items()})
+        def cutv(vv):
+            if vv is None:
+                return None
+            return {a: b[:cut] for a, b in vv.items()} if isinstance(vv, dict) else vv[:cut]
+        part = se.Ctx({k: {kk: cutv(vv) for kk, vv in d.items()} for k, d in full.bars.items()})
         for c in self.CONDS:
             a = full.series("A", c)[:cut]
             b = part.series("A", c)
@@ -460,8 +466,12 @@ class Config(unittest.TestCase):
         files = hooks.family_files()
         self.assertIn("sweep_mix1", files)
         self.assertIn("sweep_price_action1", files)
+        for n in ("sweep_fundwin1", "sweep_metrics1", "sweep_taker_cont2"):
+            self.assertIn(n, files)
         for name, path in files.items():
             cfg, sha = sc.load(path)
+            if cfg.get("kind") == "funding_window":
+                continue
             rules = sc.expand(cfg)
             self.assertEqual(len({r["id"] for r in rules}), len(rules), name)
             self.assertEqual(len(sha), 64)
@@ -572,7 +582,8 @@ class EndToEnd(unittest.TestCase):
     def test_run_py_exposes_sharded_sweeps(self):
         from research.studies import run
         self.assertIn("sweep_mix1", run.sharded_names())
-        self.assertIn("sweep_price_action1", run.sharded_names())
+        for n in ("sweep_price_action1", "sweep_fundwin1", "sweep_metrics1", "sweep_taker_cont2"):
+            self.assertIn(n, run.sharded_names())
 
 
 class Loaders(unittest.TestCase):
@@ -597,6 +608,180 @@ class Loaders(unittest.TestCase):
         d, _ = loaders.to_grid(rows, [], None, T0, T0 + 12 * 3600)
         r = loaders.resample(d, 4)
         self.assertEqual(r["ts"], [T0 + 4 * 3600])
+
+
+class Metrics(unittest.TestCase):
+    def test_hourly_last_value_and_resample(self):
+        from research.sweeps import loaders
+        rows = [[T0 + i * 3600, 4.0] for i in range(8)]
+        mrows = [[T0 + 600, 1.0, 2.0, 3.0, 4.0, 5.0], [T0 + 3300, 9.0, 8.0, 7.0, 6.0, 5.0], [T0 + 3600 + 300, 2.0, 2.0, 2.0, 2.0, 2.0]]
+        rows = [[r[0], 1, 1, 1, 1, 1.0, 0.5] for r in rows]
+        d, _ = loaders.to_grid(rows, [], None, T0, T0 + 10 * 3600, metrics=mrows)
+        self.assertEqual(d["m"]["lsr_acct"][0], 9.0)          # the last 5-minute row of the hour
+        self.assertEqual(d["m"]["oi"][1], 2.0)
+        self.assertTrue(math.isnan(d["m"]["top_pos"][5]))
+        r = loaders.resample(d, 4)
+        self.assertEqual(len(r["m"]["oi"]), 2)
+        self.assertTrue(math.isnan(r["m"]["oi"][0]))        # hour 3 has no metrics row
+        d2, _ = loaders.to_grid(rows, [], None, T0, T0 + 10 * 3600)
+        self.assertIsNone(d2["m"])
+        self.assertIsNone(loaders.resample(d2, 4)["m"])
+
+    def test_metric_features_and_validation(self):
+        d = from_closes([100.0] * 6)
+        d["m"] = {k: [1.0, 2.0, 4.0, 8.0, 16.0, 32.0] for k in se.METRIC_NAMES}
+        ctx = se.Ctx({"A": d})
+        self.assertEqual(ctx.series("A", {"f": "mval", "m": "oi"}), [1.0, 2.0, 4.0, 8.0, 16.0, 32.0])
+        self.assertAlmostEqual(ctx.series("A", {"f": "mchg", "m": "oi", "n": 1})[3], 1.0)
+        self.assertTrue(math.isnan(se.Ctx({"A": from_closes([1.0, 2.0, 3.0])}).series("A", {"f": "mval", "m": "oi"})[0]))
+        cfg = synthetic_cfg()
+        cfg["rules"][1].update(long=[{"f": "mz", "m": "oi", "n": 5, "gt": 1.0}], short=None)
+        with self.assertRaises(sc.ConfigError):
+            sc.expand(cfg)                                    # data has no metrics extra
+        cfg["defs"]["data"]["d"]["extras"] = ["funding", "metrics"]
+        sc.expand(cfg)
+        cfg["rules"][1]["long"] = [{"f": "mz", "m": "nope", "n": 5, "gt": 1.0}]
+        with self.assertRaises(sc.ConfigError):
+            sc.expand(cfg)
+
+
+def fw_bars(ts, drift=0.0):
+    """Minute bars -60..+60 around a settlement: open 100 + drift * minute (drift in price units per minute)."""
+    out = {}
+    for m in range(-60, 61):
+        o = 100.0 + drift * m
+        out[ts + m * 60] = (o, o + 0.005, o - 0.005, o)
+    return out
+
+
+FW_TS = 1_700_000_000 // 60 * 60
+
+
+class FundingWindow(unittest.TestCase):
+    def cfg(self, **over):
+        c = {"family": "fw", "version": 1, "kind": "funding_window", "alpha": 0.05, "account_usd": 147,
+             "gate": {"min_train_trades": 5, "min_vol_cost": 0, "min_x": 0, "target_multiple": 0},
+             "pass": {"min_val_trades": 5, "min_test_trades": 5}, "data": {"min_abs_funding": 0.001, "start": "2024-01-01", "end": "2025-07-01"},
+             "splits": {"train": ["2024-01-01", "2024-07-01"], "validation": ["2024-07-01", "2025-01-01"], "test": ["2025-01-01", "2025-07-01"]},
+             "grid": {"thr": [0.001, 0.003], "mode": ["fade_payer", "take_payer"], "entry": [-60, -15, -1], "exit": [1, 15, 60], "delay": [0, 5]},
+             "size": {"lev": 1, "k": 1}, "cost": {"model": "perp"}}
+        c.update(over)
+        return c
+
+    def test_make_event_prices(self):
+        from core import sweep_events as sev
+        ev = sev.make_event("X", FW_TS, 0.004, fw_bars(FW_TS, drift=0.01))
+        self.assertEqual(len(ev["v"]), len(sev.PAIRS))
+        gl, hi, lo = ev["v"]["-15:15"]
+        self.assertAlmostEqual(gl, (100.15 / 99.85) - 1, places=6)
+        self.assertAlmostEqual(hi, (100.14 + 0.005) / 99.85 - 1, places=6)      # last held bar starts at minute +14
+        self.assertAlmostEqual(lo, (99.85 - 0.005) / 99.85 - 1, places=6)
+        bars = fw_bars(FW_TS)
+        del bars[FW_TS + 15 * 60]
+        ev2 = sev.make_event("X", FW_TS, 0.004, bars)
+        self.assertNotIn("-15:15", ev2["v"])
+        self.assertNotIn("-60:15", ev2["v"])
+        self.assertIn("-15:60", ev2["v"])
+        self.assertIsNone(sev.make_event("X", FW_TS, 0.004, {}))
+
+    def test_events_for_symbol_filters_and_counts(self):
+        from core import sweep_events as sev
+        calls = []
+
+        def bars_fn(ts):
+            calls.append(ts)
+            return None if ts == FW_TS + 3600 else fw_bars(ts)
+        fund = [(FW_TS - 3600 + 0.4, 0.0005), (FW_TS + 0.4, -0.002), (FW_TS + 3600, 0.003), (FW_TS + 7200, 0.003)]
+        ev, st = sev.events_for_symbol("X", fund, bars_fn, 0.001, FW_TS - 10, FW_TS + 7200)
+        self.assertEqual([e["ts"] for e in ev], [FW_TS])           # ms jitter rounded; 0.0005 ignored; failed one counted; end excluded
+        self.assertEqual((st["extreme"], st["failed"]), (2, 1))
+
+    def test_trades_fade_and_take(self):
+        from core import sweep_events as sev
+        rules = {r["id"]: r for r in sev.expand(self.cfg())}
+        ev = sev.make_event("X", FW_TS, 0.004, fw_bars(FW_TS, drift=-0.01))          # price falls 0.01 a minute
+        fade = rules[sev.rule_id(0.003, "fade_payer", -15, 15, 0)]
+        t = sev.trades_for_rule(fade, [ev])[0]
+        self.assertEqual(t["side"], -1)                                              # longs pay (f > 0): fade = short
+        gl = ev["v"]["-15:15"][0]
+        self.assertAlmostEqual(t["gross"], -gl)
+        self.assertAlmostEqual(t["fund"], -0.004)                                    # a short collects the funding
+        self.assertAlmostEqual(t["net"], -gl - 0.0014 + 0.004)
+        self.assertEqual(t["t"], FW_TS - 15 * 60)
+        take = rules[sev.rule_id(0.003, "take_payer", -15, 15, 0)]
+        t2 = sev.trades_for_rule(take, [ev])[0]
+        self.assertEqual(t2["side"], 1)
+        self.assertAlmostEqual(t2["fund"], 0.004)
+        neg = sev.make_event("X", FW_TS, -0.004, fw_bars(FW_TS))
+        self.assertEqual(sev.trades_for_rule(fade, [neg])[0]["side"], 1)             # shorts pay: fade = long
+        late = rules[sev.rule_id(0.003, "fade_payer", -15, 60, 5)]
+        self.assertEqual(sev.trades_for_rule(late, [ev])[0]["fund"], -0.004)         # entry at -10: still across the settlement
+        after = rules[sev.rule_id(0.003, "fade_payer", -1, 15, 5)]
+        self.assertEqual(after["E"], 4)
+        self.assertEqual(sev.trades_for_rule(after, [ev])[0]["fund"], 0.0)           # entered after the settlement: no funding
+
+    def test_threshold_and_cap(self):
+        from core import sweep_events as sev
+        rules = {r["id"]: r for r in sev.expand(self.cfg(size={"lev": 1, "k": 1}))}
+        r = rules[sev.rule_id(0.003, "fade_payer", -15, 15, 0)]
+        weak = sev.make_event("X", FW_TS, 0.002, fw_bars(FW_TS))
+        strong1 = sev.make_event("A", FW_TS + 86400, 0.004, fw_bars(FW_TS + 86400))
+        strong2 = sev.make_event("B", FW_TS + 86400, 0.004, fw_bars(FW_TS + 86400))
+        tr = sev.trades_for_rule(r, [weak, strong1, strong2])
+        self.assertEqual([t["sym"] for t in tr], ["A"])                              # weak is below the threshold; k=1 keeps one
+
+    def test_expand_counts_and_twins(self):
+        from core import sweep_events as sev
+        with open(hooks.family_files()["sweep_fundwin1"]) as f:
+            cfg = json.load(f)
+        rules = sev.expand(cfg)
+        self.assertEqual(len(rules), 136)
+        ids = {r["id"] for r in rules}
+        self.assertNotIn(sev.rule_id(0.001, "fade_payer", -1, 1, 5), ids)          # entry +4 is not before exit +1
+        r0 = next(r for r in rules if r["id"] == sev.rule_id(0.001, "fade_payer", -1, 1, 0))
+        self.assertNotIn(sev.twin_id(r0), ids)
+        r1 = next(r for r in rules if r["id"] == sev.rule_id(0.001, "fade_payer", -60, 1, 0))
+        self.assertIn(sev.twin_id(r1), ids)
+        self.assertIsNone(sev.twin_id(next(r for r in rules if r["delay"] == 5)))
+        with self.assertRaises(sc.ConfigError):
+            sev.expand(self.cfg(cost={"model": "xm"}))
+
+    def test_summarize_end_to_end(self):
+        from core import sweep_events as sev
+        events = []
+        t = sc.day("2024-01-01") + 3600
+        end = sc.day("2025-07-01")
+        k = 0
+        while t < end - 7200:
+            ts = int(t) // 60 * 60
+            events.append(sev.make_event("AAAUSDT", ts, 0.004 if k % 2 == 0 else -0.004, fw_bars(ts, drift=-0.02 if k % 2 == 0 else 0.02)))
+            t += 12 * 3600
+            k += 1
+        cfg = self.cfg()
+        with tempfile.TemporaryDirectory() as td:
+            path = os.path.join(td, "fw.json")
+            with open(path, "w") as f:
+                json.dump(cfg, f)
+            fns = hooks.make_fw_functions("sweep_fw", path)
+            with mock.patch.object(hooks, "on_actions", lambda: False), \
+                    mock.patch.object(ss, "p_adaptive", lambda v: ss.block_p(v, n_boot=500)):
+                summ = fns["summarize_sweep_fw"](events, write_board=False)
+            by = {r["id"]: r for r in summ["rule_rows"]}
+            self.assertEqual(summ["n_rules"], 68)
+            good = by[sev.rule_id(0.003, "fade_payer", -15, 15, 0)]
+            self.assertEqual(good["status"], "ok", good.get("reason"))
+            self.assertTrue(good["criteria"]["survives_5min_delay"])
+            self.assertGreater(good["validation"]["mean"], 0.005)
+            no_twin = by[sev.rule_id(0.003, "fade_payer", -1, 1, 0)]
+            if no_twin["status"] == "ok":
+                self.assertFalse(no_twin["criteria"]["survives_5min_delay"])
+            self.assertEqual(by[sev.rule_id(0.003, "take_payer", -15, 15, 0)]["status"], "gate")
+            self.assertEqual(summ["n_events"], len(events))
+            merged = os.path.join(td, "m.json")
+            with open(merged, "w") as f:
+                json.dump({"summary": summ, "rows": events}, f)
+            n = hooks.export_trades(merged, os.path.join(td, "o.jsonl.gz"))
+            self.assertGreater(n, 100)
 
 
 if __name__ == "__main__":
