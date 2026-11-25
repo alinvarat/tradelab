@@ -141,6 +141,9 @@ def find_events(sym, days, splits, today, after_close, gap_min=0.20, funnel=None
         if gap < gap_min:
             continue
         hit("gap_ok")
+        if any(b[5] for b in pm):
+            hit("gap_pm_any_vol")
+        hit("gap_pm_bars_%d" % min(len(pm), 10))
         pm_dv = _dv(pm)
         if pm_dv < PM_DV_MIN:
             continue
