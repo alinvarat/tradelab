@@ -113,15 +113,17 @@ def pair_removal_symbols(text: str) -> list:
 
 
 def kr_class(title: str) -> str:
-    """Upbit/Bithumb title (Korean or English) -> 'delist' | 'caution' | ''. Event-style 'termination' words are not matched."""
+    """Upbit/Bithumb title (Korean or English) -> 'delist' | 'caution' | ''. Event-style 'termination' words are not matched; lifted,
+    extended, cancelled or completed notices are not new forced sales; a title that mixes a caution designation and a delisting
+    (or a designation and its lifting) is ambiguous and is not an event."""
     low = title.lower()
-    if re.search(r"해제|연장|취소|유예|재개|completed|cancel|extend|postpone|lifted|resum", low):     # lifted / extended / cancelled: not a new forced sale
+    if re.search(r"해제|해지|연장|취소|유예|재개|completed|cancel|extend|postpone|lifted|resum", low):
         return ""
-    if re.search(r"거래지원\s*종료|상장\s*폐지|market support termination|support termination|termination of (?:digital asset )?(?:market )?support|delist", low):
-        return "delist"
-    if re.search(r"유의\s*종목|투자\s*유의|investment warning|caution", low):
-        return "caution"
-    return ""
+    delist = bool(re.search(r"거래지원\s*종료|상장\s*폐지|market support termination|support termination|termination of (?:digital asset )?(?:market )?support|delist", low))
+    caution = bool(re.search(r"유의\s*종목|투자\s*유의|investment warning|caution", low))
+    if delist and caution:
+        return ""
+    return "delist" if delist else ("caution" if caution else "")
 
 
 def kr_symbols(title: str) -> list:
@@ -135,19 +137,20 @@ def kr_symbols(title: str) -> list:
 
 
 def bybit_class_symbols(slug_title: str):
-    """Bybit announcement title -> ('perp_delist' | 'delist', coins) or None. Alpha, TradFi, pair-only and zone notices are skipped."""
+    """Bybit announcement title -> ('perp_delist' | 'delist', coins) or None. Coins come only from the words after 'Delisting of' /
+    'to delist' / 'Delists'. Alpha, TradFi, pair-only, zone and swap/migration notices are skipped."""
     t = slug_title.strip()
     low = t.lower()
     if any(k in low for k in ("alpha", "tradfi", "pre-market", "innovation", "spot trading pair", "trading pairs", "leveraged", "margin",
-                              "p2p", "launchpool", "in the uk", "monitoring")):
+                              "p2p", "launchpool", "in the uk", "monitoring", "swap to", "migration", "rebrand")):
         return None
-    if "delist" not in low:
+    m = re.search(r"(?i)(?:delisting of|to delist|delists?)\s+(.+?)(?:\s+perpetual|\s+contracts?|\s+spot|\s+on\s+(?:bybit|\w{3}\s+\d)|$)", t)
+    if not m:
         return None
-    perp = "perpetual" in low or "contract" in low
-    m = re.search(r"(?i)delisting of (.+?)(?: perpetual| usdt perp| contracts?|$)", t)
-    body = m.group(1) if m else t
-    toks = re.findall(r"\b([A-Z0-9]{2,15})USDT\b", body) if perp else []
-    coins = _tokens(" ".join(toks)) if toks else _tokens(body)
+    perp = bool(re.search(r"perpetual|contract", low))
+    seg = re.sub(r"/USD[TC]\b", " ", m.group(1))
+    toks = re.findall(r"\b([A-Z0-9]{2,15})USDT\b", seg) if perp else []
+    coins = _tokens(" ".join(toks)) if toks else _tokens(seg)
     return ("perp_delist" if perp else "delist", coins) if coins else None
 
 

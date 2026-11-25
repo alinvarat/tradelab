@@ -45,7 +45,10 @@ def pace(gap):
         time.sleep(w)
 
 
-def fetch(url, timeout=40, tries=4, raw=True, gap=0.0):
+ERRS = {}
+
+
+def fetch(url, timeout=40, tries=5, raw=True, gap=0.0):
     for k in range(tries):
         try:
             if gap:
@@ -57,9 +60,12 @@ def fetch(url, timeout=40, tries=4, raw=True, gap=0.0):
             t = b.decode("utf-8", "replace")
             return t if raw else json.loads(t)
         except Exception as e:  # noqa: BLE001
+            with LOCK:
+                key = f"{getattr(e, 'code', '')}{type(e).__name__}"
+                ERRS[key] = ERRS.get(key, 0) + 1
             if k == tries - 1:
                 return None
-            time.sleep(2 * (k + 1))
+            time.sleep(min(40, 3 * 2 ** k))
 
 
 # ---------------------------------------------------------------- Binance notices
@@ -164,7 +170,7 @@ def upbit_events(gaps, stats):
     one = cdx("api-manager.upbit.com/api/v1/announcements/") or []
     lists = cdx("api-manager.upbit.com/api/v1/announcements?", "&filter=" + quote("original:.*per_page.*"), limit=6000, collapse="timestamp:8") or []
     stats["upbit_snapshots"] = {"single": len(one), "list": len(lists)}
-    jobs = sorted([(a, b) for a, b in one if re.search(r"/announcements/\d+", b)] + lists[:4500])
+    jobs = sorted([tuple(x) for x in one if re.search(r"/announcements/\d+", x[1])] + [tuple(x) for x in lists[:4500]])
 
     def work(j):
         t = snap(j[0], j[1], "upbit")
@@ -448,6 +454,7 @@ def build_events(out_dir):
         print(name, len(got), stats, flush=True)
         events += got
     stats["fetch_failures"] = dict(FAILS)
+    stats["fetch_error_kinds"] = dict(ERRS)
     events = ff.dedupe([e for e in events if ff.in_window(e["ts"])])
     l1f = ff.dedupe([e for e in l1f if ff.in_window(e["ts"])])
     for e in events:
