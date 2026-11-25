@@ -784,7 +784,6 @@ def study_news_v2(_symbols, workers=6):
     return summ, rows
 
 
-
 def study_news_v3(_symbols, workers=6):
     """protocol_news_v3.md: v3 reader (market-relative context, numbers over tone, unanimity + size rule) on held-out
     2.02 filings accepted 2026-10-20..11-05 (never used by v2). All returns are SPY-adjusted."""
@@ -915,7 +914,6 @@ def study_news_v3(_symbols, workers=6):
             **{f"v3_majority_H{h}": st.llm_summary(maj, h) for h in nb.HORIZONS},
             **{f"v1_H{h}": st.llm_summary(v1r, h) for h in nb.HORIZONS}}
     return summ, rows
-
 
 
 # ------------------------------------------------------------------ L1 listings screen (ops/lines/L1_listings.md)
@@ -1951,7 +1949,6 @@ STUDIES = {"probe_claude": study_probe_claude, "factory_crypto_1": study_factory
 STUDIES.update({"factory_us_pit_1": study_factory_us_pit_1})
 
 
-
 # ---- sharded studies: rows_<study>(symbols_slice) and summarize_<study>(all_rows), looked up by name below ----
 
 def symbols_selftest_shard():
@@ -1968,6 +1965,54 @@ def rows_selftest_shard(symbols_slice):
 def summarize_selftest_shard(all_rows):
     return {"line": "selftest_shard", "rows": len(all_rows), "symbols": len({r["symbol"] for r in all_rows}),
             "value_sum": sum(r["value"] for r in all_rows)}
+
+
+# ---- H3: passive market making on small perps (RESULTS.md 'H3 screen'; rule in core/passive_mm.py) ----
+
+H3_BUDGET_S = 4.2 * 3600        # a shard stops here and counts the rest as a gap (job limit is 5.67 h)
+
+
+def symbols_h3_passive_mm():
+    """30 USDT perps chosen by a seeded hash from every perp ever listed, minus majors and stablecoins."""
+    from core import passive_mm as mm
+    from research.studies import binance_vision as bv
+    return mm.pick_universe(bv.list_symbols("futures/um", "USDT"), exclude_bases=L8_SKIP)
+
+
+def rows_h3_passive_mm(symbols_slice):
+    from core import passive_mm as mm
+    from research.studies import binance_vision as bv
+    gaps = {"agg_failed": 0, "agg_missing": 0, "parse_error": 0, "thin_day": 0, "time_budget": 0}
+    rows, t0, days = [], time.time(), mm.sample_days()
+    for sym in symbols_slice:
+        for d in days:
+            if time.time() - t0 > H3_BUDGET_S:
+                gaps["time_budget"] += 1
+                continue
+            it = bv.iter_file("futures/um", "daily", "aggTrades", sym, d, parse=bv.parse_aggtrade)
+            if it is None:
+                gaps["agg_failed"] += 1
+                continue
+            if it == []:
+                gaps["agg_missing"] += 1
+                continue
+            try:
+                ts, px, notional = mm.load_trades(it)
+            except Exception as e:  # noqa: BLE001
+                gaps["parse_error"] += 1
+                log(f"{sym} {d}: {type(e).__name__}")
+                continue
+            row = mm.process_day(ts, px, d, notional)
+            if row is None:
+                gaps["thin_day"] += 1
+                continue
+            rows.append({"symbol": sym, **row})
+    return {"rows": rows, "gaps": gaps}
+
+
+def summarize_h3_passive_mm(all_rows):
+    from core import passive_mm as mm
+    return mm.summarize(all_rows)
 
 
 H1_START, H1_END = (2022, 1), (2026, 11)          # monthly files 2022-01 .. 2026-10
