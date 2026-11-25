@@ -143,7 +143,7 @@ def gate(train_trades, rule, cfg, train_days, min_notional_usd=0.0):
     nets = [t["net"] for t in train_trades]
     m, s_ = sum(nets) / n, sd(nets)
     cost = quantile(sorted(t["cost"] for t in train_trades), 0.5)
-    placebo = mean([-t["gross"] - t["cost"] - t["fund"] for t in train_trades])
+    placebo = mean([-t["gross"] - t["cost"] + t["fund"] for t in train_trades])       # reversed side: gross and funding flip sign
     vc = (sd([t["gross"] for t in train_trades]) or 0.0) / cost if cost else 0.0
     xval = tpm * (m / s_) * abs(m / s_) if s_ and s_ > 0 else 0.0      # signed: a losing rule has negative x
     info.update(train_mean=round(m, 6), placebo_mean=round(placebo, 6), vol_cost=round(vc, 2), x=round(xval, 4))

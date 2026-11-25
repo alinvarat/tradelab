@@ -466,7 +466,7 @@ class Config(unittest.TestCase):
         files = hooks.family_files()
         self.assertIn("sweep_mix1", files)
         self.assertIn("sweep_price_action1", files)
-        for n in ("sweep_fundwin1", "sweep_metrics1", "sweep_taker_cont2"):
+        for n in ("sweep_fundwin1", "sweep_fundwin2", "sweep_metrics1", "sweep_taker_cont2"):
             self.assertIn(n, files)
         for name, path in files.items():
             cfg, sha = sc.load(path)
@@ -582,7 +582,7 @@ class EndToEnd(unittest.TestCase):
     def test_run_py_exposes_sharded_sweeps(self):
         from research.studies import run
         self.assertIn("sweep_mix1", run.sharded_names())
-        for n in ("sweep_price_action1", "sweep_fundwin1", "sweep_metrics1", "sweep_taker_cont2"):
+        for n in ("sweep_price_action1", "sweep_fundwin1", "sweep_fundwin2", "sweep_metrics1", "sweep_taker_cont2"):
             self.assertIn(n, run.sharded_names())
 
 
@@ -737,12 +737,43 @@ class FundingWindow(unittest.TestCase):
         tr = sev.trades_for_rule(r, [weak, strong1, strong2])
         self.assertEqual([t["sym"] for t in tr], ["A"])                              # weak is below the threshold; k=1 keeps one
 
+    def test_prev_signal_uses_only_the_earlier_rate(self):
+        from core import sweep_events as sev
+        cfg = self.cfg()
+        cfg["grid"]["sig"] = ["prev", "realized"]
+        rules = {r["id"]: r for r in sev.expand(cfg)}
+        prev_rule = rules[sev.rule_id(0.003, "fade_payer", -15, 15, 0, "prev")]
+        real_rule = rules[sev.rule_id(0.003, "fade_payer", -15, 15, 0)]
+        # last settlement was extreme (longs paid 0.4%) but this one settled small and negative: only the prev rule trades
+        ev = sev.make_event("X", FW_TS, -0.0002, fw_bars(FW_TS), prev=0.004)
+        tp = sev.trades_for_rule(prev_rule, [ev])
+        self.assertEqual(len(tp), 1)
+        self.assertEqual(tp[0]["side"], -1)                    # chosen by the previous rate's payer (longs)
+        self.assertAlmostEqual(tp[0]["fund"], 0.0002)          # but the funding actually settled is what is charged: the short pays
+        self.assertEqual(sev.trades_for_rule(real_rule, [ev]), [])
+        none_prev = sev.make_event("X", FW_TS, 0.004, fw_bars(FW_TS))
+        self.assertEqual(sev.trades_for_rule(prev_rule, [none_prev]), [])
+        ev2, st = sev.events_for_symbol("X", [(FW_TS - 28800, 0.004), (FW_TS, 0.0001)], lambda ts: fw_bars(ts), 0.001, 0, FW_TS + 1)
+        self.assertEqual([(e["ts"], e["fp"]) for e in ev2], [(FW_TS - 28800, None), (FW_TS, 0.004)])   # a quiet settlement after an extreme one is kept
+
+    def test_placebo_flips_funding_sign(self):
+        a = {"t": T0, "x": T0 + 3600, "gross": -0.002, "cost": 0.0014, "fund": -0.01, "net": 0.0066, "mfe": 0.02, "mae": 0.0}
+        cfg = {"account_usd": 147, "gate": {"min_train_trades": 1, "min_vol_cost": 0, "min_x": 0, "target_multiple": 0}}
+        ok, info = ss.gate([dict(a) for _ in range(5)], {"size": {"lev": 1, "k": 1}}, cfg, 30)
+        self.assertAlmostEqual(info["placebo_mean"], 0.002 - 0.0014 - 0.01)       # the reversed side would PAY the 1% funding
+        self.assertTrue(ok, info)
+
     def test_expand_counts_and_twins(self):
         from core import sweep_events as sev
         with open(hooks.family_files()["sweep_fundwin1"]) as f:
             cfg = json.load(f)
         rules = sev.expand(cfg)
         self.assertEqual(len(rules), 136)
+        with open(hooks.family_files()["sweep_fundwin2"]) as f:
+            rules2 = sev.expand(json.load(f))
+        self.assertEqual(len(rules2), 272)
+        self.assertEqual(len({r["id"] for r in rules2}), 272)
+        self.assertTrue(any("sig=prev" in r["id"] for r in rules2))
         ids = {r["id"] for r in rules}
         self.assertNotIn(sev.rule_id(0.001, "fade_payer", -1, 1, 5), ids)          # entry +4 is not before exit +1
         r0 = next(r for r in rules if r["id"] == sev.rule_id(0.001, "fade_payer", -1, 1, 0))
