@@ -9,7 +9,7 @@ import random
 import re
 import time
 
-from . import news_backtest as nb
+from . import broker_costs as bc, news_backtest as nb
 
 MIN_DAYS = 7          # nearest expiry at least this many calendar days away
 OTM = 0.05            # call strike >= spot*1.05, put strike <= spot*0.95
@@ -100,10 +100,22 @@ def intrinsic(direction: str, strike: float, spot: float) -> float:
     return max(0.0, spot - strike) if direction == "long" else max(0.0, strike - spot)
 
 
-def trade_return(entry_ask: float, exit_bid: float, fee: float = FEE, haircut: float = 0.0) -> float:
-    """One contract: pay ask*100 + fee, receive bid*100*(1-haircut) and pay the exit fee (both fees always)."""
-    cost = entry_ask * 100 + fee
-    got = max(0.0, (exit_bid or 0.0)) * 100 * (1 - haircut) - fee
+def webull_buy_fee(ask: float) -> float:
+    """Webull fees for buying one contract (reported cost variant, addendum 2026-11-25; see research/brokers/costs.md)."""
+    return bc.webull_option_cost(1, "buy", ask)
+
+
+def webull_sell_fee(bid: float) -> float:
+    """Webull fees for selling one contract at `bid` (a zero bid still pays the per-contract fees)."""
+    return bc.webull_option_cost(1, "sell", max(0.0, bid or 0.0))
+
+
+def trade_return(entry_ask: float, exit_bid: float, fee: float = FEE, haircut: float = 0.0,
+                 buy_fee=None, sell_fee=None) -> float:
+    """One contract: pay ask*100 + fee, receive bid*100*(1-haircut) and pay the exit fee (both fees always).
+    buy_fee / sell_fee (optional callables of the option price) replace the flat fee, e.g. the Webull variant."""
+    cost = entry_ask * 100 + (buy_fee(entry_ask) if buy_fee else fee)
+    got = max(0.0, (exit_bid or 0.0)) * 100 * (1 - haircut) - (sell_fee(exit_bid) if sell_fee else fee)
     return got / cost - 1
 
 
@@ -132,16 +144,20 @@ def sessions_after(session_dates: list, entry_date: str) -> int:
     return sum(1 for d in session_dates if d > entry_date)
 
 
-def simulate_account(trades: list, start: float = START_USD, stake: float = STAKE, whole_contracts: bool = True):
+def simulate_account(trades: list, start: float = START_USD, stake: float = STAKE, whole_contracts: bool = True,
+                     buy_fee=None, sell_fee=None):
     """trades: closed, each {'entry_ts','exit_ts','entry_ask','exit_bid'}. Events in time order; each entry stakes
-    stake*equity (capped at cash). whole_contracts: buy floor(stake/(ask*100+fee)) contracts, skip if 0."""
+    stake*equity (capped at cash). whole_contracts: buy floor(stake/(ask*100+fee)) contracts, skip if 0.
+    buy_fee / sell_fee: optional callables of the option price giving USD per contract (default: flat FEE)."""
+    buy = buy_fee or (lambda p: FEE)
+    sell = sell_fee or (lambda p: FEE)
     # exits before entries at the same time, as in the runner (cash from a closing trade funds a new one)
     events = sorted([(t["entry_ts"], 1, i) for i, t in enumerate(trades)] +
                     [(t["exit_ts"], 0, i) for i, t in enumerate(trades)])
     cash, held, count, curve, taken, unaffordable = start, {}, {}, [], 0, 0
     for ts, kind, i in events:
         t = trades[i]
-        unit = t["entry_ask"] * 100 + FEE
+        unit = t["entry_ask"] * 100 + buy(t["entry_ask"])
         if kind == 1:
             equity = cash + sum(held.values())
             budget = min(cash, stake * equity)
@@ -155,7 +171,7 @@ def simulate_account(trades: list, start: float = START_USD, stake: float = STAK
             taken += 1
         elif i in held:
             n = count[i]
-            cash += (max(0.0, t["exit_bid"] or 0.0) * 100 - FEE) * n
+            cash += (max(0.0, t["exit_bid"] or 0.0) * 100 - sell(t["exit_bid"] or 0.0)) * n
             held.pop(i)
             curve.append((ts, cash + sum(held.values())))
     months, peak, dd = {}, start, 0.0
@@ -170,7 +186,7 @@ def simulate_account(trades: list, start: float = START_USD, stake: float = STAK
     first_stake = stake * start
     return {"end_equity_usd": cash + sum(held.values()), "taken": taken, "unaffordable": unaffordable,
             "month_end_equity": months, "months_3x": months_3x, "worst_drawdown": dd,
-            "affordable_at_start_stake": sum(1 for t in trades if t["entry_ask"] * 100 + FEE <= first_stake),
+            "affordable_at_start_stake": sum(1 for t in trades if t["entry_ask"] * 100 + buy(t["entry_ask"]) <= first_stake),
             "curve": curve}
 
 
