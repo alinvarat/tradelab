@@ -113,8 +113,11 @@ jobs:
             if bunx --bun @dmgnr/kuber@2.7.1 ci --trust; then
               exit 0
             fi
-            echo "::warning::Deploy attempt ${attempt} of 3 failed; retrying in 60 s."
-            sleep 60
+            # 2026-11-25: Kuber builds can outlast Cloudflare's 120 s proxy window; the server keeps building
+            # after the client gives up, and a quick retry then fails with "Build record was concurrently
+            # modified". Wait long enough for the abandoned build to finish before trying again.
+            echo "::warning::Deploy attempt ${attempt} of 3 failed; retrying in 300 s."
+            sleep 300
           done
           echo "::error::Deploy failed on all 3 attempts."
           exit 1
