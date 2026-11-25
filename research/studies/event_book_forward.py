@@ -47,10 +47,8 @@ class Venue:
     def __init__(self):
         self.inst = {}
         self.books = {}
-        self.name = "bybit"
-        if not self.refresh():
-            self.name = "okx"
-            self.refresh()
+        self.name = "okx"                       # Bybit answers 403 (country block) to GitHub runners, probe 2026-11-25
+        self.refresh()
 
     def refresh(self) -> bool:
         """Reload instruments (rarely) and the all-symbol book. Returns False when the venue does not answer."""
@@ -124,11 +122,21 @@ class Venue:
             if not d or d.get("retCode") != 0:
                 return None
             return sorted((int(k[0]) // 1000, float(k[2]), float(k[3]), float(k[4])) for k in d["result"]["list"])
-        d = get(f"https://www.okx.com/api/v5/market/history-candles?instId={sym}&bar=1m&before={int(t0 * 1000) - 1}"
-                f"&after={int(t1 * 1000) + 60000}&limit=300")
-        if not d or d.get("code") != "0":
-            return None
-        return sorted((int(k[0]) // 1000, float(k[2]), float(k[3]), float(k[4])) for k in d["data"])
+        out, after = {}, int(t1 * 1000) + 60000
+        for _ in range(8):                      # history-candles: <= 100 bars, newest first, older than `after`
+            d = get(f"https://www.okx.com/api/v5/market/history-candles?instId={sym}&bar=1m&after={after}&limit=100")
+            if not d or d.get("code") != "0":
+                return None
+            rows = d.get("data") or []
+            if not rows:
+                break
+            for k in rows:
+                out[int(k[0]) // 1000] = (float(k[2]), float(k[3]), float(k[4]))
+            oldest = min(int(k[0]) for k in rows)
+            if oldest / 1000 <= t0:
+                break
+            after = oldest
+        return sorted((t, *v) for t, v in out.items() if t0 - 60 <= t <= t1 + 60) or None
 
 
 # ---------------------------------------------------------------- components, state, notices
