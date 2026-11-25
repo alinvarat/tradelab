@@ -1,5 +1,5 @@
 {
- "equity_usd": 149.619,
+ "equity_usd": 149.7984,
  "start_usd": 147.0,
  "goal_usd": 441.0,
  "pending": [
@@ -12,36 +12,6 @@
    "stake": 7.35,
    "entry_ts": 1795557353.5935743,
    "volume": 67057.062766
-  },
-  {
-   "id": "6757646",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-25T20:00:00Z",
-   "side": "yes",
-   "price": 0.02,
-   "stake": 7.35,
-   "entry_ts": 1795557353.5935743,
-   "volume": 74050
-  },
-  {
-   "id": "6757546",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-25T20:00:00Z",
-   "side": "yes",
-   "price": 0.002,
-   "stake": 7.35,
-   "entry_ts": 1795558630.3247502,
-   "volume": 77299
-  },
-  {
-   "id": "6757692",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-25T20:00:00Z",
-   "side": "yes",
-   "price": 0.002,
-   "stake": 7.35,
-   "entry_ts": 1795558630.3247502,
-   "volume": 75485
   },
   {
    "id": "7176635",
@@ -154,7 +124,7 @@
    "volume": 53232
   }
  ],
- "n_closed": 6,
+ "n_closed": 9,
  "sequential": {
   "n_units": 1,
   "e_value_edge": 1.0,
@@ -162,7 +132,7 @@
   "threshold": 20.0,
   "decision": "continue",
   "decided_at_unit": null,
-  "mean_scaled": 0.05939
+  "mean_scaled": 0.042306
  },
  "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md",
  "closed_last": [
@@ -249,6 +219,48 @@
    "ts": 1795637839.2731695,
    "yes_won": false,
    "equity_after": 149.619
+  },
+  {
+   "id": "6757646",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-25T20:00:00Z",
+   "side": "yes",
+   "price": 0.02,
+   "stake": 7.35,
+   "entry_ts": 1795557353.5935743,
+   "volume": 74050,
+   "net": 0.020408163265306124,
+   "ts": 1795645059.9208035,
+   "yes_won": false,
+   "equity_after": 149.769
+  },
+  {
+   "id": "6757546",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-25T20:00:00Z",
+   "side": "yes",
+   "price": 0.002,
+   "stake": 7.35,
+   "entry_ts": 1795558630.3247502,
+   "volume": 77299,
+   "net": 0.002004008016032064,
+   "ts": 1795645059.9208035,
+   "yes_won": false,
+   "equity_after": 149.7837
+  },
+  {
+   "id": "6757692",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-25T20:00:00Z",
+   "side": "yes",
+   "price": 0.002,
+   "stake": 7.35,
+   "entry_ts": 1795558630.3247502,
+   "volume": 75485,
+   "net": 0.002004008016032064,
+   "ts": 1795645059.9208035,
+   "yes_won": false,
+   "equity_after": 149.7984
   }
  ],
  "last_error": null
