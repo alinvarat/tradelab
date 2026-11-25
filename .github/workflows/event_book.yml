@@ -3,13 +3,14 @@ name: Event book
 # Combined event book work (research/plans/PLAN_20261125_fable.md). Modes:
 #   probe   - check public announcement/price endpoints from a runner
 #   rows    - per-event rows for L1, L1f, L1g, kept as jsonl.gz on branch data/event-rows
+#   titles  - notice tape titles only (no prices)
 #   tape    - exchange-notice tape screen (protocol_notice_tape_20261125.md), rows kept on data/event-rows
 #   forward - one poll of the forward event book paper ledger (protocol_event_book_20261125.md), state on data/event-book
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe, rows, tape or forward"
+        description: "probe, rows, titles, tape or forward"
         required: true
         default: "probe"
 
@@ -75,3 +76,85 @@ jobs:
           git add -A rows runs
           git commit -qm "Event rows: $(date -u +%FT%TZ)" || echo "nothing new"
           git push -q origin data/event-rows
+
+  tape:
+    if: inputs.mode == 'tape' || inputs.mode == 'titles'
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    concurrency:
+      group: tradelab-event-rows
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Notice tape screen
+        run: python research/studies/event_tape.py out ${{ inputs.mode == 'titles' && 'titles' || 'full' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: event-tape
+          path: out/tape/
+      - name: Keep rows on data/event-rows
+        if: always()
+        run: |
+          [ -d out/tape ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/event-rows 2>/dev/null; then
+            git checkout -q -B data/event-rows origin/data/event-rows
+          else
+            git checkout -q --orphan data/event-rows && git rm -rq --cached . && git clean -fdq
+          fi
+          mkdir -p tape
+          cp /tmp/keep/tape/* tape/
+          git add -A tape
+          git commit -qm "Notice tape rows: $(date -u +%FT%TZ)" || echo "nothing new"
+          git push -q origin data/event-rows
+
+  forward:
+    if: inputs.mode == 'forward'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: tradelab-event-book-state
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore state
+        run: |
+          mkdir -p /tmp/eb
+          if git fetch origin data/event-book 2>/dev/null; then
+            for f in state.json trades.jsonl; do git show origin/data/event-book:$f > /tmp/eb/$f 2>/dev/null || rm -f /tmp/eb/$f; done
+          fi
+      - name: Poll the event book for about 9 minutes
+        run: python research/studies/event_book_forward.py /tmp/eb 9
+      - name: Push state to data/event-book
+        if: always()
+        run: |
+          [ -f /tmp/eb/state.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/event-book; then
+            git checkout -q -B data/event-book origin/data/event-book
+          else
+            git checkout -q --orphan data/event-book && git rm -rq --cached . && git clean -fdq
+          fi
+          cp /tmp/eb/state.json . && cp /tmp/eb/trades.jsonl . 2>/dev/null || true
+          cp /tmp/eb/summary.json . 2>/dev/null || true
+          git add -A state.json trades.jsonl summary.json 2>/dev/null || git add state.json
+          git commit -qm "Event book: $(date -u +%FT%TZ)" || echo "nothing new"
+          git push -q origin data/event-book
