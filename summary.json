@@ -1,12 +1,12 @@
 {
- "run_utc": "2026-11-25T08:50:16Z",
+ "run_utc": "2026-11-25T08:59:17Z",
  "venue": "okx",
- "polls": 90,
+ "polls": 108,
  "events_seen": 1,
  "open": 0,
  "closed": 0,
  "skipped": {
-  "stale_at_first_sight": 5
+  "stale_at_first_sight": 6
  },
  "components": {
   "l1f": 0,
