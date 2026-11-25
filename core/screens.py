@@ -702,3 +702,135 @@ def perp_shock_rows(symbol: str, h1: list, btc: dict, funding: list) -> list:
         if ret:
             out.append({**r, "kind": "perp_spike_fade", "ret": ret})
     return out
+
+
+# ------------------------------------------------------------------ H2: open-interest deleveraging flush (perps)
+H2_DROP = 0.15                  # open interest (contracts, not USD) down >= 15% over 24 h
+H2_MOVE = 0.10                  # and the hourly close down (up) >= 10% over the same 24 h
+H2_MIN_QV = 2e5                 # 30-day (720 h) average hourly perp quote volume before the decision hour (USDT)
+H2_MIN_OI_USD = 1e6             # open interest value 24 h earlier (USDT)
+H2_FEES = 0.004                 # round trip, taker + slippage (perp)
+H2_HOLDS = (1, 3, 7)            # days held
+H2_COOLDOWN_H = 168             # one row per coin per 7 days
+H2_ALPHA = 0.05 / 2             # Bonferroni across the two rules (long after a down flush, short after an up flush)
+H2_START, H2_END = "2022-01-01", "2026-11-01"
+
+
+def oi_hourly_row(fields):
+    """One 5-minute futures `metrics` row (create_time, symbol, sum_open_interest, sum_open_interest_value, ...) ->
+    (ts_s, open_interest, open_interest_value) when the row sits on the hour and both numbers exist, else None."""
+    t = fields[0].strip()
+    if t.isdigit():
+        ts = int(t) // 1000 if int(t) < 10**14 else int(t) // 1000000
+    else:
+        if not t.endswith(":00:00"):
+            return None
+        import calendar
+        ts = calendar.timegm(time.strptime(t, "%Y-%m-%d %H:%M:%S"))
+    if ts % 3600:
+        return None
+    try:
+        a, b = float(fields[2]), float(fields[3])
+    except (ValueError, IndexError):
+        return None
+    return (ts, a, b)
+
+
+def oi_flush_rows(symbol: str, h1: list, oi: dict, btc: dict, funding: list, start_ts: float = 0.0) -> list:
+    """Perp open-interest flush. h1: hourly perp klines [(open_ts, o, h, l, c, quote_vol)], oldest first; oi: hour
+    timestamp -> (open_interest, open_interest_value) snapshot taken at that hour; btc: open_ts -> (o, c) of the BTCUSDT
+    perp hours; funding: [(ts, rate)] settled rates (positive = longs pay shorts).
+    Decision time D = end of hour i (everything used is known at D): open interest at D <= (1 - H2_DROP) x open interest
+    at D - 24 h AND close(i) / close(i - 24 h) - 1 <= -H2_MOVE (long) or >= +H2_MOVE (short). Also needed: open interest
+    value at D - 24 h >= H2_MIN_OI_USD and 720 prior contiguous hours averaging >= H2_MIN_QV quote volume (hour i itself
+    excluded). Entry at the open of the hour starting D + 1 h (one hour of delay for publication and execution).
+    Exit at the close of the last hour of 1, 3 and 7 days held. Return = coin gain - BTC gain over the same window -
+    H2_FEES + funding settled in the window (a long pays the rate, a short receives it). `net_unhedged` omits the BTC leg.
+    One row per coin per H2_COOLDOWN_H hours; rows before start_ts are dropped."""
+    import bisect
+    fts = sorted(funding)
+    times = [t for t, _ in fts]
+    out, i = [], 720
+    while i + 2 < len(h1):
+        t = h1[i][0]
+        D = t + 3600
+        if h1[i - 24][0] != t - 86400:
+            i += 1
+            continue
+        mv = h1[i][4] / h1[i - 24][4] - 1
+        if abs(mv) < H2_MOVE:
+            i += 1
+            continue
+        now, then = oi.get(D), oi.get(D - 86400)
+        if not (now and then and then[0] > 0 and then[1] >= H2_MIN_OI_USD and now[0] / then[0] - 1 <= -H2_DROP):
+            i += 1
+            continue
+        e = h1[i + 2]
+        if h1[i + 1][0] != D or e[0] != D + 3600 or e[0] < start_ts or e[0] not in btc or not e[1] > 0:
+            i += 1
+            continue
+        if h1[i - 720][0] != t - 720 * 3600 or sum(x[5] for x in h1[i - 720:i]) / 720 < H2_MIN_QV:
+            i += 1
+            continue
+        side = 1 if mv <= -H2_MOVE else -1
+        ret = {}
+        for d in H2_HOLDS:
+            j = i + 2 + 24 * d - 1
+            if j >= len(h1) or h1[j][0] - e[0] != (24 * d - 1) * 3600 or h1[j][0] not in btc:
+                continue
+            a, b = bisect.bisect_left(times, e[0]), bisect.bisect_left(times, h1[j][0] + 3600)
+            paid = sum(r for _, r in fts[a:b])
+            if side > 0:
+                coin, bt, fund = h1[j][4] / e[1] - 1, btc[h1[j][0]][1] / btc[e[0]][0] - 1, -paid
+            else:
+                coin, bt, fund = short_gain(e[1], h1[j][4]), short_gain(btc[e[0]][0], btc[h1[j][0]][1]), paid
+            ret[f"d{d}"] = {"net": coin - bt - H2_FEES + fund, "net_unhedged": coin - H2_FEES + fund, "funding": fund}
+        if ret:
+            out.append({"symbol": symbol, "market": f"{D}{symbol}{side}", "ts": e[0],
+                        "kind": "oi_flush_long" if side > 0 else "oi_flush_short",
+                        "oi_drop": round(now[0] / then[0] - 1, 4), "move": round(mv, 4), "ret": ret})
+        i += H2_COOLDOWN_H
+    return out
+
+
+def h2_bounds():
+    import calendar
+    T = lambda y, m=1, d=1: float(calendar.timegm((y, m, d, 0, 0, 0)))  # noqa: E731
+    return {"train": (T(2022), T(2023)), "validation": (T(2023), T(2025)), "test": (T(2025), T(2026, 11))}
+
+
+def oi_flush_summary(all_rows: list) -> dict:
+    """Verdict per rule (pre-registered in RESULTS.md 'H2 screen'). A rule passes only if judge() passes at base cost,
+    the validation block p is below H2_ALPHA (Bonferroni over 2 rules), the validation mean stays > 0 at double cost
+    (another H2_FEES) and the test mean at the picked hold is > 0, and the rule has >= 3 events a week."""
+    bounds = h2_bounds()
+    hs = [f"d{d}" for d in H2_HOLDS]
+    weeks = (bounds["test"][1] - bounds["train"][0]) / (7 * 86400)
+    summ = {"rows": len(all_rows), "alpha_bonferroni": H2_ALPHA, "weeks": round(weeks, 1)}
+    for kind in ("oi_flush_long", "oi_flush_short"):
+        rows = [dict(r, split=split_of(r["ts"], bounds)) for r in all_rows if r.get("kind") == kind]
+        base = judge(rows, hs, bounds, pick_trim=5)
+        dbl = judge(rows, hs, bounds, cost_extra=H2_FEES, pick_trim=5)
+        unh = judge([dict(r, ret={h: {"net": v["net_unhedged"]} for h, v in r["ret"].items()}) for r in rows],
+                    hs, bounds, pick_trim=5)
+        per_week = sum(1 for r in rows if r["split"] != "out") / weeks
+        pick = base.get("pick")
+        checks = {}
+        if pick:
+            val, test = base["table"][pick]["validation"], base["table"][pick].get("test", {})
+            dval = dbl["table"][pick]["validation"]
+            checks = {"base_judge_passed": base["verdict"] == "passed",
+                      "validation_p_below_bonferroni": val["p"] is not None and val["p"] < H2_ALPHA,
+                      "double_cost_validation_positive": dval["mean"] is not None and dval["mean"] > 0,
+                      "test_positive": test.get("mean") is not None and test["mean"] > 0,
+                      "three_a_week": per_week >= 3}
+        by_day = {}
+        for r in rows:
+            by_day[day_key(r)] = by_day.get(day_key(r), 0) + 1
+        summ[kind] = {"rows": len(rows), "per_week": round(per_week, 2), "coins": len({r["symbol"] for r in rows}),
+                      "max_events_one_day": max(by_day.values(), default=0), "base": base, "double_cost": dbl,
+                      "unhedged_descriptive": unh, "checks": checks,
+                      "mean_funding": round(sum(v["funding"] for r in rows for v in r["ret"].values())
+                                            / max(1, sum(len(r["ret"]) for r in rows)), 5),
+                      "passed": bool(checks) and all(checks.values())}
+    return summ

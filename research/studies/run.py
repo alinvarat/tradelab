@@ -1778,6 +1778,71 @@ def summarize_selftest_shard(all_rows):
             "value_sum": sum(r["value"] for r in all_rows)}
 
 
+def symbols_h2_oi_flush():
+    """Every USDT perp ever listed (S3 listing of futures/um klines, delisted included), minus L8_SKIP and leveraged tokens."""
+    return [x for x in _binance_all_usdt_symbols("futures/um")
+            if x[:-4] not in L8_SKIP and not re.search(r"(UP|DOWN|BULL|BEAR)$", x[:-4])]
+
+
+def rows_h2_oi_flush(symbols_slice, workers=16):
+    """Pre-registered in RESULTS.md 'H2 screen'. Per symbol: hourly perp klines, hourly open-interest snapshots from the
+    daily futures metrics files, settled funding. A symbol whose klines or funding months failed is dropped and counted."""
+    from concurrent.futures import ThreadPoolExecutor
+    from core import screens as sc
+    from research.studies import binance_vision as bv
+    if not symbols_slice:
+        return {"rows": [], "gaps": {}}
+    start, end, first = bv.utc(2021, 12), bv.utc(2026, 11), bv.utc(2022)
+    hour = lambda k: (k[0], k[1], k[2], k[3], k[4], k[7])   # noqa: E731
+    got, failed = bv.klines("BTCUSDT", start, end, "1h", market="futures/um")
+    if failed or not got:
+        raise RuntimeError(f"BTCUSDT perp hours failed: {failed[:5]}")
+    btc = {k[0]: (k[1], k[4]) for k in got}
+
+    def one(sym):
+        g = {"no_klines": 0, "klines_failed_symbols": 0, "funding_failed_symbols": 0, "metrics_days_failed": 0,
+             "symbols_without_oi": 0}
+        if sym == "BTCUSDT":
+            return [], g
+        k, kfail = bv.klines(sym, start, end, "1h", market="futures/um")
+        if kfail:
+            g["klines_failed_symbols"] += 1
+            return [], g
+        h1 = [hour(x) for x in k]
+        if len(h1) < 800:
+            g["no_klines"] += 1
+            return [], g
+        funding, ffail = bv.funding(sym, h1[0][0], end)
+        if ffail:
+            g["funding_failed_symbols"] += 1
+            return [], g
+        oi = {}
+        for y, m, d in bv.days(h1[0][0], min(end, h1[-1][0] + 3600)):
+            part = bv.iter_file("futures/um", "daily", "metrics", sym, (y, m, d), parse=sc.oi_hourly_row)
+            if part is None:
+                g["metrics_days_failed"] += 1
+                continue
+            for r in part:
+                if r is not None:
+                    oi[int(r[0])] = (r[1], r[2])
+        if not oi:
+            g["symbols_without_oi"] += 1
+            return [], g
+        return sc.oi_flush_rows(sym, h1, oi, btc, funding, start_ts=first), g
+    rows, gaps = [], {}
+    with ThreadPoolExecutor(workers) as ex:
+        for r, g in ex.map(one, symbols_slice):
+            rows += r
+            for kk, v in g.items():
+                gaps[kk] = gaps.get(kk, 0) + v
+    return {"rows": rows, "gaps": gaps}
+
+
+def summarize_h2_oi_flush(all_rows):
+    from core import screens as sc
+    return sc.oi_flush_summary(all_rows)
+
+
 def sharded_study(name):
     """(rows_fn, summarize_fn, symbols_fn) for a study that supports sharding, else None."""
     g = globals()
