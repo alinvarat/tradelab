@@ -2332,6 +2332,8 @@ from research.studies.thin_a import rows_thin_a, summarize_thin_a, symbols_thin_
 STUDIES.update({"factory_us_pit_1": study_factory_us_pit_1})
 STUDIES.update({"fxcom_1": study_fxcom_1})
 STUDIES.update({"factory_crypto_3": study_factory_crypto_3})
+from research.studies import news_v3_shard as _nv3s   # noqa: E402  news_v3 split over parallel jobs
+globals().update(_nv3s.bind(globals()))   # symbols_/rows_/summarize_news_v3 for research_sharded.yml
 STUDIES.update(__import__("research.studies.indicators_1", fromlist=["STUDIES"]).STUDIES)   # indicators_1 + its depth probe
 
 from research.sweeps import hooks as _sweep_hooks   # noqa: E402  config-driven sweeps: research/sweeps/<family>.json

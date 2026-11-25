@@ -37,6 +37,7 @@ jobs:
         env:
           STUDY: ${{ inputs.study }}
           SHARDS: ${{ inputs.shards }}
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}   # news_v3 plan lists SEC filings
         run: |
           [[ "$STUDY" =~ ^[a-z0-9_]+$ ]] || { echo "bad study name"; exit 2; }
           [[ "$SHARDS" =~ ^[0-9]+$ ]] || { echo "bad shard count"; exit 2; }
