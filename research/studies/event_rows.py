@@ -84,6 +84,8 @@ def summarize(comp: str, rows: list) -> dict:
     sn = [stop_net(r["path"], side, cost) for r in rows if r.get("path")]
     sn = [v for v in sn if v is not None]
     out["net_stop_4h"] = stats(sn)
+    from core import event_book as eb
+    out["sizing"] = eb.frozen_weight(sn, STOP)      # half-Kelly weight on the stop-adjusted 4h returns, loss cap 25%
     out["stopped_share"] = round(sum(1 for r in rows if r.get("path") and any(
         x is not None and side * (x - 1) <= -STOP for x in r["path"])) / max(1, len(rows)), 3)
     if rows:
