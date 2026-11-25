@@ -48,29 +48,36 @@ def _day(d):
 
 def probe():
     out = {"t": datetime.now(timezone.utc).isoformat()}
-    # A: closed crypto events ending in a one-day window, by month back to 2024
-    days = []
-    d = datetime(2026, 11, 20, tzinfo=timezone.utc)
-    while d > datetime(2024, 1, 1, tzinfo=timezone.utc):
-        days.append(d)
-        d -= timedelta(days=60)
+    st, ser = http(f"{GAMMA}/series?slug=bitcoin-up-or-down-hourly&limit=5")
+    out["series_by_slug"] = [st, json.dumps(ser)[:1500]]
+    sid = None
+    if isinstance(ser, list) and ser:
+        sid = ser[0].get("id")
+        out["series_keys"] = sorted(ser[0].keys())
+    for slug in ("btc-up-or-down-hourly", "bitcoin-up-or-down-hourly", "bitcoin-multi-strikes-weekly", "bitcoin-neg-risk-weekly", "btc-up-or-down-daily"):
+        st, s2 = http(f"{GAMMA}/series?slug={slug}&limit=2")
+        out["series_" + slug] = [st, (json.dumps([(x.get("id"), x.get("slug"), x.get("recurrence")) for x in s2]) if isinstance(s2, list) else s2)]
+    # event queries in 1-day windows by month back, with several filters
     hist = {}
     sample = None
-    for d in days:
+    d = datetime(2026, 11, 20, tzinfo=timezone.utc)
+    while d > datetime(2024, 1, 1, tzinfo=timezone.utc):
         a, b = _day(d), _day(d + timedelta(days=1))
-        ev = get(f"{GAMMA}/events?closed=true&tag_slug=crypto&limit=500&end_date_min={a}T00:00:00Z&end_date_max={b}T00:00:00Z")
-        if not isinstance(ev, list):
-            hist[a] = "fail"
-            continue
-        updown = [e for e in ev if re.search(r"up or down", e.get("title", ""), re.I)]
-        above = [e for e in ev if re.search(r"above|reach|hit", e.get("title", ""), re.I)]
-        hist[a] = {"events": len(ev), "updown": len(updown), "above_like": len(above),
-                   "titles": [e.get("title") for e in ev[:6]], "slugs": [e.get("slug") for e in (updown + above)[:3]]}
-        if updown and sample is None:
-            sample = updown[0]
+        row = {}
+        for name, q in (("series", f"series_id={sid}&") if sid else ("none", ""), ("tag", "tag_slug=crypto&"), ("plain", "")):
+            st, ev = http(f"{GAMMA}/events?{q}closed=true&limit=100&end_date_min={a}T00:00:00Z&end_date_max={b}T00:00:00Z")
+            if isinstance(ev, list):
+                ud = [e for e in ev if re.search(r"up or down", e.get("title", ""), re.I)]
+                ab = [e for e in ev if re.search(r"\babove\b", e.get("title", ""), re.I)]
+                row[name] = {"n": len(ev), "updown": len(ud), "above": len(ab), "ex": [e.get("slug") for e in (ud + ab)[:2]]}
+                if ud and sample is None:
+                    sample = ud[0]
+            else:
+                row[name] = [st, str(ev)[:100]]
+        hist[a] = row
+        d -= timedelta(days=60)
     out["history_by_date"] = hist
     if sample:
-        out["sample_event_keys"] = sorted(sample.keys())
         out["sample_event"] = {k: (v if len(str(v)) < 200 else str(v)[:200]) for k, v in sample.items() if k not in ("markets", "tags")}
         out["sample_tags"] = [(t.get("slug"), t.get("label")) for t in sample.get("tags") or []]
         mk = (sample.get("markets") or [{}])[0]
@@ -92,11 +99,16 @@ def probe():
                     ph = http(f"{CLOB}/prices-history?market={toks[0]}&interval=max&fidelity={fid}")
                     h = (ph[1] or {}).get("history") if isinstance(ph[1], dict) else None
                     out[f"prices_history_fid{fid}"] = {"status": ph[0], "n": len(h) if h is not None else None, "first": h[:1] if h else None}
-    # B: other discovery routes
-    out["series_probe"] = {}
-    for q in ("bitcoin up or down", "ethereum above", "solana up or down"):
-        st, body = http(f"{GAMMA}/public-search?q={q.replace(' ', '%20')}&limit_per_type=5&events_status=closed")
-        out["series_probe"][q] = (st, [(e.get("slug"), e.get("endDate"), (e.get("series") or [{}])[0].get("slug") if e.get("series") else None) for e in (body.get("events") or [])][:6] if isinstance(body, dict) else body)
+    # slug-constructed lookups (hourly and daily), to measure how far back they exist
+    slugs = {}
+    for ymd in ("2025-08-15", "2025-09-15", "2025-10-05", "2025-12-10", "2026-02-23", "2026-06-10", "2026-10-10"):
+        dd = datetime.strptime(ymd, "%Y-%m-%d")
+        mon = dd.strftime("%B").lower()
+        for coin in ("bitcoin", "ethereum", "solana", "xrp"):
+            for sl in (f"{coin}-up-or-down-{mon}-{dd.day}-3pm-et", f"{coin}-above-on-{mon}-{dd.day}", f"{coin}-above-on-{mon}-{dd.day}-{dd.year}"):
+                st, e = http(f"{GAMMA}/events?slug={sl}")
+                slugs[sl] = [st, len(e) if isinstance(e, list) else str(e)[:60]]
+    out["slug_lookup"] = slugs
     return out
 
 
