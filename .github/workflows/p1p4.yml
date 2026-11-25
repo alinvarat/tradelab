@@ -1,0 +1,138 @@
+name: P1 + P4
+
+# PLAN_20261126b directions P1 (deep resting orders on small perps) and P4 (new-perp first-week short). Protocol: research/studies/protocol_p1p4_20261126.md.
+# Modes: p4step0 (a read of the calendar_flow_1 run-2 rows), p1 (sharded pricing + aggregate, locked gate).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "p4step0 or p1"
+        required: true
+        default: "p4step0"
+
+permissions:
+  contents: read
+
+jobs:
+  p4step0:
+    if: inputs.mode == 'p4step0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: tradelab-p1p4-data
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Fetch the R2 rows and the frozen L1f rows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p parts
+          gh run download 45556054691 --repo "$GITHUB_REPOSITORY" --pattern 'part-calendar_flow_1-*' --dir parts
+          git fetch origin data/forced-flow
+          git show origin/data/forced-flow:runs/20261125T162107Z/rows.jsonl.gz > /tmp/ff_rows.jsonl.gz
+      - name: Step 0
+        run: python research/studies/p4_newperp.py step0 out parts /tmp/ff_rows.jsonl.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p4-step0
+          path: out/
+      - name: Keep on data/p1p4
+        if: always()
+        run: |
+          [ -f out/step0.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/p1p4 2>/dev/null; then
+            git checkout -q -B data/p1p4 origin/data/p1p4
+          else
+            git checkout -q --orphan data/p1p4 && git rm -rq --cached . && git clean -fdq
+          fi
+          d=p4_step0/$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d
+          cp /tmp/keep/* $d/
+          git add -A p4_step0
+          git commit -qm "P4 step 0: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/p1p4 && break; git fetch -q origin data/p1p4; git rebase -q origin/data/p1p4; done
+
+  shard:
+    if: inputs.mode == 'p1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      matrix:
+        i: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Price one shard
+        run: python research/studies/p1_rest.py shard out ${{ matrix.i }} 16
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p1-shard-${{ matrix.i }}
+          path: out/
+          retention-days: 30
+
+  aggregate:
+    if: always() && inputs.mode == 'p1'
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    concurrency:
+      group: tradelab-p1p4-data
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: p1-shard-*
+          path: shards
+      - name: Frozen L1f rows
+        run: |
+          git fetch origin data/forced-flow
+          git show origin/data/forced-flow:runs/20261125T162107Z/rows.jsonl.gz > /tmp/ff_rows.jsonl.gz
+      - name: Locked gate and criteria
+        run: python research/studies/p1_rest.py aggregate out shards /tmp/ff_rows.jsonl.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p1-summary
+          path: out/
+      - name: Keep summary on data/p1p4
+        if: always()
+        run: |
+          [ -f out/summary.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          mkdir -p /tmp/keep_meta; find shards -name 'meta_*.json' -exec cp {} /tmp/keep_meta/ \;
+          if git fetch origin data/p1p4 2>/dev/null; then
+            git checkout -q -B data/p1p4 origin/data/p1p4
+          else
+            git checkout -q --orphan data/p1p4 && git rm -rq --cached . && git clean -fdq
+          fi
+          d=p1_run/$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d
+          cp /tmp/keep/* $d/; cp /tmp/keep_meta/* $d/
+          git add -A p1_run
+          git commit -qm "P1 run: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4 5; do git push -q origin data/p1p4 && break; git fetch -q origin data/p1p4; git rebase -q origin/data/p1p4; done
