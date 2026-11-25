@@ -1778,6 +1778,95 @@ def summarize_selftest_shard(all_rows):
             "value_sum": sum(r["value"] for r in all_rows)}
 
 
+H1_START, H1_END = (2022, 1), (2026, 11)          # monthly files 2022-01 .. 2026-10
+
+
+def symbols_h1_basis_snapback():
+    """Every USDT perp ever listed (delisted included), minus the L8 skip list and leveraged tokens."""
+    return [x for x in _binance_all_usdt_symbols("futures/um")
+            if x[:-4] not in L8_SKIP and not re.search(r"(UP|DOWN|BULL|BEAR)$", x[:-4])]
+
+
+def _h1_symbol(sym, ms):
+    """Rows and counters for one perp. Premium files first; perp, spot and funding files only for candidate months."""
+    from research.studies import binance_vision as bv
+    from core import screens as sc
+    gaps, prem = {}, {}
+    def bump(k, n=1):
+        gaps[k] = gaps.get(k, 0) + n
+    blocked = set()
+    for ym in ms:
+        got = bv.fetch("futures/um", "monthly", "premiumIndexKlines", sym, ym, "5m", bv.parse_kline)
+        if got is None:
+            bump("premium_months_failed")
+            blocked.add(ym)
+            continue
+        for r in got:
+            prem[r[0]] = r[4]
+    if not prem:
+        bump("no_premium_data")
+        return [], gaps
+    need = set()
+    for t, p in prem.items():
+        if abs(p) >= sc.BS_PREM:
+            need |= sc.basis_window_months(t)
+    need = sorted(need & set(ms))
+    perp, spot, funding = {}, {}, []
+    for ym in need:
+        got = bv.fetch("futures/um", "monthly", "klines", sym, ym, "5m", bv.parse_kline)
+        if got is None:
+            bump("perp_months_failed")
+            blocked.add(ym)
+        for r in got or []:
+            perp[r[0]] = (r[1], r[4], r[7])
+        got = bv.fetch("spot", "monthly", "klines", sym, ym, "5m", bv.parse_kline)
+        if got is None:
+            bump("spot_months_failed")
+            blocked.add(ym)
+        elif not got:
+            bump("spot_months_missing")
+        for r in got or []:
+            spot[r[0]] = r[4]
+        got = bv.fetch("futures/um", "monthly", "fundingRate", sym, ym, None, bv.parse_funding)
+        if got is None:
+            bump("funding_months_failed")
+            blocked.add(ym)
+        funding += got or []
+    rows = []
+    for side in (1, -1):
+        r, st = sc.basis_snap_rows(sym, side, prem, perp, spot, funding, blocked)
+        rows += r
+        for k, v in st.items():
+            bump(f"{sc.BS_KINDS[side]}_{k}", v)
+    return rows, gaps
+
+
+def rows_h1_basis_snapback(symbols_slice):
+    """Pre-registered in RESULTS.md 'H1 screen'. Needs only its slice; ranks and verdicts are in summarize_*."""
+    from concurrent.futures import ThreadPoolExecutor
+    from research.studies import binance_vision as bv
+    ms = bv.months(bv.utc(*H1_START), bv.utc(*H1_END))
+    rows, gaps = [], {}
+    with ThreadPoolExecutor(6) as ex:
+        for r, g in ex.map(lambda s: _h1_symbol(s, ms), list(symbols_slice)):
+            rows += r
+            for k, v in g.items():
+                gaps[k] = gaps.get(k, 0) + v
+    return {"rows": rows, "gaps": gaps}
+
+
+def summarize_h1_basis_snapback(all_rows):
+    from datetime import datetime, timezone
+    from core import screens as sc
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2022), T(2023)), "validation": (T(2023), T(2025)), "test": (T(2025), T(2026, 11))}
+    weeks = (T(2026, 11) - T(2022)) / (7 * 86400)
+    summ = {"line": "h1_basis_snapback", "rows": len(all_rows), "symbols": len({r["symbol"] for r in all_rows}),
+            "weeks": round(weeks, 1)}
+    summ.update(sc.basis_snap_summary(all_rows, bounds, weeks))
+    return summ
+
+
 def sharded_study(name):
     """(rows_fn, summarize_fn, symbols_fn) for a study that supports sharding, else None."""
     g = globals()
