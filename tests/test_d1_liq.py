@@ -9,10 +9,10 @@ from core import sweep_stats as ss
 PROTO = Path(__file__).resolve().parents[1] / "research" / "studies" / "protocol_d1_liq_20261126.md"
 
 
-def series(n_min=3000, price=100.0, qv=10000.0):
+def series(n_min=6000, price=100.0, qv=10000.0):
     """Flat series from the START minute index minus a baseline day, with an optional spike added by the caller."""
     s = d1.Series()
-    base = int((d1.START - d1.T0) // 60) - 2000
+    base = int((d1.START - d1.T0) // 60) - 1700
     for i in range(base, base + n_min):
         s.o[i] = s.h[i] = s.l[i] = s.c[i] = price
         s.qv[i], s.tb[i] = qv, qv / 2
@@ -35,7 +35,7 @@ def spike(s, i0, drop=0.05, qv=200000.0, buy_share=0.1):
 class Events(unittest.TestCase):
     def test_trigger_fade_long(self):
         s, base = series()
-        i0 = base + 1500 - (base + 1500) % 5
+        i0 = base + 3000 - (base + 3000) % 5
         spike(s, i0)
         ev = d1.find_events(s)
         self.assertEqual(len(ev), 1)
@@ -47,13 +47,13 @@ class Events(unittest.TestCase):
 
     def test_no_trigger_when_taker_side_disagrees(self):
         s, base = series()
-        i0 = base + 1500 - (base + 1500) % 5
+        i0 = base + 3000 - (base + 3000) % 5
         spike(s, i0, buy_share=0.9)           # price falls but takers are buyers: not forced selling
         self.assertEqual(d1.find_events(s), [])
 
     def test_no_trigger_small_volume_or_move(self):
         s, base = series()
-        i0 = base + 1500 - (base + 1500) % 5
+        i0 = base + 3000 - (base + 3000) % 5
         spike(s, i0, qv=20000.0)              # 2x volume only (5 x 20000 vs 5 x 10000 baseline)
         self.assertEqual(d1.find_events(s), [])
         s2, base = series()
@@ -62,11 +62,12 @@ class Events(unittest.TestCase):
 
     def test_baseline_excludes_current_window_and_needs_history(self):
         s, base = series(n_min=400)
-        self.assertEqual(d1.find_events(s), [])
+        spike(s, base + 300 - (base + 300) % 5)
+        self.assertEqual(d1.find_events(s, a=d1.T0), [])
 
     def test_cluster_merge(self):
         s, base = series()
-        i0 = base + 1500 - (base + 1500) % 5
+        i0 = base + 3000 - (base + 3000) % 5
         spike(s, i0)
         s.o[i0 + 5] = 100                      # second spike right after the first (< 30 min)
         spike(s, i0 + 10)
@@ -76,7 +77,7 @@ class Events(unittest.TestCase):
 class Trade(unittest.TestCase):
     def test_long_gain_and_time_exit(self):
         s, base = series()
-        i0 = base + 1500 - (base + 1500) % 5
+        i0 = base + 3000 - (base + 3000) % 5
         spike(s, i0)
         ev = d1.find_events(s)[0]
         t = d1.trade(s, 1, ev["ts"], 60, 900)
@@ -99,7 +100,7 @@ class Trade(unittest.TestCase):
 
     def test_missing_bar_drops_trade(self):
         s, base = series()
-        self.assertIsNone(d1.trade(s, 1, d1.T0 + (base + 2990) * 60, 60, 900))
+        self.assertIsNone(d1.trade(s, 1, d1.T0 + (base + 7000) * 60, 60, 900))
 
 
 class Selection(unittest.TestCase):
