@@ -1,0 +1,102 @@
+{
+ "cells": 56,
+ "gate_ok": 0,
+ "passed": 0,
+ "family": {
+  "holm_m": 0,
+  "bonferroni_bar": null,
+  "alpha": 0.05
+ },
+ "gate_fail_reasons": {
+  "train net mean": 41,
+  "volatility/cost 8.8 <": 1,
+  "volatility/cost 9.0 <": 1,
+  "volatility/cost 8.4 <": 1,
+  "volatility/cost 5.9 <": 1,
+  "monthly contribution x": 1,
+  "volatility/cost 9.2 <": 1,
+  "train trades 10": 1,
+  "train trades 15": 4,
+  "train trades 14": 4
+ },
+ "by_family": {
+  "A": {
+   "cells": 36,
+   "gate_ok": 0
+  },
+  "B": {
+   "cells": 4,
+   "gate_ok": 0
+  },
+  "D": {
+   "cells": 4,
+   "gate_ok": 0
+  },
+  "E": {
+   "cells": 4,
+   "gate_ok": 0
+  },
+  "C": {
+   "cells": 8,
+   "gate_ok": 0
+  }
+ },
+ "top": [],
+ "best_x_survivors": [],
+ "best_x_all": [
+  [
+   0.0827,
+   "fix_fade_1.5|XAUUSD",
+   "volatility/cost 9.2 < 10"
+  ],
+  [
+   0.0461,
+   "orb_ny_60_brk_t120|XAUUSD",
+   "monthly contribution x 0.046 < 0.2"
+  ],
+  [
+   0.0385,
+   "orb_ldn_30_brk_trail|XAUUSD",
+   "volatility/cost 8.4 < 10"
+  ],
+  [
+   0.0252,
+   "orb_ldn_30_brk_t120|XAUUSD",
+   "volatility/cost 8.8 < 10"
+  ],
+  [
+   0.0247,
+   "orb_ldn_30_brk_tp|XAUUSD",
+   "volatility/cost 9.0 < 10"
+  ],
+  [
+   0.0058,
+   "orb_ny_15_fail_trail|XAUUSD",
+   "volatility/cost 5.9 < 10"
+  ],
+  [
+   -0.0025,
+   "orb_ny_30_fail_t120|XAUUSD",
+   "train net mean not above 0 and the reversed-side placebo"
+  ],
+  [
+   -0.0038,
+   "orb_ny_15_fail_t120|XAUUSD",
+   "train net mean not above 0 and the reversed-side placebo"
+  ]
+ ],
+ "bounds": {
+  "train": [
+   1701388800.0,
+   1733011200.0
+  ],
+  "validation": [
+   1733011200.0,
+   1756684800.0
+  ],
+  "test": [
+   1756684800.0,
+   1795132800.0
+  ]
+ }
+}
