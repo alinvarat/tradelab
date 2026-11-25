@@ -2,10 +2,10 @@
  "protocol": "research/studies/protocol_fwd_crypto_spikes_20261125.md",
  "start_ts": 1795564800.0,
  "gap_hours_missed": 0,
- "h_next": 1795564800.0,
+ "h_next": 1795568400.0,
  "d_next": 1795651200.0,
  "last_run": {
-  "run_at": 1795568199,
+  "run_at": 1795568709,
   "universe": {
    "spot_usdt": 516,
    "with_okx_perp": 206
