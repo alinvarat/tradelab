@@ -39,6 +39,10 @@ class Parsers(unittest.TestCase):
         self.assertEqual(ff.kr_class("[이벤트] 업비트 입출금 이벤트 (이벤트 종료)"), "")
         self.assertEqual(ff.kr_class("투자유의 종목 지정 해제 안내 - 싸이식(CYS)"), "")
         self.assertEqual(ff.kr_class("거래지원 종료 일정 연장 안내 (CYS)"), "")
+        self.assertEqual(ff.kr_class("[투자유의/거래지원종료] 코넌(CON) 투자유의종목 지정 및 벨로프로토콜(VELO) 거래지원 종료"), "")
+        self.assertEqual(ff.kr_class("거래유의 코넌(CON) 투자유의종목 지정 및 믹스마블(MIX) 지정 해지"), "")
+        self.assertEqual(ff.kr_class("[투자유의] 오르빗 체인(ORC) 투자유의종목 지정"), "caution")
+        self.assertEqual(ff.kr_class("[거래지원종료] 썸씽(SSX) 거래지원 종료"), "delist")
         self.assertEqual(ff.kr_class("Notice of Digital Asset Market Support Termination (AAA) (Completed)"), "")
         self.assertEqual(ff.kr_symbols("[거래지원 종료] 싸이식(CYS), 아이콘(ICX) 거래지원 종료"), ["CYS", "ICX"])
         self.assertEqual(ff.kr_symbols("Notice on market support termination (AAA, BBB)"), ["AAA", "BBB"])
@@ -47,6 +51,8 @@ class Parsers(unittest.TestCase):
         self.assertEqual(ff.bybit_class_symbols("Delisting of GALFT, PIXFI, PAWS, B3TR, SAND and MANA"), ("delist", ["GALFT", "PIXFI", "PAWS", "B3TR", "SAND", "MANA"]))
         self.assertEqual(ff.bybit_class_symbols("Delisting of SOLOUSDT Perpetual Contract"), ("perp_delist", ["SOLO"]))
         self.assertIsNone(ff.bybit_class_symbols("Bybit Alpha Delisting of ARENA"))
+        self.assertEqual(ff.bybit_class_symbols("Delisting of Metachain (MTC) on Bybit"), ("delist", ["MTC"]))
+        self.assertIsNone(ff.bybit_class_symbols("Bybit Supports SaitamaV2 (SAITAMA) Contract Swap to The SaitaChain Coin (STC) and Delists SAITAMA/USDT"))
         self.assertIsNone(ff.bybit_class_symbols("Delisting 2 Spot Trading Pairs on Jun 16, 2026"))
 
 
