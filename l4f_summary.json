@@ -1,5 +1,5 @@
 {
- "equity_usd": 147.0,
+ "equity_usd": 147.6653,
  "start_usd": 147.0,
  "goal_usd": 441.0,
  "pending": [
@@ -94,16 +94,6 @@
    "volume": 55421.884689
   },
   {
-   "id": "7233465",
-   "question": "Will Elon Musk post <40 tweets from November 23 to November 25, 2026?",
-   "end": "2026-11-25T17:00:00Z",
-   "side": "yes",
-   "price": 0.083,
-   "stake": 7.35,
-   "entry_ts": 1795567653.2079093,
-   "volume": 73525.824658
-  },
-  {
    "id": "7176635",
    "question": "Will the price of Bitcoin be above $54,000 on November 26?",
    "end": "2026-11-26T17:00:00Z",
@@ -114,17 +104,32 @@
    "volume": 53583.940569
   }
  ],
- "n_closed": 0,
+ "n_closed": 1,
  "sequential": {
-  "n_units": 0,
+  "n_units": 1,
   "e_value_edge": 1.0,
   "e_value_negative": 1.0,
   "threshold": 20.0,
   "decision": "continue",
   "decided_at_unit": null,
-  "mean_scaled": null
+  "mean_scaled": 0.090513
  },
  "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md",
- "closed_last": [],
+ "closed_last": [
+  {
+   "id": "7233465",
+   "question": "Will Elon Musk post <40 tweets from November 23 to November 25, 2026?",
+   "end": "2026-11-25T17:00:00Z",
+   "side": "yes",
+   "price": 0.083,
+   "stake": 7.35,
+   "entry_ts": 1795567653.2079093,
+   "volume": 73525.824658,
+   "net": 0.09051254089422028,
+   "ts": 1795591037.4459643,
+   "yes_won": false,
+   "equity_after": 147.6653
+  }
+ ],
  "last_error": null
 }
