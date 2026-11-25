@@ -2319,6 +2319,8 @@ STUDIES.update(_thin_a.STUDIES)
 from research.studies.thin_a import rows_thin_a, summarize_thin_a, symbols_thin_a   # noqa: E402,F401  sharded study
 STUDIES.update({"factory_us_pit_1": study_factory_us_pit_1})
 STUDIES.update({"factory_crypto_3": study_factory_crypto_3})
+from research.studies import news_v3_shard as _nv3s   # noqa: E402  news_v3 split over parallel jobs
+globals().update(_nv3s.bind(globals()))   # symbols_/rows_/summarize_news_v3 for research_sharded.yml
 
 
 # ---- sharded studies: rows_<study>(symbols_slice) and summarize_<study>(all_rows), looked up by name below ----
