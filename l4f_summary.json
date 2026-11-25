@@ -1,18 +1,8 @@
 {
- "equity_usd": 149.7984,
+ "equity_usd": 149.8131,
  "start_usd": 147.0,
  "goal_usd": 441.0,
  "pending": [
-  {
-   "id": "6757401",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-25T20:00:00Z",
-   "side": "yes",
-   "price": 0.002,
-   "stake": 7.35,
-   "entry_ts": 1795557353.5935743,
-   "volume": 67057.062766
-  },
   {
    "id": "7176635",
    "question": "Will the price of Bitcoin be above $54,000 on November 26?",
@@ -124,7 +114,7 @@
    "volume": 53232
   }
  ],
- "n_closed": 9,
+ "n_closed": 10,
  "sequential": {
   "n_units": 1,
   "e_value_edge": 1.0,
@@ -132,7 +122,7 @@
   "threshold": 20.0,
   "decision": "continue",
   "decided_at_unit": null,
-  "mean_scaled": 0.042306
+  "mean_scaled": 0.038276
  },
  "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md",
  "closed_last": [
@@ -261,6 +251,20 @@
    "ts": 1795645059.9208035,
    "yes_won": false,
    "equity_after": 149.7984
+  },
+  {
+   "id": "6757401",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-25T20:00:00Z",
+   "side": "yes",
+   "price": 0.002,
+   "stake": 7.35,
+   "entry_ts": 1795557353.5935743,
+   "volume": 67057.062766,
+   "net": 0.002004008016032064,
+   "ts": 1795646839.0774944,
+   "yes_won": false,
+   "equity_after": 149.8131
   }
  ],
  "last_error": null
