@@ -183,14 +183,17 @@ def make_functions(name, path):
     return {f"symbols_{name}": symbols, f"rows_{name}": rows, f"summarize_{name}": summarize}
 
 
-def make_fw_functions(name, path):
-    """funding_window family: the shard universe is the perp symbols, rows are extreme-funding events, the merge builds the rules."""
+def make_fw_functions(name, path, pred=False):
+    """funding_window families: the shard universe is the perp symbols, rows are events, the merge builds the rules.
+    pred=True is fundwin3 (rate predicted at entry from premium-index minutes, per-symbol spread cost, spot-hedged variant)."""
     from core import sweep_events as sev
+    expand = sev.expand_pred if pred else sev.expand
+    trades_of = sev.trades_pred if pred else sev.trades_for_rule
     rel = os.path.relpath(path, sc.ROOT)
 
     def symbols():
         cfg, sha = sc.load(path)
-        sev.expand(cfg)
+        expand(cfg)
         pre = sc.preregistration(cfg, sha, rel, read_board(), check_git=on_actions())
         if pre["problems"]:
             raise SystemExit("pre-registration check failed: " + "; ".join(pre["problems"]))
@@ -200,16 +203,16 @@ def make_fw_functions(name, path):
     def rows(symbols_slice):
         from research.sweeps import fundwin
         cfg, _ = sc.load(path)
-        events, gaps = fundwin.load_events(symbols_slice, cfg["data"])
+        events, gaps = (fundwin.load_events_pred if pred else fundwin.load_events)(symbols_slice, cfg["data"])
         return {"rows": events, "gaps": gaps}
 
     def summarize(events, write_board=None):
         cfg, sha = sc.load(path)
-        rules = sev.expand(cfg)
+        rules = expand(cfg)
         by_id = {r["id"]: r for r in rules}
         rule_rows = []
         for r in rules:
-            tr = sev.trades_for_rule(r, events)
+            tr = trades_of(r, events)
             b = r["bounds"]
             train = ss.in_split(tr, *b["train"])
             row = {"id": r["id"], "style": r["style"], "lev": r["lev"], "k": r["k"], "tf": "1m", "n_symbols": len({e["sym"] for e in events})}
@@ -223,7 +226,7 @@ def make_fw_functions(name, path):
             row["trades"] = compact_trades(tr)
             tw = by_id.get(sev.twin_id(r) or "")
             if r["delay"] == 0:
-                ttr = sev.trades_for_rule(tw, events) if tw else []
+                ttr = trades_of(tw, events) if tw else []
                 vm = ss.mean([t["net"] for t in ss.in_split(ttr, *b["validation"])])
                 tm = ss.mean([t["net"] for t in ss.in_split(ttr, *b["test"])])
                 row["extra_criteria"] = {"survives_5min_delay": bool(tw) and vm is not None and tm is not None and vm > 0 and tm > 0}
@@ -236,6 +239,11 @@ def make_fw_functions(name, path):
         summ["rule_rows"] = rule_rows
         summ["n_events"] = len(events)
         summ["n_event_symbols"] = len({e["sym"] for e in events})
+        if pred:
+            b = rules[0]["bounds"]
+            summ["tracking_train"] = sev.tracking_error(events, *b["train"])
+            summ["tracking_all"] = sev.tracking_error(events, b["train"][0], b["test"][1])
+            summ["n_events_with_spot"] = sum(1 for e in events if e.get("vs"))
         return summ
 
     return {f"symbols_{name}": symbols, f"rows_{name}": rows, f"summarize_{name}": summarize}
@@ -246,7 +254,10 @@ def shard_functions():
     for name, path in family_files().items():
         with open(path) as f:
             kind = json.load(f).get("kind")
-        out.update(make_fw_functions(name, path) if kind == "funding_window" else make_functions(name, path))
+        if kind in ("funding_window", "funding_window_pred"):
+            out.update(make_fw_functions(name, path, pred=kind == "funding_window_pred"))
+        else:
+            out.update(make_functions(name, path))
     return out
 
 
