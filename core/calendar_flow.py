@@ -54,9 +54,16 @@ class Funding:
         return sum(self.r[a:b])
 
     def covers(self, t0, t1):
-        """True when the series has a settlement near the window (a missing month must not read as zero funding)."""
-        a = bisect.bisect_right(self.t, t0 - 9 * 3600)
-        return a < len(self.t) and self.t[a] <= t1 + 9 * 3600
+        """True when settlements cover the whole window: one within 9h of its start, one within 9h of its end and no
+        hole above 9h between them (a missing month inside a long trade must not read as zero funding)."""
+        h = 9 * 3600
+        t0, t1 = int(round(t0)), int(round(t1))
+        a = bisect.bisect_left(self.t, t0 - h)
+        b = bisect.bisect_right(self.t, t1 + h)
+        pts = self.t[a:b]
+        if not pts or pts[0] > t0 + h or pts[-1] < t1 - h:
+            return False
+        return all(y - x <= h for x, y in zip(pts, pts[1:]))
 
     def pnl(self, side, t0, t1):
         """Funding pnl of a position: longs pay a positive rate, shorts receive it."""
@@ -618,15 +625,22 @@ def rule_report(rows, horizons, bounds=BOUNDS, bar=BAR, n_boot=N_BOOT, size=SIZE
     rng = random.Random(20261125)
     cv, ct = [], []
     for r in rows:
-        flip = rng.random() < 0.5
-        t = ((r.get("ctl") or {}).get(pick) if flip else None) or (r.get("ret") or {}).get(pick)
+        c = (r.get("ctl") or {}).get(pick)
+        if c is None:
+            continue                       # the control is only defined where a mirrored trade exists
+        t = c if rng.random() < 0.5 else (r.get("ret") or {}).get(pick)
         sp = sc.split_of(r["ts"], bounds)
         if t is not None and sp == "validation":
             cv.append(t["net"])
         elif t is not None and sp == "test":
             ct.append(t["net"])
-    out["control"] = {"validation_mean": _m(cv), "test_mean": _m(ct), "n_validation": len(cv),
-                      "real_beats_control_validation": bool(v and cv and mean(v) > mean(cv))}
+    beats = bool(v and cv and mean(v) > mean(cv))
+    out["control"] = {"validation_mean": _m(cv), "test_mean": _m(ct), "n_validation": len(cv), "real_beats_control_validation": beats}
+    crit["beats_random_control"] = beats
+    out["criteria"] = crit
+    out["passed_stats"] = passed = all(crit.values())
+    out["passed"] = passed and gate
+    out["verdict"] = "PASS" if passed and gate else ("stats pass but below the 3/week gate: diagnostic only" if passed else "fail")
     return out
 
 

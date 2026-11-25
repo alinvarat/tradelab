@@ -63,6 +63,14 @@ class Basics(unittest.TestCase):
         self.assertTrue(f.covers(t, t + 3600))
         self.assertFalse(f.covers(t + 10 * 86400, t + 10 * 86400 + 3600))
 
+    def test_funding_hole_inside_a_window_is_not_zero_funding(self):
+        t = 1_700_000_000
+        full = cf.Funding([(t + 28800 * k, 0.0001) for k in range(10)])
+        holed = cf.Funding([(t + 28800 * k, 0.0001) for k in range(10) if k not in (3, 4, 5)])
+        self.assertTrue(full.covers(t, t + 28800 * 9))
+        self.assertFalse(holed.covers(t, t + 28800 * 9))                  # a 32h hole must skip the trade
+        self.assertTrue(holed.covers(t, t + 28800 * 2))                   # a window before the hole is fine
+
     def test_sane_catches_bad_rows(self):
         good = cf.make_trade(-1, 100.0, 90.0, 0.0014)
         self.assertEqual(cf.sane([{"symbol": "A", "ts": 1, "ret": {"h": good}}]), [])
@@ -251,7 +259,7 @@ class Expiry(unittest.TestCase):
         for k in range(1440):
             t = X + 8 * 3600 + 60 * k
             perp[t] = (t, 100.0, 100.0, 96.0 if k == 10 else 100.0, 96.0 if k == 10 else 100.0)
-        fund = cf.Funding([(X + 16 * 3600, 0.0001), (X + 32 * 3600, 0.0001)])
+        fund = cf.Funding([(X + h * 3600, 0.0001) for h in (8, 16, 24, 32)])
         rows, cnt = cf.unpin_rows("BTCUSDT", [X], perp, fund)
         r = rows[0]
         self.assertEqual((r["ret"]["V1"]["reason"], r["ret"]["V1"]["exit"]), ("stop", 97.0))
@@ -312,7 +320,8 @@ class Report(unittest.TestCase):
                 t = ts(y) + k * 157000
                 px = 99.0 if win else 101.0
                 out.append({"symbol": f"S{k}", "market": f"S{k}", "ts": t, "kind": "x",
-                            "ret": {"h": cf.make_trade(-1, 100.0, px + (k % 7) * 0.01, 0.0014)}})
+                            "ret": {"h": cf.make_trade(-1, 100.0, px + (k % 7) * 0.01, 0.0014)},
+                            "ctl": {"h": cf.make_trade(1, 100.0, px + (k % 7) * 0.01, 0.0014)}})
         return out
 
     def test_pass_needs_the_gate_and_all_criteria(self):
@@ -324,6 +333,17 @@ class Report(unittest.TestCase):
         self.assertFalse(thin["passed"])
         self.assertTrue(thin["passed_stats"])
         self.assertIn("diagnostic", thin["verdict"])
+
+    def test_rule_that_does_not_beat_its_random_control_cannot_pass(self):
+        rows = self.rows()
+        for r in rows:                     # the mirrored trade earns the same as the real one: no directional edge
+            r["ctl"]["h"] = dict(r["ret"]["h"])
+        rep = cf.rule_report(rows, ["h"], n_boot=2000)
+        self.assertFalse(rep["criteria"]["beats_random_control"])
+        self.assertFalse(rep["passed"])
+        for r in rows:
+            r.pop("ctl")                   # no control rows at all: also not a pass
+        self.assertFalse(cf.rule_report(rows, ["h"], n_boot=2000)["passed"])
 
     def test_losing_rule_fails(self):
         rep = cf.rule_report(self.rows(win=False), ["h"], n_boot=2000)
