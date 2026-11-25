@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "p4step0 or p1"
+        description: "p4step0, p4step1 or p1"
         required: true
         default: "p4step0"
 
@@ -62,6 +62,47 @@ jobs:
           cp /tmp/keep/* $d/
           git add -A p4_step0
           git commit -qm "P4 step 0: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/p1p4 && break; git fetch -q origin data/p1p4; git rebase -q origin/data/p1p4; done
+
+  p4step1:
+    if: inputs.mode == 'p4step1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    concurrency:
+      group: tradelab-p1p4-data
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Step 1 (counts only)
+        run: python research/studies/p4_newperp.py step1 out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p4-step1
+          path: out/
+      - name: Keep on data/p1p4
+        if: always()
+        run: |
+          [ -f out/step1.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/p1p4 2>/dev/null; then
+            git checkout -q -B data/p1p4 origin/data/p1p4
+          else
+            git checkout -q --orphan data/p1p4 && git rm -rq --cached . && git clean -fdq
+          fi
+          d=p4_step1/$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d
+          cp /tmp/keep/* $d/
+          git add -A p4_step1
+          git commit -qm "P4 step 1: $(date -u +%FT%TZ)" || echo "nothing new"
           for i in 1 2 3 4; do git push -q origin data/p1p4 && break; git fetch -q origin data/p1p4; git rebase -q origin/data/p1p4; done
 
   shard:

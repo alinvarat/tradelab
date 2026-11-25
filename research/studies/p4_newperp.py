@@ -2,27 +2,38 @@
 
     python research/studies/p4_newperp.py step0 <out_dir> <parts_dir> <ff_rows>
         Step 0: a read of the R2 V1 rows of calendar_flow_1 run 2 (the part files of Actions 45556054691). Kill 0 is locked in the protocol.
+    python research/studies/p4_newperp.py step1 <out_dir>
+        Step 1 (counts only, no returns): listing time of every USDT perp on the non-Binance venues, eligible clusters. Kill 1 (< 60) is locked.
 """
-import calendar
 import glob
 import gzip
 import json
 import math
 import os
+import re
 import sys
 import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
+from concurrent.futures import ThreadPoolExecutor   # noqa: E402
+
 from core import calendar_flow as cf   # noqa: E402
+from core import d1_liq as d1          # noqa: E402
 from core import forced_flow as ff     # noqa: E402
+from research.studies import binance_vision as bv   # noqa: E402
 from research.studies import d3d4_core as dc   # noqa: E402
+from research.studies import l1f_venues as lv   # noqa: E402
 
 MONTH = 30.4375 * 86400
 HOLD_S = 168 * 3600
 KILL_X = 0.15
 CAP_N = 8.6
-FIRST_ENTRY_S = 24 * 3600
+STEP2_BOUNDS = {"train": (cf.utc(2023), cf.utc(2024, 9)), "validation": (cf.utc(2024, 9), cf.utc(2025, 9)), "test": (cf.utc(2025, 9), cf.utc(2026, 10, 29))}
+WINDOW = (cf.utc(2023), cf.utc(2026, 10, 29))
+SAME_WEEK = 7 * 86400
+KILL1_MIN = 60
+STABLE_BASES = {"USDC", "FDUSD", "TUSD", "BUSD", "USDP", "DAI", "USDE", "USDT", "EUR", "AEUR", "XAUT", "PAXG"}
 
 
 def find_rows(obj, out):
@@ -118,13 +129,166 @@ def step0(out_dir, parts_dir, ff_rows):
     print(json.dumps(res, indent=1)[:6000], flush=True)
 
 
+# ---------------------------------------------------------------- step 1: listing times on the non-Binance venues (counts only, no prices)
+def base_name(x):
+    x = x.upper() if not (x[:1] == "k" and x[1:].isupper()) else x[1:]
+    return re.sub(r"^(1000000|10000|1000)(?=[A-Z])", "", x)
+
+
+def _num(v):
+    try:
+        v = float(v)
+    except (TypeError, ValueError):
+        return None
+    return v if v > 0 else None
+
+
+def venue_okx():
+    st, d = lv.jget("https://www.okx.com/api/v5/public/instruments?instType=SWAP")
+    out = {}
+    for r in ((d or {}).get("data") or []):
+        if r.get("settleCcy") == "USDT" and r.get("instId", "").endswith("-USDT-SWAP"):
+            t = _num(r.get("listTime"))
+            if t:
+                out[base_name(r["instId"].split("-")[0])] = t / 1000
+    return st, out
+
+
+def venue_gate():
+    st, d = lv.jget("https://api.gateio.ws/api/v4/futures/usdt/contracts")
+    out = {}
+    for r in (d if isinstance(d, list) else []):
+        t = _num(r.get("create_time"))
+        if t and str(r.get("name", "")).endswith("_USDT"):
+            out[base_name(r["name"][:-5])] = t
+    return st, out
+
+
+def venue_mexc():
+    st, d = lv.jget("https://contract.mexc.com/api/v1/contract/detail")
+    out = {}
+    for r in ((d or {}).get("data") or []) if isinstance(d, dict) else []:
+        t = _num(r.get("createTime"))
+        if t and r.get("quoteCoin") == "USDT":
+            out[base_name(r.get("baseCoin") or r["symbol"].split("_")[0])] = t / 1000
+    return st, out
+
+
+def venue_bitget():
+    st, d = lv.jget("https://api.bitget.com/api/v2/mix/market/contracts?productType=usdt-futures")
+    out = {}
+    for r in ((d or {}).get("data") or []) if isinstance(d, dict) else []:
+        t = _num(r.get("launchTime"))
+        if t:
+            out[base_name(r.get("baseCoin") or r["symbol"][:-4])] = t / 1000
+    return st, out
+
+
+def venue_kucoin():
+    st, d = lv.jget("https://api-futures.kucoin.com/api/v1/contracts/active")
+    out = {}
+    for r in ((d or {}).get("data") or []) if isinstance(d, dict) else []:
+        t = _num(r.get("firstOpenDate"))
+        if t and r.get("quoteCurrency") == "USDT" and not r.get("isInverse"):
+            b = r.get("baseCurrency", "")
+            out[base_name("BTC" if b == "XBT" else b)] = t / 1000
+    return st, out
+
+
+def venue_hyperliquid():
+    import json as _j
+    st, d = lv.jget("https://api.hyperliquid.xyz/info", data=_j.dumps({"type": "meta"}).encode(), method="POST")
+    names = [u["name"] for u in ((d or {}).get("universe") or []) if not u.get("isDelisted")]
+    out = {}
+
+    def one(nm):
+        body = _j.dumps({"type": "candleSnapshot", "req": {"coin": nm, "interval": "1d", "startTime": 0, "endTime": int(time.time() * 1000)}})
+        _, c = lv.jget("https://api.hyperliquid.xyz/info", data=body.encode(), method="POST")
+        return nm, (min(int(k["t"]) for k in c) / 1000 if isinstance(c, list) and c else None)
+    with ThreadPoolExecutor(4) as ex:
+        for nm, t in ex.map(one, names):
+            if t:
+                out[base_name(nm)] = t
+    return st, out
+
+
+VENUE_FNS = (("okx", venue_okx), ("gate", venue_gate), ("mexc", venue_mexc), ("bitget", venue_bitget), ("kucoin_fut", venue_kucoin),
+             ("hyperliquid", venue_hyperliquid))
+
+
+def binance_first(sym_list):
+    """First 1h bar of the earliest monthly file for the first symbol of `sym_list` that exists on Binance USDT-M. None = never listed; False = listing check failed."""
+    for sym in sym_list:
+        try:
+            files = bv.list_files("futures/um", "monthly", "klines", sym, "1h")
+        except RuntimeError:
+            return False
+        if files:
+            rows = bv.fetch("futures/um", "monthly", "klines", sym, files[0], "1h", bv.parse_kline)
+            if rows is None:
+                return False
+            if rows:
+                return float(rows[0][0])
+    return None
+
+
+def step1(out_dir):
+    venues, status = {}, {}
+    for name, fn in VENUE_FNS:
+        try:
+            st, got = fn()
+        except Exception as e:  # noqa: BLE001
+            st, got = repr(e)[:100], {}
+        venues[name], status[name] = got, {"http": st, "contracts_with_listing_time": len(got)}
+    first = {}
+    for name, got in venues.items():
+        for b, t in got.items():
+            if b in STABLE_BASES:
+                continue
+            if b not in first or t < first[b][0]:
+                first[b] = (t, name)
+    cand = {b: v for b, v in first.items() if WINDOW[0] <= v[0] < WINDOW[1]}
+    bsyms = set(bv.list_symbols("futures/um", "USDT"))
+
+    def binance(b):
+        names = [s for s in (b + "USDT", "1000" + b + "USDT", "10000" + b + "USDT", "1000000" + b + "USDT") if s in bsyms]
+        return b, (binance_first(names) if names else None)
+    with ThreadPoolExecutor(4) as ex:
+        bin_t = dict(ex.map(binance, sorted(cand)))
+    clusters, dropped = [], {"binance_first_or_same_week": 0, "binance_check_failed": 0}
+    for b, (t, v) in sorted(cand.items()):
+        bt = bin_t[b]
+        if bt is False:
+            dropped["binance_check_failed"] += 1
+        elif bt is not None and bt <= t + SAME_WEEK:
+            dropped["binance_first_or_same_week"] += 1
+        else:
+            clusters.append({"base": b, "first_venue": v, "first_ts": t, "binance_ts": bt})
+    by_venue, by_split, by_month = {}, {}, {}
+    for c in clusters:
+        by_venue[c["first_venue"]] = by_venue.get(c["first_venue"], 0) + 1
+        g = time.gmtime(c["first_ts"])
+        k = f"{g.tm_year}-{g.tm_mon:02d}"
+        by_month[k] = by_month.get(k, 0) + 1
+    for sp, (a, b2) in STEP2_BOUNDS.items():
+        by_split[sp] = sum(1 for c in clusters if a <= c["first_ts"] < b2)
+    res = {"run_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "venues": status, "bases_listed_in_window": len(cand),
+           "binance_symbols": len(bsyms), "dropped": dropped, "eligible_clusters": len(clusters), "kill1_fired": len(clusters) < KILL1_MIN,
+           "by_first_venue": by_venue, "by_split": by_split, "by_month": dict(sorted(by_month.items())), "clusters": clusters}
+    with open(os.path.join(out_dir, "step1.json"), "w") as f:
+        json.dump(res, f, indent=1)
+    print(json.dumps({k: v for k, v in res.items() if k != "clusters"}, indent=1), flush=True)
+
+
 def main():
     mode, out_dir = sys.argv[1], sys.argv[2]
     os.makedirs(out_dir, exist_ok=True)
     if mode == "step0":
         step0(out_dir, sys.argv[3], sys.argv[4])
+    elif mode == "step1":
+        step1(out_dir)
     else:
-        raise SystemExit("mode must be step0")
+        raise SystemExit("mode must be step0 or step1")
 
 
 if __name__ == "__main__":

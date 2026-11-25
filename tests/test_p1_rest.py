@@ -201,6 +201,20 @@ class P4Step0(unittest.TestCase):
         self.assertLessEqual(st["x_capped"], st["x"])
 
 
+class P4Step1(unittest.TestCase):
+    def test_base_names(self):
+        self.assertEqual(p4.base_name("1000PEPE"), "PEPE")
+        self.assertEqual(p4.base_name("1INCH"), "1INCH")
+        self.assertEqual(p4.base_name("kBONK"), "BONK")
+        self.assertEqual(p4.base_name("eth"), "ETH")
+        self.assertEqual(p4.base_name("1000000MOG"), "MOG")
+
+    def test_step2_bounds_are_the_protocol_ones(self):
+        self.assertEqual(p4.STEP2_BOUNDS["train"][0], p4.cf.utc(2023))
+        self.assertEqual(p4.STEP2_BOUNDS["test"][1], p4.cf.utc(2026, 10, 29))
+        self.assertEqual(p4.KILL1_MIN, 60)
+
+
 class Lock(unittest.TestCase):
     def test_protocol_hash(self):
         self.assertEqual(hashlib.sha256(PROTO.read_bytes()).hexdigest(), PROTO.with_suffix(".sha256").read_text().strip(),
