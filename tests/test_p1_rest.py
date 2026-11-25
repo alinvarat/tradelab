@@ -8,6 +8,7 @@ from core import p1_rest as p1
 from research.studies import p4_newperp as p4
 
 PROTO = Path(__file__).resolve().parents[1] / "research" / "studies" / "protocol_p1p4_20261126.md"
+ADD2 = PROTO.with_name("protocol_p1p4_20261126_addendum_step2.md")
 
 
 def flat(price=100.0, qv=10000.0, n=6000):
@@ -215,10 +216,67 @@ class P4Step1(unittest.TestCase):
         self.assertEqual(p4.KILL1_MIN, 60)
 
 
+class P4Step2(unittest.TestCase):
+    def week(self, n=150, last_close=None, spike=None):
+        t0 = p4.cf.utc(2025, 3, 1)
+        bars = {}
+        for k in range(n):
+            t = t0 + k * 3600
+            bars[t] = (t, 100.0, 100.0, 100.0, 100.0)
+        if last_close is not None:
+            t = t0 + (p4.HOLD_BARS - 1) * 3600
+            bars[t] = (t, 100.0, 100.0, last_close, last_close)
+        if spike is not None:
+            t = t0 + 10 * 3600
+            bars[t] = (t, 100.0, spike, 100.0, 100.0)
+        btc = {t: (t, 100.0, 100.0, 100.0, 100.0) for t in bars}
+        return t0, bars, btc
+
+    def test_short_gain_and_cost(self):
+        t0, bars, btc = self.week(last_close=80.0)
+        t, why = p4.v1_trade(bars, btc, t0)
+        self.assertIsNone(why)
+        self.assertAlmostEqual(t["gross"], 0.2)
+        self.assertAlmostEqual(t["net"], 0.2 - 0.0028)
+        self.assertEqual(t["reason"], "time")
+        self.assertEqual(t["xt"], t0 + p4.HOLD_BARS * 3600)
+
+    def test_hedge_leg_is_added(self):
+        t0, bars, btc = self.week(last_close=80.0)
+        last = t0 + (p4.HOLD_BARS - 1) * 3600
+        btc[last] = (last, 100.0, 110.0, 100.0, 110.0)          # BTC rallies 10% while the coin falls 20%
+        t, _ = p4.v1_trade(bars, btc, t0)
+        self.assertAlmostEqual(t["gross"], 0.2 + 0.1)
+
+    def test_stop_at_135_percent(self):
+        t0, bars, btc = self.week(spike=140.0)
+        t, _ = p4.v1_trade(bars, btc, t0)
+        self.assertEqual(t["reason"], "stop")
+        self.assertAlmostEqual(t["gross"], -0.35)
+        self.assertEqual(t["xt"], t0 + 11 * 3600)
+        self.assertAlmostEqual(t["mae"], 0.40)
+
+    def test_short_week_is_a_gap_and_missing_data_drops(self):
+        t0, bars, btc = self.week(n=100)
+        t, _ = p4.v1_trade(bars, btc, t0)
+        self.assertEqual(t["reason"], "gap")
+        self.assertEqual(p4.v1_trade(bars, {}, t0), (None, "no_btc_bar"))
+        self.assertEqual(p4.v1_trade({}, btc, t0), (None, "no_bar_at_entry"))
+
+    def test_mirror_is_the_opposite_leg(self):
+        t0, bars, btc = self.week(last_close=80.0)
+        m, _ = p4.v1_trade(bars, btc, t0, 1)
+        self.assertAlmostEqual(m["gross"], -0.2)
+
+
 class Lock(unittest.TestCase):
     def test_protocol_hash(self):
         self.assertEqual(hashlib.sha256(PROTO.read_bytes()).hexdigest(), PROTO.with_suffix(".sha256").read_text().strip(),
                          "protocol_p1p4_20261126.md is locked: write a dated addendum instead of editing it")
+
+    def test_step2_addendum_hash(self):
+        self.assertEqual(hashlib.sha256(ADD2.read_bytes()).hexdigest(), ADD2.with_suffix(".sha256").read_text().strip(),
+                         "the step 2 addendum is locked: write a new dated addendum instead of editing it")
 
 
 if __name__ == "__main__":

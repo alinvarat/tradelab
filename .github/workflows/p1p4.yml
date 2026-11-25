@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "p4step0, p4step1 or p1"
+        description: "p4step0, p4step1, p4step2 or p1"
         required: true
         default: "p4step0"
 
@@ -103,6 +103,49 @@ jobs:
           cp /tmp/keep/* $d/
           git add -A p4_step1
           git commit -qm "P4 step 1: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/p1p4 && break; git fetch -q origin data/p1p4; git rebase -q origin/data/p1p4; done
+
+  p4step2:
+    if: inputs.mode == 'p4step2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    concurrency:
+      group: tradelab-p1p4-data
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Frozen step 1 clusters and L1f rows
+        run: |
+          git fetch origin data/p1p4 data/forced-flow
+          f=$(git ls-tree -r origin/data/p1p4 --name-only | grep '^p4_step1/.*step1.json$' | sort | tail -1)
+          git show "origin/data/p1p4:$f" > /tmp/step1.json
+          git show origin/data/forced-flow:runs/20261125T162107Z/rows.jsonl.gz > /tmp/ff_rows.jsonl.gz
+      - name: Step 2
+        run: python research/studies/p4_newperp.py step2 out /tmp/step1.json /tmp/ff_rows.jsonl.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p4-step2
+          path: out/
+      - name: Keep on data/p1p4
+        if: always()
+        run: |
+          [ -f out/step2.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          git checkout -q -B data/p1p4 origin/data/p1p4
+          d=p4_step2/$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d
+          cp /tmp/keep/* $d/
+          git add -A p4_step2
+          git commit -qm "P4 step 2: $(date -u +%FT%TZ)" || echo "nothing new"
           for i in 1 2 3 4; do git push -q origin data/p1p4 && break; git fetch -q origin data/p1p4; git rebase -q origin/data/p1p4; done
 
   shard:
