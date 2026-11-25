@@ -26,6 +26,7 @@ jobs:
           run() { gh workflow run research.yml -R "$R" --ref main -f study="$1" && echo "$(date -u +%FT%TZ) dispatched $1" || echo "dispatch $1 failed"; }
           end=$(( $(date +%s) + 340*60 ))
           last=""
+          run l4f_forward   # startup smoke: proves GITHUB_TOKEN can dispatch (ledger is idempotent)
           while [ "$(date +%s)" -lt "$end" ]; do
             m=$(date -u +%M); h=$(date -u +%H); dow=$(date -u +%u); key=$(date -u +%F-%H-%M)
             if [ "$key" != "$last" ]; then
