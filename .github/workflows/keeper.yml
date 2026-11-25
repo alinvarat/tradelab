@@ -35,6 +35,7 @@ jobs:
               { [ "$m" = "17" ] || [ "$m" = "47" ]; } && run l4f_forward
               [ "$h:$m" = "15:00" ] && [ "$dow" -le 5 ] && run options_forward
               [ "$h:$m" = "03:00" ] && [ "$dow" = "7" ] && run llm_earnings_forward
+              [ "$h:$m" = "21:45" ] && [ "$dow" -le 5 ] && { gh workflow run smallcap_intraday.yml -R "$R" --ref main -f mode=scan && echo "dispatched smallcap scan" || echo "dispatch smallcap failed"; }
             fi
             sleep 20
           done

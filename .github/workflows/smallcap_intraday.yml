@@ -44,3 +44,33 @@ jobs:
         with:
           name: smallcap-probe
           path: /tmp/probe.json
+      - name: Restore state from the data branch
+        if: env.MODE != 'probe'
+        run: |
+          mkdir -p /tmp/sc
+          if git fetch origin data/smallcap-intraday-rows 2>/dev/null; then
+            for f in events.jsonl.gz halts.jsonl.gz; do
+              git show origin/data/smallcap-intraday-rows:$f > /tmp/sc/$f 2>/dev/null || rm -f /tmp/sc/$f
+            done
+          fi
+      - name: Run (scan | halts | report)
+        if: env.MODE != 'probe'
+        env:
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+        run: python research/studies/smallcap_intraday.py "$MODE" /tmp/sc
+      - name: Push state and per-trade rows to data/smallcap-intraday-rows
+        if: always() && env.MODE != 'probe'
+        run: |
+          [ -d /tmp/sc ] && ls /tmp/sc/*.gz >/dev/null 2>&1 || exit 0
+          mkdir -p /tmp/out && cp /tmp/sc/* /tmp/out/
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/smallcap-intraday-rows; then
+            git checkout -q -B data/smallcap-intraday-rows origin/data/smallcap-intraday-rows
+          else
+            git checkout -q --orphan data/smallcap-intraday-rows && git rm -rq --cached . && git clean -fdq
+          fi
+          cp /tmp/out/* .
+          git add -A *.gz summary.json
+          git commit -qm "smallcap intraday $MODE $(date -u +%FT%TZ)" || echo "nothing new"
+          git push -q origin data/smallcap-intraday-rows
