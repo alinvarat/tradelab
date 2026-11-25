@@ -983,3 +983,198 @@ def drift(closes_by_ts, a, b):
     return v[-1] / v[0] - 1 if len(v) > 1 else None
 
 
+
+
+# ------------------------------------------------------------------ the study
+
+def _bounds():
+    bd = {"train": (utc(2018), utc(2022)), "validation": (utc(2022), utc(2025)), "test": (utc(2025), utc(2026, 11, 25))}
+    bh = {"train": (utc(2025, 2, 1), utc(2025, 8, 1)), "validation": (utc(2025, 8, 1), utc(2026, 2, 1)),
+          "test": (utc(2026, 2, 1), utc(2026, 11, 25))}
+    return bd, bh
+
+
+def _mean_val_test(series, b):
+    out = {}
+    for sp in ("validation", "test"):
+        v = split_vals(series, *b[sp])
+        out[sp] = {"mean_day": mean(v) if v else None, "days": len(v)}
+    return out
+
+
+def _daily_control(rec, series, b):
+    """Random-sign control for a daily book: flip each position run (segment) at random."""
+    out = {}
+    for sp in ("validation", "test"):
+        a, z = b[sp]
+        segs, tc_total = {}, 0.0
+        for sym, rows in rec.items():
+            for d, sg, plus, minus, tc, _sgn in rows:
+                if a <= day_ts(d) < z:
+                    k = (sym, sg)
+                    p0, m0 = segs.get(k, (0.0, 0.0))
+                    segs[k] = (p0 + plus, m0 + minus)
+                    tc_total += tc
+        v = split_vals(series, a, z)
+        actual = sum(v)
+        draw = control_segments(list(segs.values()))
+        out[sp] = control_run(actual, lambda rng, draw=draw, tc=tc_total: draw(rng) - tc, len(v))
+    return out
+
+
+def _by_asset_year_daily(rec):
+    by_a, by_y = {}, {}
+    for sym, rows in rec.items():
+        for d, _sg, plus, minus, tc, sgn in rows:
+            x = (plus if sgn > 0 else minus if sgn < 0 else 0.0) - tc
+            by_a[sym] = by_a.get(sym, 0.0) + x
+            by_y[d.year] = by_y.get(d.year, 0.0) + x
+    return ({k: round(v, 5) for k, v in sorted(by_a.items())}, {k: round(v, 5) for k, v in sorted(by_y.items())})
+
+
+def study(chart_fn, fred_fn, run_ts, n_ctrl=2000):
+    """Whole fxcom_1 run on injected fetchers. -> (summary, series_by_rule)."""
+    from core import factory as fa
+    bd, bh = _bounds()
+    bar = 0.05 / 8
+    rates, rate_gaps = load_rates(fred_fn)
+    gaps = {"rates": rate_gaps, "daily_fetch": {}, "hourly_fetch": {}}
+    gates = {}
+    # ---- data
+    daily_g, daily_raw = {}, {}
+    for s in sorted(set(DAILY_R1) | set(DAILY_R7)):
+        try:
+            ch = chart_fn(s, "10y", "1d")
+            daily_g[s] = build_daily(s, ch, run_ts, True)
+            daily_raw[s] = build_daily(s, ch, run_ts, False)
+        except Exception as e:  # noqa: BLE001
+            gaps["daily_fetch"][s] = f"{type(e).__name__}: {e}"[:200]
+    hs_g, hs_raw, h_start, h_end = {}, {}, utc(2024, 11, 25), utc(2026, 11, 25)
+    for s in HOURLY:
+        try:
+            ch = chart_fn(s, "2y", "1h")
+        except Exception as e:  # noqa: BLE001
+            gaps["hourly_fetch"][s] = f"{type(e).__name__}: {e}"[:200]
+            gates[s] = {"ok": False, "error": "fetch"}
+            continue
+        ok, info, clean = gate_hourly(ch["bars"])
+        clean = [b for b in clean if h_start <= b["t"] < h_end]
+        gates[s] = info
+        if ok and len(clean) > 600:
+            hs_g[s] = adjust_hourly(s, clean, True)
+            hs_raw[s] = adjust_hourly(s, clean, False)
+    gaps["roll_hourly"] = {s: h.rolls for s, h in hs_g.items()}
+    gaps["clipped_daily"] = {s: a.clipped for s, a in daily_g.items()}
+    gaps["gbp_rate_zero"] = "GBP has no usable rate series: differential taken as 0 for GBPUSD"
+    # ---- ceiling first
+    ceil = {"daily": ceiling_daily(daily_g, bd), "hourly": ceiling_hourly(hs_g, bh)}
+    zero = all(ceil[k][sp]["months_3x"] == 0 for k in ceil for sp in ("validation", "test"))
+    first = ("CEILING: perfect foresight, one trade a day at the leverage caps, after 1x costs, gives ZERO 3x months in "
+             "validation and test for this universe" if zero else
+             "CEILING: perfect foresight reaches 3x in some months (see ceiling); a real rule must still be judged")
+    # ---- daily rules
+    results = {}
+    rows = {}
+    ds = {"R1_tsmom_voltarget": {s: daily_g[s] for s in DAILY_R1 if s in daily_g},
+          "R7_fx_carry_volscaled": {s: daily_g[s] for s in DAILY_R7 if s in daily_g}}
+    dr = {"R1_tsmom_voltarget": {s: daily_raw[s] for s in DAILY_R1 if s in daily_raw},
+          "R7_fx_carry_volscaled": {s: daily_raw[s] for s in DAILY_R7 if s in daily_raw}}
+    for rule in DAILY_RULES:
+        data = ds[rule]
+        if not data:
+            results[rule], results[rule + "@2x"] = [], []
+            rows[rule] = {"error": "no daily data", "kind": "daily", "low_count": True}
+            continue
+        base, rec, info = run_daily(data, rates, rule, 1.0, 0)
+        s2 = run_daily(data, rates, rule, 2.0, 0)[0]
+        sd = run_daily(data, rates, rule, 1.0, 1)[0]
+        sr = run_daily(dr[rule], rates, rule, 1.0, 0)[0]
+        results[rule], results[rule + "@2x"] = base, s2
+        by_a, by_y = _by_asset_year_daily(rec)
+        wk = max(1.0, (bd["test"][1] - bd["train"][0]) / 604800)
+        row = {"kind": "daily", "info": info, "splits": split_stats(base, bd), "splits_2x": split_stats(s2, bd),
+               "delayed": _mean_val_test(sd, bd), "no_clip": _mean_val_test(sr, bd),
+               "control": _daily_control(rec, base, bd), "by_asset": by_a, "by_year": by_y,
+               "per_week": round(info["changes"] / wk, 2), "low_count": True}
+        vv = split_vals(base, *bd["validation"])
+        row["validation_trim"] = dict(zip(("without_best_5pct_days", "without_best_day"), trimmed_mean(vv, len(vv))))
+        v0, t1 = bd["validation"][0], bd["test"][1]
+        row["continuous"] = {"base": equity_summary(continuous_daily(base, v0, t1), v0, t1),
+                             "x2": equity_summary(continuous_daily(s2, v0, t1), v0, t1)}
+        rows[rule] = row
+    # ---- hourly rules
+    grid = weekdays(bh["train"][0], bh["test"][1])
+    weeks = (bh["test"][1] - bh["train"][0]) / 604800
+    for rule in HOURLY_RULES:
+        groups, skipped = hourly_trades(hs_g, rule, 0)
+        gdel, _ = hourly_trades(hs_g, rule, 1)
+        graw, _ = hourly_trades(hs_raw, rule, 0)
+        base = series_from_groups(groups, rates, grid, 1.0)
+        s2 = series_from_groups(groups, rates, grid, 2.0)
+        results[rule], results[rule + "@2x"] = base, s2
+        sd = series_from_groups(gdel, rates, grid, 1.0)
+        sr = series_from_groups(graw, rates, grid, 1.0)
+        inb = [g for g in groups if bh["train"][0] <= max(t.t_out for t in g) < bh["test"][1]]
+        row = {"kind": "hourly", "trades": len(inb), "skipped_risk_cap": skipped,
+               "per_week": round(len(inb) / weeks, 2), "low_count": len(inb) / weeks < 3,
+               "splits": split_stats(base, bh), "splits_2x": split_stats(s2, bh),
+               "delayed": _mean_val_test(sd, bh), "no_clip": _mean_val_test(sr, bh)}
+        ctrl, trims = {}, {}
+        for sp in ("validation", "test"):
+            a, z = bh[sp]
+            gs = [g for g in groups if a <= max(t.t_out for t in g) < z]
+            pairs = [(group_frac(g, rates), group_frac(g, rates, 1.0, True)) for g in gs]
+            ndays = len(split_vals(base, a, z))
+            ctrl[sp] = control_run(sum(p[0] for p in pairs), control_trades(pairs), ndays, n_ctrl)
+            trims[sp] = dict(zip(("without_best_5pct_trades", "without_best_trade"),
+                                 trimmed_mean([p[0] for p in pairs], ndays)))
+        row["control"], row["validation_trim"], row["test_trim"] = ctrl, trims["validation"], trims["test"]
+        by_a, by_y = {}, {}
+        for g in inb:
+            for t in g:
+                x = trade_frac(t, rates)
+                by_a[t.asset] = by_a.get(t.asset, 0.0) + x
+                y = datetime.fromtimestamp(t.t_out, timezone.utc).year
+                by_y[y] = by_y.get(y, 0.0) + x
+        row["by_asset"] = {k: round(v, 5) for k, v in sorted(by_a.items())}
+        row["by_year"] = {k: round(v, 5) for k, v in sorted(by_y.items())}
+        v0, t1 = bh["validation"][0], bh["test"][1]
+        p1, k1 = continuous_trades(groups, rates, v0, t1, 1.0)
+        p2, k2 = continuous_trades(groups, rates, v0, t1, 2.0)
+        row["continuous"] = {"base": {**equity_summary(p1, v0, t1), "skipped_min_notional": k1},
+                             "x2": {**equity_summary(p2, v0, t1), "skipped_min_notional": k2}}
+        rows[rule] = row
+    # ---- judge (two calls, alpha scaled so both use the same bar 0.05/8)
+    jd = fa.judge_all({k: v for k, v in results.items() if k.split("@")[0] in DAILY_RULES}, bd, alpha=0.05 * 2 / 8)
+    jh = fa.judge_all({k: v for k, v in results.items() if k.split("@")[0] in HOURLY_RULES}, bh, alpha=0.05 * 6 / 8)
+    screen, main_route = [], []
+    for rule in ALL_RULES:
+        j = (jd if rule in DAILY_RULES else jh)["strategies"][rule]
+        row = rows[rule]
+        row["judge"] = {"validation": j["validation"], "test": j["test"], "passed_judge_all": j["passed"],
+                        "validation_3x_check": j["validation_3x_check"]}
+        trim = row.get("validation_trim") or {}
+        ctrl_ok = (row.get("control", {}).get("validation", {}).get("p", 1.0)) < bar
+        trim_ok = bool(trim) and all((x or 0) > 0 for x in trim.values())
+        row["beats_control_at_bar"], row["survives_trims"] = ctrl_ok, trim_ok
+        row["screen_pass"] = bool(j["passed"] and ctrl_ok and trim_ok)
+        row["main_route_pass"] = bool(row["screen_pass"] and not row["low_count"])
+        if row["screen_pass"]:
+            screen.append(rule)
+        if row["main_route_pass"]:
+            main_route.append(rule)
+    drift_d = {}
+    for s, a in daily_g.items():
+        pts = [(day_ts(d), a.c[i]) for i, d in enumerate(a.dates)]
+        drift_d[s] = {sp: drift(pts, *bd[sp]) for sp in bd}
+    drift_h = {}
+    for s, h in hs_g.items():
+        pts = list(zip(h.ts, h.c))
+        drift_h[s] = {sp: drift(pts, *bh[sp]) for sp in bh}
+    gaps["rate_missing_calls"] = dict(rates.missing)
+    summary = {"first_line": first, "ceiling": ceil, "bonferroni_bar": bar, "n_rules": 8,
+               "gates": gates, "gaps": gaps, "rules": rows, "screen_pass": screen, "main_route_pass": main_route,
+               "judge_daily_bar": jd["bonferroni_bar"], "judge_hourly_bar": jh["bonferroni_bar"],
+               "buy_hold_drift_daily": drift_d, "buy_hold_drift_hourly": drift_h,
+               "note": "sharpe252 on trading-day series; judge_all sharpe_ann (sqrt 365) is ignored; hourly validation ~6 months, low power"}
+    return summary, {k: v for k, v in results.items() if not k.endswith("@2x")}

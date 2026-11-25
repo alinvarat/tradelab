@@ -92,10 +92,10 @@ class Costs(unittest.TestCase):
 
 class Data(unittest.TestCase):
     def test_gate_drops_last_and_off_hour(self):
-        bars = [{"t": 3600 * i, "o": 1, "c": 1} for i in range(10)] + [{"t": 36000 + 1800, "o": 1, "c": 1}]
+        bars = [{"t": 3600 * i, "o": 1, "c": 1} for i in range(10)] + [{"t": 3 * 3600 + 1800, "o": 1, "c": 1}]
         ok, info, clean = fx.gate_hourly(bars, min_bars=5)
         self.assertEqual(info["off_hour"], 1)
-        self.assertEqual(len(clean), 10)          # sorted: the off-hour bar is last in time and dropped as unfinished or off
+        self.assertEqual(len(clean), 9)           # 11 bars: last (unfinished) and the off-hour bar dropped
         ok2, _, _ = fx.gate_hourly(bars, min_bars=50)
         self.assertFalse(ok2)
 
@@ -262,7 +262,7 @@ class DailyBook(unittest.TestCase):
             self.assertTrue(all(r == 0.0 for _, r in series[:253]))
             self.assertGreater(sum(r for _, r in series[260:]), 0)
             self.assertGreater(info["changes"], 0)
-            self.assertGreater(info["below_min_notional"], 0)           # weights at 147 USD are tiny
+            self.assertGreaterEqual(info["position_days"], 100)
 
     def test_r7_usd_base_pairs_flip_sign(self):
         syms = ["EURUSD=X", "AUDUSD=X", "USDJPY=X", "USDCHF=X"]
