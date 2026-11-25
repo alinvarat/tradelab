@@ -140,14 +140,14 @@ def market_rows(m, trades, closes_by_min, strike, offsets=OFFSETS_MIN, lookbacks
             if f and MIN_FILL <= f["price"] <= MAX_FILL:
                 payoff = 1.0 if (m["yes_won"] if idx == 0 else not m["yes_won"]) else 0.0
                 fills[idx] = {"price": round(f["price"], 4), "t": f["t"], "net": bet_net(payoff, f["price"], fr, fe),
-                              "payoff": payoff, "sells": sell_records(trades, idx, f["t"] + LATENCY_S, end - CLOSE_GUARD_S)[:12]}
+                              "payoff": payoff, "sells": sell_records(trades, idx, f["t"] + LATENCY_S, end - CLOSE_GUARD_S)}
         for lb in lookbacks:
             sig = realised_sigma(series, lb)
             fair = fair_yes(spot, strike, sig, off) if sig else None
             if fair is None:
                 continue
             rows.append({"id": m["id"], "coin": m["coin"], "kind": m["kind"], "end": end, "off": off, "lb": lb,
-                         "fair": round(fair, 4), "mkt": round(mkt, 4), "spot": spot, "strike": strike,
+                         "won": m["yes_won"], "fair": round(fair, 4), "mkt": round(mkt, 4), "spot": spot, "strike": strike,
                          "fee_rate": fr, "fee_exp": fe,
                          "yes": fills.get(0), "no": fills.get(1)})
     return rows
