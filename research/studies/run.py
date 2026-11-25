@@ -2311,6 +2311,13 @@ def study_probe_provider(_symbols):
     ids = sorted(m.get("id", "") for m in (d.get("data") or []))
     return {"models": len(ids), "deepseek": [i for i in ids if "deepseek" in i.lower()], "all": ids[:200]}, []
 
+def study_fxcom_1(_symbols):
+    """Pre-registered in research/studies/protocol_fxcom_1.md: 8 rules on FX, gold and commodities (Yahoo + FRED)."""
+    from core import fxcom
+    summ, series = fxcom.study(data.chart, fxcom.fetch_fred_text, time.time())
+    log(summ["first_line"])
+    return summ, series
+
 STUDIES = {"factory_crypto_2": study_factory_crypto_2, "probe_claude": study_probe_claude, "factory_crypto_1": study_factory_crypto_1, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4, "l12b_perp_fade": study_l12b_perp_fade, "l12_hour_shocks": study_l12_hour_shocks}
 
 from research.studies.calendar_flow import rows_calendar_flow_1, summarize_calendar_flow_1, symbols_calendar_flow_1  # noqa: E402,F401  (sharded study calendar_flow_1)
@@ -2320,6 +2327,7 @@ from research.studies import thin_a as _thin_a   # noqa: E402  batch A (small ex
 STUDIES.update(_thin_a.STUDIES)
 from research.studies.thin_a import rows_thin_a, summarize_thin_a, symbols_thin_a   # noqa: E402,F401  sharded study
 STUDIES.update({"factory_us_pit_1": study_factory_us_pit_1})
+STUDIES.update({"fxcom_1": study_fxcom_1})
 STUDIES.update({"factory_crypto_3": study_factory_crypto_3})
 
 
@@ -2339,6 +2347,22 @@ def rows_selftest_shard(symbols_slice):
 def summarize_selftest_shard(all_rows):
     return {"line": "selftest_shard", "rows": len(all_rows), "symbols": len({r["symbol"] for r in all_rows}),
             "value_sum": sum(r["value"] for r in all_rows)}
+
+
+def symbols_opt_vrp():
+    """Shard tokens 'BTC:2021-03' (asset x month); no network. Protocol: protocol_opt_vrp_20261125.md."""
+    from core import opt_vrp
+    return opt_vrp.universe()
+
+
+def rows_opt_vrp(symbols_slice):
+    from research.studies import opt_vrp
+    return opt_vrp.rows_for(symbols_slice)
+
+
+def summarize_opt_vrp(all_rows):
+    from core import opt_vrp
+    return opt_vrp.summarize(all_rows)
 
 
 H4_SKIP = L8_SKIP + ("BTCDOM", "DEFI")      # stables, wrapped coins and index perps are no alts
