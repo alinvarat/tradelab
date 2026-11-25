@@ -1778,6 +1778,89 @@ def summarize_selftest_shard(all_rows):
             "value_sum": sum(r["value"] for r in all_rows)}
 
 
+H4_SKIP = L8_SKIP + ("BTCDOM", "DEFI")      # stables, wrapped coins and index perps are no alts
+
+
+def symbols_h4_btc_leadlag():
+    """Every USDT perp ever listed on Binance USDT-M (S3 listing, delisted ones included), minus BTC and non-alts."""
+    return [s for s in _binance_all_usdt_symbols("futures/um") if s != "BTCUSDT" and s[:-4] not in H4_SKIP]
+
+
+def _h4_window():
+    from research.studies import binance_vision as bv
+    return bv.utc(2021, 12), bv.utc(2026, 11)       # one month before train for the first 30-day beta; test ends 2026-10-31
+
+
+def _h4_btc(bv, start, end):
+    bars, failed = bv.klines("BTCUSDT", start, end, "5m", market="futures/um")
+    if failed:
+        raise RuntimeError(f"BTCUSDT 5m perp files failed: {failed}")     # every shard needs the full BTC series
+    return {b[0]: (b[1], b[4]) for b in bars}
+
+
+def rows_h4_btc_leadlag(symbols_slice):
+    """Pre-registered in RESULTS.md 'H4 screen'. Per symbol: 5-minute perp klines, settled funding, then core.screens
+    rows for every BTC event. Ranking across symbols happens in summarize_h4_btc_leadlag."""
+    if not symbols_slice:
+        return {"rows": [], "gaps": {"kline_failed": 0, "funding_failed": 0, "no_perp_data": 0}}
+    from concurrent.futures import ThreadPoolExecutor
+    from core import screens as sc
+    from research.studies import binance_vision as bv
+    start, end = _h4_window()
+    btc = _h4_btc(bv, start, end)
+    events = sc.btc_events(btc, bv.utc(2022), end)
+    log(f"h4: {len(btc)} BTC bars, {len(events)} events, {len(symbols_slice)} symbols")
+    def one(sym):
+        g = {"kline_failed": 0, "funding_failed": 0, "no_perp_data": 0}
+        bars, failed = bv.klines(sym, start, end, "5m", market="futures/um")
+        g["kline_failed"] = len(failed)
+        if not bars:
+            g["no_perp_data"] = 1
+            return [], g
+        fund, ffail = bv.funding(sym, start, end)
+        if ffail:                       # a short's funding must be measured: drop the symbol rather than assume
+            g["funding_failed"] = 1
+            return [], g
+        alt = {b[0]: (b[1], b[4], b[7]) for b in bars}
+        del bars
+        return sc.leadlag_rows(sym, alt, btc, events, sorted(fund)), g
+    rows, gaps = [], {"kline_failed": 0, "funding_failed": 0, "no_perp_data": 0}
+    with ThreadPoolExecutor(4) as ex:
+        for part, g in ex.map(one, symbols_slice):
+            rows += part
+            for k, v in g.items():
+                gaps[k] += v
+    return {"rows": rows, "gaps": gaps}
+
+
+def summarize_h4_btc_leadlag(all_rows):
+    from core import screens as sc
+    from research.studies import binance_vision as bv
+    T = bv.utc
+    bounds = {"train": (T(2022), T(2023)), "validation": (T(2023), T(2025)), "test": (T(2025), T(2026, 11))}
+    hs = list(sc.H4_HOLDS)
+    top, ctl, seen, traded = sc.pick_trades(all_rows)
+    pair = sc.paired_rows(top, ctl)
+    weeks = (T(2026, 11) - T(2022)) / (7 * 86400)
+    inside = [r for r in top if sc.split_of(r["ts"], bounds) != "out"]
+    per_week = len(inside) / weeks
+    base = sc.judge(top, hs, bounds, pick_trim=5)
+    dbl = sc.judge(top, hs, bounds, cost_extra=sc.H4_COST, pick_trim=5)
+    pj = sc.judge(pair, hs, bounds, pick_trim=5)
+    inside_ev = len({r["ts"] for r in inside})
+    events_week = inside_ev / weeks
+    verdict = sc.h4_verdict(base, dbl, pj, events_week)
+    fund = {sp: round(sum(v["ret"][base["pick"]]["funding"] for v in top if sc.split_of(v["ts"], bounds) == sp and base["pick"] in v["ret"]) /
+                      max(1, sum(1 for v in top if sc.split_of(v["ts"], bounds) == sp and base["pick"] in v["ret"])), 6)
+            for sp in bounds} if base.get("pick") else {}
+    return {"line": "h4_btc_leadlag", "rows_all": len(all_rows), "symbols_with_rows": len({r["symbol"] for r in all_rows}),
+            "events_seen": seen, "events_traded": traded, "trades": len(top), "events_per_week": round(events_week, 2),
+            "trades_per_week": round(per_week, 2), "side_split": {"long": sum(1 for r in top if r["side"] > 0),
+                                                                  "short": sum(1 for r in top if r["side"] < 0)},
+            "base": base, "double_cost": dbl, "paired_vs_random_lagger": pj, "mean_funding_in_net_by_split": fund,
+            "verdict": verdict["verdict"], "checks": verdict["checks"]}
+
+
 def sharded_study(name):
     """(rows_fn, summarize_fn, symbols_fn) for a study that supports sharding, else None."""
     g = globals()
