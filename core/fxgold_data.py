@@ -83,6 +83,9 @@ def fetch_year_file(sym, year, path, workers=4, start=None, end=None):
         d += timedelta(days=1)
     with ThreadPoolExecutor(workers) as ex:
         res = list(ex.map(lambda x: fetch_day(sym, x), days))
+    for k, (d, (b, st)) in enumerate(zip(days, res)):          # second pass, one at a time, for days that gave up
+        if st == "fail":
+            res[k] = fetch_day(sym, d)
     n = {"days": len(days), "ok": 0, "closed": 0, "fail": 0, "failed_days": []}
     buf = []
     for d, (b, st) in zip(days, res):
