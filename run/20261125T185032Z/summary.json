@@ -1,0 +1,844 @@
+{
+ "run_utc": "2026-11-25T18:50:29Z",
+ "months": 33.91,
+ "coverage": {
+  "events": 343,
+  "priced_rows": 224,
+  "by_src": {
+   "no_perp": 119,
+   "binance_um": 212,
+   "binance_um_prefixed": 2,
+   "okx": 10
+  },
+  "dropped_rule_instances": 0
+ },
+ "rules": {
+  "kr_listing|h15m|d1m": {
+   "gate": {
+    "n_train": 105,
+    "tpm": 5.759,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.000817,
+    "placebo_mean": -0.011183,
+    "vol_cost": 8.6,
+    "x": -0.0014,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "kr_listing|h15m|d1m",
+    "control_mean_train": -0.00681787619047619
+   },
+   "all": {
+    "n": 224,
+    "mean": -0.00407,
+    "sd": 0.05638,
+    "s": -0.0722,
+    "per_month": 6.607,
+    "x": 0.0345,
+    "hit": 0.402
+   },
+   "by_split": {
+    "train": {
+     "n": 105,
+     "mean": -0.00082,
+     "sd": 0.0516,
+     "s": -0.0158,
+     "per_month": 5.843,
+     "x": 0.0015,
+     "hit": 0.419
+    },
+    "validation": {
+     "n": 54,
+     "mean": -0.00483,
+     "sd": 0.06569,
+     "s": -0.0736,
+     "per_month": 6.764,
+     "x": 0.0366,
+     "hit": 0.407
+    },
+    "test": {
+     "n": 65,
+     "mean": -0.0087,
+     "sd": 0.056,
+     "s": -0.1553,
+     "per_month": 8.175,
+     "x": 0.1971,
+     "hit": 0.369
+    }
+   },
+   "gross_mean_by_split": {
+    "train": 0.0056826476190476195,
+    "validation": 0.0016655925925925922,
+    "test": -0.0021958461538461537
+   },
+   "control_mean_by_split": {
+    "train": -0.00681787619047619,
+    "validation": -0.007173648148148149,
+    "test": -0.007466353846153846
+   },
+   "placebo_mean_by_split": {
+    "train": -0.01118264761904762,
+    "validation": -0.007165592592592592,
+    "test": -0.0033041538461538464
+   },
+   "mean_2x_cost_all": -0.010071919642857143,
+   "by_src_all": {
+    "upbit": {
+     "n": 117,
+     "mean": -0.00388,
+     "sd": 0.07067,
+     "s": -0.0549,
+     "per_month": 3.451,
+     "x": 0.0104,
+     "hit": 0.402
+    },
+    "bithumb": {
+     "n": 107,
+     "mean": -0.00428,
+     "sd": 0.03496,
+     "s": -0.1225,
+     "per_month": 3.156,
+     "x": 0.0474,
+     "hit": 0.402
+    }
+   },
+   "ok": false
+  },
+  "kr_listing|h15m|d5m": {
+   "gate": {
+    "n_train": 105,
+    "tpm": 5.759,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": 0.000204,
+    "placebo_mean": -0.012204,
+    "vol_cost": 5.76,
+    "x": 0.0002,
+    "reason": "volatility/cost 5.8 < 10",
+    "id": "kr_listing|h15m|d5m",
+    "control_mean_train": -0.007249828571428572
+   },
+   "all": {
+    "n": 224,
+    "mean": -0.00023,
+    "sd": 0.04702,
+    "s": -0.0048,
+    "per_month": 6.607,
+    "x": 0.0002,
+    "hit": 0.42
+   },
+   "by_split": {
+    "train": {
+     "n": 105,
+     "mean": 0.0002,
+     "sd": 0.03454,
+     "s": 0.0059,
+     "per_month": 5.843,
+     "x": 0.0002,
+     "hit": 0.429
+    },
+    "validation": {
+     "n": 54,
+     "mean": 0.00451,
+     "sd": 0.05896,
+     "s": 0.0765,
+     "per_month": 6.764,
+     "x": 0.0396,
+     "hit": 0.444
+    },
+    "test": {
+     "n": 65,
+     "mean": -0.00485,
+     "sd": 0.05333,
+     "s": -0.091,
+     "per_month": 8.175,
+     "x": 0.0677,
+     "hit": 0.385
+    }
+   },
+   "gross_mean_by_split": {
+    "train": 0.0067038857142857145,
+    "validation": 0.011010740740740741,
+    "test": 0.0016469076923076925
+   },
+   "control_mean_by_split": {
+    "train": -0.007249828571428572,
+    "validation": -0.006968203703703705,
+    "test": -0.007523307692307693
+   },
+   "placebo_mean_by_split": {
+    "train": -0.012203885714285715,
+    "validation": -0.016510740740740742,
+    "test": -0.007146907692307693
+   },
+   "mean_2x_cost_all": -0.006225281250000001,
+   "by_src_all": {
+    "upbit": {
+     "n": 117,
+     "mean": -0.00201,
+     "sd": 0.0466,
+     "s": -0.0431,
+     "per_month": 3.451,
+     "x": 0.0064,
+     "hit": 0.402
+    },
+    "bithumb": {
+     "n": 107,
+     "mean": 0.00172,
+     "sd": 0.04761,
+     "s": 0.0362,
+     "per_month": 3.156,
+     "x": 0.0041,
+     "hit": 0.439
+    }
+   },
+   "ok": false
+  },
+  "kr_listing|h15m|d15m": {
+   "gate": {
+    "n_train": 105,
+    "tpm": 5.759,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.002935,
+    "placebo_mean": -0.009065,
+    "vol_cost": 4.31,
+    "x": -0.0743,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "kr_listing|h15m|d15m",
+    "control_mean_train": -0.00674047619047619
+   },
+   "all": {
+    "n": 224,
+    "mean": -0.00238,
+    "sd": 0.03933,
+    "s": -0.0604,
+    "per_month": 6.607,
+    "x": 0.0241,
+    "hit": 0.406
+   },
+   "by_split": {
+    "train": {
+     "n": 105,
+     "mean": -0.00293,
+     "sd": 0.02583,
+     "s": -0.1136,
+     "per_month": 5.843,
+     "x": 0.0754,
+     "hit": 0.381
+    },
+    "validation": {
+     "n": 54,
+     "mean": 0.00034,
+     "sd": 0.04945,
+     "s": 0.0069,
+     "per_month": 6.764,
+     "x": 0.0003,
+     "hit": 0.481
+    },
+    "test": {
+     "n": 65,
+     "mean": -0.00373,
+     "sd": 0.04766,
+     "s": -0.0783,
+     "per_month": 8.175,
+     "x": 0.0501,
+     "hit": 0.385
+    }
+   },
+   "gross_mean_by_split": {
+    "train": 0.003565276190476191,
+    "validation": 0.0068399444444444445,
+    "test": 0.0027701384615384616
+   },
+   "control_mean_by_split": {
+    "train": -0.00674047619047619,
+    "validation": -0.007132740740740741,
+    "test": -0.007049092307692308
+   },
+   "placebo_mean_by_split": {
+    "train": -0.009065276190476191,
+    "validation": -0.012339944444444443,
+    "test": -0.008270138461538462
+   },
+   "mean_2x_cost_all": -0.008376026785714285,
+   "by_src_all": {
+    "upbit": {
+     "n": 117,
+     "mean": -0.00488,
+     "sd": 0.04241,
+     "s": -0.115,
+     "per_month": 3.451,
+     "x": 0.0456,
+     "hit": 0.41
+    },
+    "bithumb": {
+     "n": 107,
+     "mean": 0.00036,
+     "sd": 0.03565,
+     "s": 0.0101,
+     "per_month": 3.156,
+     "x": 0.0003,
+     "hit": 0.402
+    }
+   },
+   "ok": false
+  },
+  "kr_listing|h60m|d1m": {
+   "gate": {
+    "n_train": 105,
+    "tpm": 5.759,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.000717,
+    "placebo_mean": -0.011283,
+    "vol_cost": 13.47,
+    "x": -0.0005,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "kr_listing|h60m|d1m",
+    "control_mean_train": -0.0077127714285714286
+   },
+   "all": {
+    "n": 224,
+    "mean": -0.00055,
+    "sd": 0.08805,
+    "s": -0.0063,
+    "per_month": 6.607,
+    "x": 0.0003,
+    "hit": 0.406
+   },
+   "by_split": {
+    "train": {
+     "n": 105,
+     "mean": -0.00072,
+     "sd": 0.08082,
+     "s": -0.0089,
+     "per_month": 5.843,
+     "x": 0.0005,
+     "hit": 0.4
+    },
+    "validation": {
+     "n": 54,
+     "mean": 0.00243,
+     "sd": 0.10622,
+     "s": 0.0229,
+     "per_month": 6.764,
+     "x": 0.0035,
+     "hit": 0.407
+    },
+    "test": {
+     "n": 65,
+     "mean": -0.00276,
+     "sd": 0.08392,
+     "s": -0.0329,
+     "per_month": 8.175,
+     "x": 0.0088,
+     "hit": 0.415
+    }
+   },
+   "gross_mean_by_split": {
+    "train": 0.006282571428571428,
+    "validation": 0.009428037037037037,
+    "test": 0.004242630769230769
+   },
+   "control_mean_by_split": {
+    "train": -0.0077127714285714286,
+    "validation": -0.007714296296296297,
+    "test": -0.00860446153846154
+   },
+   "placebo_mean_by_split": {
+    "train": -0.011282571428571428,
+    "validation": -0.014428037037037036,
+    "test": -0.00924263076923077
+   },
+   "mean_2x_cost_all": -0.006551093750000002,
+   "by_src_all": {
+    "upbit": {
+     "n": 117,
+     "mean": -0.00243,
+     "sd": 0.09887,
+     "s": -0.0246,
+     "per_month": 3.451,
+     "x": 0.0021,
+     "hit": 0.419
+    },
+    "bithumb": {
+     "n": 107,
+     "mean": 0.00151,
+     "sd": 0.07486,
+     "s": 0.0201,
+     "per_month": 3.156,
+     "x": 0.0013,
+     "hit": 0.393
+    }
+   },
+   "ok": false
+  },
+  "kr_listing|h60m|d5m": {
+   "gate": {
+    "n_train": 105,
+    "tpm": 5.759,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.002921,
+    "placebo_mean": -0.009079,
+    "vol_cost": 10.38,
+    "x": -0.0127,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "kr_listing|h60m|d5m",
+    "control_mean_train": -0.007786714285714286
+   },
+   "all": {
+    "n": 224,
+    "mean": -6e-05,
+    "sd": 0.07992,
+    "s": -0.0008,
+    "per_month": 6.607,
+    "x": 0.0,
+    "hit": 0.379
+   },
+   "by_split": {
+    "train": {
+     "n": 105,
+     "mean": -0.00292,
+     "sd": 0.06228,
+     "s": -0.0469,
+     "per_month": 5.843,
+     "x": 0.0129,
+     "hit": 0.362
+    },
+    "validation": {
+     "n": 54,
+     "mean": 0.00552,
+     "sd": 0.09996,
+     "s": 0.0552,
+     "per_month": 6.764,
+     "x": 0.0206,
+     "hit": 0.426
+    },
+    "test": {
+     "n": 65,
+     "mean": -9e-05,
+     "sd": 0.08739,
+     "s": -0.001,
+     "per_month": 8.175,
+     "x": 0.0,
+     "hit": 0.369
+    }
+   },
+   "gross_mean_by_split": {
+    "train": 0.004079342857142857,
+    "validation": 0.012519277777777778,
+    "test": 0.006912384615384615
+   },
+   "control_mean_by_split": {
+    "train": -0.007786714285714286,
+    "validation": -0.007138148148148149,
+    "test": -0.008423307692307692
+   },
+   "placebo_mean_by_split": {
+    "train": -0.009079342857142857,
+    "validation": -0.01751927777777778,
+    "test": -0.011912384615384616
+   },
+   "mean_2x_cost_all": -0.006063941964285717,
+   "by_src_all": {
+    "upbit": {
+     "n": 117,
+     "mean": -0.00044,
+     "sd": 0.08618,
+     "s": -0.0051,
+     "per_month": 3.451,
+     "x": 0.0001,
+     "hit": 0.402
+    },
+    "bithumb": {
+     "n": 107,
+     "mean": 0.00035,
+     "sd": 0.07286,
+     "s": 0.0048,
+     "per_month": 3.156,
+     "x": 0.0001,
+     "hit": 0.355
+    }
+   },
+   "ok": false
+  },
+  "kr_listing|h60m|d15m": {
+   "gate": {
+    "n_train": 105,
+    "tpm": 5.759,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.009119,
+    "placebo_mean": -0.002881,
+    "vol_cost": 9.21,
+    "x": -0.1568,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "kr_listing|h60m|d15m",
+    "control_mean_train": -0.007362409523809525
+   },
+   "all": {
+    "n": 224,
+    "mean": -0.00383,
+    "sd": 0.09138,
+    "s": -0.0419,
+    "per_month": 6.607,
+    "x": 0.0116,
+    "hit": 0.397
+   },
+   "by_split": {
+    "train": {
+     "n": 105,
+     "mean": -0.00912,
+     "sd": 0.05527,
+     "s": -0.165,
+     "per_month": 5.843,
+     "x": 0.1591,
+     "hit": 0.381
+    },
+    "validation": {
+     "n": 54,
+     "mean": 0.01044,
+     "sd": 0.15722,
+     "s": 0.0664,
+     "per_month": 6.764,
+     "x": 0.0298,
+     "hit": 0.444
+    },
+    "test": {
+     "n": 65,
+     "mean": -0.00714,
+     "sd": 0.05861,
+     "s": -0.1218,
+     "per_month": 8.175,
+     "x": 0.1213,
+     "hit": 0.385
+    }
+   },
+   "gross_mean_by_split": {
+    "train": -0.0021191619047619043,
+    "validation": 0.01743598148148148,
+    "test": -0.00013823076923076913
+   },
+   "control_mean_by_split": {
+    "train": -0.007362409523809525,
+    "validation": -0.008108166666666668,
+    "test": -0.0073494461538461545
+   },
+   "placebo_mean_by_split": {
+    "train": -0.0028808380952380958,
+    "validation": -0.022435981481481484,
+    "test": -0.00486176923076923
+   },
+   "mean_2x_cost_all": -0.00983015178571429,
+   "by_src_all": {
+    "upbit": {
+     "n": 117,
+     "mean": -0.01182,
+     "sd": 0.07721,
+     "s": -0.1531,
+     "per_month": 3.451,
+     "x": 0.0809,
+     "hit": 0.41
+    },
+    "bithumb": {
+     "n": 107,
+     "mean": 0.00491,
+     "sd": 0.10439,
+     "s": 0.047,
+     "per_month": 3.156,
+     "x": 0.007,
+     "hit": 0.383
+    }
+   },
+   "ok": false
+  },
+  "kr_listing|h240m|d1m": {
+   "gate": {
+    "n_train": 105,
+    "tpm": 5.759,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.002231,
+    "placebo_mean": -0.009769,
+    "vol_cost": 14.17,
+    "x": -0.004,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "kr_listing|h240m|d1m",
+    "control_mean_train": -0.005369866666666666
+   },
+   "all": {
+    "n": 224,
+    "mean": -0.00767,
+    "sd": 0.13335,
+    "s": -0.0575,
+    "per_month": 6.607,
+    "x": 0.0219,
+    "hit": 0.402
+   },
+   "by_split": {
+    "train": {
+     "n": 105,
+     "mean": -0.00223,
+     "sd": 0.085,
+     "s": -0.0262,
+     "per_month": 5.843,
+     "x": 0.004,
+     "hit": 0.476
+    },
+    "validation": {
+     "n": 54,
+     "mean": 0.00358,
+     "sd": 0.20894,
+     "s": 0.0171,
+     "per_month": 6.764,
+     "x": 0.002,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 65,
+     "mean": -0.02581,
+     "sd": 0.11649,
+     "s": -0.2216,
+     "per_month": 8.175,
+     "x": 0.4015,
+     "hit": 0.338
+    }
+   },
+   "gross_mean_by_split": {
+    "train": 0.004768742857142857,
+    "validation": 0.01058111111111111,
+    "test": -0.01881487692307692
+   },
+   "control_mean_by_split": {
+    "train": -0.005369866666666666,
+    "validation": -0.008857111111111112,
+    "test": -0.009406723076923078
+   },
+   "placebo_mean_by_split": {
+    "train": -0.009768742857142857,
+    "validation": -0.015581111111111112,
+    "test": 0.013814876923076922
+   },
+   "mean_2x_cost_all": -0.013673522321428575,
+   "by_src_all": {
+    "upbit": {
+     "n": 117,
+     "mean": -0.02049,
+     "sd": 0.12685,
+     "s": -0.1615,
+     "per_month": 3.451,
+     "x": 0.0901,
+     "hit": 0.359
+    },
+    "bithumb": {
+     "n": 107,
+     "mean": 0.00634,
+     "sd": 0.13935,
+     "s": 0.0455,
+     "per_month": 3.156,
+     "x": 0.0065,
+     "hit": 0.449
+    }
+   },
+   "ok": false
+  },
+  "kr_listing|h240m|d5m": {
+   "gate": {
+    "n_train": 105,
+    "tpm": 5.759,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.000622,
+    "placebo_mean": -0.011378,
+    "vol_cost": 14.7,
+    "x": -0.0003,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "kr_listing|h240m|d5m",
+    "control_mean_train": -0.0057699142857142866
+   },
+   "all": {
+    "n": 224,
+    "mean": -0.00647,
+    "sd": 0.13802,
+    "s": -0.0469,
+    "per_month": 6.607,
+    "x": 0.0145,
+    "hit": 0.357
+   },
+   "by_split": {
+    "train": {
+     "n": 105,
+     "mean": -0.00062,
+     "sd": 0.08823,
+     "s": -0.0071,
+     "per_month": 5.843,
+     "x": 0.0003,
+     "hit": 0.39
+    },
+    "validation": {
+     "n": 54,
+     "mean": 0.00835,
+     "sd": 0.2188,
+     "s": 0.0382,
+     "per_month": 6.764,
+     "x": 0.0099,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 65,
+     "mean": -0.02825,
+     "sd": 0.11556,
+     "s": -0.2444,
+     "per_month": 8.175,
+     "x": 0.4884,
+     "hit": 0.323
+    }
+   },
+   "gross_mean_by_split": {
+    "train": 0.006377895238095239,
+    "validation": 0.015354,
+    "test": -0.021245107692307693
+   },
+   "control_mean_by_split": {
+    "train": -0.0057699142857142866,
+    "validation": -0.007970166666666667,
+    "test": -0.009301492307692309
+   },
+   "placebo_mean_by_split": {
+    "train": -0.011377895238095239,
+    "validation": -0.020354000000000004,
+    "test": 0.016245107692307692
+   },
+   "mean_2x_cost_all": -0.012473825892857147,
+   "by_src_all": {
+    "upbit": {
+     "n": 117,
+     "mean": -0.02059,
+     "sd": 0.12346,
+     "s": -0.1668,
+     "per_month": 3.451,
+     "x": 0.096,
+     "hit": 0.308
+    },
+    "bithumb": {
+     "n": 107,
+     "mean": 0.00896,
+     "sd": 0.15144,
+     "s": 0.0592,
+     "per_month": 3.156,
+     "x": 0.0111,
+     "hit": 0.411
+    }
+   },
+   "ok": false
+  },
+  "kr_listing|h240m|d15m": {
+   "gate": {
+    "n_train": 105,
+    "tpm": 5.759,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.007051,
+    "placebo_mean": -0.004949,
+    "vol_cost": 14.19,
+    "x": -0.0395,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "kr_listing|h240m|d15m",
+    "control_mean_train": -0.005809819047619048
+   },
+   "all": {
+    "n": 224,
+    "mean": -0.01253,
+    "sd": 0.13449,
+    "s": -0.0931,
+    "per_month": 6.607,
+    "x": 0.0573,
+    "hit": 0.353
+   },
+   "by_split": {
+    "train": {
+     "n": 105,
+     "mean": -0.00705,
+     "sd": 0.08514,
+     "s": -0.0828,
+     "per_month": 5.843,
+     "x": 0.0401,
+     "hit": 0.39
+    },
+    "validation": {
+     "n": 54,
+     "mean": -0.00034,
+     "sd": 0.21822,
+     "s": -0.0015,
+     "per_month": 6.764,
+     "x": 0.0,
+     "hit": 0.315
+    },
+    "test": {
+     "n": 65,
+     "mean": -0.0315,
+     "sd": 0.10615,
+     "s": -0.2967,
+     "per_month": 8.175,
+     "x": 0.7197,
+     "hit": 0.323
+    }
+   },
+   "gross_mean_by_split": {
+    "train": -5.099047619047658e-05,
+    "validation": 0.006661814814814814,
+    "test": -0.024496907692307696
+   },
+   "control_mean_by_split": {
+    "train": -0.005809819047619048,
+    "validation": -0.008293666666666668,
+    "test": -0.008531446153846154
+   },
+   "placebo_mean_by_split": {
+    "train": -0.004949009523809524,
+    "validation": -0.011661814814814816,
+    "test": 0.01949690769230769
+   },
+   "mean_2x_cost_all": -0.018526406250000006,
+   "by_src_all": {
+    "upbit": {
+     "n": 117,
+     "mean": -0.02866,
+     "sd": 0.1224,
+     "s": -0.2341,
+     "per_month": 3.451,
+     "x": 0.1892,
+     "hit": 0.291
+    },
+    "bithumb": {
+     "n": 107,
+     "mean": 0.00511,
+     "sd": 0.1451,
+     "s": 0.0352,
+     "per_month": 3.156,
+     "x": 0.0039,
+     "hit": 0.421
+    }
+   },
+   "ok": false
+  }
+ },
+ "rules_tested": 9,
+ "event_gate": {
+  "stage0_survivors": 0,
+  "holm": {
+   "holm_m": 0
+  },
+  "passed": [],
+  "evaluated": []
+ },
+ "sweep_strict_gate": {
+  "stage0_survivors": 0,
+  "holm": {
+   "holm_m": 0
+  },
+  "passed": [],
+  "evaluated": []
+ }
+}
