@@ -210,6 +210,15 @@ Code `core.screens.perp_shock_rows`, study `l12b_perp_fade`. Same events, entry,
 - Reading: most of L12's edge sat in coins with no perp (unshortable) and in the understated funding. On the shortable set it is too thin after realistic costs. No forward ledger. Any retest would need a new idea (e.g. skip events where funding is already strongly negative), not a relabel.
 
 
+## fxcom_1: 8 rules on FX, gold and commodities (pre-registered 2026-11-25, before any Yahoo or FRED data was pulled for this study)
+Full locked text: `research/studies/protocol_fxcom_1.md`. Code `core/fxcom.py`, study `fxcom_1` (single job, not sharded). No LLM, no cost. Branch `line/fx-gold-cmdty`. Hypotheses only; the expectation stated before the run is that nothing reaches 3x a month and a clean kill is likeliest.
+- Universe: daily GC SI HG CL BZ NG ZC + EURUSD USDJPY GBPUSD AUDUSD USDCAD (R1), 6 USD pairs for R7; hourly 6 commodities + 7 FX pairs (2-year Yahoo window, per-symbol data gate: >= 9,000 bars, on-the-hour timestamps). Rates from FRED CSV (GBP dropped, differential 0).
+- Rules (8, Bonferroni bar 0.05/8 = 0.00625 on validation block-bootstrap p): R1 vol-targeted time-series momentum (daily), R2 hourly 48-bar breakout, R3 hourly 6h overextension fade, R4 New York session continuation of the Asia+London move, R5 London breakout of the Asia range, R6 fade of macro-release bars (mechanical calendar), R7 vol-scaled FX carry (daily), R8 gold/silver and WTI/Brent spread reversion.
+- Costs: FX 0.015-0.025% a side, GC 0.06%, SI HG CL BZ 0.10%, NG 0.15%, ZC 0.12%; commodity holding 0.04%/day long, 0.01%/day short; FX swap = rate differential minus 0.5%/yr. Double cost run required. Gain = side x (exit/entry - 1).
+- Splits: daily train 2018-2021, validation 2022-2024, test 2025 to 2026-11-24; hourly train 2025-02 to 2025-07, validation 2025-08 to 2026-01 (about 6 months, low power), test 2026-02 to 2026-11-24.
+- Pass: judge_all (validation mean > 0, p < 0.00625, validation > 0 at 2x, test > 0) plus beating a 2,000-draw random-direction control, validation > 0 without the best 5% and best single trade; >= 3 trades a week or labelled low-count (R1, R7, probably R8). Ceiling check (perfect foresight, one trade a day, caps 10x/20x) printed first. Continuous 147 USD account run with 5 USD minimum order at base and 2x cost.
+- Known limits: unadjusted =F continuous futures (roll guard clips returns), FX priced from Yahoo with a modelled spread, asynchronous daily closes, no forward test.
+
 ## Factory crypto 1: 11 portfolio rules at once (pre-registered 2026-11-25, before any panel was built)
 Code `core/factory.py`, study `factory_crypto_1`. No LLM, no cost. Owner feedback 2026-11-25: research was too slow and too narrow, so this screens many styles in one run on one panel, with a Bonferroni bar so trying many does not manufacture a pass.
 - Panel: daily bars of every Binance USDT coin ever listed (delisted included), 2020-11 to 2026-10; a coin is tradable on a day when it has >= 31 days of history and 20-day average quote volume >= 2M USDT. Weights are set with data up to day i's close and earn day i to i+1 close-to-close.
