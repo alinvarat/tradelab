@@ -3,6 +3,9 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-25 line/fx-gold-cmdty)
+- **fxcom_1 (FX/ทอง/commodity 8 กติกา) ไม่ผ่านทั้งหมด:** run 45522041311; ไม่มีเดือน 3 เท่า บัญชี 147 USD ต่อเนื่องจบที่ 0.96-156.6 USD ที่ต้นทุนปกติ และต่ำลงที่ 2 เท่า; กติการายชั่วโมงแพ้ต้นทุนคูณ leverage; ดู RESULTS.md หัวข้อ fxcom_1 (PR #177)
+
 ## ด่วน (2026-11-25 ops/sharded-runner)
 - **ตัวรันแบบแบ่ง shard:** workflow `research_sharded.yml` กระจายหนึ่งด่านไปหลาย job พร้อมกัน (ค่าเริ่ม 20) แล้วรวมผล; ด่านที่จะใช้ต้องมี `rows_<study>(symbols_slice)` และ `summarize_<study>(all_rows)` ใน `run.py`; ยังไม่ได้ทดสอบบน Actions จริง (workflow_dispatch ใช้ได้หลัง merge เข้า main) → หลัง merge ให้รัน `study=selftest_shard` ก่อน
 
