@@ -105,12 +105,16 @@ def _dv(bars):
     return sum(b[4] * b[5] for b in bars)
 
 
-def find_events(sym, days, splits, today, after_close, gap_min=0.20):
+def find_events(sym, days, splits, today, after_close, gap_min=0.20, funnel=None):
     """Gap events of one symbol. Point in time: previous close, 20-session average dollar volume and the premarket gap use only
     information available at 09:25 ET of the event day. A day counts only when complete (earlier than `today`, or `today`
     after the close). Days within 3 sessions of a split are skipped (a reverse split fakes a gap)."""
     dates = sorted(d for d, v in days.items() if v["reg"])
     out = []
+    fn = funnel if funnel is not None else {}
+
+    def hit(k):
+        fn[k] = fn.get(k, 0) + 1
     sp = [_date.fromisoformat(s) for s in splits]
     for k in range(1, len(dates)):
         d, pd_ = dates[k], dates[k - 1]
@@ -121,25 +125,33 @@ def find_events(sym, days, splits, today, after_close, gap_min=0.20):
             continue
         if any(-3 <= (dd - s).days <= 4 for s in sp):
             continue
+        hit("days")
+        if days[d]["pre"]:
+            hit("day_has_pre")
         prev_close = days[pd_]["reg"][-1][4]
         if not (PX_LO <= prev_close <= PX_HI):
             continue
+        hit("px_ok")
         pm = [b for b in days[d]["pre"] if b[0] < PM_CUT]
         reg = days[d]["reg"]
         if not pm or reg[0][0] != REG_OPEN:
             continue
+        hit("has_pm")
         gap = pm[-1][4] / prev_close - 1.0
         if gap < gap_min:
             continue
+        hit("gap_ok")
         pm_dv = _dv(pm)
         if pm_dv < PM_DV_MIN:
             continue
+        hit("pm_dv_ok")
         prior = [_dv(days[x]["reg"]) for x in dates[max(0, k - 20):k]]
         if len(prior) < MIN_PRIOR_SESSIONS:
             continue
         adv = sum(prior) / len(prior)
         if not (ADV_LO <= adv <= ADV_HI):
             continue
+        hit("event")
         out.append({"sym": sym, "date": d, "prev_date": pd_, "prev_close": prev_close, "pm_px": pm[-1][4], "gap": round(gap, 5),
                     "pm_dv": round(pm_dv, 0), "adv20": round(adv, 0), "open": reg[0][1], "reg": reg})
     return out

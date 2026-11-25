@@ -170,7 +170,7 @@ def scan_events(state, deadline):
     random.Random(int(time.time()) // 86400).shuffle(syms)       # a timed-out scan covers a different part each day
     today, m = si.et_parts(time.time())
     after_close = m >= 975
-    new, stats = [], {"symbols": len(syms), "fetched": 0, "failed": 0, "timeout": False}
+    new, stats = [], {"funnel": {}, "symbols": len(syms), "fetched": 0, "failed": 0, "timeout": False}
 
     def one(sym):
         if time.time() > deadline:
@@ -181,7 +181,7 @@ def scan_events(state, deadline):
             stats["failed"] += 1
             return []
         stats["fetched"] += 1
-        return si.find_events(sym, c[0], c[1], today, after_close)
+        return si.find_events(sym, c[0], c[1], today, after_close, funnel=stats["funnel"])
     with ThreadPoolExecutor(WORKERS) as ex:
         for evs in ex.map(one, syms):
             for e in evs:
@@ -213,7 +213,8 @@ def report(state, events=None, halts=None, extra=None):
         summ["scan"] = extra
     with open(os.path.join(state, "summary.json"), "w") as f:
         json.dump(summ, f, indent=1, default=str)
-    brief = {k: summ[k] for k in ("events", "event_days", "events_by_gap", "tags", "halts_archived", "halts_with_bars", "trade_rows")}
+    brief = {"funnel": (extra or {}).get("funnel")}
+    brief.update({k: summ[k] for k in ("events", "event_days", "events_by_gap", "tags", "halts_archived", "halts_with_bars", "trade_rows")})
     brief.update(rules=ev["n_rules"], gate_survivors=ev["gate_survivors"], passed=ev["passed"], dropped_reasons=ev["dropped_reasons"],
                  top_train_x=[{k: d.get(k) for k in ("id", "n_train", "train_mean", "x", "vol_cost", "reason")} for d in ev["top_train_x"]])
     print(json.dumps(brief, indent=1, default=str))
