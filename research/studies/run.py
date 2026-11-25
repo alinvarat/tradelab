@@ -2323,6 +2323,9 @@ STUDIES = {"factory_crypto_2": study_factory_crypto_2, "probe_claude": study_pro
 from research.studies.calendar_flow import rows_calendar_flow_1, summarize_calendar_flow_1, symbols_calendar_flow_1  # noqa: E402,F401  (sharded study calendar_flow_1)
 
 
+from research.studies import thin_b as _thin_b   # noqa: E402  batch B (thin prediction markets)
+STUDIES.update(_thin_b.STUDIES)
+
 from research.studies import thin_a as _thin_a   # noqa: E402  batch A (small exchanges)
 STUDIES.update(_thin_a.STUDIES)
 from research.studies.thin_a import rows_thin_a, summarize_thin_a, symbols_thin_a   # noqa: E402,F401  sharded study
