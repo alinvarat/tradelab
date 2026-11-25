@@ -110,8 +110,8 @@ def resample(d, k):
             out["tb"].append(sum(d["tb"][i:j]))
             out["fund"].append(sum(d["fund"][i:j]))
             if d.get("m") is not None:
-                for k in METRIC_KEYS:
-                    out["m"][k].append(d["m"][k][j - 1])
+                for mk in METRIC_KEYS:
+                    out["m"][mk].append(d["m"][mk][j - 1])
             if d.get("prem") is not None:
                 out["prem"].append(d["prem"][j - 1])
             i = j
