@@ -34,3 +34,7 @@ Same reason as `protocol_llm_earnings_forward.md`. The model gets the v2 message
 Use [daily-v1](../sequential_protocol_20261124.md) for entries from November 25, 2026 UTC onward. Group each completed record by the UTC day of bookkeeping (`closed_ts`), including records priced after their planned exit. The first market-open run on November 24 stays in the fixed-sample study.
 
 [The separately tagged all-8-K protocol](protocol_llm_options_forward_v2_sec_20261124.md) covers the prospective window from November 25 onward, beginning on its first scheduled run.
+
+## Addendum 2026-11-25: model changed to Claude Haiku 5.5 before the first real event (owner order: Claude only)
+The DeepSeek provider returns 402 (credit exhausted) and the owner ordered every LLM call onto Claude Haiku 5.5 (`claude-haiku-5-5`, Claude Code CLI on the owner's Max plan, `CLAUDE_CODE_OAUTH_TOKEN` secret; verified on Actions run 45510699072). The state on branch `data/options-forward` shows 0 model calls and 0 trades (GitHub's cron never fired; runs are dispatched by the owner's machine from 2026-11-25), so no event has been read yet. Everything else (events, prompt, parsing, entry, exits, costs, control, sample size and verdict) is unchanged. Haiku takes no temperature, so calls use its default sampling instead of temperature 0. The verdict is reported as a Claude Haiku 5.5 result; nothing collected under DeepSeek exists to pool.
+

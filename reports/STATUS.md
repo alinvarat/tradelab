@@ -3,6 +3,13 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-25 ops/sharded-runner)
+- **ตัวรันแบบแบ่ง shard:** workflow `research_sharded.yml` กระจายหนึ่งด่านไปหลาย job พร้อมกัน (ค่าเริ่ม 20) แล้วรวมผล; ด่านที่จะใช้ต้องมี `rows_<study>(symbols_slice)` และ `summarize_<study>(all_rows)` ใน `run.py`; ยังไม่ได้ทดสอบบน Actions จริง (workflow_dispatch ใช้ได้หลัง merge เข้า main) → หลัง merge ให้รัน `study=selftest_shard` ก่อน
+
+## ด่วน (2026-11-24 23:30 UTC)
+- **เครดิต DeepSeek หมด:** probe บน Actions (run 45509191649) เรียก `api.deepseek.com` model `deepseek-flash` ได้ HTTP 402 Payment Required ทุกครั้ง → N1 news_v3 สองรอบไม่ได้เรียกโมเดลเลย (v3 = 0 เทรด, ผลใช้ไม่ได้) และบอท DeepSeek บน Kuber ก็เรียกไม่ได้เช่นกัน; ต้องให้เจ้าของเติมเครดิตหรือเลือกโมเดลอื่นด้วย protocol ใหม่
+- **ผลวันนี้:** L12 ผ่านบนทุกเหรียญ แต่ L12b (เฉพาะเหรียญที่ short ได้จริง + funding จริง) ไม่ผ่าน; factory ชุด 1 ไม่ผ่านทั้ง 11 กติกา; workflow ค้นไอเดีย 4 มุมกำลังเขียน `factory_crypto_2` และ `factory_us_pit_1`
+
 ## ด่วน (2026-11-24 22:05 UTC)
 - **รันบนเครื่องเจ้าของชั่วคราว (เจ้าของสั่ง):** unit `tradelab-local` ที่ `~/Project/tradelab-local` → http://127.0.0.1:8770; บอท v4.18 Claude Haiku 5.5 ผ่าน Claude Code ที่ล็อกอิน Max (ตรวจ 22:00 UTC: protocol v4.18, model claude/claude-haiku-5-5, error ไม่มี) เป็นบัญชีจำลองแยกจาก Kuber เริ่ม 147.5 USD
 - **N1 run 45481243341 ใช้ไม่ได้** (env ของ provider ว่าง ไม่ได้เรียกโมเดลเลย) → รันใหม่จาก main: 45495806547

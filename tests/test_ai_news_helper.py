@@ -9,6 +9,9 @@ class Helper(unittest.TestCase):
         p = mock.patch.object(ai_news, "custom_available", return_value=False)   # the free-model path
         p.start()
         self.addCleanup(p.stop)
+        q = mock.patch.object(ai_news, "other_models_allowed", return_value=True)   # legacy paths, opt-in only
+        q.start()
+        self.addCleanup(q.stop)
 
     def test_custom_provider_serves_helpers_directly(self):
         from unittest import mock
@@ -44,6 +47,12 @@ if __name__ == "__main__":
 
 
 class CustomProvider(unittest.TestCase):
+    def setUp(self):
+        from unittest import mock
+        q = mock.patch.object(ai_news, "other_models_allowed", return_value=True)
+        q.start()
+        self.addCleanup(q.stop)
+
     def test_paid_calls_use_the_configured_provider_and_free_ones_do_not(self):
         import io
         import json as _json
@@ -156,6 +165,12 @@ class ClaudeCli(unittest.TestCase):
 
 
 class FallbackReason(unittest.TestCase):
+    def setUp(self):
+        from unittest import mock
+        q = mock.patch.object(ai_news, "other_models_allowed", return_value=True)
+        q.start()
+        self.addCleanup(q.stop)
+
     def test_provider_failure_stays_visible_behind_the_openrouter_error(self):
         import os
         from unittest import mock
@@ -180,3 +195,21 @@ class LocalCliAuth(unittest.TestCase):
         env["TRADELAB_CLAUDE_AUTH"] = "cli"
         with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(ai_news.shutil, "which", return_value="/x"):
             self.assertTrue(ai_news.claude_ready())
+
+
+class ClaudeOnly(unittest.TestCase):
+    def test_no_other_model_is_called_without_claude(self):
+        import os
+        from unittest import mock
+        env = {k: v for k, v in os.environ.items()
+               if k not in ("CLAUDE_CODE_OAUTH_TOKEN", "TRADELAB_CLAUDE_AUTH", "TRADELAB_OTHER_MODELS")}
+        env |= {"TRADELAB_LLM_API_KEY": "k", "OPENROUTER_API_KEY": "k"}
+
+        def boom(*a, **k):
+            raise AssertionError("another provider was called")
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(ai_news, "CUSTOM_MODEL", "m1"), \
+                mock.patch.object(ai_news, "_chat_custom", boom):
+            text, reason = ai_news.chat("s", "u", urlopen=boom, run=boom)
+            self.assertEqual(text, "")
+            self.assertIn("Claude only", reason)
+            self.assertEqual(ai_news.providers(), {})

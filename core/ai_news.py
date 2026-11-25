@@ -138,7 +138,9 @@ def providers() -> dict:
     out = {}
     if claude_ready():              # owner 2026-11-25: one Claude scorer, labelled with the full model id
         out[CLAUDE_MODEL] = score_claude
-    elif available():
+    if not other_models_allowed():
+        return out
+    if not out and available():
         out[MODEL] = score
     deepseek = OPENCODE_MODEL.split("/", 1)[-1]
     if opencode_available():
@@ -162,7 +164,7 @@ _helper_stats = {"free_ok": 0, "free_fail": 0, "fallback": 0, "by_model": {}}
 def chat_helper(system: str, user: str, chat_fn=None) -> tuple:
     """Free models first (in order), then DeepSeek. -> (text, model_name). Records which model answered."""
     chat_fn = chat_fn or chat
-    if claude_ready() or custom_available():   # owner 2026-11-24/25: the main model serves every role, no free models
+    if claude_ready() or custom_available() or not other_models_allowed():   # owner 2026-11-24/25: the main model serves every role, no free models
         key = "claude/" + CLAUDE_MODEL if claude_ready() else "custom/" + CUSTOM_MODEL
         with _spend_lock:
             _helper_stats["by_model"][key] = _helper_stats["by_model"].get(key, 0) + 1
@@ -263,6 +265,11 @@ CLAUDE_MAX_PARALLEL = int(os.environ.get("TRADELAB_CLAUDE_PARALLEL", "2"))     #
 _claude_slots = threading.BoundedSemaphore(max(1, CLAUDE_MAX_PARALLEL))
 
 
+def other_models_allowed() -> bool:
+    """Owner 2026-11-25: every LLM call uses Claude. DeepSeek/OpenRouter/free models run only if explicitly re-enabled."""
+    return os.environ.get("TRADELAB_OTHER_MODELS") == "1"
+
+
 def claude_ready() -> bool:
     """True only when the subscription token is set AND the CLI is installed; this is what switches on v4.18."""
     authed = bool(os.environ.get("CLAUDE_CODE_OAUTH_TOKEN")) or os.environ.get("TRADELAB_CLAUDE_AUTH") == "cli"
@@ -318,6 +325,8 @@ def chat(system: str, user: str, timeout=180, run=subprocess.run, urlopen=None, 
     name = full.split("/", 1)[-1]
     if claude_ready():          # owner 2026-11-25 (v4.18): Claude only, no silent fallback that would mix models
         return _chat_claude(system, user, timeout, cache_layout, run)
+    if not other_models_allowed():
+        return "", "Claude not configured (owner 2026-11-25: Claude only; set CLAUDE_CODE_OAUTH_TOKEN or TRADELAB_CLAUDE_AUTH=cli)"
     first_fail = ""
     if custom_available() and not full.endswith(":free"):     # paid calls go to the configured provider
         text, served = _chat_custom(system, user, timeout, urlopen, cache_layout, temperature)
