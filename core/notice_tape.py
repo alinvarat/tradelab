@@ -27,7 +27,7 @@ def _clean(tokens) -> list:
     out = []
     for t in tokens:
         t = re.sub(r"^(1000000|10000|1000)(?=[A-Z])", "", t.strip())
-        if _TICK.match(t) and t not in _STABLE and t not in out:
+        if _TICK.match(t) and re.search("[A-Z]", t) and t not in _STABLE and t not in out:
             out.append(t)
     return out
 
@@ -56,7 +56,7 @@ def title_symbols(title: str) -> list:
 
 _SKIP = ("tradfi", "stock", "equity", "pre-market", "premarket", "pre-ipo", "etf", "index", "copy trading",
          "trading bot", "campaign", "airdrop", "earn", "loan", "convert", "launchpool", "launchpad", "giveaway",
-         "competition", "reward", "bot trading", "trading bot", "maintenance", "wallet", "deposit", "withdraw")
+         "competition", "reward", "margin", "delay", "postpone", "futures will list", "new listing:", "bot trading", "trading bot", "maintenance", "wallet", "deposit", "withdraw")
 
 
 def classify_title(title: str) -> list:
@@ -75,8 +75,8 @@ def classify_title(title: str) -> list:
         return [("funding_interval", syms)]
     if re.search(r"\bdelist|\bremov(e|al)\b|\bcease|\bsuspend trading|\bdelisting\b", low):
         return [("perp_delist" if perp else "delist", syms)]
-    if re.search(r"\blist(ing|ed|s)?\b|\bwill add\b|\badds\b|\blaunch(es)?\b|\bnew listing\b", low):
-        if perp and "spot" not in low and "perp" not in low and "perpetual" not in low and "futures" not in low:
+    if re.search(r"\blist(ing|ed|s)?\b|\bwill add\b|\badds\b|\bnew listing\b", low):
+        if perp:                                    # a futures launch is not one of the five classes
             return []
         return [("listing", syms)]
     return []

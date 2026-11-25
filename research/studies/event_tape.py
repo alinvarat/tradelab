@@ -130,7 +130,7 @@ def build_events(gaps):
         for cls, syms in cl:
             for s in syms:
                 k = (cls, s)
-                if k in seen and g["ts"] - seen[k] < 6 * 3600:
+                if k in seen and g["ts"] - seen[k] < 7 * 86400:
                     continue
                 seen[k] = g["ts"]
                 ev.append({"venue": g["venue"], "cls": cls, "symbol": s, "ts": g["ts"], "title": g["title"][:140]})

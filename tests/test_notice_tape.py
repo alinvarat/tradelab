@@ -28,6 +28,19 @@ class Classify(unittest.TestCase):
         self.assertEqual(nt.classify_title("KuCoin Adds Monitoring Tag to FOO (FOO)")[0][0], "monitoring")
         self.assertEqual(nt.classify_title("Adjustment of Funding Rate Interval for BAR-USDT perpetual")[0][0], "funding_interval")
 
+    def test_futures_launch_and_digits_are_not_events(self):
+        self.assertEqual(nt.classify_title("KuCoin Futures New Listing: PRLUSDT Perpetual Contract with Up to 20x Leverage"), [])
+        self.assertEqual(nt.classify_title("KuCoin Futures Will List BZUSDT & NATGASUSDT Perpetual Contracts (2026-03-31)"), [])
+        self.assertEqual(nt.classify_title("KuCoin Will Delist 17 Spot Trading Pairs"), [])
+        self.assertEqual(nt.classify_title("Delay of Margin Trading Delisting for Pepe2.0 (PEPE2)"), [])
+
+    def test_kucoin_futures_delist_and_funding(self):
+        r = nt.classify_title("KuCoin Futures Will Delist the DENTUSDT and TRUUSDT Perpetual Contracts (2026-04-21)")
+        self.assertEqual(r[0][0], "perp_delist")
+        self.assertIn("DENT", r[0][1])
+        self.assertEqual(nt.classify_title("Changes to Funding Rate Intervals for XECUSDT Perpetual Contracts (07-23)"),
+                         [("funding_interval", ["XEC"])])
+
     def test_prefix_stripped(self):
         self.assertEqual(nt.title_symbols("New Listing: 1000PEPEUSDT Perpetual Contract"), ["PEPE"])
 
