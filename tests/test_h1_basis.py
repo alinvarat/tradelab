@@ -231,8 +231,8 @@ class Wiring(unittest.TestCase):
         self.assertIn("short_premium", summ)
 
     def test_universe_filter(self):
-        with mock.patch.object(bv, "list_symbols", lambda m, q: ["BTCUSDT", "USDCUSDT", "BTCUPUSDT", "ETHUSDT"]):
-            self.assertEqual(self.run.symbols_h1_basis_snapback(), ["BTCUSDT", "ETHUSDT"])
+        with mock.patch.object(bv, "list_symbols", lambda m, q: ["BTCUSDT", "USDCUSDT", "JUPUSDT", "SYRUPUSDT", "ETHUSDT"]):
+            self.assertEqual(self.run.symbols_h1_basis_snapback(), ["BTCUSDT", "JUPUSDT", "SYRUPUSDT", "ETHUSDT"])
 
 
 if __name__ == "__main__":

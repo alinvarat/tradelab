@@ -1782,9 +1782,9 @@ H1_START, H1_END = (2022, 1), (2026, 11)          # monthly files 2022-01 .. 202
 
 
 def symbols_h1_basis_snapback():
-    """Every USDT perp ever listed (delisted included), minus the L8 skip list and leveraged tokens."""
-    return [x for x in _binance_all_usdt_symbols("futures/um")
-            if x[:-4] not in L8_SKIP and not re.search(r"(UP|DOWN|BULL|BEAR)$", x[:-4])]
+    """Every USDT perp ever listed (delisted included), minus the L8 skip list. No leveraged-token regex: futures/um has
+    no leveraged tokens, and the spot regex (...UP|DOWN) would wrongly drop real perps such as JUPUSDT and SYRUPUSDT."""
+    return [x for x in _binance_all_usdt_symbols("futures/um") if x[:-4] not in L8_SKIP]
 
 
 def _h1_symbol(sym, ms):
