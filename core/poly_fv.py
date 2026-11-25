@@ -114,9 +114,9 @@ def exit_net(sell_price, buy_price, fee_rate, fee_exp):
     return proceeds / cost - 1
 
 
-def market_rows(m, trades, spot_t, spot_c, strike, offsets=OFFSETS_MIN, lookbacks=LOOKBACKS_MIN):
+def market_rows(m, trades, closes_by_min, strike, offsets=OFFSETS_MIN, lookbacks=LOOKBACKS_MIN):
     """Per-bet candidate rows of one market. m: {'id','coin','kind','end','yes_won','fee_rate','fee_exp'};
-    spot_t / spot_c: ascending minute-start timestamps and closes of the spot pair; strike: spot threshold (Yes = spot >= strike at end).
+    closes_by_min: {minute_start_ts: close} of the spot pair; strike: spot threshold (Yes = spot >= strike at end).
     One row per (offset, lookback) with a fair value and a market price; the fills are per offset and shared."""
     rows = []
     if not trades or strike is None:
@@ -128,11 +128,11 @@ def market_rows(m, trades, spot_t, spot_c, strike, offsets=OFFSETS_MIN, lookback
         mkt = last_yes_before(trades, t0)
         if mkt is None:
             continue
-        i = bisect.bisect_left(spot_t, t0 // 60 * 60) - 1       # last minute that is complete at t0
-        if i < 0 or t0 - spot_t[i] > 3 * MIN:
+        mins = sorted(k for k in closes_by_min if k < t0 // 60 * 60 + 0)  # strictly completed minutes before t0
+        if not mins or t0 - mins[-1] > 3 * MIN:
             continue
-        spot = spot_c[i]
-        series = spot_c[max(0, i - max(lookbacks)):i + 1]
+        spot = closes_by_min[mins[-1]]
+        series = [closes_by_min[k] for k in mins[-(max(lookbacks) + 1):]]
         t_lo, t_hi = t0 + LATENCY_S, min(t0 + LATENCY_S + FILL_WINDOW_S, end - CLOSE_GUARD_S)
         fills = {}
         for idx in (0, 1):

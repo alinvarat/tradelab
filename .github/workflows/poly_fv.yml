@@ -1,13 +1,12 @@
 name: Polymarket fair-value family (poly_fv)
 
-# Own workflow so research.yml stays untouched. Protocol: research/studies/protocol_poly_fv.md.
-# mode=probe prints a data report; mode=run shards (month, coin) over a matrix, merges, evaluates the locked rules and
-# persists the per-bet rows (jsonl.gz) on branch data/poly-fv-rows.
+# Own workflow so research.yml stays untouched. mode=probe prints the data-availability report;
+# later modes (rows shards, summary, forward ledger) are added with the study.
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe | run"
+        description: "probe"
         default: probe
 
 permissions:
@@ -24,87 +23,8 @@ jobs:
         with:
           python-version: "3.13"
       - name: Probe Polymarket data
-        run: python research/studies/poly_fv.py probe | tee probe.json
+        run: python research/studies/poly_fv.py probe --quick | tee probe.json
       - uses: actions/upload-artifact@v4
         with:
           name: poly-fv-probe
           path: probe.json
-
-  plan:
-    if: inputs.mode == 'run'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    outputs:
-      matrix: ${{ steps.plan.outputs.matrix }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - id: plan
-        run: echo "matrix=$(python research/studies/poly_fv.py plan)" >> "$GITHUB_OUTPUT"
-
-  shard:
-    needs: plan
-    runs-on: ubuntu-latest
-    timeout-minutes: 300
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: ${{ fromJSON(needs.plan.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - name: Run shard
-        run: python research/studies/poly_fv.py shard --shard ${{ matrix.shard }} --dir out
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: part-${{ matrix.shard }}
-          path: out/
-
-  merge:
-    needs: [plan, shard]
-    if: ${{ !cancelled() && needs.plan.result == 'success' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: part-*
-          merge-multiple: true
-          path: out
-      - name: Merge and evaluate
-        run: python research/studies/poly_fv.py merge --dir out | tee out/merge_log.txt
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: poly-fv-result
-          path: |
-            out/summary.json
-            out/merge_log.txt
-            out/gaps_*.json
-      - name: Persist rows on data/poly-fv-rows
-        run: |
-          mkdir -p /tmp/keep && cp out/rows_*.jsonl.gz out/summary.json out/gaps_*.json /tmp/keep/
-          git config user.name tradelab-research
-          git config user.email tradelab-research@users.noreply.github.com
-          if git ls-remote --exit-code origin data/poly-fv-rows >/dev/null 2>&1; then
-            git fetch origin data/poly-fv-rows && git checkout -q -B data/poly-fv-rows origin/data/poly-fv-rows
-          else
-            git checkout -q --orphan data/poly-fv-rows && git rm -rq --cached . && git clean -fdq
-          fi
-          mkdir -p rows && cp /tmp/keep/rows_*.jsonl.gz rows/ && cp /tmp/keep/summary.json /tmp/keep/gaps_*.json rows/
-          git add rows
-          git commit -qm "poly_fv rows and summary $(date -u +%FT%TZ)" || echo "nothing new"
-          git push -q origin data/poly-fv-rows
