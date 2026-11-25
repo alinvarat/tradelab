@@ -1,1 +1,1 @@
-{"item": "2026-08:ethereum", "gaps": {"markets": 12081, "no_candidate_rows": 208, "no_strike": 9078, "no_trades": 1780, "trades_truncated_or_failed": 184, "strike_implausible": 6, "rows": 6597}, "seconds": 554}
+{"item": "2026-08:ethereum", "gaps": {"markets": 12081, "no_candidate_rows": 3625, "no_trades": 1787, "trades_truncated_or_failed": 160, "strike_implausible": 7, "rows": 26970}, "seconds": 515}

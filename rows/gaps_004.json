@@ -1,1 +1,1 @@
-{"item": "2025-09:bitcoin", "gaps": {"markets": 980, "strike_implausible": 51, "no_candidate_rows": 96, "rows": 7188}, "seconds": 47}
+{"item": "2025-09:bitcoin", "gaps": {"markets": 980, "strike_implausible": 51, "no_candidate_rows": 96, "trades_truncated_or_failed": 1, "rows": 7179}, "seconds": 89}
