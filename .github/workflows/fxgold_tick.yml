@@ -47,11 +47,16 @@ jobs:
         with:
           name: fxgold-probe
           path: /tmp/probe.json
+      - uses: actions/cache@v4
+        id: calcache
+        with:
+          path: /tmp/events.csv
+          key: fxcal-v1
       - name: Matrix and calendar
         id: mx
         if: steps.m.outputs.mode == 'all' || steps.m.outputs.mode == 'pilot'
         run: |
-          python -m research.studies.fxgold_calendar /tmp/events.csv
+          [ -s /tmp/events.csv ] || python -m research.studies.fxgold_calendar /tmp/events.csv
           J="$(python -m research.studies.fxgold_matrix ${{ steps.m.outputs.mode }})"
           echo "fetch=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["fetch"]))')" >> "$GITHUB_OUTPUT"
           echo "events=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["events"]))')" >> "$GITHUB_OUTPUT"

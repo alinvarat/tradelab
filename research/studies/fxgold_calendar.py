@@ -18,9 +18,21 @@ MONTHS = {m: i + 1 for i, m in enumerate(["January", "February", "March", "April
                                           "October", "November", "December"])}
 
 
+UAS = [UA, {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.9"}]
+
+
 def page(u):
-    with urlopen(Request(u, headers=UA), timeout=40) as r:
-        return r.read().decode("utf8", "replace")
+    import time
+    last = None
+    for k in range(8):
+        try:
+            with urlopen(Request(u, headers=UAS[k % 2]), timeout=40) as r:
+                return r.read().decode("utf8", "replace")
+        except Exception as e:  # noqa: BLE001
+            last = e
+            time.sleep(4 * (k + 1))
+    raise last
 
 
 def utc(day, hh, mm):
