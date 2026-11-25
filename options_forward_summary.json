@@ -28,10 +28,10 @@
    "affordable_at_start_stake": 0
   }
  },
- "open": 0,
+ "open": 1,
  "closed": 0,
  "late_exits": 0,
- "calls": 31,
+ "calls": 133,
  "account_whole_contracts": {
   "end_equity_usd": 147.0,
   "taken": 0,
@@ -263,10 +263,10 @@
      "affordable_at_start_stake": 0
     }
    },
-   "open": 0,
+   "open": 1,
    "closed": 0,
    "late_exits": 0,
-   "calls": 31,
+   "calls": 133,
    "account_whole_contracts": {
     "end_equity_usd": 147.0,
     "taken": 0,
@@ -351,6 +351,6 @@
    "llm_cost_usd_recorded": 0.0
   }
  },
- "gaps": 0,
- "updated_utc": "2026-11-25T15:02:17Z"
+ "gaps": 1,
+ "updated_utc": "2026-11-25T23:28:34Z"
 }
