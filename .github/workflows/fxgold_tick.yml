@@ -47,6 +47,65 @@ jobs:
         with:
           name: fxgold-probe
           path: /tmp/probe.json
+      - name: Matrix
+        id: mx
+        if: steps.m.outputs.mode == 'all' || steps.m.outputs.mode == 'pilot'
+        run: |
+          J="$(python -m research.studies.fxgold_matrix ${{ steps.m.outputs.mode }})"
+          echo "fetch=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["fetch"]))')" >> "$GITHUB_OUTPUT"
+          echo "events=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["events"]))')" >> "$GITHUB_OUTPUT"
+          echo "sims=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["sims"]))')" >> "$GITHUB_OUTPUT"
+
+  calendar:
+    needs: plan
+    if: needs.plan.outputs.fetch != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ok: ${{ steps.c.outputs.ok }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/cache@v4
+        with:
+          path: /tmp/events.csv
+          key: fxcal-v1
+      - id: c
+        run: |
+          [ -s /tmp/events.csv ] || timeout 60 python -m research.studies.fxgold_calendar /tmp/events.csv || true
+          if [ -s /tmp/events.csv ]; then echo "ok=true" >> "$GITHUB_OUTPUT"; else echo "ok=false" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/upload-artifact@v4
+        if: steps.c.outputs.ok == 'true'
+        with:
+          name: fx-calendar-${{ needs.plan.outputs.mode }}
+          path: /tmp/events.csv
+
+  fetch: ${{ steps.mx.outputs.fetch }}
+      events: ${{ steps.mx.outputs.events }}
+      sims: ${{ steps.mx.outputs.sims }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - id: m
+        run: |
+          M="${{ inputs.mode }}"
+          [ -n "$M" ] || M="$(tr -d ' \n' < research/studies/fxgold_mode.txt)"
+          echo "mode=$M" >> "$GITHUB_OUTPUT"
+      - name: Probe
+        if: steps.m.outputs.mode == 'probe'
+        run: python research/studies/fxgold_probe.py | tee /tmp/probe.json
+      - name: Probe 2
+        if: steps.m.outputs.mode == 'probe2'
+        run: python -m research.studies.fxgold_probe2 | tee /tmp/probe.json
+      - uses: actions/upload-artifact@v4
+        if: startsWith(steps.m.outputs.mode, 'probe')
+        with:
+          name: fxgold-probe
+          path: /tmp/probe.json
       - uses: actions/cache@v4
         id: calcache
         with:
@@ -98,8 +157,8 @@ jobs:
           if-no-files-found: ignore
 
   events:
-    needs: plan
-    if: needs.plan.outputs.events != ''
+    needs: [plan, calendar]
+    if: always() && needs.calendar.outputs.ok == 'true' && needs.plan.outputs.events != ''
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:

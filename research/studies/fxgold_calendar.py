@@ -26,14 +26,14 @@ def page(u):
     """Direct (BLS answers 403 to many runner IPs), then the Wayback Machine copy of the same page."""
     import time
     last = None
-    for k, url in enumerate([u] * 3 + ["https://web.archive.org/web/2026id_/" + u] * 3):
+    for k, url in enumerate([u] * 2 + ["https://web.archive.org/web/2026id_/" + u] * 2):
         try:
-            with urlopen(Request(url, headers=UAS[k % 2]), timeout=60) as r:
+            with urlopen(Request(url, headers=UAS[k % 2]), timeout=12) as r:
                 return r.read().decode("utf8", "replace")
         except Exception as e:  # noqa: BLE001
             last = e
             print("fetch failed", url, e, file=sys.stderr)
-            time.sleep(3 * (k + 1))
+            time.sleep(1)
     raise last
 
 
