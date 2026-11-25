@@ -113,7 +113,7 @@ class BasisSnapRows(unittest.TestCase):
 
     def test_one_trade_at_a_time_then_a_new_event_after_the_exit(self):
         price = lambda k: 100.0 if k < 20 else (99.0 if k < 31 else (99.5 if k < 80 else 98.5))
-        prem_by = {20: -0.006, **{k: -0.004 for k in range(21, 30)}, 30: -0.0005, 80: -0.006, 81: -0.0005}
+        prem_by = {20: -0.006, **{k: -0.006 for k in range(21, 30)}, 30: -0.0005, 80: -0.006, 81: -0.0005}
         prem, perp, spot = make(price, prem_by)
         rows, st = sc.basis_snap_rows("X", 1, prem, perp, spot, FUND)
         self.assertEqual([r["ts"] for r in rows], [at(21), at(81)])
@@ -202,6 +202,8 @@ class Wiring(unittest.TestCase):
     def fake_fetch(self, market, period, kind, symbol, date, interval=None, parse=None, **kw):
         if symbol == "BADUSDT":
             return None
+        if symbol == "NONEUSDT":
+            return []
         if symbol == "NOSPOTUSDT" and market == "spot":
             return []
         return self.files.get((market, kind, tuple(date)), [])
