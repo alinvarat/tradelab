@@ -73,6 +73,16 @@ jobs:
           curl -fsSL https://claude.ai/install.sh | bash
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
+      - name: Restore sweep data cache (sweep_* studies; bars are downloaded once per data group)
+        if: ${{ startsWith(inputs.study, 'sweep_') }}
+        uses: actions/cache@v4
+        with:
+          path: .sweepcache
+          key: sweepdata-v1-${{ inputs.study }}-${{ matrix.shard }}-${{ github.run_id }}
+          restore-keys: |
+            sweepdata-v1-${{ inputs.study }}-${{ matrix.shard }}-
+            sweepdata-v1-
+
       - name: Download universe
         uses: actions/download-artifact@v4
         with:
@@ -141,3 +151,56 @@ jobs:
           name: study-${{ inputs.study }}
           path: out/
           if-no-files-found: warn
+
+      - name: Upload leaderboard (sweep_* studies)
+        if: ${{ always() && startsWith(inputs.study, 'sweep_') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: leaderboard-${{ inputs.study }}
+          path: reports/LEADERBOARD.*
+          if-no-files-found: ignore
+
+  publish_rows:
+    name: keep trade rows ${{ inputs.study }}
+    needs: merge
+    if: ${{ !cancelled() && needs.merge.result == 'success' && startsWith(inputs.study, 'sweep_') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Download merged result
+        uses: actions/download-artifact@v4
+        with:
+          name: study-${{ inputs.study }}
+          path: out
+
+      - name: Export per-trade rows and push them to the data/sweep-rows branch
+        env:
+          STUDY: ${{ inputs.study }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          [[ "$STUDY" =~ ^[a-z0-9_]+$ ]] || { echo "bad study name"; exit 2; }
+          python research/sweeps/publish_rows.py "out/${STUDY}.json" "/tmp/${RUN_ID}.jsonl.gz"
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git ls-remote --exit-code origin data/sweep-rows >/dev/null 2>&1; then
+            git fetch -q origin data/sweep-rows
+            git checkout -q -B data/sweep-rows FETCH_HEAD
+          else
+            git checkout -q --orphan data/sweep-rows
+            git rm -rqf . || true
+          fi
+          mkdir -p "rows/${STUDY}"
+          cp "/tmp/${RUN_ID}.jsonl.gz" "rows/${STUDY}/${RUN_ID}.jsonl.gz"
+          git add "rows/${STUDY}/${RUN_ID}.jsonl.gz"
+          git commit -qm "sweep rows ${STUDY} run ${RUN_ID}"
+          git push -q origin data/sweep-rows
