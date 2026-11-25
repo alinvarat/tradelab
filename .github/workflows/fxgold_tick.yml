@@ -82,50 +82,6 @@ jobs:
           name: fx-calendar-${{ needs.plan.outputs.mode }}
           path: /tmp/events.csv
 
-  fetch: ${{ steps.mx.outputs.fetch }}
-      events: ${{ steps.mx.outputs.events }}
-      sims: ${{ steps.mx.outputs.sims }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - id: m
-        run: |
-          M="${{ inputs.mode }}"
-          [ -n "$M" ] || M="$(tr -d ' \n' < research/studies/fxgold_mode.txt)"
-          echo "mode=$M" >> "$GITHUB_OUTPUT"
-      - name: Probe
-        if: steps.m.outputs.mode == 'probe'
-        run: python research/studies/fxgold_probe.py | tee /tmp/probe.json
-      - name: Probe 2
-        if: steps.m.outputs.mode == 'probe2'
-        run: python -m research.studies.fxgold_probe2 | tee /tmp/probe.json
-      - uses: actions/upload-artifact@v4
-        if: startsWith(steps.m.outputs.mode, 'probe')
-        with:
-          name: fxgold-probe
-          path: /tmp/probe.json
-      - uses: actions/cache@v4
-        id: calcache
-        with:
-          path: /tmp/events.csv
-          key: fxcal-v1
-      - name: Matrix and calendar
-        id: mx
-        if: steps.m.outputs.mode == 'all' || steps.m.outputs.mode == 'pilot'
-        run: |
-          [ -s /tmp/events.csv ] || python -m research.studies.fxgold_calendar /tmp/events.csv
-          J="$(python -m research.studies.fxgold_matrix ${{ steps.m.outputs.mode }})"
-          echo "fetch=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["fetch"]))')" >> "$GITHUB_OUTPUT"
-          echo "events=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["events"]))')" >> "$GITHUB_OUTPUT"
-          echo "sims=$(echo "$J" | python -c 'import json,sys;print(json.dumps(json.load(sys.stdin)["sims"]))')" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v4
-        if: steps.m.outputs.mode == 'all' || steps.m.outputs.mode == 'pilot'
-        with:
-          name: fx-calendar-${{ steps.m.outputs.mode }}
-          path: /tmp/events.csv
-
   fetch:
     needs: plan
     if: needs.plan.outputs.fetch != ''
