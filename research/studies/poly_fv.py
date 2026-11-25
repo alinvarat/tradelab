@@ -16,8 +16,11 @@ DATA = "https://data-api.polymarket.com"
 def http(url, timeout=30):
     """(status, parsed json or text head). Never raises: a block or error is a probe result."""
     try:
-        with urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0 tradelab-research"}), timeout=timeout) as r:
+        with urlopen(Request(url, headers={"User-Agent": "Mozilla/5.0 tradelab-research", "Accept-Encoding": "gzip"}), timeout=timeout) as r:
             body, status = r.read(), r.status
+            if body[:2] == b"\x1f\x8b":
+                import gzip
+                body = gzip.decompress(body)
     except Exception as e:  # noqa: BLE001
         head = ""
         try:
@@ -101,11 +104,11 @@ def probe():
                     out[f"prices_history_fid{fid}"] = {"status": ph[0], "n": len(h) if h is not None else None, "first": h[:1] if h else None}
     # slug-constructed lookups (hourly and daily), to measure how far back they exist
     slugs = {}
-    for ymd in ("2025-08-15", "2025-09-15", "2025-10-05", "2025-12-10", "2026-02-23", "2026-06-10", "2026-10-10"):
+    for ymd in ("2025-06-15", "2025-07-15", "2025-08-01", "2026-06-10"):
         dd = datetime.strptime(ymd, "%Y-%m-%d")
         mon = dd.strftime("%B").lower()
         for coin in ("bitcoin", "ethereum", "solana", "xrp"):
-            for sl in (f"{coin}-up-or-down-{mon}-{dd.day}-3pm-et", f"{coin}-above-on-{mon}-{dd.day}", f"{coin}-above-on-{mon}-{dd.day}-{dd.year}"):
+            for sl in (f"{coin}-up-or-down-{mon}-{dd.day}-3pm-et", f"{coin}-up-or-down-{mon}-{dd.day}-{dd.year}-3pm-et", f"{coin}-above-on-{mon}-{dd.day}", f"{coin}-above-on-{mon}-{dd.day}-{dd.year}"):
                 st, e = http(f"{GAMMA}/events?slug={sl}")
                 slugs[sl] = [st, len(e) if isinstance(e, list) else str(e)[:60]]
     out["slug_lookup"] = slugs
