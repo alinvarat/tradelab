@@ -1778,6 +1778,54 @@ def summarize_selftest_shard(all_rows):
             "value_sum": sum(r["value"] for r in all_rows)}
 
 
+# ---- H3: passive market making on small perps (RESULTS.md 'H3 screen'; rule in core/passive_mm.py) ----
+
+H3_BUDGET_S = 4.2 * 3600        # a shard stops here and counts the rest as a gap (job limit is 5.67 h)
+
+
+def symbols_h3_passive_mm():
+    """30 USDT perps chosen by a seeded hash from every perp ever listed, minus majors and stablecoins."""
+    from core import passive_mm as mm
+    from research.studies import binance_vision as bv
+    return mm.pick_universe(bv.list_symbols("futures/um", "USDT"), exclude_bases=L8_SKIP)
+
+
+def rows_h3_passive_mm(symbols_slice):
+    from core import passive_mm as mm
+    from research.studies import binance_vision as bv
+    gaps = {"agg_failed": 0, "agg_missing": 0, "parse_error": 0, "thin_day": 0, "time_budget": 0}
+    rows, t0, days = [], time.time(), mm.sample_days()
+    for sym in symbols_slice:
+        for d in days:
+            if time.time() - t0 > H3_BUDGET_S:
+                gaps["time_budget"] += 1
+                continue
+            it = bv.iter_file("futures/um", "daily", "aggTrades", sym, d, parse=bv.parse_aggtrade)
+            if it is None:
+                gaps["agg_failed"] += 1
+                continue
+            if it == []:
+                gaps["agg_missing"] += 1
+                continue
+            try:
+                ts, px, notional = mm.load_trades(it)
+            except Exception as e:  # noqa: BLE001
+                gaps["parse_error"] += 1
+                log(f"{sym} {d}: {type(e).__name__}")
+                continue
+            row = mm.process_day(ts, px, d, notional)
+            if row is None:
+                gaps["thin_day"] += 1
+                continue
+            rows.append({"symbol": sym, **row})
+    return {"rows": rows, "gaps": gaps}
+
+
+def summarize_h3_passive_mm(all_rows):
+    from core import passive_mm as mm
+    return mm.summarize(all_rows)
+
+
 def sharded_study(name):
     """(rows_fn, summarize_fn, symbols_fn) for a study that supports sharding, else None."""
     g = globals()
