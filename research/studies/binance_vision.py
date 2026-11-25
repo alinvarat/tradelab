@@ -263,5 +263,44 @@ def list_symbols(market="spot", quote="USDT", kind="klines", period="monthly", t
     return sorted(set(out))
 
 
+def parse_keys(xml, prefix):
+    """Dates (YYYY-MM or YYYY-MM-DD) of the .zip keys under `prefix` in one S3 listing page, the last key and whether
+    more pages follow. Checksum keys (.zip.CHECKSUM) are ignored."""
+    keys = re.findall(r"<Key>([^<]+)</Key>", xml)
+    dates = []
+    for k in keys:
+        m = re.fullmatch(r"%s[A-Za-z0-9_]+-(?:[A-Za-z0-9]+-)?(\d{4}-\d{2}(?:-\d{2})?)\.zip" % re.escape(prefix), k)
+        if m:
+            dates.append(m.group(1))
+    return dates, (keys[-1] if keys else None), "<IsTruncated>true</IsTruncated>" in xml
+
+
+def list_files(market, period, kind, symbol, interval=None, tries=4, timeout=60, opener=None, sleep=time.sleep):
+    """Dates of every zip of one symbol (and interval), ascending: the first one is the first month (or day) of data.
+    Raises RuntimeError if a page fails after retries (a missing listing must never read as 'never listed')."""
+    if opener is None:
+        from urllib.request import Request, urlopen
+        opener = lambda u, t: urlopen(Request(u, headers=UA), timeout=t)  # noqa: E731
+    prefix = f"data/{market}/{period}/{kind}/{symbol}/" + (f"{interval}/" if interval else "")
+    out, marker = [], ""
+    for _ in range(50):
+        url = f"{LISTING}?prefix={prefix}" + (f"&marker={marker}" if marker else "")
+        for k in range(tries):
+            try:
+                with opener(url, timeout) as r:
+                    xml = r.read().decode()
+                break
+            except Exception as e:  # noqa: BLE001
+                if k + 1 == tries:
+                    raise RuntimeError(f"S3 listing failed for {prefix} after {tries} tries") from e
+                sleep(2 * (k + 1))
+        dates, last, more = parse_keys(xml, prefix)
+        out += dates
+        if not more or not last:
+            break
+        marker = last
+    return sorted(set(out))
+
+
 def utc(y, m=1, d=1):
     return datetime(y, m, d, tzinfo=timezone.utc).timestamp()
