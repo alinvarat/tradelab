@@ -1,0 +1,46 @@
+name: Smallcap intraday (family 7)
+
+# Family 7: US small-cap intraday LONG events (gap ORB, LULD halt resumption, catalyst-tagged gaps).
+# mode comes from the dispatch input, or (push on the line branch) from research/studies/smallcap_mode.txt.
+# State and per-trade rows live on the data branch data/smallcap-intraday-rows.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe | scan (archive new events, recompute rows, stage-0 gate) | halts (archive today's halts)"
+        default: scan
+  push:
+    branches: [line/smallcap-intraday]
+    paths: [research/studies/smallcap_mode.txt]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tradelab-smallcap-intraday
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Choose mode
+        run: |
+          M="${{ inputs.mode }}"
+          [ -n "$M" ] || M="$(tr -d ' \n' < research/studies/smallcap_mode.txt)"
+          echo "MODE=$M" >> "$GITHUB_ENV"
+      - name: Probe
+        if: env.MODE == 'probe'
+        run: python research/studies/smallcap_probe.py | tee /tmp/probe.json
+      - uses: actions/upload-artifact@v4
+        if: env.MODE == 'probe'
+        with:
+          name: smallcap-probe
+          path: /tmp/probe.json
