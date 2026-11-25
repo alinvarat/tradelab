@@ -229,6 +229,8 @@ def make_fw_functions(name, path):
                 row["extra_criteria"] = {"survives_5min_delay": bool(tw) and vm is not None and tm is not None and vm > 0 and tm > 0}
             else:
                 row["extra_criteria"] = {"survives_5min_delay": True}
+            # the rate settled at the event is not known to an entry before it: such a rule can never pass
+            row["extra_criteria"]["no_lookahead"] = not (r["sig"] == "realized" and r["E"] < 0)
             rule_rows.append(row)
         summ = finish(name, rel, cfg, sha, len(rules), rule_rows, write_board)
         summ["rule_rows"] = rule_rows

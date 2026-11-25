@@ -809,6 +809,8 @@ class FundingWindow(unittest.TestCase):
             good = by[sev.rule_id(0.003, "fade_payer", -15, 15, 0)]
             self.assertEqual(good["status"], "ok", good.get("reason"))
             self.assertTrue(good["criteria"]["survives_5min_delay"])
+            self.assertFalse(good["criteria"]["no_lookahead"])          # sig=realized with an entry before the settlement
+            self.assertFalse(good["passed"])
             self.assertGreater(good["validation"]["mean"], 0.005)
             no_twin = by[sev.rule_id(0.003, "fade_payer", -1, 1, 0)]
             if no_twin["status"] == "ok":

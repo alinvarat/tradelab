@@ -54,7 +54,7 @@ def render_md(board):
          "Pass = validation and test net mean > 0 after costs and also at 2x costs, enough trades, validation p significant after Holm "
          "over the family, at least 70% of rolling 6-month folds positive, last 12 months positive at 2x cost.", "",
          "## Top 10 closest to pass", "",
-         "| # | rule | criteria met (of 8, 9 for event rules) | val n | val mean/trade | val p | Holm p | test n | test mean/trade | val 2x | test 2x | 30d x median val/test | x |",
+         "| # | rule | criteria met (of 8; event rules 10) | val n | val mean/trade | val p | Holm p | test n | test mean/trade | val 2x | test 2x | 30d x median val/test | x |",
          "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for i, r in enumerate(board.get("top10", []), 1):
         L.append(f"| {i} | `{r['family']}/{r['id']}` | {r['n_criteria']} | {r['val_n']} | {_pct(r['val_mean'])} | {_num(r['val_p'])} | "
