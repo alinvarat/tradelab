@@ -3,6 +3,9 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-25 line/h1_basis_snapback)
+- **H1 (perp ต่ำกว่า index แล้วเด้งกลับ + ฝั่งตรงข้าม):** ลงทะเบียนกติกาใน `research/studies/RESULTS.md` แล้ว (ก่อนดึงข้อมูล); โค้ด `core.screens.basis_snap_rows` + `rows_/summarize_h1_basis_snapback` ใน `run.py`; เทสต์ `tests/test_h1_basis.py`; ยังไม่ได้รัน → หลัง merge: `gh workflow run research_sharded.yml -f study=h1_basis_snapback -f shards=20`
+
 ## ด่วน (2026-11-25 ops/sharded-runner)
 - **ตัวรันแบบแบ่ง shard:** workflow `research_sharded.yml` กระจายหนึ่งด่านไปหลาย job พร้อมกัน (ค่าเริ่ม 20) แล้วรวมผล; ด่านที่จะใช้ต้องมี `rows_<study>(symbols_slice)` และ `summarize_<study>(all_rows)` ใน `run.py`; ยังไม่ได้ทดสอบบน Actions จริง (workflow_dispatch ใช้ได้หลัง merge เข้า main) → หลัง merge ให้รัน `study=selftest_shard` ก่อน
 
