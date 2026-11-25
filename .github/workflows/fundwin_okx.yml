@@ -1,0 +1,73 @@
+name: Funding window OKX forward
+
+# Forward paper ledger fundwin_okx_fwd (research/studies/protocol_fundwin_okx_fwd_20261125.md). Modes:
+#   probe   - one look at OKX's public funding-rate / ticker endpoints from a runner
+#   forward - one 8-hour settlement: reads OKX's predicted rates at -15/-5/-1 min, paper trades, settles at +1 min; state on data/okx-fwd
+# Dispatched by keeper.yml about 30 minutes before 00:00, 08:00 and 16:00 UTC (GitHub cron never fires).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe or forward"
+        required: true
+        default: "probe"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    if: inputs.mode == 'probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python research/studies/fundwin_okx_forward.py probe out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: okx-probe
+          path: out/
+
+  forward:
+    if: inputs.mode == 'forward'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    concurrency:
+      group: tradelab-okx-fwd-state
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore state
+        run: |
+          mkdir -p /tmp/okx
+          if git fetch origin data/okx-fwd 2>/dev/null; then
+            for f in state.json trades.jsonl preds.jsonl; do git show origin/data/okx-fwd:$f > /tmp/okx/$f 2>/dev/null || rm -f /tmp/okx/$f; done
+          fi
+      - name: One settlement
+        run: python research/studies/fundwin_okx_forward.py forward /tmp/okx
+      - name: Push state to data/okx-fwd
+        if: always()
+        run: |
+          [ -f /tmp/okx/state.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/okx-fwd; then
+            git checkout -q -B data/okx-fwd origin/data/okx-fwd
+          else
+            git checkout -q --orphan data/okx-fwd && git rm -rq --cached . && git clean -fdq
+          fi
+          for f in state.json trades.jsonl preds.jsonl summary.json; do cp /tmp/okx/$f . 2>/dev/null || true; done
+          git add -A
+          git commit -qm "OKX funding forward: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3; do git push -q origin data/okx-fwd && break; git fetch -q origin data/okx-fwd; git rebase -q origin/data/okx-fwd || git rebase --abort; done
