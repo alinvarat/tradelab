@@ -2339,6 +2339,22 @@ def summarize_selftest_shard(all_rows):
             "value_sum": sum(r["value"] for r in all_rows)}
 
 
+def symbols_opt_vrp():
+    """Shard tokens 'BTC:2021-03' (asset x month); no network. Protocol: protocol_opt_vrp_20261125.md."""
+    from core import opt_vrp
+    return opt_vrp.universe()
+
+
+def rows_opt_vrp(symbols_slice):
+    from research.studies import opt_vrp
+    return opt_vrp.rows_for(symbols_slice)
+
+
+def summarize_opt_vrp(all_rows):
+    from core import opt_vrp
+    return opt_vrp.summarize(all_rows)
+
+
 H4_SKIP = L8_SKIP + ("BTCDOM", "DEFI")      # stables, wrapped coins and index perps are no alts
 
 
