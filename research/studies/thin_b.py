@@ -181,3 +181,41 @@ def study_probe_thin_b4(_symbols):
 
 
 STUDIES["probe_thin_b4"] = study_probe_thin_b4
+
+
+def study_probe_thin_b5(_symbols):
+    """Fifth probe: v2 trades pagination on a market with more than 1,000 trades, duplicates, taker_only, side."""
+    out = {}
+    ks = http("https://gamma-api.polymarket.com/markets/keyset?closed=true&limit=3&volume_num_min=150000&volume_num_max=400000&end_date_min=2025-10-01T00:00:00Z&end_date_max=2026-03-01T00:00:00Z")[1]
+    ms = ks.get("markets") if isinstance(ks, dict) else []
+    res = []
+    for m in ms[:2]:
+        cid = m["conditionId"]
+        toks = json.loads(m.get("clobTokenIds") or "[]")
+        r = {"q": m["question"][:60], "vol": m.get("volumeNum"), "tokens": [t[:8] for t in toks], "negRisk": m.get("negRisk"), "feesEnabled": m.get("feesEnabled"), "feeType": m.get("feeType")}
+        for label, extra in (("all", ""), ("taker", "&taker_only=true")):
+            rows, cur, pages = [], "", 0
+            while pages < 30:
+                t = http(f"https://data-api.polymarket.com/v2/trades?condition={cid}&limit=1000{extra}" + (f"&cursor={cur}" if cur else ""))[1]
+                if not isinstance(t, dict):
+                    r[label + "_err"] = str(t)[:120]
+                    break
+                rows += t.get("data") or []
+                pages += 1
+                cur = (t.get("pagination") or {}).get("next_cursor") or ""
+                if not cur or not (t.get("pagination") or {}).get("has_more"):
+                    break
+            keys = [(x.get("transaction_hash"), x.get("token_id"), x.get("price"), x.get("size"), x.get("proxy_wallet")) for x in rows]
+            ts = [x.get("timestamp") for x in rows]
+            r[label] = {"rows": len(rows), "unique_keys": len(set(keys)), "pages": pages, "ts_min": min(ts) if ts else None, "ts_max": max(ts) if ts else None,
+                        "by_side": {sd: sum(1 for x in rows if x.get("side") == sd) for sd in ("BUY", "SELL")},
+                        "sorted_desc": all(ts[i] >= ts[i + 1] for i in range(len(ts) - 1)) if ts else None,
+                        "same_tx_both_sides": len({x["transaction_hash"] for x in rows if x.get("side") == "BUY"} & {x["transaction_hash"] for x in rows if x.get("side") == "SELL"})}
+            if rows:
+                r[label]["first"] = {k: rows[0].get(k) for k in ("side", "price", "size", "outcome", "timestamp", "transaction_hash")}
+        res.append(r)
+    out["markets"] = res
+    return {"line": "probe_thin_b5", **out}, []
+
+
+STUDIES["probe_thin_b5"] = study_probe_thin_b5
