@@ -84,3 +84,8 @@ sha256sum research/threefold_plan/pre_removal_results.json
 **เตรียม sprint ข้อ 2 (24 พ.ย. 2026):** เพิ่มรายงาน `daily-v1` ของออปชัน ข่าวงบ H5 และผลคู่ของ DeepSeek พร้อม addendum ที่ล็อกช่วงเวลาและวิธีนับก่อนรับข้อมูล งานยังอยู่ใน branch สำหรับ CI ก่อนใช้จริง
 
 **เตรียม sprint ข้อ 3 (24 พ.ย. 2026):** ออปชัน `options-v2-sec` รับ 8-K ทุกประเภทและแยกผลกับบัญชีจำลองเดิม โปรโตคอลคริปโตทั้งสามสายอยู่ใน PR #78 การตั้งรันเดินหน้าจะใช้เฉพาะข้อมูลหลังวันล็อก
+
+
+## 2026-11-25 (forced-flow families, สายวิจัย)
+- ลองครอบครัวเหตุการณ์ forced-selling เพิ่ม 9 ตัว (monitoring tag, Binance futures delist, pair removal, OKX/Upbit/Bithumb/Bybit delist และ caution) ตามโปรโตคอล `research/studies/protocol_forced_flow_20261125.md`: ผ่านด่าน stage 0 ศูนย์จาก 54 กฎ จึงไม่เสนอ addendum ให้ event book (ผลใน `research/studies/RESULTS.md`, rows ที่ branch `data/forced-flow`).
+- ข้อสังเกตสำคัญ: L1f ที่ชอร์ตบน perp ของ Binance ได้เฉพาะ 65 จาก 107 ประกาศ ให้เฉลี่ย +4.7% ต่อครั้ง x ประมาณ 0.19 (ช่วง train ติดลบ) ต่างจาก x 1.98 บน rows แบบ spot ที่รวมเหรียญที่ไม่มี perp; book จริงข้ามเหรียญที่ไม่มี perp บน OKX จึงอาจได้ x ใกล้ 0.2 ไม่ใช่ 2.2 ต้องดูผล forward
