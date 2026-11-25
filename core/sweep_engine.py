@@ -342,6 +342,87 @@ def f_sma_dist(ctx, sym, p):
     return [x / a - 1 if a == a else NAN for x, a in zip(c, m)]
 
 
+def _by_day(d):
+    """Index ranges of each UTC day: list of (start_idx, end_idx_exclusive)."""
+    ts, out, a = d["ts"], [], 0
+    for i in range(1, len(ts) + 1):
+        if i == len(ts) or ts[i] // 86400 != ts[a] // 86400:
+            out.append((a, i))
+            a = i
+    return out
+
+
+def f_pd_sweep(ctx, sym, p):
+    """Prior-UTC-day high/low sweep and reclaim: +1 when this bar's low is below the previous day's low but it closes back
+    above it, -1 when its high is above the previous day's high but it closes back below, else 0."""
+    d = ctx.bars[sym]
+    h, l, c = d["h"], d["l"], d["c"]
+    out = [0.0] * len(c)
+    days = _by_day(d)
+    for j in range(1, len(days)):
+        a, b = days[j - 1]
+        ph, pl = max(h[a:b]), min(l[a:b])
+        for i in range(*days[j]):
+            if l[i] < pl and c[i] > pl:
+                out[i] = 1.0
+            elif h[i] > ph and c[i] < ph:
+                out[i] = -1.0
+    if days:
+        for i in range(*days[0]):
+            out[i] = NAN
+    return out
+
+
+def f_asia_sweep(ctx, sym, p):
+    """Asia range (UTC hours 0..7 of the day, known from hour 8): from hour 8 to 15 +1 when a bar's low is below the Asia low
+    and it closes back above it, -1 for the high side."""
+    d = ctx.bars[sym]
+    ts, h, l, c = d["ts"], d["h"], d["l"], d["c"]
+    out = [0.0] * len(c)
+    for a, b in _by_day(d):
+        idx = [i for i in range(a, b) if (ts[i] // 3600) % 24 < 8]
+        if not idx or (ts[idx[0]] // 3600) % 24 != 0:
+            for i in range(a, b):
+                out[i] = NAN
+            continue
+        ah, al = max(h[i] for i in idx), min(l[i] for i in idx)
+        for i in range(a, b):
+            hr = (ts[i] // 3600) % 24
+            if 8 <= hr < 16:
+                if l[i] < al and c[i] > al:
+                    out[i] = 1.0
+                elif h[i] > ah and c[i] < ah:
+                    out[i] = -1.0
+            elif hr < 8:
+                out[i] = NAN
+    return out
+
+
+def f_orb(ctx, sym, p):
+    """Opening-range breakout: the range of the first `hours` hours of the UTC day (known when they close); afterwards +1
+    for a close above its high, -1 for a close below its low, else 0. NaN inside the range."""
+    d = ctx.bars[sym]
+    ts, h, l, c = d["ts"], d["h"], d["l"], d["c"]
+    hours = int(p.get("hours", 4))
+    out = [NAN] * len(c)
+    for a, b in _by_day(d):
+        rng = [i for i in range(a, b) if (ts[i] // 3600) % 24 < hours]
+        if not rng or (ts[rng[0]] // 3600) % 24 != 0 or (ts[rng[-1]] // 3600) % 24 != hours - 1:
+            continue
+        oh, ol = max(h[i] for i in rng), min(l[i] for i in rng)
+        for i in range(rng[-1] + 1, b):
+            out[i] = 1.0 if c[i] > oh else (-1.0 if c[i] < ol else 0.0)
+    return out
+
+
+def f_rnd(ctx, sym, p):
+    """Position of the close inside the grid of round numbers of size `step` (price units, or step as a fraction of the
+    price's power of ten when `rel` is set): (c mod step) / step in [0, 1). Near 1 = just below a round number."""
+    c = ctx.bars[sym]["c"]
+    step = float(p["step"])
+    return [(x % step) / step for x in c]
+
+
 # name -> (function, sign). signed: the mirror (short) of "x > v" is "x < -v". sym: unchanged under mirror.
 # none: no meaningful mirror (calendar, one-sided features): a short rule must list its own conditions.
 FEATURES = {
@@ -355,6 +436,8 @@ FEATURES = {
     "prem": (f_prem, "signed"), "premz": (f_premz, "signed"),
     "xret": (f_xret, "signed"), "xzret": (f_xzret, "signed"), "rel": (f_rel, "signed"),
     "ratio_mom": (f_ratio_mom, "signed"), "sma_dist": (f_sma_dist, "signed"),
+    "pd_sweep": (f_pd_sweep, "signed"), "asia_sweep": (f_asia_sweep, "signed"), "orb": (f_orb, "signed"),
+    "rnd": (f_rnd, "none"),
 }
 NEEDS_REF = frozenset(("xret", "xzret", "rel", "ratio_mom"))
 NEEDS_FUNDING = frozenset(("fundlast", "fsum", "fz"))
