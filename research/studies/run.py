@@ -1593,6 +1593,88 @@ def study_factory_crypto_1(_symbols, workers=16):
     return summ, {n: r for n, r in results.items() if not n.endswith("@2x")}
 
 
+def study_factory_crypto_3(_symbols, workers=6):
+    """Pre-registered in RESULTS.md 'factory_crypto_3 screen': 10 time-series rules on six liquid USDT-M perps."""
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime, timezone
+    from core import factory as fa
+    from core import factory_ts as ft
+    from research.studies import binance_vision as bv
+    T = lambda y, m=1, d=1: datetime(y, m, d, tzinfo=timezone.utc).timestamp()
+    bounds = {"train": (T(2020), T(2024)), "validation": (T(2024), T(2025)), "test": (T(2025), T(2026, 11))}
+    start, end = T(2019, 9), T(2026, 11)
+    syms = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"]
+
+    def load(sym):
+        bars, failed_k = bv.klines(sym, start, end, "1h", market="futures/um")
+        fund, failed_f = bv.funding(sym, start, end)
+        return sym, bars, fund, failed_k + failed_f
+    with ThreadPoolExecutor(workers) as ex:
+        loaded = list(ex.map(load, syms))
+    data, cov = {}, {}
+    for sym, bars, fund, failed in loaded:
+        ts, o, h, l, c, miss = ft.grid(bars, start, end)
+        fm = ft.funding_map(fund)
+        data[sym] = (ts, o, h, l, c, fm)
+        first = ts[0] if ts else end
+        cov[sym] = {"raw_bars": len(bars), "unique_ts": len({int(b[0]) for b in bars}), "grid_hours": len(ts),
+                    "filled_hours": miss, "first_bar": time.strftime("%Y-%m-%d", time.gmtime(first)) if ts else None,
+                    "funding_rows": len(fund), "failed": failed, "bars": {}, "hours": {}, "funding": {}}
+        have = set(ts)
+        for sp, (a, b) in bounds.items():
+            lo = max(a, first)
+            hrs = range(int(lo) // 3600 * 3600, int(b), 3600) if lo < b else range(0)
+            cov[sym]["hours"][sp] = len(hrs)
+            cov[sym]["bars"][sp] = sum(1 for t in hrs if t in have) - 0
+            cov[sym]["funding"][sp] = sum(v for k, v in
+                                          ((k, 1) for k in fm) if lo <= k < b)
+    # rows count real bars only: grid fills are reported separately, so present = grid minus filled would need the raw
+    # set; use raw timestamps for the gate.
+    for sym, bars, _f, _x in loaded:
+        raw = {int(b[0]) for b in bars}
+        for sp, (a, b) in bounds.items():
+            first = data[sym][0][0] if data[sym][0] else end
+            lo = max(a, first)
+            cov[sym]["bars"][sp] = sum(1 for t in raw if lo <= t < b)
+    gate = ft.integrity(cov, bounds)
+    results, hourly_all, per_rule, flips, trades = {}, {}, {}, {}, {}
+    wk = (bounds["validation"][1] - bounds["validation"][0]) / (7 * 86400)
+    for name in ft.RULE_NAMES:
+        per, per2, perf, n_ent = [], [], [], 0
+        for sym in syms:
+            ts, o, h, l, c, fm = data[sym]
+            if not ts:
+                continue
+            pos = ft.RULES[name]((ts, o, h, l, c))
+            per.append(ft.hourly_returns(ts, c, pos, fm))
+            per2.append(ft.hourly_returns(ts, c, pos, fm, cost_mult=2.0))
+            perf.append(ft.hourly_returns(ts, c, [-x for x in pos], fm))
+            n_ent += ft.entries(ts, pos, *bounds["validation"])
+        hr = ft.portfolio(per, len(syms))
+        hourly_all[name] = hr
+        results[name] = ft.daily(hr)
+        results[name + "@2x"] = ft.daily(ft.portfolio(per2, len(syms)))
+        flips[name] = ft.daily(ft.portfolio(perf, len(syms)))
+        trades[name] = round(n_ent / wk, 2)
+    judged = fa.judge_all(results, bounds)
+    for name in ft.RULE_NAMES:
+        st = ft.split_stats(results[name], bounds)
+        st["train"]["p_block"] = fa.block_p([r for t, r in results[name] if bounds["train"][0] <= t < bounds["train"][1]])
+        row = judged["strategies"][name]
+        flip_v = [r for t, r in flips[name] if bounds["validation"][0] <= t < bounds["validation"][1]]
+        row.update(splits=st, entries_per_week_validation=trades[name],
+                   control_flipped_validation_mean=sum(flip_v) / len(flip_v) if flip_v else None,
+                   lev_table_validation=ft.lev_table(hourly_all[name], *bounds["validation"]),
+                   passed_judge=row["passed"], passed=bool(row["passed"] and trades[name] >= 3 and gate["ok"]))
+        per_rule[name] = st
+    judged["passed"] = [n for n in ft.RULE_NAMES if judged["strategies"][n]["passed"]]
+    best = max(((r["lev"], n, r) for n in ft.RULE_NAMES for r in judged["strategies"][n]["lev_table_validation"]),
+               key=lambda x: (x[2]["months_3x"], x[2]["median_month"]), default=None)
+    summ = {"integrity": gate, "coverage": cov, "red_flags": ft.red_flags(per_rule), "n_days_by_rule": {n: len(results[n]) for n in results},
+            "best_3x_check": best and {"rule": best[1], **best[2]}, **judged}
+    return summ, {n: r for n, r in results.items() if not n.endswith("@2x")}
+
+
 def study_l9_loser_bounce(_symbols, workers=6):
     """Pre-registered in RESULTS.md 'L9 screen': buy the day's >= 20% crypto losers at the next UTC open."""
     return study_l8_gainer_fade(_symbols, workers, kind="l9")
@@ -1949,6 +2031,7 @@ def study_probe_provider(_symbols):
 
 STUDIES = {"probe_claude": study_probe_claude, "factory_crypto_1": study_factory_crypto_1, "l8b_gainer_fade_all": study_l8b_gainer_fade_all, "l11_funding_short": study_l11_funding_short, "l10_gap_fade": study_l10_gap_fade, "l9_loser_bounce": study_l9_loser_bounce, "l8_gainer_fade": study_l8_gainer_fade, "news_v3": study_news_v3, "l7_first_red_day": study_l7_first_red_day, "probe_provider": study_probe_provider, "l2_unlocks": study_l2_unlocks, "l6_smallcap_insider": study_l6_smallcap_insider, "l3_smallcap_news": study_l3_smallcap_news, "l4_polymarket_longshot": study_l4_polymarket_longshot, "l1g_alpha_remove": study_l1g_alpha_remove, "l1e_binance_delist": study_l1e_binance_delist, "l1c_binance_notices": study_l1c_binance_notices, "l1_listings": study_l1_listings, "news_v2": study_news_v2, "pit_swing": study_pit_swing, "probe_llm_cost": study_probe_llm_cost, "polymarket_llm": study_polymarket_llm, "probe_options": study_probe_options, "llm_8k_other": study_llm_8k_other, "llm_earnings_forward": study_llm_earnings_forward, "llm_earnings_wide": study_llm_earnings_wide, "llm_earnings": study_llm_earnings, "pit_momentum": study_pit_momentum, "tom": study_tom, "momentum": study_momentum, "items": study_items, "form4": study_form4, "l12b_perp_fade": study_l12b_perp_fade, "l12_hour_shocks": study_l12_hour_shocks}
 STUDIES.update({"factory_us_pit_1": study_factory_us_pit_1})
+STUDIES.update({"factory_crypto_3": study_factory_crypto_3})
 
 
 
