@@ -1,0 +1,68 @@
+name: D3 D4
+
+# D3 (short a perp before a delist notice) and D4 (long spot after a tag removal / survived round): protocol_d3d4_20261126.md.
+# Modes: events (stage A, no returns: frozen on data/d3d4), run (prices the frozen signals and events once).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "events or run"
+        required: true
+        default: "events"
+
+permissions:
+  contents: write
+
+jobs:
+  d3d4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    concurrency:
+      group: tradelab-d3d4
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Events (stage A, no returns)
+        if: inputs.mode == 'events'
+        run: |
+          git fetch origin data/forced-flow
+          git show origin/data/forced-flow:events/latest.json > /tmp/ff_events.json
+          python research/studies/d3d4.py out events /tmp/ff_events.json
+      - name: Price the frozen signals and events
+        if: inputs.mode == 'run'
+        run: |
+          git fetch origin data/d3d4 data/forced-flow
+          mkdir -p /tmp/frozen
+          for f in events.json signals.json.gz stagea.json; do git show origin/data/d3d4:events/$f > /tmp/frozen/$f; done
+          git show origin/data/forced-flow:runs/20261125T162107Z/rows.jsonl.gz > /tmp/ff_rows.jsonl.gz
+          python research/studies/d3d4.py out run /tmp/frozen /tmp/ff_rows.jsonl.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d3d4-${{ inputs.mode }}
+          path: out/
+      - name: Keep on data/d3d4
+        if: always()
+        run: |
+          [ -d out ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/d3d4 2>/dev/null; then
+            git checkout -q -B data/d3d4 origin/data/d3d4
+          else
+            git checkout -q --orphan data/d3d4 && git rm -rq --cached . && git clean -fdq
+          fi
+          d=${{ inputs.mode }}/$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d
+          cp /tmp/keep/* $d/
+          if [ "${{ inputs.mode }}" = "events" ] && [ -f /tmp/keep/events.json ]; then
+            mkdir -p events && cp /tmp/keep/events.json /tmp/keep/signals.json.gz /tmp/keep/stagea.json events/
+          fi
+          git add -A events ${{ inputs.mode }} 2>/dev/null || git add -A
+          git commit -qm "D3 D4 ${{ inputs.mode }}: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/d3d4 && break; git fetch -q origin data/d3d4; git rebase -q origin/data/d3d4; done
