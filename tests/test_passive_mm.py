@@ -92,6 +92,33 @@ class Simulation(unittest.TestCase):
         self.assertGreater(r["steps_cap"], 0)
         self.assertLess(r["gross"], 0)                      # adverse selection: bought a falling market
 
+    def test_long_flatten_loss_is_priced_at_last_trade_minus_a_tick(self):
+        # buy at 99 (scale 100); hour's last trade 98, flatten sell at 97: gross (97 - 99) / 100 = -0.02
+        r = sim([(D0 + 5, 100), (D0 + 62, 98), (D0 + 100, 98)])
+        self.assertAlmostEqual(r["gross"], -0.02)
+        self.assertAlmostEqual(r["taker_n"], 0.97)
+        self.assertAlmostEqual(r["maker_n"], 0.99)
+        self.assertAlmostEqual(mm.net_pnl(r), -0.02 - 0.0002 * 0.99 - 0.0005 * 0.97)
+
+    def test_short_flatten_loss_matches_short_gain_formula(self):
+        # sell at 101, hour's last trade 102, flatten buy at 103: loss 2 on a short opened at 101
+        from core import screens as sc
+        r = sim([(D0 + 5, 100), (D0 + 62, 102), (D0 + 100, 102)])
+        self.assertEqual((r["sells"], r["buys"]), (1, 0))
+        self.assertAlmostEqual(r["gross"], sc.short_gain(101.0, 103.0) * 101.0 / 100.0)
+        self.assertAlmostEqual(r["gross"], -0.02)
+        self.assertAlmostEqual(r["taker_n"], 1.03)
+
+    def test_trade_at_the_decision_instant_is_neither_reference_nor_fill(self):
+        # decision at 60 s uses only trades strictly before it (ref 100, bid 99); the print at exactly 60 s (90) is ignored
+        r = sim([(D0 + 5, 100), (D0 + 60, 90), (D0 + 61, 98)])
+        self.assertEqual(r["buys"], 1)
+        self.assertAlmostEqual(r["maker_n"], 0.99)          # filled at 99, not at 89
+
+    def test_no_reference_means_no_quote_and_no_profit(self):
+        r = sim([(D0 + 3599.5, 100)])                       # first trade of the hour comes after every decision
+        self.assertEqual((r["steps"], r["fills"], r["gross"]), (0, 0, 0.0))
+
     def test_one_fill_per_side_per_step(self):
         r = sim([(D0 + 5, 100), (D0 + 62, 98), (D0 + 63, 97), (D0 + 64, 96)])
         self.assertEqual(r["buys"], 1)
