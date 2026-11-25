@@ -1,13 +1,13 @@
 {
- "polls": 3,
- "new_listings": 0,
- "gone": 25,
- "watching": 49,
+ "polls": 4,
+ "new_listings": 1,
+ "gone": 2,
+ "watching": 50,
  "f2": {
   "kucoin": {
    "compared": 340,
    "collisions": 2,
-   "candidates": 1
+   "candidates": 2
   },
   "gate": {
    "compared": 387,
@@ -32,6 +32,6 @@
   "bitget": false,
   "binance": false
  },
- "f2_candidates": 2,
- "announcements_new": 0
+ "f2_candidates": 3,
+ "announcements_new": 1
 }
