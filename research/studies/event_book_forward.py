@@ -141,7 +141,12 @@ class Venue:
 
 # ---------------------------------------------------------------- components, state, notices
 def load_components() -> dict:
-    return json.loads(CONF.read_text())
+    """components.json (locked) plus dated addenda components_addendum_*.json: each adds components whose own
+    `effective_from` is after the addendum was written, so an addendum never changes past events."""
+    conf = json.loads(CONF.read_text())
+    for f in sorted(CONF.parent.glob("components_addendum_*.json")):
+        conf["components"] += json.loads(f.read_text()).get("components", [])
+    return conf
 
 
 def load_state(d: Path) -> dict:

@@ -22,7 +22,7 @@ reported separately, not re-tested here). Plan: `research/plans/PLAN_20261125_fa
   delisted swaps; that blind spot is reported).
 - A titles-only pass (class by venue counts, reach, a random 5% sample of unclassified titles; no prices) runs first and
   only fixes parser bugs (one fix, the family and grid do not change).
-- One event = one (venue, class, notice time, coin). Duplicate (class, coin) pairs closer than 6 hours are the same event.
+- One event = one (venue, class, notice time, coin). Duplicate (class, coin) pairs closer than 7 days are the same event. Futures launches ("New Listing: XUSDT Perpetual") are not a class here.
 
 ## Grid (the family)
 - 8 types = (listing, long), (listing, short), (delist, long), (delist, short), (perp_delist, long), (perp_delist, short),
