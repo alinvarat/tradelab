@@ -18,3 +18,7 @@ Rules: `protocol.md`, which was locked before the first run. Raw rows: `results_
 - Contributors change from one horizon to the next (H5 best: AVGO, TXN, AMD; H3 best: AVGO, IBM, TXN; INTC is worst at H1 and H3), so no single firm or sector carries a stable effect.
 - The block bootstrap was added after the pilot as a stricter statistic. It does not change any rule, and it does not change the verdict: the p values move by 0.02 or less, because most clusters contain one 8-K.
 - Limits: as listed in `protocol.md` (routine 8-Ks dilute the signal, survivorship bias, the control is not matched on sector or volatility).
+
+## N1 news_v3 on Claude Haiku 5.5 (2026-11-25, run 45556256839)
+
+Held-out 2.02 filings 2026-10-20..11-05: 2390 found, 1746 tradeable. Verdict **v3 no edge shown**: H5 n = 84, hit 39%, net -1.39% (p 0.88); v3 minus v1 paired H5 -0.99% (p 1.00). Details in `research/studies/protocol_news_v3.md`.
