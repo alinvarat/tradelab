@@ -1,0 +1,82 @@
+name: Polymarket liquidity-reward quoting (P3)
+
+# Protocol: research/studies/protocol_poly_rewards_20261126.md. Public endpoints only, no keys, no orders.
+#   probe   - status and key names of the candidate endpoints
+#   measure - reward pools, competition, 147 USD allocation, trade-history replay
+#   collect - one ~58 min forward paper-tape run (5-minute book snapshots + trades); state on branch data/poly-rewards
+#   eval    - recompute the tape verdict from data/poly-rewards
+# collect is dispatched hourly by keeper.yml.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe | measure | collect | eval"
+        required: true
+        default: "probe"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    if: inputs.mode == 'probe' || inputs.mode == 'measure'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python research/studies/poly_rewards.py ${{ inputs.mode }} out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: poly-rewards-${{ inputs.mode }}
+          path: out/
+
+  tape:
+    if: inputs.mode == 'collect' || inputs.mode == 'eval'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    concurrency:
+      group: tradelab-poly-rewards-tape
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore tape
+        run: |
+          mkdir -p /tmp/tape
+          if git ls-remote --exit-code origin data/poly-rewards >/dev/null 2>&1; then
+            git fetch -q origin data/poly-rewards
+            git archive origin/data/poly-rewards | tar -x -C /tmp/tape
+          fi
+      - name: Run
+        run: python research/studies/poly_rewards.py ${{ inputs.mode }} /tmp/tape
+      - name: Push tape to data/poly-rewards
+        if: always() && inputs.mode == 'collect'
+        run: |
+          [ -f /tmp/tape/state.json ] || exit 0
+          mkdir -p /tmp/keep && cp -r /tmp/tape/. /tmp/keep/
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/poly-rewards; then
+            git checkout -q -B data/poly-rewards origin/data/poly-rewards
+          else
+            git checkout -q --orphan data/poly-rewards && git rm -rq --cached . && git clean -fdq
+          fi
+          cp -r /tmp/keep/. .
+          git add snaps trades markets.json state.json summary.json 2>/dev/null || true
+          git commit -qm "poly-rewards tape: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3; do git push -q origin data/poly-rewards && break; git fetch -q origin data/poly-rewards; git rebase -q origin/data/poly-rewards || git rebase --abort; done
+      - uses: actions/upload-artifact@v4
+        if: always() && inputs.mode == 'eval'
+        with:
+          name: poly-rewards-eval
+          path: /tmp/tape/summary.json
