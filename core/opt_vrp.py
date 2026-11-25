@@ -134,6 +134,15 @@ def pick_strikes(strikes, index, sigma, k, side):
     return (short, w[0]) if w else (None, "no_wing")
 
 
+NON_TAKER_FLAGS = ("block_trade_id", "block_rfq_id", "block_trade_leg_count", "combo_id", "combo_trade_id", "liquidation")
+
+
+def tradable(p):
+    """False for prints that are not ordinary order-book taker trades: block trades (negotiated price), combo leg
+    prints (price allocated between legs) and liquidations. Their prices are not available to a retail taker."""
+    return not any(p.get(f) for f in NON_TAKER_FLAGS)
+
+
 def first_fill(prints, name, direction, t0_ms, t1_ms):
     """First print of `name` with that taker direction and t0 <= timestamp < t1: the print dict or None."""
     best = None
@@ -223,6 +232,10 @@ def build_day_rows(asset, date, instruments, prints_am, prints_pm, usdc_am, usdc
     (None = not collected, e.g. before 2025). dvol: {hour start seconds: close}. hours: {bar open s: (o, h, l, c)}.
     delivery: settlement price of the D+1 08:00 expiry or None. gaps: list of fetch failures for this day (day is dropped)."""
     gaps = list(gaps or [])
+    prints_am = [p for p in (prints_am or []) if tradable(p)]
+    prints_pm = [p for p in (prints_pm or []) if tradable(p)]
+    usdc_am = None if usdc_am is None else [p for p in usdc_am if tradable(p)]
+    usdc_pm = None if usdc_pm is None else [p for p in usdc_pm if tradable(p)]
     closes = {t: v[3] for t, v in hours.items()}
     e_am, h_am = entry_times(date, "am")
     e_pm, h_pm = entry_times(date, "pm")
@@ -271,7 +284,7 @@ def build_day_rows(asset, date, instruments, prints_am, prints_pm, usdc_am, usdc
             ps = first_fill(prints, grid[ks], "sell", e * 1000, (e + FILL_SECONDS) * 1000)
             pl = first_fill(prints, grid[kl], "buy", e * 1000, (e + FILL_SECONDS) * 1000)
             if usdc is not None:
-                row["usdc"] = usdc_legs(usdc, date, ks, kl, side, e)
+                row["usdc"] = usdc_legs(usdc, date, ks, kl, side, e, asset)
             if ps is None:
                 row["status"] = "no_short_print"
                 continue
@@ -286,7 +299,7 @@ def build_day_rows(asset, date, instruments, prints_am, prints_pm, usdc_am, usdc
     return rows
 
 
-def usdc_legs(usdc, date, ks, kl, side, entry_s):
+def usdc_legs(usdc, date, ks, kl, side, entry_s, asset=None):
     """First sell print of the short strike and first buy print of the long strike on the USDC tape (USD per unit)."""
     exp_date = add_days(date, 1)
     out = {}
@@ -294,7 +307,7 @@ def usdc_legs(usdc, date, ks, kl, side, entry_s):
         best = None
         for p in usdc:
             pn = parse_name(p.get("instrument_name"))
-            if not pn or pn[1] != exp_date or pn[2] != strike or pn[3] != side or p.get("direction") != direction:
+            if not pn or pn[1] != exp_date or pn[2] != strike or pn[3] != side or p.get("direction") != direction or (asset and pn[0] != asset):
                 continue
             if entry_s * 1000 <= p["timestamp"] < (entry_s + FILL_SECONDS) * 1000 and (best is None or p["timestamp"] < best["timestamp"]):
                 best = p
@@ -531,10 +544,25 @@ def candidates(rule, asset, days, sides, cost):
     return out
 
 
+def month_concentration(trades):
+    """Report-only guard against clustered signals (the random draw treats days as independent, which is generous when a
+    filter fires in a few volatile months): share of months with a positive sum of ROR, and the mean ROR without the
+    best month."""
+    by = {}
+    for x in trades:
+        by.setdefault(x["date"][:7], []).append(x["ror"])
+    if not by:
+        return {"signal_months": 0, "positive_month_share": None, "mean_ror_without_best_month": None}
+    best = max(by, key=lambda m: sum(by[m]))
+    rest = [v for m, vs in by.items() if m != best for v in vs]
+    return {"signal_months": len(by), "positive_month_share": sum(sum(v) > 0 for v in by.values()) / len(by),
+            "mean_ror_without_best_month": sum(rest) / len(rest) if rest else None}
+
+
 def _stats(sim_res, n_days):
     t = sim_res["trades"]
     n = len(t)
-    return {"trades": n, "trades_per_week": round(n / (n_days / 7.0), 3) if n_days else 0.0,
+    return {"month_concentration": month_concentration(t), "trades": n, "trades_per_week": round(n / (n_days / 7.0), 3) if n_days else 0.0,
             "win_rate": sum(x["win"] for x in t) / n if n else None,
             "mean_ret_equity": sum(x["ret"] for x in t) / n if n else None,
             "mean_ror": sum(x["ror"] for x in t) / n if n else None,

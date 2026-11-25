@@ -70,6 +70,13 @@ def fetch_trades(currency, a_ms, b_ms, get=jget, max_pages=200):
     return sorted(seen.values(), key=lambda t: (t["timestamp"], str(t["trade_id"])))
 
 
+def usdc_only(trades, asset):
+    """The `USDC` currency tape holds every USDC-settled option (BTC_USDC, ETH_USDC, SOL_USDC ...); keep one asset."""
+    if trades is None:
+        return None
+    return [t for t in trades if str(t.get("instrument_name", "")).startswith(asset + "_USDC-")]
+
+
 def fetch_instruments(asset, lo_s, hi_s, get=jget):
     """{expiry seconds: [instrument dicts]} for expiries in [lo_s, hi_s]; raises on failure (no fallback grid)."""
     res = get(HIST + "get_instruments?" + urlencode({"currency": asset, "kind": "option", "expired": "true"}), tries=6, timeout=300)
@@ -97,19 +104,22 @@ def fetch_delivery(asset, lo_date, get=jget):
 
 
 def fetch_dvol(asset, start_s, end_s, get=jget):
-    """{hour bar stamp (seconds): close} for hourly DVOL over [start_s, end_s], 20-day windows with continuation."""
+    """{hour bar stamp (seconds): close} for hourly DVOL over [start_s, end_s], 20-day windows. Deribit's `continuation`
+    is the end_timestamp for the next (older) page, so it moves the END back; it never moves the start."""
     out, a = {}, start_s
     while a < end_s:
-        b, cur = min(a + 20 * 86400, end_s), a
+        b = min(a + 20 * 86400, end_s)
+        cur_end = b
         for _ in range(20):
-            res = get(WWW + "get_volatility_index_data?" + urlencode({"currency": asset, "start_timestamp": cur * 1000,
-                                                                        "end_timestamp": b * 1000, "resolution": 3600}))
+            res = get(WWW + "get_volatility_index_data?" + urlencode({"currency": asset, "start_timestamp": a * 1000,
+                                                                        "end_timestamp": cur_end * 1000, "resolution": 3600}))
             for row in res.get("data") or []:
                 out[int(row[0]) // 1000] = float(row[4])
             cont = res.get("continuation")
-            if not cont:
+            nxt = int(cont) // 1000 if cont else None
+            if nxt is None or not a <= nxt < cur_end:
                 break
-            cur = int(cont) // 1000
+            cur_end = nxt
         a = b
     return out
 
@@ -142,8 +152,8 @@ def shard_unit(asset, month, get=jget, hours_fn=fetch_hours):
             gaps["trades"] += 1
         u_am = u_pm = None
         if date >= USDC_FROM:
-            u_am = fetch_trades(asset + "_USDC", e_am * 1000, (e_am + 3600) * 1000, get)
-            u_pm = fetch_trades(asset + "_USDC", e_pm * 1000, (e_pm + 3600) * 1000, get)
+            u_am = usdc_only(fetch_trades("USDC", e_am * 1000, (e_am + 3600) * 1000, get), asset)
+            u_pm = usdc_only(fetch_trades("USDC", e_pm * 1000, (e_pm + 3600) * 1000, get), asset)
             if u_am is None or u_pm is None:        # USDC is a cross-check only: a failure drops its fields, not the day
                 gaps["usdc_trades"] += 1
                 u_am = u_pm = None

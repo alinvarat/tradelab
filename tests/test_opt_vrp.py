@@ -251,6 +251,33 @@ class BuildDay(unittest.TestCase):
         r = [x for x in self.build(prints_am=pr)[1:] if x["side"] == "put" and x["k"] == 1.0 and x["win"] == "am"][0]
         self.assertEqual(r["index_src"], "binance_1h")
 
+    def test_block_combo_liquidation_prints_are_not_fills(self):
+        pr = self.prints()
+        pr[0] = dict(pr[0], block_trade_id="b1")                              # negotiated block price on the short put
+        st = {r["side"]: r["status"] for r in self.build(prints_am=pr)[1:] if r["win"] == "am" and r["k"] == 1.0}
+        self.assertEqual(st["put"], "no_short_print")
+        self.assertEqual(st["call"], "ok")
+        for flag in ("combo_trade_id", "liquidation"):
+            q = self.prints()
+            q[2] = dict(q[2], **{flag: "x"})
+            st = {r["side"]: r["status"] for r in self.build(prints_am=q)[1:] if r["win"] == "am" and r["k"] == 1.0}
+            self.assertEqual(st["call"], "no_short_print")
+        self.assertTrue(ov.tradable({"liquidation": None, "block_trade_id": None}))
+
+    def test_usdc_legs_ignore_other_asset(self):
+        usdc = [trade("ETH_USDC-11JAN25-58000-P", "sell", 55.0, E * 1000 + 1000, 9)]
+        self.assertIsNone(ov.usdc_legs(usdc, D, 58000.0, 57000.0, "put", E, "BTC")["s"])
+        self.assertEqual(io.usdc_only([{"instrument_name": "BTC_USDC-1-P"}, {"instrument_name": "SOL_USDC-1-P"}], "BTC"),
+                         [{"instrument_name": "BTC_USDC-1-P"}])
+        self.assertIsNone(io.usdc_only(None, "BTC"))
+
+    def test_month_concentration(self):
+        c = ov.month_concentration([{"date": "2025-01-02", "ror": 0.5}, {"date": "2025-02-02", "ror": -0.1},
+                                    {"date": "2025-03-02", "ror": 0.1}])
+        self.assertEqual(c["signal_months"], 3)
+        self.assertAlmostEqual(c["positive_month_share"], 2 / 3)
+        self.assertAlmostEqual(c["mean_ror_without_best_month"], 0.0)
+
     def test_usdc_legs(self):
         usdc = [trade("BTC_USDC-11JAN25-58000-P", "sell", 55.0, E * 1000 + 1000, 9), trade("BTC_USDC-11JAN25-57000-P", "buy", 28.0, E * 1000 + 2000, 10)]
         r = [x for x in self.build(usdc_am=usdc)[1:] if x["side"] == "put" and x["k"] == 1.0 and x["win"] == "am"][0]
@@ -360,10 +387,14 @@ class Fetching(unittest.TestCase):
 
         def get(url, **kw):
             calls.append(url)
-            return {"data": [[1000000, 1, 2, 0, 55.0]], "continuation": None if len(calls) % 2 else 2000000}
+            if len(calls) == 1:                                              # first page of window 1 holds the NEWEST rows
+                return {"data": [[1500000, 1, 2, 0, 56.0]], "continuation": 1000000}
+            return {"data": [[1000000, 1, 2, 0, 55.0]], "continuation": None}
         v = io.fetch_dvol("BTC", 0, 30 * 86400, get)
-        self.assertEqual(v[1000], 55.0)
-        self.assertGreaterEqual(len(calls), 3)                               # two 20-day windows plus a continuation
+        self.assertEqual((v[1000], v[1500]), (55.0, 56.0))
+        self.assertEqual(len(calls), 3)                                      # window 1 + its continuation + window 2
+        self.assertIn("start_timestamp=0&", calls[1])                        # continuation moves the END, never the start
+        self.assertIn("end_timestamp=1000000&", calls[1])
 
     def test_shard_unit_with_fake_api(self):
         d = "2021-03-31"
