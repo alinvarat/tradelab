@@ -1,0 +1,64 @@
+name: KR listing
+
+# D2 (protocol_kr_listing_20261126.md). Modes: events (Wayback notices -> frozen events on data/kr-listing, no prices), run (price the frozen events).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "events or run"
+        required: true
+        default: "events"
+
+permissions:
+  contents: write
+
+jobs:
+  kr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    concurrency:
+      group: tradelab-kr-listing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Events (no prices)
+        if: inputs.mode == 'events'
+        run: python research/studies/kr_listing.py out events
+      - name: Restore the frozen events
+        if: inputs.mode == 'run'
+        run: |
+          git fetch origin data/kr-listing
+          git show origin/data/kr-listing:events/latest.json > /tmp/frozen_events.json
+      - name: Price the frozen events
+        if: inputs.mode == 'run'
+        run: python research/studies/kr_listing.py out run /tmp/frozen_events.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kr-listing-${{ inputs.mode }}
+          path: out/
+      - name: Keep on data/kr-listing
+        if: always()
+        run: |
+          [ -d out ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/kr-listing 2>/dev/null; then
+            git checkout -q -B data/kr-listing origin/data/kr-listing
+          else
+            git checkout -q --orphan data/kr-listing && git rm -rq --cached . && git clean -fdq
+          fi
+          d=${{ inputs.mode }}/$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d
+          cp /tmp/keep/* $d/
+          if [ "${{ inputs.mode }}" = "events" ] && [ -f /tmp/keep/events.json ] && [ ! -f events/latest.json ]; then
+            mkdir -p events && cp /tmp/keep/events.json events/latest.json
+          fi
+          git add -A events ${{ inputs.mode }} 2>/dev/null || git add -A
+          git commit -qm "KR listing ${{ inputs.mode }}: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/kr-listing && break; git fetch -q origin data/kr-listing; git rebase -q origin/data/kr-listing; done
