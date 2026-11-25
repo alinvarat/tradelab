@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-25T08:07Z",
+ "asof": "2026-11-25T08:11Z",
  "events": 0,
  "event_days": null,
  "events_by_gap": {
@@ -231,9 +231,16 @@
    "train trades 0": 50
   },
   "train_days": 70.3,
-  "now": 1795594035.4507258
+  "now": 1795594317.5818326
  },
  "scan": {
+  "funnel": {
+   "days": 365784,
+   "px_ok": 185497,
+   "day_has_pre": 210004,
+   "has_pm": 91457,
+   "gap_ok": 351
+  },
   "symbols": 7081,
   "fetched": 7036,
   "failed": 45,
