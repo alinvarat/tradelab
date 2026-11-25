@@ -22,7 +22,7 @@ def do_fetch(sym, chunk, start, end, out):
     from datetime import date
     os.makedirs(out, exist_ok=True)
     t0 = time.time()
-    n = fd.fetch_range(sym, date.fromisoformat(start), date.fromisoformat(end), f"{out}/{sym}_{chunk}.gz", workers=3)
+    n = fd.fetch_range(sym, date.fromisoformat(start), date.fromisoformat(end), f"{out}/{sym}_{chunk}.gz", workers=int(os.environ.get("FXGOLD_WORKERS", "6")))
     n["sec"] = round(time.time() - t0, 1)
     json.dump(n, open(f"{out}/{sym}_{chunk}.json", "w"))
     fd.log(sym, chunk, n)
