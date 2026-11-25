@@ -3,6 +3,9 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-25 line/opt-vol-sell)
+- **opt_vrp (PR #175):** ถูกตัด (run 45520875720) ทั้ง 16 test หยุดที่ step 0 เพราะแม้ชนะทุกไม้ก็ไม่ถึง 3 เท่าต่อเดือน และมีโอกาสสูงสุด 0.94 ครั้ง/สัปดาห์ (R2)
+
 ## ด่วน (2026-11-25 ops/sharded-runner)
 - **ตัวรันแบบแบ่ง shard:** workflow `research_sharded.yml` กระจายหนึ่งด่านไปหลาย job พร้อมกัน (ค่าเริ่ม 20) แล้วรวมผล; ด่านที่จะใช้ต้องมี `rows_<study>(symbols_slice)` และ `summarize_<study>(all_rows)` ใน `run.py`; ยังไม่ได้ทดสอบบน Actions จริง (workflow_dispatch ใช้ได้หลัง merge เข้า main) → หลัง merge ให้รัน `study=selftest_shard` ก่อน
 
