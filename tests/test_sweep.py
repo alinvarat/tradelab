@@ -335,6 +335,7 @@ class Stats(unittest.TestCase):
         ok, info = ss.gate(losing, rl, cfg, 60)
         self.assertFalse(ok)
         self.assertIn("placebo", info["reason"])
+        self.assertLess(info["x"], 0)
 
     def test_gate_notional_and_ceiling(self):
         cfg = {"account_usd": 147, "gate": {"min_vol_cost": 0, "min_x": 0}}
