@@ -1,0 +1,323 @@
+{
+ "run_utc": "2026-11-25T06:43:27Z",
+ "months": 34,
+ "components": {
+  "l1": {
+   "component": "l1",
+   "rows": 31,
+   "net_15m": {
+    "n": 31,
+    "mean": 0.28798,
+    "sd": 1.23448,
+    "s": 0.2333,
+    "per_month": 0.912,
+    "x": 0.0496,
+    "hit": 0.516
+   },
+   "net_1h": {
+    "n": 31,
+    "mean": 0.39808,
+    "sd": 1.6511,
+    "s": 0.2411,
+    "per_month": 0.912,
+    "x": 0.053,
+    "hit": 0.516
+   },
+   "net_4h": {
+    "n": 31,
+    "mean": 0.48159,
+    "sd": 1.92674,
+    "s": 0.25,
+    "per_month": 0.912,
+    "x": 0.057,
+    "hit": 0.548
+   },
+   "net_1d": {
+    "n": 31,
+    "mean": 0.62711,
+    "sd": 3.10692,
+    "s": 0.2018,
+    "per_month": 0.912,
+    "x": 0.0371,
+    "hit": 0.548
+   },
+   "net_7d": {
+    "n": 31,
+    "mean": 0.66109,
+    "sd": 3.71866,
+    "s": 0.1778,
+    "per_month": 0.912,
+    "x": 0.0288,
+    "hit": 0.387
+   },
+   "net_4h_by_split": {
+    "train": {
+     "n": 11,
+     "mean": 1.1773,
+     "sd": 3.19939,
+     "s": 0.368,
+     "per_month": 0.324,
+     "x": 0.0438,
+     "hit": 0.636
+    },
+    "validation": {
+     "n": 13,
+     "mean": 0.10208,
+     "sd": 0.19809,
+     "s": 0.5153,
+     "per_month": 0.382,
+     "x": 0.1015,
+     "hit": 0.538
+    },
+    "test": {
+     "n": 7,
+     "mean": 0.09314,
+     "sd": 0.21803,
+     "s": 0.4272,
+     "per_month": 0.206,
+     "x": 0.0376,
+     "hit": 0.429
+    }
+   },
+   "net_stop_4h": {
+    "n": 31,
+    "mean": 0.48326,
+    "sd": 1.92772,
+    "s": 0.2507,
+    "per_month": 0.912,
+    "x": 0.0573,
+    "hit": 0.548
+   },
+   "sizing": {
+    "half_kelly": 0.0631,
+    "loss_cap_weight": 1.0,
+    "weight": 0.0631
+   },
+   "stopped_share": 0.0,
+   "with_path": 31,
+   "study_summary_keys": {
+    "events": 65,
+    "rows": 31,
+    "skipped": {
+     "not_trading_before": 34,
+     "no_bars": 0
+    },
+    "gaps": {
+     "upbit": "stopped at page 1 (request failed)"
+    },
+    "by_venue": {
+     "binance": 31,
+     "upbit": 0
+    }
+   },
+   "seconds": 366.2
+  },
+  "l1f": {
+   "component": "l1f",
+   "rows": 105,
+   "net_15m": {
+    "n": 105,
+    "mean": 0.04522,
+    "sd": 0.12465,
+    "s": 0.3628,
+    "per_month": 3.088,
+    "x": 0.4064,
+    "hit": 0.724
+   },
+   "net_1h": {
+    "n": 105,
+    "mean": 0.09878,
+    "sd": 0.18594,
+    "s": 0.5313,
+    "per_month": 3.088,
+    "x": 0.8716,
+    "hit": 0.79
+   },
+   "net_4h": {
+    "n": 105,
+    "mean": 0.1447,
+    "sd": 0.18054,
+    "s": 0.8015,
+    "per_month": 3.088,
+    "x": 1.9837,
+    "hit": 0.867
+   },
+   "net_1d": {
+    "n": 105,
+    "mean": 0.12648,
+    "sd": 0.26684,
+    "s": 0.474,
+    "per_month": 3.088,
+    "x": 0.6938,
+    "hit": 0.81
+   },
+   "net_7d": {
+    "n": 93,
+    "mean": 0.09148,
+    "sd": 1.90643,
+    "s": 0.048,
+    "per_month": 2.735,
+    "x": 0.0063,
+    "hit": 0.871
+   },
+   "net_4h_by_split": {
+    "train": {
+     "n": 31,
+     "mean": 0.24521,
+     "sd": 0.17514,
+     "s": 1.4001,
+     "per_month": 0.912,
+     "x": 1.7872,
+     "hit": 0.935
+    },
+    "validation": {
+     "n": 27,
+     "mean": 0.08546,
+     "sd": 0.25058,
+     "s": 0.341,
+     "per_month": 0.794,
+     "x": 0.0924,
+     "hit": 0.741
+    },
+    "test": {
+     "n": 47,
+     "mean": 0.11243,
+     "sd": 0.09093,
+     "s": 1.2365,
+     "per_month": 1.382,
+     "x": 2.1137,
+     "hit": 0.894
+    }
+   },
+   "net_stop_4h": {
+    "n": 105,
+    "mean": 0.14192,
+    "sd": 0.16661,
+    "s": 0.8518,
+    "per_month": 3.088,
+    "x": 2.2408,
+    "hit": 0.857
+   },
+   "sizing": {
+    "half_kelly": 1.4897,
+    "loss_cap_weight": 1.0,
+    "weight": 1.0
+   },
+   "stopped_share": 0.057,
+   "with_path": 105,
+   "study_summary_keys": {
+    "events": 107,
+    "rows": 105,
+    "skipped": {
+     "no_prior_market": 2,
+     "no_bars": 0
+    },
+    "gaps": {},
+    "by_venue": {
+     "kucoin": 16,
+     "binance": 89,
+     "coinbase": 0
+    }
+   },
+   "seconds": 848.8
+  },
+  "l1g": {
+   "component": "l1g",
+   "rows": 13,
+   "net_15m": {
+    "n": 13,
+    "mean": 0.06511,
+    "sd": 0.09995,
+    "s": 0.6515,
+    "per_month": 0.382,
+    "x": 0.1623,
+    "hit": 0.769
+   },
+   "net_1h": {
+    "n": 13,
+    "mean": 0.11661,
+    "sd": 0.13203,
+    "s": 0.8832,
+    "per_month": 0.382,
+    "x": 0.2982,
+    "hit": 0.769
+   },
+   "net_4h": {
+    "n": 13,
+    "mean": 0.14435,
+    "sd": 0.14651,
+    "s": 0.9853,
+    "per_month": 0.382,
+    "x": 0.3712,
+    "hit": 0.923
+   },
+   "net_1d": {
+    "n": 13,
+    "mean": 0.2073,
+    "sd": 0.1153,
+    "s": 1.7979,
+    "per_month": 0.382,
+    "x": 1.2359,
+    "hit": 1.0
+   },
+   "net_7d": {
+    "n": 13,
+    "mean": 0.29498,
+    "sd": 0.19027,
+    "s": 1.5503,
+    "per_month": 0.382,
+    "x": 0.919,
+    "hit": 1.0
+   },
+   "net_4h_by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 0
+    },
+    "test": {
+     "n": 13,
+     "mean": 0.14435,
+     "sd": 0.14651,
+     "s": 0.9853,
+     "per_month": 0.382,
+     "x": 0.3712,
+     "hit": 0.923
+    }
+   },
+   "net_stop_4h": {
+    "n": 13,
+    "mean": 0.14414,
+    "sd": 0.1442,
+    "s": 0.9996,
+    "per_month": 0.382,
+    "x": 0.382,
+    "hit": 0.923
+   },
+   "sizing": {
+    "half_kelly": 1.8031,
+    "loss_cap_weight": 1.0,
+    "weight": 1.0
+   },
+   "stopped_share": 0.0,
+   "with_path": 13,
+   "study_summary_keys": {
+    "events": 132,
+    "rows": 13,
+    "skipped": {
+     "no_prior_market": 119,
+     "no_bars": 0
+    },
+    "gaps": {},
+    "by_venue": {
+     "kucoin": 13,
+     "binance": 0,
+     "coinbase": 0
+    }
+   },
+   "seconds": 3248.0
+  }
+ },
+ "x_sum_4h_net": 2.4119
+}
