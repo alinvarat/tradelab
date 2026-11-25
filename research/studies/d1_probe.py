@@ -43,7 +43,7 @@ def jget(url):
 # ---------------------------------------------------------------- A. Binance Vision liquidationSnapshot
 def probe_vision(out):
     res = {}
-    for market in ("futures/um", "futures/cm"):
+    for market in ("futures/um",):
         for period in ("daily", "monthly"):
             key = f"{market}/{period}"
             try:
@@ -67,6 +67,10 @@ def probe_vision(out):
                     rows = bv.fetch(market, period, "liquidationSnapshot", s, d, None, bv.parse_raw)
                     info["header_probe"] = {"symbol": s, "date": d, "rows": None if rows is None else len(rows), "first_rows": (rows or [])[:2]}
                     break
+    try:
+        res["cm_listing_symbols"] = len(bv.list_symbols("futures/cm", quote="", kind="liquidationSnapshot", period="daily"))
+    except Exception as e:  # noqa: BLE001
+        res["cm_listing_symbols"] = repr(e)[:150]
     out["binance_vision_liquidationSnapshot"] = res
 
 
