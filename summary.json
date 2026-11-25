@@ -1,0 +1,242 @@
+{
+ "asof": "2026-11-25T08:07Z",
+ "events": 0,
+ "event_days": null,
+ "events_by_gap": {
+  "20": 0,
+  "40": 0
+ },
+ "tags": {
+  "contract": 0,
+  "fda": 0,
+  "earnings": 0,
+  "offering": 0,
+  "none": 0,
+  "other": 0
+ },
+ "halts_archived": 29,
+ "halts_with_bars": 0,
+ "trade_rows": 0,
+ "per_rule": {
+  "a_gap20_orb5_stoporb_eod_low": {
+   "n": 0
+  },
+  "a_gap20_orb5_stoporb_eod_high": {
+   "n": 0
+  },
+  "a_gap20_orb5_stoporb_1130_low": {
+   "n": 0
+  },
+  "a_gap20_orb5_stoporb_1130_high": {
+   "n": 0
+  },
+  "a_gap20_orb5_trail8_eod_low": {
+   "n": 0
+  },
+  "a_gap20_orb5_trail8_eod_high": {
+   "n": 0
+  },
+  "a_gap20_orb15_stoporb_eod_low": {
+   "n": 0
+  },
+  "a_gap20_orb15_stoporb_eod_high": {
+   "n": 0
+  },
+  "a_gap20_orb15_stoporb_1130_low": {
+   "n": 0
+  },
+  "a_gap20_orb15_stoporb_1130_high": {
+   "n": 0
+  },
+  "a_gap20_orb15_trail8_eod_low": {
+   "n": 0
+  },
+  "a_gap20_orb15_trail8_eod_high": {
+   "n": 0
+  },
+  "a_gap20_orb30_stoporb_eod_low": {
+   "n": 0
+  },
+  "a_gap20_orb30_stoporb_eod_high": {
+   "n": 0
+  },
+  "a_gap20_orb30_stoporb_1130_low": {
+   "n": 0
+  },
+  "a_gap20_orb30_stoporb_1130_high": {
+   "n": 0
+  },
+  "a_gap20_orb30_trail8_eod_low": {
+   "n": 0
+  },
+  "a_gap20_orb30_trail8_eod_high": {
+   "n": 0
+  },
+  "a_gap40_orb5_stoporb_eod_low": {
+   "n": 0
+  },
+  "a_gap40_orb5_stoporb_eod_high": {
+   "n": 0
+  },
+  "a_gap40_orb5_stoporb_1130_low": {
+   "n": 0
+  },
+  "a_gap40_orb5_stoporb_1130_high": {
+   "n": 0
+  },
+  "a_gap40_orb5_trail8_eod_low": {
+   "n": 0
+  },
+  "a_gap40_orb5_trail8_eod_high": {
+   "n": 0
+  },
+  "a_gap40_orb15_stoporb_eod_low": {
+   "n": 0
+  },
+  "a_gap40_orb15_stoporb_eod_high": {
+   "n": 0
+  },
+  "a_gap40_orb15_stoporb_1130_low": {
+   "n": 0
+  },
+  "a_gap40_orb15_stoporb_1130_high": {
+   "n": 0
+  },
+  "a_gap40_orb15_trail8_eod_low": {
+   "n": 0
+  },
+  "a_gap40_orb15_trail8_eod_high": {
+   "n": 0
+  },
+  "a_gap40_orb30_stoporb_eod_low": {
+   "n": 0
+  },
+  "a_gap40_orb30_stoporb_eod_high": {
+   "n": 0
+  },
+  "a_gap40_orb30_stoporb_1130_low": {
+   "n": 0
+  },
+  "a_gap40_orb30_stoporb_1130_high": {
+   "n": 0
+  },
+  "a_gap40_orb30_trail8_eod_low": {
+   "n": 0
+  },
+  "a_gap40_orb30_trail8_eod_high": {
+   "n": 0
+  },
+  "c_contract_gap20_orb15_stoporb_eod": {
+   "n": 0
+  },
+  "c_contract_gap20_orb15_trail8_eod": {
+   "n": 0
+  },
+  "c_fda_gap20_orb15_stoporb_eod": {
+   "n": 0
+  },
+  "c_fda_gap20_orb15_trail8_eod": {
+   "n": 0
+  },
+  "c_earnings_gap20_orb15_stoporb_eod": {
+   "n": 0
+  },
+  "c_earnings_gap20_orb15_trail8_eod": {
+   "n": 0
+  },
+  "c_offering_gap20_orb15_stoporb_eod": {
+   "n": 0
+  },
+  "c_offering_gap20_orb15_trail8_eod": {
+   "n": 0
+  },
+  "c_none_gap20_orb15_stoporb_eod": {
+   "n": 0
+  },
+  "c_none_gap20_orb15_trail8_eod": {
+   "n": 0
+  },
+  "b_halt_t15_nostop": {
+   "n": 0
+  },
+  "b_halt_t15_stop8": {
+   "n": 0
+  },
+  "b_halt_t60_nostop": {
+   "n": 0
+  },
+  "b_halt_t60_stop8": {
+   "n": 0
+  }
+ },
+ "eval": {
+  "n_rules": 50,
+  "gate_survivors": 0,
+  "passed": [],
+  "survivors": [],
+  "family": null,
+  "top_train_x": [
+   {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 0.3333333333333333,
+    "shortable": true,
+    "reason": "train trades 0 < 30",
+    "id": "a_gap20_orb5_stoporb_eod_low",
+    "control_mean_train": null,
+    "folds_month": []
+   },
+   {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 0.3333333333333333,
+    "shortable": true,
+    "reason": "train trades 0 < 30",
+    "id": "a_gap20_orb5_stoporb_eod_high",
+    "control_mean_train": null,
+    "folds_month": []
+   },
+   {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 0.3333333333333333,
+    "shortable": true,
+    "reason": "train trades 0 < 30",
+    "id": "a_gap20_orb5_stoporb_1130_low",
+    "control_mean_train": null,
+    "folds_month": []
+   },
+   {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 0.3333333333333333,
+    "shortable": true,
+    "reason": "train trades 0 < 30",
+    "id": "a_gap20_orb5_stoporb_1130_high",
+    "control_mean_train": null,
+    "folds_month": []
+   },
+   {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 0.3333333333333333,
+    "shortable": true,
+    "reason": "train trades 0 < 30",
+    "id": "a_gap20_orb5_trail8_eod_low",
+    "control_mean_train": null,
+    "folds_month": []
+   }
+  ],
+  "dropped_reasons": {
+   "train trades 0": 50
+  },
+  "train_days": 70.3,
+  "now": 1795594035.4507258
+ },
+ "scan": {
+  "symbols": 7081,
+  "fetched": 7036,
+  "failed": 45,
+  "timeout": false
+ }
+}
