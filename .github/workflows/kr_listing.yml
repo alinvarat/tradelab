@@ -56,7 +56,7 @@ jobs:
           fi
           d=${{ inputs.mode }}/$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d
           cp /tmp/keep/* $d/
-          if [ "${{ inputs.mode }}" = "events" ] && [ -f /tmp/keep/events.json ] && [ ! -f events/latest.json ]; then
+          if [ "${{ inputs.mode }}" = "events" ] && [ -f /tmp/keep/events.json ]; then
             mkdir -p events && cp /tmp/keep/events.json events/latest.json
           fi
           git add -A events ${{ inputs.mode }} 2>/dev/null || git add -A
