@@ -1,0 +1,1647 @@
+{
+ "run_utc": "2026-11-25T20:01:13Z",
+ "months": 33.91,
+ "shards": 16,
+ "symbols": 888,
+ "rows": 1680957,
+ "failed_months": 0,
+ "audit": {
+  "sampled": 640,
+  "ok": 640,
+  "unsupported": 4,
+  "unsupported_share": 0.00625,
+  "failed_or_budget": 0,
+  "by_d_ok_unsupported": {
+   "3": [
+    442,
+    2
+   ],
+   "8": [
+    55,
+    2
+   ],
+   "5": [
+    143,
+    0
+   ]
+  },
+  "kill": false,
+  "unusable": false
+ },
+ "cells": {
+  "d3|h1m|bid": {
+   "gate": {
+    "n_train": 7091,
+    "tpm": 388.903,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.002121,
+    "placebo_mean": -0.002279,
+    "vol_cost": 5.01,
+    "x": -14.4207,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d3|h1m|bid",
+    "control_mean_train": -0.0022925360366674364,
+    "late_taker_gap_train": -0.005078967197337291,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 7091,
+      "mean": -0.00212,
+      "sd": 0.01102,
+      "s": -0.1926,
+      "per_month": 394.575,
+      "x": 14.631,
+      "hit": 0.452
+     },
+     "fills_n": 49874,
+     "fills_mean": -0.008063658018205879,
+     "gross": -0.005763658018205879,
+     "placebo": 0.003663658018205879,
+     "ctrl_cluster": -0.0022925360366674364,
+     "taker_cluster": -0.0033729579224673093,
+     "mean_at_taker_cost": -0.009863658018205879,
+     "stop_share": 0.1733
+    },
+    "validation": {
+     "clusters": {
+      "n": 5662,
+      "mean": -0.00358,
+      "sd": 0.00906,
+      "s": -0.3948,
+      "per_month": 709.206,
+      "x": 110.5407,
+      "hit": 0.353
+     },
+     "fills_n": 88902,
+     "fills_mean": -0.007561138118377541,
+     "gross": -0.00526113811837754,
+     "placebo": 0.003161138118377539,
+     "ctrl_cluster": -0.002265483777190216,
+     "taker_cluster": -0.003510346770079716,
+     "mean_at_taker_cost": -0.009361138118377538,
+     "stop_share": 0.1789
+    },
+    "test": {
+     "clusters": {
+      "n": 5734,
+      "mean": -0.00391,
+      "sd": 0.00857,
+      "s": -0.4556,
+      "per_month": 721.193,
+      "x": 149.7175,
+      "hit": 0.334
+     },
+     "fills_n": 86876,
+     "fills_mean": -0.005919223444909987,
+     "gross": -0.0036192234449099864,
+     "placebo": 0.0015192234449099868,
+     "ctrl_cluster": -0.0023146651839826603,
+     "taker_cluster": -0.0036915489982838204,
+     "mean_at_taker_cost": -0.007719223444909987,
+     "stop_share": 0.137
+    }
+   },
+   "corr_l1f_exit_day": -0.04098486258168488,
+   "all_clusters": {
+    "n": 18487,
+    "mean": -0.00312,
+    "sd": 0.00975,
+    "s": -0.32,
+    "per_month": 545.25,
+    "x": 55.832,
+    "hit": 0.385
+   }
+  },
+  "d3|h1m|ask": {
+   "gate": {
+    "n_train": 8135,
+    "tpm": 446.161,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.002328,
+    "placebo_mean": -0.002072,
+    "vol_cost": 5.43,
+    "x": -16.9787,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d3|h1m|ask",
+    "control_mean_train": -0.0023140628795503843,
+    "late_taker_gap_train": -0.0019877992893336982,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 8135,
+      "mean": -0.00233,
+      "sd": 0.01194,
+      "s": -0.1951,
+      "per_month": 452.667,
+      "x": 17.2263,
+      "hit": 0.443
+     },
+     "fills_n": 47561,
+     "fills_mean": -0.006411704526818192,
+     "gross": -0.004111704526818191,
+     "placebo": 0.002011704526818191,
+     "ctrl_cluster": -0.0023140628795503843,
+     "taker_cluster": -0.0032303519991801173,
+     "mean_at_taker_cost": -0.008211704526818192,
+     "stop_share": 0.098
+    },
+    "validation": {
+     "clusters": {
+      "n": 5702,
+      "mean": -0.00377,
+      "sd": 0.00855,
+      "s": -0.4409,
+      "per_month": 714.217,
+      "x": 138.8693,
+      "hit": 0.328
+     },
+     "fills_n": 89285,
+     "fills_mean": -0.008077690272722182,
+     "gross": -0.005777690272722182,
+     "placebo": 0.0036776902727221816,
+     "ctrl_cluster": -0.0023039347486659614,
+     "taker_cluster": -0.00364191931985632,
+     "mean_at_taker_cost": -0.009877690272722181,
+     "stop_share": 0.1644
+    },
+    "test": {
+     "clusters": {
+      "n": 5754,
+      "mean": -0.00412,
+      "sd": 0.00818,
+      "s": -0.5033,
+      "per_month": 723.708,
+      "x": 183.2868,
+      "hit": 0.299
+     },
+     "fills_n": 84306,
+     "fills_mean": -0.005764153951082961,
+     "gross": -0.00346415395108296,
+     "placebo": 0.0013641539510829597,
+     "ctrl_cluster": -0.002313540281454153,
+     "taker_cluster": -0.0038008707801921397,
+     "mean_at_taker_cost": -0.00756415395108296,
+     "stop_share": 0.1187
+    }
+   },
+   "corr_l1f_exit_day": -0.03892203592705973,
+   "all_clusters": {
+    "n": 19591,
+    "mean": -0.00327,
+    "sd": 0.01004,
+    "s": -0.3261,
+    "per_month": 577.811,
+    "x": 61.4557,
+    "hit": 0.368
+   }
+  },
+  "d3|h5m|bid": {
+   "gate": {
+    "n_train": 7079,
+    "tpm": 388.245,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.002183,
+    "placebo_mean": -0.002217,
+    "vol_cost": 7.07,
+    "x": -7.6409,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d3|h5m|bid",
+    "control_mean_train": -0.002305984980044659,
+    "late_taker_gap_train": -0.006104909901912921,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 7079,
+      "mean": -0.00218,
+      "sd": 0.01556,
+      "s": -0.1403,
+      "per_month": 393.907,
+      "x": 7.7524,
+      "hit": 0.479
+     },
+     "fills_n": 45062,
+     "fills_mean": -0.008335661488615686,
+     "gross": -0.006035661488615685,
+     "placebo": 0.003935661488615685,
+     "ctrl_cluster": -0.002305984980044659,
+     "taker_cluster": -0.003332189356990277,
+     "mean_at_taker_cost": -0.010135661488615685,
+     "stop_share": 0.2393
+    },
+    "validation": {
+     "clusters": {
+      "n": 5661,
+      "mean": -0.00396,
+      "sd": 0.01249,
+      "s": -0.3173,
+      "per_month": 709.081,
+      "x": 71.3708,
+      "hit": 0.38
+     },
+     "fills_n": 76620,
+     "fills_mean": -0.007737629639780737,
+     "gross": -0.0054376296397807364,
+     "placebo": 0.0033376296397807366,
+     "ctrl_cluster": -0.002284627352771518,
+     "taker_cluster": -0.0035537685252197957,
+     "mean_at_taker_cost": -0.009537629639780736,
+     "stop_share": 0.2646
+    },
+    "test": {
+     "clusters": {
+      "n": 5733,
+      "mean": -0.00453,
+      "sd": 0.01194,
+      "s": -0.3793,
+      "per_month": 721.067,
+      "x": 103.7388,
+      "hit": 0.349
+     },
+     "fills_n": 74297,
+     "fills_mean": -0.007077329407647686,
+     "gross": -0.004777329407647684,
+     "placebo": 0.002677329407647685,
+     "ctrl_cluster": -0.0023097431454389356,
+     "taker_cluster": -0.004050069286425353,
+     "mean_at_taker_cost": -0.008877329407647684,
+     "stop_share": 0.2271
+    }
+   },
+   "corr_l1f_exit_day": -0.033185035787502114,
+   "all_clusters": {
+    "n": 18473,
+    "mean": -0.00346,
+    "sd": 0.01363,
+    "s": -0.2535,
+    "per_month": 544.837,
+    "x": 35.0195,
+    "hit": 0.409
+   }
+  },
+  "d3|h5m|ask": {
+   "gate": {
+    "n_train": 8124,
+    "tpm": 445.558,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.002678,
+    "placebo_mean": -0.001722,
+    "vol_cost": 7.5,
+    "x": -11.7471,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d3|h5m|ask",
+    "control_mean_train": -0.002390859199840903,
+    "late_taker_gap_train": -0.001724432825832358,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 8124,
+      "mean": -0.00268,
+      "sd": 0.01649,
+      "s": -0.1624,
+      "per_month": 452.055,
+      "x": 11.9184,
+      "hit": 0.464
+     },
+     "fills_n": 41839,
+     "fills_mean": -0.008331366141638185,
+     "gross": -0.0060313661416381845,
+     "placebo": 0.003931366141638185,
+     "ctrl_cluster": -0.002390859199840903,
+     "taker_cluster": -0.0034010045951997623,
+     "mean_at_taker_cost": -0.010131366141638185,
+     "stop_share": 0.1808
+    },
+    "validation": {
+     "clusters": {
+      "n": 5702,
+      "mean": -0.00405,
+      "sd": 0.01197,
+      "s": -0.3381,
+      "per_month": 714.217,
+      "x": 81.6599,
+      "hit": 0.365
+     },
+     "fills_n": 75369,
+     "fills_mean": -0.009787823720627847,
+     "gross": -0.007487823720627844,
+     "placebo": 0.005387823720627845,
+     "ctrl_cluster": -0.0023864951417223567,
+     "taker_cluster": -0.0035767446546507214,
+     "mean_at_taker_cost": -0.011587823720627844,
+     "stop_share": 0.2667
+    },
+    "test": {
+     "clusters": {
+      "n": 5754,
+      "mean": -0.00471,
+      "sd": 0.01182,
+      "s": -0.3982,
+      "per_month": 723.708,
+      "x": 114.7443,
+      "hit": 0.336
+     },
+     "fills_n": 71671,
+     "fills_mean": -0.0068281513303846755,
+     "gross": -0.004528151330384674,
+     "placebo": 0.002428151330384675,
+     "ctrl_cluster": -0.0024194953613489176,
+     "taker_cluster": -0.004213170367012796,
+     "mean_at_taker_cost": -0.008628151330384675,
+     "stop_share": 0.2139
+    }
+   },
+   "corr_l1f_exit_day": -0.044872695888497016,
+   "all_clusters": {
+    "n": 19580,
+    "mean": -0.00367,
+    "sd": 0.01402,
+    "s": -0.2621,
+    "per_month": 577.487,
+    "x": 39.669,
+    "hit": 0.397
+   }
+  },
+  "d3|h15m|bid": {
+   "gate": {
+    "n_train": 7055,
+    "tpm": 386.929,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.002013,
+    "placebo_mean": -0.002387,
+    "vol_cost": 9.77,
+    "x": -3.3914,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d3|h15m|bid",
+    "control_mean_train": -0.002321151310536396,
+    "late_taker_gap_train": -0.006945346599520853,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 7055,
+      "mean": -0.00201,
+      "sd": 0.0215,
+      "s": -0.0936,
+      "per_month": 392.571,
+      "x": 3.4409,
+      "hit": 0.472
+     },
+     "fills_n": 40906,
+     "fills_mean": -0.00864457243436171,
+     "gross": -0.006344572434361707,
+     "placebo": 0.004244572434361708,
+     "ctrl_cluster": -0.002321151310536396,
+     "taker_cluster": -0.003037668431997337,
+     "mean_at_taker_cost": -0.010444572434361707,
+     "stop_share": 0.3051
+    },
+    "validation": {
+     "clusters": {
+      "n": 5659,
+      "mean": -0.00376,
+      "sd": 0.01729,
+      "s": -0.2174,
+      "per_month": 708.831,
+      "x": 33.4928,
+      "hit": 0.404
+     },
+     "fills_n": 65896,
+     "fills_mean": -0.007138750591841691,
+     "gross": -0.0048387505918416895,
+     "placebo": 0.002738750591841691,
+     "ctrl_cluster": -0.0023892623491021015,
+     "taker_cluster": -0.0032295574795472787,
+     "mean_at_taker_cost": -0.00893875059184169,
+     "stop_share": 0.3476
+    },
+    "test": {
+     "clusters": {
+      "n": 5733,
+      "mean": -0.00483,
+      "sd": 0.01663,
+      "s": -0.2902,
+      "per_month": 721.067,
+      "x": 60.7308,
+      "hit": 0.359
+     },
+     "fills_n": 63400,
+     "fills_mean": -0.008212252902208204,
+     "gross": -0.005912252902208202,
+     "placebo": 0.0038122529022082026,
+     "ctrl_cluster": -0.002284426776185583,
+     "taker_cluster": -0.004056286066338799,
+     "mean_at_taker_cost": -0.010012252902208202,
+     "stop_share": 0.3181
+    }
+   },
+   "corr_l1f_exit_day": -0.028542075908454086,
+   "all_clusters": {
+    "n": 18447,
+    "mean": -0.00342,
+    "sd": 0.01886,
+    "s": -0.1814,
+    "per_month": 544.07,
+    "x": 17.9112,
+    "hit": 0.416
+   }
+  },
+  "d3|h15m|ask": {
+   "gate": {
+    "n_train": 8090,
+    "tpm": 443.693,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.002442,
+    "placebo_mean": -0.001958,
+    "vol_cost": 10.13,
+    "x": -5.3264,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d3|h15m|ask",
+    "control_mean_train": -0.0024214042832806245,
+    "late_taker_gap_train": -0.0016792803705786286,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 8090,
+      "mean": -0.00244,
+      "sd": 0.02229,
+      "s": -0.1096,
+      "per_month": 450.163,
+      "x": 5.4041,
+      "hit": 0.47
+     },
+     "fills_n": 37347,
+     "fills_mean": -0.008291298497871316,
+     "gross": -0.005991298497871315,
+     "placebo": 0.003891298497871316,
+     "ctrl_cluster": -0.0024214042832806245,
+     "taker_cluster": -0.0030633191661815014,
+     "mean_at_taker_cost": -0.010091298497871316,
+     "stop_share": 0.2622
+    },
+    "validation": {
+     "clusters": {
+      "n": 5700,
+      "mean": -0.00419,
+      "sd": 0.01651,
+      "s": -0.2536,
+      "per_month": 713.966,
+      "x": 45.9339,
+      "hit": 0.386
+     },
+     "fills_n": 63620,
+     "fills_mean": -0.010825830886513677,
+     "gross": -0.008525830886513675,
+     "placebo": 0.006425830886513676,
+     "ctrl_cluster": -0.0026211000853883985,
+     "taker_cluster": -0.0035709608864943647,
+     "mean_at_taker_cost": -0.012625830886513674,
+     "stop_share": 0.3703
+    },
+    "test": {
+     "clusters": {
+      "n": 5751,
+      "mean": -0.00495,
+      "sd": 0.01631,
+      "s": -0.3036,
+      "per_month": 723.331,
+      "x": 66.6624,
+      "hit": 0.354
+     },
+     "fills_n": 60645,
+     "fills_mean": -0.007604725154588178,
+     "gross": -0.005304725154588177,
+     "placebo": 0.003204725154588178,
+     "ctrl_cluster": -0.0026244501192468016,
+     "taker_cluster": -0.004223140809125958,
+     "mean_at_taker_cost": -0.009404725154588177,
+     "stop_share": 0.3146
+    }
+   },
+   "corr_l1f_exit_day": -0.04650306116182649,
+   "all_clusters": {
+    "n": 19541,
+    "mean": -0.00369,
+    "sd": 0.0191,
+    "s": -0.1932,
+    "per_month": 576.336,
+    "x": 21.5186,
+    "hit": 0.412
+   }
+  },
+  "d5|h1m|bid": {
+   "gate": {
+    "n_train": 2759,
+    "tpm": 151.316,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.001352,
+    "placebo_mean": -0.003048,
+    "vol_cost": 9.06,
+    "x": -0.6963,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d5|h1m|bid",
+    "control_mean_train": -0.002286687057617459,
+    "late_taker_gap_train": -0.009493664409810936,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 2759,
+      "mean": -0.00135,
+      "sd": 0.01992,
+      "s": -0.0678,
+      "per_month": 153.523,
+      "x": 0.7065,
+      "hit": 0.527
+     },
+     "fills_n": 15656,
+     "fills_mean": -0.010556057422074607,
+     "gross": -0.008256057422074603,
+     "placebo": 0.006156057422074605,
+     "ctrl_cluster": -0.002286687057617459,
+     "taker_cluster": -0.002460394928972411,
+     "mean_at_taker_cost": -0.012356057422074605,
+     "stop_share": 0.3229
+    },
+    "validation": {
+     "clusters": {
+      "n": 4361,
+      "mean": -0.00262,
+      "sd": 0.01805,
+      "s": -0.1451,
+      "per_month": 546.247,
+      "x": 11.5033,
+      "hit": 0.464
+     },
+     "fills_n": 30741,
+     "fills_mean": -0.010204262841156763,
+     "gross": -0.007904262841156761,
+     "placebo": 0.0058042628411567624,
+     "ctrl_cluster": -0.002286950256145463,
+     "taker_cluster": -0.0033528837274095016,
+     "mean_at_taker_cost": -0.012004262841156762,
+     "stop_share": 0.3212
+    },
+    "test": {
+     "clusters": {
+      "n": 4838,
+      "mean": -0.00232,
+      "sd": 0.0183,
+      "s": -0.127,
+      "per_month": 608.498,
+      "x": 9.8113,
+      "hit": 0.471
+     },
+     "fills_n": 26625,
+     "fills_mean": -0.007275239436619719,
+     "gross": -0.004975239436619719,
+     "placebo": 0.002875239436619719,
+     "ctrl_cluster": -0.0023116012216702706,
+     "taker_cluster": -0.0029582410376014284,
+     "mean_at_taker_cost": -0.009075239436619718,
+     "stop_share": 0.2453
+    }
+   },
+   "corr_l1f_exit_day": -0.07339333482836212,
+   "all_clusters": {
+    "n": 11958,
+    "mean": -0.00221,
+    "sd": 0.0186,
+    "s": -0.1187,
+    "per_month": 352.686,
+    "x": 4.9651,
+    "hit": 0.481
+   }
+  },
+  "d5|h1m|ask": {
+   "gate": {
+    "n_train": 3850,
+    "tpm": 211.152,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.001131,
+    "placebo_mean": -0.003269,
+    "vol_cost": 9.84,
+    "x": -0.5766,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d5|h1m|ask",
+    "control_mean_train": -0.0023200387364957237,
+    "late_taker_gap_train": -0.0037036734101649955,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 3850,
+      "mean": -0.00113,
+      "sd": 0.02164,
+      "s": -0.0523,
+      "per_month": 214.231,
+      "x": 0.5851,
+      "hit": 0.532
+     },
+     "fills_n": 12061,
+     "fills_mean": -0.008275556006964597,
+     "gross": -0.005975556006964596,
+     "placebo": 0.003875556006964597,
+     "ctrl_cluster": -0.0023200387364957237,
+     "taker_cluster": -0.0026161326719255865,
+     "mean_at_taker_cost": -0.010075556006964597,
+     "stop_share": 0.1884
+    },
+    "validation": {
+     "clusters": {
+      "n": 4502,
+      "mean": -0.00231,
+      "sd": 0.01786,
+      "s": -0.1295,
+      "per_month": 563.908,
+      "x": 9.4505,
+      "hit": 0.47
+     },
+     "fills_n": 29939,
+     "fills_mean": -0.011767321921239856,
+     "gross": -0.009467321921239856,
+     "placebo": 0.007367321921239855,
+     "ctrl_cluster": -0.002285294882570051,
+     "taker_cluster": -0.003231637559268798,
+     "mean_at_taker_cost": -0.013567321921239854,
+     "stop_share": 0.3058
+    },
+    "test": {
+     "clusters": {
+      "n": 4917,
+      "mean": -0.00283,
+      "sd": 0.01739,
+      "s": -0.1626,
+      "per_month": 618.435,
+      "x": 16.3581,
+      "hit": 0.444
+     },
+     "fills_n": 24765,
+     "fills_mean": -0.00666299866747426,
+     "gross": -0.004362998667474258,
+     "placebo": 0.0022629986674742586,
+     "ctrl_cluster": -0.002348509593401448,
+     "taker_cluster": -0.0036286990105333645,
+     "mean_at_taker_cost": -0.008462998667474258,
+     "stop_share": 0.2087
+    }
+   },
+   "corr_l1f_exit_day": -0.022905811729653763,
+   "all_clusters": {
+    "n": 13269,
+    "mean": -0.00216,
+    "sd": 0.01888,
+    "s": -0.1144,
+    "per_month": 391.352,
+    "x": 5.1231,
+    "hit": 0.478
+   }
+  },
+  "d5|h5m|bid": {
+   "gate": {
+    "n_train": 2757,
+    "tpm": 151.207,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.000982,
+    "placebo_mean": -0.003418,
+    "vol_cost": 12.36,
+    "x": -0.1972,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d5|h5m|bid",
+    "control_mean_train": -0.002409792305917007,
+    "late_taker_gap_train": -0.012014294617949242,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 2757,
+      "mean": -0.00098,
+      "sd": 0.02719,
+      "s": -0.0361,
+      "per_month": 153.412,
+      "x": 0.2,
+      "hit": 0.523
+     },
+     "fills_n": 14697,
+     "fills_mean": -0.01049389616928625,
+     "gross": -0.008193896169286249,
+     "placebo": 0.0060938961692862505,
+     "ctrl_cluster": -0.002409792305917007,
+     "taker_cluster": -0.0020255603805818226,
+     "mean_at_taker_cost": -0.012293896169286249,
+     "stop_share": 0.4157
+    },
+    "validation": {
+     "clusters": {
+      "n": 4360,
+      "mean": -0.0029,
+      "sd": 0.02389,
+      "s": -0.1216,
+      "per_month": 546.121,
+      "x": 8.0721,
+      "hit": 0.459
+     },
+     "fills_n": 28266,
+     "fills_mean": -0.009457288686053918,
+     "gross": -0.007157288686053916,
+     "placebo": 0.005057288686053919,
+     "ctrl_cluster": -0.0024185104618605455,
+     "taker_cluster": -0.003581323683299122,
+     "mean_at_taker_cost": -0.011257288686053918,
+     "stop_share": 0.4212
+    },
+    "test": {
+     "clusters": {
+      "n": 4837,
+      "mean": -0.00256,
+      "sd": 0.02466,
+      "s": -0.1037,
+      "per_month": 608.373,
+      "x": 6.543,
+      "hit": 0.455
+     },
+     "fills_n": 24462,
+     "fills_mean": -0.008621154361867387,
+     "gross": -0.006321154361867387,
+     "placebo": 0.004221154361867387,
+     "ctrl_cluster": -0.0023372183715640567,
+     "taker_cluster": -0.0032078985899785585,
+     "mean_at_taker_cost": -0.010421154361867387,
+     "stop_share": 0.3576
+    }
+   },
+   "corr_l1f_exit_day": -0.10160829306101044,
+   "all_clusters": {
+    "n": 11954,
+    "mean": -0.00232,
+    "sd": 0.025,
+    "s": -0.0928,
+    "per_month": 352.568,
+    "x": 3.0368,
+    "hit": 0.472
+   }
+  },
+  "d5|h5m|ask": {
+   "gate": {
+    "n_train": 3846,
+    "tpm": 210.932,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.001694,
+    "placebo_mean": -0.002706,
+    "vol_cost": 12.65,
+    "x": -0.7816,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d5|h5m|ask",
+    "control_mean_train": -0.0023929987015265134,
+    "late_taker_gap_train": -0.0028537577278731846,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 3846,
+      "mean": -0.00169,
+      "sd": 0.02783,
+      "s": -0.0609,
+      "per_month": 214.008,
+      "x": 0.793,
+      "hit": 0.513
+     },
+     "fills_n": 11355,
+     "fills_mean": -0.011179623601937473,
+     "gross": -0.008879623601937472,
+     "placebo": 0.006779623601937473,
+     "ctrl_cluster": -0.0023929987015265134,
+     "taker_cluster": -0.0031158394828528176,
+     "mean_at_taker_cost": -0.012979623601937471,
+     "stop_share": 0.3236
+    },
+    "validation": {
+     "clusters": {
+      "n": 4500,
+      "mean": -0.00247,
+      "sd": 0.02471,
+      "s": -0.0998,
+      "per_month": 563.657,
+      "x": 5.6157,
+      "hit": 0.465
+     },
+     "fills_n": 26875,
+     "fills_mean": -0.014061730716279072,
+     "gross": -0.01176173071627907,
+     "placebo": 0.009661730716279071,
+     "ctrl_cluster": -0.002447413946980684,
+     "taker_cluster": -0.003145108882795281,
+     "mean_at_taker_cost": -0.015861730716279072,
+     "stop_share": 0.4379
+    },
+    "test": {
+     "clusters": {
+      "n": 4913,
+      "mean": -0.0035,
+      "sd": 0.02383,
+      "s": -0.1467,
+      "per_month": 617.932,
+      "x": 13.3073,
+      "hit": 0.44
+     },
+     "fills_n": 22600,
+     "fills_mean": -0.008231116017699117,
+     "gross": -0.005931116017699116,
+     "placebo": 0.003831116017699116,
+     "ctrl_cluster": -0.0023946501224615412,
+     "taker_cluster": -0.004240798991154562,
+     "mean_at_taker_cost": -0.010031116017699116,
+     "stop_share": 0.3347
+    }
+   },
+   "corr_l1f_exit_day": -0.017197534459420096,
+   "all_clusters": {
+    "n": 13259,
+    "mean": -0.00262,
+    "sd": 0.02535,
+    "s": -0.1035,
+    "per_month": 391.057,
+    "x": 4.19,
+    "hit": 0.47
+   }
+  },
+  "d5|h15m|bid": {
+   "gate": {
+    "n_train": 2749,
+    "tpm": 150.768,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.001445,
+    "placebo_mean": -0.002955,
+    "vol_cost": 16.08,
+    "x": -0.2517,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d5|h15m|bid",
+    "control_mean_train": -0.0024082266192409977,
+    "late_taker_gap_train": -0.012664347496964937,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 2749,
+      "mean": -0.00145,
+      "sd": 0.03537,
+      "s": -0.0409,
+      "per_month": 152.967,
+      "x": 0.2554,
+      "hit": 0.507
+     },
+     "fills_n": 14003,
+     "fills_mean": -0.011672360208526746,
+     "gross": -0.009372360208526744,
+     "placebo": 0.007272360208526746,
+     "ctrl_cluster": -0.0024082266192409977,
+     "taker_cluster": -0.0026201311962612043,
+     "mean_at_taker_cost": -0.013472360208526744,
+     "stop_share": 0.4893
+    },
+    "validation": {
+     "clusters": {
+      "n": 4347,
+      "mean": -0.00263,
+      "sd": 0.0318,
+      "s": -0.0828,
+      "per_month": 544.493,
+      "x": 3.7293,
+      "hit": 0.453
+     },
+     "fills_n": 25857,
+     "fills_mean": -0.008055285261244539,
+     "gross": -0.005755285261244538,
+     "placebo": 0.0036552852612445393,
+     "ctrl_cluster": -0.002215599356937388,
+     "taker_cluster": -0.0032899848458915106,
+     "mean_at_taker_cost": -0.009855285261244538,
+     "stop_share": 0.5048
+    },
+    "test": {
+     "clusters": {
+      "n": 4830,
+      "mean": -0.00271,
+      "sd": 0.03186,
+      "s": -0.0851,
+      "per_month": 607.492,
+      "x": 4.3958,
+      "hit": 0.44
+     },
+     "fills_n": 22397,
+     "fills_mean": -0.009505851676563828,
+     "gross": -0.007205851676563826,
+     "placebo": 0.005105851676563827,
+     "ctrl_cluster": -0.002121335541010101,
+     "taker_cluster": -0.0031873692349409302,
+     "mean_at_taker_cost": -0.011305851676563826,
+     "stop_share": 0.4492
+    }
+   },
+   "corr_l1f_exit_day": -0.06615142825997863,
+   "all_clusters": {
+    "n": 11926,
+    "mean": -0.00239,
+    "sd": 0.03268,
+    "s": -0.0731,
+    "per_month": 351.742,
+    "x": 1.8811,
+    "hit": 0.46
+   }
+  },
+  "d5|h15m|ask": {
+   "gate": {
+    "n_train": 3838,
+    "tpm": 210.494,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.001419,
+    "placebo_mean": -0.002981,
+    "vol_cost": 15.86,
+    "x": -0.3484,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d5|h15m|ask",
+    "control_mean_train": -0.0024328147219701917,
+    "late_taker_gap_train": -0.0025699854645639384,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 3838,
+      "mean": -0.00142,
+      "sd": 0.03488,
+      "s": -0.0407,
+      "per_month": 213.563,
+      "x": 0.3535,
+      "hit": 0.504
+     },
+     "fills_n": 10526,
+     "fills_mean": -0.011005176420292612,
+     "gross": -0.008705176420292608,
+     "placebo": 0.0066051764202926105,
+     "ctrl_cluster": -0.0024328147219701917,
+     "taker_cluster": -0.002914246335483217,
+     "mean_at_taker_cost": -0.012805176420292608,
+     "stop_share": 0.4059
+    },
+    "validation": {
+     "clusters": {
+      "n": 4488,
+      "mean": -0.00198,
+      "sd": 0.03258,
+      "s": -0.0609,
+      "per_month": 562.154,
+      "x": 2.0849,
+      "hit": 0.461
+     },
+     "fills_n": 24230,
+     "fills_mean": -0.015355064878250106,
+     "gross": -0.013055064878250104,
+     "placebo": 0.010955064878250105,
+     "ctrl_cluster": -0.002616242329269868,
+     "taker_cluster": -0.0029621128080025223,
+     "mean_at_taker_cost": -0.017155064878250102,
+     "stop_share": 0.5355
+    },
+    "test": {
+     "clusters": {
+      "n": 4908,
+      "mean": -0.00346,
+      "sd": 0.0319,
+      "s": -0.1084,
+      "per_month": 617.303,
+      "x": 7.2475,
+      "hit": 0.441
+     },
+     "fills_n": 20514,
+     "fills_mean": -0.009197921029540803,
+     "gross": -0.006897921029540802,
+     "placebo": 0.004797921029540803,
+     "ctrl_cluster": -0.0026537001016993587,
+     "taker_cluster": -0.004215594826506653,
+     "mean_at_taker_cost": -0.010997921029540801,
+     "stop_share": 0.4438
+    }
+   },
+   "corr_l1f_exit_day": -0.04407975246047747,
+   "all_clusters": {
+    "n": 13234,
+    "mean": -0.00237,
+    "sd": 0.03303,
+    "s": -0.0716,
+    "per_month": 390.32,
+    "x": 2.0037,
+    "hit": 0.466
+   }
+  },
+  "d8|h1m|bid": {
+   "gate": {
+    "n_train": 869,
+    "tpm": 47.66,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": 0.003169,
+    "placebo_mean": -0.007569,
+    "vol_cost": 14.9,
+    "x": 0.4454,
+    "mfe_q": 0.05547,
+    "cost_med": 0.0022,
+    "best_trade": 0.15981,
+    "ceiling_multiple": 1171.318,
+    "id": "d8|h1m|bid",
+    "control_mean_train": -0.0020720739211268872,
+    "late_taker_gap_train": -0.009653165890361878,
+    "top1pct_share_train": null,
+    "reason": "late-taker gap -0.009653165890361878 < 0.002"
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 869,
+      "mean": 0.00317,
+      "sd": 0.03278,
+      "s": 0.0967,
+      "per_month": 48.355,
+      "x": 0.4519,
+      "hit": 0.577
+     },
+     "fills_n": 5582,
+     "fills_mean": -0.0042682878896452905,
+     "gross": -0.0019682878896452884,
+     "placebo": -0.00013171211035470931,
+     "ctrl_cluster": -0.0020720739211268872,
+     "taker_cluster": -7.69104007209872e-05,
+     "mean_at_taker_cost": -0.006068287889645289,
+     "stop_share": 0.3981
+    },
+    "validation": {
+     "clusters": {
+      "n": 2300,
+      "mean": -0.0013,
+      "sd": 0.03213,
+      "s": -0.0404,
+      "per_month": 288.092,
+      "x": 0.4708,
+      "hit": 0.511
+     },
+     "fills_n": 11302,
+     "fills_mean": -0.014181121394443464,
+     "gross": -0.011881121394443462,
+     "placebo": 0.009781121394443463,
+     "ctrl_cluster": -0.002277906018372795,
+     "taker_cluster": -0.002924706099805828,
+     "mean_at_taker_cost": -0.01598112139444346,
+     "stop_share": 0.4866
+    },
+    "test": {
+     "clusters": {
+      "n": 2731,
+      "mean": -0.0006,
+      "sd": 0.03152,
+      "s": -0.0189,
+      "per_month": 343.491,
+      "x": 0.123,
+      "hit": 0.527
+     },
+     "fills_n": 7929,
+     "fills_mean": -0.008549331819901628,
+     "gross": -0.006249331819901627,
+     "placebo": 0.004149331819901628,
+     "ctrl_cluster": -0.002225180489392025,
+     "taker_cluster": -0.0024440471291752312,
+     "mean_at_taker_cost": -0.010349331819901627,
+     "stop_share": 0.3814
+    }
+   },
+   "corr_l1f_exit_day": -0.03607360054678186,
+   "all_clusters": {
+    "n": 5900,
+    "mean": -0.00032,
+    "sd": 0.03198,
+    "s": -0.0099,
+    "per_month": 174.013,
+    "x": 0.017,
+    "hit": 0.528
+   }
+  },
+  "d8|h1m|ask": {
+   "gate": {
+    "n_train": 1449,
+    "tpm": 79.47,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.000376,
+    "placebo_mean": -0.004024,
+    "vol_cost": 15.35,
+    "x": -0.0099,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d8|h1m|ask",
+    "control_mean_train": -0.002280446277828951,
+    "late_taker_gap_train": -0.0039561721655668874,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 1449,
+      "mean": -0.00038,
+      "sd": 0.03377,
+      "s": -0.0111,
+      "per_month": 80.629,
+      "x": 0.01,
+      "hit": 0.535
+     },
+     "fills_n": 3334,
+     "fills_mean": -0.008635982303539293,
+     "gross": -0.006335982303539292,
+     "placebo": 0.004235982303539293,
+     "ctrl_cluster": -0.002280446277828951,
+     "taker_cluster": -0.0015891793656008044,
+     "mean_at_taker_cost": -0.010435982303539293,
+     "stop_share": 0.2936
+    },
+    "validation": {
+     "clusters": {
+      "n": 2297,
+      "mean": -0.00249,
+      "sd": 0.03006,
+      "s": -0.0829,
+      "per_month": 287.716,
+      "x": 1.9781,
+      "hit": 0.489
+     },
+     "fills_n": 10935,
+     "fills_mean": -0.017654926383173297,
+     "gross": -0.015354926383173298,
+     "placebo": 0.013254926383173297,
+     "ctrl_cluster": -0.0022800723318828547,
+     "taker_cluster": -0.00309987912011215,
+     "mean_at_taker_cost": -0.019454926383173296,
+     "stop_share": 0.4812
+    },
+    "test": {
+     "clusters": {
+      "n": 2671,
+      "mean": -0.0023,
+      "sd": 0.02964,
+      "s": -0.0776,
+      "per_month": 335.944,
+      "x": 2.0212,
+      "hit": 0.49
+     },
+     "fills_n": 7108,
+     "fills_mean": -0.008057758019133372,
+     "gross": -0.005757758019133371,
+     "placebo": 0.003657758019133372,
+     "ctrl_cluster": -0.0023660002568425945,
+     "taker_cluster": -0.0034473392873981103,
+     "mean_at_taker_cost": -0.009857758019133371,
+     "stop_share": 0.3289
+    }
+   },
+   "corr_l1f_exit_day": -0.0034449817417646074,
+   "all_clusters": {
+    "n": 6417,
+    "mean": -0.00193,
+    "sd": 0.03077,
+    "s": -0.0629,
+    "per_month": 189.261,
+    "x": 0.7476,
+    "hit": 0.5
+   }
+  },
+  "d8|h5m|bid": {
+   "gate": {
+    "n_train": 869,
+    "tpm": 47.66,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": 0.003454,
+    "placebo_mean": -0.007854,
+    "vol_cost": 18.07,
+    "x": 0.3596,
+    "mfe_q": 0.07206,
+    "cost_med": 0.0022,
+    "best_trade": 0.20958,
+    "ceiling_multiple": 8676.846,
+    "id": "d8|h5m|bid",
+    "control_mean_train": -0.0023855479918557876,
+    "late_taker_gap_train": -0.012564472445357744,
+    "top1pct_share_train": null,
+    "reason": "late-taker gap -0.012564472445357744 < 0.002"
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 869,
+      "mean": 0.00345,
+      "sd": 0.03976,
+      "s": 0.0869,
+      "per_month": 48.355,
+      "x": 0.3649,
+      "hit": 0.548
+     },
+     "fills_n": 5353,
+     "fills_mean": -0.0020553569960769682,
+     "gross": 0.0002446430039230337,
+     "placebo": -0.002344643003923031,
+     "ctrl_cluster": -0.0023855479918557876,
+     "taker_cluster": -0.0005263664878028232,
+     "mean_at_taker_cost": -0.0038553569960769678,
+     "stop_share": 0.4911
+    },
+    "validation": {
+     "clusters": {
+      "n": 2298,
+      "mean": -0.00141,
+      "sd": 0.04192,
+      "s": -0.0336,
+      "per_month": 287.841,
+      "x": 0.3251,
+      "hit": 0.478
+     },
+     "fills_n": 10787,
+     "fills_mean": -0.011714449337165108,
+     "gross": -0.009414449337165105,
+     "placebo": 0.007314449337165109,
+     "ctrl_cluster": -0.0023578118625053267,
+     "taker_cluster": -0.0036556493886016036,
+     "mean_at_taker_cost": -0.013514449337165108,
+     "stop_share": 0.5842
+    },
+    "test": {
+     "clusters": {
+      "n": 2730,
+      "mean": -0.00127,
+      "sd": 0.04026,
+      "s": -0.0316,
+      "per_month": 343.365,
+      "x": 0.342,
+      "hit": 0.489
+     },
+     "fills_n": 7606,
+     "fills_mean": -0.010180267026032083,
+     "gross": -0.00788026702603208,
+     "placebo": 0.005780267026032082,
+     "ctrl_cluster": -0.0022727981951912272,
+     "taker_cluster": -0.003734493937706703,
+     "mean_at_taker_cost": -0.01198026702603208,
+     "stop_share": 0.4975
+    }
+   },
+   "corr_l1f_exit_day": -0.06790182816380048,
+   "all_clusters": {
+    "n": 5897,
+    "mean": -0.00063,
+    "sd": 0.04087,
+    "s": -0.0154,
+    "per_month": 173.924,
+    "x": 0.0411,
+    "hit": 0.493
+   }
+  },
+  "d8|h5m|ask": {
+   "gate": {
+    "n_train": 1449,
+    "tpm": 79.47,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.001114,
+    "placebo_mean": -0.003286,
+    "vol_cost": 18.94,
+    "x": -0.0568,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d8|h5m|ask",
+    "control_mean_train": -0.0024897975651612374,
+    "late_taker_gap_train": -0.003351046001852425,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 1449,
+      "mean": -0.00111,
+      "sd": 0.04167,
+      "s": -0.0267,
+      "per_month": 80.629,
+      "x": 0.0576,
+      "hit": 0.511
+     },
+     "fills_n": 3239,
+     "fills_mean": -0.012319630750231556,
+     "gross": -0.010019630750231552,
+     "placebo": 0.007919630750231554,
+     "ctrl_cluster": -0.0024897975651612374,
+     "taker_cluster": -0.0023620202133028904,
+     "mean_at_taker_cost": -0.014119630750231555,
+     "stop_share": 0.4304
+    },
+    "validation": {
+     "clusters": {
+      "n": 2293,
+      "mean": -0.00275,
+      "sd": 0.03947,
+      "s": -0.0696,
+      "per_month": 287.215,
+      "x": 1.39,
+      "hit": 0.466
+     },
+     "fills_n": 10167,
+     "fills_mean": -0.021810202419592802,
+     "gross": -0.019510202419592802,
+     "placebo": 0.0174102024195928,
+     "ctrl_cluster": -0.0025023292037624064,
+     "taker_cluster": -0.0029127749599611717,
+     "mean_at_taker_cost": -0.023610202419592802,
+     "stop_share": 0.626
+    },
+    "test": {
+     "clusters": {
+      "n": 2668,
+      "mean": -0.00385,
+      "sd": 0.03894,
+      "s": -0.0989,
+      "per_month": 335.567,
+      "x": 3.2816,
+      "hit": 0.449
+     },
+     "fills_n": 6756,
+     "fills_mean": -0.009679080521018357,
+     "gross": -0.007379080521018354,
+     "placebo": 0.005279080521018355,
+     "ctrl_cluster": -0.0023602013029744165,
+     "taker_cluster": -0.005704874128795315,
+     "mean_at_taker_cost": -0.011479080521018354,
+     "stop_share": 0.4654
+    }
+   },
+   "corr_l1f_exit_day": -0.012181817078574613,
+   "all_clusters": {
+    "n": 6410,
+    "mean": -0.00284,
+    "sd": 0.03977,
+    "s": -0.0713,
+    "per_month": 189.055,
+    "x": 0.962,
+    "hit": 0.469
+   }
+  },
+  "d8|h15m|bid": {
+   "gate": {
+    "n_train": 868,
+    "tpm": 47.605,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": 0.003049,
+    "placebo_mean": -0.007449,
+    "vol_cost": 22.06,
+    "x": 0.1878,
+    "reason": "monthly contribution x 0.188 < 0.2",
+    "id": "d8|h15m|bid",
+    "control_mean_train": -0.0024064085558237773,
+    "late_taker_gap_train": -0.011576576687116565,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 868,
+      "mean": 0.00305,
+      "sd": 0.04854,
+      "s": 0.0628,
+      "per_month": 48.299,
+      "x": 0.1906,
+      "hit": 0.53
+     },
+     "fills_n": 5216,
+     "fills_mean": -0.005805812500000002,
+     "gross": -0.0035058125000000002,
+     "placebo": 0.0014058125000000021,
+     "ctrl_cluster": -0.0024064085558237773,
+     "taker_cluster": -0.0008926595177865717,
+     "mean_at_taker_cost": -0.007605812500000001,
+     "stop_share": 0.5786
+    },
+    "validation": {
+     "clusters": {
+      "n": 2294,
+      "mean": -0.00173,
+      "sd": 0.05177,
+      "s": -0.0334,
+      "per_month": 287.34,
+      "x": 0.3213,
+      "hit": 0.442
+     },
+     "fills_n": 10266,
+     "fills_mean": -0.009288025423728816,
+     "gross": -0.0069880254237288135,
+     "placebo": 0.004888025423728816,
+     "ctrl_cluster": -0.0021566239993439282,
+     "taker_cluster": -0.0037153191596312747,
+     "mean_at_taker_cost": -0.011088025423728814,
+     "stop_share": 0.6512
+    },
+    "test": {
+     "clusters": {
+      "n": 2722,
+      "mean": -0.00114,
+      "sd": 0.04988,
+      "s": -0.0228,
+      "per_month": 342.359,
+      "x": 0.1785,
+      "hit": 0.466
+     },
+     "fills_n": 7306,
+     "fills_mean": -0.010690320010949906,
+     "gross": -0.008390320010949904,
+     "placebo": 0.006290320010949906,
+     "ctrl_cluster": -0.002255434157932307,
+     "taker_cluster": -0.003952957466035206,
+     "mean_at_taker_cost": -0.012490320010949903,
+     "stop_share": 0.579
+    }
+   },
+   "corr_l1f_exit_day": -0.053498850405914296,
+   "all_clusters": {
+    "n": 5884,
+    "mean": -0.00075,
+    "sd": 0.05045,
+    "s": -0.0149,
+    "per_month": 173.541,
+    "x": 0.0386,
+    "hit": 0.466
+   }
+  },
+  "d8|h15m|ask": {
+   "gate": {
+    "n_train": 1445,
+    "tpm": 79.25,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.000297,
+    "placebo_mean": -0.004103,
+    "vol_cost": 22.68,
+    "x": -0.0028,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "d8|h15m|ask",
+    "control_mean_train": -0.002370559357682433,
+    "late_taker_gap_train": -0.003506283978253919,
+    "top1pct_share_train": null
+   },
+   "ok": false,
+   "by_split": {
+    "train": {
+     "clusters": {
+      "n": 1445,
+      "mean": -0.0003,
+      "sd": 0.0499,
+      "s": -0.006,
+      "per_month": 80.406,
+      "x": 0.0029,
+      "hit": 0.498
+     },
+     "fills_n": 3127,
+     "fills_mean": -0.01313833866325552,
+     "gross": -0.010838338663255518,
+     "placebo": 0.008738338663255518,
+     "ctrl_cluster": -0.002370559357682433,
+     "taker_cluster": -0.001249748047424446,
+     "mean_at_taker_cost": -0.014938338663255519,
+     "stop_share": 0.5219
+    },
+    "validation": {
+     "clusters": {
+      "n": 2287,
+      "mean": -0.00274,
+      "sd": 0.04954,
+      "s": -0.0553,
+      "per_month": 286.463,
+      "x": 0.8775,
+      "hit": 0.442
+     },
+     "fills_n": 9524,
+     "fills_mean": -0.02412983672826544,
+     "gross": -0.021829836728265436,
+     "placebo": 0.019729836728265435,
+     "ctrl_cluster": -0.002462811478659319,
+     "taker_cluster": -0.003552171755465707,
+     "mean_at_taker_cost": -0.025929836728265435,
+     "stop_share": 0.7061
+    },
+    "test": {
+     "clusters": {
+      "n": 2659,
+      "mean": -0.00375,
+      "sd": 0.04876,
+      "s": -0.077,
+      "per_month": 334.435,
+      "x": 1.9819,
+      "hit": 0.435
+     },
+     "fills_n": 6375,
+     "fills_mean": -0.010683367058823532,
+     "gross": -0.008383367058823529,
+     "placebo": 0.006283367058823531,
+     "ctrl_cluster": -0.0026333377047140496,
+     "taker_cluster": -0.005794229539117462,
+     "mean_at_taker_cost": -0.012483367058823532,
+     "stop_share": 0.5644
+    }
+   },
+   "corr_l1f_exit_day": -0.016144400215993875,
+   "all_clusters": {
+    "n": 6391,
+    "mean": -0.00261,
+    "sd": 0.04931,
+    "s": -0.0529,
+    "per_month": 188.494,
+    "x": 0.5281,
+    "hit": 0.452
+   }
+  }
+ },
+ "l1f_trades": 65,
+ "raw_fills_by_d_side": {
+  "3b": 304222,
+  "3a": 299580,
+  "5b": 93969,
+  "5a": 85590,
+  "8b": 30667,
+  "8a": 25981
+ },
+ "gate": {
+  "rules_tested": 18,
+  "stage0_survivors": 0,
+  "holm": {
+   "holm_m": 0
+  },
+  "passed": [],
+  "evaluated": []
+ },
+ "closest_by_train_x": {
+  "id": "d8|h1m|bid",
+  "gate": {
+   "n_train": 869,
+   "tpm": 47.66,
+   "w": 3.0,
+   "shortable": true,
+   "train_mean": 0.003169,
+   "placebo_mean": -0.007569,
+   "vol_cost": 14.9,
+   "x": 0.4454,
+   "mfe_q": 0.05547,
+   "cost_med": 0.0022,
+   "best_trade": 0.15981,
+   "ceiling_multiple": 1171.318,
+   "id": "d8|h1m|bid",
+   "control_mean_train": -0.0020720739211268872,
+   "late_taker_gap_train": -0.009653165890361878,
+   "top1pct_share_train": null,
+   "reason": "late-taker gap -0.009653165890361878 < 0.002"
+  }
+ }
+}
