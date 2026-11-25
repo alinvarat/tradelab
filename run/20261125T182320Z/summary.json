@@ -1,0 +1,837 @@
+{
+ "run_utc": "2026-11-25T18:23:17Z",
+ "months": 33.91,
+ "shards": 16,
+ "symbols": 888,
+ "raw_events": 21821,
+ "symbols_with_events": 709,
+ "failed_months": 0,
+ "events_by_split": {
+  "train": 7742,
+  "validation": 7301,
+  "test": 6778
+ },
+ "s2_events": 4989,
+ "long_fades": 15305,
+ "rules": {
+  "s1|h5m|d1m": {
+   "gate": {
+    "n_train": 4055,
+    "tpm": 222.395,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.004326,
+    "placebo_mean": -0.003674,
+    "vol_cost": 4.77,
+    "x": -11.4352,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "s1|h5m|d1m",
+    "control_mean_train": -0.00407908815495406
+   },
+   "ok": false,
+   "all": {
+    "n": 15040,
+    "mean": -0.00445,
+    "sd": 0.0231,
+    "s": -0.1926,
+    "per_month": 443.585,
+    "x": 16.451,
+    "hit": 0.4
+   },
+   "by_split": {
+    "train": {
+     "n": 4055,
+     "mean": -0.00433,
+     "sd": 0.01908,
+     "s": -0.2268,
+     "per_month": 225.638,
+     "x": 11.602,
+     "hit": 0.408
+    },
+    "validation": {
+     "n": 5278,
+     "mean": -0.00465,
+     "sd": 0.02378,
+     "s": -0.1956,
+     "per_month": 661.108,
+     "x": 25.2952,
+     "hit": 0.397
+    },
+    "test": {
+     "n": 5707,
+     "mean": -0.00435,
+     "sd": 0.02498,
+     "s": -0.1739,
+     "per_month": 717.797,
+     "x": 21.7153,
+     "hit": 0.397
+    }
+   },
+   "gross_by_split": {
+    "train": -0.00022578273736128238,
+    "validation": -0.0005523183023872679,
+    "test": -0.0002455549325389872
+   },
+   "control_by_split": {
+    "train": -0.00407908815495406,
+    "validation": -0.004096521193689413,
+    "test": -0.004201020024591604
+   },
+   "placebo_by_split": {
+    "train": -0.0036742172626387177,
+    "validation": -0.003347681697612732,
+    "test": -0.0036544450674610126
+   },
+   "by_direction_all": {
+    "long": {
+     "n": 9104,
+     "mean": -0.00494,
+     "sd": 0.02072,
+     "s": -0.2384,
+     "per_month": 268.511,
+     "x": 15.2667,
+     "hit": 0.38
+    },
+    "short": {
+     "n": 5936,
+     "mean": -0.00369,
+     "sd": 0.02632,
+     "s": -0.1404,
+     "per_month": 175.075,
+     "x": 3.4487,
+     "hit": 0.429
+    }
+   },
+   "skipped_busy": 6781,
+   "skipped_no_bar": 0,
+   "stop_share": 0.0576
+  },
+  "s1|h15m|d1m": {
+   "gate": {
+    "n_train": 3671,
+    "tpm": 201.335,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.005251,
+    "placebo_mean": -0.002749,
+    "vol_cost": 6.6,
+    "x": -7.9617,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "s1|h15m|d1m",
+    "control_mean_train": -0.004097568294020844
+   },
+   "ok": false,
+   "all": {
+    "n": 12973,
+    "mean": -0.00457,
+    "sd": 0.03257,
+    "s": -0.1403,
+    "per_month": 382.622,
+    "x": 7.5296,
+    "hit": 0.449
+   },
+   "by_split": {
+    "train": {
+     "n": 3671,
+     "mean": -0.00525,
+     "sd": 0.0264,
+     "s": -0.1989,
+     "per_month": 204.271,
+     "x": 8.0778,
+     "hit": 0.445
+    },
+    "validation": {
+     "n": 4465,
+     "mean": -0.00502,
+     "sd": 0.03433,
+     "s": -0.1461,
+     "per_month": 559.273,
+     "x": 11.9459,
+     "hit": 0.443
+    },
+    "test": {
+     "n": 4837,
+     "mean": -0.00364,
+     "sd": 0.03502,
+     "s": -0.1038,
+     "per_month": 608.373,
+     "x": 6.5596,
+     "hit": 0.458
+    }
+   },
+   "gross_by_split": {
+    "train": -0.0011506924543721057,
+    "validation": -0.0009166550951847704,
+    "test": 0.0004632869547240025
+   },
+   "control_by_split": {
+    "train": -0.004097568294020844,
+    "validation": -0.004256880053908356,
+    "test": -0.004289522468419962
+   },
+   "placebo_by_split": {
+    "train": -0.002749307545627894,
+    "validation": -0.0029833449048152286,
+    "test": -0.004363286954724002
+   },
+   "by_direction_all": {
+    "long": {
+     "n": 7815,
+     "mean": -0.00506,
+     "sd": 0.03063,
+     "s": -0.1652,
+     "per_month": 230.493,
+     "x": 6.2884,
+     "hit": 0.43
+    },
+    "short": {
+     "n": 5158,
+     "mean": -0.00382,
+     "sd": 0.03529,
+     "s": -0.1084,
+     "per_month": 152.129,
+     "x": 1.7872,
+     "hit": 0.478
+    }
+   },
+   "skipped_busy": 8848,
+   "skipped_no_bar": 0,
+   "stop_share": 0.1196
+  },
+  "s1|h60m|d1m": {
+   "gate": {
+    "n_train": 2895,
+    "tpm": 158.775,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.00646,
+    "placebo_mean": -0.00154,
+    "vol_cost": 9.34,
+    "x": -4.7493,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "s1|h60m|d1m",
+    "control_mean_train": -0.0039243736111111115
+   },
+   "ok": false,
+   "all": {
+    "n": 9029,
+    "mean": -0.00511,
+    "sd": 0.0457,
+    "s": -0.1119,
+    "per_month": 266.299,
+    "x": 3.3319,
+    "hit": 0.455
+   },
+   "by_split": {
+    "train": {
+     "n": 2895,
+     "mean": -0.00646,
+     "sd": 0.03735,
+     "s": -0.173,
+     "per_month": 161.091,
+     "x": 4.8186,
+     "hit": 0.453
+    },
+    "validation": {
+     "n": 2977,
+     "mean": -0.00512,
+     "sd": 0.05179,
+     "s": -0.0989,
+     "per_month": 372.891,
+     "x": 3.6477,
+     "hit": 0.447
+    },
+    "test": {
+     "n": 3157,
+     "mean": -0.00387,
+     "sd": 0.04652,
+     "s": -0.0831,
+     "per_month": 397.071,
+     "x": 2.7446,
+     "hit": 0.466
+    }
+   },
+   "gross_by_split": {
+    "train": -0.002360037305699482,
+    "validation": -0.0010218159220691972,
+    "test": 0.0002323664871713652
+   },
+   "control_by_split": {
+    "train": -0.0039243736111111115,
+    "validation": -0.00480770101010101,
+    "test": -0.004129177291468443
+   },
+   "placebo_by_split": {
+    "train": -0.0015399626943005168,
+    "validation": -0.0028781840779308013,
+    "test": -0.004132366487171364
+   },
+   "by_direction_all": {
+    "long": {
+     "n": 5399,
+     "mean": -0.00532,
+     "sd": 0.04621,
+     "s": -0.1152,
+     "per_month": 159.236,
+     "x": 2.1128,
+     "hit": 0.441
+    },
+    "short": {
+     "n": 3630,
+     "mean": -0.0048,
+     "sd": 0.04495,
+     "s": -0.1068,
+     "per_month": 107.062,
+     "x": 1.2207,
+     "hit": 0.477
+    }
+   },
+   "skipped_busy": 12792,
+   "skipped_no_bar": 0,
+   "stop_share": 0.2338
+  },
+  "s2|h5m|d1m": {
+   "gate": {
+    "n_train": 639,
+    "tpm": 35.046,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.003268,
+    "placebo_mean": -0.004732,
+    "vol_cost": 6.75,
+    "x": -0.5136,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "s2|h5m|d1m",
+    "control_mean_train": -0.003974557480314961
+   },
+   "ok": false,
+   "all": {
+    "n": 2861,
+    "mean": -0.00476,
+    "sd": 0.0336,
+    "s": -0.1418,
+    "per_month": 84.381,
+    "x": 1.6959,
+    "hit": 0.445
+   },
+   "by_split": {
+    "train": {
+     "n": 639,
+     "mean": -0.00327,
+     "sd": 0.027,
+     "s": -0.1211,
+     "per_month": 35.557,
+     "x": 0.5211,
+     "hit": 0.487
+    },
+    "validation": {
+     "n": 1119,
+     "mean": -0.00494,
+     "sd": 0.03479,
+     "s": -0.142,
+     "per_month": 140.163,
+     "x": 2.8243,
+     "hit": 0.434
+    },
+    "test": {
+     "n": 1103,
+     "mean": -0.00545,
+     "sd": 0.03575,
+     "s": -0.1525,
+     "per_month": 138.73,
+     "x": 3.2259,
+     "hit": 0.432
+    }
+   },
+   "gross_by_split": {
+    "train": 0.0008317433489827855,
+    "validation": -0.0008377667560321716,
+    "test": -0.0013510806890299186
+   },
+   "control_by_split": {
+    "train": -0.003974557480314961,
+    "validation": -0.0041148944543828265,
+    "test": -0.004023295186194369
+   },
+   "placebo_by_split": {
+    "train": -0.004731743348982785,
+    "validation": -0.003062233243967828,
+    "test": -0.0025489193109700806
+   },
+   "by_direction_all": {
+    "long": {
+     "n": 1883,
+     "mean": -0.00564,
+     "sd": 0.03055,
+     "s": -0.1847,
+     "per_month": 55.537,
+     "x": 1.8955,
+     "hit": 0.432
+    },
+    "short": {
+     "n": 978,
+     "mean": -0.00307,
+     "sd": 0.03876,
+     "s": -0.0792,
+     "per_month": 28.845,
+     "x": 0.1807,
+     "hit": 0.47
+    }
+   },
+   "skipped_busy": 2128,
+   "skipped_no_bar": 0,
+   "stop_share": 0.1262
+  },
+  "s2|h15m|d1m": {
+   "gate": {
+    "n_train": 618,
+    "tpm": 33.894,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.005553,
+    "placebo_mean": -0.002447,
+    "vol_cost": 8.57,
+    "x": -0.8897,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "s2|h15m|d1m",
+    "control_mean_train": -0.004131724755700326
+   },
+   "ok": false,
+   "all": {
+    "n": 2744,
+    "mean": -0.00568,
+    "sd": 0.04562,
+    "s": -0.1245,
+    "per_month": 80.931,
+    "x": 1.2542,
+    "hit": 0.447
+   },
+   "by_split": {
+    "train": {
+     "n": 618,
+     "mean": -0.00555,
+     "sd": 0.03427,
+     "s": -0.162,
+     "per_month": 34.388,
+     "x": 0.9027,
+     "hit": 0.468
+    },
+    "validation": {
+     "n": 1067,
+     "mean": -0.00517,
+     "sd": 0.05149,
+     "s": -0.1004,
+     "per_month": 133.649,
+     "x": 1.3472,
+     "hit": 0.443
+    },
+    "test": {
+     "n": 1059,
+     "mean": -0.00627,
+     "sd": 0.04515,
+     "s": -0.1388,
+     "per_month": 133.196,
+     "x": 2.5647,
+     "hit": 0.439
+    }
+   },
+   "gross_by_split": {
+    "train": -0.0014531343042071198,
+    "validation": -0.001069091846298032,
+    "test": -0.0021658045325779036
+   },
+   "control_by_split": {
+    "train": -0.004131724755700326,
+    "validation": -0.004204820825515947,
+    "test": -0.004254408876298394
+   },
+   "placebo_by_split": {
+    "train": -0.002446865695792879,
+    "validation": -0.0028309081537019666,
+    "test": -0.001734195467422095
+   },
+   "by_direction_all": {
+    "long": {
+     "n": 1802,
+     "mean": -0.00667,
+     "sd": 0.04456,
+     "s": -0.1496,
+     "per_month": 53.148,
+     "x": 1.19,
+     "hit": 0.427
+    },
+    "short": {
+     "n": 942,
+     "mean": -0.00379,
+     "sd": 0.04755,
+     "s": -0.0797,
+     "per_month": 27.783,
+     "x": 0.1763,
+     "hit": 0.485
+    }
+   },
+   "skipped_busy": 2245,
+   "skipped_no_bar": 0,
+   "stop_share": 0.2201
+  },
+  "s2|h60m|d1m": {
+   "gate": {
+    "n_train": 583,
+    "tpm": 31.974,
+    "w": 3.0,
+    "shortable": true,
+    "train_mean": -0.007163,
+    "placebo_mean": -0.000837,
+    "vol_cost": 11.45,
+    "x": -0.7825,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "s2|h60m|d1m",
+    "control_mean_train": -0.0031138970840480272
+   },
+   "ok": false,
+   "all": {
+    "n": 2479,
+    "mean": -0.00594,
+    "sd": 0.06716,
+    "s": -0.0884,
+    "per_month": 73.115,
+    "x": 0.5713,
+    "hit": 0.437
+   },
+   "by_split": {
+    "train": {
+     "n": 583,
+     "mean": -0.00716,
+     "sd": 0.04579,
+     "s": -0.1564,
+     "per_month": 32.441,
+     "x": 0.7939,
+     "hit": 0.458
+    },
+    "validation": {
+     "n": 946,
+     "mean": -0.00532,
+     "sd": 0.08454,
+     "s": -0.063,
+     "per_month": 118.493,
+     "x": 0.4696,
+     "hit": 0.426
+    },
+    "test": {
+     "n": 950,
+     "mean": -0.0058,
+     "sd": 0.05808,
+     "s": -0.0998,
+     "per_month": 119.486,
+     "x": 1.1901,
+     "hit": 0.435
+    }
+   },
+   "gross_by_split": {
+    "train": -0.0030631114922813037,
+    "validation": -0.001222438689217759,
+    "test": -0.0016965105263157896
+   },
+   "control_by_split": {
+    "train": -0.0031138970840480272,
+    "validation": -0.004498610169491525,
+    "test": -0.004397097997892519
+   },
+   "placebo_by_split": {
+    "train": -0.0008368885077186944,
+    "validation": -0.0026775613107822387,
+    "test": -0.0022034894736842085
+   },
+   "by_direction_all": {
+    "long": {
+     "n": 1622,
+     "mean": -0.00538,
+     "sd": 0.0719,
+     "s": -0.0748,
+     "per_month": 47.839,
+     "x": 0.2677,
+     "hit": 0.437
+    },
+    "short": {
+     "n": 857,
+     "mean": -0.00699,
+     "sd": 0.05716,
+     "s": -0.1224,
+     "per_month": 25.276,
+     "x": 0.3786,
+     "hit": 0.436
+    }
+   },
+   "skipped_busy": 2510,
+   "skipped_no_bar": 0,
+   "stop_share": 0.3473
+  }
+ },
+ "reported_delay300": {
+  "s1|h5m|d5m": {
+   "all": {
+    "n": 15040,
+    "mean": -0.00418,
+    "sd": 0.01934,
+    "s": -0.2159,
+    "per_month": 443.585,
+    "x": 20.6819,
+    "hit": 0.371
+   },
+   "by_split": {
+    "train": {
+     "n": 4055,
+     "mean": -0.00489,
+     "sd": 0.01643,
+     "s": -0.2974,
+     "per_month": 225.638,
+     "x": 19.9591,
+     "hit": 0.345
+    },
+    "validation": {
+     "n": 5278,
+     "mean": -0.00412,
+     "sd": 0.02061,
+     "s": -0.1997,
+     "per_month": 661.108,
+     "x": 26.3727,
+     "hit": 0.373
+    },
+    "test": {
+     "n": 5707,
+     "mean": -0.00373,
+     "sd": 0.02003,
+     "s": -0.1862,
+     "per_month": 717.797,
+     "x": 24.8862,
+     "hit": 0.387
+    }
+   }
+  },
+  "s1|h15m|d5m": {
+   "all": {
+    "n": 12903,
+    "mean": -0.00456,
+    "sd": 0.02971,
+    "s": -0.1536,
+    "per_month": 380.557,
+    "x": 8.9753,
+    "hit": 0.421
+   },
+   "by_split": {
+    "train": {
+     "n": 3669,
+     "mean": -0.00575,
+     "sd": 0.02384,
+     "s": -0.241,
+     "per_month": 204.159,
+     "x": 11.8592,
+     "hit": 0.402
+    },
+    "validation": {
+     "n": 4424,
+     "mean": -0.0048,
+     "sd": 0.0336,
+     "s": -0.1429,
+     "per_month": 554.138,
+     "x": 11.3156,
+     "hit": 0.417
+    },
+    "test": {
+     "n": 4810,
+     "mean": -0.00344,
+     "sd": 0.0299,
+     "s": -0.1151,
+     "per_month": 604.977,
+     "x": 8.0098,
+     "hit": 0.439
+    }
+   }
+  },
+  "s1|h60m|d5m": {
+   "all": {
+    "n": 8901,
+    "mean": -0.00499,
+    "sd": 0.04341,
+    "s": -0.115,
+    "per_month": 262.523,
+    "x": 3.4702,
+    "hit": 0.441
+   },
+   "by_split": {
+    "train": {
+     "n": 2872,
+     "mean": -0.00684,
+     "sd": 0.03499,
+     "s": -0.1954,
+     "per_month": 159.811,
+     "x": 6.1033,
+     "hit": 0.434
+    },
+    "validation": {
+     "n": 2910,
+     "mean": -0.00441,
+     "sd": 0.04863,
+     "s": -0.0908,
+     "per_month": 364.498,
+     "x": 3.0034,
+     "hit": 0.441
+    },
+    "test": {
+     "n": 3119,
+     "mean": -0.00383,
+     "sd": 0.04517,
+     "s": -0.0847,
+     "per_month": 392.292,
+     "x": 2.8175,
+     "hit": 0.448
+    }
+   }
+  },
+  "s2|h5m|d5m": {
+   "all": {
+    "n": 2861,
+    "mean": -0.00523,
+    "sd": 0.02693,
+    "s": -0.1942,
+    "per_month": 84.381,
+    "x": 3.1824,
+    "hit": 0.387
+   },
+   "by_split": {
+    "train": {
+     "n": 639,
+     "mean": -0.00652,
+     "sd": 0.02135,
+     "s": -0.3055,
+     "per_month": 35.557,
+     "x": 3.3177,
+     "hit": 0.362
+    },
+    "validation": {
+     "n": 1119,
+     "mean": -0.00561,
+     "sd": 0.02846,
+     "s": -0.1973,
+     "per_month": 140.163,
+     "x": 5.4544,
+     "hit": 0.383
+    },
+    "test": {
+     "n": 1103,
+     "mean": -0.00409,
+     "sd": 0.02818,
+     "s": -0.1452,
+     "per_month": 138.73,
+     "x": 2.9243,
+     "hit": 0.406
+    }
+   }
+  },
+  "s2|h15m|d5m": {
+   "all": {
+    "n": 2731,
+    "mean": -0.00673,
+    "sd": 0.04227,
+    "s": -0.1593,
+    "per_month": 80.547,
+    "x": 2.0448,
+    "hit": 0.41
+   },
+   "by_split": {
+    "train": {
+     "n": 616,
+     "mean": -0.00866,
+     "sd": 0.03015,
+     "s": -0.2872,
+     "per_month": 34.277,
+     "x": 2.8266,
+     "hit": 0.404
+    },
+    "validation": {
+     "n": 1058,
+     "mean": -0.00689,
+     "sd": 0.05016,
+     "s": -0.1373,
+     "per_month": 132.522,
+     "x": 2.4996,
+     "hit": 0.403
+    },
+    "test": {
+     "n": 1057,
+     "mean": -0.00546,
+     "sd": 0.03959,
+     "s": -0.1379,
+     "per_month": 132.944,
+     "x": 2.5288,
+     "hit": 0.421
+    }
+   }
+  },
+  "s2|h60m|d5m": {
+   "all": {
+    "n": 2453,
+    "mean": -0.00654,
+    "sd": 0.06294,
+    "s": -0.104,
+    "per_month": 72.348,
+    "x": 0.7818,
+    "hit": 0.426
+   },
+   "by_split": {
+    "train": {
+     "n": 580,
+     "mean": -0.00979,
+     "sd": 0.04196,
+     "s": -0.2333,
+     "per_month": 32.274,
+     "x": 1.7563,
+     "hit": 0.441
+    },
+    "validation": {
+     "n": 931,
+     "mean": -0.00563,
+     "sd": 0.07941,
+     "s": -0.0709,
+     "per_month": 116.614,
+     "x": 0.5864,
+     "hit": 0.407
+    },
+    "test": {
+     "n": 942,
+     "mean": -0.00544,
+     "sd": 0.05475,
+     "s": -0.0995,
+     "per_month": 118.48,
+     "x": 1.1719,
+     "hit": 0.436
+    }
+   }
+  }
+ },
+ "gate": {
+  "rules_tested": 6,
+  "stage0_survivors": 0,
+  "holm": {
+   "holm_m": 0
+  },
+  "passed": [],
+  "evaluated": []
+ },
+ "closest_by_train_x": {
+  "id": "s2|h5m|d1m",
+  "gate": {
+   "n_train": 639,
+   "tpm": 35.046,
+   "w": 3.0,
+   "shortable": true,
+   "train_mean": -0.003268,
+   "placebo_mean": -0.004732,
+   "vol_cost": 6.75,
+   "x": -0.5136,
+   "reason": "train net mean not above 0 and the reversed-side placebo",
+   "id": "s2|h5m|d1m",
+   "control_mean_train": -0.003974557480314961
+  }
+ }
+}
