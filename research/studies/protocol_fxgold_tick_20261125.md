@@ -23,3 +23,6 @@ Total cells: 36x4 + 4x4 + 8x4 + 4x4 + 4 = 212.
 3. Pass = all of: validation and test mean net > 0; validation and test mean at 2x cost > 0; >= 30 validation and >= 20 test trades; Holm p < 0.05; >= 70% of 6-month folds positive; last 12 months mean at 2x cost > 0; validation mean above the maximum of 5 random-side controls (same entries, exits and costs).
 4. Reported for every survivor: validation/test mean, p, x per month, 30-day multiple distribution at nominal leverage, ceiling. Per-trade rows of every cell go to data branch `data/fxgold-tick-rows`.
 No parameter is changed after seeing validation or test data; a variant is a new dated protocol.
+
+## Addendum 2026-11-25 (before any candle of this study was read): gold-only pilot
+Dukascopy answers about 17 s per request, so the full download takes hours. A pilot runs the SAME pre-registered rules (no rule, parameter, cost or criterion change) on XAUUSD cells only, from candles of 2023Q4..2026Q4, with shorter splits: train 2023-12-01..2024-12-01, validation 2024-12-01..2025-09-01, test 2025-09-01..2026-11-20. It is a diagnostic subset (about 60 cells), reported as such; it does not replace and is not pooled with the full run, which keeps the splits above. The family size and Holm of the full run are unchanged. The macro tick windows are cut to -30 s..+330 s (the rules need -5 s..+311 s).

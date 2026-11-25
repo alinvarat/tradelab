@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from urllib.request import Request, urlopen
 
 ET = ZoneInfo("America/New_York")
-UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) tradelab-research", "Accept": "*/*"}
+UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) tradelab-research"}
 FOMC_2016_2020 = ["2016-01-27", "2016-03-16", "2016-04-27", "2016-06-15", "2016-07-27", "2016-09-21", "2016-11-02", "2016-12-14",
                   "2017-02-01", "2017-03-15", "2017-05-03", "2017-06-14", "2017-07-26", "2017-09-20", "2017-11-01", "2017-12-13",
                   "2018-01-31", "2018-03-21", "2018-05-02", "2018-06-13", "2018-08-01", "2018-09-26", "2018-11-08", "2018-12-19",

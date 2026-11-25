@@ -70,16 +70,14 @@ def fetch_day(sym, d):
     return b"".join(recs), ("ok" if recs else "closed")
 
 
-def fetch_year_file(sym, year, path, workers=4, start=None, end=None):
-    """Download every weekday of `year` (UTC) for sym into one gzip file; returns dict(days, ok, closed, fail)."""
+def fetch_range(sym, start, end, path, workers=3):
+    """Download every Mon-Fri and Sunday (UTC) from start to end (dates, inclusive) into one gzip file; returns dict(days, ok, closed, fail)."""
     from concurrent.futures import ThreadPoolExecutor
-    d0, d1 = _date(year, 1, 1), _date(year, 12, 31)
     days = []
-    d = d0
-    while d <= d1:
-        if d.weekday() < 5 or (d.weekday() == 6):      # Sunday evening sessions open at 21:00-22:00 UTC
-            if (start is None or d >= start) and (end is None or d <= end):
-                days.append(d)
+    d = start
+    while d <= end:
+        if d.weekday() != 5:                           # Sunday evening sessions open at 21:00-22:00 UTC
+            days.append(d)
         d += timedelta(days=1)
     with ThreadPoolExecutor(workers) as ex:
         res = list(ex.map(lambda x: fetch_day(sym, x), days))
@@ -96,6 +94,10 @@ def fetch_year_file(sym, year, path, workers=4, start=None, end=None):
     with gzip.open(path, "wb", 6) as f:
         f.write(b"".join(buf))
     return n
+
+
+def fetch_year_file(sym, year, path, workers=3, start=None, end=None):
+    return fetch_range(sym, start or _date(year, 1, 1), end or _date(year, 12, 31), path, workers)
 
 
 def fetch_ticks_window(sym, t0, before=120, after=1200):

@@ -30,9 +30,18 @@ def _ts(y, m, d):
     return datetime(y, m, d, tzinfo=timezone.utc).timestamp()
 
 
-BOUNDS = {"train": (_ts(2018, 1, 1), _ts(2022, 1, 1)),
+BOUNDS = {"train": (_ts(2016, 1, 1), _ts(2022, 1, 1)),
           "validation": (_ts(2022, 1, 1), _ts(2024, 7, 1)),
           "test": (_ts(2024, 7, 1), _ts(2026, 11, 20))}
+PILOT_BOUNDS = {"train": (_ts(2023, 12, 1), _ts(2024, 12, 1)),          # gold-only pilot (protocol addendum 2026-11-25): same rules, shorter windows
+                "validation": (_ts(2024, 12, 1), _ts(2025, 9, 1)),
+                "test": (_ts(2025, 9, 1), _ts(2026, 11, 20))}
+
+
+def use_pilot():
+    BOUNDS.update(PILOT_BOUNDS)
+
+
 MIN = 60
 HARD_END_UTC = 21 * 3600          # every trade is closed before 21:00 UTC (XM rollover is 22:00 GMT)
 N_CTRL = 5
@@ -224,39 +233,37 @@ def sig_sweep(D, sym, m, target):
         if rng <= 0:
             continue
         s, e = ix(D, loc(d, 8, 0, LON)), ix(D, loc(d, 11, 0, LON))
-        up = dn = None                        # sweep start index; a sweep not reclaimed within m minutes is dead for the day
-        up_dead = dn_dead = False
+        up = dn = None                        # sweep start index
         up_x, dn_x = ah_, al_
         for j in range(s, min(e, len(ts) - 2)):
-            end_i = max(j + 1, ix(D, hard_end(D, d, loc(d, 13, 0, LON)) + 1) - 1)
-            if up is None and not up_dead and mid_hi(D, j) > ah_:
+            if up is None and mid_hi(D, j) > ah_:
                 up = j
-            if dn is None and not dn_dead and mid_lo(D, j) < al_:
+            if dn is None and mid_lo(D, j) < al_:
                 dn = j
-            if up is not None:
-                if j - up > m:
-                    up, up_dead = None, True
-                else:
-                    up_x = max(up_x, mid_hi(D, j))
-                    if mid_c(D, j) <= ah_:
-                        mc = mid_c(D, j)
-                        td = (mc - (ah_ + al_) / 2) if target == "mid" else (mc - al_)
-                        if td > 0:
-                            yield (j + 1, -1, max(up_x - mc, 0.1 * rng), td, None, end_i)
-                            break
-                        up, up_dead = None, True
-            if dn is not None:
-                if j - dn > m:
-                    dn, dn_dead = None, True
-                else:
-                    dn_x = min(dn_x, mid_lo(D, j))
-                    if mid_c(D, j) >= al_:
-                        mc = mid_c(D, j)
-                        td = ((ah_ + al_) / 2 - mc) if target == "mid" else (ah_ - mc)
-                        if td > 0:
-                            yield (j + 1, 1, max(mc - dn_x, 0.1 * rng), td, None, end_i)
-                            break
-                        dn, dn_dead = None, True
+            if up is not None and j - up <= m:
+                up_x = max(up_x, mid_hi(D, j))
+                if mid_c(D, j) <= ah_:
+                    mc = mid_c(D, j)
+                    sd = max(up_x - mc, 0.1 * rng)
+                    td = (mc - (ah_ + al_) / 2) if target == "mid" else (mc - al_)
+                    if td > 0:
+                        yield (j + 1, -1, sd, td, None, max(j + 1, ix(D, hard_end(D, d, loc(d, 13, 0, LON)) + 1) - 1))
+                        break
+                    up = m + j + 1 and None
+            if dn is not None and j - dn <= m:
+                dn_x = min(dn_x, mid_lo(D, j))
+                if mid_c(D, j) >= al_:
+                    mc = mid_c(D, j)
+                    sd = max(mc - dn_x, 0.1 * rng)
+                    td = ((ah_ + al_) / 2 - mc) if target == "mid" else (ah_ - mc)
+                    if td > 0:
+                        yield (j + 1, 1, sd, td, None, max(j + 1, ix(D, hard_end(D, d, loc(d, 13, 0, LON)) + 1) - 1))
+                        break
+                    dn = None
+            if up is not None and j - up > m and mid_c(D, j) > ah_:
+                up = 10 ** 9
+            if dn is not None and j - dn > m and mid_c(D, j) < al_:
+                dn = 10 ** 9
 
 
 def _sigma1(D, j, n=240):

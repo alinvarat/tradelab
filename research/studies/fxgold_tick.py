@@ -18,25 +18,28 @@ from core import sweep_stats as ss
 R6 = ("gross", "cost", "net", "mfe", "mae")
 
 
-def do_fetch(sym, year, out):
+def do_fetch(sym, chunk, start, end, out):
+    from datetime import date
     os.makedirs(out, exist_ok=True)
     t0 = time.time()
-    n = fd.fetch_year_file(sym, int(year), f"{out}/{sym}_{year}.gz", workers=3)
+    n = fd.fetch_range(sym, date.fromisoformat(start), date.fromisoformat(end), f"{out}/{sym}_{chunk}.gz", workers=3)
     n["sec"] = round(time.time() - t0, 1)
-    json.dump(n, open(f"{out}/{sym}_{year}.json", "w"))
-    fd.log(sym, year, n)
+    json.dump(n, open(f"{out}/{sym}_{chunk}.json", "w"))
+    fd.log(sym, chunk, n)
+    if n["fail"]:
+        raise SystemExit(f"{n['fail']} days failed: not cached, rerun fetches this chunk again")
 
 
-def do_events(sym, evcsv, out):
+def do_events(sym, evcsv, year, out):
     from concurrent.futures import ThreadPoolExecutor
     os.makedirs(out, exist_ok=True)
     evs = [r for r in csv.DictReader(open(evcsv))]
     from datetime import datetime, timezone
     items = [(int(datetime.strptime(r["utc_datetime"], "%Y-%m-%dT%H:%MZ").replace(tzinfo=timezone.utc).timestamp()), r["event"]) for r in evs]
-    items = [x for x in items if x[0] >= ft.BOUNDS["train"][0] and x[0] < ft.BOUNDS["test"][1]]
+    items = [x for x in items if datetime.fromtimestamp(x[0], timezone.utc).year == int(year) and x[0] < ft.BOUNDS["test"][1]]
 
     def one(x):
-        sec, st = fd.fetch_ticks_window(sym, x[0], 30, 330)
+        sec, st = fd.fetch_ticks_window(sym, x[0], 120, 1200)
         return {"ts": x[0], "name": x[1], "status": st, "sec": sec or []}
     with ThreadPoolExecutor(3) as ex:
         res = list(ex.map(one, items))
@@ -44,7 +47,7 @@ def do_events(sym, evcsv, out):
     for r in res:
         cnt[r["status"]] = cnt.get(r["status"], 0) + 1
     fd.log(sym, "events", len(items), cnt)
-    with gzip.open(f"{out}/events_{sym}.json.gz", "wt") as f:
+    with gzip.open(f"{out}/events_{sym}_{year}.json.gz", "wt") as f:
         json.dump(res, f)
 
 
@@ -63,17 +66,11 @@ def do_sim(sym, data, out):
     os.makedirs(out, exist_ok=True)
     D = fd.load_bars(glob.glob(f"{data}/{sym}_*.gz"), sym)
     fd.log(sym, "bars", len(D["ts"]), "dropped", D["bad"])
-    if len(D["ts"]) < 500_000:
+    if len(D["ts"]) < (250_000 if os.environ.get("FXGOLD_PILOT") else 1_500_000):
         raise SystemExit(f"{sym}: only {len(D['ts'])} bars, data not complete")
-    fetch = {}
-    for p in glob.glob(f"{data}/{sym}_*.json"):
-        j = json.load(open(p))
-        fetch[os.path.basename(p)[:-5]] = {k: j[k] for k in ("days", "ok", "closed", "fail", "failed_days")}
-    json.dump(fetch, open(f"{out}/fetch_{sym}.json", "w"))
     events = []
-    ep = f"{data}/events_{sym}.json.gz"
-    if os.path.exists(ep):
-        events = [e for e in json.load(gzip.open(ep, "rt")) if e["status"] == "ok"]
+    for ep in sorted(glob.glob(f"{data}/events_{sym}_*.json.gz")):
+        events += [e for e in json.load(gzip.open(ep, "rt")) if e["status"] == "ok"]
     sig = {}
     for e in events:
         j = ft.ix(D, e["ts"] - 60)
@@ -159,11 +156,7 @@ def do_merge(d):
         byfam[k]["gate_ok"] += 1 if cell["gate_ok"] else 0
     # best gate-failed cells by x (informational)
     near = sorted(((c["gate"].get("x", -9), k, c["gate"].get("reason", "")) for k, c in cells.items()), reverse=True)[:8]
-    fetch = {}
-    for p in glob.glob(f"{d}/fetch_*.json"):
-        for k, v in json.load(open(p)).items():
-            fetch[k] = (v["ok"], v["closed"], v["fail"])
-    summ = {"fetch_ok_closed_fail": fetch, "cells": len(cells), "gate_ok": len(ev), "passed": sum(1 for r in ev if r["passed"]), "family": fam,
+    summ = {"cells": len(cells), "gate_ok": len(ev), "passed": sum(1 for r in ev if r["passed"]), "family": fam,
             "gate_fail_reasons": gate_fail, "by_family": byfam, "top": top, "best_x_survivors": best_x, "best_x_all": near,
             "bounds": ft.BOUNDS}
     json.dump(summ, open(f"{d}/summary.json", "w"), indent=1, default=str)
@@ -172,5 +165,7 @@ def do_merge(d):
 
 
 if __name__ == "__main__":
+    if os.environ.get("FXGOLD_PILOT"):
+        ft.use_pilot()
     m = sys.argv[1]
     {"fetch": do_fetch, "events": do_events, "sim": do_sim, "merge": do_merge}[m](*sys.argv[2:])
