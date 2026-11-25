@@ -1,0 +1,115 @@
+{
+ "legacy_hand_built_rules_failed": 60,
+ "runs": [
+  {
+   "family": "mix1",
+   "version": 1,
+   "config_sha256": "4ff8e501e3a3e2e30652395bdcc839b3f5d25a44db46cbbdee4737e9d6c9c0e1",
+   "config_commit": "d66f4b4fa6fe6831464039919a49d267ecda3b13",
+   "preregistered": true,
+   "run_id": "45564157095",
+   "sha": "d66f4b4fa6fe6831464039919a49d267ecda3b13",
+   "utc": "2026-11-25T06:58:55Z",
+   "n_rules": 309,
+   "n_gate_dropped": 309,
+   "n_evaluated": 0,
+   "n_errors": 0,
+   "n_passed": 0,
+   "holm_m": 0,
+   "bonferroni_bar": null,
+   "top": [],
+   "near_miss": [
+    {
+     "id": "volz_taker_cont_4h[long.0.gt=2,exit.time=12]",
+     "reason": "monthly contribution x 0.139 < 0.2",
+     "x": 0.1391,
+     "train_mean": 0.00878,
+     "n_train": 175,
+     "vol_cost": 31.97
+    },
+    {
+     "id": "volz_taker_cont_4h[long.0.gt=2,exit.time=3]",
+     "reason": "monthly contribution x 0.130 < 0.2",
+     "x": 0.1296,
+     "train_mean": 0.005044,
+     "n_train": 189,
+     "vol_cost": 19.74
+    },
+    {
+     "id": "volz_taker_cont_4h[long.0.gt=3,exit.time=3]",
+     "reason": "monthly contribution x 0.107 < 0.2",
+     "x": 0.1065,
+     "train_mean": 0.006589,
+     "n_train": 59,
+     "vol_cost": 15.88
+    },
+    {
+     "id": "volz_taker_cont_1h[long.0.gt=3,exit.time=24]",
+     "reason": "monthly contribution x 0.107 < 0.2",
+     "x": 0.1065,
+     "train_mean": 0.006367,
+     "n_train": 270,
+     "vol_cost": 32.81
+    },
+    {
+     "id": "volz_taker_cont_4h[long.0.gt=3,exit.time=12]",
+     "reason": "monthly contribution x 0.106 < 0.2",
+     "x": 0.1058,
+     "train_mean": 0.013365,
+     "n_train": 58,
+     "vol_cost": 32.05
+    },
+    {
+     "id": "rv_squeeze_brk_4h[long.0.lt=0.2,exit.time=3]",
+     "reason": "monthly contribution x 0.091 < 0.2",
+     "x": 0.0907,
+     "train_mean": 0.004144,
+     "n_train": 341,
+     "vol_cost": 26.06
+    },
+    {
+     "id": "rv_squeeze_brk_1h[long.0.lt=0.1,exit.time=24]",
+     "reason": "monthly contribution x 0.089 < 0.2",
+     "x": 0.0885,
+     "train_mean": 0.002831,
+     "n_train": 769,
+     "vol_cost": 27.08
+    },
+    {
+     "id": "volz_taker_cont_4h[long.0.gt=2,exit.time=6]",
+     "reason": "monthly contribution x 0.085 < 0.2",
+     "x": 0.0853,
+     "train_mean": 0.005703,
+     "n_train": 182,
+     "vol_cost": 26.99
+    },
+    {
+     "id": "rv_squeeze_brk_4h[long.0.lt=0.2,exit.time=6]",
+     "reason": "monthly contribution x 0.079 < 0.2",
+     "x": 0.0791,
+     "train_mean": 0.00556,
+     "n_train": 338,
+     "vol_cost": 37.31
+    },
+    {
+     "id": "rv_squeeze_brk_1h[long.0.lt=0.2,exit.time=24]",
+     "reason": "monthly contribution x 0.076 < 0.2",
+     "x": 0.0761,
+     "train_mean": 0.002127,
+     "n_train": 1217,
+     "vol_cost": 27.63
+    }
+   ]
+  }
+ ],
+ "top10": [],
+ "totals": {
+  "n_rules": 309,
+  "n_gate_dropped": 309,
+  "n_evaluated": 0,
+  "n_errors": 0,
+  "n_passed": 0,
+  "runs": 1
+ },
+ "updated": "2026-11-25T06:58:55Z"
+}
