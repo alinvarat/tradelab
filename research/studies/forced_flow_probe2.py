@@ -53,6 +53,17 @@ def main():
     out = sys.argv[1]
     os.makedirs(out, exist_ok=True)
     res = {}
+    only = sys.argv[2] if len(sys.argv) > 2 else ""
+    if only == "bybit":
+        b = cdx("announcements.bybit.com/en/article/", "original:.*([Dd]elist|[Mm]onitoring|[Rr]emov|[Ss]uspend).*")
+        b2 = cdx("announcements.bybit.com/article/", "original:.*([Dd]elist|[Mm]onitoring|[Rr]emov|[Ss]uspend).*")
+        res["bybit"] = {"n_en": len(b) if isinstance(b, list) else b, "n_plain": len(b2) if isinstance(b2, list) else b2}
+        allb = (b if isinstance(b, list) else []) + (b2 if isinstance(b2, list) else [])
+        res["bybit"]["urls"] = [x for x in allb[:80]]
+        res["bybit"]["samples"] = [(x[0], x[1], snap(x[0], x[1])[:200], strip(snap(x[0], x[1]))[:1200]) for x in allb[:: max(1, len(allb) // 4)][:4]]
+        with open(os.path.join(out, "probe2.json"), "w") as f:
+            json.dump(res, f, indent=1, ensure_ascii=False)
+        return
     # Binance article body
     codes = ["1c44ea17a57943aa95752f7b7360bd69", "c498db770fa844e188bbad8cc5986674", "e56e5e6b33ad493c98a71189643ade4f"]
     res["binance_detail"] = {}
@@ -60,7 +71,7 @@ def main():
         t = fetch(f"https://www.binance.com/bapi/composite/v1/public/cms/article/detail/query?articleCode={c}")
         res["binance_detail"][c] = t[:3500]
     # Bybit articles about delisting / monitoring
-    b = cdx("announcements.bybit.com/en/article/", r"original:.*(?i)(delist|monitoring|removal|remove|suspend).*")
+    b = cdx("announcements.bybit.com/en/article/", "original:.*([Dd]elist|[Mm]onitoring|[Rr]emov|[Ss]uspend).*")
     res["bybit"] = {"n": len(b) if isinstance(b, list) else b, "first": b[:5] if isinstance(b, list) else None,
                     "titles": [x[1].rsplit("/", 2)[-2][:100] for x in b[:60]] if isinstance(b, list) else None}
     if isinstance(b, list) and b:
