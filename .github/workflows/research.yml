@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       study:
-        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, fwd_crypto_spikes, polymarket_llm, l7_first_red_day or all"
+        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, fwd_crypto_spikes, polymarket_llm, l7_first_red_day, factory_crypto_2, thin_a_forward or all"
         default: all
   schedule:
     - cron: "0 3 * * 0"        # Sundays 03:00 UTC: forward DeepSeek earnings reader
@@ -249,17 +249,69 @@ jobs:
           git commit -qm "Forward crypto spikes ledger: $(date -u +%FT%TZ)" || echo "nothing new"
           git push -q origin data/fwd-crypto-spikes
 
+  thin_a:
+    name: thin_a_forward (hourly)
+    if: inputs.study == 'thin_a_forward'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: tradelab-thin-a-state
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Restore state
+        run: |
+          mkdir -p /tmp/thin_a/ledger
+          if git fetch origin data/thin-a-forward 2>/dev/null; then
+            git show origin/data/thin-a-forward:state.json > /tmp/thin_a/state.json || true
+            for f in f1_listings f2_gaps f3_announcements; do
+              git show origin/data/thin-a-forward:ledger/$f.jsonl > /tmp/thin_a/ledger/$f.jsonl || true
+            done
+          fi
+
+      - name: Run
+        run: python research/studies/thin_a_forward.py /tmp/thin_a
+
+      - name: Push state to data/thin-a-forward
+        if: always()
+        run: |
+          [ -f /tmp/thin_a/state.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/thin-a-forward; then
+            git checkout -q -B data/thin-a-forward origin/data/thin-a-forward
+          else
+            git checkout -q --orphan data/thin-a-forward && git rm -rq --cached . && git clean -fdq
+          fi
+          mkdir -p ledger
+          cp /tmp/thin_a/state.json /tmp/thin_a/thin_a_summary.json .
+          cp /tmp/thin_a/ledger/*.jsonl ledger/ 2>/dev/null || true
+          git add -A state.json thin_a_summary.json ledger
+          git commit -qm "Thin A forward: $(date -u +%FT%TZ)" || echo "nothing new"
+          git push -q origin data/thin-a-forward
+
   study:
     name: ${{ matrix.study }}
     # Only on a manual run, and only the requested study: before, each dispatch started all ~25 matrix jobs just to
     # skip their steps, and every job is billed as at least one runner minute.
-    if: github.event_name == 'workflow_dispatch' && !contains(fromJSON('["llm_earnings_forward","options_forward","l4f_forward","fwd_crypto_spikes","fwd_probe"]'), inputs.study)
+    if: github.event_name == 'workflow_dispatch' && !contains(fromJSON('["llm_earnings_forward","options_forward","l4f_forward","fwd_crypto_spikes","fwd_probe","thin_a_forward"]'), inputs.study)
     runs-on: ubuntu-latest
     timeout-minutes: 240
     strategy:
       fail-fast: false
       matrix:
-        study: ${{ fromJSON(inputs.study == 'all' && '["tom","momentum","items","form4","pit_momentum","llm_earnings","llm_earnings_wide","llm_8k_other","probe_options","polymarket_llm","probe_llm_cost","pit_swing","news_v2","l1_listings","l1c_binance_notices","l1e_binance_delist","l1g_alpha_remove","l4_polymarket_longshot","l3_smallcap_news","l6_smallcap_insider","l2_unlocks","probe_provider","probe_claude","news_v3","l7_first_red_day","l8_gainer_fade","l9_loser_bounce","l10_gap_fade","l11_funding_short","factory_crypto_1","l8b_gainer_fade_all","l12_hour_shocks","l12b_perp_fade","factory_us_pit_1"]' || format('["{0}"]', inputs.study)) }}
+        study: ${{ fromJSON(inputs.study == 'all' && '["tom","momentum","items","form4","pit_momentum","llm_earnings","llm_earnings_wide","llm_8k_other","probe_options","polymarket_llm","probe_llm_cost","pit_swing","news_v2","l1_listings","l1c_binance_notices","l1e_binance_delist","l1g_alpha_remove","l4_polymarket_longshot","l3_smallcap_news","l6_smallcap_insider","l2_unlocks","probe_provider","probe_claude","news_v3","l7_first_red_day","l8_gainer_fade","l9_loser_bounce","l10_gap_fade","l11_funding_short","factory_crypto_1","factory_crypto_2","l8b_gainer_fade_all","l12_hour_shocks","l12b_perp_fade","factory_us_pit_1","factory_crypto_3"]' || format('["{0}"]', inputs.study)) }}
     steps:
       - name: Check out repository
         if: inputs.study == 'all' || inputs.study == matrix.study
