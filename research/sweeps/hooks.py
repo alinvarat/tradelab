@@ -154,12 +154,16 @@ def make_functions(name, path):
                 s["evaluated"] += 1
                 s["passed"] += r["passed"]
                 s["best_criteria"] = max(s["best_criteria"], r["n_criteria"])
+        near = sorted((r for r in all_rows if r["status"] == "gate" and r.get("gate", {}).get("x") is not None),
+                      key=lambda r: -r["gate"]["x"])[:10]
+        near_miss = [{"id": r["id"], "reason": r["reason"], "x": r["gate"]["x"], "train_mean": r["gate"].get("train_mean"),
+                      "n_train": r["gate"]["n_train"], "vol_cost": r["gate"].get("vol_cost")} for r in near]
         run = {"family": cfg["family"], "version": cfg["version"], "config_sha256": sha, "config_commit": pre["config_commit"],
                "preregistered": pre["preregistered"], "run_id": os.environ.get("GITHUB_RUN_ID"), "sha": os.environ.get("GITHUB_SHA"),
                "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "n_rules": len(rules),
                "n_gate_dropped": sum(r["status"] == "gate" for r in all_rows), "n_evaluated": len(ev),
                "n_errors": sum(r["status"] == "error" for r in all_rows), "n_passed": sum(1 for r in ev if r["passed"]),
-               "holm_m": info["holm_m"], "bonferroni_bar": info["bonferroni_bar"], "top": top}
+               "holm_m": info["holm_m"], "bonferroni_bar": info["bonferroni_bar"], "top": top, "near_miss": near_miss}
         errors = [{"id": r["id"], "reason": r["reason"]} for r in all_rows if r["status"] == "error"][:5]
         if (write_board if write_board is not None else on_actions()) and not pre["problems"]:
             nb = sb.update(board, run)
