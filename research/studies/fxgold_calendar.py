@@ -23,16 +23,30 @@ UAS = [UA, {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit
 
 
 def page(u):
+    """Direct (BLS answers 403 to many runner IPs), then the Wayback Machine copy of the same page."""
     import time
     last = None
-    for k in range(8):
+    for k, url in enumerate([u] * 3 + ["https://web.archive.org/web/2026id_/" + u] * 3):
         try:
-            with urlopen(Request(u, headers=UAS[k % 2]), timeout=40) as r:
+            with urlopen(Request(url, headers=UAS[k % 2]), timeout=60) as r:
                 return r.read().decode("utf8", "replace")
         except Exception as e:  # noqa: BLE001
             last = e
-            time.sleep(4 * (k + 1))
+            print("fetch failed", url, e, file=sys.stderr)
+            time.sleep(3 * (k + 1))
     raise last
+
+
+def nfp_rule(y0=2018, y1=2026):
+    """Employment Situation = third Friday after the Saturday ending the week (Sun-Sat) that contains the 12th (matches the BLS 2026 table)."""
+    from datetime import date, timedelta
+    out = []
+    for y in range(y0, y1 + 1):
+        for m in range(1, 13):
+            d12 = date(y, m, 12)
+            sat = d12 + timedelta(days=(5 - d12.weekday()) % 7)
+            out.append((sat + timedelta(days=20)).isoformat())
+    return [d for d in out if d <= "2026-11-19"]
 
 
 def utc(day, hh, mm):
@@ -43,10 +57,14 @@ def utc(day, hh, mm):
 def main(out):
     rows = []
     for ev, u in (("CPI", "https://www.bls.gov/bls/news-release/cpi.htm"), ("NFP", "https://www.bls.gov/bls/news-release/empsit.htm")):
-        t = page(u)
         key = "cpi" if ev == "CPI" else "empsit"
-        days = sorted(set(f"{m[3]}-{m[1]}-{m[2]}" for m in re.finditer(key + r"_(\d{2})(\d{2})(\d{4})\.htm", t)))
-        days = [d for d in days if "2018-01-01" <= d <= "2026-12-31"]
+        try:
+            t = page(u)
+            days = sorted(set(f"{m[3]}-{m[1]}-{m[2]}" for m in re.finditer(key + r"_(\d{2})(\d{2})(\d{4})\.htm", t)))
+            days = [d for d in days if "2018-01-01" <= d <= "2026-12-31"]
+        except Exception as e:  # noqa: BLE001
+            days = nfp_rule() if ev == "NFP" else []
+            print(f"WARNING {ev}: BLS list unavailable ({e}); using", "the date rule" if days else "no events", file=sys.stderr)
         print(ev, len(days), days[:2], days[-2:], file=sys.stderr)
         rows += [(utc(d, 8, 30), ev, u) for d in days]
     t = page("https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm")
