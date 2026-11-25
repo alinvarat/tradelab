@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 340
     concurrency:
-      group: tradelab-event-rows
+      group: tradelab-event-tape
       cancel-in-progress: false
     permissions:
       contents: write
