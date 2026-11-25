@@ -26,19 +26,20 @@ def call(url, data=None, headers=None):
 
 
 out = {}
-for pair, y, m, kind in (("xauusd", 2024, 1, "1-minute-bar-quotes"), ("eurusd", 2024, 1, "1-minute-bar-quotes"), ("xauusd", 2019, 6, "1-minute-bar-quotes"),
-                         ("xauusd", 2024, 1, "tick-data-quotes")):
-    page = f"https://www.histdata.com/download-free-forex-historical-data/?/ascii/{kind}/{pair}/{y}/{m}"
+CASES = [("xauusd", 2024, None, "1-minute-bar-quotes"), ("xauusd", 2025, None, "1-minute-bar-quotes"), ("xauusd", 2026, 10, "1-minute-bar-quotes"),
+         ("eurusd", 2024, None, "1-minute-bar-quotes"), ("xauusd", 2024, 1, "tick-data-quotes")]
+for pair, y, m, kind in CASES:
+    page = f"https://www.histdata.com/download-free-forex-historical-data/?/ascii/{kind}/{pair}/{y}" + (f"/{m}" if m else "")
     st, body, _ = call(page)
     r = {"page_status": st, "page_len": len(body) if st == 200 else 0}
     if st == 200:
         t = body.decode("utf8", "replace")
-        tk = re.search(r'id="tk"[^>]*value="([^"]+)"', t) or re.search(r'name="tk"[^>]*value="([^"]+)"', t) or re.search(r'value="([0-9a-f]{20,})"', t)
-        r["token"] = bool(tk)
-        r["form"] = re.findall(r'<input[^>]*type="hidden"[^>]*>', t)[:8]
-        if tk:
-            form = {"tk": tk.group(1), "date": str(y), "datemonth": f"{y}{m:02d}", "platform": "ASCII",
-                    "timeframe": "M1" if kind.startswith("1-minute") else "T", "fxpair": pair.upper()}
+        form = {}
+        for nm in ("tk", "date", "datemonth", "platform", "timeframe", "fxpair"):
+            mm = re.search(r'name="%s" id="%s" value="([^"]*)"' % (nm, nm), t)
+            form[nm] = mm.group(1) if mm else ""
+        r["form"] = form
+        if form["tk"]:
             st2, b2, hd = call("https://www.histdata.com/get.php", urlencode(form).encode(), {"Referer": page, "Content-Type": "application/x-www-form-urlencoded"})
             r["get_status"], r["get_bytes"] = st2, len(b2) if st2 == 200 else 0
             if st2 == 200:
@@ -46,8 +47,9 @@ for pair, y, m, kind in (("xauusd", 2024, 1, "1-minute-bar-quotes"), ("eurusd", 
                     z = zipfile.ZipFile(io.BytesIO(b2))
                     names = z.namelist()
                     csvn = [n for n in names if n.lower().endswith((".csv", ".txt")) and "status" not in n.lower()]
-                    rows = z.read(csvn[0]).decode().splitlines()
-                    r.update(files=names, rows=len(rows), head=rows[:3], tail=rows[-1:])
+                    with z.open(csvn[0]) as f:
+                        head = [f.readline().decode() for _ in range(3)]
+                    r.update(files=names, head=head)
                 except Exception as e:  # noqa: BLE001
                     r["zip_err"] = str(e)[:120]
                     r["head_bytes"] = b2[:120].decode("latin1")
