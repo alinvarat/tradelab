@@ -1,1 +1,1 @@
-{"item": "2026-05:bitcoin", "gaps": {"markets": 9011, "no_candidate_rows": 1426, "no_trades": 934, "trades_truncated_or_failed": 72, "rows": 38580}, "seconds": 552}
+{"item": "2026-05:bitcoin", "gaps": {"markets": 9011, "no_candidate_rows": 116, "no_strike": 6902, "no_trades": 924, "trades_truncated_or_failed": 104, "rows": 8229}, "seconds": 401}

@@ -1,1 +1,1 @@
-{"item": "2026-04:ethereum", "gaps": {"markets": 8101, "no_candidate_rows": 847, "no_trades": 257, "trades_truncated_or_failed": 64, "rows": 42222}, "seconds": 487}
+{"item": "2026-04:ethereum", "gaps": {"markets": 8101, "no_candidate_rows": 147, "no_strike": 6708, "no_trades": 256, "trades_truncated_or_failed": 96, "rows": 7545}, "seconds": 419}
