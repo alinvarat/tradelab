@@ -150,22 +150,43 @@ def load_binance(spec, workers=8):
     return bars, dropped
 
 
+def _yahoo_daily(sym, start_s, end_s):
+    """Raw daily bars [{t,o,h,l,c,v}] for [start_s, end_s) via explicit period1/period2 (range=max returns only about a year)."""
+    import urllib.parse
+    import urllib.request
+    from core import data
+    url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(sym)}?period1={int(start_s) - 7 * 86400}"
+           f"&period2={int(end_s) + 7 * 86400}&interval=1d&includePrePost=false")
+    with urllib.request.urlopen(urllib.request.Request(url, headers=data.UA), timeout=40) as r:
+        d = json.loads(r.read())["chart"]
+    if d.get("error") or not d.get("result"):
+        raise ValueError(f"no data for {sym}: {d.get('error')}")
+    res = d["result"][0]
+    q = res["indicators"]["quote"][0]
+    bars = []
+    for i, t in enumerate(res.get("timestamp") or []):
+        o, h, l, c, v = (q[k][i] for k in ("open", "high", "low", "close", "volume"))
+        if None not in (o, h, l, c):
+            bars.append({"t": t, "o": o, "h": h, "l": l, "c": c, "v": v or 0})
+    return bars
+
+
 def load_yahoo(spec, tries=4):
     """Daily bars from Yahoo Finance; a bar's day is its timestamp + 6 h floored to a UTC day (US sessions and FX/futures
     sessions that open the evening before both land on their trading date)."""
-    from core import data
     start_s, end_s = sc.day(spec["start"]), sc.day(spec["end"])
     bars, dropped = {}, {}
     for sym in spec["symbols"]:
         def prod(sym=sym):
+            err = ""
             for k in range(tries):
                 try:
-                    return data.chart(sym, "max", "1d")["bars"], True
+                    return _yahoo_daily(sym, start_s, end_s), True
                 except Exception as e:      # noqa: BLE001  a missing symbol is a gap, not a crash
                     err = f"{type(e).__name__}: {e}"
                     time.sleep(2 * (k + 1))
             return {"error": err}, False
-        raw = _cached(f"yahoo|{sym}|1d|{spec['end']}", prod)
+        raw = _cached(f"yahoo2|{sym}|1d|{spec['start']}|{spec['end']}", prod)
         if isinstance(raw, dict):
             dropped[sym] = raw["error"]
             continue

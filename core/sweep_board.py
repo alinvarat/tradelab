@@ -60,6 +60,13 @@ def render_md(board):
         L.append(f"| {i} | `{r['family']}/{r['id']}` | {r['n_criteria']} | {r['val_n']} | {_pct(r['val_mean'])} | {_num(r['val_p'])} | "
                  f"{_num(r['p_adj'])} | {r['test_n']} | {_pct(r['test_mean'])} | {_pct(r['val_mean_2x'])} | {_pct(r['test_mean_2x'])} | "
                  f"{_num(r['val_mult30_median'])} / {_num(r['test_mult30_median'])} | {_num(r.get('x'))} |")
+    nm = [(r["family"], x) for r in board.get("runs", []) for x in r.get("near_miss", [])]
+    nm.sort(key=lambda z: -z[1]["x"])
+    if nm:
+        L += ["", "## Closest to the step-0 gate (dropped on train data; x = monthly contribution N*s^2, 2.2 needed for a median 3x month)", "",
+              "| rule | x | train mean/trade | train trades | vol/cost | dropped because |", "|---|---|---|---|---|---|"]
+        for fam, x in nm[:10]:
+            L.append(f"| `{fam}/{x['id']}` | {_num(x['x'])} | {_pct(x['train_mean'])} | {x['n_train']} | {_num(x.get('vol_cost'))} | {x['reason']} |")
     L += ["", "## Runs", "", "| family | v | run | rules | gate-dropped | evaluated | errors | passed | Holm m | bar |", "|---|---|---|---|---|---|---|---|---|---|"]
     for r in board.get("runs", []):
         L.append(f"| {r['family']} | {r['version']} | {r.get('run_id') or '-'} | {r['n_rules']} | {r['n_gate_dropped']} | {r['n_evaluated']} | "
