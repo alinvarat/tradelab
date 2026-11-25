@@ -301,7 +301,7 @@ class ShardedWorkflow(unittest.TestCase):
     def test_structure(self):
         self.assertEqual(self.block("on", 0), ["workflow_dispatch"])
         self.assertEqual(self.block("inputs", 4), ["study", "shards"])
-        self.assertEqual(self.block("jobs", 0), ["plan", "shard", "merge"])
+        self.assertEqual(self.block("jobs", 0), ["plan", "shard", "merge", "publish_rows"])
         self.assertIn('default: "20"', self.text)
         self.assertIn("fromJSON(needs.plan.outputs.matrix)", self.text)
         self.assertIn("merge-multiple: true", self.text)
