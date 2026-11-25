@@ -3,6 +3,11 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-25 line/fx-gold-cmdty)
+- **fxcom_1 (FX/ทอง/commodity 8 กติกา) ไม่ผ่านทั้งหมด:** run 2 45526346396 (รอบ 1: 45522041311); ไม่มีเดือน 3 เท่า บัญชี 147 USD ต่อเนื่องจบที่ 0.96-156.6 USD ที่ต้นทุนปกติ และต่ำลงที่ 2 เท่า; กติการายชั่วโมงแพ้ต้นทุนคูณ leverage; ดู RESULTS.md หัวข้อ fxcom_1 (PR #177)
+
+## ด่วน (2026-11-25 line/h1_basis_snapback)
+- **H1 (perp ต่ำกว่า index แล้วเด้งกลับ + ฝั่งตรงข้าม):** ลงทะเบียนกติกาใน `research/studies/RESULTS.md` แล้ว (ก่อนดึงข้อมูล); โค้ด `core.screens.basis_snap_rows` + `rows_/summarize_h1_basis_snapback` ใน `run.py`; เทสต์ `tests/test_h1_basis.py`; ยังไม่ได้รัน → หลัง merge: `gh workflow run research_sharded.yml -f study=h1_basis_snapback -f shards=20`
 ## ด่วน (2026-11-25 line/opt-vol-sell)
 - **opt_vrp (PR #175):** ถูกตัด (run 45520875720) ทั้ง 16 test หยุดที่ step 0 เพราะแม้ชนะทุกไม้ก็ไม่ถึง 3 เท่าต่อเดือน และมีโอกาสสูงสุด 0.94 ครั้ง/สัปดาห์ (R2)
 
