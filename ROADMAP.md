@@ -79,6 +79,8 @@
 | D เดินหน้าด้วยเงินจำลอง | บอท Haiku, ออปชันเดินหน้า (เริ่ม 25 พ.ย. 15:00 UTC), ข่าวงบเดินหน้า (1 ธ.ค.), L4f | เส้นที่ผ่านด่าน A/B/C เข้าทันทีภายในวันเดียวกัน | ต่อเนื่อง |
 | E โครงสร้าง | Kuber deploy (รอน้อง, issue #80) | — | — |
 
+**ช่อง B เพิ่ม 25 พ.ย.:** `calendar_flow_1` (stablecoin depeg, new-perp short, weekend CME-gap fade, day-of-week, Deribit expiry pin/unpin; 22 variants, Bonferroni 0.05/22) ล็อกใน `research/studies/protocol_calendar_flow_1_20261125.md` รันด้วย `research_sharded.yml` study `calendar_flow_1` shards 20
+
 **ทุกครั้งที่งานจบ:** บันทึก RESULTS/LESSONS ภายในรอบเดียวกัน → เปิดงานถัดไปในช่องเดิม → STATUS 1 บรรทัด
 **เกณฑ์ไม่เปลี่ยน:** ล็อกก่อนดูข้อมูล, universe ที่ไม่มี survivorship, short เฉพาะของที่ short ได้จริงพร้อม funding จริง, ต้นทุน 2 เท่า, ≥ 3 ครั้ง/สัปดาห์
 

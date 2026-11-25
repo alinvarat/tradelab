@@ -1,0 +1,77 @@
+name: Event book
+
+# Combined event book work (research/plans/PLAN_20261125_fable.md). Modes:
+#   probe   - check public announcement/price endpoints from a runner
+#   rows    - per-event rows for L1, L1f, L1g, kept as jsonl.gz on branch data/event-rows
+#   tape    - exchange-notice tape screen (protocol_notice_tape_20261125.md), rows kept on data/event-rows
+#   forward - one poll of the forward event book paper ledger (protocol_event_book_20261125.md), state on data/event-book
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe, rows, tape or forward"
+        required: true
+        default: "probe"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    if: inputs.mode == 'probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Probe endpoints
+        run: python research/studies/event_probe.py out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: event-probe
+          path: out/
+
+  rows:
+    if: inputs.mode == 'rows'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    concurrency:
+      group: tradelab-event-rows
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Recompute rows
+        run: python research/studies/event_rows.py out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: event-rows
+          path: out/
+      - name: Keep rows on data/event-rows
+        if: always()
+        run: |
+          [ -d out/rows ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/event-rows 2>/dev/null; then
+            git checkout -q -B data/event-rows origin/data/event-rows
+          else
+            git checkout -q --orphan data/event-rows && git rm -rq --cached . && git clean -fdq
+          fi
+          mkdir -p rows runs
+          cp /tmp/keep/rows/*.jsonl.gz rows/
+          cp /tmp/keep/summary.json runs/rows_$(date -u +%Y%m%dT%H%M%SZ).json
+          git add -A rows runs
+          git commit -qm "Event rows: $(date -u +%FT%TZ)" || echo "nothing new"
+          git push -q origin data/event-rows

@@ -6,6 +6,17 @@
 ## ด่วน (2026-11-25 line/indicators-1)
 - **indicators_1 (PR #185):** อินดิเคเตอร์คลาสสิก 8 ตัวบน perp/ทอง/FX ไม่ผ่านทั้ง 54 cell (0 ผ่าน, 51 ล้ม, 3 invalid เพราะ validation < 30 รายการ); run 45558036802; ไม่ใช่ทางไปสู่ 3 เท่าต่อเดือน
 
+## ด่วน (2026-11-25 line/crypto-calendar)
+- **calendar_flow_1 (PR #178):** ไม่ผ่านทั้ง 7 กติกา. run 1 (45521976524) R2/R3 "invalid" เพราะบั๊กใน `sane()` ที่ตัดเทรด net > +100% (ไม่อยู่ใน protocol; เป็นการขึ้นราคาจริงของ long) แก้แล้ว รันใหม่ 45556054691: R1 ล้ม, R2 ล้ม (validation +3.39% p 0.018 > bar 0.0023 และ 2.6 ครั้ง/สัปดาห์ < 3; เป็นเบาะแสบวกเดียว ยังไม่ผ่าน), R3 ล้ม, R4 ไม่ผ่าน (14 ขา), R5 ล้ม, R6 ล้ม; ไม่มีเดือน 3 เท่า
+
+## ด่วน (2026-11-25 line/fx-gold-cmdty)
+- **fxcom_1 (FX/ทอง/commodity 8 กติกา) ไม่ผ่านทั้งหมด:** run 2 45526346396 (รอบ 1: 45522041311); ไม่มีเดือน 3 เท่า บัญชี 147 USD ต่อเนื่องจบที่ 0.96-156.6 USD ที่ต้นทุนปกติ และต่ำลงที่ 2 เท่า; กติการายชั่วโมงแพ้ต้นทุนคูณ leverage; ดู RESULTS.md หัวข้อ fxcom_1 (PR #177)
+
+## ด่วน (2026-11-25 line/h1_basis_snapback)
+- **H1 (perp ต่ำกว่า index แล้วเด้งกลับ + ฝั่งตรงข้าม):** ลงทะเบียนกติกาใน `research/studies/RESULTS.md` แล้ว (ก่อนดึงข้อมูล); โค้ด `core.screens.basis_snap_rows` + `rows_/summarize_h1_basis_snapback` ใน `run.py`; เทสต์ `tests/test_h1_basis.py`; ยังไม่ได้รัน → หลัง merge: `gh workflow run research_sharded.yml -f study=h1_basis_snapback -f shards=20`
+## ด่วน (2026-11-25 line/opt-vol-sell)
+- **opt_vrp (PR #175):** ถูกตัด (run 45520875720) ทั้ง 16 test หยุดที่ step 0 เพราะแม้ชนะทุกไม้ก็ไม่ถึง 3 เท่าต่อเดือน และมีโอกาสสูงสุด 0.94 ครั้ง/สัปดาห์ (R2)
+
 ## ด่วน (2026-11-25 ผลด่าน H1-H4 และ factory_crypto_2)
 - **ผลทั้ง 5 ด่านลง `research/studies/RESULTS.md` แล้ว** (PR #173, #172, #170, #174, #164 merge เข้า main; ตัวเลขจาก summary JSON ของ Actions): ไม่มีเส้นไหนผ่าน ไม่มีอะไรให้ทดสอบเดินหน้า
 - **H1 `long_discount` = inconclusive** (run 45515874060): 47,964 เหตุการณ์; validation +0.614% p 0.0005, ต้นทุน 2 เท่า +0.414%, แต่ test -0.075% (n 35,018) และเฉลี่ยรายปีลดจาก 2024 +1.02% → 2025 +0.06% → 2026 -0.16%; control ออกเมื่อครบ 4 ชม. validation +1.19% test +0.20% p 0.34 → edge หายในช่วง test จึงไม่ทดสอบเดินหน้า เว้นแต่มีสมมติฐานใหม่ที่ลงทะเบียนก่อน; `short_premium` killed (validation -0.724%)
