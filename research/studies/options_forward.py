@@ -266,6 +266,26 @@ def run(state):
     return state
 
 
+def webull_variant(state, acct_trades):
+    """REPORTED VARIANT, not the protocol: the same closed trades re-costed with the Webull fee schedule
+    (addendum 2026-11-25, research/brokers/costs.md) instead of 0.65 USD per contract per side. The locked rules,
+    the exit-bid stress haircut and the verdict above are unchanged; this block never feeds the verdict."""
+    wb = {"buy_fee": of.webull_buy_fee, "sell_fee": of.webull_sell_fee}
+    rows = []
+    for t in state["closed"]:
+        m, c = t["model"], t["control"]
+        if m is None or m.get("exit_bid") is None:
+            continue
+        ctrl = of.trade_return(c["entry_ask"], c["exit_bid"], **wb) if c and c.get("exit_bid") is not None else None
+        rows.append({"symbol": t["symbol"], "ts": t["ts"], "ret": of.trade_return(m["entry_ask"], m["exit_bid"], **wb),
+                     "ctrl_ret": ctrl, "ret_haircut": of.trade_return(m["entry_ask"], m["exit_bid"], haircut=0.10, **wb)})
+    whole = of.simulate_account(acct_trades, **wb)
+    frac = of.simulate_account(acct_trades, whole_contracts=False, **wb)
+    return {"cost_model": "webull-us-options-v1 (no commission; ORF, OCC, CAT, FINRA TAF, SEC; estimates marked in costs.md)",
+            "verdict": of.verdict(rows), "account_whole_contracts": {k: v for k, v in whole.items() if k != "curve"},
+            "account_fractional": {k: v for k, v in frac.items() if k != "curve"}}
+
+
 def protocol_summary(state):
     closed, daily, matched = [], [], []
     for t in state["closed"]:
@@ -294,7 +314,8 @@ def protocol_summary(state):
         for label, haircut in (("base", 0.0), ("stress", 0.10)):
             sim = of.simulate_account([{**t[leg], "exit_bid": t[leg]["exit_bid"] * (1 - haircut)} for t in matched])
             paired_wallets[leg][label] = {k: v for k, v in sim.items() if k != "curve"}
-    return {"verdict": of.verdict(closed), "open": len(state["open"]), "closed": len(state["closed"]),
+    return {"verdict": of.verdict(closed), "webull_cost_variant": webull_variant(state, acct_trades),
+            "open": len(state["open"]), "closed": len(state["closed"]),
             "late_exits": sum(1 for t in state["closed"] if t.get("late")),
             "calls": len(state["calls"]),
             "account_whole_contracts": {k: v for k, v in whole.items() if k != "curve"},
