@@ -22,7 +22,7 @@ def pair_key(e, x):
     return f"{e}:{x}"
 
 
-def make_event(sym, ts, rate, bars):
+def make_event(sym, ts, rate, bars, prev=None):
     """bars: {minute open ts (s): (o, h, l, c)}. Returns the event dict or None when no pair has both prices."""
     vals = {}
     for e, x in PAIRS:
@@ -35,22 +35,25 @@ def make_event(sym, ts, rate, bars):
             continue
         vals[pair_key(e, x)] = [round(xp / ep - 1, 7), round(max(h[1] for h in held) / ep - 1, 7),
                                 round(min(h[2] for h in held) / ep - 1, 7)]
-    return {"sym": sym, "ts": ts, "f": rate, "v": vals} if vals else None
+    return {"sym": sym, "ts": ts, "f": rate, "fp": prev, "v": vals} if vals else None
 
 
 def events_for_symbol(sym, funding, bars_fn, min_abs, start_s, end_s):
     """funding: [(ts, rate)]. bars_fn(ts) -> {minute: bar} or None when its download failed. Returns (events, stats)."""
     out, st = [], {"extreme": 0, "no_bars": 0, "failed": 0}
-    for t, rate in funding:
+    prev = None
+    for t, rate in sorted(funding):
         ts = int(round(t / 60.0)) * 60
-        if abs(rate) < min_abs or not start_s <= ts < end_s:
+        fp, prev = prev, rate
+        # an event is kept when the settled rate OR the previous settlement's rate (known before the entry) is extreme
+        if (abs(rate) < min_abs and (fp is None or abs(fp) < min_abs)) or not start_s <= ts < end_s:
             continue
         st["extreme"] += 1
         bars = bars_fn(ts)
         if bars is None:
             st["failed"] += 1
             continue
-        ev = make_event(sym, ts, rate, bars)
+        ev = make_event(sym, ts, rate, bars, fp)
         if ev is None:
             st["no_bars"] += 1
             continue
@@ -70,11 +73,11 @@ def expand(cfg):
     if cfg["cost"]["model"] != "perp":
         raise sc.ConfigError("funding_window supports the perp cost model only")
     out = []
-    for thr, mode, e, x, d in itertools.product(g["thr"], g["mode"], g["entry"], g["exit"], g["delay"]):
+    for sig, thr, mode, e, x, d in itertools.product(g.get("sig", ["realized"]), g["thr"], g["mode"], g["entry"], g["exit"], g["delay"]):
         ea = e + d
         if (ea, x) not in PAIRS:
             continue
-        out.append({"id": rule_id(thr, mode, e, x, d), "style": "fw_" + mode, "thr": thr, "mode": mode, "entry": e, "exit": x,
+        out.append({"id": rule_id(thr, mode, e, x, d, sig), "style": f"fw_{sig}_{mode}", "sig": sig, "thr": thr, "mode": mode, "entry": e, "exit": x,
                     "delay": d, "E": ea, "X": x, "size": dict(cfg["size"]), "cost": dict(cfg["cost"]), "bounds": bounds,
                     "tf": "1m", "n_symbols": 0, "lev": cfg["size"]["lev"], "k": cfg["size"].get("k", 1)})
     ids = [r["id"] for r in out]
@@ -83,15 +86,18 @@ def expand(cfg):
     return out
 
 
-def rule_id(thr, mode, e, x, d):
-    return f"fw[thr={thr},mode={mode},entry={e},exit={x},delay={d}]"
+def rule_id(thr, mode, e, x, d, sig="realized"):
+    """sig: 'realized' selects and signs events by the rate settled at the event (known only at the settlement: look-ahead for
+    any entry before it); 'prev' uses the previous settlement's rate, known before every entry."""
+    base = f"thr={thr},mode={mode},entry={e},exit={x},delay={d}"
+    return f"fw[{base}]" if sig == "realized" else f"fw[sig={sig},{base}]"
 
 
 def twin_id(rule):
     """The 5-minute-delay variant of a delay-0 rule (None when it does not exist or the rule is already delayed)."""
     if rule["delay"] != 0:
         return None
-    return rule_id(rule["thr"], rule["mode"], rule["entry"], rule["exit"], 5)
+    return rule_id(rule["thr"], rule["mode"], rule["entry"], rule["exit"], 5, rule["sig"])
 
 
 def trades_for_rule(rule, events):
@@ -101,10 +107,11 @@ def trades_for_rule(rule, events):
     key = pair_key(rule["E"], rule["X"])
     out = []
     for ev in events:
-        if abs(ev["f"]) < rule["thr"] or key not in ev["v"]:
+        sel = ev["f"] if rule.get("sig", "realized") == "realized" else ev.get("fp")
+        if sel is None or abs(sel) < rule["thr"] or key not in ev["v"]:
             continue
         gl, hi, lo = ev["v"][key]
-        payer = 1 if ev["f"] > 0 else -1
+        payer = 1 if sel > 0 else -1
         s = -payer if rule["mode"] == "fade_payer" else payer
         fund = s * ev["f"] if rule["E"] < 0 < rule["X"] else 0.0
         gross = s * gl

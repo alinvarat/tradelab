@@ -42,7 +42,7 @@ def load_symbol(sym, spec):
         events, st = sev.events_for_symbol(sym, fund, lambda ts: _minute_bars(bv, sym, ts, cache), min_abs, start_s, end_s)
         st["funding_rows"] = len(fund)
         return {"events": events, "stats": st}, st["failed"] == 0
-    return loaders._cached(f"fw|{sym}|{start_s}|{end_s}|{min_abs}", prod)
+    return loaders._cached(f"fw2|{sym}|{start_s}|{end_s}|{min_abs}", prod)
 
 
 def load_events(symbols, spec, workers=12):
