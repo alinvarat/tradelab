@@ -2,12 +2,13 @@ name: Forced flow
 
 # Forced-selling event families shaped like L1f (branch line/forced-flow-*). Modes:
 #   probe - stage A: announcement titles and archive/mirror probes, no prices
+#   events - stage A3: build the event lists from announcements/archives (no prices), freeze them on data/forced-flow
 #   run   - stage B: build events, price, apply the locked protocol, keep rows on data/forced-flow
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe, probe2 or run"
+        description: "probe, probe2, events or run"
         required: true
         default: "probe"
       arg:
@@ -52,3 +53,90 @@ jobs:
         with:
           name: forced-flow-probe2
           path: out/
+
+  events:
+    if: inputs.mode == 'events'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    concurrency:
+      group: tradelab-forced-flow
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Build the event lists (no prices)
+        run: python research/studies/forced_flow.py out events
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: forced-flow-events
+          path: out/
+      - name: Freeze events on data/forced-flow
+        if: always()
+        run: |
+          [ -f out/events.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/forced-flow 2>/dev/null; then
+            git checkout -q -B data/forced-flow origin/data/forced-flow
+          else
+            git checkout -q --orphan data/forced-flow && git rm -rq --cached . && git clean -fdq
+          fi
+          mkdir -p events
+          cp /tmp/keep/events.json events/latest.json
+          cp /tmp/keep/events.json events/events_$(date -u +%Y%m%dT%H%M%SZ).json
+          git add -A events
+          git commit -qm "Forced-flow events (no prices): $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/forced-flow && break; git fetch -q origin data/forced-flow; git rebase -q origin/data/forced-flow; done
+
+  run:
+    if: inputs.mode == 'run'
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    concurrency:
+      group: tradelab-forced-flow
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore the frozen events
+        run: |
+          git fetch origin data/forced-flow
+          git show origin/data/forced-flow:events/latest.json > /tmp/frozen_events.json
+      - name: Forced-flow families
+        run: python research/studies/forced_flow.py out run /tmp/frozen_events.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: forced-flow
+          path: out/
+      - name: Keep rows on data/forced-flow
+        if: always()
+        run: |
+          [ -f out/summary.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/forced-flow 2>/dev/null; then
+            git checkout -q -B data/forced-flow origin/data/forced-flow
+          else
+            git checkout -q --orphan data/forced-flow && git rm -rq --cached . && git clean -fdq
+          fi
+          d=runs/$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d
+          cp /tmp/keep/* $d/
+          git add -A runs
+          git commit -qm "Forced-flow run: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/forced-flow && break; git fetch -q origin data/forced-flow; git rebase -q origin/data/forced-flow; done
