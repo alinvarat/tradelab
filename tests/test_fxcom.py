@@ -78,6 +78,21 @@ class Costs(unittest.TestCase):
                       {"JPY": 1, "USD": 1})
         self.assertAlmostEqual(fx.hold_cost_hourly("USDJPY=X", -1, tue_in, tue_out, r2), (0.005 + 0.02) / 365)
 
+    def test_missing_currency_rate_is_markup_only_for_long_and_short(self):
+        """GBP has no series: the differential is 0, so a GBPUSD long and short pay the same markup, no USD carry."""
+        t0 = fx.day_ts(date(2025, 1, 1))
+        r = fx.Rates({"USD": [(t0, 5.0)]}, {"USD": 1})
+        tue_in = datetime(2025, 3, 4, 16, tzinfo=fx.ET).timestamp()
+        tue_out = datetime(2025, 3, 4, 18, tzinfo=fx.ET).timestamp()
+        lo = fx.hold_cost_hourly("GBPUSD=X", 1, tue_in, tue_out, r)
+        sh = fx.hold_cost_hourly("GBPUSD=X", -1, tue_in, tue_out, r)
+        self.assertAlmostEqual(lo, 0.005 / 365)
+        self.assertAlmostEqual(sh, 0.005 / 365)
+        self.assertEqual(r.diff("GBP", "USD", tue_in), 0.0)
+        self.assertGreaterEqual(r.missing["GBP"], 1)
+        d0, d1 = date(2025, 3, 3), date(2025, 3, 4)
+        self.assertAlmostEqual(fx.hold_cost_daily("GBPUSD=X", -0.5, d0, d1, r, 1.0), 0.5 * 0.005 / 365)
+
     def test_rates_point_in_time(self):
         r = fx.Rates({"EUR": [(fx.day_ts(date(2025, 1, 1)), 3.0)]}, {"EUR": 45})
         self.assertIsNone(r.get("EUR", fx.day_ts(date(2025, 2, 1))))
@@ -182,6 +197,22 @@ class HourlyRules(unittest.TestCase):
         self.assertEqual(tr.side, 1)
         self.assertEqual(tr.t_out, h.ts[d_idx] + 7 * 3600)               # close of the bar starting 14:00 ET = 15:00 ET
         self.assertEqual(datetime.fromtimestamp(tr.t_out, fx.ET).hour, 15)
+
+    def test_r4_enters_even_when_the_exit_bar_is_missing(self):
+        """Entry must not depend on the 14:00 ET exit bar existing; the data gap forces the position flat."""
+        start = fx.utc(2025, 1, 6)
+        d_idx = 58 * 24 + 13
+        n = d_idx + 3                              # data ends 3 bars after the 08:00 ET entry bar
+        closes = [100.0 * (1 + 0.002 * math.sin(0.37 * i)) for i in range(n)]
+        p0 = closes[d_idx - 14]
+        for k in range(14):
+            closes[d_idx - 14 + k] = p0 * (1 + 0.02 * k / 13)
+        for i in range(d_idx, n):
+            closes[i] = p0 * 1.02
+        h = mk("GC=F", start, closes)
+        gs = [g for g in fx.rule_r4(h) if g[0].t_in == h.ts[d_idx]]
+        self.assertEqual(len(gs), 1)
+        self.assertEqual(gs[0][0].t_out, h.ts[n - 1] + 3600)              # flat at the last close before the gap
 
     def test_r5_london_breakout_of_asia_range(self):
         base = 24                                   # second day of the series = 2025-01-14 (winter, London = UTC)
@@ -293,6 +324,15 @@ class Evaluation(unittest.TestCase):
         self.assertTrue(0.3 < mid["p"] < 0.7)
         rng_total = fx.control_trades(pairs)(__import__("random").Random(1))
         self.assertEqual(int(rng_total) % 2, 0)                          # 20 trades of +-1: same parity as 20
+
+    def test_clustered_control_flips_one_coin_per_entry_day(self):
+        """Four legs of one event move together: the clustered control is all-or-nothing, the per-trade one is not."""
+        items = [(1.0, -1.0, 7)] * 4 + [(1.0, -1.0, 8)] * 4
+        rng = __import__("random").Random(3)
+        draws = {fx.control_clustered(items)(rng) for _ in range(200)}
+        self.assertEqual(draws, {-8.0, 0.0, 8.0})
+        per_trade = {fx.control_trades([(a, b) for a, b, _ in items])(rng) for _ in range(200)}
+        self.assertGreater(len(per_trade), 3)
 
     def test_minimum_notional(self):
         t_in = fx.utc(2025, 9, 1, 10)

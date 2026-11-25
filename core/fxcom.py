@@ -207,7 +207,15 @@ class Rates:
         return v / 100.0
 
     def diff(self, base, quote, ts):
-        return self.annual(base, ts) - self.annual(quote, ts)
+        """r_base - r_quote. A currency without a usable rate gives a ZERO differential (protocol: markup only);
+        it must not be read as a 0% rate, which would credit or charge the whole other leg's rate as carry."""
+        rb, rq = self.get(base, ts), self.get(quote, ts)
+        if rb is None or rq is None:
+            for c, v in ((base, rb), (quote, rq)):
+                if v is None:
+                    self.missing[c] = self.missing.get(c, 0) + 1
+            return 0.0
+        return (rb - rq) / 100.0
 
 
 def load_rates(fetch_text=fetch_fred_text):
@@ -498,16 +506,18 @@ def rule_r4(h, delay=0):
         if e0 is not None and x is not None and h.ts[x] - h.ts[e0] == 6 * 3600:
             hold_ret = c[x] / h.o[e0] - 1
         wm, wh = ms[-60:], hs[-60:]
-        if (D.weekday() < 5 and not is_holiday(D) and m is not None and hold_ret is not None
-                and len(wm) >= 40 and len(wh) >= 40):
+        # entry does NOT depend on the exit bar existing (that would condition on the future): a missing exit bar
+        # means a data gap and hold() forces the position flat at the last close before it
+        x_ok = x is not None and hold_ret is not None
+        if (D.weekday() < 5 and not is_holiday(D) and m is not None and len(wm) >= 40 and len(wh) >= 40):
             sg, sgh = pstdev(wm), pstdev(wh)
             e = e0 + delay if e0 is not None else None
-            if sg > 0 and sgh > 0 and abs(m) >= 0.5 * sg and e is not None and e <= x and not h.flag[e] \
-                    and h.ts[e] - h.ts[e0] == 3600 * delay:
+            if sg > 0 and sgh > 0 and abs(m) >= 0.5 * sg and e is not None and (not x_ok or e <= x) \
+                    and e < len(h.ts) and not h.flag[e] and h.ts[e] - h.ts[e0] == 3600 * delay:
                 side = 1 if m > 0 else -1
                 entry = h.o[e]
                 stop_px = entry * (1 - side * 1.5 * sgh)
-                px, t_out, nxt, _ = hold(h, e, side, stop_px, None, None, x)
+                px, t_out, nxt, _ = hold(h, e, side, stop_px, None, None, x if x_ok else len(h.ts))
                 tr = _mk(h, e, side, entry, px, t_out, 1.5 * sgh, f"{h.sym}:{h.ts[e]}")
                 if tr:
                     out.append([tr])
@@ -533,9 +543,7 @@ def rule_r5(h, delay=0):
             continue
         win = [i for i in idxs if 7 <= h.lhour[i] <= 10 and h.uhour[i] >= 6]
         xs = [i for i in idxs if h.lhour[i] == 15]
-        if not xs:
-            continue
-        x = xs[0]
+        x = xs[0] if xs else len(h.ts)                    # no 15:00 bar: hold() forces flat at the data gap
         sig_t = next((t for t in win if c[t] > hi or c[t] < lo), None)
         if sig_t is None or not can_enter(h, sig_t, delay):
             continue
@@ -860,6 +868,17 @@ def control_trades(pairs):
     return f
 
 
+def control_clustered(items):
+    """items: [(actual, flipped, key)]. One coin per key (a shared entry day), so trades that are one event on
+    several assets move together; the locked per-trade control flips them independently."""
+    keys = sorted({k for _, _, k in items})
+
+    def f(rng):
+        flip = {k: rng.random() < 0.5 for k in keys}
+        return sum(b if flip[k] else a for a, b, k in items)
+    return f
+
+
 def control_segments(segs):
     """segs: [(plus_sum, minus_sum)] per position run; fixed (side-independent) costs are already subtracted."""
     def f(rng):
@@ -1116,18 +1135,23 @@ def study(chart_fn, fred_fn, run_ts, n_ctrl=2000):
         sr = series_from_groups(graw, rates, grid, 1.0)
         inb = [g for g in groups if bh["train"][0] <= max(t.t_out for t in g) < bh["test"][1]]
         row = {"kind": "hourly", "trades": len(inb), "skipped_risk_cap": skipped,
-               "per_week": round(len(inb) / weeks, 2), "low_count": len(inb) / weeks < 3,
+               "per_week": round(len(inb) / weeks, 2),
+               "event_days_per_week": round(len({int(g[0].t_in // 86400) for g in inb}) / weeks, 2),
+               "low_count": len(inb) / weeks < 3 or len({int(g[0].t_in // 86400) for g in inb}) / weeks < 3,
                "splits": split_stats(base, bh), "splits_2x": split_stats(s2, bh),
                "delayed": _mean_val_test(sd, bh), "no_clip": _mean_val_test(sr, bh)}
-        ctrl, trims = {}, {}
+        ctrl, cctrl, trims = {}, {}, {}
         for sp in ("validation", "test"):
             a, z = bh[sp]
             gs = [g for g in groups if a <= max(t.t_out for t in g) < z]
             pairs = [(group_frac(g, rates), group_frac(g, rates, 1.0, True)) for g in gs]
             ndays = len(split_vals(base, a, z))
             ctrl[sp] = control_run(sum(p[0] for p in pairs), control_trades(pairs), ndays, n_ctrl)
+            cl = [(group_frac(g, rates), group_frac(g, rates, 1.0, True), int(g[0].t_in // 86400)) for g in gs]
+            cctrl[sp] = control_run(sum(p[0] for p in cl), control_clustered(cl), ndays, n_ctrl)
             trims[sp] = dict(zip(("without_best_5pct_trades", "without_best_trade"),
                                  trimmed_mean([p[0] for p in pairs], ndays)))
+        row["control_clustered"] = cctrl
         row["control"], row["validation_trim"], row["test_trim"] = ctrl, trims["validation"], trims["test"]
         by_a, by_y = {}, {}
         for g in inb:
