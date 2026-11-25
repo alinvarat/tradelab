@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: "3.13"
       - name: Probe Polymarket data
-        run: python research/studies/poly_fv.py probe --quick | tee probe.json
+        run: python research/studies/poly_fv.py probe | tee probe.json
       - uses: actions/upload-artifact@v4
         with:
           name: poly-fv-probe

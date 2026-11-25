@@ -134,7 +134,7 @@ def norm_market(m, ev, coin, kind, gaps):
     if kind == "hourly":
         strike = ((ev.get("eventMetadata") or {}).get("priceToBeat"))
     else:
-        mt = re.search(r"\$\s*([0-9][0-9,]*(?:\.[0-9]+)?)", m.get("question") or "")
+        mt = re.search(r"above\s*\$?\s*([0-9][0-9,]*(?:\.[0-9]+)?)", m.get("question") or "")
         if mt:
             strike = float(mt.group(1).replace(",", ""))
     return {"id": str(m["id"]), "cond": m["conditionId"], "coin": coin, "kind": kind, "end": end, "yes_won": prices[0] == 1.0,
@@ -204,11 +204,6 @@ def run_shard(item, workers=8):
     gaps["markets"] = len(mk)
 
     def one(m):
-        tr, bad = fetch_trades(m["cond"])
-        if bad and not (tr and tr[0]["t"] < m["end"] - 95 * 60):   # newest-first pages: a cut loses only early trades
-            return None, "trades_truncated_or_failed"
-        if not tr:
-            return None, "no_trades"
         strike = m["strike"]
         if strike is None:
             if m["kind"] != "hourly":
@@ -216,11 +211,16 @@ def run_shard(item, workers=8):
             i = bisect.bisect_left(spot_t, m["end"] - 3600)
             if i >= len(spot_t) or spot_t[i] != m["end"] - 3600:
                 return None, "no_strike"
-            strike = [r[1] for r in kl][i]          # Binance 1-minute open at the hour start
+            strike = kl[i][1]                       # Binance 1-minute open at the hour start
         if m["kind"] == "daily":
-            mid = spot_c[min(bisect.bisect_left(spot_t, m["end"] - 3600), len(spot_c) - 1)]
-            if abs(math.log(strike / mid)) > 0.5:
+            j = bisect.bisect_left(spot_t, m["end"] - 3600)
+            if j >= len(spot_c) or abs(math.log(strike / spot_c[j])) > 0.5:
                 return None, "strike_implausible"
+        tr, bad = fetch_trades(m["cond"])
+        if bad and not (tr and tr[0]["t"] < m["end"] - 95 * 60):   # newest-first pages: a cut loses only early trades
+            return None, "trades_truncated_or_failed"
+        if not tr:
+            return None, "no_trades"
         return pf.market_rows(m, tr, spot_t, spot_c, strike), None
     rows = []
     with ThreadPoolExecutor(workers) as ex:
