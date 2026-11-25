@@ -132,6 +132,26 @@
    "stake": 7.4313,
    "entry_ts": 1795637839.2731695,
    "volume": 55334
+  },
+  {
+   "id": "6995982",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T20:00:00Z",
+   "side": "yes",
+   "price": 0.001,
+   "stake": 7.4809,
+   "entry_ts": 1795639644.14894,
+   "volume": 78402
+  },
+  {
+   "id": "6996028",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T20:00:00Z",
+   "side": "yes",
+   "price": 0.001,
+   "stake": 7.4809,
+   "entry_ts": 1795639644.14894,
+   "volume": 53232
   }
  ],
  "n_closed": 6,
