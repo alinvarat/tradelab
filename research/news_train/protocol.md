@@ -4,7 +4,7 @@ Owner goal (2026-11-26): "train the news analysis". Fine-tuning is not possible 
 
 **Supersession, stated on purpose.** `PLAN_20261126b_fable.md` section 4 item 6 says "no new reader" for LLM readers of filings and news as a trade trigger. The owner's 2026-11-26 goal supersedes that line for this lane only. It does not reopen N1, the earnings readers or the locked forwards: the DVOL forward, the news-latency forward collector (branch `data/news-latency-fwd`, hash-checked prompt) and the key-person study are not touched, not edited and not re-prompted. They are read-only inputs.
 
-- params.json sha256: PARAMS_SHA
+- params.json sha256: e171d307d8ccdaa3bc6f8736c163dfdbab4419d01bf2f521d1655199177af5ef
 - versions.json (prompt registry): a version may be called only if it is registered there with the sha256 of its prompt file in a commit that precedes its first call; the code refuses an unregistered or edited version.
 
 ## Inventory (counts only, no outcome read; the build report restates it with live counts)
