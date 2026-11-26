@@ -4153,3 +4153,4 @@
 {"kind": "gone", "t": 1795659790.546509, "venue": "bitget", "base": "RWAY"}
 {"kind": "snap", "t": 1795659790.546509, "venue": "mexc", "base": "JIMMY", "age_h": 19.93, "bid": 0.00067, "ask": 0.000691, "bid_sz": 8335.27, "ask_sz": 1582.9, "vol24": 0.0, "spread": 0.03134}
 {"kind": "snap", "t": 1795663391.2106583, "venue": "mexc", "base": "JIMMY", "age_h": 20.93, "bid": 0.000918, "ask": 0.000947, "bid_sz": 1198.26, "ask_sz": 105499.04, "vol24": 0.0, "spread": 0.03159}
+{"kind": "snap", "t": 1795666990.791239, "venue": "mexc", "base": "JIMMY", "age_h": 21.93, "bid": 0.000745, "ask": 0.000759, "bid_sz": 19770.42, "ask_sz": 197368.42, "vol24": 0.0, "spread": 0.01879}
