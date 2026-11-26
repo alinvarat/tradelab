@@ -24,8 +24,8 @@ T0 = time.time()
 BUDGET_S = 150 * 60            # stop starting new work after 150 minutes
 
 FRAME_DATES = [f"{y}-{m:02d}-01" for y in (2025, 2026) for m in range(1, 13) if (y, m) <= (2026, 10)]   # 22 windows
-WINDOW_S = 3600
-FRAME_PAGES = 3
+FRAME_PAGES = 5
+MARKETS_PER_MONTH = 10
 FRAME_MIN_USD = 500.0
 SAMPLE_WALLETS = 200
 PAGE_CAP = 25
@@ -138,20 +138,53 @@ def endpoints(out):
     out["endpoints"] = res
 
 
-def build_frame(out):
-    """Wallets with a trade >= 500 USD notional in a one-hour window at 12:00 UTC on the 1st of 22 months (outcome-blind)."""
-    frame, new_counts, per_window = {}, [], {}
+def month_windows():
+    """(first day, first day of next month) of the 22 frame months."""
+    out = []
     for day in FRAME_DATES:
-        a = ts_of(day)
-        rows, pages, trunc, st = page_all(f"{DATA}/trades?{urlencode({'start': a, 'end': a + WINDOW_S, 'limit': 1000})}", FRAME_PAGES)
-        n_new = 0
-        for r in rows:
-            p = wc.parse_row(r)
-            if p and p["wallet"] and p["price"] * p["size"] >= FRAME_MIN_USD and p["wallet"] not in frame:
-                frame[p["wallet"]] = day
-                n_new += 1
+        y, m = int(day[:4]), int(day[5:7])
+        out.append((day, f"{y + (m == 12)}-{(m % 12) + 1:02d}-01"))
+    return out
+
+
+def sample_markets(a, b):
+    """Resolved binary markets ending in [a, b) with volume >= 50,000 USD (one keyset page of up to 100), then the first
+    MARKETS_PER_MONTH by sha256(seed + conditionId). The choice reads no outcome and no wallet."""
+    st, d = get(f"{GAMMA}/markets/keyset?closed=true&limit=100&volume_num_min=50000&end_date_min={a}T00:00:00Z&end_date_max={b}T00:00:00Z")
+    ms = (d.get("markets") if isinstance(d, dict) else None) or []
+    ok = []
+    for m in ms:
+        try:
+            toks = json.loads(m.get("clobTokenIds") or "[]")
+        except ValueError:
+            continue
+        if len(toks) == 2 and m.get("conditionId"):
+            ok.append(m["conditionId"])
+    return wc.sample_order(ok, "q1-wallet-probe-markets-20261127")[:MARKETS_PER_MONTH], len(ms), st
+
+
+def build_frame(out):
+    """Addendum 20261127: wallets with a trade >= 500 USD notional in MARKETS_PER_MONTH outcome-blind resolved markets of each of
+    22 months, read from the condition feed (a three-year window; the bare feed holds only ~2 months and ignores start/end)."""
+    frame, new_counts, per_window = {}, [], {}
+    for (a, b) in month_windows():
+        conds, n_listed, st0 = sample_markets(a, b)
+        n_new, rows_n, pages_n, tmin, tmax = 0, 0, 0, None, None
+        for c in conds:
+            rows, pages, trunc, st = page_all(f"{DATA}/trades?condition={c}&limit=1000", FRAME_PAGES)
+            rows_n += len(rows)
+            pages_n += pages
+            for r in rows:
+                p = wc.parse_row(r)
+                if not p:
+                    continue
+                tmin = p["t"] if tmin is None else min(tmin, p["t"])
+                tmax = p["t"] if tmax is None else max(tmax, p["t"])
+                if p["wallet"] and p["price"] * p["size"] >= FRAME_MIN_USD and p["wallet"] not in frame:
+                    frame[p["wallet"]] = a
+                    n_new += 1
         new_counts.append(n_new)
-        per_window[day] = {"rows": len(rows), "pages": pages, "truncated": trunc, "status": st, "new_wallets": n_new}
+        per_window[a] = {"listed": n_listed, "status": st0, "markets": len(conds), "rows": rows_n, "pages": pages_n, "ts_min": tmin, "ts_max": tmax, "new_wallets": n_new}
     out["frame"] = {"windows": per_window, "n": len(frame), "new_counts": new_counts, "saturation_last5_share": wc.saturation(new_counts)}
     return frame
 
@@ -233,6 +266,11 @@ def polymarket(out):
         "per_wallet": [{k: s[k] for k in ("n_rows", "earliest", "conds", "resolved", "big_positions", "two_sided", "pages", "truncated", "qualifies")} for s in summaries[:60]],
     }
     out["verdict_polymarket"] = verdict
+    mk = []
+    for j in done[:20]:
+        raw2, p2, t2, _ = page_all(f"{DATA}/trades?user={j['wallet']}&limit=1000&taker_only=false", 10)
+        mk.append({"taker_only_rows": j["raw"] if not j["truncated"] else None, "all_rows": len(raw2), "truncated": t2})
+    out["wallets"]["maker_check_first20"] = mk
 
 
 def hyperliquid(out):

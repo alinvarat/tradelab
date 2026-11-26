@@ -74,13 +74,18 @@ class Frame(unittest.TestCase):
         self.assertEqual(wf.FRAME_DATES[0], "2025-01-01")
         self.assertEqual(wf.FRAME_DATES[-1], "2026-10-01")
         self.assertEqual(wf.ts_of("2025-01-01"), 1735689600 + 12 * 3600)
+        mw = wf.month_windows()
+        self.assertEqual(mw[0], ("2025-01-01", "2025-02-01"))
+        self.assertEqual(mw[11], ("2025-12-01", "2026-01-01"))
+        self.assertEqual(mw[-1], ("2026-10-01", "2026-11-01"))
 
 
 class Lock(unittest.TestCase):
     def test_protocol_unchanged(self):
-        p = STUDIES / "protocol_wallet_follow_probe_20261127.md"
-        self.assertEqual(hashlib.sha256(p.read_bytes()).hexdigest(), p.with_suffix(".sha256").read_text().strip(),
-                         "protocol is locked; write a dated addendum instead")
+        for name in ("protocol_wallet_follow_probe_20261127", "protocol_wallet_follow_probe_addendum_20261127"):
+            p = STUDIES / (name + ".md")
+            self.assertEqual(hashlib.sha256(p.read_bytes()).hexdigest(), p.with_suffix(".sha256").read_text().strip(),
+                             "protocol is locked; write a dated addendum instead")
 
 
 if __name__ == "__main__":
