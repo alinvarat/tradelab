@@ -20,6 +20,15 @@ class Lock(unittest.TestCase):
         self.assertIn(hashlib.sha256((ROOT / "params_r3.json").read_bytes()).hexdigest(), add.read_text())
         self.assertEqual(P["model"], "claude-haiku-5-5")
 
+    def test_addendum_a_and_lock(self):
+        a = ROOT / "protocol_r3_addendum_20261126.md"
+        self.assertEqual(hashlib.sha256(a.read_bytes()).hexdigest(), a.with_suffix(".sha256").read_text().strip())
+        lock = json.loads((ROOT / "LOCK_R3.json").read_text())
+        reg = {v["id"]: v for v in T.versions_registry()["versions"]}
+        for mk in ("stock", "crypto"):
+            if lock[mk].get("version"):
+                self.assertEqual(reg[lock[mk]["version"]]["sha256"], lock[mk]["prompt_sha256"])
+
     def test_registry_and_round2_untouched(self):
         for v in T.versions_registry()["versions"]:
             T.check_version(v)

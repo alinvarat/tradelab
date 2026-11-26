@@ -281,7 +281,8 @@ def make_rows(items, decs, P):
             excl["no_reply"] += 1
             continue
         out.append({"key": it["key"], "day": L.day_of(it["t_pub"]), "y": y, "big": 1 if y > big_threshold(it["market"], P) else 0,
-                    "h": d["abs1h"], "hp": d["p_big"] if d.get("p_big") is not None else 0.0, "rv": f["rv"], "pre": f["pre"], "kw": float(f["kw"])})
+                    "h": d["abs1h"], "hp": d["p_big"] if d.get("p_big") is not None else 0.0, "rv": f["rv"], "pre": f["pre"], "kw": float(f["kw"]),
+                    "earn": 1.0 if "2.02" in (it.get("items") or []) else 0.0})
     return out, excl
 
 
@@ -313,6 +314,9 @@ def point_stats(rows):
         out["rho_" + k] = rho(rows, k)
         out["auc_" + k] = auc([r[k] for r in rows], big)
     out["partial_h_given_rv_pre"] = partial_h(rows)
+    if len({r["earn"] for r in rows}) > 1:                # descriptive (addendum 2026-11-26 a): also control for an 8-K item 2.02 (results) flag
+        out["partial_h_given_rv_pre_earn"] = partial_spearman([r["h"] for r in rows], y, [[r["rv"] for r in rows], [r["pre"] for r in rows], [r["earn"] for r in rows]])
+        out["share_earn"] = sum(r["earn"] for r in rows) / len(rows)
     out["partial_rv_given_h"] = partial_spearman([r["rv"] for r in rows], y, [[r["h"] for r in rows]])
     # filter view (descriptive): the top third by the analyst's size estimate versus the rest
     cut = sorted(r["h"] for r in rows)[int(len(rows) * 2 / 3)]
