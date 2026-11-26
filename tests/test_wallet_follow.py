@@ -82,7 +82,8 @@ class Frame(unittest.TestCase):
 
 class Lock(unittest.TestCase):
     def test_protocol_unchanged(self):
-        for name in ("protocol_wallet_follow_probe_20261127", "protocol_wallet_follow_probe_addendum_20261127"):
+        for name in ("protocol_wallet_follow_probe_20261127", "protocol_wallet_follow_probe_addendum_20261127",
+                     "protocol_wallet_follow_probe_addendum2_20261127", "protocol_wallet_follow_probe_addendum3_20261127"):
             p = STUDIES / (name + ".md")
             self.assertEqual(hashlib.sha256(p.read_bytes()).hexdigest(), p.with_suffix(".sha256").read_text().strip(),
                              "protocol is locked; write a dated addendum instead")

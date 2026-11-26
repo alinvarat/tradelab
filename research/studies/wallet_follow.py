@@ -20,6 +20,7 @@ HL = "https://api.hyperliquid.xyz/info"
 UA = {"User-Agent": "Mozilla/5.0 tradelab-research"}
 STATS = {"calls": 0, "429": 0, "errors": 0, "sec": 0.0}
 LOCK = threading.Lock()
+GAMMA_DIAG = []
 T0 = time.time()
 BUDGET_S = 150 * 60            # stop starting new work after 150 minutes
 
@@ -197,7 +198,10 @@ def closed_map(conds, deadline):
         if time.time() > deadline:
             break
         chunk = conds[i:i + 50]
-        st, b = get(f"{GAMMA}/markets?" + "&".join(f"condition_ids={c}" for c in chunk) + "&limit=100")
+        st, b = get(f"{GAMMA}/markets?closed=true&" + "&".join(f"condition_ids={c}" for c in chunk) + "&limit=100")
+        GAMMA_DIAG.append({"asked": len(chunk), "status": st, "got": len(b) if isinstance(b, list) else None,
+                           "closed": sum(1 for m in b if m.get("closed")) if isinstance(b, list) else None,
+                           "with_closedTime": sum(1 for m in b if m.get("closedTime")) if isinstance(b, list) else None})
         if not isinstance(b, list):
             continue
         for m in b:
@@ -263,7 +267,10 @@ def polymarket(out):
         "big_positions_total": sum(s["big_positions"] for s in summaries), "big_with_exit_total": sum(s["big_with_exit"] for s in summaries),
         "hold_days_median": wc.med(holds), "hold_days_p25_p75": [wc.quantile(holds, .25), wc.quantile(holds, .75)] if holds else None,
         "entry_price_median": wc.med(entries), "entry_price_p25_p75": [wc.quantile(entries, .25), wc.quantile(entries, .75)] if entries else None,
-        "per_wallet": [{k: s[k] for k in ("n_rows", "earliest", "conds", "resolved", "big_positions", "two_sided", "pages", "truncated", "qualifies")} for s in summaries[:60]],
+        "per_wallet": [{k: s[k] for k in ("n_rows", "earliest", "conds", "resolved", "big_positions", "two_sided", "pages", "truncated", "qualifies")} for s in summaries],
+        "gamma_diag": {"chunks": len(GAMMA_DIAG), "asked": sum(g["asked"] for g in GAMMA_DIAG), "got": sum(g["got"] or 0 for g in GAMMA_DIAG),
+                       "closed": sum(g["closed"] or 0 for g in GAMMA_DIAG), "with_closedTime": sum(g["with_closedTime"] or 0 for g in GAMMA_DIAG),
+                       "bad_status": [g["status"] for g in GAMMA_DIAG if g["got"] is None][:5]},
     }
     out["verdict_polymarket"] = verdict
     mk = []
@@ -303,6 +310,102 @@ def hyperliquid(out):
     out["hyperliquid"] = res
 
 
+def b64j(c):
+    import base64
+    try:
+        return json.loads(base64.urlsafe_b64decode(c + "=" * (-len(c) % 4)))
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def b64e(o):
+    import base64
+    return base64.urlsafe_b64encode(json.dumps(o, separators=(",", ":")).encode()).decode().rstrip("=")
+
+
+def tape_jump(cond, depth_pages, variant):
+    """Does a cursor built from a page-1 cursor with ts changed seek the condition tape to that time? Returns a dict.
+    Reference: walk `depth_pages` pages newest-first and take a row; target = that row's time + 120 s."""
+    st, d = get(f"{DATA}/trades?condition={cond}&limit=1000")
+    cur = (d.get("pagination") or {}).get("next_cursor") if isinstance(d, dict) else None
+    if not cur:
+        return {"err": "no cursor", "status": st}
+    ref = b64j(cur)
+    rows, c, pages = rows_of(d), cur, 1
+    while pages < depth_pages and c:
+        st, d = get(f"{DATA}/trades?condition={cond}&limit=1000&cursor={c}")
+        if not isinstance(d, dict):
+            break
+        rows += rows_of(d)
+        c = (d.get("pagination") or {}).get("next_cursor") if (d.get("pagination") or {}).get("has_more") else None
+        pages += 1
+    if len(rows) < 2000:
+        return {"err": "tape too short", "rows": len(rows)}
+    x = rows[len(rows) // 2]
+    tx = int(x["timestamp"])
+    params = dict(((ref or {}).get("data") or {}).get("params") or {})
+    new = json.loads(json.dumps(ref))
+    new["data"]["params"]["ts"] = tx + 120
+    if variant == "sq_big":
+        new["data"]["params"]["sq"] = "9223372036854775807"
+    elif variant == "sq_zero_drop":
+        new["data"]["params"].pop("sq", None)
+    elif variant == "sq_str9":
+        new["data"]["params"]["sq"] = "999999999999999999"
+    st2, j = get(f"{DATA}/trades?condition={cond}&limit=50&cursor={b64e(new)}")
+    jr = rows_of(j)
+    jts = [int(r["timestamp"]) for r in jr] if jr else []
+    return {"variant": variant, "ref_keys": sorted(params), "status": st2, "n": len(jr), "first_ts": jts[0] if jts else None, "last_ts": jts[-1] if jts else None,
+            "target_ts": tx + 120, "row_ts": tx, "covers_row": bool(jts and min(jts) <= tx <= max(jts)),
+            "first_within_300s_of_target": bool(jts and abs(jts[0] - (tx + 120)) <= 300), "err": None if jr else str(j)[:160]}
+
+
+def probe2(d):
+    """Outcome-free check (protocol addendum 3): can the market tape be sought to a past time (a 60 s delayed fill needs a trade
+    after the wallet's), and what does /v2/prices-history serve for old windows."""
+    os.makedirs(d, exist_ok=True)
+    out = {"line": "wallet_follow_probe2"}
+    conds = []
+    for a, b in month_windows()[:20:3]:
+        c, _, _ = sample_markets(a, b)
+        conds += c[:2]
+    res = []
+    for c in conds[:12]:
+        for v in ("same", "sq_big", "sq_zero_drop", "sq_str9"):
+            res.append(dict(cond=c[:10], **tape_jump(c, 4, v)))
+    out["tape_jump"] = res
+    by = {}
+    for r in res:
+        k = r.get("variant") or "none"
+        z = by.setdefault(k, {"tests": 0, "ok_status": 0, "covers_row": 0, "near_target": 0})
+        z["tests"] += 1
+        z["ok_status"] += r.get("status") == 200
+        z["covers_row"] += bool(r.get("covers_row"))
+        z["near_target"] += bool(r.get("first_within_300s_of_target"))
+    out["tape_jump_summary"] = by
+    ph = []
+    for c in conds[:6]:
+        st, g = get(f"{GAMMA}/markets?closed=true&condition_ids={c}&limit=1")
+        if not (isinstance(g, list) and g):
+            continue
+        toks = json.loads(g[0].get("clobTokenIds") or "[]")
+        ct = g[0].get("closedTime") or ""
+        if not toks or not ct:
+            continue
+        from datetime import datetime
+        t1 = int(datetime.fromisoformat(ct.replace("+00", "+00:00").replace(" ", "T")).timestamp()) - 5 * 86400
+        for bs, extra in ((60, ""), (10800, ""), (60, "&limit=5")):
+            st2, h = get(f"{DATA}/prices-history?token_id={toks[0]}&start={t1}&end={t1 + 86400}&bucket_seconds={bs}{extra}")
+            pts = (h.get("data") if isinstance(h, dict) else None)
+            n = len(pts.get("points") or pts.get("history") or []) if isinstance(pts, dict) else (len(pts) if isinstance(pts, list) else None)
+            ph.append({"bucket": bs, "age_days_of_start": round((time.time() - t1) / 86400), "status": st2, "points": n, "shape": shape(h) if not isinstance(h, str) else h[:120]})
+    out["prices_history"] = ph
+    out["http"] = dict(STATS, elapsed_s=round(time.time() - T0))
+    with open(os.path.join(d, "probe2.json"), "w") as f:
+        json.dump(out, f, indent=1, default=str)
+    print(json.dumps(out, indent=1, default=str)[:30000])
+
+
 def probe(d):
     os.makedirs(d, exist_ok=True)
     out = {"line": "wallet_follow_probe", "started": int(T0)}
@@ -318,10 +421,10 @@ def probe(d):
 
 
 def main(argv):
-    if len(argv) < 3 or argv[1] != "probe":
+    if len(argv) < 3 or argv[1] not in ("probe", "probe2"):
         print(__doc__)
         return 2
-    probe(argv[2])
+    {"probe": probe, "probe2": probe2}[argv[1]](argv[2])
     return 0
 
 
