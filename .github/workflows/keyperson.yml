@@ -1,0 +1,81 @@
+name: Key person
+
+# Key-person 8-K Item 5.02 events (protocol_keyperson_20261126.md). Modes:
+#   events - stage A: SEC filings, Haiku labels, counts by class and split. NO prices. Freezes events on data/keyperson.
+#   run    - stage B: prices the frozen events once and judges. Rows and summary go to data/keyperson.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "events or run"
+        required: true
+        default: "events"
+
+permissions:
+  contents: read
+
+jobs:
+  keyperson:
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    concurrency:
+      group: tradelab-keyperson
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code (LLM calls use the owner's Claude Max plan)
+        if: inputs.mode == 'events'
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Restore previous labels and frozen events
+        run: |
+          mkdir -p /tmp/prev out
+          if git fetch origin data/keyperson 2>/dev/null; then
+            git show origin/data/keyperson:events/labels.jsonl > /tmp/prev/labels.jsonl 2>/dev/null || true
+            git show origin/data/keyperson:events/latest.json > /tmp/prev/events.json 2>/dev/null || true
+          fi
+      - name: Stage A (events and labels, no prices)
+        if: inputs.mode == 'events'
+        env:
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          TRADELAB_CLAUDE_PARALLEL: "4"
+        run: python research/studies/keyperson.py out events /tmp/prev/labels.jsonl
+      - name: Stage B (price the frozen events)
+        if: inputs.mode == 'run'
+        env:
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+        run: python research/studies/keyperson.py out run /tmp/prev/events.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: keyperson-${{ inputs.mode }}
+          path: out/
+      - name: Keep results on data/keyperson
+        if: always()
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/keyperson 2>/dev/null; then
+            git checkout -q -B data/keyperson origin/data/keyperson
+          else
+            git checkout -q --orphan data/keyperson && git rm -rq --cached . && git clean -fdq
+          fi
+          d=runs/${{ inputs.mode }}_$(date -u +%Y%m%dT%H%M%SZ); mkdir -p $d events
+          cp /tmp/keep/* $d/ 2>/dev/null || true
+          if [ "${{ inputs.mode }}" = "events" ] && [ -f /tmp/keep/labels.jsonl ]; then
+            cp /tmp/keep/labels.jsonl events/labels.jsonl
+            [ -f /tmp/keep/events.json ] && cp /tmp/keep/events.json events/latest.json
+          fi
+          git add -A runs events
+          git commit -qm "Key person ${{ inputs.mode }}: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/keyperson && break; git fetch -q origin data/keyperson; git rebase -q origin/data/keyperson; done

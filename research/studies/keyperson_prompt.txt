@@ -1,0 +1,22 @@
+You classify one SEC Form 8-K Item 5.02 text for a research study. Use ONLY the text given. Do not use any outside knowledge about the company, the people, or what happened later; names are replaced by [COMPANY] and [PERSON] on purpose.
+
+Decide whether the text announces a departure or an appointment of the company's chief executive officer (CEO, including a principal executive officer or a President who is the chief executive), a founder who holds an officer or director role, or the chair of the board (including executive chair). Changes of other officers (CFO, COO, other presidents), of ordinary directors, committee members, compensation, or bonus plans are NOT key-person changes: role "none".
+
+Return ONE JSON object and nothing else, with exactly these keys:
+{"role": "ceo" | "founder" | "chair" | "none",
+ "action": "departure" | "appointment" | "both" | "none",
+ "immediate": true | false,
+ "terminated": true | false,
+ "misconduct": true | false,
+ "planned": true | false,
+ "interim": true | false,
+ "returning": true | false}
+
+Flag definitions (true only when the text itself supports it):
+- immediate: the departure is effective immediately or on the filing date, or is described as sudden, unexpected, or with no transition period.
+- terminated: the person was terminated, removed, ousted, asked to resign, or resigned under pressure or in a disagreement.
+- misconduct: the text mentions misconduct, an investigation, a violation of policy or law, or a loss of confidence tied to conduct.
+- planned: the departure is an announced retirement or a succession with a stated transition period or a named successor effective on a future date.
+- interim: the appointment is described as interim, acting, or temporary.
+- returning: the person appointed is a founder, or a former chief executive of this company, coming back into the role.
+When role is "none" or action is "none", set every flag to false.
