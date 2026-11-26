@@ -48,6 +48,7 @@ jobs:
               case "$m" in 11|41) gh workflow run notice_fwd.yml -R "$R" --ref main -f mode=forward && echo "$(date -u +%FT%TZ) dispatched notice_fwd forward" || echo "dispatch notice_fwd failed";; esac
               case "$h:$m" in 03:30|07:30|11:30|15:30|19:30|23:30) gh workflow run fundwin_okx.yml -R "$R" --ref main -f mode=forward && echo "$(date -u +%FT%TZ) dispatched fundwin_okx forward" || echo "dispatch fundwin_okx failed";; esac
               [ "$h:$m" = "22:40" ] && [ "$dow" -le 5 ] && { gh workflow run news_train_r2.yml -R "$R" --ref main -f mode=fwd && echo "$(date -u +%FT%TZ) dispatched news_train_r2 fwd" || echo "dispatch news_train_r2 fwd failed"; }
+              [ "$m" = "02" ] && { gh workflow run poly_rewards.yml -R "$R" --ref main -f mode=collect && echo "$(date -u +%FT%TZ) dispatched poly_rewards collect" || echo "dispatch poly_rewards failed"; }
               [ "$h:$m" = "21:45" ] && [ "$dow" -le 5 ] && { gh workflow run smallcap_intraday.yml -R "$R" --ref main -f mode=scan && echo "dispatched smallcap scan" || echo "dispatch smallcap failed"; }
             fi
             sleep 20
