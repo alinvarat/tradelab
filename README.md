@@ -1,0 +1,1 @@
+Append-only copy of the Kuber pod's news-ingest log (core/news_ingest.py), written by core/news_publish.py.
