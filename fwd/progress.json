@@ -1,0 +1,31 @@
+{
+ "capped_by_usage_limit": false,
+ "crypto": {
+  "both_answered": 0,
+  "discordant": 0,
+  "fire": null,
+  "min_discordant": 100,
+  "min_paired": 300,
+  "paired_settled_capped": 0,
+  "projection_discordant": null,
+  "projection_paired": null
+ },
+ "crypto_items": 0,
+ "ingest_rows": 323,
+ "items": 0,
+ "locked_models": {
+  "haiku": "claude-haiku-5-5",
+  "sonnet": "claude-sonnet-5-5"
+ },
+ "stock": {
+  "both_answered_w3_m1": 0,
+  "min_magnitude_n": 300,
+  "projection": null,
+  "round2_forward_result_exists": false,
+  "scoring_open": false
+ },
+ "stock_items": 0,
+ "stock_items_with_pod_row": 0,
+ "stopped_early": {},
+ "utc": 1795713462
+}
