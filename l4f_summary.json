@@ -1,5 +1,5 @@
 {
- "equity_usd": 151.6689,
+ "equity_usd": 151.8374,
  "start_usd": 147.0,
  "goal_usd": 441.0,
  "pending": [
@@ -32,16 +32,6 @@
    "stake": 7.4809,
    "entry_ts": 1795639644.14894,
    "volume": 53232
-  },
-  {
-   "id": "7109767",
-   "question": "Will Elon Musk post 220-239 tweets from November 20 to November 27, 2026?",
-   "end": "2026-11-27T17:00:00Z",
-   "side": "yes",
-   "price": 0.022,
-   "stake": 7.4907,
-   "entry_ts": 1795673867.5989683,
-   "volume": 83100.30269899999
   },
   {
    "id": "7109769",
@@ -104,32 +94,18 @@
    "volume": 58658
   }
  ],
- "n_closed": 18,
+ "n_closed": 19,
  "sequential": {
   "n_units": 2,
-  "e_value_edge": 1.0156,
+  "e_value_edge": 1.0151,
   "e_value_negative": 1.0,
   "threshold": 20.0,
   "decision": "continue",
   "decided_at_unit": null,
-  "mean_scaled": 0.034769
+  "mean_scaled": 0.034282
  },
  "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md",
  "closed_last": [
-  {
-   "id": "6757692",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-25T20:00:00Z",
-   "side": "yes",
-   "price": 0.002,
-   "stake": 7.35,
-   "entry_ts": 1795558630.3247502,
-   "volume": 75485,
-   "net": 0.002004008016032064,
-   "ts": 1795645059.9208035,
-   "yes_won": false,
-   "equity_after": 149.7984
-  },
   {
    "id": "6757401",
    "question": "Exact Score: Any Other Score?",
@@ -255,6 +231,20 @@
    "ts": 1795733258.3266199,
    "yes_won": false,
    "equity_after": 151.6689
+  },
+  {
+   "id": "7109767",
+   "question": "Will Elon Musk post 220-239 tweets from November 20 to November 27, 2026?",
+   "end": "2026-11-27T17:00:00Z",
+   "side": "yes",
+   "price": 0.022,
+   "stake": 7.4907,
+   "entry_ts": 1795673867.5989683,
+   "volume": 83100.30269899999,
+   "net": 0.022494887525562373,
+   "ts": 1795736856.033316,
+   "yes_won": false,
+   "equity_after": 151.8374
   }
  ],
  "last_error": null
