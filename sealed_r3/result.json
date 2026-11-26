@@ -1,0 +1,92 @@
+{
+ "markets": {
+  "stock": {
+   "holm_adjusted": {
+    "T1_partial": 0.0,
+    "T2_vs_keyword": 0.0,
+    "T3_vs_pre": 1.0
+   },
+   "m_total": 18,
+   "verdict": "not met",
+   "checks": {
+    "T1_partial": true,
+    "T2_vs_keyword": true,
+    "T3_vs_pre": false
+   },
+   "version": "m1",
+   "n": 518,
+   "excluded": {
+    "no_label": 0,
+    "no_target": 3,
+    "no_feat": 0,
+    "no_reply": 0
+   },
+   "drops": {},
+   "stats": {
+    "n": 518,
+    "big_rate": 0.8861003861003861,
+    "mean_abs": 0.020436611955943623,
+    "rho_h": 0.3494778672044385,
+    "auc_h": 0.5863705180754034,
+    "rho_hp": 0.36033726906264035,
+    "auc_hp": 0.6046859421734796,
+    "rho_rv": 0.18883203875469212,
+    "auc_rv": 0.5694767549204239,
+    "rho_pre": 0.3651061430736931,
+    "auc_pre": 0.6258631512868801,
+    "rho_kw": 0.0242888517345212,
+    "auc_kw": 0.5410989254458846,
+    "partial_h_given_rv_pre": 0.14479623170179762,
+    "partial_h_given_rv_pre_earn": 0.04675263284810456,
+    "share_earn": 0.5965250965250966,
+    "partial_rv_given_h": -0.10689225105974537,
+    "top_third": {
+     "n": 182,
+     "mean_abs": 0.029624416779137915,
+     "big_rate": 0.9230769230769231,
+     "rest_mean_abs": 0.015459884343380047,
+     "rest_big_rate": 0.8660714285714286
+    }
+   },
+   "tests": {
+    "T1_partial": {
+     "n": 518,
+     "days": 22,
+     "point": 0.14479623170179762,
+     "lo": 0.06872990862058202,
+     "hi": 0.21587528548849427,
+     "p": 0.0
+    },
+    "T2_vs_keyword": {
+     "n": 518,
+     "days": 22,
+     "point": 0.3251890154699173,
+     "lo": 0.20460107777658598,
+     "hi": 0.4087392490692489,
+     "p": 0.0
+    },
+    "T3_vs_pre": {
+     "n": 518,
+     "days": 22,
+     "point": -0.015628275869254582,
+     "lo": -0.09320810568020516,
+     "hi": 0.0673817992676694,
+     "p": 0.642
+    }
+   },
+   "failed_replies": 0
+  },
+  "crypto": {
+   "verdict": "no candidate (sealed set not opened for this market)"
+  }
+ },
+ "k_versions": 3,
+ "spend": {
+  "total_usd": 0.0,
+  "calls": 518,
+  "tokens_in": 1010017,
+  "tokens_out": 168297,
+  "tokens_cached": 3138,
+  "notional_usd": 0.28545207999999994
+ }
+}
