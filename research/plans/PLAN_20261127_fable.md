@@ -100,6 +100,8 @@ Rules: sum only x measured on instruments tradable at the event time, at cluster
 6. **Pod infrastructure beyond what Q2 and Q3 name** (AGENTS rule 10): no new feeds, dashboards or latency work until test 0 of Q2 has been read.
 
 ## 5. The live bot (Haiku, v4.18)
+**Superseded 2026-11-27 by the owner:** the bot is no longer kept frozen; it is improved weekly (tag v4.19 and later, see the 2026-11-27 addenda in `research/llm_trader/protocol.md`). The random control is a background yardstick. The reading below is kept as written.
+
 Numbers from the brief, not re-read here (`/api/llm_trader` did not return JSON to a plain read-only request): model 4,875 THB, random control 5,051 THB, so -2.5% against +1.0%. The locked criterion (`research/llm_trader/protocol.md`) concludes nothing before 30 closed pairs and then needs a positive model mean, a positive paired difference and bootstrap p < 0.10; the model is behind its control, which is the same sign as the three news rounds. The equity figure is one account carried across protocol versions (earlier DeepSeek protocol versions before Haiku v4.18) and the closed-pair count under v4.18 was not readable (the API sits behind a Cloudflare redirect), so the gap is not attributed to Haiku here.
 - **Keep it running, frozen.** No new version tag, role, prompt or feed: every bump restarts the pair count, and the news ingest stays measure-only.
 - **One reading, then a decision.** Read the locked criterion at 30 closed pairs under v4.18 or on 2026-12-26, whichever is first. If it is not an edge candidate, pause the LLM cycles (the ledger and its statistics stay) and give the pod's Claude quota to research; if it is, the protocol's second non-overlapping window starts unchanged.

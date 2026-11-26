@@ -91,3 +91,8 @@ sha256sum research/threefold_plan/pre_removal_results.json
 - ข้อสังเกตสำคัญ: L1f ที่ชอร์ตบน perp ของ Binance ได้เฉพาะ 65 จาก 107 ประกาศ ให้เฉลี่ย +4.7% ต่อครั้ง x ประมาณ 0.19 (ช่วง train ติดลบ) ต่างจาก x 1.98 บน rows แบบ spot ที่รวมเหรียญที่ไม่มี perp; book จริงข้ามเหรียญที่ไม่มี perp บน OKX จึงอาจได้ x ใกล้ 0.2 ไม่ใช่ 2.2 ต้องดูผล forward
 
 - **ความหน่วงข่าว (26 พ.ย.):** `news_latency_fwd` วัดล่วงหน้าว่า Haiku เร็วๆ หลายตัวขนานกันเทรดข่าวได้ไหม (t_pub, t_seen, t_llm, ราคาสด t_llm+5 วิ, เส้นราคา -5..+61 นาที) protocol ล็อกใน `research/studies/protocol_news_latency_fwd_20261126.md` ผลอยู่ที่ `summary.json` ของ branch `data/news-latency-fwd` อย่าอ้างผลก่อนมี 100 เทรดต่อตลาด
+
+## อัปเดต 2026-11-27: บอท v4.19 (เจ้าของสั่งให้ปรับปรุงบอทบน Kuber ต่อเนื่อง ไม่แช่แข็งแล้ว)
+- กติกาแข็งและเพดานความเสี่ยงอยู่ใน `core/desk_rules.py` (ล็อกต่อแท็ก), อินพุตข่าวเร็ว/ledger/funding ใน `core/desk_feeds.py`; หลักฐานและ n ของแต่ละกติกาอยู่ใน addendum 2026-11-27 ของ `research/llm_trader/protocol.md`
+- กติกาทำได้แค่ปฏิเสธ ลดขนาด หรือหยุดเข้าไม้ ห้ามขยายขนาดหรือกลับด้าน; แท็กถัดไปเสนอผ่าน PR รายสัปดาห์เท่านั้น ห้าม merge เอง
+- ตรวจหลัง deploy: `/api/llm_trader` ต้องเห็น `protocol` v4.19, `error` ว่าง, `last_scan_age_s` เล็ก, `v4_19.rules_on` true และ `stale_feeds`

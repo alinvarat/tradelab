@@ -3,6 +3,10 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-27 บอท v4.19)
+- **v4.19 (branch `bot/v4.19-desk-evidence`):** เจ้าของสั่งปรับปรุงบอทบน Kuber ต่อเนื่อง (แทนการแช่แข็ง v4.18); กติกาแข็งจาก desk_stats จริง (analyst n=13 −4.96%, long 1d ติดลบ n=251/154/208, short 1d n=10 +1.85% ใช้เป็นแค่บริบท), เพดานความเสี่ยง (2% ต่อไม้, เลเวอเรจ ≤3, ≤3 ไม้, ≤3 เข้า/วัน), เบรก drawdown, bank 3x / halt 0.4x, ไม่ martingale ไม่เฉลี่ยขาลง, time exit 4 ชม., อินพุตข่าวเร็ว/ forced-flow/ funding/ ledger พร้อมเช็กความสด; รายละเอียดใน addendum 2026-11-27 ของ `research/llm_trader/protocol.md`; รอ CI + deploy + ตรวจ `/api/llm_trader` ผ่าน Chrome
+- ห่วงโซ่ปรับปรุงรายสัปดาห์ (PR แยก) ยังไม่ merge: งานสรุป desk_stats พร้อม shrinkage แล้วเปิด branch/PR ข้อเสนอแท็กถัดไป ไม่ merge เอง
+
 ## ด่วน (2026-11-26 Q2 notice_fwd)
 - **notice_fwd (research/q2-announce-ledger):** ล็อก protocol แล้ว (`protocol_notice_fwd_20261126.md`), บัญชีเดินหน้าเข้า 5 วินาทีหลัง pod เห็นประกาศ listing/delist/monitoring (OKX, Binance, EquationNews, เกาหลีถ้า wire ส่งมา), ต่อใน keeper.yml; kill ที่ n>=30 หรือแหล่งที่ median t_seen-t_pub > 25 วินาที; ยังไม่มีไม้
 

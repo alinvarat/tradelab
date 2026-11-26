@@ -1087,5 +1087,137 @@ class Evaluation(Base):
         self.assertEqual(ev["by_protocol"]["v4.18"]["n"], 5)
 
 
+class V419Rules(Base):
+    """v4.19: frozen hard rules, risk brakes, time exits and the evaluation split. Production turns rules on; tests opt in."""
+
+    def setUp(self):
+        super().setUp()
+        self.t.rules_on = True
+        self.t.risk = lt.dr.new_risk_state(self.t.acct.equity(), time.time())
+
+    def go(self, market, **cols):
+        self.t.calls.update(last_idle=0.0, last_ts=0.0)
+        self.t.scan(market)
+
+    def test_size_leverage_and_risk_caps_are_enforced_in_code(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 90, "leverage": 15, "stop_pct": 8, "reason": "r",
+                    "expected_move_pct": 3, "review_in_min": 5000})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        ex = self.t.decisions[0]["executed"]
+        self.assertEqual(ex["status"], "filled")
+        self.assertLessEqual(ex["leverage"], lt.dr.LEV_CAP)
+        self.assertLessEqual(ex["risk_pct_equity"], lt.dr.RISK_PER_TRADE * 100 + 1e-6)
+        self.assertLessEqual(ex["margin_usd"], self.t.acct.equity() * lt.dr.SIZE_CAP_PCT / 100 + 1e-6)
+        self.assertEqual(self.t.links["AAA"]["max_hold_s"], lt.dr.MAX_HOLD_S)
+        self.assertIn("rule_reduce", self.log_kinds())
+        self.assertEqual(self.t.risk["entries_n"], 1)
+
+    def test_analyst_note_entry_is_refused_with_its_rule_id(self):
+        heads = [{"title": "Broker upgrades AAA and raises price target", "source": "X", "lexicon": 0.5, "ai_scores": {}, "seen": "", "key": "k9"}]
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "reason": "r"})
+        with mock.patch.object(lt, "archive_headlines", return_value=[dict(h) for h in heads]), \
+                mock.patch.object(lt, "similar_past", return_value=None):
+            self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.assertFalse(self.t.acct.positions)
+        self.assertIn("R1", self.t.decisions[0]["executed"]["why"])
+        self.assertIn("rule_veto", self.log_kinds())
+        self.assertEqual(self.t.cands[-1]["veto"], "R1")             # the vetoed call is still scored for the weekly review
+
+    def test_expected_move_below_cost_is_refused(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "reason": "r", "expected_move_pct": 0.1})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.assertFalse(self.t.acct.positions)
+        self.assertIn("R8", self.t.decisions[0]["executed"]["why"])
+
+    def test_no_averaging_down_and_no_limit_adds(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "stop_pct": 25, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.assertIn("AAA", self.t.acct.positions)
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "reason": "add", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=125, move=26)))        # the short is under water
+        self.assertIn("R6", self.t.decisions[-1]["executed"]["why"])
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "entry": "limit", "limit_price": 130, "reason": "add",
+                    "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=95, move=-5)))          # in profit now, but a limit add is still refused
+        self.assertIn("R6", self.t.decisions[-1]["executed"]["why"])
+
+    def test_time_exit_closes_an_entry_opened_under_the_rules(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.t.acct.positions["AAA"].opened_ts -= lt.dr.MAX_HOLD_S + 60
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.assertNotIn("AAA", self.t.acct.positions)
+        self.assertTrue(any("time exit" in (t.reason or "") for t in self.t.acct.trades))
+
+    def test_a_position_without_max_hold_is_left_alone(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.t.links["AAA"].pop("max_hold_s")                          # an entry from before v4.19
+        self.t.acct.positions["AAA"].opened_ts -= 10 * 3600
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.assertIn("AAA", self.t.acct.positions)
+
+    def test_bank_at_3x_closes_positions_and_blocks_entries(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.t.risk["cohort_eq"] = self.t.acct.equity() / 3.2
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.assertNotIn("AAA", self.t.acct.positions)
+        self.reply({"symbol": "BBB", "action": "short", "size_pct": 5, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(BBB=quote("BBB", px=50, move=9)))
+        self.assertIn("R7", self.t.decisions[-1]["executed"]["why"])
+
+    def test_context_carries_rules_risk_state_and_shrunk_stats(self):
+        self.t.cands = [{"symbol": "S", "action": "hold", "why": "x", "news_type": "analyst", "ts": 1.0, "price": 1.0,
+                         "out": {"86400": -0.05}} for _ in range(13)]
+        ctx = self.t.build_context(time.time(), [{"symbol": "AAA", "ratio": None, "why": "x"}], self.market(), [])
+        self.assertTrue(any("R1" in r and "n=13" in r for r in ctx["v4_19_rules"]))
+        self.assertTrue(ctx["risk_state"]["allow"])
+        self.assertTrue(any(c.startswith("type:analyst/hold/1d n=13") for c in ctx["desk_stats"]))
+        self.assertEqual(ctx["account"]["limits"]["max_leverage"], lt.dr.LEV_CAP)
+        self.assertIn("expected_move_pct", lt.SYSTEM)
+
+    def test_state_file_from_v4_18_loads_without_risk(self):
+        self.t.save()
+        d = json.loads(self.t.state_path.read_text())
+        d.pop("risk")
+        write_json_atomic(self.t.state_path, d)
+        again = lt.LlmTrader(self.t.state_path, self.t.log_path, chat=self.t.chat)
+        self.assertEqual(again.risk["tag"], lt.dr.TAG)
+        self.assertGreater(again.risk["peak"], 0)
+
+    def test_streak_is_fed_by_closed_model_trades(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "stop_pct": 2, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.go(self.market(AAA=quote("AAA", px=100, move=-5)))        # stopped out at a loss
+        self.assertEqual(self.t.risk["streak"], 1)
+        self.assertTrue(self.t.risk["last_loss"])
+
+    def test_outcome_rows_are_written_for_the_weekly_review(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        c = self.t.cands[-1]
+        self.t._outcome_row(dict(c, out={"3600": 0.01}), 3600)
+        rows = [json.loads(l) for l in (Path(self.tmp.name) / "desk_outcomes_v4.jsonl").read_text().splitlines()]
+        self.assertEqual((rows[0]["symbol"], rows[0]["h"], rows[0]["abn"], rows[0]["protocol"]), ("AAA", 3600, 0.01, lt.PROTOCOL_VERSION))
+        self.assertEqual(rows[0]["em"], 3.0)
+
+    def test_v4_19_pairs_are_reported_alone_and_never_pooled_with_deepseek(self):
+        ds = [{"id": f"d{i}", "s1": -0.01, "ctrl": 0.01, "protocol": "v4.17"} for i in range(5)]
+        c18 = [{"id": f"a{i}", "s1": 0.05, "ctrl": 0.0, "protocol": "v4.18"} for i in range(3)]
+        c19 = [{"id": f"b{i}", "s1": 0.02, "ctrl": 0.0, "protocol": "v4.19"} for i in range(4)]
+        self.t.pairs = ds + c18 + c19
+        ev = self.t.evaluate()
+        self.assertEqual(ev["closed_pairs"], 5)
+        self.assertEqual(ev["claude_v4_18"]["closed_pairs"], 3)
+        self.assertEqual(ev["claude_v4_19"]["closed_pairs"], 4)
+        self.assertEqual(ev["by_protocol"]["v4.19"]["n"], 4)
+
+    def test_protocol_tag_and_rules_tag_agree(self):
+        self.assertIn(lt.PROTOCOL_VERSION, ("v4.19", "v4.17"))         # CI has no Claude, so the tag falls back to v4.17
+        self.assertEqual(lt.dr.TAG, "v4.19")
+        self.assertIn("v4.19", (Path(lt.__file__).resolve().parent.parent / "research" / "llm_trader" / "protocol.md").read_text())
+
+
 if __name__ == "__main__":
     unittest.main()
