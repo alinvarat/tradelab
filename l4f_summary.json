@@ -1,18 +1,8 @@
 {
- "equity_usd": 151.3593,
+ "equity_usd": 151.6689,
  "start_usd": 147.0,
  "goal_usd": 441.0,
  "pending": [
-  {
-   "id": "6994327",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-26T17:45:00Z",
-   "side": "yes",
-   "price": 0.04,
-   "stake": 7.4313,
-   "entry_ts": 1795630723.0308065,
-   "volume": 92902
-  },
   {
    "id": "6995936",
    "question": "Exact Score: Any Other Score?",
@@ -114,32 +104,18 @@
    "volume": 58658
   }
  ],
- "n_closed": 17,
+ "n_closed": 18,
  "sequential": {
   "n_units": 2,
-  "e_value_edge": 1.0149,
+  "e_value_edge": 1.0156,
   "e_value_negative": 1.0,
   "threshold": 20.0,
   "decision": "continue",
   "decided_at_unit": null,
-  "mean_scaled": 0.034026
+  "mean_scaled": 0.034769
  },
  "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md",
  "closed_last": [
-  {
-   "id": "6757546",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-25T20:00:00Z",
-   "side": "yes",
-   "price": 0.002,
-   "stake": 7.35,
-   "entry_ts": 1795558630.3247502,
-   "volume": 77299,
-   "net": 0.002004008016032064,
-   "ts": 1795645059.9208035,
-   "yes_won": false,
-   "equity_after": 149.7837
-  },
   {
    "id": "6757692",
    "question": "Exact Score: Any Other Score?",
@@ -265,6 +241,20 @@
    "ts": 1795731443.6187105,
    "yes_won": false,
    "equity_after": 151.3593
+  },
+  {
+   "id": "6994327",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T17:45:00Z",
+   "side": "yes",
+   "price": 0.04,
+   "stake": 7.4313,
+   "entry_ts": 1795630723.0308065,
+   "volume": 92902,
+   "net": 0.04166666666666667,
+   "ts": 1795733258.3266199,
+   "yes_won": false,
+   "equity_after": 151.6689
   }
  ],
  "last_error": null
