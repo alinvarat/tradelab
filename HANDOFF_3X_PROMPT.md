@@ -89,3 +89,5 @@ sha256sum research/threefold_plan/pre_removal_results.json
 ## 2026-11-25 (forced-flow families, สายวิจัย)
 - ลองครอบครัวเหตุการณ์ forced-selling เพิ่ม 9 ตัว (monitoring tag, Binance futures delist, pair removal, OKX/Upbit/Bithumb/Bybit delist และ caution) ตามโปรโตคอล `research/studies/protocol_forced_flow_20261125.md`: ผ่านด่าน stage 0 ศูนย์จาก 54 กฎ จึงไม่เสนอ addendum ให้ event book (ผลใน `research/studies/RESULTS.md`, rows ที่ branch `data/forced-flow`).
 - ข้อสังเกตสำคัญ: L1f ที่ชอร์ตบน perp ของ Binance ได้เฉพาะ 65 จาก 107 ประกาศ ให้เฉลี่ย +4.7% ต่อครั้ง x ประมาณ 0.19 (ช่วง train ติดลบ) ต่างจาก x 1.98 บน rows แบบ spot ที่รวมเหรียญที่ไม่มี perp; book จริงข้ามเหรียญที่ไม่มี perp บน OKX จึงอาจได้ x ใกล้ 0.2 ไม่ใช่ 2.2 ต้องดูผล forward
+
+- **ความหน่วงข่าว (26 พ.ย.):** `news_latency_fwd` วัดล่วงหน้าว่า Haiku เร็วๆ หลายตัวขนานกันเทรดข่าวได้ไหม (t_pub, t_seen, t_llm, ราคาสด t_llm+5 วิ, เส้นราคา -5..+61 นาที) protocol ล็อกใน `research/studies/protocol_news_latency_fwd_20261126.md` ผลอยู่ที่ `summary.json` ของ branch `data/news-latency-fwd` อย่าอ้างผลก่อนมี 100 เทรดต่อตลาด

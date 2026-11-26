@@ -26,6 +26,11 @@ jobs:
           run() { gh workflow run research.yml -R "$R" --ref main -f study="$1" && echo "$(date -u +%FT%TZ) dispatched $1" || echo "dispatch $1 failed"; }
           end=$(( $(date +%s) + 340*60 ))
           last=""
+          ensure_news() {   # news_latency_fwd run mode chains itself; this only restarts it if nothing is running or queued
+            n=$(gh run list --workflow news_latency_fwd.yml -R "$R" --limit 10 --json status -q '[.[]|select(.status!="completed")]|length' 2>/dev/null || echo 1)
+            [ "$n" = "0" ] && { gh workflow run news_latency_fwd.yml -R "$R" --ref main -f mode=run && echo "$(date -u +%FT%TZ) dispatched news_latency_fwd run" || echo "dispatch news_latency_fwd failed"; }
+          }
+          ensure_news
           gh workflow run event_book.yml -R "$R" --ref main -f mode=forward && echo "$(date -u +%FT%TZ) dispatched event_book forward" || echo "dispatch event_book failed"
           run l4f_forward   # startup smoke: proves GITHUB_TOKEN can dispatch (ledger is idempotent)
           while [ "$(date +%s)" -lt "$end" ]; do
@@ -33,6 +38,7 @@ jobs:
             if [ "$key" != "$last" ]; then
               last=$key
               [ "$m" = "05" ] && run fwd_crypto_spikes
+              { [ "$m" = "07" ] || [ "$m" = "37" ]; } && ensure_news
               case "$m" in 03|13|23|33|43|53) gh workflow run event_book.yml -R "$R" --ref main -f mode=forward && echo "$(date -u +%FT%TZ) dispatched event_book forward" || echo "dispatch event_book failed";; esac
               { [ "$m" = "17" ] || [ "$m" = "47" ]; } && run l4f_forward
               [ "$h:$m" = "15:00" ] && [ "$dow" -le 5 ] && run options_forward
