@@ -1,6 +1,7 @@
 """Always-on news ingestion inside the Kuber pod (stdlib only): the fastest free feeds with no account, a websocket push
-channel, and Claude Haiku timing. It only MEASURES and LOGS; it does not feed the trader (that would change the bot's
-decisions and needs its own protocol tag, AGENTS rule 5/7).
+channel, and Claude Haiku timing. It only MEASURES and LOGS. Since protocol v4.19 (2026-11-27) the trader reads its append-only
+day files and view() READ-ONLY through core/desk_feeds.py (this module and its row format are unchanged); until v4.18 it did not
+feed the trader.
 
 For every new item it records t_pub (the source's own time), t_seen (when this pod first held the item) and t_llm (when
 the Haiku read of it came back), into DIR/news_ingest/YYYYMMDD.jsonl, and /api/news_latency ("ingest" key) shows the
