@@ -1,0 +1,38 @@
+[
+ {
+  "market": "stock",
+  "hold": "1d",
+  "anon": 0.0,
+  "named": -8.965642779008809e-05,
+  "named_minus_anon": -8.965642779008809e-05,
+  "traded_anon": 0,
+  "traded_named": 1
+ },
+ {
+  "market": "crypto",
+  "hold": "5m",
+  "anon": 0.0,
+  "named": 0.0,
+  "named_minus_anon": 0.0,
+  "traded_anon": 0,
+  "traded_named": 0
+ },
+ {
+  "market": "crypto",
+  "hold": "1h",
+  "anon": 0.0004095272202379096,
+  "named": 2.0782944180176235e-05,
+  "named_minus_anon": -0.00038874427605773337,
+  "traded_anon": 158,
+  "traded_named": 165
+ },
+ {
+  "market": "crypto",
+  "hold": "1d",
+  "anon": 0.0016648522641120615,
+  "named": 0.005116583338643884,
+  "named_minus_anon": 0.003451731074531822,
+  "traded_anon": 209,
+  "traded_named": 208
+ }
+]
