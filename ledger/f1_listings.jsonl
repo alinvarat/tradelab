@@ -4213,3 +4213,9 @@
 {"kind": "snap", "t": 1795706613.190918, "venue": "mexc", "base": "VERITY", "age_h": 7.01, "bid": 8.198, "ask": 8.5, "bid_sz": 0.13, "ask_sz": 1.18, "vol24": 0.0, "spread": 0.03684}
 {"kind": "snap", "t": 1795706613.190918, "venue": "kucoin", "base": "SHARE", "age_h": 6.0, "bid": 0.05914, "ask": 0.05934, "bid_sz": 170.0, "ask_sz": 354.4, "vol24": 53045.975636, "spread": 0.00338}
 {"kind": "snap", "t": 1795706613.190918, "venue": "gate", "base": "ETNM", "age_h": 3.0, "bid": 0.001165, "ask": 0.0011675, "bid_sz": 0.0, "ask_sz": 0.0, "vol24": 14495.7849176, "spread": 0.00215}
+{"kind": "gone", "t": 1795710207.7338378, "venue": "mexc", "base": "DVO"}
+{"kind": "snap", "t": 1795710207.7338378, "venue": "mexc", "base": "JIMMY", "age_h": 33.94, "bid": 0.00097, "ask": 0.000976, "bid_sz": 51546.39, "ask_sz": 6888.44, "vol24": 0.0, "spread": 0.00619}
+{"kind": "snap", "t": 1795710207.7338378, "venue": "kucoin", "base": "VERITY", "age_h": 8.0, "bid": 8.8743, "ask": 9.1, "bid_sz": 2.16, "ask_sz": 490.02, "vol24": 3088694.64209, "spread": 0.02543}
+{"kind": "snap", "t": 1795710207.7338378, "venue": "mexc", "base": "VERITY", "age_h": 8.0, "bid": 5.03, "ask": 5.1226, "bid_sz": 0.22, "ask_sz": 0.4, "vol24": 0.0, "spread": 0.01841}
+{"kind": "snap", "t": 1795710207.7338378, "venue": "kucoin", "base": "SHARE", "age_h": 7.0, "bid": 0.0587, "ask": 0.0593, "bid_sz": 171.7, "ask_sz": 353.2, "vol24": 57704.729438, "spread": 0.01022}
+{"kind": "snap", "t": 1795710207.7338378, "venue": "gate", "base": "ETNM", "age_h": 4.0, "bid": 0.001156, "ask": 0.0011585, "bid_sz": 0.0, "ask_sz": 0.0, "vol24": 14815.3994141, "spread": 0.00216}
