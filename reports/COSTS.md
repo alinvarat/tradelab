@@ -16,3 +16,4 @@
 
 งานออปชันแบบเดินหน้าบันทึกค่า LLM สะสมแยกตามโปรโตคอลไว้ใน `llm_cost_usd_recorded` ของ summary ใน branch `data/options-forward` ให้คัดค่าจริงมาลงตารางนี้เมื่อรีวิวผล
 | 2026-11-26 | key-person 8-K 5.02 labels (Haiku, 3,962 calls) | 0.00 paid | Max plan; notional list price 1.56 USD (7.77M in, 0.99M out tokens); run 45754052124 |
+| 2026-11-26 | news_train round 2 (Claude Haiku 5.5, Max plan): evals w0-w3 train+validation, analysis, sealed crypto run 45801945782 | 0 paid (Max) | sealed crypto 1,971 calls, 2.03M tokens in / 0.70M out, notional 0.76 USD; eval run 45789213718 about 4 x 5,000 calls (tokens in the Actions logs); forward job adds about 13 items a day |
