@@ -11,7 +11,7 @@
   "projection_paired": null
  },
  "crypto_items": 0,
- "ingest_rows": 323,
+ "ingest_rows": 392,
  "items": 0,
  "locked_models": {
   "haiku": "claude-haiku-5-5",
@@ -27,5 +27,5 @@
  "stock_items": 0,
  "stock_items_with_pod_row": 0,
  "stopped_early": {},
- "utc": 1795713462
+ "utc": 1795737215
 }
