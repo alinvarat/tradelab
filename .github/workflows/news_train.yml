@@ -1,0 +1,268 @@
+name: News train
+
+# News-analyst training loop (research/news_train/protocol.md). Claude Haiku 5.5 only, on the owner's Max plan. Modes:
+#   build  - items and achievable-entry labels (dev) and sealed item text (no sealed outcomes) -> data/news-train
+#   leak   - memory probe on public index prices (no news item)
+#   eval   - versions (comma list) x sets (train,validation) sharded over a matrix, merged and scored -> data/news-train
+#   sealed - ONE-SHOT run of the version named in research/news_train/LOCK.json on the sealed set
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "build, leak, eval or sealed"
+        required: true
+        default: "build"
+      versions:
+        description: "eval: comma list of registered versions, e.g. v0,v1"
+        required: false
+        default: "v0"
+      sets:
+        description: "eval: train, validation or train,validation"
+        required: false
+        default: "validation"
+      shards:
+        description: "eval: shards per version and set"
+        required: false
+        default: "8"
+
+permissions:
+  contents: read
+
+env:
+  TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+  CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+  TRADELAB_CLAUDE_PARALLEL: "4"
+
+jobs:
+  build:
+    if: inputs.mode == 'build'
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [stock, crypto]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: |
+          git fetch origin data/event-rows data/forced-flow data/kr-listing
+          python research/news_train/run.py build out ${{ matrix.part }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-${{ matrix.part }}
+          path: out/
+
+  build_publish:
+    if: inputs.mode == 'build'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: build-*
+          path: parts
+          merge-multiple: true
+      - run: python research/news_train/run.py publish parts data_out
+      - name: Keep on data/news-train
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r data_out /tmp/keep
+          if git fetch origin data/news-train 2>/dev/null; then git checkout -q -B data/news-train origin/data/news-train
+          else git checkout -q --orphan data/news-train && git rm -rq --cached . && git clean -fdq; fi
+          cp -r /tmp/keep/* .
+          git add -A . ':!parts' ':!data_out' 2>/dev/null || git add -A
+          git commit -qm "News train build: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train && break; git fetch -q origin data/news-train; git rebase -q origin/data/news-train; done
+
+  leak:
+    if: inputs.mode == 'leak'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - run: python research/news_train/run.py leak out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-train-leak
+          path: out/
+      - name: Keep on data/news-train
+        if: always()
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/news-train 2>/dev/null; then git checkout -q -B data/news-train origin/data/news-train
+          else git checkout -q --orphan data/news-train && git rm -rq --cached . && git clean -fdq; fi
+          mkdir -p leak && cp /tmp/keep/* leak/
+          git add leak
+          git commit -qm "News train leak probe: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train && break; git fetch -q origin data/news-train; git rebase -q origin/data/news-train; done
+
+  plan:
+    if: inputs.mode == 'eval'
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - id: m
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          vs = [v.strip() for v in "${{ inputs.versions }}".split(",") if v.strip()]
+          ss = [s.strip() for s in "${{ inputs.sets }}".split(",") if s.strip()]
+          n = int("${{ inputs.shards }}")
+          inc = [{"version": v, "set": s, "shard": k, "shards": n} for v in vs for s in ss for k in range(n)]
+          print("matrix=" + json.dumps({"include": inc}))
+          PY
+
+  eval:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Restore data
+        run: |
+          mkdir -p /tmp/data
+          git fetch origin data/news-train
+          git archive origin/data/news-train | tar -x -C /tmp/data
+      - run: python research/news_train/run.py eval out /tmp/data ${{ matrix.version }} ${{ matrix.set }} ${{ matrix.shard }} ${{ matrix.shards }} 300
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-${{ matrix.version }}-${{ matrix.set }}-${{ matrix.shard }}
+          path: out/
+
+  eval_merge:
+    needs: eval
+    if: always() && inputs.mode == 'eval'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: eval-*
+          path: parts
+          merge-multiple: true
+      - name: Restore data
+        run: |
+          mkdir -p /tmp/data
+          git fetch origin data/news-train
+          git archive origin/data/news-train | tar -x -C /tmp/data
+      - run: python research/news_train/run.py merge parts /tmp/data merged
+      - name: Spend
+        run: python3 -c "import glob,json;t={};[t.__setitem__(k,t.get(k,0)+v) for f in glob.glob('parts/spend_*.json') for k,v in json.load(open(f)).items() if isinstance(v,(int,float))];print('SPEND',json.dumps(t))"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-train-merged
+          path: merged/
+      - name: Keep on data/news-train
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r merged /tmp/keep
+          if git fetch origin data/news-train 2>/dev/null; then git checkout -q -B data/news-train origin/data/news-train
+          else git checkout -q --orphan data/news-train && git rm -rq --cached . && git clean -fdq; fi
+          mkdir -p calls evals && cp -r /tmp/keep/calls/. calls/ && cp -r /tmp/keep/evals/. evals/
+          git add calls evals
+          git commit -qm "News train eval ${{ inputs.versions }} ${{ inputs.sets }}: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train && break; git fetch -q origin data/news-train; git rebase -q origin/data/news-train; done
+
+  sealed:
+    if: inputs.mode == 'sealed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Restore data
+        run: |
+          mkdir -p /tmp/data
+          git fetch origin data/news-train
+          git archive origin/data/news-train | tar -x -C /tmp/data
+      - run: python research/news_train/run.py sealed out /tmp/data
+        env:
+          TRADELAB_CLAUDE_PARALLEL: "6"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-train-sealed
+          path: out/
+      - name: Keep on data/news-train
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out/sealed /tmp/keep_sealed
+          git checkout -q -B data/news-train origin/data/news-train
+          mkdir -p sealed && cp /tmp/keep_sealed/* sealed/
+          git add sealed
+          git commit -qm "News train SEALED result: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train && break; git fetch -q origin data/news-train; git rebase -q origin/data/news-train; done
