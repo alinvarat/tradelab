@@ -1,0 +1,4 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17605","title":"Binance Perp Monitor: BULLAUSDT (BULLA) -7% in the past 10 seconds","t_pub":1795717698.733,"res":"s","t_seen":1795717701.6238213,"lat_s":2.891}
+{"event":"llm","source":"eqn_rest","key":"eqn:17605","t_pub":1795717698.733,"t_seen":1795717701.6238213,"t_llm":1795717706.9567165,"llm_s":5.333,"model":"claude/claude-haiku-5-5","parsed":{"direction":"down","confidence":55,"instrument":"BULLA"}}
+{"event":"item","source":"eqn_rest","key":"eqn:17606","title":"Service Recovery Update: Withdrawals Recovery Work Complete (2026-11-26)","t_pub":1795717811.195,"res":"s","t_seen":1795717821.4571378,"lat_s":10.262}
+{"event":"llm","source":"eqn_rest","key":"eqn:17606","t_pub":1795717811.195,"t_seen":1795717821.4571378,"t_llm":1795717826.2033749,"llm_s":4.746,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":15,"instrument":null}}
