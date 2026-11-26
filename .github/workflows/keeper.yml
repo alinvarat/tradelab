@@ -29,6 +29,7 @@ jobs:
           ensure_news() {   # news_latency_fwd run mode chains itself; this only restarts it if nothing is running or queued
             n=$(gh run list --workflow news_latency_fwd.yml -R "$R" --limit 10 --json status -q '[.[]|select(.status!="completed")]|length' 2>/dev/null || echo 1)
             [ "$n" = "0" ] && { gh workflow run news_latency_fwd.yml -R "$R" --ref main -f mode=run && echo "$(date -u +%FT%TZ) dispatched news_latency_fwd run" || echo "dispatch news_latency_fwd failed"; }
+            return 0   # set -e: a false [ ] test above must not end the keeper
           }
           ensure_news
           gh workflow run event_book.yml -R "$R" --ref main -f mode=forward && echo "$(date -u +%FT%TZ) dispatched event_book forward" || echo "dispatch event_book failed"
