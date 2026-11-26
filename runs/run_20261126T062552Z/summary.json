@@ -1,0 +1,3154 @@
+{
+ "stage": "B",
+ "run_utc": "2026-11-26T06:25:49Z",
+ "prompt_sha256": "b1a78bdf5006c77cd03d51b308f57cd0869f446498242c09046fc021b3f77e48",
+ "events_frozen": 960,
+ "rows_priced": 960,
+ "dropped": {},
+ "tickers_without_bars": [],
+ "counts_priced": {
+  "abrupt": {
+   "train": 41,
+   "validation": 39,
+   "test": 61,
+   "total": 141,
+   "misconduct": 9,
+   "post_cutoff": 16
+  },
+  "planned": {
+   "train": 222,
+   "validation": 242,
+   "test": 339,
+   "total": 803,
+   "misconduct": 0,
+   "post_cutoff": 68
+  },
+  "interim": {
+   "train": 3,
+   "validation": 3,
+   "test": 3,
+   "total": 9,
+   "misconduct": 0,
+   "post_cutoff": 1
+  },
+  "return": {
+   "train": 0,
+   "validation": 4,
+   "test": 3,
+   "total": 7,
+   "misconduct": 0,
+   "post_cutoff": 0
+  }
+ },
+ "months": {
+  "train": 35.98,
+  "validation": 36.01,
+  "test": 44.98
+ },
+ "rules_tested": 12,
+ "event_gate": {
+  "stage0_survivors": [],
+  "holm": {
+   "holm_m": 0
+  },
+  "passed": [],
+  "evaluated": []
+ },
+ "sweep_strict_gate": {
+  "stage0_survivors": [],
+  "holm": {
+   "holm_m": 0
+  },
+  "passed": []
+ },
+ "judged_rules": {
+  "abrupt|short|h1|raw": {
+   "gate": {
+    "n_train": 41,
+    "tpm": 1.123,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.001373,
+    "placebo_mean": -0.002627,
+    "vol_cost": 12.02,
+    "x": -0.0037,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "abrupt|short|h1|raw",
+    "control_mean_train": -0.002844824711086084
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 141,
+    "mean": 0.00229,
+    "sd": 0.0288,
+    "s": 0.0796,
+    "per_month": 1.206,
+    "x": 0.0076,
+    "hit": 0.518
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00137,
+     "sd": 0.02404,
+     "s": -0.0571,
+     "per_month": 1.14,
+     "x": 0.0037,
+     "hit": 0.463
+    },
+    "validation": {
+     "n": 39,
+     "mean": 0.0008,
+     "sd": 0.03372,
+     "s": 0.0237,
+     "per_month": 1.083,
+     "x": 0.0006,
+     "hit": 0.487
+    },
+    "test": {
+     "n": 61,
+     "mean": 0.00571,
+     "sd": 0.02842,
+     "s": 0.201,
+     "per_month": 1.356,
+     "x": 0.0548,
+     "hit": 0.574
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.002844824711086084,
+    "validation": 0.0011051759912918708,
+    "test": -0.0008885194117947119
+   },
+   "placebo_mean_by_split": {
+    "train": -0.0026268999822224018,
+    "validation": -0.004800377578098275,
+    "test": -0.00971055246276187
+   }
+  },
+  "abrupt|short|h1|adj": {
+   "gate": {
+    "n_train": 41,
+    "tpm": 1.123,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.00252,
+    "placebo_mean": -0.00228,
+    "vol_cost": 10.17,
+    "x": -0.012,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "abrupt|short|h1|adj",
+    "control_mean_train": -0.0024148608072132594
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 141,
+    "mean": 0.00172,
+    "sd": 0.02735,
+    "s": 0.063,
+    "per_month": 1.206,
+    "x": 0.0048,
+    "hit": 0.525
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00252,
+     "sd": 0.0244,
+     "s": -0.1033,
+     "per_month": 1.14,
+     "x": 0.0122,
+     "hit": 0.488
+    },
+    "validation": {
+     "n": 39,
+     "mean": 0.00112,
+     "sd": 0.02784,
+     "s": 0.0401,
+     "per_month": 1.083,
+     "x": 0.0017,
+     "hit": 0.513
+    },
+    "test": {
+     "n": 61,
+     "mean": 0.00496,
+     "sd": 0.02888,
+     "s": 0.1718,
+     "per_month": 1.356,
+     "x": 0.04,
+     "hit": 0.557
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0024148608072132594,
+    "validation": 3.2764722075304626e-05,
+    "test": -0.0010054696409100825
+   },
+   "placebo_mean_by_split": {
+    "train": -0.0022800977103980204,
+    "validation": -0.005915837245484351,
+    "test": -0.009762922020830607
+   }
+  },
+  "abrupt|short|h5|raw": {
+   "gate": {
+    "n_train": 41,
+    "tpm": 1.123,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.010487,
+    "placebo_mean": 0.006487,
+    "vol_cost": 21.68,
+    "x": -0.0657,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "abrupt|short|h5|raw",
+    "control_mean_train": -0.005481762705626742
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 141,
+    "mean": -0.00586,
+    "sd": 0.06456,
+    "s": -0.0907,
+    "per_month": 1.206,
+    "x": 0.0099,
+    "hit": 0.475
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.01049,
+     "sd": 0.04336,
+     "s": -0.2419,
+     "per_month": 1.14,
+     "x": 0.0667,
+     "hit": 0.39
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.00277,
+     "sd": 0.09296,
+     "s": -0.0298,
+     "per_month": 1.083,
+     "x": 0.001,
+     "hit": 0.538
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00472,
+     "sd": 0.05456,
+     "s": -0.0864,
+     "per_month": 1.356,
+     "x": 0.0101,
+     "hit": 0.492
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.005481762705626742,
+    "validation": 0.0018858397782830839,
+    "test": -0.005270725092775672
+   },
+   "placebo_mean_by_split": {
+    "train": 0.006487245211503717,
+    "validation": -0.0012297591502577808,
+    "test": 0.0007157893450029317
+   }
+  },
+  "abrupt|short|h5|adj": {
+   "gate": {
+    "n_train": 41,
+    "tpm": 1.123,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.010263,
+    "placebo_mean": 0.005463,
+    "vol_cost": 18.73,
+    "x": -0.0586,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "abrupt|short|h5|adj",
+    "control_mean_train": -0.0048658599637001814
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 141,
+    "mean": -0.00493,
+    "sd": 0.05872,
+    "s": -0.084,
+    "per_month": 1.206,
+    "x": 0.0085,
+    "hit": 0.489
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.01026,
+     "sd": 0.04495,
+     "s": -0.2284,
+     "per_month": 1.14,
+     "x": 0.0594,
+     "hit": 0.439
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.00428,
+     "sd": 0.07314,
+     "s": -0.0585,
+     "per_month": 1.083,
+     "x": 0.0037,
+     "hit": 0.59
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00176,
+     "sd": 0.05728,
+     "s": -0.0307,
+     "per_month": 1.356,
+     "x": 0.0013,
+     "hit": 0.459
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0048658599637001814,
+    "validation": 0.0005802748504778203,
+    "test": -0.0018648995351844661
+   },
+   "placebo_mean_by_split": {
+    "train": 0.0054633701514071875,
+    "validation": -0.0005181617501884886,
+    "test": -0.0030397733033411096
+   }
+  },
+  "abrupt|short|h20|raw": {
+   "gate": {
+    "n_train": 41,
+    "tpm": 1.123,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.004655,
+    "placebo_mean": 0.000655,
+    "vol_cost": 34.85,
+    "x": -0.005,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "abrupt|short|h20|raw",
+    "control_mean_train": -0.011131682024821394
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 141,
+    "mean": -0.00662,
+    "sd": 0.10217,
+    "s": -0.0648,
+    "per_month": 1.206,
+    "x": 0.0051,
+    "hit": 0.44
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00466,
+     "sd": 0.0697,
+     "s": -0.0668,
+     "per_month": 1.14,
+     "x": 0.0051,
+     "hit": 0.415
+    },
+    "validation": {
+     "n": 39,
+     "mean": 0.00745,
+     "sd": 0.144,
+     "s": 0.0517,
+     "per_month": 1.083,
+     "x": 0.0029,
+     "hit": 0.513
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.01693,
+     "sd": 0.08802,
+     "s": -0.1924,
+     "per_month": 1.356,
+     "x": 0.0502,
+     "hit": 0.41
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.011131682024821394,
+    "validation": -0.011577439938840191,
+    "test": -0.014344169983289632
+   },
+   "placebo_mean_by_split": {
+    "train": 0.0006554121226968799,
+    "validation": -0.011450997742652652,
+    "test": 0.012931438355169477
+   }
+  },
+  "abrupt|short|h20|adj": {
+   "gate": {
+    "n_train": 41,
+    "tpm": 1.123,
+    "w": 1.0,
+    "shortable": true,
+    "train_mean": -0.001383,
+    "placebo_mean": -0.003417,
+    "vol_cost": 25.32,
+    "x": -0.0006,
+    "reason": "train net mean not above 0 and the reversed-side placebo",
+    "id": "abrupt|short|h20|adj",
+    "control_mean_train": -0.001631924833417809
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 141,
+    "mean": 0.0012,
+    "sd": 0.07623,
+    "s": 0.0157,
+    "per_month": 1.206,
+    "x": 0.0003,
+    "hit": 0.482
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00138,
+     "sd": 0.06077,
+     "s": -0.0228,
+     "per_month": 1.14,
+     "x": 0.0006,
+     "hit": 0.512
+    },
+    "validation": {
+     "n": 39,
+     "mean": 0.00862,
+     "sd": 0.07486,
+     "s": 0.1151,
+     "per_month": 1.083,
+     "x": 0.0143,
+     "hit": 0.462
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00182,
+     "sd": 0.08659,
+     "s": -0.021,
+     "per_month": 1.356,
+     "x": 0.0006,
+     "hit": 0.475
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.001631924833417809,
+    "validation": -0.0008347402460026865,
+    "test": 0.0015256114043479855
+   },
+   "placebo_mean_by_split": {
+    "train": -0.00341715224084937,
+    "validation": -0.013415936998937585,
+    "test": -0.002984965581044758
+   }
+  },
+  "return|long|h1|raw": {
+   "gate": {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 1.0,
+    "shortable": true,
+    "reason": "train trades 0 < 20",
+    "id": "return|long|h1|raw",
+    "control_mean_train": null
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 7,
+    "mean": 0.01207,
+    "sd": 0.03134,
+    "s": 0.3852,
+    "per_month": 0.06,
+    "x": 0.0089,
+    "hit": 0.714
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.01877,
+     "sd": 0.03653,
+     "s": 0.5138,
+     "per_month": 0.111,
+     "x": 0.0293,
+     "hit": 0.75
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.00315,
+     "sd": 0.02713,
+     "s": 0.1159,
+     "per_month": 0.067,
+     "x": 0.0009,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": 0.006220751465165902,
+    "test": 0.00804441762277314
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.020765897115430115,
+    "test": -0.005145432592325879
+   }
+  },
+  "return|long|h1|adj": {
+   "gate": {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 1.0,
+    "shortable": true,
+    "reason": "train trades 0 < 20",
+    "id": "return|long|h1|adj",
+    "control_mean_train": null
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 7,
+    "mean": 0.00318,
+    "sd": 0.02868,
+    "s": 0.1108,
+    "per_month": 0.06,
+    "x": 0.0007,
+    "hit": 0.571
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.00832,
+     "sd": 0.03309,
+     "s": 0.2513,
+     "per_month": 0.111,
+     "x": 0.007,
+     "hit": 0.75
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.00367,
+     "sd": 0.02649,
+     "s": -0.1386,
+     "per_month": 0.067,
+     "x": 0.0013,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": 0.005059256627719578,
+    "test": 0.008929975818773849
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.0111153052880626,
+    "test": 0.0008727821666158989
+   }
+  },
+  "return|long|h5|raw": {
+   "gate": {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 1.0,
+    "shortable": true,
+    "reason": "train trades 0 < 20",
+    "id": "return|long|h5|raw",
+    "control_mean_train": null
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 7,
+    "mean": -0.00119,
+    "sd": 0.02849,
+    "s": -0.0417,
+    "per_month": 0.06,
+    "x": 0.0001,
+    "hit": 0.429
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": -0.00579,
+     "sd": 0.03469,
+     "s": -0.167,
+     "per_month": 0.111,
+     "x": 0.0031,
+     "hit": 0.25
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.00495,
+     "sd": 0.02304,
+     "s": 0.2149,
+     "per_month": 0.067,
+     "x": 0.0031,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.018295304391073366,
+    "test": 0.021129363835931416
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": 0.003793113309691315,
+    "test": -0.006951195879660421
+   }
+  },
+  "return|long|h5|adj": {
+   "gate": {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 1.0,
+    "shortable": true,
+    "reason": "train trades 0 < 20",
+    "id": "return|long|h5|adj",
+    "control_mean_train": null
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 7,
+    "mean": -0.01289,
+    "sd": 0.02997,
+    "s": -0.4302,
+    "per_month": 0.06,
+    "x": 0.0111,
+    "hit": 0.429
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": -0.01965,
+     "sd": 0.03338,
+     "s": -0.5885,
+     "per_month": 0.111,
+     "x": 0.0385,
+     "hit": 0.25
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.00389,
+     "sd": 0.02846,
+     "s": -0.1366,
+     "per_month": 0.067,
+     "x": 0.0012,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.008824436621568005,
+    "test": 0.019147694472817677
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": 0.01684833477463093,
+    "test": 0.0010886245281636752
+   }
+  },
+  "return|long|h20|raw": {
+   "gate": {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 1.0,
+    "shortable": true,
+    "reason": "train trades 0 < 20",
+    "id": "return|long|h20|raw",
+    "control_mean_train": null
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 7,
+    "mean": 0.01794,
+    "sd": 0.13299,
+    "s": 0.1349,
+    "per_month": 0.06,
+    "x": 0.0011,
+    "hit": 0.429
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.06044,
+     "sd": 0.14734,
+     "s": 0.4102,
+     "per_month": 0.111,
+     "x": 0.0187,
+     "hit": 0.5
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.03874,
+     "sd": 0.10984,
+     "s": -0.3527,
+     "per_month": 0.067,
+     "x": 0.0083,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.0035845899312394566,
+    "test": 0.04066299153166983
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.06244103522322794,
+    "test": 0.03673695503245348
+   }
+  },
+  "return|long|h20|adj": {
+   "gate": {
+    "n_train": 0,
+    "tpm": 0.0,
+    "w": 1.0,
+    "shortable": true,
+    "reason": "train trades 0 < 20",
+    "id": "return|long|h20|adj",
+    "control_mean_train": null
+   },
+   "ok": false,
+   "stats_all": {
+    "n": 7,
+    "mean": -0.01197,
+    "sd": 0.09509,
+    "s": -0.1259,
+    "per_month": 0.06,
+    "x": 0.0009,
+    "hit": 0.429
+   },
+   "stats_by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.01831,
+     "sd": 0.10913,
+     "s": 0.1677,
+     "per_month": 0.111,
+     "x": 0.0031,
+     "hit": 0.5
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.05234,
+     "sd": 0.07061,
+     "s": -0.7412,
+     "per_month": 0.067,
+     "x": 0.0366,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": 0.015161567768342071,
+    "test": 0.022969514172687364
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.021105096458421253,
+    "test": 0.04953824356346881
+   }
+  }
+ },
+ "descriptive": {
+  "abrupt|short|h1|raw": {
+   "all": {
+    "n": 141,
+    "mean": 0.00229,
+    "sd": 0.0288,
+    "s": 0.0796,
+    "per_month": 1.206,
+    "x": 0.0076,
+    "hit": 0.518
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00137,
+     "sd": 0.02404,
+     "s": -0.0571,
+     "per_month": 1.14,
+     "x": 0.0037,
+     "hit": 0.463
+    },
+    "validation": {
+     "n": 39,
+     "mean": 0.0008,
+     "sd": 0.03372,
+     "s": 0.0237,
+     "per_month": 1.083,
+     "x": 0.0006,
+     "hit": 0.487
+    },
+    "test": {
+     "n": 61,
+     "mean": 0.00571,
+     "sd": 0.02842,
+     "s": 0.201,
+     "per_month": 1.356,
+     "x": 0.0548,
+     "hit": 0.574
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.002844824711086084,
+    "validation": 0.0011051759912918708,
+    "test": -0.0008885194117947119
+   },
+   "placebo_mean_by_split": {
+    "train": -0.0026268999822224018,
+    "validation": -0.004800377578098275,
+    "test": -0.00971055246276187
+   },
+   "gross_mean_all": 0.004491046209373159
+  },
+  "abrupt|short|h1|adj": {
+   "all": {
+    "n": 141,
+    "mean": 0.00172,
+    "sd": 0.02735,
+    "s": 0.063,
+    "per_month": 1.206,
+    "x": 0.0048,
+    "hit": 0.525
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00252,
+     "sd": 0.0244,
+     "s": -0.1033,
+     "per_month": 1.14,
+     "x": 0.0122,
+     "hit": 0.488
+    },
+    "validation": {
+     "n": 39,
+     "mean": 0.00112,
+     "sd": 0.02784,
+     "s": 0.0401,
+     "per_month": 1.083,
+     "x": 0.0017,
+     "hit": 0.513
+    },
+    "test": {
+     "n": 61,
+     "mean": 0.00496,
+     "sd": 0.02888,
+     "s": 0.1718,
+     "per_month": 1.356,
+     "x": 0.04,
+     "hit": 0.557
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0024148608072132594,
+    "validation": 3.2764722075304626e-05,
+    "test": -0.0010054696409100825
+   },
+   "placebo_mean_by_split": {
+    "train": -0.0022800977103980204,
+    "validation": -0.005915837245484351,
+    "test": -0.009762922020830607
+   },
+   "gross_mean_all": 0.004321390726574936
+  },
+  "abrupt|short|h5|raw": {
+   "all": {
+    "n": 141,
+    "mean": -0.00586,
+    "sd": 0.06456,
+    "s": -0.0907,
+    "per_month": 1.206,
+    "x": 0.0099,
+    "hit": 0.475
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.01049,
+     "sd": 0.04336,
+     "s": -0.2419,
+     "per_month": 1.14,
+     "x": 0.0667,
+     "hit": 0.39
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.00277,
+     "sd": 0.09296,
+     "s": -0.0298,
+     "per_month": 1.083,
+     "x": 0.001,
+     "hit": 0.538
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00472,
+     "sd": 0.05456,
+     "s": -0.0864,
+     "per_month": 1.356,
+     "x": 0.0101,
+     "hit": 0.492
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.005481762705626742,
+    "validation": 0.0018858397782830839,
+    "test": -0.005270725092775672
+   },
+   "placebo_mean_by_split": {
+    "train": 0.006487245211503717,
+    "validation": -0.0012297591502577808,
+    "test": 0.0007157893450029317
+   },
+   "gross_mean_all": -0.0028638201735874174
+  },
+  "abrupt|short|h5|adj": {
+   "all": {
+    "n": 141,
+    "mean": -0.00493,
+    "sd": 0.05872,
+    "s": -0.084,
+    "per_month": 1.206,
+    "x": 0.0085,
+    "hit": 0.489
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.01026,
+     "sd": 0.04495,
+     "s": -0.2284,
+     "per_month": 1.14,
+     "x": 0.0594,
+     "hit": 0.439
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.00428,
+     "sd": 0.07314,
+     "s": -0.0585,
+     "per_month": 1.083,
+     "x": 0.0037,
+     "hit": 0.59
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00176,
+     "sd": 0.05728,
+     "s": -0.0307,
+     "per_month": 1.356,
+     "x": 0.0013,
+     "hit": 0.459
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0048658599637001814,
+    "validation": 0.0005802748504778203,
+    "test": -0.0018648995351844661
+   },
+   "placebo_mean_by_split": {
+    "train": 0.0054633701514071875,
+    "validation": -0.0005181617501884886,
+    "test": -0.0030397733033411096
+   },
+   "gross_mean_all": -0.0015381754898268353
+  },
+  "abrupt|short|h20|raw": {
+   "all": {
+    "n": 141,
+    "mean": -0.00662,
+    "sd": 0.10217,
+    "s": -0.0648,
+    "per_month": 1.206,
+    "x": 0.0051,
+    "hit": 0.44
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00466,
+     "sd": 0.0697,
+     "s": -0.0668,
+     "per_month": 1.14,
+     "x": 0.0051,
+     "hit": 0.415
+    },
+    "validation": {
+     "n": 39,
+     "mean": 0.00745,
+     "sd": 0.144,
+     "s": 0.0517,
+     "per_month": 1.083,
+     "x": 0.0029,
+     "hit": 0.513
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.01693,
+     "sd": 0.08802,
+     "s": -0.1924,
+     "per_month": 1.356,
+     "x": 0.0502,
+     "hit": 0.41
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.011131682024821394,
+    "validation": -0.011577439938840191,
+    "test": -0.014344169983289632
+   },
+   "placebo_mean_by_split": {
+    "train": 0.0006554121226968799,
+    "validation": -0.011450997742652652,
+    "test": 0.012931438355169477
+   },
+   "gross_mean_all": -0.0006494816681464368
+  },
+  "abrupt|short|h20|adj": {
+   "all": {
+    "n": 141,
+    "mean": 0.0012,
+    "sd": 0.07623,
+    "s": 0.0157,
+    "per_month": 1.206,
+    "x": 0.0003,
+    "hit": 0.482
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00138,
+     "sd": 0.06077,
+     "s": -0.0228,
+     "per_month": 1.14,
+     "x": 0.0006,
+     "hit": 0.512
+    },
+    "validation": {
+     "n": 39,
+     "mean": 0.00862,
+     "sd": 0.07486,
+     "s": 0.1151,
+     "per_month": 1.083,
+     "x": 0.0143,
+     "hit": 0.462
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00182,
+     "sd": 0.08659,
+     "s": -0.021,
+     "per_month": 1.356,
+     "x": 0.0006,
+     "hit": 0.475
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.001631924833417809,
+    "validation": -0.0008347402460026865,
+    "test": 0.0015256114043479855
+   },
+   "placebo_mean_by_split": {
+    "train": -0.00341715224084937,
+    "validation": -0.013415936998937585,
+    "test": -0.002984965581044758
+   },
+   "gross_mean_all": 0.007564053154616521
+  },
+  "abrupt|long|h1|raw": {
+   "all": {
+    "n": 141,
+    "mean": -0.00549,
+    "sd": 0.0288,
+    "s": -0.1907,
+    "per_month": 1.206,
+    "x": 0.0438,
+    "hit": 0.397
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00183,
+     "sd": 0.02404,
+     "s": -0.0759,
+     "per_month": 1.14,
+     "x": 0.0066,
+     "hit": 0.463
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.004,
+     "sd": 0.03372,
+     "s": -0.1186,
+     "per_month": 1.083,
+     "x": 0.0152,
+     "hit": 0.385
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00891,
+     "sd": 0.02842,
+     "s": -0.3135,
+     "per_month": 1.356,
+     "x": 0.1333,
+     "hit": 0.361
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.00035358798732661547,
+    "validation": -0.00430358868970457,
+    "test": -0.0023098932866179875
+   },
+   "placebo_mean_by_split": {
+    "train": -0.0001746873193649013,
+    "validation": 0.0019987902765109707,
+    "test": 0.006908965161174565
+   },
+   "gross_mean_all": -0.004491046209373159
+  },
+  "abrupt|long|h1|adj": {
+   "all": {
+    "n": 141,
+    "mean": -0.00572,
+    "sd": 0.02735,
+    "s": -0.2092,
+    "per_month": 1.206,
+    "x": 0.0528,
+    "hit": 0.362
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00148,
+     "sd": 0.0244,
+     "s": -0.0606,
+     "per_month": 1.14,
+     "x": 0.0042,
+     "hit": 0.366
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.00511,
+     "sd": 0.02784,
+     "s": -0.1837,
+     "per_month": 1.083,
+     "x": 0.0365,
+     "hit": 0.282
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00896,
+     "sd": 0.02888,
+     "s": -0.3102,
+     "per_month": 1.356,
+     "x": 0.1305,
+     "hit": 0.41
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0015835518911994381,
+    "validation": -0.0040311774204880016,
+    "test": -0.0029929430575026147
+   },
+   "placebo_mean_by_split": {
+    "train": -0.0013214895911892808,
+    "validation": 0.0023142499438970495,
+    "test": 0.006161334719243306
+   },
+   "gross_mean_all": -0.004321390726574936
+  },
+  "abrupt|long|h5|raw": {
+   "all": {
+    "n": 141,
+    "mean": 0.00186,
+    "sd": 0.06456,
+    "s": 0.0289,
+    "per_month": 1.206,
+    "x": 0.001,
+    "hit": 0.504
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": 0.0065,
+     "sd": 0.04336,
+     "s": 0.1498,
+     "per_month": 1.14,
+     "x": 0.0256,
+     "hit": 0.585
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.00122,
+     "sd": 0.09296,
+     "s": -0.0131,
+     "per_month": 1.083,
+     "x": 0.0002,
+     "hit": 0.462
+    },
+    "test": {
+     "n": 61,
+     "mean": 0.00072,
+     "sd": 0.05456,
+     "s": 0.0133,
+     "per_month": 1.356,
+     "x": 0.0002,
+     "hit": 0.475
+    }
+   },
+   "control_mean_by_split": {
+    "train": 0.001489699213563249,
+    "validation": -0.005877903270346576,
+    "test": 0.0012786616007121792
+   },
+   "placebo_mean_by_split": {
+    "train": -0.008495181719440229,
+    "validation": -0.0007781773576787313,
+    "test": -0.0027237258529394437
+   },
+   "gross_mean_all": 0.0028638201735874174
+  },
+  "abrupt|long|h5|adj": {
+   "all": {
+    "n": 141,
+    "mean": 0.00014,
+    "sd": 0.05872,
+    "s": 0.0024,
+    "per_month": 1.206,
+    "x": 0.0,
+    "hit": 0.44
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": 0.00547,
+     "sd": 0.04495,
+     "s": 0.1217,
+     "per_month": 1.14,
+     "x": 0.0169,
+     "hit": 0.512
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.00051,
+     "sd": 0.07314,
+     "s": -0.007,
+     "per_month": 1.083,
+     "x": 0.0001,
+     "hit": 0.359
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00303,
+     "sd": 0.05728,
+     "s": -0.0529,
+     "per_month": 1.356,
+     "x": 0.0038,
+     "hit": 0.443
+    }
+   },
+   "control_mean_by_split": {
+    "train": 7.379647163669125e-05,
+    "validation": -0.005372338342541311,
+    "test": -0.0029271639568790244
+   },
+   "placebo_mean_by_split": {
+    "train": -0.008271306659343695,
+    "validation": -0.0022897747577480215,
+    "test": 0.00023183679540460085
+   },
+   "gross_mean_all": 0.0015381754898268353
+  },
+  "abrupt|long|h20|raw": {
+   "all": {
+    "n": 141,
+    "mean": -0.00035,
+    "sd": 0.10217,
+    "s": -0.0034,
+    "per_month": 1.206,
+    "x": 0.0,
+    "hit": 0.518
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00231,
+     "sd": 0.0697,
+     "s": -0.0332,
+     "per_month": 1.14,
+     "x": 0.0013,
+     "hit": 0.585
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.01442,
+     "sd": 0.144,
+     "s": -0.1001,
+     "per_month": 1.083,
+     "x": 0.0109,
+     "hit": 0.436
+    },
+    "test": {
+     "n": 61,
+     "mean": 0.00996,
+     "sd": 0.08802,
+     "s": 0.1132,
+     "per_month": 1.356,
+     "x": 0.0174,
+     "hit": 0.525
+    }
+   },
+   "control_mean_by_split": {
+    "train": 0.004163428056567425,
+    "validation": 0.0046091859705862225,
+    "test": 0.007375916015035666
+   },
+   "placebo_mean_by_split": {
+    "train": 0.0003128418455570846,
+    "validation": 0.012419251710906616,
+    "test": -0.01196318438691551
+   },
+   "gross_mean_all": 0.0006494816681464368
+  },
+  "abrupt|long|h20|adj": {
+   "all": {
+    "n": 141,
+    "mean": -0.00896,
+    "sd": 0.07623,
+    "s": -0.1176,
+    "per_month": 1.206,
+    "x": 0.0167,
+    "hit": 0.454
+   },
+   "by_split": {
+    "train": {
+     "n": 41,
+     "mean": -0.00639,
+     "sd": 0.06077,
+     "s": -0.1051,
+     "per_month": 1.14,
+     "x": 0.0126,
+     "hit": 0.39
+    },
+    "validation": {
+     "n": 39,
+     "mean": -0.01638,
+     "sd": 0.07486,
+     "s": -0.2189,
+     "per_month": 1.083,
+     "x": 0.0519,
+     "hit": 0.487
+    },
+    "test": {
+     "n": 61,
+     "mean": -0.00595,
+     "sd": 0.08659,
+     "s": -0.0688,
+     "per_month": 1.356,
+     "x": 0.0064,
+     "hit": 0.475
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.006136329134836158,
+    "validation": -0.006933513722251281,
+    "test": -0.009293865372601953
+   },
+   "placebo_mean_by_split": {
+    "train": 0.0035854062091033373,
+    "validation": 0.01358419096719155,
+    "test": 0.003153219549298721
+   },
+   "gross_mean_all": -0.007564053154616521
+  },
+  "planned|short|h1|raw": {
+   "all": {
+    "n": 803,
+    "mean": 0.00106,
+    "sd": 0.02309,
+    "s": 0.0458,
+    "per_month": 6.866,
+    "x": 0.0144,
+    "hit": 0.521
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": 0.00129,
+     "sd": 0.01908,
+     "s": 0.0676,
+     "per_month": 6.171,
+     "x": 0.0282,
+     "hit": 0.505
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00138,
+     "sd": 0.02837,
+     "s": -0.0487,
+     "per_month": 6.721,
+     "x": 0.016,
+     "hit": 0.496
+    },
+    "test": {
+     "n": 339,
+     "mean": 0.00265,
+     "sd": 0.02113,
+     "s": 0.1252,
+     "per_month": 7.537,
+     "x": 0.1182,
+     "hit": 0.549
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.00257271565084346,
+    "validation": -0.0025852522341459102,
+    "test": -0.003071679974612146
+   },
+   "placebo_mean_by_split": {
+    "train": -0.005289850041625451,
+    "validation": -0.002617297910826221,
+    "test": -0.0066458310591919695
+   },
+   "gross_mean_all": 0.003255286338172191
+  },
+  "planned|short|h1|adj": {
+   "all": {
+    "n": 803,
+    "mean": 0.00073,
+    "sd": 0.02049,
+    "s": 0.0356,
+    "per_month": 6.866,
+    "x": 0.0087,
+    "hit": 0.519
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": 0.00117,
+     "sd": 0.01765,
+     "s": 0.0663,
+     "per_month": 6.171,
+     "x": 0.0271,
+     "hit": 0.482
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00175,
+     "sd": 0.02406,
+     "s": -0.0726,
+     "per_month": 6.721,
+     "x": 0.0354,
+     "hit": 0.512
+    },
+    "test": {
+     "n": 339,
+     "mean": 0.00221,
+     "sd": 0.01931,
+     "s": 0.1143,
+     "per_month": 7.537,
+     "x": 0.0985,
+     "hit": 0.549
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0025309220784893297,
+    "validation": -0.003020042370788714,
+    "test": -0.002505454663980281
+   },
+   "placebo_mean_by_split": {
+    "train": -0.005970160216917314,
+    "validation": -0.003054165000078472,
+    "test": -0.007007656139323455
+   },
+   "gross_mean_all": 0.003327776246862618
+  },
+  "planned|short|h5|raw": {
+   "all": {
+    "n": 803,
+    "mean": 0.00223,
+    "sd": 0.05008,
+    "s": 0.0445,
+    "per_month": 6.866,
+    "x": 0.0136,
+    "hit": 0.478
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": 0.00324,
+     "sd": 0.05432,
+     "s": 0.0596,
+     "per_month": 6.171,
+     "x": 0.0219,
+     "hit": 0.428
+    },
+    "validation": {
+     "n": 242,
+     "mean": 0.00216,
+     "sd": 0.05939,
+     "s": 0.0364,
+     "per_month": 6.721,
+     "x": 0.0089,
+     "hit": 0.479
+    },
+    "test": {
+     "n": 339,
+     "mean": 0.00162,
+     "sd": 0.03881,
+     "s": 0.0417,
+     "per_month": 7.537,
+     "x": 0.0131,
+     "hit": 0.51
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.007555548454402818,
+    "validation": -0.004930198753286564,
+    "test": -0.005904735769478064
+   },
+   "placebo_mean_by_split": {
+    "train": -0.007235990372186603,
+    "validation": -0.006163611087848002,
+    "test": -0.005618407585441417
+   },
+   "gross_mean_all": 0.005221981197355249
+  },
+  "planned|short|h5|adj": {
+   "all": {
+    "n": 803,
+    "mean": 0.00317,
+    "sd": 0.04385,
+    "s": 0.0724,
+    "per_month": 6.866,
+    "x": 0.036,
+    "hit": 0.512
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": 0.00446,
+     "sd": 0.05304,
+     "s": 0.0842,
+     "per_month": 6.171,
+     "x": 0.0437,
+     "hit": 0.477
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00038,
+     "sd": 0.04485,
+     "s": -0.0084,
+     "per_month": 6.721,
+     "x": 0.0005,
+     "hit": 0.475
+    },
+    "test": {
+     "n": 339,
+     "mean": 0.00486,
+     "sd": 0.03571,
+     "s": 0.1361,
+     "per_month": 7.537,
+     "x": 0.1396,
+     "hit": 0.56
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0040194520338888646,
+    "validation": -0.0029338637976441518,
+    "test": -0.0019624390885707352
+   },
+   "placebo_mean_by_split": {
+    "train": -0.009264295085402987,
+    "validation": -0.004424448626592297,
+    "test": -0.009660100305142368
+   },
+   "gross_mean_all": 0.006564870565585361
+  },
+  "planned|short|h20|raw": {
+   "all": {
+    "n": 803,
+    "mean": -0.00134,
+    "sd": 0.08896,
+    "s": -0.0151,
+    "per_month": 6.866,
+    "x": 0.0016,
+    "hit": 0.479
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": 0.00338,
+     "sd": 0.07464,
+     "s": 0.0453,
+     "per_month": 6.171,
+     "x": 0.0127,
+     "hit": 0.486
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00418,
+     "sd": 0.11426,
+     "s": -0.0366,
+     "per_month": 6.721,
+     "x": 0.009,
+     "hit": 0.455
+    },
+    "test": {
+     "n": 339,
+     "mean": -0.00242,
+     "sd": 0.07619,
+     "s": -0.0317,
+     "per_month": 7.537,
+     "x": 0.0076,
+     "hit": 0.493
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.018199534019821113,
+    "validation": -0.01898796017999507,
+    "test": -0.014746883889654002
+   },
+   "placebo_mean_by_split": {
+    "train": -0.007384579854573391,
+    "validation": 0.00017729407240878498,
+    "test": -0.0015834753181245159
+   },
+   "gross_mean_all": 0.004624878744140114
+  },
+  "planned|short|h20|adj": {
+   "all": {
+    "n": 803,
+    "mean": 0.00783,
+    "sd": 0.07778,
+    "s": 0.1007,
+    "per_month": 6.866,
+    "x": 0.0697,
+    "hit": 0.533
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": 0.01326,
+     "sd": 0.06993,
+     "s": 0.1896,
+     "per_month": 6.171,
+     "x": 0.2218,
+     "hit": 0.55
+    },
+    "validation": {
+     "n": 242,
+     "mean": 0.00119,
+     "sd": 0.08938,
+     "s": 0.0133,
+     "per_month": 6.721,
+     "x": 0.0012,
+     "hit": 0.471
+    },
+    "test": {
+     "n": 339,
+     "mean": 0.00903,
+     "sd": 0.07355,
+     "s": 0.1227,
+     "per_month": 7.537,
+     "x": 0.1135,
+     "hit": 0.566
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.005351023011465316,
+    "validation": -0.009670341127604728,
+    "test": 0.001888436140486764
+   },
+   "placebo_mean_by_split": {
+    "train": -0.018056853646114295,
+    "validation": -0.005992291468420665,
+    "test": -0.013825464013984077
+   },
+   "gross_mean_all": 0.014202859628946091
+  },
+  "planned|long|h1|raw": {
+   "all": {
+    "n": 803,
+    "mean": -0.00426,
+    "sd": 0.02309,
+    "s": -0.1843,
+    "per_month": 6.866,
+    "x": 0.2331,
+    "hit": 0.413
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": -0.00449,
+     "sd": 0.01908,
+     "s": -0.2352,
+     "per_month": 6.171,
+     "x": 0.3414,
+     "hit": 0.428
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00182,
+     "sd": 0.02837,
+     "s": -0.064,
+     "per_month": 6.721,
+     "x": 0.0275,
+     "hit": 0.455
+    },
+    "test": {
+     "n": 339,
+     "mean": -0.00584,
+     "sd": 0.02113,
+     "s": -0.2766,
+     "per_month": 7.537,
+     "x": 0.5768,
+     "hit": 0.375
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.000625697047569239,
+    "validation": -0.0006131604642667893,
+    "test": -0.00012673272380055297
+   },
+   "placebo_mean_by_split": {
+    "train": 0.002488262740038148,
+    "validation": -0.00018428939076108202,
+    "test": 0.0038442437576046667
+   },
+   "gross_mean_all": -0.003255286338172191
+  },
+  "planned|long|h1|adj": {
+   "all": {
+    "n": 803,
+    "mean": -0.00473,
+    "sd": 0.02049,
+    "s": -0.2307,
+    "per_month": 6.866,
+    "x": 0.3655,
+    "hit": 0.381
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": -0.00517,
+     "sd": 0.01765,
+     "s": -0.2929,
+     "per_month": 6.171,
+     "x": 0.5293,
+     "hit": 0.383
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00225,
+     "sd": 0.02406,
+     "s": -0.0936,
+     "per_month": 6.721,
+     "x": 0.0589,
+     "hit": 0.413
+    },
+    "test": {
+     "n": 339,
+     "mean": -0.00621,
+     "sd": 0.01931,
+     "s": -0.3213,
+     "per_month": 7.537,
+     "x": 0.7783,
+     "hit": 0.357
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.001467490619923368,
+    "validation": -0.0009783703276239834,
+    "test": -0.0014929580344324159
+   },
+   "placebo_mean_by_split": {
+    "train": 0.002368572915330014,
+    "validation": -0.0005474223015088293,
+    "test": 0.0034060688377361543
+   },
+   "gross_mean_all": -0.003327776246862618
+  },
+  "planned|long|h5|raw": {
+   "all": {
+    "n": 803,
+    "mean": -0.00622,
+    "sd": 0.05008,
+    "s": -0.1242,
+    "per_month": 6.866,
+    "x": 0.106,
+    "hit": 0.466
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": -0.00723,
+     "sd": 0.05432,
+     "s": -0.1331,
+     "per_month": 6.171,
+     "x": 0.1093,
+     "hit": 0.5
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00616,
+     "sd": 0.05939,
+     "s": -0.1036,
+     "per_month": 6.721,
+     "x": 0.0722,
+     "hit": 0.471
+    },
+    "test": {
+     "n": 339,
+     "mean": -0.00561,
+     "sd": 0.03881,
+     "s": -0.1445,
+     "per_month": 7.537,
+     "x": 0.1575,
+     "hit": 0.44
+    }
+   },
+   "control_mean_by_split": {
+    "train": 0.0035634849623393246,
+    "validation": 0.0009381352612230724,
+    "test": 0.0019126722774145714
+   },
+   "placebo_mean_by_split": {
+    "train": 0.005228053864250092,
+    "validation": 0.004155674579911491,
+    "test": 0.0036104710775049067
+   },
+   "gross_mean_all": -0.005221981197355249
+  },
+  "planned|long|h5|adj": {
+   "all": {
+    "n": 803,
+    "mean": -0.00796,
+    "sd": 0.04385,
+    "s": -0.1817,
+    "per_month": 6.866,
+    "x": 0.2266,
+    "hit": 0.42
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": -0.00926,
+     "sd": 0.05304,
+     "s": -0.1745,
+     "per_month": 6.171,
+     "x": 0.188,
+     "hit": 0.459
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00442,
+     "sd": 0.04485,
+     "s": -0.0985,
+     "per_month": 6.721,
+     "x": 0.0652,
+     "hit": 0.463
+    },
+    "test": {
+     "n": 339,
+     "mean": -0.00965,
+     "sd": 0.03571,
+     "s": -0.2703,
+     "per_month": 7.537,
+     "x": 0.5507,
+     "hit": 0.363
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0007726114581746256,
+    "validation": -0.0018581996944193387,
+    "test": -0.0028296244034927546
+   },
+   "placebo_mean_by_split": {
+    "train": 0.006456358577466478,
+    "validation": 0.0016165121186557884,
+    "test": 0.006852163797205861
+   },
+   "gross_mean_all": -0.006564870565585361
+  },
+  "planned|long|h20|raw": {
+   "all": {
+    "n": 803,
+    "mean": -0.00562,
+    "sd": 0.08896,
+    "s": -0.0632,
+    "per_month": 6.866,
+    "x": 0.0274,
+    "hit": 0.477
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": -0.01035,
+     "sd": 0.07464,
+     "s": -0.1387,
+     "per_month": 6.171,
+     "x": 0.1187,
+     "hit": 0.477
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00279,
+     "sd": 0.11426,
+     "s": -0.0244,
+     "per_month": 6.721,
+     "x": 0.004,
+     "hit": 0.5
+    },
+    "test": {
+     "n": 339,
+     "mean": -0.00455,
+     "sd": 0.07619,
+     "s": -0.0597,
+     "per_month": 7.537,
+     "x": 0.0269,
+     "hit": 0.46
+    }
+   },
+   "control_mean_by_split": {
+    "train": 0.011231280051567141,
+    "validation": 0.0120197062117411,
+    "test": 0.007778629921400034
+   },
+   "placebo_mean_by_split": {
+    "train": 0.008352833822827355,
+    "validation": 0.0007909598958451789,
+    "test": 0.002551729286378481
+   },
+   "gross_mean_all": -0.004624878744140114
+  },
+  "planned|long|h20|adj": {
+   "all": {
+    "n": 803,
+    "mean": -0.0156,
+    "sd": 0.07778,
+    "s": -0.2006,
+    "per_month": 6.866,
+    "x": 0.2763,
+    "hit": 0.407
+   },
+   "by_split": {
+    "train": {
+     "n": 222,
+     "mean": -0.02103,
+     "sd": 0.06993,
+     "s": -0.3007,
+     "per_month": 6.171,
+     "x": 0.5578,
+     "hit": 0.396
+    },
+    "validation": {
+     "n": 242,
+     "mean": -0.00896,
+     "sd": 0.08938,
+     "s": -0.1003,
+     "per_month": 6.721,
+     "x": 0.0675,
+     "hit": 0.459
+    },
+    "test": {
+     "n": 339,
+     "mean": -0.01679,
+     "sd": 0.07355,
+     "s": -0.2283,
+     "per_month": 7.537,
+     "x": 0.3929,
+     "hit": 0.378
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0024172309567886525,
+    "validation": 0.0019020871593507598,
+    "test": -0.009656690108740732
+   },
+   "placebo_mean_by_split": {
+    "train": 0.018225107614368265,
+    "validation": 0.00616054543667463,
+    "test": 0.013993717982238045
+   },
+   "gross_mean_all": -0.014202859628946091
+  },
+  "return|short|h1|raw": {
+   "all": {
+    "n": 7,
+    "mean": -0.01527,
+    "sd": 0.03134,
+    "s": -0.4872,
+    "per_month": 0.06,
+    "x": 0.0142,
+    "hit": 0.286
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": -0.02196,
+     "sd": 0.03653,
+     "s": -0.6013,
+     "per_month": 0.111,
+     "x": 0.0402,
+     "hit": 0.25
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.00634,
+     "sd": 0.02713,
+     "s": -0.2338,
+     "per_month": 0.067,
+     "x": 0.0036,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.009419164163578603,
+    "test": -0.011242830321185839
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": 0.01796430981384281,
+    "test": 0.002343845290738575
+   },
+   "gross_mean_all": -0.013071412319814013
+  },
+  "return|short|h1|adj": {
+   "all": {
+    "n": 7,
+    "mean": -0.00718,
+    "sd": 0.02868,
+    "s": -0.2502,
+    "per_month": 0.06,
+    "x": 0.0037,
+    "hit": 0.429
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": -0.01231,
+     "sd": 0.03309,
+     "s": -0.3722,
+     "per_month": 0.111,
+     "x": 0.0154,
+     "hit": 0.25
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.00033,
+     "sd": 0.02649,
+     "s": -0.0123,
+     "per_month": 0.067,
+     "x": 0.0,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.009057669326132275,
+    "test": -0.012928388517186544
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": 0.0075137179864752995,
+    "test": -0.0044743694682032
+   },
+   "gross_mean_all": -0.0045775535217718166
+  },
+  "return|short|h5|raw": {
+   "all": {
+    "n": 7,
+    "mean": -0.0028,
+    "sd": 0.02849,
+    "s": -0.0984,
+    "per_month": 0.06,
+    "x": 0.0006,
+    "hit": 0.571
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.0018,
+     "sd": 0.03469,
+     "s": 0.0519,
+     "per_month": 0.111,
+     "x": 0.0003,
+     "hit": 0.75
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.00894,
+     "sd": 0.02304,
+     "s": -0.3882,
+     "per_month": 0.067,
+     "x": 0.0101,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": 0.014303240899009874,
+    "test": -0.025121427327994907
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.005801049817627827,
+    "test": 0.004943259371723911
+   },
+   "gross_mean_all": 0.00018840937139771467
+  },
+  "return|short|h5|adj": {
+   "all": {
+    "n": 7,
+    "mean": 0.0081,
+    "sd": 0.02997,
+    "s": 0.2703,
+    "per_month": 0.06,
+    "x": 0.0044,
+    "hit": 0.571
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.01486,
+     "sd": 0.03338,
+     "s": 0.445,
+     "per_month": 0.111,
+     "x": 0.022,
+     "hit": 0.75
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.0009,
+     "sd": 0.02846,
+     "s": -0.0317,
+     "per_month": 0.067,
+     "x": 0.0001,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": 0.004032373129504512,
+    "test": -0.023939757964881167
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.019656271282567438,
+    "test": -0.003896561036100183
+   },
+   "gross_mean_all": 0.011494173240430675
+  },
+  "return|short|h20|raw": {
+   "all": {
+    "n": 7,
+    "mean": -0.0249,
+    "sd": 0.13299,
+    "s": -0.1873,
+    "per_month": 0.06,
+    "x": 0.0021,
+    "hit": 0.571
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": -0.06741,
+     "sd": 0.14734,
+     "s": -0.4575,
+     "per_month": 0.111,
+     "x": 0.0233,
+     "hit": 0.5
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.03177,
+     "sd": 0.10984,
+     "s": 0.2892,
+     "per_month": 0.067,
+     "x": 0.0056,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.0033836640370145106,
+    "test": -0.04763124549992379
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": 0.0634092891914819,
+    "test": -0.03576870106419951
+   },
+   "gross_mean_all": -0.018936182256507332
+  },
+  "return|short|h20|adj": {
+   "all": {
+    "n": 7,
+    "mean": 0.0042,
+    "sd": 0.09509,
+    "s": 0.0442,
+    "per_month": 0.06,
+    "x": 0.0001,
+    "hit": 0.571
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": -0.02607,
+     "sd": 0.10913,
+     "s": -0.2389,
+     "per_month": 0.111,
+     "x": 0.0063,
+     "hit": 0.5
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.04457,
+     "sd": 0.07061,
+     "s": 0.6312,
+     "per_month": 0.067,
+     "x": 0.0266,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.022929821736596044,
+    "test": -0.03073776814094134
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": 0.021273350426675212,
+    "test": -0.049369989595214846
+   },
+   "gross_mean_all": 0.010570620693817348
+  },
+  "return|long|h1|raw": {
+   "all": {
+    "n": 7,
+    "mean": 0.01207,
+    "sd": 0.03134,
+    "s": 0.3852,
+    "per_month": 0.06,
+    "x": 0.0089,
+    "hit": 0.714
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.01877,
+     "sd": 0.03653,
+     "s": 0.5138,
+     "per_month": 0.111,
+     "x": 0.0293,
+     "hit": 0.75
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.00315,
+     "sd": 0.02713,
+     "s": 0.1159,
+     "per_month": 0.067,
+     "x": 0.0009,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": 0.006220751465165902,
+    "test": 0.00804441762277314
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.020765897115430115,
+    "test": -0.005145432592325879
+   },
+   "gross_mean_all": 0.013071412319814013
+  },
+  "return|long|h1|adj": {
+   "all": {
+    "n": 7,
+    "mean": 0.00318,
+    "sd": 0.02868,
+    "s": 0.1108,
+    "per_month": 0.06,
+    "x": 0.0007,
+    "hit": 0.571
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.00832,
+     "sd": 0.03309,
+     "s": 0.2513,
+     "per_month": 0.111,
+     "x": 0.007,
+     "hit": 0.75
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.00367,
+     "sd": 0.02649,
+     "s": -0.1386,
+     "per_month": 0.067,
+     "x": 0.0013,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": 0.005059256627719578,
+    "test": 0.008929975818773849
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.0111153052880626,
+    "test": 0.0008727821666158989
+   },
+   "gross_mean_all": 0.0045775535217718166
+  },
+  "return|long|h5|raw": {
+   "all": {
+    "n": 7,
+    "mean": -0.00119,
+    "sd": 0.02849,
+    "s": -0.0417,
+    "per_month": 0.06,
+    "x": 0.0001,
+    "hit": 0.429
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": -0.00579,
+     "sd": 0.03469,
+     "s": -0.167,
+     "per_month": 0.111,
+     "x": 0.0031,
+     "hit": 0.25
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.00495,
+     "sd": 0.02304,
+     "s": 0.2149,
+     "per_month": 0.067,
+     "x": 0.0031,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.018295304391073366,
+    "test": 0.021129363835931416
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": 0.003793113309691315,
+    "test": -0.006951195879660421
+   },
+   "gross_mean_all": -0.00018840937139771467
+  },
+  "return|long|h5|adj": {
+   "all": {
+    "n": 7,
+    "mean": -0.01289,
+    "sd": 0.02997,
+    "s": -0.4302,
+    "per_month": 0.06,
+    "x": 0.0111,
+    "hit": 0.429
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": -0.01965,
+     "sd": 0.03338,
+     "s": -0.5885,
+     "per_month": 0.111,
+     "x": 0.0385,
+     "hit": 0.25
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.00389,
+     "sd": 0.02846,
+     "s": -0.1366,
+     "per_month": 0.067,
+     "x": 0.0012,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.008824436621568005,
+    "test": 0.019147694472817677
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": 0.01684833477463093,
+    "test": 0.0010886245281636752
+   },
+   "gross_mean_all": -0.011494173240430675
+  },
+  "return|long|h20|raw": {
+   "all": {
+    "n": 7,
+    "mean": 0.01794,
+    "sd": 0.13299,
+    "s": 0.1349,
+    "per_month": 0.06,
+    "x": 0.0011,
+    "hit": 0.429
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.06044,
+     "sd": 0.14734,
+     "s": 0.4102,
+     "per_month": 0.111,
+     "x": 0.0187,
+     "hit": 0.5
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.03874,
+     "sd": 0.10984,
+     "s": -0.3527,
+     "per_month": 0.067,
+     "x": 0.0083,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": -0.0035845899312394566,
+    "test": 0.04066299153166983
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.06244103522322794,
+    "test": 0.03673695503245348
+   },
+   "gross_mean_all": 0.018936182256507332
+  },
+  "return|long|h20|adj": {
+   "all": {
+    "n": 7,
+    "mean": -0.01197,
+    "sd": 0.09509,
+    "s": -0.1259,
+    "per_month": 0.06,
+    "x": 0.0009,
+    "hit": 0.429
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 4,
+     "mean": 0.01831,
+     "sd": 0.10913,
+     "s": 0.1677,
+     "per_month": 0.111,
+     "x": 0.0031,
+     "hit": 0.5
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.05234,
+     "sd": 0.07061,
+     "s": -0.7412,
+     "per_month": 0.067,
+     "x": 0.0366,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": null,
+    "validation": 0.015161567768342071,
+    "test": 0.022969514172687364
+   },
+   "placebo_mean_by_split": {
+    "train": null,
+    "validation": -0.021105096458421253,
+    "test": 0.04953824356346881
+   },
+   "gross_mean_all": -0.010570620693817348
+  },
+  "interim|short|h1|raw": {
+   "all": {
+    "n": 9,
+    "mean": -0.00337,
+    "sd": 0.02604,
+    "s": -0.1295,
+    "per_month": 0.077,
+    "x": 0.0013,
+    "hit": 0.333
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": -0.02416,
+     "sd": 0.02008,
+     "s": -1.2037,
+     "per_month": 0.083,
+     "x": 0.1208,
+     "hit": 0.0
+    },
+    "validation": {
+     "n": 3,
+     "mean": 0.00737,
+     "sd": 0.02943,
+     "s": 0.2503,
+     "per_month": 0.083,
+     "x": 0.0052,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.00668,
+     "sd": 0.02167,
+     "s": 0.3083,
+     "per_month": 0.067,
+     "x": 0.0063,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": 0.0011781163365180104,
+    "validation": -0.005393035882656234,
+    "test": 0.0016585541835271924
+   },
+   "placebo_mean_by_split": {
+    "train": 0.020164068923824052,
+    "validation": -0.01136671302350277,
+    "test": -0.01068203598268839
+   },
+   "gross_mean_all": -0.0011733606074649339
+  },
+  "interim|short|h1|adj": {
+   "all": {
+    "n": 9,
+    "mean": -0.00655,
+    "sd": 0.02298,
+    "s": -0.2851,
+    "per_month": 0.077,
+    "x": 0.0063,
+    "hit": 0.333
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": -0.02703,
+     "sd": 0.0175,
+     "s": -1.5445,
+     "per_month": 0.083,
+     "x": 0.1989,
+     "hit": 0.0
+    },
+    "validation": {
+     "n": 3,
+     "mean": 0.006,
+     "sd": 0.02066,
+     "s": 0.2902,
+     "per_month": 0.083,
+     "x": 0.007,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.00137,
+     "sd": 0.02052,
+     "s": 0.0669,
+     "per_month": 0.067,
+     "x": 0.0003,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0003861701729299649,
+    "validation": -0.0066039614054740105,
+    "test": 0.0016513069288488973
+   },
+   "placebo_mean_by_split": {
+    "train": 0.022227420403301165,
+    "validation": -0.01079508755223771,
+    "test": -0.006173049935543948
+   },
+   "gross_mean_all": -0.00395468160676047
+  },
+  "interim|short|h5|raw": {
+   "all": {
+    "n": 9,
+    "mean": 0.01741,
+    "sd": 0.08375,
+    "s": 0.2079,
+    "per_month": 0.077,
+    "x": 0.0033,
+    "hit": 0.444
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": -0.03794,
+     "sd": 0.03706,
+     "s": -1.0238,
+     "per_month": 0.083,
+     "x": 0.0874,
+     "hit": 0.333
+    },
+    "validation": {
+     "n": 3,
+     "mean": 0.05294,
+     "sd": 0.13238,
+     "s": 0.3999,
+     "per_month": 0.083,
+     "x": 0.0133,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.03724,
+     "sd": 0.04557,
+     "s": 0.8172,
+     "per_month": 0.067,
+     "x": 0.0445,
+     "hit": 0.667
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.006076708115776992,
+    "validation": -0.006450765822828701,
+    "test": -0.0003807596632697593
+   },
+   "placebo_mean_by_split": {
+    "train": 0.033943984957736095,
+    "validation": -0.056938416250559905,
+    "test": -0.041237616129677836
+   },
+   "gross_mean_all": 0.020402745966230703
+  },
+  "interim|short|h5|adj": {
+   "all": {
+    "n": 9,
+    "mean": 0.0101,
+    "sd": 0.06388,
+    "s": 0.1582,
+    "per_month": 0.077,
+    "x": 0.0019,
+    "hit": 0.444
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": -0.03891,
+     "sd": 0.03584,
+     "s": -1.0857,
+     "per_month": 0.083,
+     "x": 0.0983,
+     "hit": 0.0
+    },
+    "validation": {
+     "n": 3,
+     "mean": 0.02634,
+     "sd": 0.08514,
+     "s": 0.3094,
+     "per_month": 0.083,
+     "x": 0.008,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.04288,
+     "sd": 0.04668,
+     "s": 0.9185,
+     "per_month": 0.067,
+     "x": 0.0563,
+     "hit": 1.0
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.0073286706227863934,
+    "validation": -0.008718928252800922,
+    "test": 0.003702363431809965
+   },
+   "placebo_mean_by_split": {
+    "train": 0.034109966838962606,
+    "validation": -0.031144109679661636,
+    "test": -0.04767695901202685
+   },
+   "gross_mean_all": 0.013495764109638781
+  },
+  "interim|short|h20|raw": {
+   "all": {
+    "n": 9,
+    "mean": 0.04586,
+    "sd": 0.16871,
+    "s": 0.2719,
+    "per_month": 0.077,
+    "x": 0.0057,
+    "hit": 0.667
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": -0.06273,
+     "sd": 0.08864,
+     "s": -0.7078,
+     "per_month": 0.083,
+     "x": 0.0418,
+     "hit": 0.333
+    },
+    "validation": {
+     "n": 3,
+     "mean": 0.09719,
+     "sd": 0.27813,
+     "s": 0.3494,
+     "per_month": 0.083,
+     "x": 0.0102,
+     "hit": 0.667
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.10313,
+     "sd": 0.04551,
+     "s": 2.2661,
+     "per_month": 0.067,
+     "x": 0.3425,
+     "hit": 1.0
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.00980348599002307,
+    "validation": -0.026872445827886435,
+    "test": -0.02013128905736955
+   },
+   "placebo_mean_by_split": {
+    "train": 0.058734663347734674,
+    "validation": -0.10119019855287735,
+    "test": -0.107134412950267
+   },
+   "gross_mean_all": 0.05183157002005719
+  },
+  "interim|short|h20|adj": {
+   "all": {
+    "n": 9,
+    "mean": 0.0445,
+    "sd": 0.11562,
+    "s": 0.3849,
+    "per_month": 0.077,
+    "x": 0.0114,
+    "hit": 0.667
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": -0.03539,
+     "sd": 0.07762,
+     "s": -0.456,
+     "per_month": 0.083,
+     "x": 0.0173,
+     "hit": 0.333
+    },
+    "validation": {
+     "n": 3,
+     "mean": 0.06143,
+     "sd": 0.17402,
+     "s": 0.353,
+     "per_month": 0.083,
+     "x": 0.0104,
+     "hit": 0.667
+    },
+    "test": {
+     "n": 3,
+     "mean": 0.10745,
+     "sd": 0.03491,
+     "s": 3.078,
+     "per_month": 0.067,
+     "x": 0.6319,
+     "hit": 1.0
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.023688587295414707,
+    "validation": -0.00778075233791184,
+    "test": 0.00023248994270220544
+   },
+   "placebo_mean_by_split": {
+    "train": 0.030590419399641477,
+    "validation": -0.06623345522168922,
+    "test": -0.11225024667204636
+   },
+   "gross_mean_all": 0.05086601479961867
+  },
+  "interim|long|h1|raw": {
+   "all": {
+    "n": 9,
+    "mean": 0.00017,
+    "sd": 0.02604,
+    "s": 0.0067,
+    "per_month": 0.077,
+    "x": 0.0,
+    "hit": 0.556
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": 0.02097,
+     "sd": 0.02008,
+     "s": 1.0444,
+     "per_month": 0.083,
+     "x": 0.091,
+     "hit": 1.0
+    },
+    "validation": {
+     "n": 3,
+     "mean": -0.01057,
+     "sd": 0.02943,
+     "s": -0.3589,
+     "per_month": 0.083,
+     "x": 0.0107,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.00988,
+     "sd": 0.02167,
+     "s": -0.4559,
+     "per_month": 0.067,
+     "x": 0.0139,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.004376529034930709,
+    "validation": 0.0021946231842435346,
+    "test": -0.004856966881939891
+   },
+   "placebo_mean_by_split": {
+    "train": -0.022965656225411357,
+    "validation": 0.008565125721915466,
+    "test": 0.007880448681101085
+   },
+   "gross_mean_all": 0.0011733606074649339
+  },
+  "interim|long|h1|adj": {
+   "all": {
+    "n": 9,
+    "mean": 0.00255,
+    "sd": 0.02298,
+    "s": 0.1111,
+    "per_month": 0.077,
+    "x": 0.001,
+    "hit": 0.556
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": 0.02303,
+     "sd": 0.0175,
+     "s": 1.316,
+     "per_month": 0.083,
+     "x": 0.1444,
+     "hit": 1.0
+    },
+    "validation": {
+     "n": 3,
+     "mean": -0.00999,
+     "sd": 0.02066,
+     "s": -0.4838,
+     "per_month": 0.083,
+     "x": 0.0195,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.00537,
+     "sd": 0.02052,
+     "s": -0.2618,
+     "per_month": 0.067,
+     "x": 0.0046,
+     "hit": 0.333
+    }
+   },
+   "control_mean_by_split": {
+    "train": -0.003612242525482732,
+    "validation": 0.002605548707061313,
+    "test": -0.005649719627261594
+   },
+   "placebo_mean_by_split": {
+    "train": -0.025829007704888465,
+    "validation": 0.0071935002506504095,
+    "test": 0.002571462633956647
+   },
+   "gross_mean_all": 0.00395468160676047
+  },
+  "interim|long|h5|raw": {
+   "all": {
+    "n": 9,
+    "mean": -0.0214,
+    "sd": 0.08375,
+    "s": -0.2556,
+    "per_month": 0.077,
+    "x": 0.005,
+    "hit": 0.444
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": 0.03395,
+     "sd": 0.03706,
+     "s": 0.9161,
+     "per_month": 0.083,
+     "x": 0.07,
+     "hit": 0.667
+    },
+    "validation": {
+     "n": 3,
+     "mean": -0.05693,
+     "sd": 0.13238,
+     "s": -0.4301,
+     "per_month": 0.083,
+     "x": 0.0154,
+     "hit": 0.667
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.04123,
+     "sd": 0.04557,
+     "s": -0.9048,
+     "per_month": 0.067,
+     "x": 0.0546,
+     "hit": 0.0
+    }
+   },
+   "control_mean_by_split": {
+    "train": 0.0020846446237135015,
+    "validation": 0.002458702330765209,
+    "test": -0.0036113038287937348
+   },
+   "placebo_mean_by_split": {
+    "train": -0.03595192146567261,
+    "validation": 0.05493047974262339,
+    "test": 0.03922967962174132
+   },
+   "gross_mean_all": -0.020402745966230703
+  },
+  "interim|long|h5|adj": {
+   "all": {
+    "n": 9,
+    "mean": -0.0149,
+    "sd": 0.06388,
+    "s": -0.2332,
+    "per_month": 0.077,
+    "x": 0.0042,
+    "hit": 0.444
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": 0.03412,
+     "sd": 0.03584,
+     "s": 0.952,
+     "per_month": 0.083,
+     "x": 0.0756,
+     "hit": 0.667
+    },
+    "validation": {
+     "n": 3,
+     "mean": -0.03114,
+     "sd": 0.08514,
+     "s": -0.3657,
+     "per_month": 0.083,
+     "x": 0.0111,
+     "hit": 0.667
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.04767,
+     "sd": 0.04668,
+     "s": -1.0212,
+     "per_month": 0.067,
+     "x": 0.0696,
+     "hit": 0.0
+    }
+   },
+   "control_mean_by_split": {
+    "train": 0.0025366071307229014,
+    "validation": 0.003926864760737431,
+    "test": -0.008494426923873455
+   },
+   "placebo_mean_by_split": {
+    "train": -0.036917903346899116,
+    "validation": 0.028336173171725116,
+    "test": 0.04486902250409034
+   },
+   "gross_mean_all": -0.013495764109638781
+  },
+  "interim|long|h20|raw": {
+   "all": {
+    "n": 9,
+    "mean": -0.05283,
+    "sd": 0.16871,
+    "s": -0.3132,
+    "per_month": 0.077,
+    "x": 0.0075,
+    "hit": 0.333
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": 0.05577,
+     "sd": 0.08864,
+     "s": 0.6292,
+     "per_month": 0.083,
+     "x": 0.033,
+     "hit": 0.667
+    },
+    "validation": {
+     "n": 3,
+     "mean": -0.10416,
+     "sd": 0.27813,
+     "s": -0.3745,
+     "per_month": 0.083,
+     "x": 0.0117,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.1101,
+     "sd": 0.04551,
+     "s": -2.4192,
+     "per_month": 0.067,
+     "x": 0.3904,
+     "hit": 0.0
+    }
+   },
+   "control_mean_by_split": {
+    "train": 0.002835232021769099,
+    "validation": 0.019904191859632464,
+    "test": 0.013163035089115581
+   },
+   "placebo_mean_by_split": {
+    "train": -0.05776640937948071,
+    "validation": 0.1021584525211313,
+    "test": 0.10810266691852098
+   },
+   "gross_mean_all": -0.05183157002005719
+  },
+  "interim|long|h20|adj": {
+   "all": {
+    "n": 9,
+    "mean": -0.05227,
+    "sd": 0.11562,
+    "s": -0.452,
+    "per_month": 0.077,
+    "x": 0.0157,
+    "hit": 0.333
+   },
+   "by_split": {
+    "train": {
+     "n": 3,
+     "mean": 0.02762,
+     "sd": 0.07762,
+     "s": 0.3559,
+     "per_month": 0.083,
+     "x": 0.0106,
+     "hit": 0.667
+    },
+    "validation": {
+     "n": 3,
+     "mean": -0.0692,
+     "sd": 0.17402,
+     "s": -0.3977,
+     "per_month": 0.083,
+     "x": 0.0132,
+     "hit": 0.333
+    },
+    "test": {
+     "n": 3,
+     "mean": -0.11522,
+     "sd": 0.03491,
+     "s": -3.3006,
+     "per_month": 0.067,
+     "x": 0.7266,
+     "hit": 0.0
+    }
+   },
+   "control_mean_by_split": {
+    "train": 0.01592033332716074,
+    "validation": 1.2498369657873432e-05,
+    "test": -0.008000743910956173
+   },
+   "placebo_mean_by_split": {
+    "train": -0.030422165431387507,
+    "validation": 0.06640170918994318,
+    "test": 0.11241850064030033
+   },
+   "gross_mean_all": -0.05086601479961867
+  }
+ },
+ "post_cutoff_rows": 85,
+ "seconds": 57
+}
