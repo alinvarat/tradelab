@@ -53,7 +53,7 @@ class Positions(unittest.TestCase):
 class Verdict(unittest.TestCase):
     def test_ceiling(self):
         self.assertAlmostEqual(wc.ceiling_multiple(30, 0.49), 2.0)                # one turn at 0.50
-        self.assertGreater(wc.ceiling_multiple(5, 0.89), 3.0)
+        self.assertGreater(wc.ceiling_multiple(10, 0.49), 3.0)       # 3 turns at 0.50 = 8x
         self.assertIsNone(wc.ceiling_multiple(0, 0.5))
 
     def test_verdict(self):
