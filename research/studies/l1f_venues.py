@@ -1,7 +1,8 @@
 """L1f short venues: which exchange offered a shortable instrument for each Binance delist-notice coin at notice time, and what the
 short earns there. Spec: research/studies/protocol_l1f_venues_20261125.md. GitHub Actions only (workflow l1f_venues.yml).
 
-    python research/studies/l1f_venues.py <out_dir> probe  <events.json>     existence only: bar counts per venue, NO prices stored
+    python research/studies/l1f_venues.py <out_dir> probe_venue <events.json> <venue> [budget_s]   existence only, NO prices stored
+    python research/studies/l1f_venues.py <out_dir> probe_merge <events.json> <parts_dir>          merge per-venue parts into probe.json
     python research/studies/l1f_venues.py <out_dir> margin                   Binance margin evidence (announcements + public endpoints)
     python research/studies/l1f_venues.py <out_dir> price  <events.json> <probe.json>   price the short per venue (locked protocol)
 """
@@ -30,7 +31,7 @@ STABLES = {"USDP", "IDRT", "VAI", "BUSD", "TUSD", "USDC", "FDUSD", "UST", "USTC"
 ERR = {}
 
 
-def http(url, data=None, timeout=30, tries=3, method=None, head=False):
+def http(url, data=None, timeout=15, tries=2, method=None, head=False):
     """-> (status, text|None). status is the HTTP code, or 0 on a network failure."""
     last = 0
     for k in range(tries):
@@ -47,7 +48,7 @@ def http(url, data=None, timeout=30, tries=3, method=None, head=False):
             ERR[f"{last}{type(e).__name__}"] = ERR.get(f"{last}{type(e).__name__}", 0) + 1
             if last in (400, 403, 404, 451):
                 return last, None
-            time.sleep(1.5 * (k + 1))
+            time.sleep(1.0 * (k + 1))
     return last, None
 
 
@@ -66,7 +67,7 @@ def bars_binance_um(sym, t0, t1):
     for cand in (sym, "1000" + sym, "1000000" + sym):
         out = {}
         for y, m in bv.months(t0, t1):
-            d = bv.fetch("futures/um", "monthly", "klines", cand + "USDT", (y, m), "1m", bv.parse_kline)
+            d = bv.fetch("futures/um", "monthly", "klines", cand + "USDT", (y, m), "1m", bv.parse_kline, tries=2, timeout=15)
             if d is None:
                 return None
             out.update({r[0]: (r[1], r[2], r[3], r[4]) for r in d if t0 <= r[0] < t1})
@@ -78,7 +79,7 @@ def bars_binance_um(sym, t0, t1):
 def bars_spot(sym, t0, t1, quote="USDT"):
     out = {}
     for y, m in bv.months(t0, t1):
-        d = bv.fetch("spot", "monthly", "klines", sym + quote, (y, m), "1m", bv.parse_kline)
+        d = bv.fetch("spot", "monthly", "klines", sym + quote, (y, m), "1m", bv.parse_kline, tries=2, timeout=15)
         if d is None:
             return None
         out.update({r[0]: (r[1], r[2], r[3], r[4]) for r in d if t0 <= r[0] < t1})
@@ -216,34 +217,69 @@ def shortable(bars, ts):
     return has_before and has_entry and has_exit
 
 
-def probe_one(e):
-    ts = e["ts"]
-    t0, t1 = span(ts)
-    res = {}
-    for v in VENUES:
-        b = FETCH[v](e["sym"], t0, t1)
-        res[v] = {"status": "failed" if b is None else "ok", "bars": 0 if not b else len(b), "shortable": bool(b) and shortable(b, ts)}
-    b = bars_spot(e["sym"], t0, t1)
-    res["binance_spot"] = {"status": "failed" if b is None else "ok", "bars": 0 if not b else len(b), "shortable": bool(b) and shortable(b, ts)}
-    return {**e, "venues": res}
+def fetch_venue(v, sym, t0, t1):
+    return bars_spot(sym, t0, t1) if v == "binance_spot" else FETCH[v](sym, t0, t1)
 
 
-def mode_probe(out, events_path):
-    doc = json.load(open(events_path))
-    ev = doc["l1f"]
-    with ThreadPoolExecutor(4) as ex:
-        rows = list(ex.map(probe_one, ev))
-    cover = {}
-    for v in list(VENUES) + ["binance_spot"]:
-        cover[v] = {"shortable": sum(r["venues"][v]["shortable"] for r in rows), "failed": sum(r["venues"][v]["status"] == "failed" for r in rows)}
+def mode_probe_venue(out, events_path, venue, budget_s):
+    """One venue, own job: existence only (bar counts), hard wall-clock budget, results rewritten every 5 events, flushed progress."""
+    ev = json.load(open(events_path))["l1f"]
+    t_start = time.time()
+    rows = {}
+    path = os.path.join(out, f"probe_{venue}.json")
+
+    def save(done):
+        json.dump({"venue": venue, "done": done, "of": len(ev), "errors": dict(ERR), "rows": list(rows.values())}, open(path, "w"))
+
+    def one(e):
+        key = f"{e['sym']}|{int(e['ts'])}"
+        if time.time() - t_start > budget_s:
+            rows[key] = {"sym": e["sym"], "ts": e["ts"], "status": "timeout", "bars": 0, "shortable": False}
+            return
+        t0, t1 = span(e["ts"])
+        t_ev = time.time()
+        try:
+            b = fetch_venue(venue, e["sym"], t0, t1)
+        except Exception as x:  # noqa: BLE001
+            b = None
+            ERR["exc:" + type(x).__name__] = ERR.get("exc:" + type(x).__name__, 0) + 1
+        rows[key] = {"sym": e["sym"], "ts": e["ts"], "status": "failed" if b is None else "ok", "bars": 0 if not b else len(b),
+                     "shortable": bool(b) and shortable(b, e["ts"]), "secs": round(time.time() - t_ev, 1)}
+        print(venue, len(rows), e["sym"], rows[key]["status"], rows[key]["bars"], rows[key]["shortable"], rows[key]["secs"], flush=True)
+        if len(rows) % 5 == 0:
+            save(len(rows))
+
+    with ThreadPoolExecutor(3) as ex:
+        list(ex.map(one, ev))
+    save(len(rows))
+    print(venue, "done", sum(r["shortable"] for r in rows.values()), "shortable of", len(rows), "seconds", round(time.time() - t_start), flush=True)
+
+
+def mode_probe_merge(out, events_path, parts_dir):
+    """Combine probe_<venue>.json files into probe.json (the format the pricing mode reads)."""
+    ev = json.load(open(events_path))["l1f"]
+    allv = list(VENUES) + ["binance_spot"]
+    parts = {}
+    for v in allv:
+        p = os.path.join(parts_dir, f"probe_{v}.json")
+        if os.path.exists(p):
+            parts[v] = {f"{r['sym']}|{int(r['ts'])}": r for r in json.load(open(p))["rows"]}
+    rows = []
+    for e in ev:
+        key = f"{e['sym']}|{int(e['ts'])}"
+        vs = {}
+        for v in allv:
+            r = parts.get(v, {}).get(key)
+            vs[v] = {"status": r["status"] if r else "missing", "bars": r["bars"] if r else 0, "shortable": bool(r and r["shortable"])}
+        rows.append({**e, "venues": vs})
+    bad = lambda r, v: r["venues"][v]["status"] not in ("ok",)   # noqa: E731
     nop = [r for r in rows if not r["venues"]["binance_um"]["shortable"]]
-    cover_nop = {v: {"shortable": sum(r["venues"][v]["shortable"] for r in nop), "failed": sum(r["venues"][v]["status"] == "failed" for r in nop)}
-                 for v in list(VENUES) + ["binance_spot"]}
-    any_perp = sum(any(r["venues"][v]["shortable"] for v in VENUES) for r in rows)
-    any_perp_nop = sum(any(r["venues"][v]["shortable"] for v in VENUES) for r in nop)
+    cover = {v: {"shortable": sum(r["venues"][v]["shortable"] for r in rows), "not_ok": sum(bad(r, v) for r in rows)} for v in allv}
+    cover_nop = {v: {"shortable": sum(r["venues"][v]["shortable"] for r in nop), "not_ok": sum(bad(r, v) for r in nop)} for v in allv}
     summ = {"events": len(rows), "no_binance_perp": len(nop), "cover_all": cover, "cover_no_binance_perp": cover_nop,
-            "any_perp_all": any_perp, "any_perp_among_no_binance_perp": any_perp_nop, "errors": dict(ERR),
-            "built_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+            "any_perp_all": sum(any(r["venues"][v]["shortable"] for v in VENUES) for r in rows),
+            "any_perp_among_no_binance_perp": sum(any(r["venues"][v]["shortable"] for v in VENUES) for r in nop),
+            "venues_with_part": sorted(parts), "built_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     json.dump({"summary": summ, "rows": rows}, open(os.path.join(out, "probe.json"), "w"))
     print(json.dumps(summ, indent=1))
 
@@ -279,8 +315,10 @@ def mode_margin(out):
 def main():
     out, mode = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
-    if mode == "probe":
-        mode_probe(out, sys.argv[3])
+    if mode == "probe_venue":
+        mode_probe_venue(out, sys.argv[3], sys.argv[4], float(sys.argv[5]) if len(sys.argv) > 5 else 2400)
+    elif mode == "probe_merge":
+        mode_probe_merge(out, sys.argv[3], sys.argv[4])
     elif mode == "margin":
         mode_margin(out)
     elif mode == "price":
