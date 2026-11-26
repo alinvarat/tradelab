@@ -1,0 +1,30 @@
+{
+ "stock": {
+  "version": "m1",
+  "prompt_sha256": "14401ebf2f4e2e9976184bf7b059426c3eaabf63d4183645adf849d612abe6bb",
+  "rule": "protocol_r3 selection rule on clean validation (selection.json, eval run 45810083006)",
+  "validation_partial": 0.2819428264891812,
+  "locked_utc": "2026-11-26"
+ },
+ "crypto": {
+  "version": null,
+  "note": "no eligible version; sealed set not opened for this market",
+  "validation": {
+   "m0": {
+    "n": 1500,
+    "reply_ok": 1.0,
+    "partial": 0.009175584234377145
+   },
+   "m1": {
+    "n": 1500,
+    "reply_ok": 1.0,
+    "partial": -0.00010840825848351516
+   },
+   "m2": {
+    "n": 1500,
+    "reply_ok": 1.0,
+    "partial": -0.007017269400391289
+   }
+  }
+ }
+}
