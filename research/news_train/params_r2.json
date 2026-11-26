@@ -1,0 +1,275 @@
+{
+ "version": 3,
+ "family": "r2",
+ "seed": 20261127,
+ "model": "claude-haiku-5-5",
+ "max_versions": 6,
+ "dates": {
+  "clean_start": "2025-12-01",
+  "clean_train_end": "2026-04-01",
+  "dev_end": "2026-07-01",
+  "sealed_hist_from": "2026-08-01",
+  "fwd_from": "2026-11-27"
+ },
+ "sample": {
+  "stock_train": 1200,
+  "stock_validation": 1200,
+  "crypto_train": 1500,
+  "crypto_validation": 1500,
+  "crypto_sealed_hist": 2500
+ },
+ "stock_items": [
+  "1.01",
+  "1.02",
+  "2.01",
+  "2.02",
+  "2.05",
+  "2.06",
+  "3.01",
+  "4.02",
+  "5.02",
+  "7.01",
+  "8.01"
+ ],
+ "entry": {
+  "lag_s": 93,
+  "extra_s": 5,
+  "stale_s": 300,
+  "gdelt_lag_s": 0
+ },
+ "holds": {
+  "5m": 300,
+  "1h": 3600,
+  "1d": 86400
+ },
+ "cost": {
+  "stock_side": 0.0009,
+  "stock_short_borrow_session": 0.0002,
+  "crypto_rt": 0.004
+ },
+ "min_conf": 0,
+ "primary": {
+  "stock": "1h",
+  "crypto": "1h"
+ },
+ "bootstrap": {
+  "n": 2000,
+  "alpha": 0.05
+ },
+ "done": {
+  "min_traded": 100,
+  "baselines": 3,
+  "r1_family_stock": 5
+ },
+ "select": {
+  "min_traded_val": {
+   "stock": 30,
+   "crypto": 100
+  },
+  "theta_min_trades": {
+   "stock": 25,
+   "crypto": 60
+  },
+  "theta_grid_pct": [
+   0,
+   0.25,
+   0.5,
+   0.75,
+   1,
+   1.5,
+   2,
+   3
+  ]
+ },
+ "analogs": {
+  "k": 5,
+  "text_chars": 220
+ },
+ "text_chars": 3000,
+ "gdelt": {
+  "stride": 4,
+  "cap_per_coin_day": 6,
+  "min_words": 4,
+  "jaccard": 0.8,
+  "dup_window_s": 21600,
+  "coins": {
+   "BTC": [
+    "bitcoin",
+    "btc"
+   ],
+   "ETH": [
+    "ethereum",
+    "ether",
+    "eth"
+   ],
+   "SOL": [
+    "solana"
+   ],
+   "XRP": [
+    "xrp",
+    "ripple"
+   ],
+   "BNB": [
+    "bnb",
+    "binance coin"
+   ],
+   "DOGE": [
+    "dogecoin",
+    "doge"
+   ],
+   "ADA": [
+    "cardano"
+   ],
+   "AVAX": [
+    "avalanche"
+   ],
+   "LINK": [
+    "chainlink"
+   ],
+   "DOT": [
+    "polkadot"
+   ],
+   "LTC": [
+    "litecoin"
+   ],
+   "BCH": [
+    "bitcoin cash"
+   ],
+   "SHIB": [
+    "shiba inu"
+   ],
+   "XLM": [
+    "stellar lumens"
+   ],
+   "HBAR": [
+    "hedera"
+   ],
+   "PEPE": [
+    "pepe coin"
+   ],
+   "NEAR": [
+    "near protocol"
+   ],
+   "UNI": [
+    "uniswap"
+   ],
+   "ATOM": [
+    "cosmos hub"
+   ],
+   "TRX": [
+    "tron"
+   ]
+  },
+  "context_words": [
+   "crypto",
+   "token",
+   "coin",
+   "blockchain",
+   "bitcoin",
+   "ethereum",
+   "etf",
+   "defi",
+   "wallet",
+   "binance",
+   "coinbase",
+   "stablecoin",
+   "mining",
+   "altcoin",
+   "web3",
+   "solana",
+   "xrp"
+  ],
+  "context_themes": [
+   "CRYPTO",
+   "BITCOIN",
+   "BLOCKCHAIN"
+  ],
+  "spam_domains": [
+   "tickerreport.com",
+   "marketbeat.com",
+   "themarketsdaily.com",
+   "etfdailynews.com",
+   "americanbankingnews.com",
+   "defenseworld.net",
+   "dailypolitical.com",
+   "modernreaders.com",
+   "thelincolnianonline.com",
+   "wkrb13.com",
+   "tickerreport.co.uk",
+   "stocknewsjournal.com"
+  ],
+  "spam_title_regex": [
+   "\\b(acquires|sells|buys|boosts|raises|lowers|trims|cuts|purchases)\\b.*\\b(shares|stake|position)\\b",
+   "\\bprice (target|prediction)s?\\b.*\\b20\\d\\d\\b.*\\bforecast"
+  ]
+ },
+ "keyword": {
+  "pos": [
+   "beat",
+   "beats",
+   "raises",
+   "raised",
+   "record",
+   "approval",
+   "approved",
+   "partnership",
+   "acquire",
+   "acquires",
+   "acquisition of",
+   "buyback",
+   "repurchase",
+   "dividend increase",
+   "upgrade",
+   "wins",
+   "awarded",
+   "contract",
+   "listing",
+   "listed",
+   "will list",
+   "gets listed",
+   "launch",
+   "launches",
+   "positive",
+   "exceeds",
+   "strong",
+   "growth"
+  ],
+  "neg": [
+   "miss",
+   "misses",
+   "lowers",
+   "lowered",
+   "cuts",
+   "cut",
+   "resign",
+   "resigns",
+   "resignation",
+   "terminate",
+   "terminated",
+   "termination",
+   "delist",
+   "delisting",
+   "remove",
+   "removal",
+   "investigation",
+   "subpoena",
+   "downgrade",
+   "bankruptcy",
+   "chapter 11",
+   "going concern",
+   "restatement",
+   "non-reliance",
+   "default",
+   "impairment",
+   "layoff",
+   "layoffs",
+   "recall",
+   "lawsuit",
+   "warning",
+   "suspend",
+   "suspends",
+   "monitoring tag",
+   "decline"
+  ]
+ }
+}
