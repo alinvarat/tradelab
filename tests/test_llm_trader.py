@@ -1206,7 +1206,7 @@ class V419Rules(Base):
         old = self.t.acct.positions["AAA"].sl
 
         def review(stop_pct, review_in_min=60):
-            self.t.calls["last_ts"] = 0.0                       # a position review (not a scheduled scan) starts this cycle
+            self.t.calls.update(last_ts=0.0, last_idle=time.time())    # a position review (not a scheduled scan) starts this cycle
             self.t.links["AAA"]["review_at"] = 0
             self.reply({"symbol": "AAA", "action": "adjust", "stop_pct": stop_pct, "review_in_min": review_in_min, "reason": "r"})
             self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
