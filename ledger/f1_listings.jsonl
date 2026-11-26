@@ -1153,3 +1153,4 @@
 {"kind": "snap", "t": 1795652596.1822066, "venue": "bitget", "base": "RMGY", "age_h": 10.0, "bid": 22.63, "ask": 23.6, "bid_sz": 88.0, "ask_sz": 237.0, "vol24": 70171640.95378338, "spread": 0.04286}
 {"kind": "snap", "t": 1795652596.1822066, "venue": "bitget", "base": "RSOLV", "age_h": 10.0, "bid": 85.46, "ask": 88.76, "bid_sz": 23.0, "ask_sz": 144.0, "vol24": 65826167.75149106, "spread": 0.03861}
 {"kind": "snap", "t": 1795652596.1822066, "venue": "bitget", "base": "RWAY", "age_h": 10.0, "bid": 27.16, "ask": 28.24, "bid_sz": 73.0, "ask_sz": 70.0, "vol24": 26261290.12708834, "spread": 0.03976}
+{"kind": "snap", "t": 1795656192.8926706, "venue": "mexc", "base": "JIMMY", "age_h": 18.93, "bid": 0.000794, "ask": 0.000807, "bid_sz": 5470.93, "ask_sz": 30579.35, "vol24": 0.0, "spread": 0.01637}
