@@ -105,8 +105,9 @@ def _j(raw):
         return {}
 
 
-def ensure_branch(transport, cfg, sleep=time.sleep):
-    """Make sure the data branch exists (an orphan commit with a README when it does not). -> True/False."""
+def ensure_branch(transport, cfg, sleep=time.sleep, readme=None, message="news-ingest data branch: start"):
+    """Make sure the data branch exists (an orphan commit with a README when it does not). -> True/False.
+    readme/message are only used by other publishers (core/desk_publish.py); the defaults are the news-ingest ones."""
     base = f"{API}/repos/{cfg['repo']}"
     st, _ = call(transport, "GET", f"{base}/git/ref/heads/{cfg['branch']}", cfg["token"], sleep=sleep)
     ensure_branch.last_status = st          # surfaced in the publish error: 401 bad token, 403/404 no repo access
@@ -114,15 +115,15 @@ def ensure_branch(transport, cfg, sleep=time.sleep):
         return True
     if st != 404:
         return False
-    readme = ("Append-only copy of the Kuber pod's news-ingest log (core/news_ingest.py), written by core/news_publish.py. "
-              "Public news metadata only: t_pub, t_seen, t_llm per item. Files are created once and never rewritten.\n")
+    readme = readme or ("Append-only copy of the Kuber pod's news-ingest log (core/news_ingest.py), written by core/news_publish.py. "
+                        "Public news metadata only: t_pub, t_seen, t_llm per item. Files are created once and never rewritten.\n")
     st, raw = call(transport, "POST", f"{base}/git/trees", cfg["token"],
                    {"tree": [{"path": "README.md", "mode": "100644", "type": "blob", "content": readme}]}, sleep=sleep)
     tree = _j(raw).get("sha")
     if st not in (200, 201) or not tree:
         return False
     st, raw = call(transport, "POST", f"{base}/git/commits", cfg["token"],
-                   {"message": "news-ingest data branch: start", "tree": tree, "parents": [], "author": COMMITTER, "committer": COMMITTER},
+                   {"message": message, "tree": tree, "parents": [], "author": COMMITTER, "committer": COMMITTER},
                    sleep=sleep)
     commit = _j(raw).get("sha")
     if st not in (200, 201) or not commit:

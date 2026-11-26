@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from core.universe import TICKERS
-from core import buzz, dvol_collect, event_trader, event_trader_broad, llm_trader, market_collect, news_archive, news_ingest, news_latency, steward
+from core import buzz, desk_publish, dvol_collect, event_trader, event_trader_broad, llm_trader, market_collect, news_archive, news_ingest, news_latency, steward
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 from core.storage import write_json_atomic
@@ -678,6 +678,7 @@ if __name__ == "__main__":
     if want_llm == "1" or (want_llm is None and (ai_news_available())):
         llm = llm_trader.LlmTrader()
         start("llm_trader", llm_trader.loop, llm)
+        start("desk_publish", desk_publish.loop, llm_trader.LOG.with_name("desk_outcomes"))   # v4.19 weekly review input (no-op without the token)
     start("poller", poller)
     start("backup_loop", backup_loop)
     start("shock_warm_loop", shock_warm_loop)

@@ -20,7 +20,7 @@ from pathlib import Path
 from statistics import mean
 
 from . import ai_news, buzz, data, news, news_archive, sequential
-from . import desk_feeds
+from . import desk_feeds, desk_publish
 from . import desk_rules as dr
 from .engine import Account, Quote
 from .event_trader import STALE_S, VOL_MIN, _day
@@ -95,7 +95,7 @@ MACRO_KEYWORDS = {
 }
 
 SYSTEM = """You are an autonomous multi-asset trader managing a SIMULATED paper account of a few hundred dollars. You \
-decide everything: whether to trade, which asset, how many positions, how big, how much leverage, the entry, stop, target, \
+decide, inside the v4.19 limits of rule 10, whether to trade, which asset, how many positions, how big, how much leverage, the entry, stop, target, \
 holding period, adding or cutting, and when to look again. You get the biggest moves of the moment across US stocks, ETFs, \
 commodity futures, FX and crypto, recent linked news, social-buzz surges, market context, your open positions and your track \
 record, plus the whole universe you may trade.
@@ -876,7 +876,7 @@ class LlmTrader:
                                          if self.rules_on else {}),
                                       "default_stop_pct": STOP * 100,
                                       "stop_range_pct": list(STOP_RANGE), "safety_exit_days": MAX_HOLD_S // 86400,
-                                      "holding_period": "your choice"}},
+                                      "holding_period": "default time exit 4 h (rule 10)" if self.rules_on else "your choice"}},
                "track_record": self.memory(),
                "desk_stats": dr.shrunk_cells(self.desk_stats(min_n=1)) if self.rules_on else self.desk_stats(),
                "news_principles": NEWS_PRINCIPLES,
@@ -1036,7 +1036,7 @@ class LlmTrader:
     def _outcome_row(self, c, h):
         """v4.19: one append-only row per scored candidate and horizon for the weekly job (research/llm_trader/weekly.py): source,
         news type, action, veto rule and which inputs were present. Never rewritten; a write error must not stop the bot."""
-        row = {"v": 1, "protocol": PROTOCOL_VERSION, "ts": c["ts"], "symbol": c["symbol"], "cls": c.get("asset_class"),
+        row = {"v": 2, "protocol": c.get("protocol") or "pre-v4.19", "ts": c["ts"], "symbol": c["symbol"], "cls": c.get("asset_class"),
                "src": dr.desk_source(c.get("why")), "news_type": c.get("news_type"), "action": c["action"], "h": h,
                "abn": c["out"][str(h)], "veto": c.get("veto"), "forced": c.get("forced", False), "em": c.get("em"),
                "rv": c.get("rv"), "stale": c.get("stale", [])}
@@ -1184,6 +1184,7 @@ class LlmTrader:
                                    "spy_price": spy["price"] if spy else None,
                                    "action": d["action"] if d and d["action"] in ("buy", "short") else "hold",
                                    "reason": (d or {}).get("reason", ""), "out": {},
+                                   "protocol": PROTOCOL_VERSION,
                                    "veto": (d or {}).get("veto_rule"), "forced": bool(c.get("forced")),
                                    "rv": self.rv.get(sym), "em": (d or {}).get("expected_move_pct"),
                                    "stale": list((getattr(self, "_feed_health", None) or {}).get("stale", []))})
@@ -1256,7 +1257,7 @@ class LlmTrader:
                         veto = "R6 no adding to a position that is not in profit"
                 before = d["size_pct"]
                 g = dr.gate(d, news_type=(ctx_by.get(sym) or {}).get("news_type"), forced=bool(cand_by.get(sym, {}).get("forced")),
-                            rs=self.risk, eq=eq, now=now, n_open=0 if add else len(self.acct.positions) + planned,
+                            rs=self.risk, eq=eq, now=now, n_open=0 if add else len(self._rule_positions()) + planned,
                             extra_entries=0 if add else planned, is_add=add)
                 veto = veto or g["veto"]
                 d["rules"] = g["rules"]
@@ -1303,7 +1304,7 @@ class LlmTrader:
         cap = risk_frac * eq / stop
         if notional > cap:
             notional, _ = cap, clipped.append(f"risk budget: loss at the stop capped at {risk_frac:.0%} of equity")
-        room = max(0.0, (max_exp - self.exposure()) * eq)
+        room = max(0.0, (max_exp - (self._rules_exposure() if self.rules_on else self.exposure())) * eq)
         if notional > room:
             notional, _ = room, clipped.append(f"total exposure cap ({max_exp:g}x equity)")
         free = self.acct.free_margin() / (1 / lev + self.acct.fee_rate + self.acct.slippage + 0.0003)   # margin + fee + slippage must fit
@@ -1406,6 +1407,17 @@ class LlmTrader:
                     review_at=now + (meta["decision"].get("review_in_min") or DEFAULT_REVIEW_MIN) * 60)
         return cs
 
+    def _rule_positions(self) -> list:
+        """Positions opened under the v4.19 rules (their link carries max_hold_s). Older positions are grandfathered: they keep
+        their own stops and do not use up the v4.19 position and exposure limits."""
+        return [s for s in self.acct.positions if (self.links.get(s) or {}).get("max_hold_s")]
+
+    def _rules_exposure(self):
+        eq = self.acct.equity()
+        used = sum(self.acct.positions[s].qty * (self.acct.last[s].bid if s in self.acct.last else self.acct.positions[s].entry)
+                   for s in self._rule_positions())
+        return used / eq if eq else 0
+
     def _v419_exits(self, now, quotes):
         """v4.19: time exits for entries opened under the new rules, the bank at 3x, and no limit adds (no averaging down)."""
         for s, p in list(self.acct.positions.items()):
@@ -1494,9 +1506,16 @@ class LlmTrader:
             return {"status": "skipped", "why": "no position"}
         last = self.acct.last.get(sym)
         mark = (last.bid if p.side > 0 else last.ask) if last else p.entry
-        p.sl = mark * (1 - p.side * d["stop_pct"] / 100)
+        new_sl = mark * (1 - p.side * d["stop_pct"] / 100)
+        review_min = d["review_in_min"]
+        if self.rules_on and link.get("max_hold_s"):          # v4.19: an adjust may tighten the stop, never widen it (2% risk cap)
+            if p.sl and ((p.side > 0 and new_sl < p.sl) or (p.side < 0 and new_sl > p.sl)):
+                new_sl = p.sl
+            review_min = min(review_min, dr.REVIEW_MAX_MIN)
+        p.sl = new_sl
         p.tp = mark * (1 + p.side * d["target_pct"] / 100) if d.get("target_pct") else None
-        link.update(review_at=now + d["review_in_min"] * 60, stop_pct=d["stop_pct"], target_pct=d.get("target_pct"))
+        link.update(review_at=now + review_min * 60, stop_pct=abs(1 - new_sl / mark) * 100 if mark else d["stop_pct"],
+                    target_pct=d.get("target_pct"))
         self.record("adjust", symbol=sym, stop=round(p.sl, 4), target=round(p.tp, 4) if p.tp else None,
                     review_in_min=d["review_in_min"], reason=d["reason"])
         return {"status": "adjusted"}
@@ -1842,7 +1861,8 @@ class LlmTrader:
                     "v4_19": {"rules_on": self.rules_on, "risk": dr.risk_status(self.risk, a.equity(), time.time()) if self.rules_on else None,
                               "entries_today": dr.entries_today(self.risk, time.time()),
                               "stale_feeds": (getattr(self, "_feed_health", None) or {}).get("stale"),
-                              "feed_errors": dict(self.feeds.errors) if self.feeds else None},
+                              "feed_errors": dict(self.feeds.errors) if self.feeds else None,
+                              "outcome_publish": desk_publish.view()},
                     "classes": {c: len(rows) for c, rows in ASSETS.items()},
                     "next_scan_in_s": max(0, round(IDLE_CALL_S - (time.time() - self.calls.get("last_idle", 0)))),
                     "positions": [self._pos_view(s, p, time.time()) for s, p in a.positions.items()],

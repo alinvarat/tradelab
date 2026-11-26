@@ -1186,6 +1186,50 @@ class V419Rules(Base):
         self.assertEqual(again.risk["tag"], lt.dr.TAG)
         self.assertGreater(again.risk["peak"], 0)
 
+    def test_positions_from_before_v4_19_do_not_use_up_the_new_limits(self):
+        for sym in ("AAA", "BBB", "CCC", "DDD"):                      # four legacy positions: no max_hold_s on their links
+            self.t.risk.update(entries_n=0)
+            self.reply({"symbol": sym, "action": "short", "size_pct": 2, "reason": "old", "expected_move_pct": 3})
+            self.go(self.market(**{sym: quote(sym, px=110, move=12)}))
+            self.t.links[sym].pop("max_hold_s", None)
+        self.assertEqual(len(self.t.acct.positions), 4)
+        self.assertEqual(self.t._rule_positions(), [])
+        self.assertEqual(self.t._rules_exposure(), 0)
+        self.t.risk.update(entries_n=0)
+        self.reply({"symbol": "EEE", "action": "short", "size_pct": 2, "reason": "new", "expected_move_pct": 3})
+        self.go(self.market(EEE=quote("EEE", px=110, move=12)))
+        self.assertIn("EEE", self.t.acct.positions)
+
+    def test_adjust_may_tighten_a_v4_19_stop_but_never_widen_it(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "stop_pct": 5, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        old = self.t.acct.positions["AAA"].sl
+
+        def review(stop_pct, review_in_min=60):
+            self.t.calls.update(last_ts=0.0, last_idle=time.time())    # a position review (not a scheduled scan) starts this cycle
+            self.t.links["AAA"]["review_at"] = 0
+            self.reply({"symbol": "AAA", "action": "adjust", "stop_pct": stop_pct, "review_in_min": review_in_min, "reason": "r"})
+            self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        review(25, 5000)
+        self.assertEqual(self.t.decisions[-1]["executed"]["status"], "adjusted")
+        self.assertAlmostEqual(self.t.acct.positions["AAA"].sl, old, places=6)       # a wider stop is ignored
+        self.assertLessEqual((self.t.links["AAA"]["review_at"] - time.time()) / 60, lt.dr.REVIEW_MAX_MIN + 1)
+        review(2)
+        self.assertLess(self.t.acct.positions["AAA"].sl, old)                       # a short's stop moves down when tightened
+
+    def test_outcome_rows_carry_the_tag_of_the_decision_not_of_the_scoring_time(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        c = dict(self.t.cands[-1], out={"3600": 0.01})
+        c["protocol"] = "v4.18"                                                      # a candidate decided before the upgrade
+        with mock.patch.object(lt, "PROTOCOL_VERSION", "v4.19"):
+            self.t._outcome_row(c, 3600)
+        del c["protocol"]                                                            # one saved before tags were stored
+        self.t._outcome_row(c, 3600)
+        f = next((Path(self.tmp.name) / "desk_outcomes").glob("2*.jsonl"))
+        rows = [json.loads(l) for l in f.read_text().splitlines()]
+        self.assertEqual([(r["v"], r["protocol"]) for r in rows], [(2, "v4.18"), (2, "pre-v4.19")])
+
     def test_streak_is_fed_by_closed_model_trades(self):
         self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "stop_pct": 2, "reason": "r", "expected_move_pct": 3})
         self.go(self.market(AAA=quote("AAA", px=110, move=12)))

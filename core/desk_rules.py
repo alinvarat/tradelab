@@ -196,7 +196,7 @@ def gate(d: dict, *, news_type, forced: bool, rs: dict, eq: float, now: float, n
     if st["mult"] < 1:
         out["rules"].append("R7")
         out["notes"] += [r for r in st["reasons"] if "half size" in r]
-    if d["action"] == "buy" and not forced:
+    if d["action"] == "buy":                              # forced-flow longs too: the playbook says abstain on listings
         size *= 0.5
         out["rules"].append("R2")
     if rs.get("last_loss") and rs.get("last_size_pct"):
@@ -236,11 +236,14 @@ FLOW_RECENT_OOS = ("NEGATIVE out of sample: the delisting short lost 1.8% per tr
                    "news_train v4, PLAYBOOK rule 1): a regime, not a law")
 
 
+WIRE_SOURCES = {"prnewswire", "globenewswire", "businesswire"}    # stock press releases: hundreds a day, no measured edge
+
+
 def fast_news_block(rows: list, now: float, source_health: dict, max_items: int = 6, window_s: int = 1800) -> dict:
     """rows: classified fast-ingest items [{source, title, t_pub, t_seen, lat_s, cls, coins}], newest last.
     source_health: {source: {"last_ok_age_s", "median_s", "n"}} from news_ingest.view()."""
-    fresh = [r for r in rows if now - r["t_seen"] <= window_s]
-    fresh.sort(key=lambda r: r["t_seen"], reverse=True)
+    fresh = [r for r in rows if now - r["t_seen"] <= window_s and (r.get("cls") or r["source"] not in WIRE_SOURCES)]
+    fresh.sort(key=lambda r: (bool(r.get("cls")), r["t_seen"]), reverse=True)     # notices first, then the newest
     items = [{"src": r["source"], "t_pub": r.get("t_pub"), "age_s": round(now - r["t_seen"]), "latency_s": r.get("lat_s"),
               "title": (r.get("title") or "")[:110], **({"flow": r["cls"], "coins": r["coins"][:4]} if r.get("cls") else {})}
              for r in fresh[:max_items]]

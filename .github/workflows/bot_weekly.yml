@@ -1,0 +1,59 @@
+name: Bot weekly review
+
+# Weekly review of the live llm_trader (research/llm_trader/weekly.py). Dispatched by keeper.yml on Sundays 04:00 UTC, or by hand.
+# It reads the pod's published outcome rows (data/bot-desk, needs the pod secret TRADELAB_DATA_PUSH_TOKEN) and the ingest log
+# (data/news-ingest), recomputes the desk's cells with shrinkage toward zero, and opens a PR on branch bot/weekly-<date> with the
+# review and the proposal for the next protocol tag. It NEVER merges and never changes bot code: a behaviour change is applied
+# by hand as a new tag with its own addendum. If Actions may not open PRs (repo setting), it pushes the branch and opens an issue.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: tradelab-bot-weekly
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Read the data branches
+        run: |
+          mkdir -p /tmp/desk /tmp/ingest
+          if git fetch origin data/bot-desk 2>/dev/null; then git archive origin/data/bot-desk | tar -x -C /tmp/desk; else echo "no data/bot-desk yet (pod publisher off or no outcome rows)"; fi
+          git fetch origin data/news-ingest && git archive origin/data/news-ingest | tar -x -C /tmp/ingest
+      - name: Review
+        run: python research/llm_trader/weekly.py /tmp/desk /tmp/ingest research/llm_trader/weekly
+      - name: Open the proposal PR (never merged by this job)
+        run: |
+          set -u
+          d=$(date -u +%Y%m%d)
+          b="bot/weekly-$d"
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          git checkout -q -b "$b"
+          git add research/llm_trader/weekly
+          git commit -qm "Bot weekly review $d: desk_stats recomputed with shrinkage, proposal for the next tag" || { echo "nothing to commit"; exit 0; }
+          git push -q origin "$b" || { echo "branch $b already exists or push failed"; exit 0; }
+          body="Weekly review of the live bot. Proposal only: nothing here changes behaviour. Apply by hand as a new protocol tag with a dated addendum, or close. See research/llm_trader/weekly/${d}_review.md."
+          gh pr create --base main --head "$b" --title "Bot weekly review $d (proposal)" --body "$body" \
+            || gh issue create --title "Bot weekly review $d: proposal on branch $b" \
+                 --body "Actions may not open PRs here (repo setting). Branch $b has the review: https://github.com/${GITHUB_REPOSITORY}/compare/main...$b"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bot-weekly
+          path: research/llm_trader/weekly/
