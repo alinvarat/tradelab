@@ -12,7 +12,7 @@ Sources (checked 2026-11-26, none needs an account or key):
   prnewswire    RSS, conditional GET (ETag / If-Modified-Since) every 3 s
   globenewswire RSS, conditional GET every 5 s
   businesswire  RSS, conditional GET every 5 s
-  binance_*     public CMS announcement lists, every 5 s
+  binance_*     public CMS announcement lists, every 8-20 s (429 seen at 3 s)
   okx_announcements  public REST, every 3 s
   eqn_ws        EquationNews (BWEnews-style crypto newswire) public websocket push, no key
   eqn_rest      the same newswire over REST with ETag, every 3 s (its docs allow 1 req/s)
@@ -258,9 +258,9 @@ def sources():
         {"name": "prnewswire", "kind": "rss", "url": "https://www.prnewswire.com/rss/news-releases-list.rss", "every": 3, "market": "stock"},
         {"name": "globenewswire", "kind": "rss", "url": GNW, "every": 5, "market": "stock"},
         {"name": "businesswire", "kind": "rss", "url": "https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFpRWA==", "every": 5, "market": "stock"},
-        {"name": "binance_listings", "kind": "binance", "url": BN + "48", "every": 5, "market": "crypto"},
-        {"name": "binance_news", "kind": "binance", "url": BN + "49", "every": 5, "market": "crypto"},
-        {"name": "binance_delist", "kind": "binance", "url": BN + "161", "every": 10, "market": "crypto"},
+        {"name": "binance_listings", "kind": "binance", "url": BN + "48", "every": 8, "market": "crypto"},
+        {"name": "binance_news", "kind": "binance", "url": BN + "49", "every": 8, "market": "crypto"},
+        {"name": "binance_delist", "kind": "binance", "url": BN + "161", "every": 20, "market": "crypto"},
         {"name": "okx_announcements", "kind": "okx", "url": OKX_ANN, "every": 3, "market": "crypto"},
         {"name": "eqn_rest", "kind": "eqn", "url": EQN_REST, "every": 3, "market": "crypto"},
     ]
