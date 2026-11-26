@@ -1,0 +1,32 @@
+name: Wallet follow (Q1)
+
+# Plan: research/plans/PLAN_20261127_fable.md direction Q1. Protocols: research/studies/protocol_wallet_follow_*.md.
+# Public endpoints only, no keys, no accounts, no orders.
+#   probe - counts-only probe (protocol_wallet_follow_probe_20261127.md): routes, frame, history depth, hold and entry price
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe"
+        required: true
+        default: "probe"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    if: inputs.mode == 'probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python research/studies/wallet_follow.py probe out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wallet-follow-probe
+          path: out/
