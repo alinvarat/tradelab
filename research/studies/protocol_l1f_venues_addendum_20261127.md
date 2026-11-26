@@ -1,4 +1,4 @@
-# Addendum 2026-11-27 to the L1f / event-book protocols: margin shorts as a forward-test venue (proposal, no data yet)
+# Addendum 2026-11-27 to the L1f / event-book protocols: margin shorts as a forward-test venue (proposal; superseded by `protocol_l1f_margin_arm_20261127.md`, which locks the recorder and the rules)
 
 Locked files (`protocol_L1f_delist_short_forward.md`, `protocol_event_book_20261125.md`, `protocol_l1f_venues_20261125.md`) are not edited. This addendum applies to notices first seen after it is merged.
 - Why: `RESULTS.md` "L1f short venues": only 7 of the 42 notices without a Binance perp have a verifiable perp; the margin upper bound is x about 2.2 on those, but borrowing at the notice cannot be verified backwards.
