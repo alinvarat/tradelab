@@ -919,7 +919,10 @@ class LlmTrader:
     def self_review(self, now) -> dict | None:
         """v4.17 self-coaching: every COACH_EVERY_S DeepSeek reads this desk's own results and writes up to 8 short
         lessons that go back into every cycle as desk_lessons. Lessons cannot change limits, rules or code."""
-        last = (self.calls.get("lessons") or {}).get("ts")
+        prev = self.calls.get("lessons") or {}
+        last = prev.get("ts")
+        if "openrouter" in str(prev.get("model", "")).lower():     # stale pre-Claude error text: regenerate now with Claude
+            last = None
         if last is not None and now - last < COACH_EVERY_S:
             return None
         ev = self.evaluate()

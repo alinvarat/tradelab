@@ -41,6 +41,11 @@ class Helper(unittest.TestCase):
         self.assertEqual(name, ai_news.HELPER_MODELS[0].split("/", 1)[-1])
         self.assertTrue(name.endswith(":free"))
 
+    def test_helper_models_view_is_claude_only_by_default(self):
+        from unittest import mock
+        with mock.patch.object(ai_news, "other_models_allowed", return_value=False):
+            self.assertEqual(ai_news.helper_stats()["models"], ["claude/claude-haiku-5-5"])
+
 
 if __name__ == "__main__":
     unittest.main()
