@@ -1204,14 +1204,17 @@ class V419Rules(Base):
         self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "stop_pct": 5, "reason": "r", "expected_move_pct": 3})
         self.go(self.market(AAA=quote("AAA", px=110, move=12)))
         old = self.t.acct.positions["AAA"].sl
-        self.t.links["AAA"]["review_at"] = 0
-        self.reply({"symbol": "AAA", "action": "adjust", "stop_pct": 25, "review_in_min": 5000, "reason": "give it room"})
-        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+
+        def review(stop_pct, review_in_min=60):
+            self.t.calls["last_ts"] = 0.0                       # a position review (not a scheduled scan) starts this cycle
+            self.t.links["AAA"]["review_at"] = 0
+            self.reply({"symbol": "AAA", "action": "adjust", "stop_pct": stop_pct, "review_in_min": review_in_min, "reason": "r"})
+            self.t.scan(self.market(AAA=quote("AAA", px=110, move=12)))
+        review(25, 5000)
+        self.assertEqual(self.t.decisions[-1]["executed"]["status"], "adjusted")
         self.assertAlmostEqual(self.t.acct.positions["AAA"].sl, old, places=6)       # a wider stop is ignored
         self.assertLessEqual((self.t.links["AAA"]["review_at"] - time.time()) / 60, lt.dr.REVIEW_MAX_MIN + 1)
-        self.t.links["AAA"]["review_at"] = 0
-        self.reply({"symbol": "AAA", "action": "adjust", "stop_pct": 2, "reason": "tighten"})
-        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        review(2)
         self.assertLess(self.t.acct.positions["AAA"].sl, old)                       # a short's stop moves down when tightened
 
     def test_outcome_rows_carry_the_tag_of_the_decision_not_of_the_scoring_time(self):
