@@ -1,0 +1,23 @@
+{
+ "lock": {
+  "stock": null,
+  "crypto": "w1"
+ },
+ "k_versions": 4,
+ "validation_primary": {
+  "w1": {
+   "stock": {
+    "n_offered": 0,
+    "n_traded": 0,
+    "score_per_offered": null,
+    "mean_per_trade": null
+   },
+   "crypto": {
+    "n_offered": 1016,
+    "n_traded": 138,
+    "score_per_offered": -0.00046807423285946036,
+    "mean_per_trade": -0.0034461117433710995
+   }
+  }
+ }
+}
