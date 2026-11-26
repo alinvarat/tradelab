@@ -1,0 +1,98 @@
+name: News latency forward
+
+# Forward news-latency collector (research/studies/protocol_news_latency_fwd_20261126.md). Modes:
+#   probe   - reachability and timestamp fields of every candidate source from a runner (no outcome data)
+#   run     - one long poll loop (about 5h45m), state/rows on branch data/news-latency-fwd; chains itself, keeper.yml restarts it
+#   summary - recompute summary.json from the rows on the data branch
+# `run` refuses to start unless the locked protocol and its hashes are present.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe, run or summary"
+        required: true
+        default: "probe"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    if: inputs.mode == 'probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python research/studies/news_latency_fwd.py probe out
+        env:
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-latency-probe
+          path: out/
+
+  run:
+    if: inputs.mode == 'run'
+    runs-on: ubuntu-latest
+    timeout-minutes: 358
+    concurrency:
+      group: tradelab-news-latency
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code (LLM calls use the owner's Claude Max plan)
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Check out the data branch into /tmp/nl
+        run: |
+          if git fetch origin data/news-latency-fwd 2>/dev/null; then
+            git worktree add -B data/news-latency-fwd /tmp/nl origin/data/news-latency-fwd
+          else
+            git worktree add --detach /tmp/nl HEAD
+            git -C /tmp/nl checkout -q --orphan data/news-latency-fwd
+            git -C /tmp/nl rm -rfq . || true
+          fi
+      - name: Collect
+        id: collect
+        env:
+          TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}   # owner 2026-11-25: Claude only
+        run: python research/studies/news_latency_fwd.py run /tmp/nl 340
+      - name: Chain the next collector run (only after success; keeper restarts it after a failure)
+        if: steps.collect.outcome == 'success'
+        run: gh workflow run news_latency_fwd.yml -R "${{ github.repository }}" --ref main -f mode=run
+
+  summary:
+    if: inputs.mode == 'summary'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: |
+          git fetch origin data/news-latency-fwd
+          git worktree add /tmp/nl origin/data/news-latency-fwd
+          python research/studies/news_latency_fwd.py summary /tmp/nl | tee summary_out.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: news-latency-summary
+          path: summary_out.json
