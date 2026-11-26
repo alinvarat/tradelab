@@ -8,6 +8,8 @@ from unittest import mock
 
 from core import market_collect as mc
 
+mc.MARGIN_ARM = False      # the margin arm has its own tests (tests/test_margin_arm.py); the old ledger tests must not reach for the network
+
 
 class Parsers(unittest.TestCase):
     def test_venue_payloads(self):

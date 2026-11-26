@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from core.universe import TICKERS
-from core import buzz, desk_publish, dvol_collect, event_trader, event_trader_broad, llm_trader, market_collect, news_archive, news_ingest, news_latency, steward
+from core import buzz, desk_publish, dvol_collect, event_trader, event_trader_broad, llm_trader, margin_publish, market_collect, news_archive, news_ingest, news_latency, steward
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 from core.storage import write_json_atomic
@@ -688,6 +688,7 @@ if __name__ == "__main__":
     start("dvol", dvol_collect.loop)
     if os.environ.get("TRADELAB_COLLECT", "1") == "1":   # forward market data for research/IDEAS_codex_20261124.md
         start("collect", market_collect.loop)
+        start("margin_publish", margin_publish.loop, market_collect.DIR / "margin_arm")   # L1f margin arm rows to data/l1f-margin (no-op without the token)
     if os.environ.get("TRADELAB_NEWS_INGEST", "1") == "1":   # measure-only feed ingestion (core/news_ingest.py)
         start("news_ingest", news_ingest.loop)
     start("steward", steward.loop, status_for_steward)

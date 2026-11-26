@@ -166,7 +166,10 @@ LEDGERS = {   # name -> state file, side, hold, extra cost (protocol files in re
             "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md", "lo": 1.0, "hi": 0.12},
     "l1f": {"file": "delist_short_state.json", "side": -1, "hold_s": 4 * 3600, "extra": 0.001, "stop": 0.25,
             "kinds": ("delist",), "protocol": "research/studies/protocol_L1f_delist_short_forward.md"},
+    "l1fm": {"file": "delist_margin_state.json", "side": -1, "hold_s": 4 * 3600, "extra": 0.0, "stop": 0.25, "margin": True,
+             "kinds": ("delist",), "protocol": "research/studies/protocol_l1f_margin_arm_20261127.md"},
 }
+MARGIN_ARM = os.environ.get("TRADELAB_MARGIN_ARM", "1") != "0"      # L1f margin arm (core/margin_arm.py); "0" switches it off
 
 
 def _ledger_path(name="l1b"):
@@ -306,6 +309,87 @@ def _ledger_step(name, fresh, now):
     return st
 
 
+# ------------------------------------------------------------------ L1f margin arm (protocol_l1f_margin_arm_20261127.md)
+def _arm_write(row, now):
+    """Append one row to margin_arm/<UTC day>.jsonl (plain text; core/margin_publish.py copies it to data/l1f-margin)."""
+    if not disk_ok():
+        return
+    d = DIR / "margin_arm"
+    d.mkdir(parents=True, exist_ok=True)
+    with _lock, open(d / (time.strftime("%Y%m%d", time.gmtime(now)) + ".jsonl"), "a") as f:
+        f.write(json.dumps(row, separators=(",", ":")) + "\n")
+
+
+def _spec_rows():
+    from core import margin_arm as ma
+    return ma.spec_rows(get(ma.SPEC_URL, 15, BROWSER_UA))
+
+
+def margin_step(fresh, now):
+    """Paper-short each fresh Binance delist notice through margin: at first sight record the public borrow snapshot, 60 s later short at the
+    Binance spot bid if the coin is borrowable and the borrow limit covers the stake, close at the ask 4 h later (or a 25% stop on the ask),
+    charging the borrow cost measured at entry and exit. A heartbeat row is written every 30 minutes."""
+    from core import margin_arm as ma
+    from core import screens as sc
+    cfg = LEDGERS["l1fm"]
+    st = _l1b_load("l1fm")
+    new = [e for e in fresh if e.get("kind") in cfg["kinds"]]
+    if new:
+        rows = _spec_rows()
+        for e in new:
+            snap = ma.snapshot(rows, e["symbol"], now)
+            row = {"type": "event", **e, "first_seen": round(now, 1), "borrow0": snap, "binance_perp_now": ma.has_perp(get, e["symbol"])}
+            _arm_write(row, now)
+            st["pending"].append({**e, "first_seen": now, "entry_due": now + sc.L1B_DELAY_S, "borrow0": snap,
+                                  "binance_perp_now": row["binance_perp_now"]})
+    keep = []
+    for p in st["pending"]:
+        try:
+            if "entry_px" not in p and now >= p["entry_due"]:
+                stake = round(st["equity"] * sc.L1B_STAKE, 4)
+                if not p["borrow0"]["borrowable"]:
+                    st["closed"].append({**p, "skipped": "not borrowable at the notice", "ts": now})
+                    _arm_write({"type": "skip", "symbol": p["symbol"], "reason": "not_borrowable", "ts": now}, now)
+                    continue
+                q = ma.binance_quote(get, p["symbol"])
+                if not q:
+                    st["closed"].append({**p, "skipped": "no Binance USDT spot book", "ts": now})
+                    _arm_write({"type": "skip", "symbol": p["symbol"], "reason": "no_spot_book", "ts": now}, now)
+                    continue
+                if not ma.limit_ok(p["borrow0"], stake, q[1]):
+                    st["closed"].append({**p, "skipped": "borrow limit below the stake", "ts": now})
+                    _arm_write({"type": "skip", "symbol": p["symbol"], "reason": "borrow_limit", "ts": now}, now)
+                    continue
+                p.update(px_venue="binance", entry_px=q[1], entry_ask=q[2], btc_entry=_btc_mid("binance"), entry_ts=now,
+                         exit_due=now + cfg["hold_s"], stake=stake)
+            elif "entry_px" in p:
+                due = now >= p["exit_due"]
+                q = ma.binance_quote(get, p["symbol"])
+                stopped = bool(q and q[2] / p["entry_px"] - 1 >= cfg["stop"])
+                if (due or stopped) and q:
+                    try:
+                        snap1 = ma.snapshot(_spec_rows(), p["symbol"], now)
+                    except Exception:  # noqa: BLE001  the entry rate alone is used when the exit read fails
+                        snap1 = {"borrowable": None, "daily_rate": None}
+                    cost = ma.borrow_cost([p["borrow0"]["daily_rate"], snap1["daily_rate"]], now - p["entry_ts"])
+                    r = sc.ledger_result(-1, p["entry_px"], q[2], p["btc_entry"], _btc_mid("binance"), cost)
+                    st["equity"] = round(st["equity"] + p["stake"] * r["net"], 4)
+                    row = {**p, **r, "exit_px": q[2], "exit_bid": q[1], "borrow1": snap1, "borrow_cost": round(cost, 6), "ts": now,
+                           "equity_after": st["equity"], "stopped": stopped and not due}
+                    st["closed"].append(row)
+                    _arm_write({"type": "trade", **row}, now)
+                    continue
+        except Exception as e:  # noqa: BLE001  a read failure retries on the next poll
+            STATUS["listings"]["margin_error"] = repr(e)[:200]
+        keep.append(p)
+    st["pending"] = keep
+    if now - st.get("hb", 0) >= ma.HEARTBEAT_S:
+        st["hb"] = now
+        _arm_write(ma.heartbeat(now, st), now)
+    _l1b_save(st, "l1fm")
+    return st
+
+
 def listings_once(now=None):
     """Poll the notices once and step every ledger; returns the L1b state (kept for callers and tests)."""
     from core import screens as sc
@@ -316,7 +400,12 @@ def listings_once(now=None):
     fresh = [e for e in fresh if e["ts"] >= now - MAX_NOTICE_AGE_S]   # old notices (first poll, restarts) are not events
     st["seen"] = sorted(seen)[-3000:]
     _l1b_save(st, "l1b")
-    out = {name: _ledger_step(name, fresh, now) for name, cfg in LEDGERS.items() if cfg["kinds"]}   # l4f has its own loop
+    out = {name: _ledger_step(name, fresh, now) for name, cfg in LEDGERS.items() if cfg["kinds"] and not cfg.get("margin")}   # l4f has its own loop
+    if MARGIN_ARM:
+        try:
+            margin_step(fresh, now)
+        except Exception as e:  # noqa: BLE001  the margin arm must never stop the other ledgers
+            STATUS["listings"]["margin_error"] = repr(e)[:200]
     STATUS["listings"]["polls"] += 1
     return out["l1b"]
 
@@ -441,4 +530,5 @@ def view() -> dict:
     if DIR.exists():
         for f in sorted(DIR.glob("*/*.jsonl.gz"))[-20:]:
             files[f"{f.parent.name}/{f.name}"] = f.stat().st_size
-    return {**STATUS, "files": files, "dir": str(DIR), "l1b": ledger_view("l1b"), "l1d": ledger_view("l1d"), "l1f": ledger_view("l1f")}
+    return {**STATUS, "files": files, "dir": str(DIR), "l1b": ledger_view("l1b"), "l1d": ledger_view("l1d"), "l1f": ledger_view("l1f"), "l1fm": ledger_view("l1fm"),
+            "l1fm_publish": __import__("core.margin_publish", fromlist=["view"]).view()}
