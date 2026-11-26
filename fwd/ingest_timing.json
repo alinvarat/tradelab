@@ -1,0 +1,13 @@
+{
+ "coverage": {
+  "items": 0,
+  "median_seen_minus_pub_s": null,
+  "missing": 0,
+  "n_seen_slower_than_proxy": 0,
+  "with_pod_row": 0
+ },
+ "note": "descriptive; entry, decisions, trigger and scoring do not read this",
+ "pod_rows": 385,
+ "rows": {},
+ "utc": 1795733116
+}
