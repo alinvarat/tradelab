@@ -139,10 +139,10 @@ class Walk(unittest.TestCase):
         # too early: nothing is entered
         state, rows, notices = nf.step(state, cls, t_entry + 10, perps, tape, lambda i, t: {})
         self.assertEqual(rows, [])
-        self.assertEqual(state["seen"].values().__len__(), 0)
+        self.assertEqual(sorted(state["seen"].values()), ["no_perp", "too_slow"])   # only the two that need no price
         now = t_entry + 4 * 3600 + 3600
         state, rows, notices = nf.step(state, cls, t_entry + 200, perps, tape, lambda i, t: {})
-        self.assertEqual(sorted(n["status"] for n in notices), ["no_perp", "pending", "pending", "too_slow"])
+        self.assertEqual(sorted(n["status"] for n in notices), ["pending", "pending"])
         self.assertEqual(rows, [])                                          # 5 min hold not due yet (300 + 120)
         state, rows, _ = nf.step(state, cls, now, perps, tape, lambda i, t: {})
         self.assertEqual(len(rows), 6)                                      # 2 pending clusters x 3 holds
