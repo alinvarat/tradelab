@@ -1,0 +1,6 @@
+{
+ "version": "v4",
+ "prompt_sha256": "83eded763148385ae7d5e1db1b04e85026acf1843988fbefcba98f64eb711ba2",
+ "rule": "highest clean-validation stock 1d score per offered item (addendum 2): v0 -0.039%, v1 0, v2 -0.001%, v3 +0.00007%, v4 +0.0069%",
+ "locked_utc": "2026-11-26"
+}
