@@ -1,0 +1,7 @@
+# Addendum 2026-11-27 to the L1f / event-book protocols: margin shorts as a forward-test venue (proposal, no data yet)
+
+Locked files (`protocol_L1f_delist_short_forward.md`, `protocol_event_book_20261125.md`, `protocol_l1f_venues_20261125.md`) are not edited. This addendum applies to notices first seen after it is merged.
+- Why: `RESULTS.md` "L1f short venues": only 7 of the 42 notices without a Binance perp have a verifiable perp; the margin upper bound is x about 2.2 on those, but borrowing at the notice cannot be verified backwards.
+- Forward rule: when the collector sees a "Binance Will Delist" notice, it also records, in the same poll, the public `https://www.binance.com/bapi/margin/v1/friendly/margin/vip/spec/list-all` row of each named coin (borrowable yes/no, daily interest rate at VIP 0). Only coins that are borrowable at that moment and have no OKX/Binance perp are margin-tradable events. Entry, exit, stop, sizing and cost conventions as L1f (short at the bid 60 s after first sight, buy back at the ask 4 h later, stop 25%), borrow cost charged at the recorded rate for 4 h plus 0.1% fee a side instead of the assumed 0.1%.
+- Decision: the existing event-book e-process (lo 1.0, hi 5.0, edge at e-value 20) on one value per UTC day, compared with the random control; the margin leg is a separate component so that it cannot be mixed with the perp leg. No real orders (AGENTS rule 1): paper ledger on the collector's own quotes.
+- Not changed by this addendum: any threshold, window or the stage-0 gate.
