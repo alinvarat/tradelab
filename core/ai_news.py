@@ -185,7 +185,8 @@ def chat_helper(system: str, user: str, chat_fn=None) -> tuple:
 
 def helper_stats() -> dict:
     with _spend_lock:
-        return {**_helper_stats, "by_model": dict(_helper_stats["by_model"]), "models": HELPER_MODELS}
+        models = HELPER_MODELS if other_models_allowed() else ["claude/" + CLAUDE_MODEL]   # Claude only (AGENTS rule 7)
+        return {**_helper_stats, "by_model": dict(_helper_stats["by_model"]), "models": models}
 
 
 # ---- spend accounting: OpenRouter returns the real cost of each call when usage is requested

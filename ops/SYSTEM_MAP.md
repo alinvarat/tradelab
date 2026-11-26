@@ -17,6 +17,7 @@
 | ความหน่วงข่าว (forward) | `research/studies/news_latency_fwd.py`, `core/news_latency_fwd.py` | Actions workflow `news_latency_fwd.yml` (โหมด probe / run / summary; run วนโพลประมาณ 5 ชม. 45 นาที ต่อตัวเอง และ keeper เช็กทุกชั่วโมง) | ต่อเนื่อง หลัง protocol ล็อกและ merge | branch `data/news-latency-fwd` | `git show origin/data/news-latency-fwd:summary.json` |
 | ด่านคัดกรองย้อนหลัง | `research/studies/run.py` (`STUDIES`), `core/screens.py` | Actions job `study` | สั่งรันเองเท่านั้น | artifact `study-<name>` | `gh run download <id> -n study-<name>` |
 | ด่านคัดกรองแบบแบ่ง shard | `run.py` (`rows_<study>`, `summarize_<study>`), `research/studies/sharding.py`, `binance_vision.py` | `.github/workflows/research_sharded.yml` (plan → shard ×N → merge) | สั่งรันเองเท่านั้น (`gh workflow run research_sharded.yml -f study=<name> -f shards=20`) | artifact `part-<study>-<i>`, `study-<study>` | `gh run download <id> -n study-<study>` |
+| ตัวรับข่าวเร็ว (วัดอย่างเดียว ไม่ป้อนบอท) | `core/news_ingest.py` | Kuber | poll 2-10 วิ + websocket EquationNews | volume `/app/data/collect/news_ingest/*.jsonl` (t_pub, t_seen, t_llm) | `/api/news_latency` คีย์ `ingest` (median/p90 ต่อแหล่ง) |
 | อื่นๆ บน Kuber | autotrader, hunter, buzz, news archive, DVOL, steward | Kuber | ตามโค้ด | volume | `/healthz` |
 
 - **Deploy:** push เข้า `main` จะรัน `.github/workflows/kuber.yml` (Test แล้ว Deploy) ถ้าล้มที่ฝั่ง Kuber ให้ทำตาม RUNBOOK ข้อ 6.1

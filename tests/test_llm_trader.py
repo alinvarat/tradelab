@@ -355,6 +355,12 @@ class Trading(Base):
         c = self.t.build_context(20_000.0, [], self.market(), [])
         self.assertEqual(c["desk_lessons"], r["lessons"])
 
+    def test_stale_openrouter_lessons_are_regenerated_now(self):
+        self.t.calls["lessons"] = {"ts": 10_000.0, "model": "openrouter error 402", "lessons": ["old"], "parsed": False}
+        self.t.helper = lambda s, u: (json.dumps({"lessons": ["new"]}), "claude/claude-haiku-5-5")
+        r = self.t.self_review(10_060.0)                                  # well inside the 3 h window
+        self.assertEqual((r["lessons"], r["model"]), (["new"], "claude/claude-haiku-5-5"))
+
     def test_news_type_classification(self):
         self.assertEqual(lt.news_type("Acme beats Q3 EPS, raises guidance"), "earnings")
         self.assertEqual(lt.news_type("Big Co agrees to acquire Small Co for $2B"), "m&a")

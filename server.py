@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from core.universe import TICKERS
-from core import buzz, dvol_collect, event_trader, event_trader_broad, llm_trader, market_collect, news_archive, news_latency, steward
+from core import buzz, dvol_collect, event_trader, event_trader_broad, llm_trader, market_collect, news_archive, news_ingest, news_latency, steward
 from core import ai, analysis, autotrader, backtest, data, econ_calendar, hunter, news
 from core.engine import Account, Quote
 from core.storage import write_json_atomic
@@ -324,7 +324,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(200, {**news.market_news(), "archive": news_archive.STATUS,
                                         "latency": news_latency.evaluate()})
             if p == "news_latency":
-                return self._send(200, news_latency.evaluate())
+                return self._send(200, {**news_latency.evaluate(), "ingest": news_ingest.view()})
             if p == "search":
                 if not q.get("q", "").strip():
                     return self._send(200, [])
@@ -687,6 +687,8 @@ if __name__ == "__main__":
     start("dvol", dvol_collect.loop)
     if os.environ.get("TRADELAB_COLLECT", "1") == "1":   # forward market data for research/IDEAS_codex_20261124.md
         start("collect", market_collect.loop)
+    if os.environ.get("TRADELAB_NEWS_INGEST", "1") == "1":   # measure-only feed ingestion (core/news_ingest.py)
+        start("news_ingest", news_ingest.loop)
     start("steward", steward.loop, status_for_steward)
     start("supervisor", supervisor)
     signal.signal(signal.SIGTERM, shutdown)
