@@ -1,0 +1,44 @@
+{
+ "versions": [
+  {
+   "id": "w0",
+   "prompt": "prompts_r2/w0.txt",
+   "uses_pre": false,
+   "analogs": 0,
+   "calib": false,
+   "flow": false,
+   "note": "floor: plain reader, no pre-move, no calibration",
+   "sha256": "13b00e68cbc6b892e35e66281adc822799f1e8cf98c174ef5f42675e262b02c0"
+  },
+  {
+   "id": "w1",
+   "prompt": "prompts_r2/w1.txt",
+   "uses_pre": true,
+   "analogs": 0,
+   "calib": true,
+   "flow": false,
+   "note": "surprise vs expected + already-priced pre-move + calibrated abstention (theta fit on train)",
+   "sha256": "1f6d0d7d3ef30bf3ce2a0bbdf2d110869c9101ac2a14dbfbd0d75c1648811da0"
+  },
+  {
+   "id": "w2",
+   "prompt": "prompts_r2/w2.txt",
+   "uses_pre": true,
+   "analogs": 0,
+   "calib": true,
+   "flow": true,
+   "note": "w1 + forced-flow tagging",
+   "sha256": "58848c21101c7efdf9c5bd52406247848e69bf1a93def924f020b47edf22a1b2"
+  },
+  {
+   "id": "w3",
+   "prompt": "prompts_r2/w3.txt",
+   "uses_pre": true,
+   "analogs": 5,
+   "calib": true,
+   "flow": true,
+   "note": "w2 + 5 analogs closed strictly before t_pub",
+   "sha256": "7759ce31162100226b9ddae57dded9cf63b89085886daad19b5a59b0a25cb9b8"
+  }
+ ]
+}
