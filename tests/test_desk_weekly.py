@@ -15,7 +15,7 @@ D0 = 1_795_000_000.0       # a UTC day start is not needed: rows are spread over
 
 
 def row(i, abn, action="hold", src="news", nt="analyst", h=86400, day=None, **kw):
-    r = {"v": 1, "protocol": dr.TAG, "ts": D0 + (i if day is None else day) * 86400 + 3600, "symbol": f"S{i}", "cls": "stock", "src": src,
+    r = {"v": 2, "protocol": dr.TAG, "ts": D0 + (i if day is None else day) * 86400 + 3600, "symbol": f"S{i}", "cls": "stock", "src": src,
          "news_type": nt, "action": action, "h": h, "abn": abn, "veto": None, "forced": False, "em": None, "rv": None, "stale": []}
     r.update(kw)
     return r
@@ -92,14 +92,14 @@ class Review(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             t = Path(t)
             (t / "desk" / "desk_outcomes" / "20261201").mkdir(parents=True)
-            rows = [row(i, -0.04, day=i % 8) for i in range(40)] + [row(99, 0.5, protocol="v4.18")]
+            rows = [row(i, -0.04, day=i % 8) for i in range(40)] + [row(99, 0.5, protocol="v4.18"), row(98, 0.5, v=1), row(97, 0.5, protocol="pre-v4.19")]
             (t / "desk" / "desk_outcomes" / "20261201" / "0-1.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n")
             (t / "ing" / "news_ingest" / "20261201").mkdir(parents=True)
             now = time.time()
             (t / "ing" / "news_ingest" / "20261201" / "0-1.jsonl").write_text(
                 json.dumps({"event": "item", "source": "eqn_rest", "t_seen": now - 60, "lat_s": 4.0, "res": "s"}) + "\n")
             p = weekly.run(t / "desk", t / "ing", t / "out", "2026-12-06", now=now)
-            self.assertEqual(p["window"]["rows"], 40)                       # the v4.18 row is not v4.19 evidence
+            self.assertEqual(p["window"]["rows"], 40)                       # v4.18, pre-v4.19 and version-1 (mislabelled) rows are not v4.19 evidence
             self.assertTrue((t / "out" / "20261206_review.md").exists())
             self.assertEqual(json.loads((t / "out" / "20261206_proposal.json").read_text())["current_tag"], dr.TAG)
 

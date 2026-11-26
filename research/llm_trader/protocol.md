@@ -190,3 +190,12 @@ Every Sunday 04:00 UTC `keeper.yml` dispatches `bot_weekly.yml`, which runs `res
 - **Per rule and per input.** Each vetoed entry is still scored later, so the review reports what every rule cost or saved (vetoed entries' mean outcome per rule), and whether an input moved P&L (acted entries split by forced-flow tag, a stated expected move, and a stale feed). The share of outcome rows with a stale feed, and per source from the ingest log the item count, median and p90 latency and days with no item, show which feeds are slow or broken.
 - **Log.** Every proposal file in `research/llm_trader/weekly/` is the dated log of that week's evidence; an applied change is also written as an addendum here with the same numbers.
 Not verified at the time of writing: a first run of the workflow and whether Actions may open PRs (the repository's `can_approve_pull_request_reviews` setting was false on 2026-11-27, so the issue fallback is expected until the owner enables it).
+
+**Correction 2026-11-27 (v4.19, same tag; written before any v4.19 entry existed, the 2026-11-24 v4.5 precedent).** Found in review right after the first deploy, before the first v4.19 cycle:
+- 7 positions opened before v4.19 were counted against the 3-position and 1.5x exposure limits, which would have blocked every new entry. Only positions opened under the rules (their link carries `max_hold_s`) now use those limits; older positions keep their own stops and are not touched by the time exit.
+- `adjust` could widen a stop and so defeat the 2% risk cap. For a position opened under the rules an adjust may only tighten the stop and its review is capped at 120 minutes.
+- Outcome rows were tagged with the tag at scoring time, so candidates decided under v4.18 and scored after the upgrade would have been counted as v4.19. The tag is now stored on the candidate at decision time and rows are version 2; `weekly.py` reads only version-2 rows of the current tag.
+- Forced-flow long entries are halved like every long (the playbook says abstain on listings); only R1 exempts forced flow.
+- The fast-news block drops press-release wires (PR Newswire, GlobeNewswire, Business Wire) unless the item is a recognised notice, and lists notices first.
+- The prompt no longer says "you decide everything" and shows the 4 h default time exit as the holding period.
+Bank semantics differ from `core/event_book.py`: the event book banks and restarts from the start stake, while the bot banks (closes everything, no entries) until its 30-day cohort ends and then re-bases on that day's equity.

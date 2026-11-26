@@ -29,7 +29,7 @@ def read_lines(root, pattern):
 def run(outcomes_root, ingest_root, out_dir, today=None, now=None):
     now = now or time.time()
     today = today or time.strftime("%Y-%m-%d", time.gmtime(now))
-    rows = [r for r in dw.load_rows(read_lines(outcomes_root, "desk_outcomes/*/*.jsonl")) if r.get("protocol") == dr.TAG]
+    rows = [r for r in dw.load_rows(read_lines(outcomes_root, "desk_outcomes/*/*.jsonl")) if r.get("v") == 2 and r.get("protocol") == dr.TAG]
     ing = []
     for line in read_lines(ingest_root, "news_ingest/*/*.jsonl"):
         try:

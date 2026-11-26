@@ -66,6 +66,7 @@ class Gate(unittest.TestCase):
 
     def test_longs_are_halved_and_shorts_are_not_favoured(self):
         self.assertEqual(gate(dec(action="buy"))[0]["size_pct"], 5.0)
+        self.assertEqual(gate(dec(action="buy"), forced=True)[0]["size_pct"], 5.0)        # listings: the playbook says abstain
         self.assertEqual(gate(dec(action="short"))[0]["size_pct"], 10.0)
         self.assertIn("R2", gate(dec(action="buy"))[0]["rules"])
 
@@ -166,6 +167,13 @@ class Blocks(unittest.TestCase):
         self.assertEqual((b["items"][0]["src"], b["items"][0]["latency_s"], b["items"][0]["flow"]), ("eqn_rest", 5.0, "delist"))
         self.assertEqual(b["source_latency_median_s"], {"eqn_rest": 4.4})
         self.assertIn("no edge", b["evidence"])
+
+    def test_press_release_wires_do_not_crowd_out_notices(self):
+        rows = [{"source": "prnewswire", "title": f"pr{i}", "t_pub": None, "t_seen": NOW - 5 - i, "lat_s": None, "cls": None, "coins": []} for i in range(10)]
+        rows.append({"source": "eqn_rest", "title": "XYZ delist", "t_pub": NOW - 90, "t_seen": NOW - 60, "lat_s": 4.0, "cls": "delist", "coins": ["XYZ"]})
+        rows.append({"source": "sec_8k", "title": "8-K", "t_pub": NOW - 20, "t_seen": NOW - 10, "lat_s": 3.0, "cls": None, "coins": []})
+        b = dr.fast_news_block(rows, NOW, {})
+        self.assertEqual([i["src"] for i in b["items"]], ["eqn_rest", "sec_8k"])             # notices first; stock wires dropped
 
     def test_stale_feeds_are_flagged_not_silently_missing(self):
         h = dr.feed_health({"eqn_rest": {"last_ok_age_s": 2.0}, "sec_8k": {"last_ok_age_s": 900.0}, "okx": {"last_ok_age_s": None}},
