@@ -1,0 +1,29 @@
+{
+ "version": 1,
+ "family": "r3",
+ "seed": 20261128,
+ "model": "claude-haiku-5-5",
+ "max_versions": 4,
+ "dates": {
+  "dev_end": "2026-07-01",
+  "sealed_from": "2026-07-01",
+  "sealed_stock_to": "2026-08-01",
+  "sealed_crypto_jul_to": "2026-08-01",
+  "sealed_crypto_rem_from": "2026-08-01",
+  "refuse_from": "2026-11-27"
+ },
+ "sample": {
+  "sealed_stock": 700,
+  "sealed_crypto_jul": 1000
+ },
+ "hold": "1h",
+ "cost_round_trip": {"stock": 0.0018, "crypto": 0.004},
+ "big_mult": 2.0,
+ "rv": {"stock_bars": 35, "crypto_hours": 24, "min_stock_bars": 14, "min_crypto_minutes": 1000},
+ "select": {"min_valid_n": 300, "min_reply_ok": 0.95, "min_partial_rho": 0.03},
+ "done": {"min_n": 300},
+ "bootstrap": {"n_dev": 500, "n_sealed": 2000, "alpha": 0.05},
+ "tests_per_version": 3,
+ "text_chars": 3000,
+ "analogs": {"k": 5, "text_chars": 220}
+}
