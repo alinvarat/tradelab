@@ -1,0 +1,1309 @@
+{
+ "run_utc": "2026-11-26T23:30:56Z",
+ "months": 33.91,
+ "events": 107,
+ "stables_excluded": [
+  "IDRT",
+  "USDP",
+  "VAI"
+ ],
+ "probe_summary": {
+  "events": 107,
+  "no_binance_perp": 42,
+  "cover_all": {
+   "binance_um": {
+    "shortable": 65,
+    "not_ok": 0
+   },
+   "okx": {
+    "shortable": 0,
+    "not_ok": 0
+   },
+   "bybit": {
+    "shortable": 0,
+    "not_ok": 0
+   },
+   "bitget": {
+    "shortable": 1,
+    "not_ok": 0
+   },
+   "gate": {
+    "shortable": 0,
+    "not_ok": 0
+   },
+   "mexc": {
+    "shortable": 10,
+    "not_ok": 0
+   },
+   "kucoin_fut": {
+    "shortable": 0,
+    "not_ok": 107
+   },
+   "hyperliquid": {
+    "shortable": 0,
+    "not_ok": 0
+   },
+   "binance_spot": {
+    "shortable": 105,
+    "not_ok": 0
+   }
+  },
+  "cover_no_binance_perp": {
+   "binance_um": {
+    "shortable": 0,
+    "not_ok": 0
+   },
+   "okx": {
+    "shortable": 0,
+    "not_ok": 0
+   },
+   "bybit": {
+    "shortable": 0,
+    "not_ok": 0
+   },
+   "bitget": {
+    "shortable": 1,
+    "not_ok": 0
+   },
+   "gate": {
+    "shortable": 0,
+    "not_ok": 0
+   },
+   "mexc": {
+    "shortable": 1,
+    "not_ok": 0
+   },
+   "kucoin_fut": {
+    "shortable": 0,
+    "not_ok": 42
+   },
+   "hyperliquid": {
+    "shortable": 0,
+    "not_ok": 0
+   },
+   "binance_spot": {
+    "shortable": 40,
+    "not_ok": 0
+   }
+  },
+  "any_perp_all": 67,
+  "any_perp_among_no_binance_perp": 2,
+  "venues_with_part": [
+   "binance_spot",
+   "binance_um",
+   "bitget",
+   "bybit",
+   "gate",
+   "hyperliquid",
+   "mexc",
+   "okx"
+  ],
+  "built_utc": "2026-11-26T18:12:22Z"
+ },
+ "coverage_first_venue": {
+  "binance_um": 65,
+  "bybit": 5,
+  "bitget": 1,
+  "mexc": 1
+ },
+ "sets": {
+  "A_binance_um": {
+   "label": "A: Binance USDT-M perp",
+   "events_priced": 65,
+   "all": {
+    "n": 65,
+    "mean": 0.04676,
+    "sd": 0.149,
+    "s": 0.3139,
+    "per_month": 1.917,
+    "x": 0.1889,
+    "hit": 0.677
+   },
+   "notice_level_all": {
+    "n": 24,
+    "mean": 0.03299,
+    "sd": 0.14612,
+    "s": 0.2258,
+    "per_month": 0.708,
+    "x": 0.0361,
+    "hit": 0.708
+   },
+   "by_split": {
+    "train": {
+     "n": 21,
+     "mean": -0.03293,
+     "sd": 0.18243,
+     "s": -0.1805,
+     "per_month": 1.169,
+     "x": 0.0381,
+     "hit": 0.476
+    },
+    "validation": {
+     "n": 12,
+     "mean": 0.1392,
+     "sd": 0.15831,
+     "s": 0.8793,
+     "per_month": 1.503,
+     "x": 1.1622,
+     "hit": 0.917
+    },
+    "test": {
+     "n": 32,
+     "mean": 0.0644,
+     "sd": 0.08683,
+     "s": 0.7417,
+     "per_month": 4.025,
+     "x": 2.214,
+     "hit": 0.719
+    }
+   },
+   "control_mean": -0.005999861538461539,
+   "placebo_mean": -0.058765,
+   "mean_2x_cost": 0.03976499999999999,
+   "range_slip_variant": {
+    "n": 65,
+    "mean": 0.01818,
+    "sd": 0.15535,
+    "s": 0.117,
+    "per_month": 1.917,
+    "x": 0.0263,
+    "hit": 0.646
+   },
+   "stopped": 7,
+   "syms": [
+    "A2Z",
+    "ACX",
+    "AERGO",
+    "ALPACA",
+    "ALPHA",
+    "AMB",
+    "ANT",
+    "ATA",
+    "BAKE",
+    "BLZ",
+    "BOND",
+    "BSW",
+    "CHESS",
+    "COMBO",
+    "COS",
+    "DEGO",
+    "DENT",
+    "DF",
+    "EPIC",
+    "FIO",
+    "FIS",
+    "FLM",
+    "FORTH",
+    "FUN",
+    "GHST",
+    "HFT",
+    "HIFI",
+    "HIGH",
+    "HOOK",
+    "ICX",
+    "IDEX",
+    "KDA",
+    "KEY",
+    "LEVER",
+    "LINA",
+    "LOOM",
+    "LRC",
+    "MBOX",
+    "MDT",
+    "MLN",
+    "NFP",
+    "NKN",
+    "NTRN",
+    "OMG",
+    "OXT",
+    "PERP",
+    "PHB",
+    "QUICK",
+    "RDNT",
+    "REEF",
+    "REI",
+    "REN",
+    "SCRT",
+    "STMX",
+    "STORJ",
+    "SXP",
+    "SYS",
+    "TRU",
+    "UNFI",
+    "VANRY",
+    "VIC",
+    "VOXEL",
+    "WAVES",
+    "XEM",
+    "XMR"
+   ],
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 21,
+     "tpm": 1.152,
+     "w": 1.0,
+     "shortable": true,
+     "train_mean": -0.032925,
+     "placebo_mean": 0.020925,
+     "vol_cost": 30.4,
+     "x": -0.0375,
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "id": "l1f_reach|h4h|d1m",
+     "control_mean_train": -0.013287952380952381,
+     "notice_level_train": {
+      "n": 11,
+      "mean": -0.02977,
+      "sd": 0.18253,
+      "s": -0.1631,
+      "per_month": 0.612,
+      "x": 0.0163,
+      "hit": 0.545
+     }
+    }
+   }
+  },
+  "B_other_venues": {
+   "label": "B: no Binance perp, perp on another venue (fixed priority)",
+   "events_priced": 7,
+   "all": {
+    "n": 7,
+    "mean": 0.16998,
+    "sd": 0.08021,
+    "s": 2.1191,
+    "per_month": 0.206,
+    "x": 0.9271,
+    "hit": 1.0
+   },
+   "notice_level_all": {
+    "n": 7,
+    "mean": 0.16998,
+    "sd": 0.08021,
+    "s": 2.1191,
+    "per_month": 0.206,
+    "x": 0.9271,
+    "hit": 1.0
+   },
+   "by_split": {
+    "train": {
+     "n": 4,
+     "mean": 0.18048,
+     "sd": 0.0379,
+     "s": 4.7626,
+     "per_month": 0.223,
+     "x": 5.0487,
+     "hit": 1.0
+    },
+    "validation": {
+     "n": 2,
+     "mean": 0.13277,
+     "sd": 0.17331,
+     "s": 0.7661,
+     "per_month": 0.251,
+     "x": 0.147,
+     "hit": 1.0
+    },
+    "test": {
+     "n": 1
+    }
+   },
+   "control_mean": -0.016263142857142858,
+   "placebo_mean": -0.18198128571428573,
+   "mean_2x_cost": 0.1629812857142857,
+   "range_slip_variant": {
+    "n": 7,
+    "mean": 0.14769,
+    "sd": 0.07307,
+    "s": 2.0213,
+    "per_month": 0.206,
+    "x": 0.8435,
+    "hit": 1.0
+   },
+   "stopped": 0,
+   "syms": [
+    "AKRO",
+    "DATA",
+    "FARM",
+    "GFT",
+    "MULTI",
+    "SLF",
+    "VGX"
+   ],
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 4,
+     "tpm": 0.219,
+     "w": 1.0,
+     "shortable": true,
+     "reason": "train trades 4 < 20",
+     "id": "l1f_reach|h4h|d1m",
+     "control_mean_train": -0.0211465,
+     "notice_level_train": {
+      "n": 4,
+      "mean": 0.18048,
+      "sd": 0.0379,
+      "s": 4.7626,
+      "per_month": 0.223,
+      "x": 5.0487,
+      "hit": 1.0
+     }
+    }
+   }
+  },
+  "AB_reachable": {
+   "label": "A+B reachable by perp",
+   "events_priced": 72,
+   "all": {
+    "n": 72,
+    "mean": 0.05874,
+    "sd": 0.14801,
+    "s": 0.3969,
+    "per_month": 2.124,
+    "x": 0.3345,
+    "hit": 0.708
+   },
+   "notice_level_all": {
+    "n": 31,
+    "mean": 0.06393,
+    "sd": 0.14507,
+    "s": 0.4407,
+    "per_month": 0.914,
+    "x": 0.1775,
+    "hit": 0.774
+   },
+   "by_split": {
+    "train": {
+     "n": 25,
+     "mean": 0.00122,
+     "sd": 0.18517,
+     "s": 0.0066,
+     "per_month": 1.391,
+     "x": 0.0001,
+     "hit": 0.56
+    },
+    "validation": {
+     "n": 14,
+     "mean": 0.13829,
+     "sd": 0.15337,
+     "s": 0.9017,
+     "per_month": 1.754,
+     "x": 1.4256,
+     "hit": 0.929
+    },
+    "test": {
+     "n": 33,
+     "mean": 0.06858,
+     "sd": 0.08877,
+     "s": 0.7725,
+     "per_month": 4.151,
+     "x": 2.4771,
+     "hit": 0.727
+    }
+   },
+   "control_mean": -0.006997680555555556,
+   "placebo_mean": -0.07074436111111111,
+   "mean_2x_cost": 0.0517443611111111,
+   "range_slip_variant": {
+    "n": 72,
+    "mean": 0.03077,
+    "sd": 0.15394,
+    "s": 0.1999,
+    "per_month": 2.124,
+    "x": 0.0849,
+    "hit": 0.681
+   },
+   "stopped": 7,
+   "syms": [
+    "A2Z",
+    "ACX",
+    "AERGO",
+    "AKRO",
+    "ALPACA",
+    "ALPHA",
+    "AMB",
+    "ANT",
+    "ATA",
+    "BAKE",
+    "BLZ",
+    "BOND",
+    "BSW",
+    "CHESS",
+    "COMBO",
+    "COS",
+    "DATA",
+    "DEGO",
+    "DENT",
+    "DF",
+    "EPIC",
+    "FARM",
+    "FIO",
+    "FIS",
+    "FLM",
+    "FORTH",
+    "FUN",
+    "GFT",
+    "GHST",
+    "HFT",
+    "HIFI",
+    "HIGH",
+    "HOOK",
+    "ICX",
+    "IDEX",
+    "KDA",
+    "KEY",
+    "LEVER",
+    "LINA",
+    "LOOM",
+    "LRC",
+    "MBOX",
+    "MDT",
+    "MLN",
+    "MULTI",
+    "NFP",
+    "NKN",
+    "NTRN",
+    "OMG",
+    "OXT",
+    "PERP",
+    "PHB",
+    "QUICK",
+    "RDNT",
+    "REEF",
+    "REI",
+    "REN",
+    "SCRT",
+    "SLF",
+    "STMX",
+    "STORJ",
+    "SXP",
+    "SYS",
+    "TRU",
+    "UNFI",
+    "VANRY",
+    "VGX",
+    "VIC",
+    "VOXEL",
+    "WAVES",
+    "XEM",
+    "XMR"
+   ],
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 25,
+     "tpm": 1.371,
+     "w": 1.0,
+     "shortable": true,
+     "train_mean": 0.00122,
+     "placebo_mean": -0.01322,
+     "vol_cost": 30.86,
+     "x": 0.0001,
+     "reason": "monthly contribution x 0.000 < 0.2",
+     "id": "l1f_reach|h4h|d1m",
+     "control_mean_train": -0.014545319999999999,
+     "notice_level_train": {
+      "n": 15,
+      "mean": 0.0263,
+      "sd": 0.18267,
+      "s": 0.144,
+      "per_month": 0.835,
+      "x": 0.0173,
+      "hit": 0.667
+     }
+    }
+   }
+  },
+  "venue_binance_um": {
+   "label": "binance_um alone",
+   "events_priced": 65,
+   "all": {
+    "n": 65,
+    "mean": 0.04676,
+    "sd": 0.149,
+    "s": 0.3139,
+    "per_month": 1.917,
+    "x": 0.1889,
+    "hit": 0.677
+   },
+   "notice_level_all": {
+    "n": 24,
+    "mean": 0.03299,
+    "sd": 0.14612,
+    "s": 0.2258,
+    "per_month": 0.708,
+    "x": 0.0361,
+    "hit": 0.708
+   },
+   "by_split": {
+    "train": {
+     "n": 21,
+     "mean": -0.03293,
+     "sd": 0.18243,
+     "s": -0.1805,
+     "per_month": 1.169,
+     "x": 0.0381,
+     "hit": 0.476
+    },
+    "validation": {
+     "n": 12,
+     "mean": 0.1392,
+     "sd": 0.15831,
+     "s": 0.8793,
+     "per_month": 1.503,
+     "x": 1.1622,
+     "hit": 0.917
+    },
+    "test": {
+     "n": 32,
+     "mean": 0.0644,
+     "sd": 0.08683,
+     "s": 0.7417,
+     "per_month": 4.025,
+     "x": 2.214,
+     "hit": 0.719
+    }
+   },
+   "control_mean": -0.005999861538461539,
+   "placebo_mean": -0.058765,
+   "mean_2x_cost": 0.03976499999999999,
+   "range_slip_variant": {
+    "n": 65,
+    "mean": 0.01818,
+    "sd": 0.15535,
+    "s": 0.117,
+    "per_month": 1.917,
+    "x": 0.0263,
+    "hit": 0.646
+   },
+   "stopped": 7,
+   "syms": [
+    "A2Z",
+    "ACX",
+    "AERGO",
+    "ALPACA",
+    "ALPHA",
+    "AMB",
+    "ANT",
+    "ATA",
+    "BAKE",
+    "BLZ",
+    "BOND",
+    "BSW",
+    "CHESS",
+    "COMBO",
+    "COS",
+    "DEGO",
+    "DENT",
+    "DF",
+    "EPIC",
+    "FIO",
+    "FIS",
+    "FLM",
+    "FORTH",
+    "FUN",
+    "GHST",
+    "HFT",
+    "HIFI",
+    "HIGH",
+    "HOOK",
+    "ICX",
+    "IDEX",
+    "KDA",
+    "KEY",
+    "LEVER",
+    "LINA",
+    "LOOM",
+    "LRC",
+    "MBOX",
+    "MDT",
+    "MLN",
+    "NFP",
+    "NKN",
+    "NTRN",
+    "OMG",
+    "OXT",
+    "PERP",
+    "PHB",
+    "QUICK",
+    "RDNT",
+    "REEF",
+    "REI",
+    "REN",
+    "SCRT",
+    "STMX",
+    "STORJ",
+    "SXP",
+    "SYS",
+    "TRU",
+    "UNFI",
+    "VANRY",
+    "VIC",
+    "VOXEL",
+    "WAVES",
+    "XEM",
+    "XMR"
+   ],
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 21,
+     "tpm": 1.152,
+     "w": 1.0,
+     "shortable": true,
+     "train_mean": -0.032925,
+     "placebo_mean": 0.020925,
+     "vol_cost": 30.4,
+     "x": -0.0375,
+     "reason": "train net mean not above 0 and the reversed-side placebo",
+     "id": "l1f_reach|h4h|d1m",
+     "control_mean_train": -0.013287952380952381,
+     "notice_level_train": {
+      "n": 11,
+      "mean": -0.02977,
+      "sd": 0.18253,
+      "s": -0.1631,
+      "per_month": 0.612,
+      "x": 0.0163,
+      "hit": 0.545
+     }
+    }
+   }
+  },
+  "venue_bybit": {
+   "label": "bybit alone",
+   "events_priced": 47,
+   "all": {
+    "n": 47,
+    "mean": 0.02961,
+    "sd": 0.16823,
+    "s": 0.176,
+    "per_month": 1.386,
+    "x": 0.0429,
+    "hit": 0.638
+   },
+   "notice_level_all": {
+    "n": 21,
+    "mean": 0.02215,
+    "sd": 0.15291,
+    "s": 0.1449,
+    "per_month": 0.619,
+    "x": 0.013,
+    "hit": 0.619
+   },
+   "by_split": {
+    "train": {
+     "n": 24,
+     "mean": 0.00647,
+     "sd": 0.18801,
+     "s": 0.0344,
+     "per_month": 1.335,
+     "x": 0.0016,
+     "hit": 0.583
+    },
+    "validation": {
+     "n": 5,
+     "mean": 0.13312,
+     "sd": 0.23223,
+     "s": 0.5732,
+     "per_month": 0.626,
+     "x": 0.2058,
+     "hit": 0.8
+    },
+    "test": {
+     "n": 18,
+     "mean": 0.0317,
+     "sd": 0.11026,
+     "s": 0.2875,
+     "per_month": 2.264,
+     "x": 0.1871,
+     "hit": 0.667
+    }
+   },
+   "control_mean": -0.007971638297872341,
+   "placebo_mean": -0.041605617021276596,
+   "mean_2x_cost": 0.02260561702127659,
+   "range_slip_variant": {
+    "n": 47,
+    "mean": -0.00121,
+    "sd": 0.17844,
+    "s": -0.0068,
+    "per_month": 1.386,
+    "x": 0.0001,
+    "hit": 0.638
+   },
+   "stopped": 8,
+   "syms": [
+    "ACX",
+    "AERGO",
+    "AKRO",
+    "ALPACA",
+    "ALPHA",
+    "AMB",
+    "BAKE",
+    "BLZ",
+    "BOND",
+    "BSW",
+    "COMBO",
+    "EPIC",
+    "FIO",
+    "FLM",
+    "GFT",
+    "HFT",
+    "HIFI",
+    "HIGH",
+    "HOOK",
+    "ICX",
+    "KEY",
+    "LEVER",
+    "LINA",
+    "LOOM",
+    "LRC",
+    "MBOX",
+    "MLN",
+    "MULTI",
+    "NTRN",
+    "OMG",
+    "OXT",
+    "PERP",
+    "RDNT",
+    "REEF",
+    "REN",
+    "SCRT",
+    "SLF",
+    "STMX",
+    "STORJ",
+    "SXP",
+    "TRU",
+    "UNFI",
+    "VANRY",
+    "VGX",
+    "WAVES",
+    "XEM",
+    "XMR"
+   ],
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 24,
+     "tpm": 1.316,
+     "w": 1.0,
+     "shortable": true,
+     "train_mean": 0.00647,
+     "placebo_mean": -0.01847,
+     "vol_cost": 31.34,
+     "x": 0.0016,
+     "reason": "monthly contribution x 0.002 < 0.2",
+     "id": "l1f_reach|h4h|d1m",
+     "control_mean_train": -0.014789666666666666,
+     "notice_level_train": {
+      "n": 11,
+      "mean": -0.0021,
+      "sd": 0.1883,
+      "s": -0.0111,
+      "per_month": 0.612,
+      "x": 0.0001,
+      "hit": 0.545
+     }
+    }
+   }
+  },
+  "venue_bitget": {
+   "label": "bitget alone",
+   "events_priced": 1,
+   "all": {
+    "n": 1
+   },
+   "notice_level_all": {
+    "n": 1
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 1
+    },
+    "test": {
+     "n": 0
+    }
+   },
+   "control_mean": -0.029385,
+   "placebo_mean": -0.022222,
+   "mean_2x_cost": 0.0032220000000000018,
+   "range_slip_variant": {
+    "n": 1
+   },
+   "stopped": 0,
+   "syms": [
+    "DATA"
+   ],
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 0,
+     "tpm": 0.0,
+     "w": 1.0,
+     "shortable": true,
+     "reason": "train trades 0 < 20",
+     "id": "l1f_reach|h4h|d1m",
+     "control_mean_train": null,
+     "notice_level_train": {
+      "n": 0
+     }
+    }
+   }
+  },
+  "venue_mexc": {
+   "label": "mexc alone",
+   "events_priced": 10,
+   "all": {
+    "n": 10,
+    "mean": 0.1549,
+    "sd": 0.06828,
+    "s": 2.2685,
+    "per_month": 0.295,
+    "x": 1.5178,
+    "hit": 1.0
+   },
+   "notice_level_all": {
+    "n": 3,
+    "mean": 0.15103,
+    "sd": 0.06289,
+    "s": 2.4013,
+    "per_month": 0.088,
+    "x": 0.5102,
+    "hit": 1.0
+   },
+   "by_split": {
+    "train": {
+     "n": 0
+    },
+    "validation": {
+     "n": 0
+    },
+    "test": {
+     "n": 10,
+     "mean": 0.1549,
+     "sd": 0.06828,
+     "s": 2.2685,
+     "per_month": 1.258,
+     "x": 6.4727,
+     "hit": 1.0
+    }
+   },
+   "control_mean": -0.00046540000000000025,
+   "placebo_mean": -0.1668973,
+   "mean_2x_cost": 0.14789729999999998,
+   "range_slip_variant": {
+    "n": 10,
+    "mean": 0.12987,
+    "sd": 0.07506,
+    "s": 1.7302,
+    "per_month": 0.295,
+    "x": 0.8829,
+    "hit": 0.9
+   },
+   "stopped": 0,
+   "syms": [
+    "ATA",
+    "DEGO",
+    "DENT",
+    "FARM",
+    "HOOK",
+    "MLN",
+    "PHB",
+    "SXP",
+    "SYS",
+    "TRU"
+   ],
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 0,
+     "tpm": 0.0,
+     "w": 1.0,
+     "shortable": true,
+     "reason": "train trades 0 < 20",
+     "id": "l1f_reach|h4h|d1m",
+     "control_mean_train": null,
+     "notice_level_train": {
+      "n": 0
+     }
+    }
+   }
+  },
+  "margin_upper_bound_all": {
+   "label": "UPPER BOUND, not point-in-time verified: Binance spot priced, borrow assumed",
+   "events_priced": 104,
+   "all": {
+    "n": 104,
+    "mean": 0.14115,
+    "sd": 0.17003,
+    "s": 0.8301,
+    "per_month": 3.067,
+    "x": 2.1138,
+    "hit": 0.856
+   },
+   "notice_level_all": {
+    "n": 25,
+    "mean": 0.14642,
+    "sd": 0.13741,
+    "s": 1.0656,
+    "per_month": 0.737,
+    "x": 0.8372,
+    "hit": 0.92
+   },
+   "by_split": {
+    "train": {
+     "n": 49,
+     "mean": 0.1612,
+     "sd": 0.21864,
+     "s": 0.7373,
+     "per_month": 2.727,
+     "x": 1.4821,
+     "hit": 0.796
+    },
+    "validation": {
+     "n": 15,
+     "mean": 0.15499,
+     "sd": 0.14435,
+     "s": 1.0736,
+     "per_month": 1.879,
+     "x": 2.1658,
+     "hit": 0.933
+    },
+    "test": {
+     "n": 40,
+     "mean": 0.1114,
+     "sd": 0.09249,
+     "s": 1.2044,
+     "per_month": 5.031,
+     "x": 7.2981,
+     "hit": 0.9
+    }
+   },
+   "control_mean": -0.010699346153846155,
+   "placebo_mean": -0.15314860576923078,
+   "mean_2x_cost": 0.13414860576923077,
+   "range_slip_variant": {
+    "n": 104,
+    "mean": 0.11127,
+    "sd": 0.17513,
+    "s": 0.6354,
+    "per_month": 3.067,
+    "x": 1.2384,
+    "hit": 0.846
+   },
+   "stopped": 7,
+   "syms": [
+    "A2Z",
+    "ACA",
+    "ACX",
+    "AERGO",
+    "AKRO",
+    "ALCX",
+    "ALPACA",
+    "ALPHA",
+    "AMB",
+    "ANT",
+    "ARDR",
+    "AST",
+    "ATA",
+    "BAKE",
+    "BIFI",
+    "BLZ",
+    "BOND",
+    "BSW",
+    "BURGER",
+    "CHESS",
+    "CLV",
+    "COMBO",
+    "COS",
+    "CVP",
+    "DATA",
+    "DEGO",
+    "DENT",
+    "DF",
+    "DOCK",
+    "DREP",
+    "EPIC",
+    "EPX",
+    "FARM",
+    "FIO",
+    "FIS",
+    "FLM",
+    "FOR",
+    "FORTH",
+    "FUN",
+    "GFT",
+    "GHST",
+    "HFT",
+    "HIFI",
+    "HIGH",
+    "HOOK",
+    "ICX",
+    "IDEX",
+    "IRIS",
+    "KDA",
+    "KEY",
+    "KMD",
+    "KP3R",
+    "LEVER",
+    "LINA",
+    "LOOM",
+    "LRC",
+    "LTO",
+    "MBOX",
+    "MDT",
+    "MDX",
+    "MLN",
+    "MOB",
+    "MULTI",
+    "NFP",
+    "NKN",
+    "NTRN",
+    "OAX",
+    "OMG",
+    "OOKI",
+    "OXT",
+    "PDA",
+    "PERP",
+    "PHB",
+    "PIVX",
+    "PNT",
+    "POLS",
+    "POND",
+    "PYR",
+    "QUICK",
+    "RDNT",
+    "REEF",
+    "REI",
+    "REN",
+    "SCRT",
+    "SLF",
+    "STMX",
+    "STORJ",
+    "SXP",
+    "SYS",
+    "TRU",
+    "UNFI",
+    "VANRY",
+    "VGX",
+    "VIB",
+    "VIC",
+    "VITE",
+    "VOXEL",
+    "WAN",
+    "WAVES",
+    "WING",
+    "WNXM",
+    "WRX",
+    "XEM",
+    "XMR"
+   ],
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 49,
+     "tpm": 2.687,
+     "w": 1.0,
+     "shortable": true,
+     "train_mean": 0.161195,
+     "placebo_mean": -0.173195,
+     "vol_cost": 36.44,
+     "x": 1.4608,
+     "mfe_q": 0.4687,
+     "cost_med": 0.006,
+     "best_trade": 0.4627,
+     "ceiling_multiple": 2.779,
+     "reason": "all-win ceiling 2.78x < 3x per month",
+     "id": "l1f_reach|h4h|d1m",
+     "control_mean_train": -0.019260938775510203,
+     "notice_level_train": {
+      "n": 12,
+      "mean": 0.17921,
+      "sd": 0.18362,
+      "s": 0.976,
+      "per_month": 0.668,
+      "x": 0.6361,
+      "hit": 0.917
+     }
+    }
+   }
+  },
+  "margin_upper_bound_no_binance_perp": {
+   "label": "UPPER BOUND: spot-priced, notices with no Binance perp",
+   "events_priced": 39,
+   "all": {
+    "n": 39,
+    "mean": 0.24067,
+    "sd": 0.173,
+    "s": 1.3912,
+    "per_month": 1.15,
+    "x": 2.2263,
+    "hit": 0.923
+   },
+   "notice_level_all": {
+    "n": 18,
+    "mean": 0.21946,
+    "sd": 0.16356,
+    "s": 1.3418,
+    "per_month": 0.531,
+    "x": 0.9558,
+    "hit": 0.889
+   },
+   "by_split": {
+    "train": {
+     "n": 28,
+     "mean": 0.26692,
+     "sd": 0.19554,
+     "s": 1.365,
+     "per_month": 1.558,
+     "x": 2.9031,
+     "hit": 0.893
+    },
+    "validation": {
+     "n": 3,
+     "mean": 0.21297,
+     "sd": 0.03596,
+     "s": 5.922,
+     "per_month": 0.376,
+     "x": 13.1784,
+     "hit": 1.0
+    },
+    "test": {
+     "n": 8,
+     "mean": 0.15919,
+     "sd": 0.06274,
+     "s": 2.5374,
+     "per_month": 1.006,
+     "x": 6.4783,
+     "hit": 1.0
+    }
+   },
+   "control_mean": -0.018531820512820513,
+   "placebo_mean": -0.2526737435897436,
+   "mean_2x_cost": 0.23367374358974358,
+   "range_slip_variant": {
+    "n": 39,
+    "mean": 0.20516,
+    "sd": 0.18386,
+    "s": 1.1158,
+    "per_month": 1.15,
+    "x": 1.4322,
+    "hit": 0.923
+   },
+   "stopped": 2,
+   "syms": [
+    "ACA",
+    "AKRO",
+    "ALCX",
+    "ARDR",
+    "AST",
+    "BIFI",
+    "BURGER",
+    "CLV",
+    "CVP",
+    "DATA",
+    "DOCK",
+    "DREP",
+    "EPX",
+    "FARM",
+    "FOR",
+    "GFT",
+    "IRIS",
+    "KMD",
+    "KP3R",
+    "LTO",
+    "MDX",
+    "MOB",
+    "MULTI",
+    "OAX",
+    "OOKI",
+    "PDA",
+    "PIVX",
+    "PNT",
+    "POLS",
+    "POND",
+    "PYR",
+    "SLF",
+    "VGX",
+    "VIB",
+    "VITE",
+    "WAN",
+    "WING",
+    "WNXM",
+    "WRX"
+   ],
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 28,
+     "tpm": 1.536,
+     "w": 1.0,
+     "shortable": true,
+     "train_mean": 0.266922,
+     "placebo_mean": -0.278922,
+     "vol_cost": 32.59,
+     "x": 2.8614,
+     "mfe_q": 0.56789,
+     "cost_med": 0.006,
+     "best_trade": 0.56189,
+     "ceiling_multiple": 1.983,
+     "reason": "all-win ceiling 1.98x < 3x per month",
+     "id": "l1f_reach|h4h|d1m",
+     "control_mean_train": -0.02374067857142857,
+     "notice_level_train": {
+      "n": 12,
+      "mean": 0.23528,
+      "sd": 0.19914,
+      "s": 1.1815,
+      "per_month": 0.668,
+      "x": 0.9321,
+      "hit": 0.833
+     }
+    }
+   }
+  }
+ },
+ "errors": {},
+ "no_perp_anywhere": [
+  "ACA",
+  "ALCX",
+  "ARDR",
+  "AST",
+  "BIFI",
+  "BURGER",
+  "CLV",
+  "CVP",
+  "DOCK",
+  "DREP",
+  "EPX",
+  "FOR",
+  "IDRT",
+  "IRIS",
+  "KMD",
+  "KP3R",
+  "LTO",
+  "MDX",
+  "MOB",
+  "OAX",
+  "OOKI",
+  "PDA",
+  "PIVX",
+  "PNT",
+  "POLS",
+  "POND",
+  "PYR",
+  "USDP",
+  "VAI",
+  "VIB",
+  "VITE",
+  "WAN",
+  "WING",
+  "WNXM",
+  "WRX"
+ ],
+ "seconds": 143
+}
