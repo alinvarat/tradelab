@@ -1,0 +1,20 @@
+{
+ "raw_coin_rows": 9128,
+ "after_dedupe_cap": 4355,
+ "pool": {
+  "train": 1114,
+  "validation": 1016,
+  "sealed": 2225
+ },
+ "picked": {
+  "train": 1114,
+  "validation": 1016,
+  "sealed": 2225
+ },
+ "by_lang_dev": {
+  "zho": 861,
+  "kor": 1269
+ },
+ "drops": {},
+ "dev_labelled": 2130
+}
