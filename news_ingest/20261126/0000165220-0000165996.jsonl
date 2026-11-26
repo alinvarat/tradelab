@@ -1,0 +1,3 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17604","title":"Binance Perp Monitor: BULLAUSDT (BULLA) +12% in the past 30 seconds","t_pub":1795715753.636,"res":"s","t_seen":1795715758.3459332,"lat_s":4.71}
+{"event":"llm","source":"eqn_rest","key":"eqn:17604","t_pub":1795715753.636,"t_seen":1795715758.3459332,"t_llm":1795715764.9258115,"llm_s":6.58,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":35,"instrument":"BULLA"}}
+{"event":"item","source":"globenewswire","key":"globenewswire:https://www.globenewswire.com/news-release/2026/11/26/3411016/0/en/correction-issue-of-equity-and-total-voting-rights.html","title":"Correction: Issue of Equity and Total Voting Rights","t_pub":1795716000.0,"res":"m","t_seen":1795716075.3016386,"lat_s":75.302}
