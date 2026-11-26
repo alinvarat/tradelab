@@ -1,0 +1,7 @@
+{
+ "version": "w1",
+ "prompt_sha256": "1f6d0d7d3ef30bf3ce2a0bbdf2d110869c9101ac2a14dbfbd0d75c1648811da0",
+ "rule": "addendum B: lock w1 if validation 1h has at least 100 traded items (selection.json, eval run 45819459351)",
+ "validation": "crypto 1h: w1 -0.047%/offered, 138 traded, -0.34% per trade",
+ "locked_utc": "2026-11-26"
+}
