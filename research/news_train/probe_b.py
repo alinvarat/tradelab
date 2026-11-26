@@ -1,7 +1,7 @@
 """Round 3 Track B probes: reachability and coverage only. Reads no price outcome and no Haiku reply (protocol_r3_20261126.md).
     probe_b.py <out>
 Each probe records status, byte counts, a few title/timestamp samples and counts, never a return."""
-import gzip
+import html
 import io
 import json
 import os
@@ -58,12 +58,15 @@ def probe_gnw(rep):
     for u in ("https://www.prnewswire.com/news-releases/news-releases-list/?page=1&pagesize=100", "https://www.prnewswire.com/rss/news-releases-list.rss",
               "https://www.prnewswire.com/sitemap-news.xml", "https://www.prnewswire.com/sitemap.xml"):
         r.append(brief(u))
+    for u in ("https://www.prnewswire.com/sitemap-news.xml", "https://www.prnewswire.com/sitemap.xml"):
+        st, body = get(u)
+        r.append({"sitemap_locs": re.findall(r"<loc>(.*?)</loc>", body.decode("utf-8", "replace"))[:12]})
     rep["wires"] = r
 
 
 def probe_gkg_translation(rep):
     out = {}
-    for stamp in ("20260301120000", "20251215120000", "20260715120000"):
+    for stamp in ("20260301120000", "20260301000000", "20260301060000", "20260301180000", "20260302120000", "20260303120000", "20260304120000", "20251215120000", "20260715120000"):
         u = f"https://data.gdeltproject.org/gdeltv2/{stamp}.translation.gkg.csv.zip"
         st, body = get(u, timeout=120)
         d = {"status": st, "bytes": len(body)}
@@ -77,7 +80,7 @@ def probe_gkg_translation(rep):
                     if len(f) >= 27:
                         m = re.search(r"<PAGE_TITLE>(.*?)</PAGE_TITLE>", f[26], re.S)
                         if m:
-                            titles.append((f[3], m.group(1).strip(), f[25][:60] if len(f) > 25 else ""))
+                            titles.append((f[3], html.unescape(m.group(1)).strip(), f[25][:60] if len(f) > 25 else ""))
                 d["rows"] = len(lines)
                 d["titles"] = len(titles)
                 d["title_has_cjk"] = sum(1 for t in titles if CJK.search(t[1]))
@@ -85,7 +88,12 @@ def probe_gkg_translation(rep):
                 d["title_has_chinese"] = sum(1 for t in titles if ZH.search(t[1]))
                 d["cjk_coin_titles"] = [t[1][:120] for t in titles if any(c in t[1] for c in COINS_CJK)][:8]
                 d["en_crypto_titles"] = sum(1 for t in titles if re.search(r"\b(bitcoin|ethereum|crypto)\b", t[1], re.I))
-                d["sample"] = [list(t) for t in titles[:8]]
+                d["sample"] = [list(t) for t in titles[:3]]
+                d["langs"] = {}
+                for t in titles:
+                    mm = re.search(r"srclc:([a-z]+)", t[2])
+                    if mm:
+                        d["langs"][mm.group(1)] = d["langs"].get(mm.group(1), 0) + 1
                 d["translation_info_sample"] = [ln.split("\t")[25][:80] for ln in lines[:200] if len(ln.split("\t")) > 25 and ln.split("\t")[25]][:4]
             except Exception as e:  # noqa: BLE001
                 d["error"] = str(e)[:120]
@@ -131,6 +139,12 @@ def probe_yahoo(rep):
         for itv, back in (("5m", 58), ("1h", 700)):
             u = (f"https://query1.finance.yahoo.com/v8/finance/chart/{s}?period1={now - back * 86400}&period2={now}&interval={itv}&includePrePost=true")
             st, body = get(u)
+            for wait in (5, 15, 30):
+                if st != 429:
+                    break
+                time.sleep(wait)
+                st, body = get(u)
+            time.sleep(1.5)
             n = None
             if st == 200:
                 try:
