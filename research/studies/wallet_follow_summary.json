@@ -1,0 +1,507 @@
+{
+ "entries_status": {
+  "ok": 32128,
+  "no_fill": 6194,
+  "unfollowable": 77,
+  "tape_truncated": 728
+ },
+ "rank": {
+  "hist_stats": {
+   "wallets": 10420,
+   "truncated": 144,
+   "few_positions": 5897,
+   "failed": 0,
+   "raw_rows": 10443578,
+   "dup_rows": 0,
+   "kept": 4379,
+   "conds": 1407304,
+   "conds_closed": 1353760
+  },
+  "dup_share": 0.0,
+  "persistence": [
+   {
+    "eligible": 573,
+    "with_forward": 455,
+    "rho": 0.16587380854712178,
+    "top_n": 34,
+    "top_median": 0.01851384817219516,
+    "all_median": 0.003172633661893588,
+    "month": "2025-04-01"
+   },
+   {
+    "eligible": 633,
+    "with_forward": 502,
+    "rho": 0.10265780842772171,
+    "top_n": 31,
+    "top_median": 0.031623675845446196,
+    "all_median": 0.0030979904748597033,
+    "month": "2025-05-01"
+   },
+   {
+    "eligible": 682,
+    "with_forward": 525,
+    "rho": 0.14504389001994436,
+    "top_n": 32,
+    "top_median": 0.022856500676356594,
+    "all_median": 0.004951412928783503,
+    "month": "2025-06-01"
+   },
+   {
+    "eligible": 719,
+    "with_forward": 553,
+    "rho": 0.051051498326929526,
+    "top_n": 36,
+    "top_median": 0.028730228637162177,
+    "all_median": 0.007067573556441705,
+    "month": "2025-07-01"
+   },
+   {
+    "eligible": 745,
+    "with_forward": 589,
+    "rho": 0.08816131557512073,
+    "top_n": 36,
+    "top_median": 0.025085601513344935,
+    "all_median": 0.0066608378001297335,
+    "month": "2025-08-01"
+   },
+   {
+    "eligible": 788,
+    "with_forward": 625,
+    "rho": 0.05772985991644139,
+    "top_n": 31,
+    "top_median": 0.017238197177464425,
+    "all_median": 0.005883722263935409,
+    "month": "2025-09-01"
+   },
+   {
+    "eligible": 848,
+    "with_forward": 679,
+    "rho": 0.10258644284280631,
+    "top_n": 36,
+    "top_median": 0.022837785147467565,
+    "all_median": 0.006594925546829561,
+    "month": "2025-10-01"
+   }
+  ],
+  "persistence_verdict": {
+   "dates": 7,
+   "mean_rho": 0.10187208909372655,
+   "mean_top_minus_median": 0.018493820133794834,
+   "kill": false
+  },
+  "entries": 39127,
+  "conds": 20437
+ },
+ "months": {
+  "2025-04-01": {
+   "eligible": 573,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 57245.16778175921,
+   "dropped": {
+    "small": 6125,
+    "band": 658,
+    "fee": 2,
+    "open": 0
+   }
+  },
+  "2025-05-01": {
+   "eligible": 633,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 74757.04457207076,
+   "dropped": {
+    "small": 5751,
+    "band": 1035,
+    "fee": 7,
+    "open": 5
+   }
+  },
+  "2025-06-01": {
+   "eligible": 682,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 73768.92458306187,
+   "dropped": {
+    "small": 6404,
+    "band": 992,
+    "fee": 6,
+    "open": 9
+   }
+  },
+  "2025-07-01": {
+   "eligible": 719,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 94429.3287447526,
+   "dropped": {
+    "small": 6513,
+    "band": 1275,
+    "fee": 8,
+    "open": 14
+   }
+  },
+  "2025-08-01": {
+   "eligible": 745,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 90034.97825112042,
+   "dropped": {
+    "small": 6310,
+    "band": 719,
+    "fee": 31,
+    "open": 11
+   }
+  },
+  "2025-09-01": {
+   "eligible": 788,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 74500.21528425203,
+   "dropped": {
+    "small": 5881,
+    "band": 1074,
+    "fee": 16,
+    "open": 6
+   }
+  },
+  "2025-10-01": {
+   "eligible": 848,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 88103.9633330107,
+   "dropped": {
+    "small": 10512,
+    "band": 1377,
+    "fee": 25,
+    "open": 12
+   }
+  },
+  "2025-11-01": {
+   "eligible": 929,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 81598.09743349136,
+   "dropped": {
+    "small": 10476,
+    "band": 1828,
+    "fee": 58,
+    "open": 20
+   }
+  },
+  "2025-12-01": {
+   "eligible": 1064,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 94630.29557178296,
+   "dropped": {
+    "small": 9353,
+    "band": 2266,
+    "fee": 26,
+    "open": 11
+   }
+  },
+  "2026-01-01": {
+   "eligible": 1184,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 83436.61549549416,
+   "dropped": {
+    "small": 9154,
+    "band": 1400,
+    "fee": 94,
+    "open": 77
+   }
+  },
+  "2026-02-01": {
+   "eligible": 1370,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 89004.74257092552,
+   "dropped": {
+    "small": 9569,
+    "band": 1426,
+    "fee": 142,
+    "open": 39
+   }
+  },
+  "2026-03-01": {
+   "eligible": 1512,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 113907.76036866194,
+   "dropped": {
+    "small": 9455,
+    "band": 1181,
+    "fee": 567,
+    "open": 68
+   }
+  },
+  "2026-04-01": {
+   "eligible": 1744,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 127184.50323280277,
+   "dropped": {
+    "small": 7680,
+    "band": 1448,
+    "fee": 3212,
+    "open": 48
+   }
+  },
+  "2026-05-01": {
+   "eligible": 1795,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 131426.15555528275,
+   "dropped": {
+    "small": 12833,
+    "band": 1246,
+    "fee": 2971,
+    "open": 49
+   }
+  },
+  "2026-06-01": {
+   "eligible": 1791,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 132978.81542293305,
+   "dropped": {
+    "small": 10441,
+    "band": 897,
+    "fee": 2419,
+    "open": 50
+   }
+  },
+  "2026-07-01": {
+   "eligible": 1719,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 145704.55380033364,
+   "dropped": {
+    "small": 10381,
+    "band": 859,
+    "fee": 3160,
+    "open": 89
+   }
+  },
+  "2026-08-01": {
+   "eligible": 1627,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 144949.42053374855,
+   "dropped": {
+    "small": 8227,
+    "band": 682,
+    "fee": 2369,
+    "open": 101
+   }
+  },
+  "2026-09-01": {
+   "eligible": 1462,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 149474.29637117047,
+   "dropped": {
+    "small": 5592,
+    "band": 808,
+    "fee": 3024,
+    "open": 143
+   }
+  },
+  "2026-10-01": {
+   "eligible": 1305,
+   "pools": {
+    "top": 50,
+    "bottom": 50,
+    "rand": 100
+   },
+   "top_score_min": 117169.35315697305,
+   "dropped": {
+    "small": 5901,
+    "band": 704,
+    "fee": 4174,
+    "open": 200
+   }
+  }
+ },
+ "arms": {
+  "top": {
+   "train": {
+    "n": 5552,
+    "mean": -0.02561822864447358,
+    "sd": 0.8358273982803294,
+    "s": -0.03065014223891407,
+    "N": 616.8888888888889,
+    "x": -0.57952468104033,
+    "x_capped": -0.57952468104033,
+    "N_cap": 1911.081619110816,
+    "median_hold_days": 0.31395833333333334
+   },
+   "validation": {
+    "n": 3532,
+    "mean": -0.0014655478462731169,
+    "sd": 0.9495566011258272,
+    "s": -0.0015434023043339518,
+    "N": 706.4,
+    "x": -0.001682708851423696,
+    "x_capped": -0.001682708851423696,
+    "N_cap": 2127.554789460724,
+    "median_hold_days": 0.2820138888888889
+   },
+   "test": {
+    "n": 238,
+    "mean": -0.01138835433265931,
+    "sd": 0.7937747253173364,
+    "s": -0.014347086105703928,
+    "N": 47.6,
+    "x": -0.009797930674885377,
+    "x_capped": -0.009797930674885377,
+    "N_cap": 66.49226982470745,
+    "median_hold_days": 9.023605324074074
+   },
+   "entries": 14299,
+   "clusters": 9322
+  },
+  "bottom": {
+   "train": {
+    "n": 4612,
+    "mean": -0.02030037854861962,
+    "sd": 0.9267728723222703,
+    "s": -0.021904372856481807,
+    "N": 512.4444444444445,
+    "x": -0.24587163885415592
+   },
+   "validation": {
+    "n": 3810,
+    "mean": -0.04389990988425844,
+    "sd": 0.980954228897256,
+    "s": -0.044752251013392044,
+    "N": 762.0,
+    "x": -1.5261061457234248
+   },
+   "test": {
+    "n": 107,
+    "mean": 0.12694605913092769,
+    "sd": 0.8578942634267864,
+    "s": 0.1479740156133605,
+    "N": 21.4,
+    "x": 0.4685810189503013
+   },
+   "entries": 11267,
+   "clusters": 8529
+  },
+  "rand": {
+   "train": {
+    "n": 3234,
+    "mean": -0.004204627252013979,
+    "sd": 0.7616388720294227,
+    "s": -0.005520499814840794,
+    "N": 359.3333333333333,
+    "x": -0.010951013275232834
+   },
+   "validation": {
+    "n": 1502,
+    "mean": -0.006026707634663959,
+    "sd": 0.7905145683113527,
+    "s": -0.007623778076016778,
+    "N": 300.4,
+    "x": -0.017459846442567165
+   },
+   "test": {
+    "n": 144,
+    "mean": 0.0863949608522536,
+    "sd": 0.9252831439156011,
+    "s": 0.09337137655685429,
+    "N": 28.8,
+    "x": 0.2510845620515101
+   },
+   "entries": 6562,
+   "clusters": 4880
+  }
+ },
+ "gate": {
+  "ok": false,
+  "n_train": 5552,
+  "tpm": 605.673,
+  "w": 0.1,
+  "shortable": true,
+  "train_mean": -0.025618,
+  "placebo_mean": -0.052094,
+  "vol_cost": 48.66,
+  "x": -0.569,
+  "reason": "train net mean not above 0 and the reversed-side placebo"
+ },
+ "train_top_share_best1pct": null,
+ "control_train": {
+  "top_minus_rand_mean": -0.016267726769417498,
+  "perm_p": 0.8105947026486756
+ },
+ "persistence_verdict": {
+  "dates": 7,
+  "mean_rho": 0.10187208909372655,
+  "mean_top_minus_median": 0.018493820133794834,
+  "kill": false
+ },
+ "kills": [
+  "stage0_gate: train net mean not above 0 and the reversed-side placebo",
+  "train profit concentrated or non-positive",
+  "random-wallet control not beaten on train"
+ ],
+ "passed": false,
+ "verdict": "NOT FOUND (killed: stage0_gate: train net mean not above 0 and the reversed-side placebo; train profit concentrated or non-positive; random-wallet control not beaten on train)"
+}

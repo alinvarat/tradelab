@@ -14,16 +14,26 @@ Sources (checked 2026-11-26, none needs an account or key):
   globenewswire RSS, conditional GET every 5 s
   businesswire  RSS, conditional GET every 5 s
   binance_*     public CMS announcement lists, every 8-20 s (429 seen at 3 s)
-  okx_announcements  public REST, every 3 s
+  binance_*_fast  the same lists, but each request goes to a different CloudFront cache key (parameter order) and is made just
+                when that key's ~120 s cache entry expires (see binance_variants / cache_expiry); 12 keys -> staleness ~10 s
+                instead of 0-120 s (measured 2026-11-26: Age header climbs to ~120 then RefreshHit; the control's median 64 s
+                is that cache, not the poll interval). About 0.1 request/s per catalog. LLM off for these (duplicates).
+  okx_announcements  public REST, every 3 s (not cached by a CDN: DYNAMIC / no-store)
+  okx_ann_my, okx_ann_listings, okx_help_latest, okx_help_listings  candidate faster OKX paths raced against okx_announcements:
+                the EU-catalogue host, the per-type list, and the help-center section pages (server-rendered list with ETag).
+                All use the same t_pub as the control (API pTime == help-page updatedAt) and the same key (slug), so rows pair
+                one-to-one on key. LLM off for these.
   eqn_ws        EquationNews (BWEnews-style crypto newswire) public websocket push, no key
   eqn_rest      the same newswire over REST with ETag, every 3 s (its docs allow 1 req/s)
 For eqn_*, t_pub is the newswire's own timestamp (when it relayed the story), not the original source's time.
 Request rate is about 2.5 req/s in total; errors back off exponentially (403/429 wait at least 60 s)."""
 import base64
 import gzip
+import itertools
 import json
 import os
 import random
+import re
 import shutil
 import socket
 import ssl
@@ -54,6 +64,14 @@ LLM_QUEUE_MAX = 20
 SEC_URL = "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=&dateb=&owner=include&start=0&count=100&output=atom"
 BN = "https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&pageNo=1&pageSize=20&catalogId="
 OKX_ANN = "https://www.okx.com/api/v5/support/announcements"
+# Experiment sources raced against the controls: logged and measured, never shown to the bot (core.desk_feeds skips them, so
+# the bot's inputs are unchanged and the same article is not listed up to eight times).
+CANDIDATE_SOURCES = frozenset({"binance_listings_fast", "binance_news_fast", "binance_delist_fast", "okx_ann_my", "okx_ann_listings",
+                               "okx_help_latest", "okx_help_listings"})
+BN_TTL_S = 120          # CloudFront TTL measured on 2026-11-26 (Age climbs to ~120, then RefreshHit)
+BN_KEYS = 12            # cache keys per catalog; 120 / 12 = one expiry about every 10 s
+BN_MIN_GAP_S = 2.0      # never more than one request per 2 s per catalog
+OKX_HELP = "https://www.okx.com/help/section/"
 EQN_REST = "https://api.eqn.news/public/v1/news?limit=20"
 EQN_WS = "wss://api.eqn.news/public/ws"
 GNW = "https://www.globenewswire.com/RssFeed/orgclass/1/feedTitle/GlobeNewswire%20-%20News%20about%20Public%20Companies"
@@ -124,6 +142,96 @@ def parse_eqn_frame(text):
     t_pub = float(ts) if isinstance(ts, (int, float)) else None
     return {"key": f"eqn:{d.get('url') or d['news_title']}|{ts}", "title": str(d["news_title"])[:300], "link": d.get("url") or "",
             "t_pub": t_pub, "res": "s" if t_pub else None, "coins": d.get("coins_included") or []}
+
+
+BN_PARAMS = ("type", "pageNo", "pageSize", "catalogId")
+
+
+def binance_variants(catalog_id, k=BN_KEYS, page_size=10):
+    """k distinct URLs for one catalog that return the same list but are different CloudFront cache keys. The server accepts
+    the four parameters in any order (all 24 permutations checked, 200); an unknown extra parameter is a 400. The odd-indexed
+    permutations are used so the control URL (permutation 0) is never reused. Deterministic."""
+    vals = {"type": "1", "pageNo": "1", "pageSize": str(page_size), "catalogId": str(catalog_id)}
+    perms = list(itertools.permutations(BN_PARAMS))[1::2][:k]
+    return [BN.split("?")[0] + "?" + "&".join(f"{p}={vals[p]}" for p in perm) for perm in perms]
+
+
+def _hget(hdr, name):
+    low = name.lower()
+    for k, v in (hdr or {}).items():
+        if k.lower() == low:
+            return v
+    return None
+
+
+def cache_expiry(hdr, t_rx, ttl=BN_TTL_S):
+    """When the CDN entry that answered this request will expire (epoch s). Age gives the entry's age; a Miss/RefreshHit has
+    no Age header and was filled now. A Hit without Age (unexpected) is rechecked after half a TTL."""
+    age = _hget(hdr, "Age")
+    try:
+        return t_rx - float(age) + ttl
+    except (TypeError, ValueError):
+        pass
+    if "hit" in (_hget(hdr, "X-Cache") or "").lower().replace("refreshhit", ""):
+        return t_rx + ttl / 2
+    return t_rx + ttl
+
+
+def next_variant(keys, now, last_fetch=None, min_gap=BN_MIN_GAP_S, margin=1.0):
+    """keys: {url: expiry_epoch}. -> (url, seconds to wait): the key that expires first, fetched `margin` s after expiry, and
+    never sooner than `min_gap` after the previous request."""
+    url = min(keys, key=lambda u: (keys[u], u))
+    wait = max(0.0, keys[url] + margin - now)
+    if last_fetch is not None:
+        wait = max(wait, last_fetch + min_gap - now)
+    return url, wait
+
+
+def okx_key(url_or_slug):
+    """Canonical pairing key for an OKX article: the slug, whatever host or locale the list came from."""
+    slug = str(url_or_slug or "").split("?")[0].rstrip("/").rsplit("/", 1)[-1]
+    return "okx_announcements:https://www.okx.com/help/" + slug
+
+
+def parse_okx_norm(body, name=None):
+    """OKX announcements REST answer with slug-based keys (so regional hosts pair with the control)."""
+    out = nl.parse_okx_announcements(json.loads(body), "okx_announcements")
+    for it in out:
+        it["key"] = okx_key(it["link"] or it["key"])
+    return out
+
+
+_HELP_ITEM = re.compile(r'"slug":"([^"]+)","title":"((?:[^"\\]|\\.)*)","publishTime":(\d+),"updatedAt":(\d+),"sectionSlug":"([^"]+)"')
+
+
+def parse_okx_help(body):
+    """OKX help-center section page (server-rendered, window.__INIT_STATE__ ... parseData("<json string>")) -> items. t_pub is
+    updatedAt (equal to the REST API's pTime to the second, so it pairs with okx_announcements); publishTime (often a scheduled
+    hour mark) is kept in `extra`. Structured parse first, regex over the escaped text as a fallback."""
+    text = body.decode("utf-8", "replace") if isinstance(body, (bytes, bytearray)) else body
+    rows = []
+    for m in re.finditer(r'parseData\("((?:[^"\\]|\\.)*)"\)', text):
+        try:
+            d = json.loads(json.loads('"' + m.group(1) + '"'))
+            lst = d["appContext"]["initialProps"]["sectionData"]["articleList"]["list"]
+        except (ValueError, KeyError, TypeError):
+            continue
+        rows = [(a.get("slug"), a.get("title"), a.get("publishTime"), a.get("updatedAt"), a.get("sectionSlug")) for a in lst]
+        break
+    if not rows:
+        flat = text.replace('\\"', '"')
+        rows = [(g[0], g[1], g[2], g[3], g[4]) for g in _HELP_ITEM.findall(flat)]
+    out = []
+    for slug, title, pub, upd, sect in rows:
+        if not slug or not upd:
+            continue
+        try:
+            title = json.loads('"' + title + '"') if "\\u" in str(title) else str(title)
+        except ValueError:
+            title = str(title)
+        out.append({"key": okx_key(slug), "title": title[:300], "t_pub": int(upd) / 1000.0, "res": "s",
+                    "link": "https://www.okx.com/help/" + slug, "desc": sect, "extra": {"publish_time": int(pub) / 1000.0 if pub else None}})
+    return out
 
 
 def eligible_for_llm(source, market, it):
@@ -265,6 +373,14 @@ def sources():
         {"name": "binance_delist", "kind": "binance", "url": BN + "161", "every": 20, "market": "crypto"},
         {"name": "okx_announcements", "kind": "okx", "url": OKX_ANN, "every": 3, "market": "crypto"},
         {"name": "eqn_rest", "kind": "eqn", "url": EQN_REST, "every": 3, "market": "crypto"},
+        # candidate faster paths, raced against the controls above; same keys, same t_pub, no LLM (duplicates)
+        {"name": "binance_listings_fast", "kind": "binance_multi", "catalog": 48, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
+        {"name": "binance_news_fast", "kind": "binance_multi", "catalog": 49, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
+        {"name": "binance_delist_fast", "kind": "binance_multi", "catalog": 161, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
+        {"name": "okx_ann_my", "kind": "okx_norm", "url": "https://my.okx.com/api/v5/support/announcements", "every": 3, "market": "crypto", "llm": False},
+        {"name": "okx_ann_listings", "kind": "okx_norm", "url": OKX_ANN + "?annType=announcements-new-listings", "every": 3, "market": "crypto", "llm": False},
+        {"name": "okx_help_latest", "kind": "okx_help", "url": OKX_HELP + "announcements-latest-announcements", "every": 2.5, "market": "crypto", "llm": False},
+        {"name": "okx_help_listings", "kind": "okx_help", "url": OKX_HELP + "announcements-new-listings", "every": 3, "market": "crypto", "llm": False},
     ]
     sec_ua = os.environ.get("TRADELAB_SEC_UA")
     if sec_ua:
@@ -286,6 +402,12 @@ def parse(src, body):
         return nl.parse_okx_announcements(json.loads(body), src["name"])
     if k == "eqn":
         return parse_eqn_rest(body)
+    if k == "okx_norm":
+        return parse_okx_norm(body)
+    if k == "okx_help":
+        return parse_okx_help(body)
+    if k == "binance_multi":
+        return nl.parse_binance(json.loads(body), src["name"].replace("_fast", ""))
     raise ValueError("unknown kind " + k)
 
 
@@ -367,8 +489,12 @@ def record_item(src, it, t_seen, cold=False):
             ROWS.setdefault(name, deque(maxlen=MAX_ROWS_PER_SOURCE)).append((t_seen, lat, it.get("res")))
     row = {"event": "item", "source": name, "key": it["key"], "title": it.get("title", "")[:200], "t_pub": it.get("t_pub"),
            "res": it.get("res"), "t_seen": t_seen, "lat_s": None if lat is None else round(lat, 3)}
+    if it.get("via"):
+        row["via"] = it["via"]
+    if it.get("extra"):
+        row.update(it["extra"])
     log_row(row, t_seen)
-    if lat is not None and llm_enabled() and eligible_for_llm(name, src["market"], it):
+    if lat is not None and src.get("llm", True) and llm_enabled() and eligible_for_llm(name, src["market"], it):
         enqueue_llm(src, it, t_seen)
     return True
 
@@ -449,6 +575,14 @@ def fetch(url, headers, timeout=10):
         return getattr(e, "code", 0) or 0, (f"{type(e).__name__}"[:60]).encode(), time.time(), {}
 
 
+def cache_trace(hdr):
+    """Compact CDN state of an answer for the log row, e.g. 'Hit:104' (X-Cache and Age), so every rare event shows where
+    its delay came from."""
+    xc = (_hget(hdr, "X-Cache") or _hget(hdr, "CF-Cache-Status") or "").split(" ")[0]
+    age = _hget(hdr, "Age")
+    return (xc + (":" + str(age) if age is not None else "")) or None
+
+
 def poll_step(src, cond, fetch_fn=fetch):
     """One poll of one source. `cond` is that source's conditional-GET and first-fetch state. -> seconds to wait."""
     name, every = src["name"], src["every"]
@@ -487,7 +621,11 @@ def poll_step(src, cond, fetch_fn=fetch):
         cond["etag"] = hdr.get("ETag") or hdr.get("Etag") or cond.get("etag")
         cond["modified"] = hdr.get("Last-Modified") or cond.get("modified")
         first = not cond.get("done")
+        cond["last_hdr"] = hdr
+        via = cache_trace(hdr) if src.get("trace") else None
         for it in items:
+            if via:
+                it["via"] = via
             record_item(src, it, t_rx, cold=first)
         cond["done"] = True
         wait = every
@@ -504,6 +642,47 @@ def poll_loop(src):
             traceback.print_exc()
             wait = BACKOFF_MAX_S / 5
         time.sleep(wait * random.uniform(0.9, 1.1))
+
+
+def multi_step(src, state, now=time.time, fetch_fn=fetch):
+    """One tick of a cache-key-rotating poll (binance_*_fast). state: {"keys": {url: expiry}, "conds": {url: cond}, "last": t}.
+    Fetches the key whose cache entry expires first, when it expires. -> seconds until the next tick. 429/403 pause the whole
+    catalog (poll_step's backoff); other errors retry that key after the backoff."""
+    if "keys" not in state:
+        urls = binance_variants(src["catalog"])
+        t = now()
+        # first pass: one request per TTL/k seconds, so the entries that this fills (Miss = filled now) expire evenly spread
+        # over the TTL; later requests keep that phase because each is made at its own entry's expiry
+        gap = BN_TTL_S / max(1, len(urls))
+        state.update(keys={u: t + i * gap - 1.0 for i, u in enumerate(urls)}, conds={u: {} for u in urls}, last=None)
+    url, wait = next_variant(state["keys"], now(), state["last"])
+    if wait > 0:
+        return min(wait, 1.0)
+    cond = state["conds"][url]
+    cond.pop("etag", None)
+    cond.pop("modified", None)
+    st = _stat(src["name"])
+    errors_before = st["errors"]
+    w = poll_step({**src, "url": url}, cond, fetch_fn)
+    t = now()
+    state["last"] = t
+    if st["errors"] != errors_before:
+        for u in state["keys"]:             # a failure (429/403 above all) pauses the whole catalog, not just this key
+            state["keys"][u] = max(state["keys"][u], t + w)
+        return min(w, 1.0)
+    state["keys"][url] = cache_expiry(cond.get("last_hdr"), t)
+    return 0.0
+
+
+def multi_loop(src):
+    state = {}
+    while True:
+        try:
+            wait = multi_step(src, state)
+        except Exception:  # noqa: BLE001
+            traceback.print_exc()
+            wait = BACKOFF_MAX_S / 5
+        time.sleep(max(0.05, wait) * (random.uniform(0.9, 1.1) if wait > 1.5 else 1.0))
 
 
 def ws_loop(url=EQN_WS, connect=None):
@@ -594,7 +773,7 @@ def loop():
     spawn("eqn_ws", ws_loop)
     spawn("publish", news_publish.loop)       # own thread; a no-op until TRADELAB_DATA_PUSH_TOKEN is set
     for s in srcs:
-        spawn(s["name"], poll_loop, s)
+        spawn(s["name"], multi_loop if s["kind"] == "binance_multi" else poll_loop, s)
         time.sleep(0.3)           # stagger the first requests
     last_prune = time.time()
     while True:

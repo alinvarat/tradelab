@@ -66,7 +66,7 @@ def classify_rows(rows):
     """Item rows of the ingest log -> rows with the forced-flow class when notice_fwd.classify recognises a notice."""
     out = []
     for r in rows:
-        if r.get("event") != "item" or not r.get("t_seen"):
+        if r.get("event") != "item" or not r.get("t_seen") or r.get("source") in news_ingest.CANDIDATE_SOURCES:
             continue
         try:
             c = notice_fwd.classify(r.get("source") or "", r.get("title") or "")
@@ -157,7 +157,8 @@ class Feeds:
         except Exception:  # noqa: BLE001
             return {}
         return {n: {"last_ok_age_s": s.get("last_ok_age_s"), "median_s": (s.get("seen_minus_published") or {}).get("median_s"),
-                    "n": (s.get("seen_minus_published") or {}).get("n")} for n, s in v.get("sources", {}).items()}
+                    "n": (s.get("seen_minus_published") or {}).get("n")} for n, s in v.get("sources", {}).items()
+                if n not in news_ingest.CANDIDATE_SOURCES}
 
     def forced_candidates(self, now, window_s=900):
         """Forced-flow notices (delist, monitoring tag, listing) seen in the last window that name a coin the bot can trade.
