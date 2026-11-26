@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "notices"
+        description: "notices or reach"
         required: true
         default: "notices"
 
@@ -26,9 +26,12 @@ jobs:
         with:
           python-version: "3.13"
       - run: |
-          git fetch origin data/forced-flow
+          git fetch origin data/forced-flow data/other-delist
           git show origin/data/forced-flow:events/latest.json > /tmp/frozen_events.json
-      - run: python -u research/studies/other_delist.py out ${{ inputs.mode }} /tmp/frozen_events.json
+          git show origin/data/other-delist:notices/notices.json > /tmp/notices.json
+      - run: |
+          if [ "${{ inputs.mode }}" = "reach" ]; then python -u research/studies/other_delist.py out reach /tmp/notices.json
+          else python -u research/studies/other_delist.py out ${{ inputs.mode }} /tmp/frozen_events.json; fi
         timeout-minutes: 40
       - uses: actions/upload-artifact@v4
         if: always()

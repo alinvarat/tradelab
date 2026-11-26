@@ -144,10 +144,53 @@ def mode_notices(out_dir, frozen):
     print(json.dumps(out, indent=1, ensure_ascii=False)[:6000], flush=True)
 
 
+def mode_reach(out_dir, notices_path):
+    """Reach of the own-book price history (HEAD only, no prices): Bybit spot trade archive for each Bybit event; Bitget notice paging."""
+    ev = json.load(open(notices_path))["events"].get("bybit", [])
+    res = {"bybit_events": len(ev), "ok": 0, "missing": 0, "failed": 0, "samples": []}
+    st0, idx = get("https://public.bybit.com/spot/", tries=2)
+    res["bybit_spot_index_status"] = st0
+    res["bybit_spot_index_symbols"] = len(re.findall(r'href="([A-Z0-9]+USDT)/"', idx or ""))
+    for e in ev:
+        g = time.gmtime(e["ts"])
+        d = f"{g.tm_year}-{g.tm_mon:02d}-{g.tm_mday:02d}"
+        u = f"https://public.bybit.com/spot/{e['sym']}USDT/{e['sym']}USDT_{d}.csv.gz"
+        try:
+            req = Request(u, headers=UA, method="HEAD")
+            with urlopen(req, timeout=15) as r:
+                c = r.status
+        except Exception as x:  # noqa: BLE001
+            c = getattr(x, "code", 0) or 0
+        res["ok" if c == 200 else "missing" if c in (403, 404) else "failed"] += 1
+        if len(res["samples"]) < 6:
+            res["samples"].append((e["sym"], d, c))
+    pages, seen, cur, first = [], set(), "", None
+    for i in range(60):
+        st, d = jget("https://api.bitget.com/api/v2/public/annoucements?language=en_US&annType=symbol_delisting" + (f"&cursor={cur}" if cur else ""))
+        rows = (d or {}).get("data") or []
+        new = [a for a in rows if a["annId"] not in seen]
+        pages.append((st, len(rows), len(new)))
+        if not new:
+            break
+        for a in new:
+            seen.add(a["annId"])
+            first = min(first or 1e18, float(a["cTime"]) / 1000)
+        cur = new[-1]["annId"]
+        time.sleep(0.15)
+    res["bitget_pages"] = pages[:8]
+    res["bitget_total"] = len(seen)
+    res["bitget_oldest"] = day(first) if first else None
+    print(json.dumps(res, indent=1), flush=True)
+    json.dump(res, open(os.path.join(out_dir, "reach.json"), "w"))
+
+
 def main():
     out_dir, mode = sys.argv[1], sys.argv[2]
     if mode == "notices":
         mode_notices(out_dir, sys.argv[3])
+    elif mode == "reach":
+        os.makedirs(out_dir, exist_ok=True)
+        mode_reach(out_dir, sys.argv[3])
     else:
         raise SystemExit("mode must be notices")
 
