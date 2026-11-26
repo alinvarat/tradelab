@@ -1,0 +1,13 @@
+{
+ "cutoff_month": "2025-11",
+ "first_eligible_day": "2025-12-01",
+ "haiku_cutoff_month": "2025-11",
+ "note": "items with t_pub before first_eligible_day are excluded from every comparison (registered rule, protocol_cmp_20261126.md)",
+ "rule": {
+  "min_acc": 0.6,
+  "min_answered": 4,
+  "note": "a month is known when the probe's answered count >= min_answered and accuracy among answered >= min_acc on either asset; the cutoff is the last known month; items are eligible from the first day of the next month. Checked against the round-1 Haiku probe: last known month 2025-11.",
+  "of_days": 12
+ },
+ "sonnet_cutoff_month": "2025-11"
+}

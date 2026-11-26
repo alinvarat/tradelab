@@ -1,0 +1,712 @@
+{
+ "table": [
+  {
+   "asset": "BTC-USD",
+   "month": "2024-01",
+   "n": 12,
+   "answered": 7,
+   "right": 3,
+   "empty": 0,
+   "answer_rate": 0.5833333333333334,
+   "acc_answered": 0.42857142857142855
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-02",
+   "n": 12,
+   "answered": 6,
+   "right": 5,
+   "empty": 0,
+   "answer_rate": 0.5,
+   "acc_answered": 0.8333333333333334
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-03",
+   "n": 12,
+   "answered": 9,
+   "right": 4,
+   "empty": 0,
+   "answer_rate": 0.75,
+   "acc_answered": 0.4444444444444444
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-04",
+   "n": 12,
+   "answered": 9,
+   "right": 3,
+   "empty": 0,
+   "answer_rate": 0.75,
+   "acc_answered": 0.3333333333333333
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-05",
+   "n": 12,
+   "answered": 11,
+   "right": 3,
+   "empty": 0,
+   "answer_rate": 0.9166666666666666,
+   "acc_answered": 0.2727272727272727
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-06",
+   "n": 12,
+   "answered": 5,
+   "right": 2,
+   "empty": 0,
+   "answer_rate": 0.4166666666666667,
+   "acc_answered": 0.4
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-07",
+   "n": 12,
+   "answered": 8,
+   "right": 5,
+   "empty": 0,
+   "answer_rate": 0.6666666666666666,
+   "acc_answered": 0.625
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-08",
+   "n": 12,
+   "answered": 6,
+   "right": 5,
+   "empty": 0,
+   "answer_rate": 0.5,
+   "acc_answered": 0.8333333333333334
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-09",
+   "n": 12,
+   "answered": 7,
+   "right": 4,
+   "empty": 0,
+   "answer_rate": 0.5833333333333334,
+   "acc_answered": 0.5714285714285714
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-10",
+   "n": 12,
+   "answered": 5,
+   "right": 3,
+   "empty": 0,
+   "answer_rate": 0.4166666666666667,
+   "acc_answered": 0.6
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-11",
+   "n": 12,
+   "answered": 10,
+   "right": 4,
+   "empty": 0,
+   "answer_rate": 0.8333333333333334,
+   "acc_answered": 0.4
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2024-12",
+   "n": 12,
+   "answered": 9,
+   "right": 4,
+   "empty": 0,
+   "answer_rate": 0.75,
+   "acc_answered": 0.4444444444444444
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-01",
+   "n": 12,
+   "answered": 6,
+   "right": 1,
+   "empty": 0,
+   "answer_rate": 0.5,
+   "acc_answered": 0.16666666666666666
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-02",
+   "n": 12,
+   "answered": 6,
+   "right": 3,
+   "empty": 0,
+   "answer_rate": 0.5,
+   "acc_answered": 0.5
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-03",
+   "n": 12,
+   "answered": 6,
+   "right": 4,
+   "empty": 0,
+   "answer_rate": 0.5,
+   "acc_answered": 0.6666666666666666
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-04",
+   "n": 12,
+   "answered": 4,
+   "right": 2,
+   "empty": 0,
+   "answer_rate": 0.3333333333333333,
+   "acc_answered": 0.5
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-05",
+   "n": 12,
+   "answered": 4,
+   "right": 2,
+   "empty": 0,
+   "answer_rate": 0.3333333333333333,
+   "acc_answered": 0.5
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-06",
+   "n": 12,
+   "answered": 1,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.08333333333333333,
+   "acc_answered": 0.0
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-07",
+   "n": 12,
+   "answered": 2,
+   "right": 2,
+   "empty": 0,
+   "answer_rate": 0.16666666666666666,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-08",
+   "n": 12,
+   "answered": 2,
+   "right": 1,
+   "empty": 0,
+   "answer_rate": 0.16666666666666666,
+   "acc_answered": 0.5
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-09",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-10",
+   "n": 12,
+   "answered": 1,
+   "right": 1,
+   "empty": 0,
+   "answer_rate": 0.08333333333333333,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-11",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2025-12",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-01",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-02",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-03",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-04",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-05",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-06",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-07",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-08",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-09",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-10",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "BTC-USD",
+   "month": "2026-11",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-01",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-02",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-03",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-04",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-05",
+   "n": 12,
+   "answered": 12,
+   "right": 11,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 0.9166666666666666
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-06",
+   "n": 12,
+   "answered": 12,
+   "right": 11,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 0.9166666666666666
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-07",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-08",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-09",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-10",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-11",
+   "n": 12,
+   "answered": 12,
+   "right": 11,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 0.9166666666666666
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2024-12",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-01",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-02",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-03",
+   "n": 12,
+   "answered": 12,
+   "right": 11,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 0.9166666666666666
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-04",
+   "n": 12,
+   "answered": 12,
+   "right": 12,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-05",
+   "n": 12,
+   "answered": 12,
+   "right": 11,
+   "empty": 0,
+   "answer_rate": 1.0,
+   "acc_answered": 0.9166666666666666
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-06",
+   "n": 12,
+   "answered": 11,
+   "right": 10,
+   "empty": 0,
+   "answer_rate": 0.9166666666666666,
+   "acc_answered": 0.9090909090909091
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-07",
+   "n": 12,
+   "answered": 10,
+   "right": 10,
+   "empty": 0,
+   "answer_rate": 0.8333333333333334,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-08",
+   "n": 12,
+   "answered": 8,
+   "right": 8,
+   "empty": 0,
+   "answer_rate": 0.6666666666666666,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-09",
+   "n": 12,
+   "answered": 7,
+   "right": 7,
+   "empty": 0,
+   "answer_rate": 0.5833333333333334,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-10",
+   "n": 12,
+   "answered": 6,
+   "right": 6,
+   "empty": 0,
+   "answer_rate": 0.5,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-11",
+   "n": 12,
+   "answered": 7,
+   "right": 7,
+   "empty": 0,
+   "answer_rate": 0.5833333333333334,
+   "acc_answered": 1.0
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2025-12",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-01",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-02",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-03",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-04",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-05",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-06",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-07",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-08",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-09",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-10",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  },
+  {
+   "asset": "^GSPC",
+   "month": "2026-11",
+   "n": 12,
+   "answered": 0,
+   "right": 0,
+   "empty": 0,
+   "answer_rate": 0.0,
+   "acc_answered": null
+  }
+ ],
+ "spend": {
+  "total_usd": 0.0,
+  "calls": 840,
+  "tokens_in": 391186,
+  "tokens_out": 63269,
+  "tokens_cached": 0,
+  "notional_usd": 1.4150619999999994
+ }
+}
