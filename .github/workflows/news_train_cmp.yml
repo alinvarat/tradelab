@@ -1,0 +1,243 @@
+name: News train CMP
+
+# Sonnet 5.5 versus Haiku 5.5 paired comparison (research/news_train/protocol_cmp_20261126.md). Owner exception 2026-11-26: research only;
+# the production bot stays on Haiku. Claude CLI on the owner's Max plan (shared token, so low parallelism). Reads data/news-train-r2, -r3 and
+# data/news-ingest read-only; writes only data/news-train-cmp.
+#   leak - memory probe on Sonnet (run.py leak, model switched by env) + the registered cutoff gate -> data/news-train-cmp leak/
+#   hist - DESCRIPTIVE paired comparison on the round-2 sealed crypto and round-3 sealed July 8-K items (needs leak/gate.json)
+#   fwd  - scheduled forward arm: decisions of both models on pod ingest items; counts only; outcomes once at the pre-registered trigger
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "leak, hist or fwd"
+        required: true
+        default: "leak"
+  schedule:
+    - cron: "17 */3 * * *"
+
+permissions:
+  contents: read
+
+env:
+  TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+  CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+  TRADELAB_CLAUDE_PARALLEL: "3"
+
+jobs:
+  leak:
+    if: inputs.mode == 'leak'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-cmp-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - run: python research/news_train/run.py leak out
+        env:
+          TRADELAB_CLAUDE_MODEL: claude-sonnet-5-5
+      - name: Cutoff gate (registered rule, both models)
+        run: |
+          git fetch origin data/news-train
+          git show origin/data/news-train:leak/leak.json > /tmp/haiku_leak.json
+          python research/news_train/run_cmp.py leak_gate out/leak.json /tmp/haiku_leak.json out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cmp-leak
+          path: out/
+      - name: Keep on data/news-train-cmp
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/news-train-cmp 2>/dev/null; then git checkout -q -B data/news-train-cmp origin/data/news-train-cmp
+          else git checkout -q --orphan data/news-train-cmp && git rm -rq --cached . && git clean -fdq; fi
+          mkdir -p leak && cp /tmp/keep/leak.json /tmp/keep/gate.json leak/
+          git add leak
+          git commit -qm "News train CMP: Sonnet leak probe and gate $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-cmp && break; git fetch -q origin data/news-train-cmp; git rebase -q origin/data/news-train-cmp; done
+
+  hist_prep:
+    if: inputs.mode == 'hist'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore data (read-only)
+        run: |
+          mkdir -p /tmp/r2 /tmp/r3 /tmp/cmp
+          git fetch origin data/news-train-r2 data/news-train-r3 data/news-train-cmp
+          git archive origin/data/news-train-r2 | tar -x -C /tmp/r2
+          git archive origin/data/news-train-r3 | tar -x -C /tmp/r3
+          git archive origin/data/news-train-cmp | tar -x -C /tmp/cmp
+      - run: |
+          mkdir -p out
+          python research/news_train/run_cmp.py hist_prep out /tmp/cmp/leak/gate.json /tmp/r2 /tmp/r3
+          cp /tmp/cmp/leak/gate.json out/gate.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cmp-prep
+          path: out/
+
+  hist_call:
+    needs: hist_prep
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - {set: crypto_w1, shard: 0, shards: 8}
+          - {set: crypto_w1, shard: 1, shards: 8}
+          - {set: crypto_w1, shard: 2, shards: 8}
+          - {set: crypto_w1, shard: 3, shards: 8}
+          - {set: crypto_w1, shard: 4, shards: 8}
+          - {set: crypto_w1, shard: 5, shards: 8}
+          - {set: crypto_w1, shard: 6, shards: 8}
+          - {set: crypto_w1, shard: 7, shards: 8}
+          - {set: stock_w3, shard: 0, shards: 4}
+          - {set: stock_w3, shard: 1, shards: 4}
+          - {set: stock_w3, shard: 2, shards: 4}
+          - {set: stock_w3, shard: 3, shards: 4}
+          - {set: stock_m1, shard: 0, shards: 4}
+          - {set: stock_m1, shard: 1, shards: 4}
+          - {set: stock_m1, shard: 2, shards: 4}
+          - {set: stock_m1, shard: 3, shards: 4}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - uses: actions/download-artifact@v4
+        with:
+          name: cmp-prep
+          path: prep
+      - run: python research/news_train/run_cmp.py hist_call out prep/prep.jsonl.gz ${{ matrix.set }} ${{ matrix.shard }} ${{ matrix.shards }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cmp-call-${{ matrix.set }}-${{ matrix.shard }}
+          path: out/
+
+  hist_merge:
+    needs: hist_call
+    if: always() && inputs.mode == 'hist'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-cmp-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cmp-call-*
+          path: parts
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: cmp-prep
+          path: prep
+      - name: Restore data (read-only)
+        run: |
+          mkdir -p /tmp/r2 /tmp/r3
+          git fetch origin data/news-train-r2 data/news-train-r3
+          git archive origin/data/news-train-r2 | tar -x -C /tmp/r2
+          git archive origin/data/news-train-r3 | tar -x -C /tmp/r3
+      - run: |
+          mkdir -p merged
+          python research/news_train/run_cmp.py hist_merge parts prep/prep.jsonl.gz merged /tmp/r2 /tmp/r3
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cmp-hist-result
+          path: merged/
+      - name: Keep on data/news-train-cmp
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r merged /tmp/keep
+          git checkout -q -B data/news-train-cmp origin/data/news-train-cmp
+          mkdir -p hist && cp /tmp/keep/hist_result.json hist/ && cp prep/prep_report.json hist/
+          git add hist
+          git commit -qm "News train CMP historical (descriptive): $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-cmp && break; git fetch -q origin data/news-train-cmp; git rebase -q origin/data/news-train-cmp; done
+
+  fwd:
+    if: github.event_name == 'schedule' || inputs.mode == 'fwd'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-cmp-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Restore data (read-only except the cmp state)
+        id: restore
+        run: |
+          mkdir -p /tmp/r2 /tmp/ingest /tmp/state
+          git fetch origin data/news-train-r2
+          git archive origin/data/news-train-r2 | tar -x -C /tmp/r2
+          if git fetch origin data/news-ingest 2>/dev/null; then git archive origin/data/news-ingest | tar -x -C /tmp/ingest; fi
+          if git fetch origin data/news-train-cmp 2>/dev/null; then git archive origin/data/news-train-cmp | tar -x -C /tmp/state; fi
+          if [ -f /tmp/state/leak/gate.json ]; then echo "go=1" >> "$GITHUB_OUTPUT"; else echo "go=0" >> "$GITHUB_OUTPUT"; echo "no leak gate yet: skipping"; fi
+      - if: steps.restore.outputs.go == '1'
+        run: python research/news_train/run_cmp.py fwd out /tmp/state /tmp/ingest /tmp/r2
+      - if: steps.restore.outputs.go == '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmp-fwd
+          path: out/
+      - name: Keep on data/news-train-cmp
+        if: steps.restore.outputs.go == '1'
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out/fwd /tmp/keep_fwd
+          git checkout -q -B data/news-train-cmp origin/data/news-train-cmp
+          mkdir -p fwd && cp /tmp/keep_fwd/* fwd/
+          git add fwd
+          git commit -qm "News train CMP forward: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-cmp && break; git fetch -q origin data/news-train-cmp; git rebase -q origin/data/news-train-cmp; done
