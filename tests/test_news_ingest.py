@@ -323,6 +323,10 @@ class OkxCandidates(Base):
         for s in srcs:
             if s["name"] in new:
                 self.assertFalse(s["llm"])
+        self.assertEqual(ni.CANDIDATE_SOURCES, set(new))
+        from core import desk_feeds
+        rows = [{"event": "item", "source": n, "key": "k", "title": "t", "t_pub": 1.0, "t_seen": 5.0, "lat_s": 4.0} for n in ("okx_ann_my", "okx_announcements")]
+        self.assertEqual([r["source"] for r in desk_feeds.classify_rows(rows)], ["okx_announcements"])       # the bot's input is unchanged
         for n in ("binance_listings", "binance_news", "binance_delist", "okx_announcements"):      # controls untouched
             self.assertIn(n, names)
 

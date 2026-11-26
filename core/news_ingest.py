@@ -64,6 +64,10 @@ LLM_QUEUE_MAX = 20
 SEC_URL = "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=&dateb=&owner=include&start=0&count=100&output=atom"
 BN = "https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&pageNo=1&pageSize=20&catalogId="
 OKX_ANN = "https://www.okx.com/api/v5/support/announcements"
+# Experiment sources raced against the controls: logged and measured, never shown to the bot (core.desk_feeds skips them, so
+# the bot's inputs are unchanged and the same article is not listed up to eight times).
+CANDIDATE_SOURCES = frozenset({"binance_listings_fast", "binance_news_fast", "binance_delist_fast", "okx_ann_my", "okx_ann_listings",
+                               "okx_help_latest", "okx_help_listings"})
 BN_TTL_S = 120          # CloudFront TTL measured on 2026-11-26 (Age climbs to ~120, then RefreshHit)
 BN_KEYS = 12            # cache keys per catalog; 120 / 12 = one expiry about every 10 s
 BN_MIN_GAP_S = 2.0      # never more than one request per 2 s per catalog
