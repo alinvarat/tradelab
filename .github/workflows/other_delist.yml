@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "notices"
+        description: "notices, reach or price"
         required: true
         default: "notices"
 
@@ -15,7 +15,7 @@ permissions:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 240
     permissions:
       contents: write
     steps:
@@ -26,10 +26,14 @@ jobs:
         with:
           python-version: "3.13"
       - run: |
-          git fetch origin data/forced-flow
+          git fetch origin data/forced-flow data/other-delist
           git show origin/data/forced-flow:events/latest.json > /tmp/frozen_events.json
-      - run: python -u research/studies/other_delist.py out ${{ inputs.mode }} /tmp/frozen_events.json
-        timeout-minutes: 40
+          git show origin/data/other-delist:notices/notices.json > /tmp/notices.json
+      - run: |
+          if [ "${{ inputs.mode }}" = "reach" ]; then python -u research/studies/other_delist.py out reach /tmp/notices.json
+          elif [ "${{ inputs.mode }}" = "price" ]; then python -u research/studies/other_delist.py out price /tmp/notices.json /tmp/frozen_events.json
+          else python -u research/studies/other_delist.py out ${{ inputs.mode }} /tmp/frozen_events.json; fi
+        timeout-minutes: 200
       - uses: actions/upload-artifact@v4
         if: always()
         with:
