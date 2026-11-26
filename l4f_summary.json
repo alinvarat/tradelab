@@ -142,6 +142,16 @@
    "stake": 7.4907,
    "entry_ts": 1795717699.170721,
    "volume": 53995.585414999994
+  },
+  {
+   "id": "7182070",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-27T20:15:00Z",
+   "side": "yes",
+   "price": 0.001,
+   "stake": 7.5473,
+   "entry_ts": 1795726050.4404793,
+   "volume": 58658
   }
  ],
  "n_closed": 13,
