@@ -135,7 +135,8 @@ def attach_books(markets):
 
 
 def prelim_rank(m):
-    return m["pool"] / (m["min_size"] * (1 - 2 * rc.PRIMARY_FRAC * m["v"] / 100))
+    den = m["min_size"] * (1 - 2 * rc.PRIMARY_FRAC * m["v"] / 100)
+    return m["pool"] / den if den > 0 else 0.0
 
 
 # ---------- probe ----------
@@ -295,7 +296,7 @@ def pick_tracked():
     mk = [x for x in (parse_reward_market(r) for r in rows) if x]
     mk.sort(key=prelim_rank, reverse=True)
     mkb = attach_books(mk[:PRELIM_N])
-    mkb.sort(key=lambda m: m["pool"] / (m["min_size"] * (1 - 2 * rc.PRIMARY_FRAC * m["v"] / 100)), reverse=True)
+    mkb.sort(key=prelim_rank, reverse=True)
     rew = [dict(m, group="reward") for m in mkb[:rc.TRACK_N]]
     med_v = sorted(m["v"] for m in rew)[len(rew) // 2]
     med_ms = sorted(m["min_size"] for m in rew)[len(rew) // 2]
