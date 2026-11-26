@@ -1,0 +1,81 @@
+name: Notice forward
+
+# Forward paper ledger notice_fwd (research/studies/protocol_notice_fwd_20261126.md). Modes:
+#   counts  - outcome-free: counts and t_seen - t_pub per source from the parts on data/news-ingest (no price), written to the job summary
+#   forward - enters new notices 5 s after the pod saw them, settles matured ones; state on data/notice-fwd
+# Dispatched by keeper.yml every 30 minutes (forward).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "counts or forward"
+        required: true
+        default: "counts"
+
+permissions:
+  contents: read
+
+jobs:
+  counts:
+    if: inputs.mode == 'counts'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Read the parts
+        run: |
+          mkdir -p /tmp/ingest
+          git fetch origin data/news-ingest && git archive origin/data/news-ingest | tar -x -C /tmp/ingest
+          python research/studies/notice_fwd.py counts /tmp/ingest out
+          { echo '```json'; cat out/counts.json; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: notice-counts
+          path: out/
+
+  forward:
+    if: inputs.mode == 'forward'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: tradelab-notice-fwd-state
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore state and read the parts
+        run: |
+          mkdir -p /tmp/nf /tmp/ingest
+          if git fetch origin data/notice-fwd 2>/dev/null; then
+            for f in state.json trades.jsonl notices.jsonl; do git show origin/data/notice-fwd:$f > /tmp/nf/$f 2>/dev/null || rm -f /tmp/nf/$f; done
+          fi
+          git fetch origin data/news-ingest && git archive origin/data/news-ingest | tar -x -C /tmp/ingest
+      - name: One step
+        run: python research/studies/notice_fwd.py forward /tmp/ingest /tmp/nf
+      - name: Push state to data/notice-fwd
+        if: always()
+        run: |
+          [ -f /tmp/nf/state.json ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          if git rev-parse --verify -q origin/data/notice-fwd; then
+            git checkout -q -B data/notice-fwd origin/data/notice-fwd
+          else
+            git checkout -q --orphan data/notice-fwd && git rm -rq --cached . && git clean -fdq
+          fi
+          for f in state.json trades.jsonl notices.jsonl summary.json counts.json; do cp /tmp/nf/$f . 2>/dev/null || true; done
+          git add -A
+          git commit -qm "Notice forward: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3; do git push -q origin data/notice-fwd && break; git fetch -q origin data/notice-fwd; git rebase -q origin/data/notice-fwd || git rebase --abort; done
