@@ -1,5 +1,5 @@
 {
- "polls": 41,
+ "polls": 42,
  "new_listings": 0,
  "gone": 0,
  "watching": 68,
@@ -7,7 +7,7 @@
   "kucoin": {
    "compared": 340,
    "collisions": 1,
-   "candidates": 1
+   "candidates": 3
   },
   "gate": {
    "compared": 387,
@@ -17,12 +17,12 @@
   "mexc": {
    "compared": 366,
    "collisions": 0,
-   "candidates": 3
+   "candidates": 2
   },
   "bitget": {
    "compared": 282,
    "collisions": 1,
-   "candidates": 0
+   "candidates": 1
   }
  },
  "errors": {
@@ -32,6 +32,6 @@
   "bitget": false,
   "binance": false
  },
- "f2_candidates": 4,
+ "f2_candidates": 6,
  "announcements_new": 0
 }
