@@ -20,7 +20,7 @@ from pathlib import Path
 from statistics import mean
 
 from . import ai_news, buzz, data, news, news_archive, sequential
-from . import desk_feeds
+from . import desk_feeds, desk_publish
 from . import desk_rules as dr
 from .engine import Account, Quote
 from .event_trader import STALE_S, VOL_MIN, _day
@@ -1842,7 +1842,8 @@ class LlmTrader:
                     "v4_19": {"rules_on": self.rules_on, "risk": dr.risk_status(self.risk, a.equity(), time.time()) if self.rules_on else None,
                               "entries_today": dr.entries_today(self.risk, time.time()),
                               "stale_feeds": (getattr(self, "_feed_health", None) or {}).get("stale"),
-                              "feed_errors": dict(self.feeds.errors) if self.feeds else None},
+                              "feed_errors": dict(self.feeds.errors) if self.feeds else None,
+                              "outcome_publish": desk_publish.view()},
                     "classes": {c: len(rows) for c, rows in ASSETS.items()},
                     "next_scan_in_s": max(0, round(IDLE_CALL_S - (time.time() - self.calls.get("last_idle", 0)))),
                     "positions": [self._pos_view(s, p, time.time()) for s, p in a.positions.items()],

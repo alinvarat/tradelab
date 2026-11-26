@@ -43,6 +43,7 @@ jobs:
               { [ "$m" = "17" ] || [ "$m" = "47" ]; } && run l4f_forward
               [ "$h:$m" = "15:00" ] && [ "$dow" -le 5 ] && run options_forward
               [ "$h:$m" = "03:00" ] && [ "$dow" = "7" ] && run llm_earnings_forward
+              [ "$h:$m" = "04:00" ] && [ "$dow" = "7" ] && { gh workflow run bot_weekly.yml -R "$R" --ref main && echo "$(date -u +%FT%TZ) dispatched bot_weekly" || echo "dispatch bot_weekly failed"; }
               case "$m" in 11|41) gh workflow run notice_fwd.yml -R "$R" --ref main -f mode=forward && echo "$(date -u +%FT%TZ) dispatched notice_fwd forward" || echo "dispatch notice_fwd failed";; esac
               case "$h:$m" in 03:30|07:30|11:30|15:30|19:30|23:30) gh workflow run fundwin_okx.yml -R "$R" --ref main -f mode=forward && echo "$(date -u +%FT%TZ) dispatched fundwin_okx forward" || echo "dispatch fundwin_okx failed";; esac
               [ "$h:$m" = "22:40" ] && [ "$dow" -le 5 ] && { gh workflow run news_train_r2.yml -R "$R" --ref main -f mode=fwd && echo "$(date -u +%FT%TZ) dispatched news_train_r2 fwd" || echo "dispatch news_train_r2 fwd failed"; }
