@@ -589,3 +589,10 @@ Both directions of `PLAN_20261126b_fable.md` (P1, P4) were run once, protocol lo
 
 ## Key-person events: 8-K Item 5.02 CEO / founder / chair (pre-registered 2026-11-26, before any filing was labelled or any price pulled; protocol `protocol_keyperson_20261126.md`)
 Code `core/keyperson.py`, `research/studies/keyperson.py`, workflow `keyperson.yml` (modes `events` = stage A, no prices; `run` = stage B). Point-in-time S&P 500, Haiku (`claude-haiku-5-5`) labels of the redacted Item 5.02 text, classes abrupt / planned / return / interim by a locked precedence; judged directions: abrupt short, return long; holds 1 / 5 / 20 sessions from the next open; raw and SPY-adjusted; random-date same-ticker control, reversed-side placebo, stage-0 gate, Holm. Results are added here after the runs.
+
+
+## News latency forward: fast Haiku on news (2026-11-26, protocol `protocol_news_latency_fwd_20261126.md`)
+Owner question: "Can't we just use fast Haiku, many in parallel, to trade news?" Measured forward: SEC 8-K atom, Binance/OKX announcements, 6 crypto RSS feeds, PR Newswire and GlobeNewswire; per item `t_pub`, `t_seen`, `t_llm` with Haiku direction/confidence, a live price at `t_llm + 5 s` and the 1-minute path from `t_pub - 5 min` to `t_pub + 61 min` (OKX perps, Yahoo 1-minute for stocks). Code `core/news_latency_fwd.py`, workflow `news_latency_fwd.yml` (run mode chains itself; `keeper.yml` restarts it), data on branch `data/news-latency-fwd` (`summary.json`).
+- **Probe (Actions 45754281422, 45754840324, before the protocol):** every candidate source answered from the runner except Business Wire (0 items, dropped); Yahoo 1-minute bars reachable (65 of 65 for AAPL in the last session). Timestamp resolution: SEC, Binance, OKX and the six crypto feeds second, GlobeNewswire minute, PR Newswire second field always `:00` (treated as minute). Binance and OKX announcements are slow feeds (newest items 1 to 33 days old).
+- **Results:** not yet; collection starts when the locked protocol is on `main`. Nothing is concluded below 100 trades per market.
+

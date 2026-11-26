@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "claude_parallel": 6,
+  "daily_cap": {"stock": 500, "crypto": 400},
+  "text_chars": 2500,
+  "min_pre_coverage": 3,
+  "large_move": 0.01,
+  "snap_max_age_s": 60,
+  "latest_entry_s": 3300,
+  "min_conf": 60,
+  "cost_rt": {"crypto": 0.0014, "stock": 0.002},
+  "min_trades": 100,
+  "min_days": 10,
+  "sources": [
+    {"name": "sec_8k", "kind": "sec_atom", "market": "stock", "poll_s": 10, "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=&dateb=&owner=include&start=0&count=100&output=atom"},
+    {"name": "prnewswire", "kind": "rss", "market": "stock", "poll_s": 30, "url": "https://www.prnewswire.com/rss/news-releases-list.rss"},
+    {"name": "prnewswire_fin", "kind": "rss", "market": "stock", "poll_s": 30, "url": "https://www.prnewswire.com/rss/financial-services-latest-news/financial-services-latest-news-list.rss"},
+    {"name": "globenewswire", "kind": "rss", "market": "stock", "poll_s": 30, "url": "https://www.globenewswire.com/RssFeed/orgclass/1/feedTitle/GlobeNewswire%20-%20News%20about%20Public%20Companies"},
+    {"name": "binance_listings", "kind": "binance", "market": "crypto", "poll_s": 15, "url": "https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&pageNo=1&pageSize=20&catalogId=48"},
+    {"name": "binance_news", "kind": "binance", "market": "crypto", "poll_s": 15, "url": "https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&pageNo=1&pageSize=20&catalogId=49"},
+    {"name": "binance_delist", "kind": "binance", "market": "crypto", "poll_s": 15, "url": "https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&pageNo=1&pageSize=20&catalogId=161"},
+    {"name": "okx_announcements", "kind": "okx_ann", "market": "crypto", "poll_s": 15, "url": "https://www.okx.com/api/v5/support/announcements"},
+    {"name": "coindesk", "kind": "rss", "market": "crypto", "poll_s": 30, "url": "https://www.coindesk.com/arc/outboundfeeds/rss/"},
+    {"name": "cointelegraph", "kind": "rss", "market": "crypto", "poll_s": 30, "url": "https://cointelegraph.com/rss"},
+    {"name": "decrypt", "kind": "rss", "market": "crypto", "poll_s": 30, "url": "https://decrypt.co/feed"},
+    {"name": "theblock", "kind": "rss", "market": "crypto", "poll_s": 30, "url": "https://www.theblock.co/rss.xml"},
+    {"name": "bitcoinmagazine", "kind": "rss", "market": "crypto", "poll_s": 30, "url": "https://bitcoinmagazine.com/feed"},
+    {"name": "cryptoslate", "kind": "rss", "market": "crypto", "poll_s": 30, "url": "https://cryptoslate.com/feed/"}
+  ]
+}
