@@ -1198,7 +1198,9 @@ class V419Rules(Base):
         self.go(self.market(AAA=quote("AAA", px=110, move=12)))
         c = self.t.cands[-1]
         self.t._outcome_row(dict(c, out={"3600": 0.01}), 3600)
-        rows = [json.loads(l) for l in (Path(self.tmp.name) / "desk_outcomes_v4.jsonl").read_text().splitlines()]
+        files = list((Path(self.tmp.name) / "desk_outcomes").glob("2*.jsonl"))
+        self.assertEqual(len(files), 1)
+        rows = [json.loads(l) for l in files[0].read_text().splitlines()]
         self.assertEqual((rows[0]["symbol"], rows[0]["h"], rows[0]["abn"], rows[0]["protocol"]), ("AAA", 3600, 0.01, lt.PROTOCOL_VERSION))
         self.assertEqual(rows[0]["em"], 3.0)
 

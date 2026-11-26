@@ -1041,7 +1041,9 @@ class LlmTrader:
                "abn": c["out"][str(h)], "veto": c.get("veto"), "forced": c.get("forced", False), "em": c.get("em"),
                "rv": c.get("rv"), "stale": c.get("stale", [])}
         try:
-            with self.log_path.with_name("desk_outcomes_v4.jsonl").open("a") as f:
+            d = self.log_path.with_name("desk_outcomes")          # one file per UTC day, so the publisher can ship whole days
+            d.mkdir(exist_ok=True)
+            with (d / (time.strftime("%Y%m%d", time.gmtime()) + ".jsonl")).open("a") as f:
                 f.write(json.dumps(row, separators=(",", ":")) + "\n")
         except OSError:
             pass

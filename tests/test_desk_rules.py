@@ -174,7 +174,7 @@ class Blocks(unittest.TestCase):
         self.assertEqual(sorted(h["stale"]), ["ledger:notice_fwd", "ledger:okx_funding_fwd", "okx", "sec_8k"])
 
     def test_flow_rates_state_the_negative_recent_result(self):
-        self.assertIn("-1.8%", dr.FLOW_RECENT_OOS)
+        self.assertIn("lost 1.8% per trade", dr.FLOW_RECENT_OOS)
         self.assertIn("48 trades", dr.FLOW_RECENT_OOS)
         self.assertTrue(any("mon_tag" in r for r in dr.FLOW_BASE_RATES))
 

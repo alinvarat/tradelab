@@ -7,7 +7,7 @@
 | ส่วน | โค้ด | รันที่ | รอบ | state / ผล | ตรวจด้วย |
 |---|---|---|---|---|---|
 | บอท DeepSeek (v4.4) | `core/llm_trader.py` | Kuber | สแกนตลอด, เรียกโมเดลเมื่อมีเหตุ | volume `/app/data/llm_trader_v4.json`, log `llm_trader_log_v4.jsonl` | `/api/llm_trader` (`protocol`, `usd_today`, `helper_models`) |
-| กติกาและอินพุตของบอท v4.19 (2026-11-27) | `core/desk_rules.py` (กติกาที่ล็อกต่อแท็ก, เบรกความเสี่ยง), `core/desk_feeds.py` (ข่าวเร็ว, summary ของ ledger จาก data branch, funding OKX) | Kuber | ทุกรอบสแกน; thread พื้นหลังรีเฟรช ledger ทุก 10 นาที, funding ทุก 5 นาที | `desk_outcomes_v4.jsonl` บน volume (หนึ่งแถวต่อ candidate ต่อ horizon) | `/api/llm_trader` คีย์ `v4_19` (`risk`, `stale_feeds`, `entries_today`), `evaluation.claude_v4_19`; `/api/llm_log` (`rule_veto`, `rule_reduce`) |
+| กติกาและอินพุตของบอท v4.19 (2026-11-27) | `core/desk_rules.py` (กติกาที่ล็อกต่อแท็ก, เบรกความเสี่ยง), `core/desk_feeds.py` (ข่าวเร็ว, summary ของ ledger จาก data branch, funding OKX) | Kuber | ทุกรอบสแกน; thread พื้นหลังรีเฟรช ledger ทุก 10 นาที, funding ทุก 5 นาที | `desk_outcomes/<วัน UTC>.jsonl` บน volume (หนึ่งแถวต่อ candidate ต่อ horizon) | `/api/llm_trader` คีย์ `v4_19` (`risk`, `stale_feeds`, `entries_today`), `evaluation.claude_v4_19`; `/api/llm_log` (`rule_veto`, `rule_reduce`) |
 | Event trader (กติกาเดิม) | `core/event_trader.py` | Kuber | 10 วิ | `event_trader.json` | `/api/events` |
 | บอทกติกาแบบกว้าง (broad-v1) | `core/event_trader_broad.py` | Kuber | 30 วิ | `event_trader_broad.json` | `/api/events_broad` |
 | ตัวเก็บข้อมูลตลาด + บัญชี L1b/L1d/L1f | `core/market_collect.py` | Kuber | venues 5 วิ, ประกาศ 30 วิ, Deribit 30 นาที | `/app/data/collect/` | `/api/collect` (`listings`, `l1b`, `l1d`, `l1f`) |
