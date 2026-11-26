@@ -1,0 +1,16 @@
+{
+ "stock": {
+  "version": "w3",
+  "prompt_sha256": "7759ce31162100226b9ddae57dded9cf63b89085886daad19b5a59b0a25cb9b8",
+  "rule": "highest clean-validation primary-cell (1h) score per offered item among versions with enough traded items (protocol_r2 selection rule); selection.json on data/news-train-r2, eval run 45789213718",
+  "validation": "stock 1h: w0 -0.0168%/116 trades, w1 +0.0192%/18 (ineligible), w2 -0.0114%/36, w3 +0.0210%/37",
+  "locked_utc": "2026-11-26"
+ },
+ "crypto": {
+  "version": "w1",
+  "prompt_sha256": "1f6d0d7d3ef30bf3ce2a0bbdf2d110869c9101ac2a14dbfbd0d75c1648811da0",
+  "rule": "highest clean-validation primary-cell (1h) score per offered item among versions with enough traded items (protocol_r2 selection rule); selection.json on data/news-train-r2, eval run 45789213718",
+  "validation": "crypto 1h: w0 -0.0525%/197, w1 -0.0429%/192, w2 -0.0284%/92 (ineligible), w3 -0.0107%/43 (ineligible)",
+  "locked_utc": "2026-11-26"
+ }
+}
