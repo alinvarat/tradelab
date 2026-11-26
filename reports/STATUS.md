@@ -3,6 +3,9 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-27 Q1 ตามกระเป๋า Polymarket/Hyperliquid)
+- **Q1 NOT FOUND (ตัดที่ด่าน stage 0):** รันหลัก 45866223489 (protocol `protocol_wallet_follow_20261127.md`): ranking ย้อนหลังแบบ point-in-time (top 50 จากกำไรจริง 180 วัน) ยังมี persistence เล็กน้อย (rho 0.10) แต่ตามช้า 60 วินาทีพร้อมต้นทุนแล้ว train n 5,552 mean -2.56% s -0.031 x -0.58 ไม่ชนะกระเป๋าสุ่ม (p 0.81); gross 1.6% ถูกต้นทุน 3.9% ต่อเทรดกินหมด. Hyperliquid ปิด (ไม่มี frame ย้อนหลัง, fill จำกัด 2,000). รายละเอียดใน RESULTS/LESSONS; ขั้นถัดไปตามแผน: Q2 (ประกาศแลกเปลี่ยน) และ Q3
+
 ## ด่วน (2026-11-27 บอท v4.19)
 - **v4.19 (branch `bot/v4.19-desk-evidence`):** เจ้าของสั่งปรับปรุงบอทบน Kuber ต่อเนื่อง (แทนการแช่แข็ง v4.18); กติกาแข็งจาก desk_stats จริง (analyst n=13 −4.96%, long 1d ติดลบ n=251/154/208, short 1d n=10 +1.85% ใช้เป็นแค่บริบท), เพดานความเสี่ยง (2% ต่อไม้, เลเวอเรจ ≤3, ≤3 ไม้, ≤3 เข้า/วัน), เบรก drawdown, bank 3x / halt 0.4x, ไม่ martingale ไม่เฉลี่ยขาลง, time exit 4 ชม., อินพุตข่าวเร็ว/ forced-flow/ funding/ ledger พร้อมเช็กความสด; รายละเอียดใน addendum 2026-11-27 ของ `research/llm_trader/protocol.md`; รอ CI + deploy + ตรวจ `/api/llm_trader` ผ่าน Chrome
 - ห่วงโซ่ปรับปรุงรายสัปดาห์ (PR แยก) ยังไม่ merge: งานสรุป desk_stats พร้อม shrinkage แล้วเปิด branch/PR ข้อเสนอแท็กถัดไป ไม่ merge เอง
