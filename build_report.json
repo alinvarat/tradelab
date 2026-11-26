@@ -1,0 +1,70 @@
+{
+ "stock": [
+  {
+   "candidates": 858,
+   "sec_failed": 0,
+   "r1_scored_excluded": 173,
+   "items": 633,
+   "labelled": 621,
+   "drops": {
+    "short_text": 1,
+    "no_bars": 12
+   },
+   "in_session_share": 0.05475040257648953
+  },
+  {
+   "candidates": 752,
+   "sec_failed": 0,
+   "r1_scored_excluded": 162,
+   "items": 590,
+   "labelled": 589,
+   "drops": {
+    "no_prior_bar": 1
+   },
+   "in_session_share": 0.035653650254668934
+  },
+  {
+   "candidates": 929,
+   "sec_failed": 0,
+   "r1_scored_excluded": 181,
+   "items": 641,
+   "labelled": 641,
+   "drops": {},
+   "in_session_share": 0.0499219968798752
+  },
+  {
+   "candidates": 785,
+   "sec_failed": 0,
+   "r1_scored_excluded": 175,
+   "items": 610,
+   "labelled": 609,
+   "drops": {
+    "no_prior_bar": 1
+   },
+   "in_session_share": 0.04597701149425287
+  }
+ ],
+ "crypto": {
+  "raw_rows": 44517,
+  "after_dedupe_cap": 10428,
+  "by_split_pool": {
+   "train": 4362,
+   "validation": 2950,
+   "sealed_hist": 3116
+  },
+  "picked": {
+   "train": 1500,
+   "validation": 1500,
+   "sealed_hist": 2500
+  },
+  "drops": {},
+  "dev_labelled": 3000,
+  "sealed_items": 2500
+ },
+ "final": {
+  "stock_train": 1200,
+  "stock_validation": 796,
+  "crypto_train": 1500,
+  "crypto_validation": 1500
+ }
+}
