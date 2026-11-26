@@ -1,0 +1,4 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17623","title":"Binance Perp Monitor: BULLAUSDT (BULLA) +5.1% in the past 10 seconds","t_pub":1795729515.201,"res":"s","t_seen":1795729518.338992,"lat_s":3.138}
+{"event":"llm","source":"eqn_rest","key":"eqn:17623","t_pub":1795729515.201,"t_seen":1795729518.338992,"t_llm":1795729524.1236825,"llm_s":5.785,"model":"claude/claude-haiku-5-5","parsed":{"direction":"up","confidence":40,"instrument":"BULLA"}}
+{"event":"item","source":"eqn_rest","key":"eqn:17624","title":"Binance Perp Monitor: AKEUSDT (AKE) +5.5% in the past 10 seconds","t_pub":1795729692.05,"res":"s","t_seen":1795729696.8767042,"lat_s":4.827}
+{"event":"llm","source":"eqn_rest","key":"eqn:17624","t_pub":1795729692.05,"t_seen":1795729696.8767042,"t_llm":1795729702.6630092,"llm_s":5.786,"model":"claude/claude-haiku-5-5","parsed":{"direction":"up","confidence":55,"instrument":"AKE"}}
