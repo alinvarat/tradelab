@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "seed": 20261126,
+  "model": "claude-haiku-5-5",
+  "max_versions": 8,
+  "dates": {
+    "dev_start": "2018-01-01",
+    "train_end": "2025-01-01",
+    "dev_end": "2026-07-01",
+    "sealed_from": "2026-08-01",
+    "burn_from": "2026-10-17",
+    "burn_to": "2026-11-24",
+    "sealed_stock_to": "2026-10-17"
+  },
+  "sample": {"stock_train": 1200, "stock_validation": 1200},
+  "stock_items": ["1.01", "1.02", "2.01", "2.02", "2.05", "2.06", "3.01", "4.02", "5.02", "7.01", "8.01"],
+  "entry": {"lag_s": 93, "lag_sens": [60, 300], "extra_s": 5, "stale_s": 300, "session_s": 23400},
+  "holds": {"5m": 300, "1h": 3600, "1d": 86400},
+  "cost": {"stock_side": 0.0009, "stock_short_borrow_session": 0.0002, "crypto_rt": 0.004},
+  "min_conf": 0,
+  "primary": {"market": "stock", "hold": "1d"},
+  "bootstrap": {"n": 2000, "alpha": 0.05},
+  "done": {"min_traded": 100, "baselines": 3},
+  "analogs": {"k": 5, "text_chars": 220},
+  "text_chars": 3000,
+  "leak": {"days_per_month": 12, "first_month": "2024-01", "last_month": "2026-11", "assets": ["^GSPC", "BTC-USD"]},
+  "keyword": {
+    "pos": ["beat", "beats", "raises", "raised", "record", "approval", "approved", "partnership", "acquire", "acquires", "acquisition of", "buyback", "repurchase", "dividend increase", "upgrade", "wins", "awarded", "contract", "listing", "listed", "will list", "gets listed", "launch", "launches", "positive", "exceeds", "strong", "growth"],
+    "neg": ["miss", "misses", "lowers", "lowered", "cuts", "cut", "resign", "resigns", "resignation", "terminate", "terminated", "termination", "delist", "delisting", "remove", "removal", "investigation", "subpoena", "downgrade", "bankruptcy", "chapter 11", "going concern", "restatement", "non-reliance", "default", "impairment", "layoff", "layoffs", "recall", "lawsuit", "warning", "suspend", "suspends", "monitoring tag", "decline"]
+  }
+}

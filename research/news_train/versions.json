@@ -1,0 +1,28 @@
+{
+ "versions": [
+  {
+   "id": "v0",
+   "prompt": "prompts/v0.txt",
+   "uses_pre": false,
+   "analogs": 0,
+   "note": "floor: plain reader",
+   "sha256": "332e71306bd86a6f4347680031440dc49e24aee2ab56b8a62adbfbd4276143b6"
+  },
+  {
+   "id": "v1",
+   "prompt": "prompts/v1.txt",
+   "uses_pre": true,
+   "analogs": 0,
+   "note": "rubric + already-priced input",
+   "sha256": "642a6e256516e7b389485073f91405bbfe3e30feb7888dba493916edac4a5d37"
+  },
+  {
+   "id": "v2",
+   "prompt": "prompts/v2.txt",
+   "uses_pre": true,
+   "analogs": 5,
+   "note": "v1 rubric + k=5 analogs closed before t_pub",
+   "sha256": "4e3e5fe112a15598dc8dffa440ecad36668ea4c5f3d13ee95999b1a12af3a63d"
+  }
+ ]
+}
