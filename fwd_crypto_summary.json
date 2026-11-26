@@ -2,10 +2,10 @@
  "protocol": "research/studies/protocol_fwd_crypto_spikes_20261125.md",
  "start_ts": 1795564800.0,
  "gap_hours_missed": 0,
- "h_next": 1795669200.0,
+ "h_next": 1795672800.0,
  "d_next": 1795651200.0,
  "last_run": {
-  "run_at": 1795669526,
+  "run_at": 1795673122,
   "universe": {
    "spot_usdt": 521,
    "with_okx_perp": 206
@@ -16,7 +16,7 @@
    "candidates": 0,
    "events": 0,
    "opened": 0,
-   "pool": 44,
+   "pool": 45,
    "failed_symbols": 0
   },
   "L8B_F": {
