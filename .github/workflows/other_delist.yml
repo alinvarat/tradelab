@@ -1,0 +1,56 @@
+name: Other delist
+
+# Other exchanges' own spot delist notices (protocol_other_spot_delist_20261127.md). Modes: notices (counts only, no prices).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "notices"
+        required: true
+        default: "notices"
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: |
+          git fetch origin data/forced-flow
+          git show origin/data/forced-flow:events/latest.json > /tmp/frozen_events.json
+      - run: python -u research/studies/other_delist.py out ${{ inputs.mode }} /tmp/frozen_events.json
+        timeout-minutes: 40
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: other-delist-${{ inputs.mode }}
+          path: out/
+      - name: Keep on data/other-delist
+        if: always()
+        run: |
+          [ -d out ] && [ "$(ls out)" ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          for i in 1 2 3 4 5 6; do
+            if git fetch origin data/other-delist 2>/dev/null; then
+              git checkout -q -B data/other-delist origin/data/other-delist
+            else
+              git checkout -q --orphan data/other-delist && git rm -rq --cached . && git clean -fdq
+            fi
+            d=${{ inputs.mode }}; mkdir -p $d && cp /tmp/keep/* $d/
+            git add -A $d
+            git commit -qm "other delist ${{ inputs.mode }}: $(date -u +%FT%TZ)" || break
+            git push -q origin data/other-delist && break
+            sleep $((RANDOM % 8 + 2))
+          done
