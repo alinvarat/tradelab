@@ -1,0 +1,65 @@
+{
+ "t": "2026-11-26T22:31:35.146524+00:00",
+ "snaps": 666,
+ "trades": 47230,
+ "days": 0,
+ "verdict": "collecting",
+ "results": {
+  "reward|base": {
+   "days": 0,
+   "reward_mean": null,
+   "fill_mean": null,
+   "net_mean": null,
+   "net_se": null,
+   "net_p": null,
+   "monthly_net": null,
+   "end_equity": 1.0,
+   "worst_dd": 0.0,
+   "fills": 0,
+   "capital": 1146.75,
+   "markets": 50
+  },
+  "reward|haircut_x2": {
+   "days": 0,
+   "reward_mean": null,
+   "fill_mean": null,
+   "net_mean": null,
+   "net_se": null,
+   "net_p": null,
+   "monthly_net": null,
+   "end_equity": 1.0,
+   "worst_dd": 0.0,
+   "fills": 0,
+   "capital": 1146.75,
+   "markets": 50
+  },
+  "reward|zero_reward": {
+   "days": 0,
+   "reward_mean": null,
+   "fill_mean": null,
+   "net_mean": null,
+   "net_se": null,
+   "net_p": null,
+   "monthly_net": null,
+   "end_equity": 1.0,
+   "worst_dd": 0.0,
+   "fills": 0,
+   "capital": 1146.75,
+   "markets": 50
+  },
+  "control|base": {
+   "days": 0,
+   "reward_mean": null,
+   "fill_mean": null,
+   "net_mean": null,
+   "net_se": null,
+   "net_p": null,
+   "monthly_net": null,
+   "end_equity": 1.0,
+   "worst_dd": 0.0,
+   "fills": 0,
+   "capital": 95.5,
+   "markets": 5
+  }
+ }
+}
