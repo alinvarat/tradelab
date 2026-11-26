@@ -4156,3 +4156,4 @@
 {"kind": "snap", "t": 1795666990.791239, "venue": "mexc", "base": "JIMMY", "age_h": 21.93, "bid": 0.000745, "ask": 0.000759, "bid_sz": 19770.42, "ask_sz": 197368.42, "vol24": 0.0, "spread": 0.01879}
 {"kind": "snap", "t": 1795670592.0229735, "venue": "mexc", "base": "JIMMY", "age_h": 22.93, "bid": 0.000774, "ask": 0.000795, "bid_sz": 1421.19, "ask_sz": 8315.4, "vol24": 0.0, "spread": 0.02713}
 {"kind": "snap", "t": 1795674198.153634, "venue": "mexc", "base": "JIMMY", "age_h": 23.94, "bid": 0.000712, "ask": 0.000736, "bid_sz": 10688.89, "ask_sz": 10651.18, "vol24": 0.0, "spread": 0.03371}
+{"kind": "snap", "t": 1795677790.8732662, "venue": "mexc", "base": "JIMMY", "age_h": 24.93, "bid": 0.000778, "ask": 0.000784, "bid_sz": 128389.51, "ask_sz": 7668.1, "vol24": 0.0, "spread": 0.00771}
