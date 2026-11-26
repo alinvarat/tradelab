@@ -173,6 +173,14 @@ def probe(out_dir):
     p["yahoo_aapl_bars_65m"] = len(yb)
     p["yahoo_aapl_last_bar_age_s"] = round(now - yb[-1][0]) if yb else None
     p["yahoo_snapshot"] = snapshot("stock", "AAPL")
+    day = int(now // 86400) * 86400
+    for back in range(1, 6):                       # last weekday session (15:00-16:05 UTC is inside US trading hours all year)
+        t0 = day - back * 86400 + 15 * 3600
+        if time.gmtime(t0).tm_wday < 5:
+            hb = yahoo_bars("AAPL", t0, t0 + 3900)
+            p["yahoo_aapl_prev_session_bars_65m"] = len(hb)
+            p["yahoo_aapl_prev_session_start"] = t0
+            break
     st, body, _, _ = http(SEC_TICKERS, 20, SEC_UA)
     p["sec_ticker_map"] = len(nl.cik_ticker_map(json.loads(body))) if st == 200 else f"HTTP {st}"
     st, _, t_rx, hdr = http("https://www.okx.com/api/v5/public/time", 8)
