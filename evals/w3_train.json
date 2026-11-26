@@ -1,0 +1,305 @@
+{
+ "version": "w3",
+ "set": "train",
+ "sha256": "7759ce31162100226b9ddae57dded9cf63b89085886daad19b5a59b0a25cb9b8",
+ "theta": {
+  "stock": {
+   "1h": 0.5,
+   "eod": 0.75
+  },
+  "crypto": {
+   "5m": null,
+   "1h": 0,
+   "1d": 0.5
+  }
+ },
+ "failed_replies": 0,
+ "missing_replies": 0,
+ "cells": [
+  {
+   "market": "stock",
+   "hold": "1h",
+   "lag": "main",
+   "n_offered": 1168,
+   "n_traded": 52,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 32,
+    "no_reply": 0
+   },
+   "hit_rate": 0.4807692307692308,
+   "score_per_offered": -0.00019478467715862777,
+   "mean_per_trade": -0.00437516351771687,
+   "mean_per_trade_2x": -0.00624515627961734,
+   "vs_abstain": {
+    "n": 1168,
+    "days": 87,
+    "mean": -0.0001947846771586278,
+    "lo": -0.00047298211164415556,
+    "hi": 3.979977374337887e-05,
+    "p": 0.949
+   },
+   "vs_random": {
+    "n": 1168,
+    "days": 87,
+    "mean": -0.00011023169770657011,
+    "lo": -0.0003485166904049402,
+    "hi": 0.00011680258384382188,
+    "p": 0.81
+   },
+   "vs_keyword": {
+    "n": 1168,
+    "days": 87,
+    "mean": -0.00047924503710407686,
+    "lo": -0.0015041567594389314,
+    "hi": 0.0005275695966751209,
+    "p": 0.827
+   },
+   "vs_random_2x": {
+    "n": 1168,
+    "days": 87,
+    "mean": -0.00010900394395556207,
+    "lo": -0.0003688378542549633,
+    "hi": 0.00012723530040390201,
+    "p": 0.8025
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": -8.455297945205763e-05,
+    "keyword_per_offered": 0.0002844603599454491,
+    "keyword_traded": 667,
+    "long_all_per_offered": -0.0015896809373214004,
+    "long_on_traded_per_offered": -0.0001403311834104134,
+    "short_on_traded_per_offered": -2.8774775493701874e-05
+   }
+  },
+  {
+   "market": "stock",
+   "hold": "eod",
+   "lag": "main",
+   "n_offered": 1200,
+   "n_traded": 68,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": 0.6176470588235294,
+   "score_per_offered": 0.00021017276532923527,
+   "mean_per_trade": 0.0037089311528688577,
+   "mean_per_trade_2x": 0.0018071549381603854,
+   "vs_abstain": {
+    "n": 1200,
+    "days": 87,
+    "mean": 0.00021017276532923521,
+    "lo": -0.00042414333627418356,
+    "hi": 0.0008055006926315921,
+    "p": 0.26
+   },
+   "vs_random": {
+    "n": 1200,
+    "days": 87,
+    "mean": 0.0003177935319959054,
+    "lo": -0.0002962728266927085,
+    "hi": 0.0009174505669652873,
+    "p": 0.15
+   },
+   "vs_keyword": {
+    "n": 1200,
+    "days": 87,
+    "mean": -0.00046020809320809265,
+    "lo": -0.0016191250608906386,
+    "hi": 0.0007771752497161779,
+    "p": 0.778
+   },
+   "vs_random_2x": {
+    "n": 1200,
+    "days": 87,
+    "mean": 0.00031755517982909385,
+    "lo": -0.0003007093813003023,
+    "hi": 0.0009632067484988645,
+    "p": 0.143
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": -0.00010762076666667013,
+    "keyword_per_offered": 0.000670380858537328,
+    "keyword_traded": 667,
+    "long_all_per_offered": -0.000810010472496647,
+    "long_on_traded_per_offered": 2.8771708706952783e-05,
+    "short_on_traded_per_offered": -0.00024401324204029304
+   }
+  },
+  {
+   "market": "crypto",
+   "hold": "5m",
+   "lag": "main",
+   "n_offered": 1500,
+   "n_traded": 0,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": null,
+   "score_per_offered": 0.0,
+   "mean_per_trade": null,
+   "mean_per_trade_2x": null,
+   "vs_abstain": {
+    "n": 1500,
+    "days": 121,
+    "mean": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_random": {
+    "n": 1500,
+    "days": 121,
+    "mean": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_keyword": {
+    "n": 1500,
+    "days": 121,
+    "mean": 0.00038684626657219237,
+    "lo": 0.00031989317781901046,
+    "hi": 0.0004557573880042163,
+    "p": 0.0
+   },
+   "vs_random_2x": {
+    "n": 1500,
+    "days": 121,
+    "mean": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": 0.0,
+    "keyword_per_offered": -0.00038684626657219237,
+    "keyword_traded": 155,
+    "long_all_per_offered": -0.003943014821067272,
+    "long_on_traded_per_offered": 0.0,
+    "short_on_traded_per_offered": 0.0
+   }
+  },
+  {
+   "market": "crypto",
+   "hold": "1h",
+   "lag": "main",
+   "n_offered": 1500,
+   "n_traded": 67,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": 0.582089552238806,
+   "score_per_offered": -0.000146758615258685,
+   "mean_per_trade": -0.003285640640119813,
+   "mean_per_trade_2x": -0.00727648491898536,
+   "vs_abstain": {
+    "n": 1500,
+    "days": 121,
+    "mean": -0.000146758615258685,
+    "lo": -0.00022434317567194797,
+    "hi": -7.65976952117142e-05,
+    "p": 1.0
+   },
+   "vs_random": {
+    "n": 1500,
+    "days": 121,
+    "mean": 3.172938474131518e-05,
+    "lo": -2.6377963984866495e-05,
+    "hi": 9.489122966453337e-05,
+    "p": 0.1475
+   },
+   "vs_keyword": {
+    "n": 1500,
+    "days": 121,
+    "mean": 0.0002573135769142107,
+    "lo": 0.00011586119103622117,
+    "hi": 0.0004005544573320413,
+    "p": 0.0
+   },
+   "vs_random_2x": {
+    "n": 1500,
+    "days": 121,
+    "mean": 3.160234028532024e-05,
+    "lo": -3.068824486023355e-05,
+    "hi": 9.145870855254874e-05,
+    "p": 0.1595
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": -0.00017848800000000017,
+    "keyword_per_offered": -0.00040407219217289566,
+    "keyword_traded": 155,
+    "long_all_per_offered": -0.003930809573616514,
+    "long_on_traded_per_offered": -0.00016134855038638665,
+    "short_on_traded_per_offered": -0.00019562744961361368
+   }
+  },
+  {
+   "market": "crypto",
+   "hold": "1d",
+   "lag": "main",
+   "n_offered": 1500,
+   "n_traded": 133,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": 0.5714285714285714,
+   "score_per_offered": -0.0001348254387388632,
+   "mean_per_trade": -0.0015205876549495851,
+   "mean_per_trade_2x": -0.0055184992059393876,
+   "vs_abstain": {
+    "n": 1500,
+    "days": 121,
+    "mean": -0.0001348254387388632,
+    "lo": -0.0006338941454763787,
+    "hi": 0.0003484118934964967,
+    "p": 0.702
+   },
+   "vs_random": {
+    "n": 1500,
+    "days": 121,
+    "mean": 0.00021948656126113652,
+    "lo": -0.0002956435978160405,
+    "hi": 0.0007023455258410268,
+    "p": 0.197
+   },
+   "vs_keyword": {
+    "n": 1500,
+    "days": 121,
+    "mean": 0.00042218781682510856,
+    "lo": -0.0005677378714376273,
+    "hi": 0.0013781639632370968,
+    "p": 0.196
+   },
+   "vs_random_2x": {
+    "n": 1500,
+    "days": 121,
+    "mean": 0.00021860773707337323,
+    "lo": -0.0002881047938203482,
+    "hi": 0.0006805020997039907,
+    "p": 0.1855
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": -0.00035431199999999975,
+    "keyword_per_offered": -0.0005570132555639718,
+    "keyword_traded": 155,
+    "long_all_per_offered": -0.006888041526808145,
+    "long_on_traded_per_offered": -0.0003635232021769551,
+    "short_on_traded_per_offered": -0.0003451007978230443
+   }
+  }
+ ]
+}

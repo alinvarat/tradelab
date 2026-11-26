@@ -1,0 +1,65 @@
+{
+ "lock": {
+  "stock": "w3",
+  "crypto": "w1"
+ },
+ "k_versions": 4,
+ "validation_primary": {
+  "w3": {
+   "stock": {
+    "n_offered": 788,
+    "n_traded": 37,
+    "score_per_offered": 0.00021001494184013012,
+    "mean_per_trade": 0.004472750653243852
+   },
+   "crypto": {
+    "n_offered": 1500,
+    "n_traded": 43,
+    "score_per_offered": -0.00010654982692395036,
+    "mean_per_trade": -0.0037168544275796634
+   }
+  },
+  "w2": {
+   "stock": {
+    "n_offered": 788,
+    "n_traded": 36,
+    "score_per_offered": -0.00011432871870994528,
+    "mean_per_trade": -0.0025025286206510245
+   },
+   "crypto": {
+    "n_offered": 1500,
+    "n_traded": 92,
+    "score_per_offered": -0.000283511227096711,
+    "mean_per_trade": -0.004622465659185505
+   }
+  },
+  "w1": {
+   "stock": {
+    "n_offered": 788,
+    "n_traded": 18,
+    "score_per_offered": 0.00019203625483522546,
+    "mean_per_trade": 0.008406920489453204
+   },
+   "crypto": {
+    "n_offered": 1500,
+    "n_traded": 192,
+    "score_per_offered": -0.00042924568464847363,
+    "mean_per_trade": -0.0033534819113162
+   }
+  },
+  "w0": {
+   "stock": {
+    "n_offered": 788,
+    "n_traded": 116,
+    "score_per_offered": -0.00016789582966412298,
+    "mean_per_trade": -0.0011405337394424905
+   },
+   "crypto": {
+    "n_offered": 1500,
+    "n_traded": 197,
+    "score_per_offered": -0.0005253958851420674,
+    "mean_per_trade": -0.0040004762828076195
+   }
+  }
+ }
+}
