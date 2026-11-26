@@ -195,7 +195,8 @@ jobs:
           git fetch origin data/forced-flow data/l1f-venues
           git show origin/data/forced-flow:events/latest.json > /tmp/frozen_events.json
           git show origin/data/l1f-venues:probe/probe.json > /tmp/probe.json
-      - run: python -u research/studies/l1f_venues.py out price /tmp/frozen_events.json /tmp/probe.json
+          git show origin/data/l1f-venues:archive/archive_probe.json > /tmp/archive.json
+      - run: python -u research/studies/l1f_venues.py out price /tmp/frozen_events.json /tmp/probe.json /tmp/archive.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

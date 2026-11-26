@@ -80,9 +80,15 @@ def summarize(rows, label):
     return res
 
 
-def run(out, events_path, probe_path):
+def run(out, events_path, probe_path, archive_path=None):
     t_start = time.time()
     doc = json.load(open(probe_path))
+    if archive_path and os.path.exists(archive_path):          # Bybit: the API is blocked, a trade-archive file at the notice date means the perp traded
+        arch = {(r["sym"], int(r["ts"])): r for r in json.load(open(archive_path))["rows"]}
+        for r in doc["rows"]:
+            a = arch.get((r["sym"], int(r["ts"])))
+            if a and a["status"].get("bybit_trades") == 200:
+                r["venues"]["bybit"]["shortable"] = True
     prow = {(r["sym"], int(r["ts"])): r for r in doc["rows"]}
     evs = [e for e in json.load(open(events_path))["l1f"] if (e["sym"], int(e["ts"])) in prow]
     jobs = []
@@ -91,7 +97,15 @@ def run(out, events_path, probe_path):
         want = [v for v in V.VENUES if vs[v]["shortable"]] + ["binance_spot"]
         jobs.append((e, want))
     with ThreadPoolExecutor(4) as ex:
-        priced = list(ex.map(lambda j: price_event(*j), jobs))
+        def safe(j):
+            try:
+                r = price_event(*j)
+            except Exception as x:  # noqa: BLE001
+                V.ERR["price_exc:" + type(x).__name__] = V.ERR.get("price_exc:" + type(x).__name__, 0) + 1
+                r = {v: None for v in j[1]}
+            print("priced", j[0]["sym"], {k: bool(v) for k, v in r.items()}, flush=True)
+            return r
+        priced = list(ex.map(safe, jobs))
     by_event = [(e, p) for (e, _), p in zip(jobs, priced)]
     with gzip.open(os.path.join(out, "rows.jsonl.gz"), "wt", encoding="utf-8") as f:
         for e, p in by_event:
