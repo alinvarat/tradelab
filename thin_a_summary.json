@@ -1,5 +1,5 @@
 {
- "polls": 36,
+ "polls": 37,
  "new_listings": 0,
  "gone": 0,
  "watching": 68,
@@ -17,7 +17,7 @@
   "mexc": {
    "compared": 366,
    "collisions": 0,
-   "candidates": 4
+   "candidates": 3
   },
   "bitget": {
    "compared": 282,
@@ -32,6 +32,6 @@
   "bitget": false,
   "binance": false
  },
- "f2_candidates": 6,
+ "f2_candidates": 5,
  "announcements_new": 0
 }
