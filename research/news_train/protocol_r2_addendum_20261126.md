@@ -1,0 +1,5 @@
+# Round 2 addendum 2026-11-26 (after the GDELT probe, run 45785878441; before any GDELT corpus row was kept, any bar, label or Haiku reply)
+
+Supersedes one parameter of `params_r2.json`; everything else in `protocol_r2_20261126.md` stands. New parameters: `params_r2_v2.json` (sha256 d70a5e48e6d1d8f747e8f372d5205773299127bc9eafb4a1291455c130c9a88b), loaded by `logic_r2.py`.
+
+Probe (one day, 2026-03-01, all 96 GKG files, no outcome data): all 96 files reachable from Actions, 290 MB in 10.5 s, 66,338 titled rows, 73 coin headlines (68 after dedupe) from all files but only 9 from the hourly (stride 4) subset. The hourly sample would give about 2,000 items for the clean window, too few. **`gdelt.stride` changes from 4 to 1 (every 15-minute file).** The probe also reached files of 2025-12-01, 2026-08-01 and 2026-11-24. Sample sizes, caps, filters, splits, labels, versions, selection and the sealed design are unchanged; with about 68 items a day the pool is about 8,000 per period, so the registered samples (1,500 / 1,500 / 2,500) bind.

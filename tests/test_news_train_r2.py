@@ -40,6 +40,15 @@ class Lock(unittest.TestCase):
                          "protocol_r2 is locked; write a new dated addendum")
         self.assertIn(hashlib.sha256((ROOT / "params_r2.json").read_bytes()).hexdigest(), add.read_text())
 
+    def test_addendum1_and_params_v2(self):
+        add = ROOT / "protocol_r2_addendum_20261126.md"
+        self.assertEqual(hashlib.sha256(add.read_bytes()).hexdigest(), add.with_suffix(".sha256").read_text().strip())
+        self.assertIn(hashlib.sha256((ROOT / "params_r2_v2.json").read_bytes()).hexdigest(), add.read_text())
+        v1 = json.loads((ROOT / "params_r2.json").read_text())
+        self.assertEqual(P["gdelt"]["stride"], 1)
+        for k in ("cost", "entry", "select", "sample", "dates", "primary", "done"):
+            self.assertEqual(v1[k], P[k])
+
     def test_round1_files_untouched(self):
         proto = ROOT / "protocol.md"
         self.assertEqual(hashlib.sha256(proto.read_bytes()).hexdigest(), (ROOT / "protocol.sha256").read_text().strip())

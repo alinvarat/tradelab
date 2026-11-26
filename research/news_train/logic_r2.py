@@ -16,7 +16,7 @@ from zoneinfo import ZoneInfo
 from research.news_train import logic as L
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PARAMS_PATH = os.path.join(HERE, "params_r2.json")
+PARAMS_PATH = os.path.join(HERE, "params_r2_v2.json")
 VERSIONS_PATH = os.path.join(HERE, "versions_r2.json")
 NY = ZoneInfo("America/New_York")
 LAB = "main"                      # label key (one entry convention per item in round 2)
