@@ -3,6 +3,9 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-26 news_train รอบ 3)
+- **Round 3 (PR #247-#252):** Track A (ขนาดการเคลื่อนไหว 1 ชม.) หุ้น sealed ก.ค. n 518: partial rho beyond vol 0.145 ผ่าน T1/T2 แต่แพ้ pre-entry move (T3) จึง "not met"; คริปโตไม่ผ่านเกณฑ์เลือก (sealed ไม่เปิด). Track B2 (ข่าวคริปโตเกาหลี/จีน GDELT) sealed n 248 เทรด -0.36% ต่อไม้ not met. B1 (GlobeNewswire/PR Newswire) ดึงจาก Actions ไม่ได้. รายละเอียด RESULTS.md หัวข้อ ROUND 3
+
 ## ด่วน (2026-11-25 line/indicators-1)
 - **indicators_1 (PR #185):** อินดิเคเตอร์คลาสสิก 8 ตัวบน perp/ทอง/FX ไม่ผ่านทั้ง 54 cell (0 ผ่าน, 51 ล้ม, 3 invalid เพราะ validation < 30 รายการ); run 45558036802; ไม่ใช่ทางไปสู่ 3 เท่าต่อเดือน
 
