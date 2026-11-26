@@ -136,6 +136,7 @@ def put_part(transport, cfg, path, data, message, sleep=time.sleep):
     st, raw = call(transport, "PUT", f"{API}/repos/{cfg['repo']}/contents/{path}", cfg["token"],
                    {"message": message, "content": base64.b64encode(data).decode(), "branch": cfg["branch"],
                     "committer": COMMITTER, "author": COMMITTER}, sleep=sleep)
+    put_part.last_status = st               # surfaced in the publish error: 403 = token lacks Contents write
     if st in (200, 201):
         return "ok"
     if st == 422 and b"sha" in (raw or b""):         # "sha wasn't supplied": the file is already there
@@ -210,7 +211,7 @@ def cycle(dirpath, transport=http, env=None, sleep=time.sleep):
                 n = data.count(b"\n")
                 r = put_part(transport, cfg, part_path(day, start, end), data, f"news-ingest {day} +{n} rows", sleep)
                 if r == "fail":
-                    raise RuntimeError("upload failed for " + part_path(day, start, end))
+                    raise RuntimeError(f"upload failed (PUT HTTP {getattr(put_part, 'last_status', '?')}) for " + part_path(day, start, end))
                 cursor[day] = end
                 write_cursor(dirpath, cursor)
                 res["parts"] += 1
