@@ -75,23 +75,29 @@ def stock_items():
             stats["sec_failed"] += 1
             log("  sec failed", s, e)
             continue
+        try:
+            sic = kpr.sec_get_json(f"https://data.sec.gov/submissions/CIK{ciks[s]:010d}.json").get("sicDescription") or "unknown"
+        except Exception:  # noqa: BLE001
+            sic = "unknown"
         for x in filings:
             if x["form"] != "8-K" or not x["doc"] or not (t_lo <= x["ts"] < t_hi):
                 continue
             sp = L.split_of(x["ts"], P)
-            if sp not in ("train", "validation", "sealed"):
+            if sp not in ("contam", "train", "validation", "sealed"):
+                continue
+            if sp == "contam" and x["ts"] < L.day_ts(P["dates"]["contam_from"]):
                 continue
             if x["items"] and not (set(x["items"]) & allowed):
                 continue
             if not member(s, fu.ny_date(x["ts"])):
                 continue
             cand.append({"sym": s, "cik": ciks[s], "ts": x["ts"], "acc": x["accession"], "doc": x["doc"], "items": x["items"],
-                         "split": sp, "issuer": issuer})
+                         "split": sp, "issuer": issuer, "sic": sic})
         if n % 100 == 0:
             log(f"  filings {n}/{len(keep)} candidates {len(cand)}")
-    stats["candidates"] = {sp: sum(1 for c in cand if c["split"] == sp) for sp in ("train", "validation", "sealed")}
+    stats["candidates"] = {sp: sum(1 for c in cand if c["split"] == sp) for sp in ("contam", "train", "validation", "sealed")}
     pick = []
-    for sp in ("train", "validation"):
+    for sp in ("contam", "train", "validation"):
         pool = sorted((c for c in cand if c["split"] == sp), key=lambda c: L.unit(f"{P['seed']}:{c['acc']}"))
         pick += pool[:P["sample"]["stock_" + sp]]
     pick += [c for c in cand if c["split"] == "sealed"]
@@ -120,7 +126,7 @@ def filing_text(c):
         body = body[m.start():] if m else body
     body = body[:P["text_chars"] + 500]
     text = L.scrub_dates(kp.redact(body, c["issuer"], c["sym"]))[:P["text_chars"]]
-    return text, kind
+    return text, kind, body[:P["text_chars"]]
 
 
 def build_stock(out):
@@ -130,7 +136,7 @@ def build_stock(out):
     items, failed = [], 0
     for k, c in enumerate(pick):
         try:
-            text, kind = filing_text(c)
+            text, kind, named = filing_text(c)
         except Exception as e:  # noqa: BLE001
             failed += 1
             log("  text failed", c["acc"], e)
@@ -139,11 +145,13 @@ def build_stock(out):
             failed += 1
             continue
         items.append({"key": "sec:" + c["acc"], "market": "stock", "src": "sec_8k", "t_pub": c["ts"], "sym": c["sym"],
-                      "split": c["split"], "items": c["items"], "text": text, "text_kind": kind})
+                      "split": c["split"], "items": c["items"], "text": text, "text_kind": kind,
+                      "text_named": named, "descr": f"Issuer: a large US-listed company (sector: {c['sic']}).",
+                      "named_header": f"Issuer: {c['issuer'][0] if c['issuer'] else c['sym']} ({c['sym']}). Filed: {L.day_of(c['ts'])}."})
         if k % 200 == 0:
             log(f"  text {k}/{len(pick)} ok {len(items)} failed {failed}")
     stats["text_failed"] = failed
-    dev = [i for i in items if i["split"] in ("train", "validation")]
+    dev = [i for i in items if i["split"] in ("contam", "train", "validation")]
     sealed = [i for i in items if i["split"] == "sealed"]
     # labels for DEV items only
     p1, p2 = calendar.timegm((2017, 12, 1, 0, 0, 0)), calendar.timegm((2026, 8, 1, 0, 0, 0))
@@ -218,11 +226,13 @@ def build_crypto(out):
     for e in events:
         sp = L.split_of(e["ts"], P)
         stats["by_split"][sp] = stats["by_split"].get(sp, 0) + 1
-        if sp in ("train", "validation", "sealed"):
+        if sp in ("contam", "train", "validation", "sealed"):
             todo.append((e, sp))
     for n, (e, sp) in enumerate(todo):
         it = {"key": f"ntc:{e['src']}:{e['sym']}:{int(e['ts'])}", "market": "crypto", "src": e["src"], "cls": e.get("cls"),
-              "t_pub": e["ts"], "sym": e["sym"], "split": sp, "items": [], "text": L.redact_coin(e["title"], e["sym"])}
+              "t_pub": e["ts"], "sym": e["sym"], "split": sp, "items": [], "text": L.redact_coin(e["title"], e["sym"]),
+              "text_named": e["title"], "descr": "Instrument: a crypto token with a perpetual contract.",
+              "named_header": f"Instrument: {e['sym']}. Published: {L.day_of(e['ts'])}."}
         if sp == "sealed":
             items.append(it)      # sealed: text only, never priced here
             continue
@@ -340,17 +350,17 @@ def build_leak(out):
 
 # ================================================================== eval (one shard)
 def load_calls(data, version):
-    return {r["key"]: r for r in rjsonl(os.path.join(data, "calls", f"{version}.jsonl.gz"))}
+    return {r["key"] + "|" + r.get("variant", "anon"): r for r in rjsonl(os.path.join(data, "calls", f"{version}.jsonl.gz"))}
 
 
 def build_analog_pool(dev):
     return L.AnalogIndex(dev)
 
 
-def decide(it, version, system, index, P_):
+def decide(it, version, system, index, P_, variant="anon"):
     lab = it["labels"].get(str(P_["entry"]["lag_s"]))
     analogs = index.query(it, it["t_pub"], P_["analogs"]["k"]) if (index and version.get("analogs")) else None
-    user = L.render_user(it, lab, version, analogs, P_)
+    user = L.render_user(it, lab, version, analogs, P_, variant)
     from core import ai_news
     txt, served = "", ""
     for _ in range(3):
@@ -359,7 +369,7 @@ def decide(it, version, system, index, P_):
             break
         time.sleep(3)
     parsed = L.parse_reply(txt, it["market"])
-    return {"key": it["key"], "version": version["id"], "prompt_sha": version["sha256"], "ok": parsed["ok"], "d": parsed.get("d"),
+    return {"key": it["key"], "variant": variant, "version": version["id"], "prompt_sha": version["sha256"], "ok": parsed["ok"], "d": parsed.get("d"),
             "conf": parsed.get("conf"), "why": parsed.get("why"), "reply": txt[:600], "served": served[:80]}
 
 
@@ -369,9 +379,11 @@ def run_eval(out, data, vid, which, shard, shards, deadline_min=300):
     system = open(L.check_version(version)).read()
     dev = load_dev(data)
     index = build_analog_pool(dev) if version.get("analogs") else None
-    target = sorted((i for i in dev if i["split"] == which), key=lambda i: i["key"])[shard::shards]
+    variant = "named" if which == "contam_named" else "anon"
+    target = sorted((i for i in dev if i["split"] == which.split("_")[0]), key=lambda i: i["key"])[shard::shards]
     cache = load_calls(data, vid)
-    todo = [i for i in target if not (i["key"] in cache and cache[i["key"]].get("prompt_sha") == version["sha256"] and cache[i["key"]].get("ok"))]
+    ck = lambda i: i["key"] + "|" + variant  # noqa: E731
+    todo = [i for i in target if not (ck(i) in cache and cache[ck(i)].get("prompt_sha") == version["sha256"] and cache[ck(i)].get("ok"))]
     log(f"{vid} {which} shard {shard}/{shards}: target {len(target)} cached {len(target) - len(todo)} to call {len(todo)}")
     t_end = time.time() + deadline_min * 60
     res = []
@@ -379,7 +391,7 @@ def run_eval(out, data, vid, which, shard, shards, deadline_min=300):
     def one(it):
         if time.time() > t_end:
             return None
-        return decide(it, version, system, index, P)
+        return decide(it, version, system, index, P, variant)
 
     with ThreadPoolExecutor(max(1, ai_news.CLAUDE_MAX_PARALLEL)) as ex:
         for k, r in enumerate(ex.map(one, todo)):
@@ -388,7 +400,7 @@ def run_eval(out, data, vid, which, shard, shards, deadline_min=300):
             if k % 50 == 0:
                 log(f"  {k + 1}/{len(todo)} failed {sum(1 for x in res if not x['ok'])} spend {ai_news.spend()}")
     os.makedirs(out, exist_ok=True)
-    wjsonl(os.path.join(out, f"part_{vid}_{which}_{shard}.jsonl"), res + [cache[i["key"]] for i in target if i["key"] in cache and i not in todo], gz=False)
+    wjsonl(os.path.join(out, f"part_{vid}_{which}_{shard}.jsonl"), res + [cache[ck(i)] for i in target if ck(i) in cache and i not in todo], gz=False)
     json.dump(ai_news.spend(), open(os.path.join(out, f"spend_{vid}_{which}_{shard}.json"), "w"))
 
 
@@ -400,7 +412,7 @@ def merge(parts, data, out):
     for p in glob.glob(os.path.join(parts, "part_*.jsonl")):
         vid = os.path.basename(p).split("_")[1]
         for r in rjsonl(p):
-            by_v.setdefault(vid, {})[r["key"]] = r
+            by_v.setdefault(vid, {})[r["key"] + "|" + r.get("variant", "anon")] = r
     os.makedirs(os.path.join(out, "calls"), exist_ok=True)
     os.makedirs(os.path.join(out, "evals"), exist_ok=True)
     reg = {v["id"]: v for v in L.versions_registry()["versions"]}
@@ -408,23 +420,35 @@ def merge(parts, data, out):
         old = load_calls(data, vid)
         old.update(calls)
         wjsonl(os.path.join(out, "calls", f"{vid}.jsonl.gz"), list(old.values()))
-        for which in ("train", "validation"):
-            rows = [i for i in dev if i["split"] == which]
-            decs = {k: v for k, v in old.items() if prompt_ok(v, reg.get(vid))}
-            res = {"version": vid, "set": which, "sha256": reg[vid]["sha256"], "cells": [],
-                   "failed_replies": sum(1 for i in rows if i["key"] in old and not old[i["key"]].get("ok")),
-                   "missing_replies": sum(1 for i in rows if i["key"] not in old)}
+        scores = {}
+        for which in ("train", "validation", "contam", "contam_named"):
+            variant = "named" if which == "contam_named" else "anon"
+            rows = [i for i in dev if i["split"] == which.split("_")[0]]
+            decs = {k.rsplit("|", 1)[0]: v for k, v in old.items() if k.endswith("|" + variant) and prompt_ok(v, reg.get(vid))}
+            res = {"version": vid, "set": which, "variant": variant, "sha256": reg[vid]["sha256"], "cells": [],
+                   "failed_replies": sum(1 for i in rows if i["key"] in decs and not decs[i["key"]].get("ok")),
+                   "missing_replies": sum(1 for i in rows if i["key"] not in decs)}
             for market in ("stock", "crypto"):
                 for h in L.available_holds(market):
                     res["cells"].append(L.score_cell(rows, decs, market, h, P))
                 if market == "crypto":
                     for lag in [str(x) for x in P["entry"]["lag_sens"]]:
                         res["cells"].append(L.score_cell(rows, decs, market, "1h", P, lag=lag))
+            scores[which] = res
             json.dump(res, open(os.path.join(out, "evals", f"{vid}_{which}.json"), "w"), indent=1, default=str)
             for c in res["cells"]:
                 if c["lag"] == "93":
                     log(vid, which, c["market"], c["hold"], "offered", c["n_offered"], "traded", c["n_traded"], "score", c.get("score_per_offered"),
                         "per trade", c.get("mean_per_trade"), "p_rnd", (c.get("vs_random") or {}).get("p"), "p_kw", (c.get("vs_keyword") or {}).get("p"))
+        if scores["contam"]["cells"] and scores["contam_named"]["cells"]:
+            drop = []
+            for a, b in zip(scores["contam"]["cells"], scores["contam_named"]["cells"]):
+                if a["lag"] == "93" and a.get("score_per_offered") is not None and b.get("score_per_offered") is not None:
+                    drop.append({"market": a["market"], "hold": a["hold"], "anon": a["score_per_offered"], "named": b["score_per_offered"],
+                                 "named_minus_anon": b["score_per_offered"] - a["score_per_offered"],
+                                 "traded_anon": a["n_traded"], "traded_named": b["n_traded"]})
+            json.dump(drop, open(os.path.join(out, "evals", f"{vid}_named_vs_anon.json"), "w"), indent=1)
+            log(vid, "named vs anon", drop)
 
 
 def prompt_ok(call, version):

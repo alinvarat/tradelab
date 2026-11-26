@@ -12,7 +12,7 @@ import re
 from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PARAMS_PATH = os.path.join(HERE, "params.json")
+PARAMS_PATH = os.path.join(HERE, "params_v2.json")   # addendum 2026-11-26 supersedes params.json (splits, samples)
 VERSIONS_PATH = os.path.join(HERE, "versions.json")
 HOLDS = ("5m", "1h", "1d")
 
@@ -42,10 +42,13 @@ def unit(s):
 
 # ------------------------------------------------------------------ splits and the seal
 def split_of(ts, P):
+    """contam = before the model's knowledge cliff (diagnostic only); train / validation = clean window; buffer, burned, sealed as before."""
     d = P["dates"]
     if ts < day_ts(d["dev_start"]):
         return None
-    if ts < day_ts(d["train_end"]):
+    if ts < day_ts(d["clean_start"]):
+        return "contam"
+    if ts < day_ts(d["clean_train_end"]):
         return "train"
     if ts < day_ts(d["dev_end"]):
         return "validation"
@@ -395,7 +398,7 @@ def outcome_block(item, lab):
     return ", ".join(f"{h} {pct((lab.get('gross') or {}).get(h))}" for h in holds)
 
 
-def render_user(item, lab, version, analogs=None, P=None):
+def render_user(item, lab, version, analogs=None, P=None, variant="anon"):
     """User message for one item. `lab` is the label at the primary lag; only its pre-entry fields are shown, never gross."""
     P = P or load_params()
     holds = available_holds(item["market"])
@@ -408,7 +411,13 @@ def render_user(item, lab, version, analogs=None, P=None):
         lines.append(f"Source: {item['src']}.")
     if version.get("uses_pre") and lab:
         lines.append(pre_block(item, lab))
-    lines.append("Text:\n" + (item.get("text") or "")[:P["text_chars"]])
+    if variant == "named":
+        lines.append(item.get("named_header") or "")
+        body = item.get("text_named") or item.get("text") or ""
+    else:
+        lines.append(item.get("descr") or "")
+        body = item.get("text") or ""
+    lines.append("Text:\n" + body[:P["text_chars"]])
     if analogs:
         lines.append("Similar past items and what happened after entry (net of nothing, long-side moves):")
         for k, d in enumerate(analogs, 1):
