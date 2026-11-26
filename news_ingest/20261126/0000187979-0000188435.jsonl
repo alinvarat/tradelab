@@ -1,0 +1,2 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17626","title":"Binance Perp Monitor: BULLAUSDT (BULLA) +5.2% in the past 10 seconds","t_pub":1795733114.349,"res":"s","t_seen":1795733118.1862102,"lat_s":3.837}
+{"event":"llm","source":"eqn_rest","key":"eqn:17626","t_pub":1795733114.349,"t_seen":1795733118.1862102,"t_llm":1795733124.2917295,"llm_s":6.106,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":30,"instrument":"BULLA"}}
