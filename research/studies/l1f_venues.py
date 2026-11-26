@@ -312,10 +312,50 @@ def mode_margin(out):
     print(json.dumps({"endpoints": res["endpoints"], "pages": res["pages"], "margin_titles": len(arts)}, indent=1))
 
 
+
+# ---------------------------------------------------------------- public archives: which perps have a file at the notice date (HEAD only, no prices)
+def archive_urls(sym, ts):
+    g = time.gmtime(ts)
+    d, ym, ymd = f"{g.tm_year}-{g.tm_mon:02d}-{g.tm_mday:02d}", f"{g.tm_year}{g.tm_mon:02d}", f"{g.tm_year}{g.tm_mon:02d}{g.tm_mday:02d}"
+    return {"bybit_trades": f"https://public.bybit.com/trading/{sym}USDT/{sym}USDT{d}.csv.gz",
+            "gate_candles": f"https://download.gatedata.org/futures_usdt/candlesticks/{ym}/{sym}_USDT-{ym}.csv.gz",
+            "okx_candles": f"https://static.okx.com/cdn/okex/traderecords/candlesticks/daily/{ymd}/{sym}-USDT-SWAP-candlesticks-{d}.zip"}
+
+
+def mode_archive_probe(out, events_path):
+    ev = json.load(open(events_path))["l1f"] + [{"sym": "BTC", "ts": 1707202812.0, "title": "control: BTC must exist"}]
+    st, idx = http("https://public.bybit.com/trading/", tries=2)
+    bybit_syms = set(__import__("re").findall(r'href="([A-Z0-9]+USDT)/"', idx or ""))
+    rows = []
+
+    def one(e):
+        res = {}
+        for k, u in archive_urls(e["sym"], e["ts"]).items():
+            res[k] = http(u, head=True, tries=2)[0]
+        r = {"sym": e["sym"], "ts": e["ts"], "status": res,
+             "bybit_in_index": any(e["sym"] + "USDT" == x or ("1000" + e["sym"] + "USDT") == x for x in bybit_syms)}
+        print(r["sym"], res, r["bybit_in_index"], flush=True)
+        return r
+
+    with ThreadPoolExecutor(4) as ex:
+        rows = list(ex.map(one, ev))
+    summ = {k: {} for k in ("bybit_trades", "gate_candles", "okx_candles")}
+    for r in rows:
+        for k, c in r["status"].items():
+            summ[k][str(c)] = summ[k].get(str(c), 0) + 1
+    summ["bybit_index_status"] = st
+    summ["bybit_index_symbols"] = len(bybit_syms)
+    summ["bybit_in_index"] = sum(r["bybit_in_index"] for r in rows)
+    json.dump({"summary": summ, "rows": rows}, open(os.path.join(out, "archive_probe.json"), "w"))
+    print(json.dumps(summ), flush=True)
+
+
 def main():
     out, mode = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
-    if mode == "probe_venue":
+    if mode == "archive_probe":
+        mode_archive_probe(out, sys.argv[3])
+    elif mode == "probe_venue":
         mode_probe_venue(out, sys.argv[3], sys.argv[4], float(sys.argv[5]) if len(sys.argv) > 5 else 2400)
     elif mode == "probe_merge":
         mode_probe_merge(out, sys.argv[3], sys.argv[4])

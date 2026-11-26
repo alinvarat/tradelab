@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe, margin or price"
+        description: "probe, archive, margin or price"
         required: true
         default: "probe"
 
@@ -100,6 +100,44 @@ jobs:
           git add -A probe
           git commit -qm "L1f venues probe merged: $(date -u +%FT%TZ)" || echo "nothing new"
           for i in 1 2 3 4; do git push -q origin data/l1f-venues && break; git fetch -q origin data/l1f-venues; git rebase -q origin/data/l1f-venues; done
+
+  archive:
+    if: inputs.mode == 'archive'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: |
+          git fetch origin data/forced-flow
+          git show origin/data/forced-flow:events/latest.json > /tmp/frozen_events.json
+      - run: python -u research/studies/l1f_venues.py out archive_probe /tmp/frozen_events.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: l1f-archive
+          path: out/
+      - name: Keep on data/l1f-venues
+        if: always()
+        run: |
+          [ -d out ] && [ "$(ls out)" ] || exit 0
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          for i in 1 2 3 4 5 6; do
+            git fetch origin data/l1f-venues && git checkout -q -B data/l1f-venues origin/data/l1f-venues
+            mkdir -p archive && cp /tmp/keep/* archive/
+            git add -A archive
+            git commit -qm "L1f venues archive probe: $(date -u +%FT%TZ)" || break
+            git push -q origin data/l1f-venues && break
+            sleep $((RANDOM % 8 + 2))
+          done
 
   margin:
     if: inputs.mode == 'margin'
