@@ -58,7 +58,7 @@
 | กติกาที่ล็อกของแต่ละการทดสอบ | `research/studies/protocol_*.md`, `research/llm_trader/protocol.md`, `research/event_trader/protocol_broad.md` |
 | สเปกแต่ละเส้น | `ops/lines/` |
 
-## 6. เจ้าของต้องทำ: เปิดการส่งล็อกข่าวจาก pod ขึ้น `data/news-ingest`
+## 5. เจ้าของต้องทำ: เปิดการส่งล็อกข่าวจาก pod ขึ้น `data/news-ingest`
 Pod ไม่มี GitHub token (env มีแค่ `CLAUDE_CODE_OAUTH_TOKEN` และ `TRADELAB_SEC_UA`) จึงยังไม่ส่งอะไรจนกว่าจะทำ 3 ข้อนี้ ห้ามส่ง token ในแชต:
 1. สร้าง fine-grained personal access token ที่ GitHub: Settings > Developer settings > Fine-grained tokens; Repository access = Only select repositories > `alinvarat/tradelab` เท่านั้น; Permissions: Contents = Read and write (ไม่ต้องมีอย่างอื่น); ตั้งวันหมดอายุ 90 วัน
 2. เก็บเป็น secret ของ repo: `gh secret set TRADELAB_DATA_PUSH_TOKEN -R alinvarat/tradelab` แล้ววาง token ตอนที่ถาม
