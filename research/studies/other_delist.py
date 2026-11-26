@@ -22,12 +22,16 @@ NOT_EVENT = re.compile(r"extend|postpone|cancel|resum|complet|perpetual|futures|
 ERR = {}
 
 
-def get(url, tries=2, timeout=15):
+def get(url, tries=2, timeout=15, raw_gz=False):
     last = 0
     for k in range(tries):
         try:
             with urlopen(Request(url, headers=UA), timeout=timeout) as r:
-                return r.status, r.read().decode("utf-8", "replace")
+                b = r.read()
+                if raw_gz and b[:2] == b"\x1f\x8b":
+                    import gzip
+                    b = gzip.decompress(b)
+                return r.status, b.decode("utf-8", "replace")
         except Exception as e:  # noqa: BLE001
             last = getattr(e, "code", 0) or 0
             ERR[f"{last}{type(e).__name__}"] = ERR.get(f"{last}{type(e).__name__}", 0) + 1
@@ -188,6 +192,10 @@ def main():
     out_dir, mode = sys.argv[1], sys.argv[2]
     if mode == "notices":
         mode_notices(out_dir, sys.argv[3])
+    elif mode == "price":
+        os.makedirs(out_dir, exist_ok=True)
+        from research.studies import other_delist_price as P
+        P.run(out_dir, sys.argv[3], sys.argv[4])
     elif mode == "reach":
         os.makedirs(out_dir, exist_ok=True)
         mode_reach(out_dir, sys.argv[3])
