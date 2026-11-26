@@ -6,7 +6,8 @@ name: News train R2
 #   eval          - versions x sets (train, validation) sharded; merged, calibrated on train, scored; selection written
 #   analyze       - error analysis of one version on TRAIN only
 #   sealed_crypto - ONE-SHOT run of the version in LOCK_R2.json (crypto) on GDELT 2026-08-01..2026-11-26
-#   fwd           - scheduled: collect forward S&P 8-Ks, snapshot bars, decide with the locked stock version, count only; scores once
+#   fwd           - scheduled: collect forward S&P 8-Ks, snapshot bars, decide with the locked stock version, count only; scores once;
+#                   then joins the pod's news-ingest log (branch data/news-ingest) as descriptive timing in fwd/ingest_timing.json
 on:
   workflow_dispatch:
     inputs:
@@ -369,6 +370,12 @@ jobs:
           git fetch origin data/news-train-r2
           git archive origin/data/news-train-r2 | tar -x -C /tmp/data
       - run: python research/news_train/run_r2.py fwd out /tmp/data
+      - name: Pod ingest timing (addendum 2026-11-26; descriptive, optional, never fails the job)
+        continue-on-error: true
+        run: |
+          mkdir -p /tmp/ingest
+          if git fetch origin data/news-ingest 2>/dev/null; then git archive origin/data/news-ingest | tar -x -C /tmp/ingest; fi
+          python research/news_train/run_ingest_fwd.py r2 out /tmp/ingest
       - uses: actions/upload-artifact@v4
         if: always()
         with:

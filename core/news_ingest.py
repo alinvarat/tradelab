@@ -37,6 +37,7 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from . import news_latency_fwd as nl
+from . import news_publish
 
 DIR = Path(os.environ.get("TRADELAB_NEWS_INGEST_DIR")
            or Path(os.environ.get("TRADELAB_COLLECT_DIR") or Path(__file__).resolve().parent.parent / "data/collect") / "news_ingest")
@@ -570,6 +571,7 @@ def view(now=None):
         return {"started": STATE["started"], "window_h": WINDOW_S // 3600, "sources": out_sources,
                 "all_seen_minus_published": lat_summary(all_rows), "llm": dict(STATE["llm"]),
                 "log": {"dir": str(DIR), "log_errors": STATE["log_errors"], "paused_low_disk": STATE["log_paused_low_disk"]},
+                "publish": news_publish.view(),
                 "note": "t_pub is the source's own time; for eqn_* it is the newswire's relay time. Items in a source's first "
                         "fetch are not counted. Minute-resolution timestamps are excluded from the statistics."}
 
@@ -589,6 +591,7 @@ def loop():
 
     spawn("llm", llm_worker)
     spawn("eqn_ws", ws_loop)
+    spawn("publish", news_publish.loop)       # own thread; a no-op until TRADELAB_DATA_PUSH_TOKEN is set
     for s in srcs:
         spawn(s["name"], poll_loop, s)
         time.sleep(0.3)           # stagger the first requests

@@ -87,6 +87,7 @@ jobs:
           KUBER_API_KEY: ${{ secrets.KUBER_API_TOKEN }}
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}   # set = every LLM role on Claude Haiku 5.5 (v4.18)
+          TRADELAB_DATA_PUSH_TOKEN: ${{ secrets.TRADELAB_DATA_PUSH_TOKEN }}   # optional fine-grained PAT (contents:write, this repo): the pod then publishes the news-ingest log to data/news-ingest
         run: |
           if [ -z "$KUBER_API_KEY" ]; then
             echo "::error::Add the KUBER_API_TOKEN repository secret before deploying."
@@ -104,7 +105,14 @@ jobs:
             printf 'CLAUDE_CODE_OAUTH_TOKEN=%s\n' "$CLAUDE_CODE_OAUTH_TOKEN" >> "$runtime_env"
           fi
           if [ -n "$TRADELAB_SEC_UA" ]; then printf 'TRADELAB_SEC_UA=%s\n' "$TRADELAB_SEC_UA" >> "$runtime_env"; fi
-          unset CLAUDE_CODE_OAUTH_TOKEN TRADELAB_SEC_UA
+          if [ -n "$TRADELAB_DATA_PUSH_TOKEN" ]; then
+            if [[ "$TRADELAB_DATA_PUSH_TOKEN" == *$'\n'* || "$TRADELAB_DATA_PUSH_TOKEN" == *$'\r'* ]]; then
+              echo "::error::TRADELAB_DATA_PUSH_TOKEN must be a single line."
+              exit 1
+            fi
+            printf 'TRADELAB_DATA_PUSH_TOKEN=%s\n' "$TRADELAB_DATA_PUSH_TOKEN" >> "$runtime_env"
+          fi
+          unset CLAUDE_CODE_OAUTH_TOKEN TRADELAB_SEC_UA TRADELAB_DATA_PUSH_TOKEN
           export TRADELAB_RUNTIME_ENV_FILE="$runtime_env"
           # Kuber's build step has failed on the platform side ("The request could not be completed") and
           # succeeded on a manual re-run since 2026-11-24. Retry the same command instead of failing the
