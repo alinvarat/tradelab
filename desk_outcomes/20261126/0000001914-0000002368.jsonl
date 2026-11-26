@@ -1,0 +1,2 @@
+{"v":2,"protocol":"v4.19","ts":1795726908.123288,"symbol":"LTC-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":3600,"abn":0.0025,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_delist"]}
+{"v":2,"protocol":"v4.19","ts":1795726908.123288,"symbol":"BCH-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":3600,"abn":0.0038,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_delist"]}
