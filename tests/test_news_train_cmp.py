@@ -21,6 +21,8 @@ class Lock(unittest.TestCase):
         f = NT / "protocol_cmp_20261126.md"
         self.assertEqual(hashlib.sha256(f.read_bytes()).hexdigest(), f.with_suffix(".sha256").read_text().strip())
         self.assertIn(hashlib.sha256((NT / "params_cmp.json").read_bytes()).hexdigest(), f.read_text())
+        a = NT / "protocol_cmp_addendum_20261126.md"
+        self.assertEqual(hashlib.sha256(a.read_bytes()).hexdigest(), a.with_suffix(".sha256").read_text().strip())
 
     def test_models_and_registry(self):
         self.assertEqual(P["models"], {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5"})
@@ -118,6 +120,11 @@ class Forward(unittest.TestCase):
         self.assertEqual(lab["gross"], {})
         self.assertIsNotNone(lab["pre_1h"])
         self.assertIsNone(C.crypto_pre_label([], t, P2))
+
+    def test_junk_filter(self):
+        for t in ("@telsopian Bitcoin is good crypto", "RT @lsanger: bitcoin crypto database", "Bitcoin crypto news https://t.co/abc", "  "):
+            self.assertTrue(C.is_junk(t), t)
+        self.assertFalse(C.is_junk("Bitcoin ETF sees record crypto inflows today"))
 
     def test_item_redacts_and_keys(self):
         it = C.title_to_item("eqn_rest", "k1", "Bitcoin jumps 5% on 2026-11-28", 1_800_000_000, "BTC", P2)

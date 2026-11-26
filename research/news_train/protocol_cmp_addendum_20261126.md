@@ -1,0 +1,6 @@
+# CMP addendum 2026-11-26 (written after reading title samples of the first `data/news-ingest` part and the Sonnet leak probe, before any forward decision or outcome)
+
+`protocol_cmp_20261126.md` and `params_cmp.json` stand unchanged. Two registered facts:
+
+1. **Leak gate result** (run 45839708983, `leak/gate.json` on `data/news-train-cmp`): Sonnet 5.5 cutoff month 2025-11 (7, 6, 7 of 12 answered, accuracy 1.0 for 2025-09..11; nothing answered from 2025-12), same as Haiku; combined cutoff 2025-11, first eligible day 2025-12-01. Every historical item (July 2026 8-Ks, Aug-Nov 2026 GDELT) is eligible. Served model strings are checked per call in the hist run.
+2. **Social and junk filter for the forward crypto arm.** The first ingest part (393 unique rows: prnewswire 146, globenewswire 82, eqn_rest 65, okx_announcements 3, binance_news 2; no `sec_8k` yet) shows `eqn_rest` carrying tweets ("@handle ...", "RT @...", t.co links). Items are dropped before dedupe, coin mapping, decision and scoring when the title starts with a handle or RT, contains a link, or is empty (`logic_cmp.is_junk`, tested). Nothing else changes: the 20-coin map with crypto context, dedupe, cap and the minimum n are as registered. Stock wires have no ticker in the log and remain unused; stock items need `sec_8k` pod rows, which are absent so far.

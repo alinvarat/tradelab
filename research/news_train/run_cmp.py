@@ -317,7 +317,7 @@ def fwd_crypto_candidates(joined, start):
     rows = []
     for (src, key), d in joined.items():
         t = d.get("t_seen")
-        if src in P["fwd"]["crypto_sources"] and isinstance(t, (int, float)) and not isinstance(t, bool) and t >= start and d.get("title"):
+        if src in P["fwd"]["crypto_sources"] and isinstance(t, (int, float)) and not isinstance(t, bool) and t >= start and d.get("title") and not C.is_junk(d["title"]):
             coin = R.coin_of(d["title"], "", P2)
             if coin:
                 rows.append({"t": t, "coin": coin, "title": d["title"], "domain": src, "url": key})
