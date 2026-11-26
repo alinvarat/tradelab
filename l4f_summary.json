@@ -1,18 +1,8 @@
 {
- "equity_usd": 150.946,
+ "equity_usd": 151.3519,
  "start_usd": 147.0,
  "goal_usd": 441.0,
  "pending": [
-  {
-   "id": "6994161",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-26T17:45:00Z",
-   "side": "yes",
-   "price": 0.05,
-   "stake": 7.4313,
-   "entry_ts": 1795630723.0308065,
-   "volume": 80102
-  },
   {
    "id": "6994327",
    "question": "Exact Score: Any Other Score?",
@@ -24,16 +14,6 @@
    "volume": 92902
   },
   {
-   "id": "6995614",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-26T17:45:00Z",
-   "side": "yes",
-   "price": 0.001,
-   "stake": 7.4313,
-   "entry_ts": 1795630723.0308065,
-   "volume": 55950
-  },
-  {
    "id": "6995752",
    "question": "Exact Score: Any Other Score?",
    "end": "2026-11-26T17:45:00Z",
@@ -42,16 +22,6 @@
    "stake": 7.4313,
    "entry_ts": 1795630723.0308065,
    "volume": 118770
-  },
-  {
-   "id": "6995844",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-26T17:45:00Z",
-   "side": "yes",
-   "price": 0.001,
-   "stake": 7.4313,
-   "entry_ts": 1795630723.0308065,
-   "volume": 92226
   },
   {
    "id": "6995936",
@@ -154,60 +124,18 @@
    "volume": 58658
   }
  ],
- "n_closed": 13,
+ "n_closed": 16,
  "sequential": {
   "n_units": 2,
-  "e_value_edge": 1.0255,
+  "e_value_edge": 1.0173,
   "e_value_negative": 1.0,
   "threshold": 20.0,
   "decision": "continue",
   "decided_at_unit": null,
-  "mean_scaled": 0.044603
+  "mean_scaled": 0.036423
  },
  "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md",
  "closed_last": [
-  {
-   "id": "6757110",
-   "question": "Will FC Barcelona win on 2026-11-25?",
-   "end": "2026-11-25T17:45:00Z",
-   "side": "no",
-   "price": 0.09,
-   "stake": 7.35,
-   "entry_ts": 1795529548.836021,
-   "volume": 50628.931149,
-   "net": 0.0989010989010989,
-   "ts": 1795637839.2731695,
-   "yes_won": true,
-   "equity_after": 149.3535
-  },
-  {
-   "id": "6757103",
-   "question": "Will Sabah FK win on 2026-11-25?",
-   "end": "2026-11-25T17:45:00Z",
-   "side": "yes",
-   "price": 0.033,
-   "stake": 7.35,
-   "entry_ts": 1795557353.5935743,
-   "volume": 51747.215243000006,
-   "net": 0.03412616339193382,
-   "ts": 1795637839.2731695,
-   "yes_won": false,
-   "equity_after": 149.6043
-  },
-  {
-   "id": "6757353",
-   "question": "Exact Score: Any Other Score?",
-   "end": "2026-11-25T17:45:00Z",
-   "side": "yes",
-   "price": 0.002,
-   "stake": 7.35,
-   "entry_ts": 1795557353.5935743,
-   "volume": 57899,
-   "net": 0.002004008016032064,
-   "ts": 1795637839.2731695,
-   "yes_won": false,
-   "equity_after": 149.619
-  },
   {
    "id": "6757646",
    "question": "Exact Score: Any Other Score?",
@@ -305,6 +233,48 @@
    "ts": 1795717699.170721,
    "yes_won": true,
    "equity_after": 150.946
+  },
+  {
+   "id": "6994161",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T17:45:00Z",
+   "side": "yes",
+   "price": 0.05,
+   "stake": 7.4313,
+   "entry_ts": 1795630723.0308065,
+   "volume": 80102,
+   "net": 0.052631578947368425,
+   "ts": 1795729649.210034,
+   "yes_won": false,
+   "equity_after": 151.3371
+  },
+  {
+   "id": "6995614",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T17:45:00Z",
+   "side": "yes",
+   "price": 0.001,
+   "stake": 7.4313,
+   "entry_ts": 1795630723.0308065,
+   "volume": 55950,
+   "net": 0.001001001001001001,
+   "ts": 1795729649.210034,
+   "yes_won": false,
+   "equity_after": 151.3445
+  },
+  {
+   "id": "6995844",
+   "question": "Exact Score: Any Other Score?",
+   "end": "2026-11-26T17:45:00Z",
+   "side": "yes",
+   "price": 0.001,
+   "stake": 7.4313,
+   "entry_ts": 1795630723.0308065,
+   "volume": 92226,
+   "net": 0.001001001001001001,
+   "ts": 1795729649.210034,
+   "yes_won": false,
+   "equity_after": 151.3519
   }
  ],
  "last_error": null
