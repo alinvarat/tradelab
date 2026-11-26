@@ -1,0 +1,14 @@
+{
+ "items": 4996,
+ "drops": {},
+ "by": {
+  "stock_train": 1200,
+  "stock_validation": 796,
+  "crypto_train": 1500,
+  "crypto_validation": 1500
+ },
+ "with_rv": {
+  "stock": 1996,
+  "crypto": 3000
+ }
+}
