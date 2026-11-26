@@ -1,0 +1,46 @@
+{
+ "lock": {
+  "stock": "m1",
+  "crypto": null
+ },
+ "validation": {
+  "m0": {
+   "stock": {
+    "n": 788,
+    "reply_ok": 1.0,
+    "partial": 0.20547782391000444
+   },
+   "crypto": {
+    "n": 1500,
+    "reply_ok": 1.0,
+    "partial": 0.009175584234377145
+   }
+  },
+  "m1": {
+   "stock": {
+    "n": 788,
+    "reply_ok": 1.0,
+    "partial": 0.2819428264891812
+   },
+   "crypto": {
+    "n": 1500,
+    "reply_ok": 1.0,
+    "partial": -0.00010840825848351516
+   }
+  },
+  "m2": {
+   "stock": {
+    "n": 788,
+    "reply_ok": 1.0,
+    "partial": 0.27042711195827696
+   },
+   "crypto": {
+    "n": 1500,
+    "reply_ok": 1.0,
+    "partial": -0.007017269400391289
+   }
+  }
+ },
+ "k_versions": 3,
+ "rule": "protocol_r3 selection rule on clean validation"
+}
