@@ -1,0 +1,352 @@
+{
+ "version": "v1",
+ "set": "contam",
+ "variant": "anon",
+ "sha256": "642a6e256516e7b389485073f91405bbfe3e30feb7888dba493916edac4a5d37",
+ "cells": [
+  {
+   "market": "stock",
+   "hold": "1d",
+   "lag": "93",
+   "n_offered": 353,
+   "n_traded": 2,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": 0.0,
+   "score_per_offered": -0.00019187846801448747,
+   "mean_per_trade": -0.03386654960455704,
+   "mean_per_trade_2x": -0.03560637238272868,
+   "vs_abstain": {
+    "n": 353,
+    "days": 245,
+    "mean": -0.00019187846801448747,
+    "lo": -0.0004909369134722529,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_random": {
+    "n": 353,
+    "days": 245,
+    "mean": -0.00018111818472836783,
+    "lo": -0.00047972275229481745,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_keyword": {
+    "n": 353,
+    "days": 245,
+    "mean": 0.0009838662717903738,
+    "lo": -0.0009570819748211474,
+    "hi": 0.0027606640160884924,
+    "p": 0.162
+   },
+   "vs_random_2x": {
+    "n": 353,
+    "days": 245,
+    "mean": -0.0001802244327633345,
+    "lo": -0.00048285472447761484,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": -1.076028328611964e-05,
+    "keyword_per_offered": -0.0011757447398048613,
+    "keyword_traded": 201,
+    "long_all_per_offered": -0.0011862728428436748,
+    "long_on_traded_per_offered": -0.00019187846801448747,
+    "short_on_traded_per_offered": 0.00017035790144224818
+   }
+  },
+  {
+   "market": "crypto",
+   "hold": "5m",
+   "lag": "93",
+   "n_offered": 427,
+   "n_traded": 0,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": null,
+   "score_per_offered": 0.0,
+   "mean_per_trade": null,
+   "mean_per_trade_2x": null,
+   "vs_abstain": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_random": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_keyword": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.0015427044324137604,
+    "lo": -7.298112503272181e-06,
+    "hi": 0.0032142204836356695,
+    "p": 0.0255
+   },
+   "vs_random_2x": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": 0.0,
+    "keyword_per_offered": -0.0015427044324137604,
+    "keyword_traded": 167,
+    "long_all_per_offered": -0.0066546463279254725,
+    "long_on_traded_per_offered": 0.0,
+    "short_on_traded_per_offered": 0.0
+   }
+  },
+  {
+   "market": "crypto",
+   "hold": "1h",
+   "lag": "93",
+   "n_offered": 427,
+   "n_traded": 2,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": 0.0,
+   "score_per_offered": -2.541239555475129e-05,
+   "mean_per_trade": -0.0054255464509394,
+   "mean_per_trade_2x": -0.00940782254697281,
+   "vs_abstain": {
+    "n": 427,
+    "days": 230,
+    "mean": -2.541239555475129e-05,
+    "lo": -7.048938716584886e-05,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_random": {
+    "n": 427,
+    "days": 230,
+    "mean": -6.69576792009087e-06,
+    "lo": -2.086929125458979e-05,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_keyword": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.0020677866389241773,
+    "lo": -0.006455829989156304,
+    "hi": 0.01198281125659189,
+    "p": 0.322
+   },
+   "vs_random_2x": {
+    "n": 427,
+    "days": 230,
+    "mean": -6.668958065446461e-06,
+    "lo": -2.1251082790639094e-05,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": -1.871662763466042e-05,
+    "keyword_per_offered": -0.002093199034478929,
+    "keyword_traded": 167,
+    "long_all_per_offered": -0.004919475607778487,
+    "long_on_traded_per_offered": -1.2020859714569549e-05,
+    "short_on_traded_per_offered": -2.541239555475129e-05
+   }
+  },
+  {
+   "market": "crypto",
+   "hold": "1d",
+   "lag": "93",
+   "n_offered": 427,
+   "n_traded": 6,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": 0.16666666666666666,
+   "score_per_offered": 0.00014509916135820622,
+   "mean_per_trade": 0.010326223649992342,
+   "mean_per_trade_2x": 0.006280877466727859,
+   "vs_abstain": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.00014509916135820622,
+    "lo": -7.854545454545454e-05,
+    "hi": 0.0005578350138346168,
+    "p": 0.361
+   },
+   "vs_random": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.00020124904426218747,
+    "lo": 0.0,
+    "hi": 0.0006445000642496554,
+    "p": 0.388
+   },
+   "vs_keyword": {
+    "n": 427,
+    "days": 230,
+    "mean": -0.01101032082680121,
+    "lo": -0.02895346185444428,
+    "hi": 0.005554212034904609,
+    "p": 0.902
+   },
+   "vs_random_2x": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.0002004432430921946,
+    "lo": 0.0,
+    "hi": 0.0006247391591267672,
+    "p": 0.3725
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": -5.6149882903981256e-05,
+    "keyword_per_offered": 0.011155419988159417,
+    "keyword_traded": 167,
+    "long_all_per_offered": -0.016899446554332037,
+    "long_on_traded_per_offered": -0.00025739892716616876,
+    "short_on_traded_per_offered": 0.00014509916135820622
+   }
+  },
+  {
+   "market": "crypto",
+   "hold": "1h",
+   "lag": "60",
+   "n_offered": 427,
+   "n_traded": 2,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": 0.0,
+   "score_per_offered": -2.541239555475129e-05,
+   "mean_per_trade": -0.0054255464509394,
+   "mean_per_trade_2x": -0.00940782254697281,
+   "vs_abstain": {
+    "n": 427,
+    "days": 230,
+    "mean": -2.541239555475129e-05,
+    "lo": -7.048938716584886e-05,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_random": {
+    "n": 427,
+    "days": 230,
+    "mean": -6.69576792009087e-06,
+    "lo": -2.086929125458979e-05,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_keyword": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.0008379977202300359,
+    "lo": -0.007879942064074802,
+    "hi": 0.01068944580048839,
+    "p": 0.432
+   },
+   "vs_random_2x": {
+    "n": 427,
+    "days": 230,
+    "mean": -6.668958065446461e-06,
+    "lo": -2.1251082790639094e-05,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": -1.871662763466042e-05,
+    "keyword_per_offered": -0.0008634101157847875,
+    "keyword_traded": 167,
+    "long_all_per_offered": -0.007516412134763356,
+    "long_on_traded_per_offered": -1.2020859714569549e-05,
+    "short_on_traded_per_offered": -2.541239555475129e-05
+   }
+  },
+  {
+   "market": "crypto",
+   "hold": "1h",
+   "lag": "300",
+   "n_offered": 427,
+   "n_traded": 2,
+   "excluded": {
+    "no_label": 0,
+    "no_gross": 0,
+    "no_reply": 0
+   },
+   "hit_rate": 0.0,
+   "score_per_offered": -2.3905525179168402e-05,
+   "mean_per_trade": -0.005103829625752454,
+   "mean_per_trade_2x": -0.009087393875948757,
+   "vs_abstain": {
+    "n": 427,
+    "days": 230,
+    "mean": -2.3905525179168402e-05,
+    "lo": -6.585076942013615e-05,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_random": {
+    "n": 427,
+    "days": 230,
+    "mean": -5.188897544507983e-06,
+    "lo": -1.617269526645919e-05,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "vs_keyword": {
+    "n": 427,
+    "days": 230,
+    "mean": 0.002506978249965098,
+    "lo": -0.0055671789357084,
+    "hi": 0.011818870177003915,
+    "p": 0.271
+   },
+   "vs_random_2x": {
+    "n": 427,
+    "days": 230,
+    "mean": -5.16812119882326e-06,
+    "lo": -1.646856531266815e-05,
+    "hi": 0.0,
+    "p": 1.0
+   },
+   "baselines": {
+    "abstain": 0.0,
+    "random_per_offered": -1.871662763466042e-05,
+    "keyword_per_offered": -0.0025308837751442663,
+    "keyword_traded": 167,
+    "long_all_per_offered": -0.0028319101836420156,
+    "long_on_traded_per_offered": -1.3527730090152435e-05,
+    "short_on_traded_per_offered": -2.3905525179168402e-05
+   }
+  }
+ ],
+ "failed_replies": 0,
+ "missing_replies": 0
+}
