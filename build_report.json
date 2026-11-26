@@ -1,0 +1,39 @@
+{
+ "stock": {
+  "symbols": 578,
+  "sec_failed": 0,
+  "candidates": {
+   "contam": 10888,
+   "train": 1811,
+   "validation": 1505,
+   "sealed": 1015
+  },
+  "picked": 3215,
+  "text_failed": 2,
+  "label_drops": {
+   "intraday_no_bars": 844,
+   "no_bars": 4
+  },
+  "dev_items": 2199,
+  "dev_labelled": 1351,
+  "sealed_items": 1014
+ },
+ "crypto": {
+  "events": 2393,
+  "by_split": {
+   "contam": 1444,
+   "train": 402,
+   "validation": 287,
+   "buffer": 85,
+   "sealed": 155,
+   "burned": 20
+  },
+  "drops": {
+   "no_perp_or_bars": 1181,
+   "no_entry_bar": 98
+  },
+  "dev_items": 854,
+  "dev_labelled": 854,
+  "sealed_items": 155
+ }
+}
