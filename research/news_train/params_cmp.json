@@ -1,0 +1,24 @@
+{
+ "version": 1,
+ "family": "cmp",
+ "seed": 20261129,
+ "models": {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5"},
+ "owner_exception": "owner 2026-11-26: Sonnet 5.5 is allowed for this research comparison only; the production bot stays on Haiku",
+ "leak_rule": {"min_answered": 4, "min_acc": 0.6, "of_days": 12, "note": "a month is known when the probe's answered count >= min_answered and accuracy among answered >= min_acc on either asset; the cutoff is the last known month; items are eligible from the first day of the next month. Checked against the round-1 Haiku probe: last known month 2025-11."},
+ "hist": {"crypto_registered_n": 1971, "stock_registered_n": 518, "crypto_set": "round-2 sealed GDELT 2026-08-01..2026-11-26, w1", "stock_set": "round-3 sealed July 2026 8-Ks, m1 (magnitude) and w3 (direction)"},
+ "call": {"parallel": 3, "retries": 1, "stop_after_consecutive_empty": 12, "timeout_s": 150},
+ "fwd": {
+  "start_utc": "2026-11-27",
+  "crypto_sources": ["binance_listings", "binance_news", "binance_delist", "okx_announcements", "eqn_rest"],
+  "heads": {"crypto": "w1", "stock_direction": "w3", "stock_magnitude": "m1"},
+  "hold": "1h",
+  "min_paired": 300,
+  "min_discordant": 100,
+  "min_stock_magnitude_n": 300,
+  "hard_stop_utc": "2027-03-31",
+  "cap_per_coin_day": 6,
+  "bootstrap": {"n": 2000, "alpha": 0.05},
+  "ready_after_s": 90,
+  "max_attempts": 3
+ }
+}
