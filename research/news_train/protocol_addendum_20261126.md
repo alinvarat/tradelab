@@ -1,0 +1,13 @@
+# Addendum 2026-11-26 (written after the leakage probe, before any item was labelled and before any version was scored)
+
+Supersedes the splits and sample sizes of `protocol.md` (which stays locked as written). Every other rule there stands: entry, holds, costs, metric, baselines, Holm family, done condition, seal. New parameters are in `params_v2.json` (sha256 0ca9e01c4d2bf2e38c4036c14661e7e678b3a82613c7038da4e60925d99dc1f1); `logic.py` loads that file.
+
+## Leakage probe result (Actions run 45759766585, `data/news-train` `leak/`)
+Haiku answered "did the S&P 500 close up or down on day D" with about 85-90% accuracy on answered days in 2025-04..2025-08 and still answered in 2025-09..2025-11 (3-8 of 12 days a month); from **2025-12 on it answered "unknown" for every one of the 12 days in every month**, through 2026-11. For BTC-USD it answered few days and was near chance, and answered none from 2025-06 on. The working knowledge cliff is therefore about **end of November 2025**, earlier than the mid-2026 assumed in the protocol.
+
+## Changes (owner/coordinator instruction)
+1. **Development and selection use the clean window only:** train 2025-12-01..2026-03-31, validation 2026-04-01..2026-06-30 (chronological). A version is chosen only on clean validation. Buffer 2026-07 and burned 2026-10-17..11-23 unchanged.
+2. **Contaminated items are a diagnostic only:** the `contam` set is stock 8-Ks from 2024-01-01 to 2025-11-30 (sample of 600) and all crypto notices before 2025-12-01. They never choose a version and never enter a selection statistic. They are read in two variants: **anon** (the standard input: names, tickers, coin symbols and dates replaced; plus a descriptor, "a large US-listed company (sector: SIC description)" for stocks and "a crypto token with a perpetual contract" for crypto) and **named** (the raw text with issuer name, ticker or coin and the filing date). We report the score of the named variant minus the anonymized variant per version. A large positive gap means memory, not analysis. Company size is not available point-in-time without a new data source, so the descriptor carries sector only (all stock items are S&P 500 members).
+3. **Samples:** clean train 900 stock items, clean validation 700, contaminated 600 (drawn by sha256 order); every crypto notice. The analog pool may contain contaminated items (their outcomes are facts that existed before the scored item's `t_pub`, with the closed-before rule unchanged); a version is still judged only on clean validation.
+4. **Reporting:** clean-window and contaminated numbers are always reported separately, never pooled.
+5. **Sealed set unchanged** (2026-08-01 onward minus the burned window); it is after the cliff, so memory is not an issue there.

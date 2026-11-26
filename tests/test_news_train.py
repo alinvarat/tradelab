@@ -22,6 +22,14 @@ class Lock(unittest.TestCase):
                          "protocol.md is locked; write a dated addendum instead")
         self.assertIn(hashlib.sha256((ROOT / "params.json").read_bytes()).hexdigest(), proto.read_text())
 
+    def test_addendum_hash_and_params_v2(self):
+        add = ROOT / "protocol_addendum_20261126.md"
+        self.assertEqual(hashlib.sha256(add.read_bytes()).hexdigest(), add.with_suffix(".sha256").read_text().strip())
+        self.assertIn(hashlib.sha256((ROOT / "params_v2.json").read_bytes()).hexdigest(), add.read_text())
+        v1 = json.loads((ROOT / "params.json").read_text())
+        for k in ("cost", "entry", "holds", "keyword", "seed", "model"):
+            self.assertEqual(v1[k], P[k])
+
     def test_registry_matches_prompts_and_cap(self):
         reg = L.versions_registry()["versions"]
         self.assertLessEqual(len(reg), P["max_versions"])
@@ -40,7 +48,11 @@ class Lock(unittest.TestCase):
 class Seal(unittest.TestCase):
     def test_splits(self):
         d = L.day_ts
-        self.assertEqual(L.split_of(d("2024-06-01"), P), "train")
+        self.assertEqual(L.split_of(d("2024-06-01"), P), "contam")
+        self.assertEqual(L.split_of(d("2025-11-30"), P), "contam")
+        self.assertEqual(L.split_of(d("2025-12-01"), P), "train")
+        self.assertEqual(L.split_of(d("2026-03-31"), P), "train")
+        self.assertEqual(L.split_of(d("2026-04-01"), P), "validation")
         self.assertEqual(L.split_of(d("2026-06-30"), P), "validation")
         self.assertEqual(L.split_of(d("2026-07-15"), P), "buffer")
         self.assertEqual(L.split_of(d("2026-09-01"), P), "sealed")
@@ -171,6 +183,16 @@ class Analogs(unittest.TestCase):
 
 
 class Prompt(unittest.TestCase):
+    def test_named_variant_uses_raw_text(self):
+        it = {"key": "k", "market": "stock", "t_pub": 1.0, "text": "the [COMPANY] said", "text_named": "Acme said", "descr": "Issuer: sector X.",
+              "named_header": "Issuer: Acme (ACM). Filed: 2025-01-01.", "items": []}
+        a = L.render_user(it, {}, {"uses_pre": False}, None, P, "anon")
+        n = L.render_user(it, {}, {"uses_pre": False}, None, P, "named")
+        self.assertIn("[COMPANY]", a)
+        self.assertNotIn("Acme", a)
+        self.assertIn("Acme said", n)
+        self.assertIn("ACM", n)
+
     def test_render_hides_gross_and_parse(self):
         it = {"key": "k", "market": "stock", "t_pub": 1.0, "text": "x" * 5000, "items": ["2.02"]}
         lab = {"gap": 0.021, "runup5": -0.01, "gross": {"1d": 0.5}}
