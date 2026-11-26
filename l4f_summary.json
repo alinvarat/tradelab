@@ -1,28 +1,8 @@
 {
- "equity_usd": 149.8131,
+ "equity_usd": 150.946,
  "start_usd": 147.0,
  "goal_usd": 441.0,
  "pending": [
-  {
-   "id": "7176635",
-   "question": "Will the price of Bitcoin be above $54,000 on November 26?",
-   "end": "2026-11-26T17:00:00Z",
-   "side": "no",
-   "price": 0.029,
-   "stake": 7.35,
-   "entry_ts": 1795583862.5271363,
-   "volume": 53583.940569
-  },
-  {
-   "id": "7176637",
-   "question": "Will the price of Bitcoin be above $56,000 on November 26?",
-   "end": "2026-11-26T17:00:00Z",
-   "side": "no",
-   "price": 0.038,
-   "stake": 7.4313,
-   "entry_ts": 1795628838.5644197,
-   "volume": 51908.538111
-  },
   {
    "id": "6994161",
    "question": "Exact Score: Any Other Score?",
@@ -72,16 +52,6 @@
    "stake": 7.4313,
    "entry_ts": 1795630723.0308065,
    "volume": 92226
-  },
-  {
-   "id": "7176639",
-   "question": "Will the price of Bitcoin be above $58,000 on November 26?",
-   "end": "2026-11-26T17:00:00Z",
-   "side": "no",
-   "price": 0.077,
-   "stake": 7.4313,
-   "entry_ts": 1795634683.2869155,
-   "volume": 53403.579274
   },
   {
    "id": "6995936",
@@ -142,62 +112,50 @@
    "stake": 7.4907,
    "entry_ts": 1795683369.5597908,
    "volume": 52333.79947099999
+  },
+  {
+   "id": "7109773",
+   "question": "Will Elon Musk post 300-319 tweets from November 20 to November 27, 2026?",
+   "end": "2026-11-27T17:00:00Z",
+   "side": "yes",
+   "price": 0.05,
+   "stake": 7.4907,
+   "entry_ts": 1795717699.170721,
+   "volume": 77161.94256899999
+  },
+  {
+   "id": "7203509",
+   "question": "Will the price of Ethereum be above $1,800 on November 27?",
+   "end": "2026-11-27T17:00:00Z",
+   "side": "yes",
+   "price": 0.028,
+   "stake": 7.4907,
+   "entry_ts": 1795717699.170721,
+   "volume": 55081.174039000005
+  },
+  {
+   "id": "7203524",
+   "question": "Will the price of Bitcoin be above $58,000 on November 27?",
+   "end": "2026-11-27T17:00:00Z",
+   "side": "no",
+   "price": 0.05,
+   "stake": 7.4907,
+   "entry_ts": 1795717699.170721,
+   "volume": 53995.585414999994
   }
  ],
- "n_closed": 10,
+ "n_closed": 13,
  "sequential": {
-  "n_units": 1,
-  "e_value_edge": 1.0,
+  "n_units": 2,
+  "e_value_edge": 1.0255,
   "e_value_negative": 1.0,
   "threshold": 20.0,
   "decision": "continue",
   "decided_at_unit": null,
-  "mean_scaled": 0.038276
+  "mean_scaled": 0.044603
  },
  "protocol": "research/studies/protocol_L4f_polymarket_longshot_forward.md",
  "closed_last": [
-  {
-   "id": "7233465",
-   "question": "Will Elon Musk post <40 tweets from November 23 to November 25, 2026?",
-   "end": "2026-11-25T17:00:00Z",
-   "side": "yes",
-   "price": 0.083,
-   "stake": 7.35,
-   "entry_ts": 1795567653.2079093,
-   "volume": 73525.824658,
-   "net": 0.09051254089422028,
-   "ts": 1795591037.4459643,
-   "yes_won": false,
-   "equity_after": 147.6653
-  },
-  {
-   "id": "7150180",
-   "question": "Will the price of Bitcoin be above $56,000 on November 25?",
-   "end": "2026-11-25T17:00:00Z",
-   "side": "no",
-   "price": 0.042,
-   "stake": 7.35,
-   "entry_ts": 1795529548.836021,
-   "volume": 55360.12932199999,
-   "net": 0.04384133611691023,
-   "ts": 1795627052.9824119,
-   "yes_won": true,
-   "equity_after": 147.9875
-  },
-  {
-   "id": "7150186",
-   "question": "Will the price of Bitcoin be above $62,000 on November 25?",
-   "end": "2026-11-25T17:00:00Z",
-   "side": "yes",
-   "price": 0.08,
-   "stake": 7.35,
-   "entry_ts": 1795565895.9228568,
-   "volume": 55421.884689,
-   "net": 0.08695652173913043,
-   "ts": 1795627052.9824119,
-   "yes_won": false,
-   "equity_after": 148.6266
-  },
   {
    "id": "6757110",
    "question": "Will FC Barcelona win on 2026-11-25?",
@@ -295,6 +253,48 @@
    "ts": 1795646839.0774944,
    "yes_won": false,
    "equity_after": 149.8131
+  },
+  {
+   "id": "7176635",
+   "question": "Will the price of Bitcoin be above $54,000 on November 26?",
+   "end": "2026-11-26T17:00:00Z",
+   "side": "no",
+   "price": 0.029,
+   "stake": 7.35,
+   "entry_ts": 1795583862.5271363,
+   "volume": 53583.940569,
+   "net": 0.029866117404737387,
+   "ts": 1795717699.170721,
+   "yes_won": true,
+   "equity_after": 150.0326
+  },
+  {
+   "id": "7176637",
+   "question": "Will the price of Bitcoin be above $56,000 on November 26?",
+   "end": "2026-11-26T17:00:00Z",
+   "side": "no",
+   "price": 0.038,
+   "stake": 7.4313,
+   "entry_ts": 1795628838.5644197,
+   "volume": 51908.538111,
+   "net": 0.0395010395010395,
+   "ts": 1795717699.170721,
+   "yes_won": true,
+   "equity_after": 150.3261
+  },
+  {
+   "id": "7176639",
+   "question": "Will the price of Bitcoin be above $58,000 on November 26?",
+   "end": "2026-11-26T17:00:00Z",
+   "side": "no",
+   "price": 0.077,
+   "stake": 7.4313,
+   "entry_ts": 1795634683.2869155,
+   "volume": 53403.579274,
+   "net": 0.08342361863488623,
+   "ts": 1795717699.170721,
+   "yes_won": true,
+   "equity_after": 150.946
   }
  ],
  "last_error": null
