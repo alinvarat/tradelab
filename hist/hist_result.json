@@ -1,0 +1,1524 @@
+{
+ "gate": {
+  "cutoff_month": "2025-11",
+  "first_eligible_day": "2025-12-01",
+  "haiku_cutoff_month": "2025-11",
+  "note": "items with t_pub before first_eligible_day are excluded from every comparison (registered rule, protocol_cmp_20261126.md)",
+  "rule": {
+   "min_acc": 0.6,
+   "min_answered": 4,
+   "note": "a month is known when the probe's answered count >= min_answered and accuracy among answered >= min_acc on either asset; the cutoff is the last known month; items are eligible from the first day of the next month. Checked against the round-1 Haiku probe: last known month 2025-11.",
+   "of_days": 12
+  },
+  "sonnet_cutoff_month": "2025-11"
+ },
+ "label": "DESCRIPTIVE: these sealed sets were already opened once for Haiku (round 2 crypto, round 3 stock); no gate, no verdict",
+ "meta": [
+  {
+   "items": 247,
+   "models": {
+    "haiku": {
+     "called": 247,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 247,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 247,
+      "notional_usd": 0.0944,
+      "tokens_cached": 0,
+      "tokens_in": 254893,
+      "tokens_out": 86862,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 247,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 247,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 247,
+      "notional_usd": 1.2871,
+      "tokens_cached": 0,
+      "tokens_in": 249722,
+      "tokens_out": 28924,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "crypto_w1",
+   "shard": 0
+  },
+  {
+   "items": 247,
+   "models": {
+    "haiku": {
+     "called": 247,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 247,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 247,
+      "notional_usd": 0.0942,
+      "tokens_cached": 0,
+      "tokens_in": 254761,
+      "tokens_out": 86596,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 247,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 247,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 247,
+      "notional_usd": 1.2879,
+      "tokens_cached": 0,
+      "tokens_in": 249574,
+      "tokens_out": 29055,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "crypto_w1",
+   "shard": 1
+  },
+  {
+   "items": 247,
+   "models": {
+    "haiku": {
+     "called": 247,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 247,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 247,
+      "notional_usd": 0.0953,
+      "tokens_cached": 0,
+      "tokens_in": 254255,
+      "tokens_out": 88936,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 247,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 247,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 247,
+      "notional_usd": 1.2833,
+      "tokens_cached": 0,
+      "tokens_in": 249053,
+      "tokens_out": 28805,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "crypto_w1",
+   "shard": 2
+  },
+  {
+   "items": 246,
+   "models": {
+    "haiku": {
+     "called": 246,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 0.0934,
+      "tokens_cached": 0,
+      "tokens_in": 253237,
+      "tokens_out": 85565,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 246,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 1.2791,
+      "tokens_cached": 0,
+      "tokens_in": 248039,
+      "tokens_out": 28796,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "crypto_w1",
+   "shard": 3
+  },
+  {
+   "items": 246,
+   "models": {
+    "haiku": {
+     "called": 246,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 0.0936,
+      "tokens_cached": 0,
+      "tokens_in": 253714,
+      "tokens_out": 85907,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 246,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 1.2833,
+      "tokens_cached": 0,
+      "tokens_in": 248538,
+      "tokens_out": 29017,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "crypto_w1",
+   "shard": 4
+  },
+  {
+   "items": 246,
+   "models": {
+    "haiku": {
+     "called": 246,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 0.0958,
+      "tokens_cached": 0,
+      "tokens_in": 253436,
+      "tokens_out": 90238,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 246,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 1.2823,
+      "tokens_cached": 0,
+      "tokens_in": 248258,
+      "tokens_out": 29025,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "crypto_w1",
+   "shard": 5
+  },
+  {
+   "items": 246,
+   "models": {
+    "haiku": {
+     "called": 246,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 0.0943,
+      "tokens_cached": 664,
+      "tokens_in": 253679,
+      "tokens_out": 87531,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 246,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 1.2779,
+      "tokens_cached": 664,
+      "tokens_in": 248523,
+      "tokens_out": 28734,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "crypto_w1",
+   "shard": 6
+  },
+  {
+   "items": 246,
+   "models": {
+    "haiku": {
+     "called": 246,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 0.0937,
+      "tokens_cached": 0,
+      "tokens_in": 253475,
+      "tokens_out": 86137,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 246,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 246,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 246,
+      "notional_usd": 1.2821,
+      "tokens_cached": 0,
+      "tokens_in": 248326,
+      "tokens_out": 28976,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "crypto_w1",
+   "shard": 7
+  },
+  {
+   "items": 130,
+   "models": {
+    "haiku": {
+     "called": 130,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 130,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 130,
+      "notional_usd": 0.0729,
+      "tokens_cached": 0,
+      "tokens_in": 258347,
+      "tokens_out": 42529,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 130,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 130,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 130,
+      "notional_usd": 1.1393,
+      "tokens_cached": 0,
+      "tokens_in": 255615,
+      "tokens_out": 11740,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "stock_m1",
+   "shard": 0
+  },
+  {
+   "items": 130,
+   "models": {
+    "haiku": {
+     "called": 130,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 130,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 130,
+      "notional_usd": 0.0722,
+      "tokens_cached": 0,
+      "tokens_in": 253452,
+      "tokens_out": 42980,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 130,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 130,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 130,
+      "notional_usd": 1.12,
+      "tokens_cached": 0,
+      "tokens_in": 250702,
+      "tokens_out": 11768,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "stock_m1",
+   "shard": 1
+  },
+  {
+   "items": 129,
+   "models": {
+    "haiku": {
+     "called": 129,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 129,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 129,
+      "notional_usd": 0.0705,
+      "tokens_cached": 1569,
+      "tokens_in": 248673,
+      "tokens_out": 42249,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 129,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 129,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 129,
+      "notional_usd": 1.0932,
+      "tokens_cached": 1569,
+      "tokens_in": 245970,
+      "tokens_out": 11595,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "stock_m1",
+   "shard": 2
+  },
+  {
+   "items": 129,
+   "models": {
+    "haiku": {
+     "called": 129,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 129,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 129,
+      "notional_usd": 0.0704,
+      "tokens_cached": 1569,
+      "tokens_in": 249558,
+      "tokens_out": 41632,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 129,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 129,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 129,
+      "notional_usd": 1.0972,
+      "tokens_cached": 1569,
+      "tokens_in": 246845,
+      "tokens_out": 11641,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "stock_m1",
+   "shard": 3
+  },
+  {
+   "items": 130,
+   "models": {
+    "haiku": {
+     "called": 130,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 130,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 130,
+      "notional_usd": 0.0973,
+      "tokens_cached": 70485,
+      "tokens_in": 413758,
+      "tokens_out": 55894,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 130,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 130,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 130,
+      "notional_usd": 1.5238,
+      "tokens_cached": 70485,
+      "tokens_in": 411021,
+      "tokens_out": 15510,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "stock_w3",
+   "shard": 0
+  },
+  {
+   "items": 130,
+   "models": {
+    "haiku": {
+     "called": 130,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 130,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 130,
+      "notional_usd": 0.0947,
+      "tokens_cached": 72150,
+      "tokens_in": 406129,
+      "tokens_out": 54347,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 130,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 130,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 130,
+      "notional_usd": 1.4856,
+      "tokens_cached": 72150,
+      "tokens_in": 403401,
+      "tokens_out": 15389,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "stock_w3",
+   "shard": 1
+  },
+  {
+   "items": 129,
+   "models": {
+    "haiku": {
+     "called": 129,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 129,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 129,
+      "notional_usd": 0.0922,
+      "tokens_cached": 73674,
+      "tokens_in": 398518,
+      "tokens_out": 53119,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 129,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 129,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 129,
+      "notional_usd": 1.4494,
+      "tokens_cached": 73674,
+      "tokens_in": 395812,
+      "tokens_out": 15398,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "stock_w3",
+   "shard": 2
+  },
+  {
+   "items": 129,
+   "models": {
+    "haiku": {
+     "called": 129,
+     "first_served": "claude/claude-haiku-5-5",
+     "ok": 129,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 129,
+      "notional_usd": 0.0947,
+      "tokens_cached": 73674,
+      "tokens_in": 400476,
+      "tokens_out": 57195,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    },
+    "sonnet": {
+     "called": 129,
+     "first_served": "claude/claude-sonnet-5-5",
+     "ok": 129,
+     "served_mismatch": 0,
+     "spend": {
+      "calls": 129,
+      "notional_usd": 1.4588,
+      "tokens_cached": 73674,
+      "tokens_in": 397763,
+      "tokens_out": 15558,
+      "total_usd": 0.0
+     },
+     "stopped_early": false
+    }
+   },
+   "set": "stock_w3",
+   "shard": 3
+  }
+ ],
+ "prep_report": {
+  "gate": {
+   "cutoff_month": "2025-11",
+   "first_eligible_day": "2025-12-01",
+   "haiku_cutoff_month": "2025-11",
+   "note": "items with t_pub before first_eligible_day are excluded from every comparison (registered rule, protocol_cmp_20261126.md)",
+   "rule": {
+    "min_acc": 0.6,
+    "min_answered": 4,
+    "note": "a month is known when the probe's answered count >= min_answered and accuracy among answered >= min_acc on either asset; the cutoff is the last known month; items are eligible from the first day of the next month. Checked against the round-1 Haiku probe: last known month 2025-11.",
+    "of_days": 12
+   },
+   "sonnet_cutoff_month": "2025-11"
+  },
+  "sets": {
+   "crypto_w1": {
+    "drops": {
+     "no_label": 529
+    },
+    "eligible_by_gate": 2500,
+    "items_in_file": 2500,
+    "prepared": 1971,
+    "registered_n": 1971
+   },
+   "stock": {
+    "callable": 518,
+    "drops": {
+     "not_callable": 3
+    },
+    "eligible_by_gate": 521,
+    "items_in_file": 521,
+    "registered_n": 518
+   }
+  }
+ },
+ "sets": {
+  "crypto_w1": {
+   "called": {
+    "haiku": 1971,
+    "sonnet": 1971
+   },
+   "cells": {
+    "haiku": {
+     "1d": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.0005608777182979746,
+       "keyword_traded": 218,
+       "long_all_per_offered": -0.0020811799643506534,
+       "long_on_traded_per_offered": -4.5753958639623724e-05,
+       "random_per_offered": -0.00020061885245901604,
+       "short_on_traded_per_offered": -0.00035548374627840834
+      },
+      "excluded": {
+       "no_gross": 19,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.41836734693877553,
+      "hold": "1d",
+      "lag": "main",
+      "market": "crypto",
+      "mean_per_trade": -0.006342753401861446,
+      "mean_per_trade_2x": -0.01032135700127809,
+      "n_offered": 1952,
+      "n_traded": 98,
+      "score_per_offered": -0.00031843741464263406,
+      "vs_abstain": {
+       "days": 91,
+       "hi": -6.645628039047192e-05,
+       "lo": -0.0006115418591766676,
+       "mean": -0.00031843741464263406,
+       "n": 1952,
+       "p": 0.995
+      },
+      "vs_keyword": {
+       "days": 91,
+       "hi": 0.000890337949250424,
+       "lo": -0.0004595903168769706,
+       "mean": 0.00024244030365534053,
+       "n": 1952,
+       "p": 0.2535
+      },
+      "vs_random": {
+       "days": 91,
+       "hi": 0.00012234301985633477,
+       "lo": -0.0003853237368585702,
+       "mean": -0.00011781856218361803,
+       "n": 1952,
+       "p": 0.818
+      },
+      "vs_random_2x": {
+       "days": 91,
+       "hi": 0.00013102343393818668,
+       "lo": -0.00038134558874510475,
+       "mean": -0.00011734681666252757,
+       "n": 1952,
+       "p": 0.813
+      }
+     },
+     "1h": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.0004448754039282053,
+       "keyword_traded": 218,
+       "long_all_per_offered": -0.00387596101804696,
+       "long_on_traded_per_offered": -0.00045455768543440614,
+       "random_per_offered": -0.00048049315068493195,
+       "short_on_traded_per_offered": -0.0005064286159354578
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.48523206751054854,
+      "hold": "1h",
+      "lag": "main",
+      "market": "crypto",
+      "mean_per_trade": -0.004099051463614497,
+      "mean_per_trade_2x": -0.00808663884555583,
+      "n_offered": 1971,
+      "n_traded": 237,
+      "score_per_offered": -0.0004928844225655179,
+      "vs_abstain": {
+       "days": 92,
+       "hi": -0.00034989406490241613,
+       "lo": -0.0006337191730259329,
+       "mean": -0.0004928844225655179,
+       "n": 1971,
+       "p": 1.0
+      },
+      "vs_keyword": {
+       "days": 92,
+       "hi": 0.00016027516425233713,
+       "lo": -0.0002634060439790416,
+       "mean": -4.800901863731259e-05,
+       "n": 1971,
+       "p": 0.671
+      },
+      "vs_random": {
+       "days": 92,
+       "hi": 0.0001247356104347433,
+       "lo": -0.0001347861080996787,
+       "mean": -1.2391271880585925e-05,
+       "n": 1971,
+       "p": 0.5795
+      },
+      "vs_random_2x": {
+       "days": 92,
+       "hi": 0.00011863565580125884,
+       "lo": -0.0001478828382762272,
+       "mean": -1.2341657228174687e-05,
+       "n": 1971,
+       "p": 0.577
+      }
+     },
+     "5m": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.00043343686768238204,
+       "keyword_traded": 218,
+       "long_all_per_offered": -0.003913288659906768,
+       "long_on_traded_per_offered": -0.0002682227091255939,
+       "random_per_offered": -0.00026761643835616444,
+       "short_on_traded_per_offered": -0.000267010167586735
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.48484848484848486,
+      "hold": "5m",
+      "lag": "main",
+      "market": "crypto",
+      "mean_per_trade": -0.0039003831921177734,
+      "mean_per_trade_2x": -0.007888766041814993,
+      "n_offered": 1971,
+      "n_traded": 132,
+      "score_per_offered": -0.00026121287740210353,
+      "vs_abstain": {
+       "days": 92,
+       "hi": -0.00020709708337922388,
+       "lo": -0.0003167160146003846,
+       "mean": -0.00026121287740210353,
+       "n": 1971,
+       "p": 1.0
+      },
+      "vs_keyword": {
+       "days": 92,
+       "hi": 0.00025035594276882645,
+       "lo": 9.15683632220133e-05,
+       "mean": 0.00017222399028027848,
+       "n": 1971,
+       "p": 0.0
+      },
+      "vs_random": {
+       "days": 92,
+       "hi": 2.6143654316630507e-05,
+       "lo": -1.2966029796927823e-05,
+       "mean": 6.403560954060892e-06,
+       "n": 1971,
+       "p": 0.257
+      },
+      "vs_random_2x": {
+       "days": 92,
+       "hi": 2.6675565638415834e-05,
+       "lo": -1.401895829033106e-05,
+       "mean": 6.37792109610341e-06,
+       "n": 1971,
+       "p": 0.2605
+      }
+     }
+    },
+    "sonnet": {
+     "1d": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.0005608777182979746,
+       "keyword_traded": 218,
+       "long_all_per_offered": -0.0020811799643506534,
+       "long_on_traded_per_offered": -8.247755352288899e-05,
+       "random_per_offered": -2.6612704918032785e-05,
+       "short_on_traded_per_offered": 2.9252143686823416e-05
+      },
+      "excluded": {
+       "no_gross": 19,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.5384615384615384,
+      "hold": "1d",
+      "lag": "main",
+      "market": "crypto",
+      "mean_per_trade": 0.002366360847380716,
+      "mean_per_trade_2x": -0.0016471140453499723,
+      "n_offered": 1952,
+      "n_traded": 13,
+      "score_per_offered": 1.5759575315547802e-05,
+      "vs_abstain": {
+       "days": 91,
+       "hi": 7.481857268147704e-05,
+       "lo": -2.7946045415514417e-05,
+       "mean": 1.5759575315547802e-05,
+       "n": 1952,
+       "p": 0.2805
+      },
+      "vs_keyword": {
+       "days": 91,
+       "hi": 0.0011112165570412922,
+       "lo": 7.015509592594568e-06,
+       "mean": 0.0005766372936135225,
+       "n": 1952,
+       "p": 0.025
+      },
+      "vs_random": {
+       "days": 91,
+       "hi": 0.00010222094041774625,
+       "lo": -5.677009538412271e-06,
+       "mean": 4.237228023358058e-05,
+       "n": 1952,
+       "p": 0.0545
+      },
+      "vs_random_2x": {
+       "days": 91,
+       "hi": 0.0001022114774425562,
+       "lo": -2.6259894486801833e-06,
+       "mean": 4.220262162420607e-05,
+       "n": 1952,
+       "p": 0.0335
+      }
+     },
+     "1h": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.0004448754039282053,
+       "keyword_traded": 218,
+       "long_all_per_offered": -0.00387596101804696,
+       "long_on_traded_per_offered": -2.292754632114918e-05,
+       "random_per_offered": -1.4191780821917864e-05,
+       "short_on_traded_per_offered": -5.456015322686546e-06
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.7142857142857143,
+      "hold": "1h",
+      "lag": "main",
+      "market": "crypto",
+      "mean_per_trade": -0.0015362580287164545,
+      "mean_per_trade_2x": -0.005534106835529954,
+      "n_offered": 1971,
+      "n_traded": 7,
+      "score_per_offered": -5.456015322686546e-06,
+      "vs_abstain": {
+       "days": 92,
+       "hi": 8.521990548222094e-06,
+       "lo": -1.8747933453081682e-05,
+       "mean": -5.456015322686546e-06,
+       "n": 1971,
+       "p": 0.8025
+      },
+      "vs_keyword": {
+       "days": 92,
+       "hi": 0.0005699655774242697,
+       "lo": 0.00031063534541593806,
+       "mean": 0.0004394193886055188,
+       "n": 1971,
+       "p": 0.0
+      },
+      "vs_random": {
+       "days": 92,
+       "hi": 2.5195740005522343e-05,
+       "lo": -1.8357978225271404e-06,
+       "mean": 8.735765499231317e-06,
+       "n": 1971,
+       "p": 0.0785
+      },
+      "vs_random_2x": {
+       "days": 92,
+       "hi": 2.4114189441904854e-05,
+       "lo": -2.2713918731978004e-06,
+       "mean": 8.700787494312749e-06,
+       "n": 1971,
+       "p": 0.0895
+      }
+     },
+     "5m": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.00043343686768238204,
+       "keyword_traded": 218,
+       "long_all_per_offered": -0.003913288659906768,
+       "long_on_traded_per_offered": -3.2520498817049846e-06,
+       "random_per_offered": -4.054794520547945e-06,
+       "short_on_traded_per_offered": -4.857539159390905e-06
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.0,
+      "hold": "5m",
+      "lag": "main",
+      "market": "crypto",
+      "mean_per_trade": -0.004787104841579737,
+      "mean_per_trade_2x": -0.008771937257806728,
+      "n_offered": 1971,
+      "n_traded": 2,
+      "score_per_offered": -4.857539159390905e-06,
+      "vs_abstain": {
+       "days": 92,
+       "hi": 0.0,
+       "lo": -1.2434706607868496e-05,
+       "mean": -4.857539159390905e-06,
+       "n": 1971,
+       "p": 1.0
+      },
+      "vs_keyword": {
+       "days": 92,
+       "hi": 0.0004907877600818964,
+       "lo": 0.00036587255788954836,
+       "mean": 0.0004285793285229911,
+       "n": 1971,
+       "p": 0.0
+      },
+      "vs_random": {
+       "days": 92,
+       "hi": 0.0,
+       "lo": -2.0512960903868172e-06,
+       "mean": -8.027446388429602e-07,
+       "n": 1971,
+       "p": 1.0
+      },
+      "vs_random_2x": {
+       "days": 92,
+       "hi": 0.0,
+       "lo": -1.995478881967192e-06,
+       "mean": -7.995304493219043e-07,
+       "n": 1971,
+       "p": 1.0
+      }
+     }
+    }
+   },
+   "haiku_rerun_vs_registered": {
+    "items": 1971,
+    "registered_cell_1h": {
+     "baselines": {
+      "abstain": 0.0,
+      "keyword_per_offered": -0.0004448754039282053,
+      "keyword_traded": 218,
+      "long_all_per_offered": -0.00387596101804696,
+      "long_on_traded_per_offered": -0.000435776250939551,
+      "random_per_offered": -0.00043386301369863033,
+      "short_on_traded_per_offered": -0.00043194977645770954
+     },
+     "excluded": {
+      "no_gross": 0,
+      "no_label": 0,
+      "no_reply": 0
+     },
+     "hit_rate": 0.4672897196261682,
+     "hold": "1h",
+     "lag": "main",
+     "market": "crypto",
+     "mean_per_trade": -0.00416446115215113,
+     "mean_per_trade_2x": -0.008151786633700617,
+     "n_offered": 1971,
+     "n_traded": 214,
+     "score_per_offered": -0.00045215357004583547,
+     "vs_abstain": {
+      "days": 92,
+      "hi": -0.0003374660662431288,
+      "lo": -0.0005870342074047295,
+      "mean": -0.00045215357004583547,
+      "n": 1971,
+      "p": 1.0
+     },
+     "vs_keyword": {
+      "days": 92,
+      "hi": 0.00017600089971743304,
+      "lo": -0.00019110870888680177,
+      "mean": -7.27816611763018e-06,
+      "n": 1971,
+      "p": 0.533
+     },
+     "vs_random": {
+      "days": 92,
+      "hi": 8.753502298677619e-05,
+      "lo": -0.00012576740309273092,
+      "mean": -1.8290556347205195e-05,
+      "n": 1971,
+      "p": 0.623
+     },
+     "vs_random_2x": {
+      "days": 92,
+      "hi": 8.666399048716685e-05,
+      "lo": -0.00013030440388755158,
+      "mean": -1.821732095988495e-05,
+      "n": 1971,
+      "p": 0.606
+     }
+    },
+    "same_side_1h": 0.8883815322171487
+   },
+   "latency": {
+    "haiku": {
+     "mean_s": 3.67,
+     "median_s": 3.52,
+     "n": 1971,
+     "p90_s": 4.86
+    },
+    "sonnet": {
+     "mean_s": 2.26,
+     "median_s": 2.25,
+     "n": 1971,
+     "p90_s": 2.52
+    }
+   },
+   "n_paired": 1971,
+   "n_set": 1971,
+   "ok": {
+    "haiku": 1971,
+    "sonnet": 1971
+   },
+   "paired_1h": {
+    "both_abstain": 1734,
+    "days": 92,
+    "discordant": 230,
+    "hi": 0.0006233150299629389,
+    "lo": 0.0003515342912006345,
+    "mean_diff": 0.00048742840724283135,
+    "mean_net_per_item": {
+     "haiku": -0.0004928844225655179,
+     "sonnet": -5.456015322686546e-06
+    },
+    "n": 1971,
+    "p_boot_two_sided": 0.0,
+    "sign": {
+     "n_nonzero": 230,
+     "neg": 36,
+     "p": 2.2269916657432302e-27,
+     "pos": 194,
+     "ties": 1741
+    }
+   }
+  },
+  "stock_m1": {
+   "haiku": {
+    "excluded": {
+     "no_feat": 0,
+     "no_label": 0,
+     "no_reply": 0,
+     "no_target": 0
+    },
+    "stats": {
+     "auc_h": 0.5920940881060522,
+     "auc_hp": 0.5816624201469666,
+     "auc_kw": 0.5410989254458846,
+     "auc_pre": 0.6258631512868801,
+     "auc_rv": 0.5694767549204239,
+     "big_rate": 0.8861003861003861,
+     "mean_abs": 0.020436611955943623,
+     "n": 518,
+     "partial_h_given_rv_pre": 0.17893756637779207,
+     "partial_h_given_rv_pre_earn": 0.08986489575426303,
+     "partial_rv_given_h": -0.13428683170321382,
+     "rho_h": 0.3646842601866891,
+     "rho_hp": 0.3552976760243638,
+     "rho_kw": 0.0242888517345212,
+     "rho_pre": 0.3651061430736931,
+     "rho_rv": 0.18883203875469212,
+     "share_earn": 0.5965250965250966,
+     "top_third": {
+      "big_rate": 0.9230769230769231,
+      "mean_abs": 0.030050184756892924,
+      "n": 182,
+      "rest_big_rate": 0.8660714285714286,
+      "rest_mean_abs": 0.015229260022096083
+     }
+    }
+   },
+   "haiku_rerun_vs_registered_rank_corr": 0.9317037382034448,
+   "latency": {
+    "haiku": {
+     "mean_s": 3.39,
+     "median_s": 3.31,
+     "n": 518,
+     "p90_s": 3.99
+    },
+    "sonnet": {
+     "mean_s": 2.05,
+     "median_s": 2.02,
+     "n": 518,
+     "p90_s": 2.29
+    }
+   },
+   "n_paired": 518,
+   "n_set": 518,
+   "paired_partial": {
+    "a": 0.17893756637779207,
+    "b": 0.18920130065696117,
+    "days": 22,
+    "hi": 0.08663311545496459,
+    "lo": -0.07516941624688016,
+    "n": 518,
+    "p": 0.4025,
+    "p_two_sided": 0.805,
+    "point": 0.010263734279169101
+   },
+   "registered_haiku_stats": {
+    "auc_h": 0.5863705180754034,
+    "auc_hp": 0.6046859421734796,
+    "auc_kw": 0.5410989254458846,
+    "auc_pre": 0.6258631512868801,
+    "auc_rv": 0.5694767549204239,
+    "big_rate": 0.8861003861003861,
+    "mean_abs": 0.020436611955943623,
+    "n": 518,
+    "partial_h_given_rv_pre": 0.14479623170179762,
+    "partial_h_given_rv_pre_earn": 0.04675263284810456,
+    "partial_rv_given_h": -0.10689225105974537,
+    "rho_h": 0.3494778672044385,
+    "rho_hp": 0.36033726906264035,
+    "rho_kw": 0.0242888517345212,
+    "rho_pre": 0.3651061430736931,
+    "rho_rv": 0.18883203875469212,
+    "share_earn": 0.5965250965250966,
+    "top_third": {
+     "big_rate": 0.9230769230769231,
+     "mean_abs": 0.029624416779137915,
+     "n": 182,
+     "rest_big_rate": 0.8660714285714286,
+     "rest_mean_abs": 0.015459884343380047
+    }
+   },
+   "sonnet": {
+    "excluded": {
+     "no_feat": 0,
+     "no_label": 0,
+     "no_reply": 0,
+     "no_target": 0
+    },
+    "stats": {
+     "auc_h": 0.6211181271001809,
+     "auc_hp": 0.5993685609837155,
+     "auc_kw": 0.5410989254458846,
+     "auc_pre": 0.6258631512868801,
+     "auc_rv": 0.5694767549204239,
+     "big_rate": 0.8861003861003861,
+     "mean_abs": 0.020436611955943623,
+     "n": 518,
+     "partial_h_given_rv_pre": 0.18920130065696117,
+     "partial_h_given_rv_pre_earn": 0.11612980977487784,
+     "partial_rv_given_h": -0.12586641172871493,
+     "rho_h": 0.39429544166480957,
+     "rho_hp": 0.3873747886032936,
+     "rho_kw": 0.0242888517345212,
+     "rho_pre": 0.3651061430736931,
+     "rho_rv": 0.18883203875469212,
+     "share_earn": 0.5965250965250966,
+     "top_third": {
+      "big_rate": 0.9371980676328503,
+      "mean_abs": 0.029693377481906987,
+      "n": 207,
+      "rest_big_rate": 0.8520900321543409,
+      "rest_mean_abs": 0.01427535644509341
+     }
+    }
+   }
+  },
+  "stock_w3": {
+   "called": {
+    "haiku": 518,
+    "sonnet": 518
+   },
+   "cells": {
+    "haiku": {
+     "1h": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": 0.0010815989121667293,
+       "keyword_traded": 270,
+       "long_all_per_offered": -0.00031537494871657865,
+       "long_on_traded_per_offered": 9.074490564305986e-05,
+       "random_per_offered": -0.00020165144787645452,
+       "short_on_traded_per_offered": -0.000494047801395969
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.4727272727272727,
+      "hold": "1h",
+      "lag": "main",
+      "market": "stock",
+      "mean_per_trade": -0.0008072698882722826,
+      "mean_per_trade_2x": -0.0026831273006916382,
+      "n_offered": 518,
+      "n_traded": 55,
+      "score_per_offered": -8.571398427601456e-05,
+      "vs_abstain": {
+       "days": 22,
+       "hi": 0.000906503466906689,
+       "lo": -0.0010425772865649914,
+       "mean": -8.57139842760146e-05,
+       "n": 518,
+       "p": 0.552
+      },
+      "vs_keyword": {
+       "days": 22,
+       "hi": 0.0012560105366202948,
+       "lo": -0.003973823520356022,
+       "mean": -0.001167312896442744,
+       "n": 518,
+       "p": 0.7975
+      },
+      "vs_random": {
+       "days": 22,
+       "hi": 0.0010825906873929792,
+       "lo": -0.0008300768819446515,
+       "mean": 0.00011593746360044002,
+       "n": 518,
+       "p": 0.4
+      },
+      "vs_random_2x": {
+       "days": 22,
+       "hi": 0.001086458113181681,
+       "lo": -0.0007754784373187462,
+       "mean": 0.00011824285417367756,
+       "n": 518,
+       "p": 0.377
+      }
+     },
+     "eod": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": 0.0009766994916735176,
+       "keyword_traded": 270,
+       "long_all_per_offered": -0.0015444606109560326,
+       "long_on_traded_per_offered": 0.0005146613816822906,
+       "random_per_offered": -0.00018698588803089486,
+       "short_on_traded_per_offered": -0.0008886331577440804
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.5882352941176471,
+      "hold": "eod",
+      "lag": "main",
+      "market": "stock",
+      "mean_per_trade": 0.0029142381372457673,
+      "mean_per_trade_2x": 0.0010217502749211675,
+      "n_offered": 518,
+      "n_traded": 51,
+      "score_per_offered": 0.0002869230598446605,
+      "vs_abstain": {
+       "days": 22,
+       "hi": 0.0014034151433600461,
+       "lo": -0.0009101989011742779,
+       "mean": 0.00028692305984466044,
+       "n": 518,
+       "p": 0.3145
+      },
+      "vs_keyword": {
+       "days": 22,
+       "hi": 0.0015054848255893392,
+       "lo": -0.003265884062692264,
+       "mean": -0.000689776431828857,
+       "n": 518,
+       "p": 0.705
+      },
+      "vs_random": {
+       "days": 22,
+       "hi": 0.001575833940948591,
+       "lo": -0.0007036542848405593,
+       "mean": 0.0004739089478755555,
+       "n": 518,
+       "p": 0.2245
+      },
+      "vs_random_2x": {
+       "days": 22,
+       "hi": 0.0016160498571548727,
+       "lo": -0.0006175667237984961,
+       "mean": 0.000474409312781822,
+       "n": 518,
+       "p": 0.2095
+      }
+     }
+    },
+    "sonnet": {
+     "1h": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": 0.0010815989121667293,
+       "keyword_traded": 270,
+       "long_all_per_offered": -0.00031537494871657865,
+       "long_on_traded_per_offered": 0.0012057604426542034,
+       "random_per_offered": -0.0001686539382239434,
+       "short_on_traded_per_offered": -0.00154306831910209
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.5,
+      "hold": "1h",
+      "lag": "main",
+      "market": "stock",
+      "mean_per_trade": 0.0006157113866553907,
+      "mean_per_trade_2x": -0.0012733205058221354,
+      "n_offered": 518,
+      "n_traded": 46,
+      "score_per_offered": 5.46770729462316e-05,
+      "vs_abstain": {
+       "days": 22,
+       "hi": 0.0010769225389769936,
+       "lo": -0.001132271517340162,
+       "mean": 5.467707294623155e-05,
+       "n": 518,
+       "p": 0.4365
+      },
+      "vs_keyword": {
+       "days": 22,
+       "hi": 0.001358999504136804,
+       "lo": -0.003966965981590985,
+       "mean": -0.0010269218392204976,
+       "n": 518,
+       "p": 0.7415
+      },
+      "vs_random": {
+       "days": 22,
+       "hi": 0.001217673700314047,
+       "lo": -0.0009461180099769188,
+       "mean": 0.00022333101117017506,
+       "n": 518,
+       "p": 0.332
+      },
+      "vs_random_2x": {
+       "days": 22,
+       "hi": 0.0012333345837247725,
+       "lo": -0.0009564482884025121,
+       "mean": 0.00022408922149070557,
+       "n": 518,
+       "p": 0.3175
+      }
+     },
+     "eod": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": 0.0009766994916735176,
+       "keyword_traded": 270,
+       "long_all_per_offered": -0.0015444606109560326,
+       "long_on_traded_per_offered": 0.0008283407717368419,
+       "random_per_offered": -0.00011365808880309262,
+       "short_on_traded_per_offered": -0.001055656949343027
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.5161290322580645,
+      "hold": "eod",
+      "lag": "main",
+      "market": "stock",
+      "mean_per_trade": 0.0003388011316288539,
+      "mean_per_trade_2x": -0.001546640987598806,
+      "n_offered": 518,
+      "n_traded": 31,
+      "score_per_offered": 2.0275743398637975e-05,
+      "vs_abstain": {
+       "days": 22,
+       "hi": 0.0010471641654374016,
+       "lo": -0.0010076901817177124,
+       "mean": 2.0275743398637927e-05,
+       "n": 518,
+       "p": 0.4635
+      },
+      "vs_keyword": {
+       "days": 22,
+       "hi": 0.0014383116884412951,
+       "lo": -0.003789502539978181,
+       "mean": -0.0009564237482748795,
+       "n": 518,
+       "p": 0.7515
+      },
+      "vs_random": {
+       "days": 22,
+       "hi": 0.001150624376222633,
+       "lo": -0.0009684694232112487,
+       "mean": 0.00013393383220173063,
+       "n": 518,
+       "p": 0.388
+      },
+      "vs_random_2x": {
+       "days": 22,
+       "hi": 0.0011225311313518807,
+       "lo": -0.0009321416671860385,
+       "mean": 0.00013465963201629292,
+       "n": 518,
+       "p": 0.377
+      }
+     }
+    }
+   },
+   "latency": {
+    "haiku": {
+     "mean_s": 4.17,
+     "median_s": 4.01,
+     "n": 518,
+     "p90_s": 5.19
+    },
+    "sonnet": {
+     "mean_s": 2.28,
+     "median_s": 2.21,
+     "n": 518,
+     "p90_s": 2.55
+    }
+   },
+   "n_paired": 518,
+   "n_set": 518,
+   "ok": {
+    "haiku": 518,
+    "sonnet": 518
+   },
+   "paired_1h": {
+    "both_abstain": 438,
+    "days": 22,
+    "discordant": 59,
+    "hi": 0.0010267637711853415,
+    "lo": -0.0007161897662935369,
+    "mean_diff": 0.00014039105722224617,
+    "mean_net_per_item": {
+     "haiku": -8.571398427601456e-05,
+     "sonnet": 5.46770729462316e-05
+    },
+    "n": 518,
+    "p_boot_two_sided": 0.8,
+    "sign": {
+     "n_nonzero": 59,
+     "neg": 29,
+     "p": 1.0,
+     "pos": 30,
+     "ties": 459
+    }
+   }
+  }
+ },
+ "spend": {
+  "haiku": {
+   "calls": 3007,
+   "notional_usd": 1.4196,
+   "stopped_early_shards": 0,
+   "tokens_in": 4660361,
+   "tokens_out": 1087717
+  },
+  "sonnet": {
+   "calls": 3007,
+   "notional_usd": 20.630300000000005,
+   "stopped_early_shards": 0,
+   "tokens_in": 4597162,
+   "tokens_out": 339931
+  }
+ }
+}
