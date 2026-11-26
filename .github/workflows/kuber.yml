@@ -110,7 +110,7 @@ jobs:
           # succeeded on a manual re-run since 2026-11-24. Retry the same command instead of failing the
           # deploy on a transient platform error; a real code error still fails all three attempts.
           for attempt in 1 2 3; do
-            if bunx --bun @dmgnr/kuber@2.7.1 ci --trust; then
+            if bunx --bun @dmgnr/kuber@2.7.3 ci --trust; then
               exit 0
             fi
             # 2026-11-25: Kuber builds can outlast Cloudflare's 120 s proxy window; the server keeps building
