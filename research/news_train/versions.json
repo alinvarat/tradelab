@@ -23,6 +23,22 @@
    "analogs": 5,
    "note": "v1 rubric + k=5 analogs closed before t_pub",
    "sha256": "4e3e5fe112a15598dc8dffa440ecad36668ea4c5f3d13ee95999b1a12af3a63d"
+  },
+  {
+   "id": "v3",
+   "prompt": "prompts/v3.txt",
+   "uses_pre": true,
+   "analogs": 0,
+   "note": "rules learned from train error analysis (crypto forced-selling shorts, stock abstain)",
+   "sha256": "12d89143ef95e50f10cdd642429be61143c89d930c79811c635e84012d5bfe1d"
+  },
+  {
+   "id": "v4",
+   "prompt": "prompts/v4.txt",
+   "uses_pre": true,
+   "analogs": 5,
+   "note": "v3 rules compact + analogs",
+   "sha256": "83eded763148385ae7d5e1db1b04e85026acf1843988fbefcba98f64eb711ba2"
   }
  ]
 }
