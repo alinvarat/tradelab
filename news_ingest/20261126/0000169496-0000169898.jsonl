@@ -1,0 +1,2 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17607","title":"@TalkativeTri Cool","t_pub":1795720165.693,"res":"s","t_seen":1795720169.3354177,"lat_s":3.642}
+{"event":"llm","source":"eqn_rest","key":"eqn:17607","t_pub":1795720165.693,"t_seen":1795720169.3354177,"t_llm":1795720174.5636523,"llm_s":5.228,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":0,"instrument":null}}
