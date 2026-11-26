@@ -1,0 +1,28 @@
+{
+ "versions": [
+  {
+   "id": "m0",
+   "prompt": "prompts_r3/m0.txt",
+   "uses_ctx": false,
+   "analogs": 0,
+   "note": "plain size estimate, no context",
+   "sha256": "e783d4ffa9d56ded165585cdfb66eeb08d204c8e79ec4f15adab20d580efc06d"
+  },
+  {
+   "id": "m1",
+   "prompt": "prompts_r3/m1.txt",
+   "uses_ctx": true,
+   "analogs": 0,
+   "note": "m0 + pre-entry move and recent typical hourly move",
+   "sha256": "14401ebf2f4e2e9976184bf7b059426c3eaabf63d4183645adf849d612abe6bb"
+  },
+  {
+   "id": "m2",
+   "prompt": "prompts_r3/m2.txt",
+   "uses_ctx": true,
+   "analogs": 5,
+   "note": "m1 + 5 analogs closed strictly before t_pub with their absolute moves",
+   "sha256": "382337729c2704e162442a937c994d2a96e4dbff31c1df0332dbb4941e708be0"
+  }
+ ]
+}
