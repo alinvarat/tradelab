@@ -176,26 +176,37 @@ def bars_hyperliquid(sym, t0, t1):
 
 
 def bars_bybit(sym, t0, t1):
-    """Bybit API is blocked from Actions; the public archive (kline_for_metatrader4, monthly 1m, linear USDT) is tried instead."""
+    """Bybit's API is blocked from Actions; its public trade archive (public.bybit.com/trading/<SYM>USDT/<SYM>USDT<date>.csv.gz, one file per
+    UTC day, a file exists only on days the perp traded) is turned into 1-minute bars from the trades (open/high/low/close of the minute)."""
     out = {}
-    for y, m in bv.months(t0, t1):
-        last = [31, 29 if y % 4 == 0 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1]
-        url = (f"https://public.bybit.com/kline_for_metatrader4/{sym}USDT/{y}/{sym}USDT_{y}-{m:02d}-01_{y}-{m:02d}-{last}_1m.csv.gz")
-        st, t = http(url, tries=2)
+    day = int(t0) - int(t0) % 86400
+    while day < t1:
+        g = time.gmtime(day)
+        url = f"https://public.bybit.com/trading/{sym}USDT/{sym}USDT{g.tm_year}-{g.tm_mon:02d}-{g.tm_mday:02d}.csv.gz"
+        st, t = http(url, tries=2, timeout=15)
         if t is None:
             if st in (403, 404):
-                return {}
-            return None
-        for ln in t.splitlines():
-            f = ln.split(",")
-            if len(f) < 6 or not f[0][:1].isdigit():
+                day += 86400
                 continue
+            return None
+        for ln in t.splitlines()[1:]:
+            f = ln.split(",")
             try:
-                ts = time.mktime(time.strptime(f[0] + " " + f[1], "%Y.%m.%d %H:%M")) - time.timezone
-                out[int(ts)] = (float(f[2]), float(f[3]), float(f[4]), float(f[5]))
+                ts, px = float(f[0]), float(f[4])
             except (ValueError, IndexError):
                 continue
-    return {t_: v for t_, v in out.items() if t0 <= t_ < t1}
+            m = int(ts // 60 * 60)
+            if not t0 <= m < t1:
+                continue
+            o = out.get(m)
+            if o is None:
+                out[m] = [px, px, px, px, ts]
+            else:
+                o[1], o[2] = max(o[1], px), min(o[2], px)
+                if ts >= o[4]:
+                    o[3], o[4] = px, ts
+        day += 86400
+    return {m: tuple(v[:4]) for m, v in out.items()}
 
 
 FETCH = {"binance_um": bars_binance_um, "okx": bars_okx, "bybit": bars_bybit, "bitget": bars_bitget, "gate": bars_gate, "mexc": bars_mexc,
@@ -312,10 +323,50 @@ def mode_margin(out):
     print(json.dumps({"endpoints": res["endpoints"], "pages": res["pages"], "margin_titles": len(arts)}, indent=1))
 
 
+
+# ---------------------------------------------------------------- public archives: which perps have a file at the notice date (HEAD only, no prices)
+def archive_urls(sym, ts):
+    g = time.gmtime(ts)
+    d, ym, ymd = f"{g.tm_year}-{g.tm_mon:02d}-{g.tm_mday:02d}", f"{g.tm_year}{g.tm_mon:02d}", f"{g.tm_year}{g.tm_mon:02d}{g.tm_mday:02d}"
+    return {"bybit_trades": f"https://public.bybit.com/trading/{sym}USDT/{sym}USDT{d}.csv.gz",
+            "gate_candles": f"https://download.gatedata.org/futures_usdt/candlesticks/{ym}/{sym}_USDT-{ym}.csv.gz",
+            "okx_candles": f"https://static.okx.com/cdn/okex/traderecords/candlesticks/daily/{ymd}/{sym}-USDT-SWAP-candlesticks-{d}.zip"}
+
+
+def mode_archive_probe(out, events_path):
+    ev = json.load(open(events_path))["l1f"] + [{"sym": "BTC", "ts": 1707202812.0, "title": "control: BTC must exist"}]
+    st, idx = http("https://public.bybit.com/trading/", tries=2)
+    bybit_syms = set(__import__("re").findall(r'href="([A-Z0-9]+USDT)/"', idx or ""))
+    rows = []
+
+    def one(e):
+        res = {}
+        for k, u in archive_urls(e["sym"], e["ts"]).items():
+            res[k] = http(u, head=True, tries=2)[0]
+        r = {"sym": e["sym"], "ts": e["ts"], "status": res,
+             "bybit_in_index": any(e["sym"] + "USDT" == x or ("1000" + e["sym"] + "USDT") == x for x in bybit_syms)}
+        print(r["sym"], res, r["bybit_in_index"], flush=True)
+        return r
+
+    with ThreadPoolExecutor(4) as ex:
+        rows = list(ex.map(one, ev))
+    summ = {k: {} for k in ("bybit_trades", "gate_candles", "okx_candles")}
+    for r in rows:
+        for k, c in r["status"].items():
+            summ[k][str(c)] = summ[k].get(str(c), 0) + 1
+    summ["bybit_index_status"] = st
+    summ["bybit_index_symbols"] = len(bybit_syms)
+    summ["bybit_in_index"] = sum(r["bybit_in_index"] for r in rows)
+    json.dump({"summary": summ, "rows": rows}, open(os.path.join(out, "archive_probe.json"), "w"))
+    print(json.dumps(summ), flush=True)
+
+
 def main():
     out, mode = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
-    if mode == "probe_venue":
+    if mode == "archive_probe":
+        mode_archive_probe(out, sys.argv[3])
+    elif mode == "probe_venue":
         mode_probe_venue(out, sys.argv[3], sys.argv[4], float(sys.argv[5]) if len(sys.argv) > 5 else 2400)
     elif mode == "probe_merge":
         mode_probe_merge(out, sys.argv[3], sys.argv[4])
@@ -323,7 +374,7 @@ def main():
         mode_margin(out)
     elif mode == "price":
         from research.studies import l1f_venues_price as P
-        P.run(out, sys.argv[3], sys.argv[4])
+        P.run(out, sys.argv[3], sys.argv[4], sys.argv[5] if len(sys.argv) > 5 else None)
     else:
         raise SystemExit("mode must be probe, margin or price")
 
