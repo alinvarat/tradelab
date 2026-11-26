@@ -1,0 +1,218 @@
+{
+ "run_utc": "2026-11-26T23:50:49Z",
+ "coverage": {
+  "bybit": {
+   "events": 210,
+   "stable": 1,
+   "overlap_l1f": 0,
+   "rows_no_entry_or_exit_bar": 93,
+   "rows_no_bars": 6,
+   "rows_priced": 91,
+   "rows_no_bar_before_notice": 19
+  },
+  "kucoin": {
+   "events": 7,
+   "stable": 0,
+   "overlap_l1f": 2,
+   "rows_no_bars": 5
+  },
+  "okx": {
+   "events": 41,
+   "stable": 1,
+   "overlap_l1f": 1,
+   "rows_no_bars": 39
+  }
+ },
+ "tests": {
+  "bybit": {
+   "fam": "os_bybit",
+   "events_priced": 91,
+   "all": {
+    "n": 91,
+    "mean": 0.0665,
+    "sd": 0.12712,
+    "s": 0.5231,
+    "per_month": 2.684,
+    "x": 0.7345,
+    "hit": 0.67
+   },
+   "notice_level_all": {
+    "n": 43,
+    "mean": 0.05488,
+    "sd": 0.10522,
+    "s": 0.5216,
+    "per_month": 1.268,
+    "x": 0.345,
+    "hit": 0.698
+   },
+   "by_split": {
+    "train": {
+     "n": 44,
+     "mean": 0.08105,
+     "sd": 0.10875,
+     "s": 0.7453,
+     "per_month": 2.448,
+     "x": 1.3599,
+     "hit": 0.75
+    },
+    "validation": {
+     "n": 38,
+     "mean": 0.0715,
+     "sd": 0.1461,
+     "s": 0.4894,
+     "per_month": 4.76,
+     "x": 1.14,
+     "hit": 0.658
+    },
+    "test": {
+     "n": 9,
+     "mean": -0.02577,
+     "sd": 0.093,
+     "s": -0.2771,
+     "per_month": 1.132,
+     "x": 0.0869,
+     "hit": 0.333
+    }
+   },
+   "control_mean": -0.006072791666666668,
+   "placebo_mean": -0.07849992307692308,
+   "mean_2x_cost": 0.05949992307692307,
+   "stopped": 3,
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 44,
+     "tpm": 2.413,
+     "w": 1.0,
+     "shortable": true,
+     "train_mean": 0.081053,
+     "placebo_mean": -0.093053,
+     "vol_cost": 18.13,
+     "x": 1.3404,
+     "mfe_q": 0.32444,
+     "cost_med": 0.006,
+     "best_trade": 0.31844,
+     "ceiling_multiple": 1.949,
+     "reason": "all-win ceiling 1.95x < 3x per month",
+     "id": "os_bybit|h4h|d1m",
+     "control_mean_train": -0.003957764705882355,
+     "notice_level_train": {
+      "n": 24,
+      "mean": 0.07443,
+      "sd": 0.09263,
+      "s": 0.8035,
+      "per_month": 1.335,
+      "x": 0.8622,
+      "hit": 0.75
+     }
+    }
+   }
+  },
+  "kucoin": {
+   "fam": "os_kucoin",
+   "events_priced": 0
+  },
+  "okx": {
+   "fam": "os_okx",
+   "events_priced": 0
+  },
+  "pool": {
+   "fam": "os_pool",
+   "events_priced": 91,
+   "all": {
+    "n": 91,
+    "mean": 0.0665,
+    "sd": 0.12712,
+    "s": 0.5231,
+    "per_month": 2.684,
+    "x": 0.7345,
+    "hit": 0.67
+   },
+   "notice_level_all": {
+    "n": 43,
+    "mean": 0.05488,
+    "sd": 0.10522,
+    "s": 0.5216,
+    "per_month": 1.268,
+    "x": 0.345,
+    "hit": 0.698
+   },
+   "by_split": {
+    "train": {
+     "n": 44,
+     "mean": 0.08105,
+     "sd": 0.10875,
+     "s": 0.7453,
+     "per_month": 2.448,
+     "x": 1.3599,
+     "hit": 0.75
+    },
+    "validation": {
+     "n": 38,
+     "mean": 0.0715,
+     "sd": 0.1461,
+     "s": 0.4894,
+     "per_month": 4.76,
+     "x": 1.14,
+     "hit": 0.658
+    },
+    "test": {
+     "n": 9,
+     "mean": -0.02577,
+     "sd": 0.093,
+     "s": -0.2771,
+     "per_month": 1.132,
+     "x": 0.0869,
+     "hit": 0.333
+    }
+   },
+   "control_mean": -0.006072791666666668,
+   "placebo_mean": -0.07849992307692308,
+   "mean_2x_cost": 0.05949992307692307,
+   "stopped": 3,
+   "stage0": {
+    "ok": false,
+    "gate": {
+     "n_train": 44,
+     "tpm": 2.413,
+     "w": 1.0,
+     "shortable": true,
+     "train_mean": 0.081053,
+     "placebo_mean": -0.093053,
+     "vol_cost": 18.13,
+     "x": 1.3404,
+     "mfe_q": 0.32444,
+     "cost_med": 0.006,
+     "best_trade": 0.31844,
+     "ceiling_multiple": 1.949,
+     "reason": "all-win ceiling 1.95x < 3x per month",
+     "id": "os_pool|h4h|d1m",
+     "control_mean_train": -0.003957764705882355,
+     "notice_level_train": {
+      "n": 24,
+      "mean": 0.07443,
+      "sd": 0.09263,
+      "s": 0.8035,
+      "per_month": 1.335,
+      "x": 0.8622,
+      "hit": 0.75
+     }
+    }
+   }
+  }
+ },
+ "rules_tested": 4,
+ "event_gate": {
+  "stage0_survivors": 0,
+  "holm": {
+   "holm_m": 0
+  },
+  "passed": [],
+  "evaluated": []
+ },
+ "seconds": 46,
+ "errors": {
+  "404HTTPError": 3,
+  "429HTTPError": 4
+ }
+}
