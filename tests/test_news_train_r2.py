@@ -206,7 +206,7 @@ class ForwardTrigger(unittest.TestCase):
     def test_counts_decisions_only(self):
         bars = {"A": week()}
         ver = {"calib": False}
-        items = [{"key": f"k{i}", "sym": "A", "t_pub": ts("2026-01-05 15:00")} for i in range(3)] + \
+        items = [{"key": f"k{i}", "sym": "A", "t_pub": ts("2026-01-06 15:00")} for i in range(3)] + \
                 [{"key": "late", "sym": "A", "t_pub": ts("2026-01-13 15:00")}]
         decs = {"k0": {"ok": True, "d": {"1h": "long", "eod": "none"}}, "k1": {"ok": True, "d": {"1h": "none", "eod": "none"}},
                 "k2": {"ok": False}, "late": {"ok": True, "d": {"1h": "long", "eod": "none"}}}
