@@ -109,6 +109,7 @@ def ensure_branch(transport, cfg, sleep=time.sleep):
     """Make sure the data branch exists (an orphan commit with a README when it does not). -> True/False."""
     base = f"{API}/repos/{cfg['repo']}"
     st, _ = call(transport, "GET", f"{base}/git/ref/heads/{cfg['branch']}", cfg["token"], sleep=sleep)
+    ensure_branch.last_status = st          # surfaced in the publish error: 401 bad token, 403/404 no repo access
     if st == 200:
         return True
     if st != 404:
@@ -204,7 +205,7 @@ def cycle(dirpath, transport=http, env=None, sleep=time.sleep):
         todo = pending(dirpath, cursor)
         if todo:
             if not ensure_branch(transport, cfg, sleep):
-                raise RuntimeError("data branch not reachable")
+                raise RuntimeError(f"data branch not reachable (GET ref HTTP {getattr(ensure_branch, 'last_status', '?')})")
             for day, start, end, data in todo:
                 n = data.count(b"\n")
                 r = put_part(transport, cfg, part_path(day, start, end), data, f"news-ingest {day} +{n} rows", sleep)
