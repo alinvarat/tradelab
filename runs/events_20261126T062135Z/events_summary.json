@@ -1,0 +1,107 @@
+{
+ "stage": "A",
+ "prompt_sha256": "b1a78bdf5006c77cd03d51b308f57cd0869f446498242c09046fc021b3f77e48",
+ "stats": {
+  "candidates": 10891,
+  "reused_labels": 0,
+  "doc_failed": 0,
+  "no_section": 69,
+  "prefilter_out": 6860,
+  "to_label": 3962,
+  "label_failed": 0,
+  "stamp_hour_as_read": {
+   "22": 729,
+   "21": 3081,
+   "20": 3371,
+   "01": 45,
+   "13": 725,
+   "00": 61,
+   "11": 538,
+   "12": 813,
+   "14": 305,
+   "10": 321,
+   "15": 167,
+   "17": 145,
+   "16": 142,
+   "18": 176,
+   "19": 169,
+   "23": 90,
+   "02": 13
+  }
+ },
+ "by_year": {
+  "2017": 966,
+  "2018": 1095,
+  "2019": 1041,
+  "2020": 1131,
+  "2021": 1138,
+  "2023": 1125,
+  "2024": 1120,
+  "2025": 1238,
+  "2026": 905,
+  "2022": 1132
+ },
+ "sec_failed": [],
+ "no_cik": 130,
+ "same_issuer_dropped": {
+  "FOXA": "FOX",
+  "GOOGL": "GOOG",
+  "NWSA": "NWS",
+  "UAA": "UA"
+ },
+ "events": 960,
+ "counts": {
+  "abrupt": {
+   "train": 41,
+   "validation": 39,
+   "test": 61,
+   "total": 141,
+   "misconduct": 9,
+   "post_cutoff": 16
+  },
+  "planned": {
+   "train": 222,
+   "validation": 242,
+   "test": 339,
+   "total": 803,
+   "misconduct": 0,
+   "post_cutoff": 68
+  },
+  "interim": {
+   "train": 3,
+   "validation": 3,
+   "test": 3,
+   "total": 9,
+   "misconduct": 0,
+   "post_cutoff": 1
+  },
+  "return": {
+   "train": 0,
+   "validation": 4,
+   "test": 3,
+   "total": 7,
+   "misconduct": 0,
+   "post_cutoff": 0
+  }
+ },
+ "labelled_not_other": 1005,
+ "class_counts_before_dedupe": {
+  "abrupt": 148,
+  "planned": 831,
+  "return": 9,
+  "interim": 17,
+  "other": 2957
+ },
+ "abrupt_and_return_flag": 12,
+ "months": 116.96,
+ "spend": {
+  "total_usd": 0.0,
+  "calls": 3962,
+  "tokens_in": 7769783,
+  "tokens_out": 995387,
+  "tokens_cached": 2564784,
+  "notional_usd": 1.563548739999995
+ },
+ "seconds": 7549,
+ "built_utc": "2026-11-26T06:21:34Z"
+}
