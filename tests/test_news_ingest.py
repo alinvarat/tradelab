@@ -163,5 +163,169 @@ class WsFrames(unittest.TestCase):
         self.assertEqual(bytes(b ^ mask[i % 4] for i, b in enumerate(body)), b"ping")
 
 
+
+def bn_body(*arts):
+    return json.dumps({"data": {"catalogs": [{"articles": [{"code": c, "title": "T " + c, "releaseDate": t} for c, t in arts]}]}}).encode()
+
+
+class BinanceFast(Base):
+    def test_variants_are_distinct_valid_cache_keys_and_skip_the_control(self):
+        v = ni.binance_variants(49)
+        self.assertEqual(len(v), 12)
+        self.assertEqual(len(set(v)), 12)
+        self.assertNotIn(ni.BN + "49", v)
+        for u in v:
+            q = u.split("?")[1].split("&")
+            self.assertEqual(sorted(x.split("=")[0] for x in q), sorted(ni.BN_PARAMS))
+            self.assertIn("catalogId=49", q)
+            self.assertIn("pageSize=10", q)
+        self.assertNotEqual(set(v), set(ni.binance_variants(48)))
+
+    def test_cache_expiry_from_age_header(self):
+        self.assertEqual(ni.cache_expiry({"Age": "104", "X-Cache": "Hit from cloudfront"}, 1000.0), 1016.0)
+        self.assertEqual(ni.cache_expiry({"age": "0"}, 1000.0), 1120.0)
+        self.assertEqual(ni.cache_expiry({"X-Cache": "Miss from cloudfront"}, 1000.0), 1120.0)
+        self.assertEqual(ni.cache_expiry({"X-Cache": "RefreshHit from cloudfront"}, 1000.0), 1120.0)
+        self.assertEqual(ni.cache_expiry({"X-Cache": "Hit from cloudfront"}, 1000.0), 1060.0)
+        self.assertEqual(ni.cache_expiry({}, 1000.0), 1120.0)
+
+    def test_next_variant_takes_earliest_expiry_and_respects_gap(self):
+        keys = {"a": 130.0, "b": 100.0, "c": 110.0}
+        self.assertEqual(ni.next_variant(keys, 90.0), ("b", 11.0))
+        self.assertEqual(ni.next_variant(keys, 105.0), ("b", 0.0))
+        self.assertEqual(ni.next_variant(keys, 105.0, last_fetch=104.5), ("b", 1.5))
+
+    def test_trace(self):
+        self.assertEqual(ni.cache_trace({"X-Cache": "Hit from cloudfront", "Age": "104"}), "Hit:104")
+        self.assertEqual(ni.cache_trace({"X-Cache": "Miss from cloudfront"}), "Miss")
+        self.assertIsNone(ni.cache_trace({}))
+
+    def run_ticks(self, src, responses, t0=1795680000.0, n=400):
+        """Fake clock + fake CDN. responses(url, t) -> (status, body, headers). Returns (log of (t, url), state)."""
+        clock = [t0]
+        log = []
+
+        def fetch(url, headers):
+            st, body, hdr = responses(url, clock[0])
+            log.append((clock[0], url))
+            return st, body, clock[0], hdr
+        state = {}
+        for _ in range(n):
+            w = ni.multi_step(src, state, now=lambda: clock[0], fetch_fn=fetch)
+            clock[0] += max(w, 0.05)
+        return log, state
+
+    def test_rotation_polls_each_key_once_per_ttl_and_sees_new_item_fast(self):
+        src = {"name": "binance_news_fast", "kind": "binance_multi", "catalog": 49, "every": 2.0, "market": "crypto", "llm": False, "trace": True}
+        fill = {}                       # url -> time the fake CDN entry was filled
+        t0 = 1795680000.0
+        pub = t0 + 300.0                # article published 300 s in (origin knows it from then on)
+
+        def cdn(url, t):
+            if url not in fill or t - fill[url] >= ni.BN_TTL_S:
+                fill[url] = t
+                hdr = {"X-Cache": "Miss from cloudfront"}
+            else:
+                hdr = {"X-Cache": "Hit from cloudfront", "Age": str(int(t - fill[url]))}
+            arts = [("old", int((t0 - 1000) * 1000))]
+            if fill[url] >= pub:
+                arts.append(("new", int(pub * 1000)))
+            return 200, bn_body(*arts), hdr
+        log, state = self.run_ticks(src, cdn, t0=t0, n=900)
+        st = ni.STATE["sources"]["binance_news_fast"]
+        self.assertEqual(st["errors"], 0)
+        # about one request per 10 s over 12 keys, not one per 2 s
+        span = log[-1][0] - log[0][0]
+        self.assertLess(len(log), span / 10 * 1.5)
+        rows = [json.loads(x) for f in Path(self.tmp.name).glob("*.jsonl") for x in f.read_text().splitlines()]
+        new = [r for r in rows if r["key"] == "binance_news:new"]
+        self.assertEqual(len(new), 1)                       # first sighting only
+        self.assertLessEqual(new[0]["lat_s"], 14.0)         # 120 s / 12 keys + margin, not up to 120 s
+        self.assertTrue(new[0]["via"].startswith("Miss"))
+        self.assertNotIn("binance_news:old", [r["key"] for r in rows])  # cold items never counted
+
+    def test_block_pauses_every_key(self):
+        src = {"name": "binance_news_fast", "kind": "binance_multi", "catalog": 49, "every": 2.0, "market": "crypto", "llm": False, "trace": True}
+        calls = []
+
+        def blocked(url, t):
+            calls.append(t)
+            return 429, b"x", {}
+        self.run_ticks(src, blocked, n=70)
+        self.assertLessEqual(len(calls), 2)          # 12 keys, but one 429 pauses all of them for a minute
+        self.assertTrue(all(b - a >= 60 for a, b in zip(calls, calls[1:])))
+
+
+class OkxCandidates(Base):
+    HELP_ITEMS = [{"id": "z", "slug": "okx-to-support-zeta-crypto-migration", "title": "OKX to support ZETA crypto migration",
+                   "publishTime": 1795687200000, "updatedAt": 1795687218000, "sectionSlug": "announcements-new-listings", "categorySlug": "announcements"},
+                  {"id": "u", "slug": "p2p-guide", "title": "Guide & Fees", "publishTime": 1795622400000, "updatedAt": 1795700016000,
+                   "sectionSlug": "announcements-p2p-trading", "categorySlug": "announcements"}]
+
+    def page(self):
+        inner = json.dumps({"appContext": {"initialProps": {"sectionData": {"articleList": {"list": self.HELP_ITEMS}}}}})
+        return ('<html><script>window.__INIT_STATE__.appContext = parseData(' + json.dumps(inner) + ');</script></html>').encode()
+
+    def test_key_is_the_slug_for_any_host_or_locale(self):
+        want = "okx_announcements:https://www.okx.com/help/okx-to-support-zeta-crypto-migration"
+        for u in ("https://www.okx.com/help/okx-to-support-zeta-crypto-migration",
+                  "https://my.okx.com/en-eu/help/okx-to-support-zeta-crypto-migration",
+                  "https://app.okx.com/en-us/help/okx-to-support-zeta-crypto-migration/", "okx-to-support-zeta-crypto-migration"):
+            self.assertEqual(ni.okx_key(u), want)
+
+    def test_rest_candidate_pairs_with_control_on_key_and_stamp(self):
+        body = json.dumps({"data": [{"details": [{"annType": "announcements-new-listings", "title": "OKX to support ZETA crypto migration",
+                                                  "url": "https://my.okx.com/en-eu/help/okx-to-support-zeta-crypto-migration", "pTime": "1795687218036"}]}]})
+        ctrl = ni.nl.parse_okx_announcements(json.loads(body), "okx_announcements")
+        cand = ni.parse_okx_norm(body)
+        self.assertEqual(cand[0]["t_pub"], ctrl[0]["t_pub"])
+        self.assertEqual(cand[0]["key"], ni.okx_key("okx-to-support-zeta-crypto-migration"))
+
+    def test_help_page_structured_parse(self):
+        items = ni.parse_okx_help(self.page())
+        self.assertEqual([i["key"] for i in items], [ni.okx_key("okx-to-support-zeta-crypto-migration"), ni.okx_key("p2p-guide")])
+        self.assertEqual(items[0]["t_pub"], 1795687218.0)          # updatedAt == API pTime, not publishTime
+        self.assertEqual(items[0]["extra"]["publish_time"], 1795687200.0)
+        self.assertEqual(items[0]["res"], "s")
+        self.assertEqual(items[1]["title"], "Guide & Fees")
+
+    def test_help_page_regex_fallback_on_real_escaped_snippet(self):
+        raw = ('window.__INIT_STATE__.appContext = parseData("{\\"appContext\\":{\\"initialProps\\":{\\"sectionData\\":{\\"articleList\\":{\\"list\\":[{'
+               '\\"id\\":\\"okx-to-support-zeta-crypto-migration\\",\\"slug\\":\\"okx-to-support-zeta-crypto-migration\\",'
+               '\\"title\\":\\"OKX to support ZETA crypto migration\\",\\"publishTime\\":1795687200000,\\"updatedAt\\":1795687218000,'
+               '\\"sectionSlug\\":\\"announcements-new-listings\\",\\"categorySlug\\":\\"announcements\\"},{\\"id\\":\\"x\\",\\"slug\\":\\"x\\",'
+               '\\"title\\":\\"A \\u0026 B\\",\\"publishTime\\":1795622400000,\\"updatedAt\\":1795682513000,\\"sectionSlug\\":\\"s\\"')
+        items = ni.parse_okx_help(raw)                   # truncated JSON: only the regex path can read it
+        self.assertEqual([i["t_pub"] for i in items], [1795687218.0, 1795682513.0])
+        self.assertEqual(items[1]["title"], "A & B")
+        self.assertEqual(ni.parse_okx_help(b"<html>no data</html>"), [])
+
+    def test_help_source_records_latency_with_extra_and_no_llm(self):
+        src = next(s for s in ni.sources() if s["name"] == "okx_help_latest")
+        cond = {}
+        ni.poll_step(src, cond, lambda u, h: (200, self.page(), 1795687300.0, {"ETag": "e1"}))   # cold
+        self.HELP_ITEMS = self.HELP_ITEMS + [{"slug": "new-one", "title": "New", "publishTime": 1, "updatedAt": 1795687400000, "sectionSlug": "s"}]
+        with mock.patch.object(ni, "llm_enabled", return_value=True), mock.patch.object(ni, "enqueue_llm") as q:
+            ni.poll_step(src, cond, lambda u, h: (200, self.page(), 1795687403.5, {}))
+            q.assert_not_called()
+        rows = [json.loads(x) for f in Path(self.tmp.name).glob("*.jsonl") for x in f.read_text().splitlines()]
+        self.assertEqual([(r["key"], r["lat_s"]) for r in rows], [(ni.okx_key("new-one"), 3.5)])
+        self.assertIn("publish_time", rows[0])
+
+    def test_new_sources_registered_with_unique_names_and_no_llm(self):
+        with mock.patch.dict("os.environ", {}, clear=True):
+            srcs = ni.sources()
+        names = [s["name"] for s in srcs]
+        self.assertEqual(len(names), len(set(names)))
+        new = ["binance_listings_fast", "binance_news_fast", "binance_delist_fast", "okx_ann_my", "okx_ann_listings", "okx_help_latest", "okx_help_listings"]
+        for n in new:
+            self.assertIn(n, names)
+        for s in srcs:
+            if s["name"] in new:
+                self.assertFalse(s["llm"])
+        for n in ("binance_listings", "binance_news", "binance_delist", "okx_announcements"):      # controls untouched
+            self.assertIn(n, names)
+
+
 if __name__ == "__main__":
     unittest.main()
