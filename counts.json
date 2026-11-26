@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-11-26T20:41:23Z",
- "items_total": 360,
+ "updated_utc": "2026-11-26T21:11:32Z",
+ "items_total": 365,
  "sources": {
   "binance_news": {
    "items": 3,
@@ -53,9 +53,9 @@
    "slow": false
   },
   "prnewswire": {
-   "items": 168,
-   "items_s": 168,
-   "median_lat_s": 102.804,
+   "items": 173,
+   "items_s": 173,
+   "median_lat_s": 103.729,
    "p90_lat_s": 169.479,
    "share_fast": 0.0,
    "notice_items": 0,
