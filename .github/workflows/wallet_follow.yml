@@ -2,13 +2,14 @@ name: Wallet follow (Q1)
 
 # Plan: research/plans/PLAN_20261127_fable.md direction Q1. Protocols: research/studies/protocol_wallet_follow_*.md.
 # Public endpoints only, no keys, no accounts, no orders.
+#   run - the locked test (protocol_wallet_follow_20261127.md): plan -> hist x16 -> rank -> price x16 -> final
 #   probe2 - tape-seek and prices-history check (protocol_wallet_follow_probe_addendum3)
 #   probe - counts-only probe (protocol_wallet_follow_probe_20261127.md): routes, frame, history depth, hold and entry price
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe | probe2"
+        description: "probe | probe2 | run"
         required: true
         default: "probe"
 
@@ -30,4 +31,109 @@ jobs:
         if: always()
         with:
           name: wallet-follow-probe
+          path: out/
+
+  plan:
+    if: inputs.mode == 'run'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python research/studies/wallet_follow.py plan out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wf-frame
+          path: out/
+
+  hist:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          name: wf-frame
+          path: frame
+      - run: python research/studies/wallet_follow.py hist frame/frame.json.gz ${{ matrix.shard }} out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wf-hist-${{ matrix.shard }}
+          path: out/
+
+  rank:
+    needs: hist
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wf-hist-*
+          merge-multiple: true
+          path: hist
+      - run: python research/studies/wallet_follow.py rank hist out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wf-rank
+          path: out/
+
+  price:
+    needs: rank
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          name: wf-rank
+          path: rank
+      - run: python research/studies/wallet_follow.py price rank/entries_${{ matrix.shard }}.json.gz ${{ matrix.shard }} out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wf-priced-${{ matrix.shard }}
+          path: out/
+
+  final:
+    needs: price
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          name: wf-rank
+          path: rank
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wf-priced-*
+          merge-multiple: true
+          path: priced
+      - run: python research/studies/wallet_follow.py final rank priced out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wf-final
           path: out/
