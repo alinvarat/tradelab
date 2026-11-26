@@ -18,6 +18,7 @@
 | ด่านคัดกรองย้อนหลัง | `research/studies/run.py` (`STUDIES`), `core/screens.py` | Actions job `study` | สั่งรันเองเท่านั้น | artifact `study-<name>` | `gh run download <id> -n study-<name>` |
 | ด่านคัดกรองแบบแบ่ง shard | `run.py` (`rows_<study>`, `summarize_<study>`), `research/studies/sharding.py`, `binance_vision.py` | `.github/workflows/research_sharded.yml` (plan → shard ×N → merge) | สั่งรันเองเท่านั้น (`gh workflow run research_sharded.yml -f study=<name> -f shards=20`) | artifact `part-<study>-<i>`, `study-<study>` | `gh run download <id> -n study-<study>` |
 | ตัวรับข่าวเร็ว (วัดอย่างเดียว ไม่ป้อนบอท) | `core/news_ingest.py` | Kuber | poll 2-10 วิ + websocket EquationNews | volume `/app/data/collect/news_ingest/*.jsonl` (t_pub, t_seen, t_llm) | `/api/news_latency` คีย์ `ingest` (median/p90 ต่อแหล่ง) |
+| ตัวส่งล็อกข่าวเร็วขึ้น git (ใหม่ 2026-11-26) | `core/news_publish.py` (thread ของตัวเอง ใน `news_ingest.loop`) | Kuber | ทุก 10 นาที (`TRADELAB_NEWS_PUSH_MINUTES`); ไม่ทำอะไรจนกว่าจะมี secret `TRADELAB_DATA_PUSH_TOKEN` | branch `data/news-ingest` ไฟล์สร้างครั้งเดียวไม่แก้ `news_ingest/<YYYYMMDD>/<start>-<end>.jsonl` (cursor อยู่ที่ `.publish_cursor.json` บน volume) | `/api/news_latency` คีย์ `ingest.publish` (`enabled`, `last_ok_utc`, `last_error`); `git ls-tree -r origin/data/news-ingest`; ผู้อ่านคือ `research/news_train/run_ingest_fwd.py` (R2 `fwd` เขียน `fwd/ingest_timing.json`, R3 `fwd_ingest` นับอย่างเดียว) ตาม `protocol_ingest_addendum_20261126.md` |
 | อื่นๆ บน Kuber | autotrader, hunter, buzz, news archive, DVOL, steward | Kuber | ตามโค้ด | volume | `/healthz` |
 
 - **Deploy:** push เข้า `main` จะรัน `.github/workflows/kuber.yml` (Test แล้ว Deploy) ถ้าล้มที่ฝั่ง Kuber ให้ทำตาม RUNBOOK ข้อ 6.1
@@ -56,3 +57,10 @@
 | บทเรียน | `research/LESSONS.md` |
 | กติกาที่ล็อกของแต่ละการทดสอบ | `research/studies/protocol_*.md`, `research/llm_trader/protocol.md`, `research/event_trader/protocol_broad.md` |
 | สเปกแต่ละเส้น | `ops/lines/` |
+
+## 5. เจ้าของต้องทำ: เปิดการส่งล็อกข่าวจาก pod ขึ้น `data/news-ingest`
+Pod ไม่มี GitHub token (env มีแค่ `CLAUDE_CODE_OAUTH_TOKEN` และ `TRADELAB_SEC_UA`) จึงยังไม่ส่งอะไรจนกว่าจะทำ 3 ข้อนี้ ห้ามส่ง token ในแชต:
+1. สร้าง fine-grained personal access token ที่ GitHub: Settings > Developer settings > Fine-grained tokens; Repository access = Only select repositories > `alinvarat/tradelab` เท่านั้น; Permissions: Contents = Read and write (ไม่ต้องมีอย่างอื่น); ตั้งวันหมดอายุ 90 วัน
+2. เก็บเป็น secret ของ repo: `gh secret set TRADELAB_DATA_PUSH_TOKEN -R alinvarat/tradelab` แล้ววาง token ตอนที่ถาม
+3. deploy ใหม่เพื่อให้ pod ได้ secret: `gh workflow run "Test and deploy" -R alinvarat/tradelab --ref main` (หรือ re-run deploy ล่าสุดบน main) แล้วเปิด `https://tradelab.dgnr.us/api/news_latency` ดู `ingest.publish.enabled = true` และภายใน 10-20 นาทีมี `last_ok_utc` กับ branch `data/news-ingest` ขึ้นมา
+token หมดอายุหรือถูกเพิกถอน: `ingest.publish.last_error` จะขึ้น ล็อกยังอยู่บน volume (เก็บ 14 วัน) และส่งต่อจาก cursor เมื่อเปลี่ยน token แล้ว deploy ใหม่

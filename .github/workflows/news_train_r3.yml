@@ -7,11 +7,12 @@ name: News train R3
 #   eval    - Track A: versions x sets, merged, scored on train and validation, selection written
 #   analyze - Track A: error analysis of one version on TRAIN only
 #   sealed  - Track A: ONE-SHOT run of the versions in LOCK_R3.json
+#   fwd_ingest - scheduled: counts of wire press releases in the pod's news-ingest log (branch data/news-ingest); counts only (addendum 2026-11-26)
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe_b, build, eval, analyze or sealed"
+        description: "probe_b, build, eval, analyze, sealed or fwd_ingest"
         required: true
         default: "probe_b"
       versions:
@@ -26,6 +27,8 @@ on:
         description: "eval: shards per version and set"
         required: false
         default: "8"
+  schedule:
+    - cron: "50 22 * * 1-5"
 
 permissions:
   contents: read
@@ -356,4 +359,36 @@ jobs:
           mkdir -p sealed_r3 && cp /tmp/keep_sealed/* sealed_r3/
           git add sealed_r3
           git commit -qm "News train R3 SEALED result: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-r3 && break; git fetch -q origin data/news-train-r3; git rebase -q origin/data/news-train-r3; done
+
+  fwd_ingest:
+    if: github.event_name == 'schedule' || inputs.mode == 'fwd_ingest'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-r3-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Read the pod ingest log (empty until the owner sets the push token)
+        run: |
+          mkdir -p /tmp/ingest
+          if git fetch origin data/news-ingest 2>/dev/null; then git archive origin/data/news-ingest | tar -x -C /tmp/ingest; fi
+      - run: python research/news_train/run_ingest_fwd.py r3 out /tmp/ingest
+      - name: Keep on data/news-train-r3
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out/fwd_ingest /tmp/keep_fwd
+          git checkout -q -B data/news-train-r3 origin/data/news-train-r3
+          mkdir -p fwd_ingest && cp /tmp/keep_fwd/* fwd_ingest/
+          git add fwd_ingest
+          git commit -qm "News train R3 forward ingest counts: $(date -u +%FT%TZ)" || echo "nothing new"
           for i in 1 2 3 4; do git push -q origin data/news-train-r3 && break; git fetch -q origin data/news-train-r3; git rebase -q origin/data/news-train-r3; done
