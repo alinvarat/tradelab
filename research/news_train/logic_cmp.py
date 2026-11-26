@@ -4,6 +4,7 @@ logic.py, logic_r2.py and logic_r3.py."""
 import json
 import math
 import os
+import re
 from statistics import median
 
 from research.news_train import logic as L
@@ -175,3 +176,13 @@ def title_to_item(source, key, title, t_seen, coin, P2):
     """Forward crypto item from one ingest-log row: redacted title, the pod source as the source label."""
     return {"key": f"ing:{source}:{key}", "market": "crypto", "src": source, "t_pub": t_seen, "t_seen": t_seen, "sym": coin, "items": [],
             "text": R.redact_title(title, coin, P2), "text_named": title, "descr": "Instrument: a crypto token with a perpetual contract."}
+
+
+JUNK_RX = (r"^\s*(rt\s+)?@\w+", r"https?://", r"\bt\.co/", r"^\s*\W*\s*$")
+
+
+def is_junk(title):
+    """Social and junk filter registered in protocol_cmp_addendum_20261126.md (written after reading title samples of the first ingest part,
+    before any outcome): tweets that start with a handle or RT, any item with a link, and empty titles."""
+    t = title or ""
+    return any(re.search(rx, t, re.I) for rx in JUNK_RX)
