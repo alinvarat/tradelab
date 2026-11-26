@@ -112,6 +112,16 @@
    "stake": 7.4809,
    "entry_ts": 1795639644.14894,
    "volume": 53232
+  },
+  {
+   "id": "7109767",
+   "question": "Will Elon Musk post 220-239 tweets from November 20 to November 27, 2026?",
+   "end": "2026-11-27T17:00:00Z",
+   "side": "yes",
+   "price": 0.022,
+   "stake": 7.4907,
+   "entry_ts": 1795673867.5989683,
+   "volume": 83100.30269899999
   }
  ],
  "n_closed": 10,
