@@ -1,0 +1,38 @@
+{
+ "version": 1,
+ "family": "r3b",
+ "seed": 20261129,
+ "model": "claude-haiku-5-5",
+ "source": "gdelt_translation_gkg",
+ "langs": ["kor", "zho"],
+ "dates": {"clean_start": "2025-12-01", "clean_train_end": "2026-04-01", "dev_end": "2026-07-01", "sealed_from": "2026-07-01", "refuse_from": "2026-11-27"},
+ "sample": {"train": 1500, "validation": 1500, "sealed": 2500},
+ "dedupe": {"jaccard": 0.8, "window_s": 21600, "min_chars": 8, "cap_per_coin_day": 6},
+ "version_id": "w1",
+ "k_versions": 1,
+ "coins": {
+  "BTC": ["비트코인", "比特币", "比特幣"],
+  "ETH": ["이더리움", "以太坊", "以太币"],
+  "XRP": ["리플", "瑞波币", "瑞波幣"],
+  "SOL": ["솔라나", "索拉纳", "索拉納"],
+  "BNB": ["바이낸스코인", "币安币", "幣安幣"],
+  "DOGE": ["도지코인", "狗狗币", "狗狗幣"],
+  "ADA": ["에이다", "카르다노", "卡尔达诺", "卡爾達諾"],
+  "LINK": ["체인링크"],
+  "DOT": ["폴카닷", "波卡"],
+  "LTC": ["라이트코인", "莱特币", "萊特幣"],
+  "BCH": ["비트코인캐시", "비트코인 캐시", "比特币现金", "比特幣現金"],
+  "SHIB": ["시바이누", "柴犬币"],
+  "XLM": ["스텔라루멘"],
+  "HBAR": ["헤데라"],
+  "TRX": ["트론", "波场", "波場"],
+  "UNI": ["유니스왑"],
+  "AVAX": ["아발란체"]
+ },
+ "latin": {"BTC": ["bitcoin", "btc"], "ETH": ["ethereum", "eth"], "XRP": ["xrp"], "SOL": ["solana"], "DOGE": ["dogecoin"], "BNB": ["bnb"]},
+ "spam_title_regex": ["^\\s*$"],
+ "keyword": {
+  "pos": ["상승", "급등", "승인", "상장", "돌파", "최고", "매수", "호재", "上涨", "暴涨", "批准", "上线", "突破", "新高", "利好", "买入", "beat", "approval", "approved", "listing", "launch"],
+  "neg": ["하락", "급락", "해킹", "상폐", "상장폐지", "청산", "폭락", "매도", "악재", "下跌", "暴跌", "黑客", "退市", "清算", "抛售", "利空", "hack", "delist", "lawsuit", "ban"]
+ }
+}

@@ -1,0 +1,269 @@
+name: News train R3B
+
+# Round 3 Track B2 (research/news_train/protocol_r3_addendum_b_20261126.md): Korean/Chinese crypto headlines from GDELT translingual GKG.
+# Claude Haiku 5.5 only. Reuses round-2 eval code read-only; writes only data/news-train-r3b.
+#   build   - pull translation GKG files (kor, zho rows), coin-map, dedupe, split, label dev items -> data/news-train-r3b
+#   eval    - w1 on train and validation, sharded; merged, theta fitted on train, selection written
+#   analyze - error analysis on TRAIN only
+#   sealed  - ONE-SHOT run of LOCK_R3B.json on 2026-07-01..2026-11-26
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "build, eval, analyze or sealed"
+        required: true
+        default: "build"
+      sets:
+        description: "eval: train, validation or train,validation"
+        required: false
+        default: "train,validation"
+      shards:
+        description: "eval: shards per set"
+        required: false
+        default: "8"
+
+permissions:
+  contents: read
+
+env:
+  CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+  TRADELAB_CLAUDE_PARALLEL: "4"
+
+jobs:
+  plan_build:
+    if: inputs.mode == 'build'
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - id: m
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, datetime as d
+          out, t, end = [], d.date.fromisoformat("2025-12-01"), d.date.fromisoformat("2026-11-27")
+          while t < end:
+              e = min(t + d.timedelta(days=8), end)
+              out.append({"start": t.isoformat(), "end": e.isoformat()})
+              t = e
+          print("matrix=" + json.dumps({"include": out}))
+          PY
+
+  pull:
+    needs: plan_build
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.plan_build.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python research/news_train/run_b.py pull out ${{ matrix.start }} ${{ matrix.end }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trpull-${{ matrix.start }}
+          path: out/
+
+  build_publish:
+    needs: pull
+    if: always() && inputs.mode == 'build'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-r3b-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: trpull-*
+          path: parts
+          merge-multiple: true
+      - run: python research/news_train/run_b.py build parts data_out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r3b-build
+          path: data_out/build_report_b.json
+      - name: Keep on data/news-train-r3b
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r data_out /tmp/keep
+          if git fetch origin data/news-train-r3b 2>/dev/null; then git checkout -q -B data/news-train-r3b origin/data/news-train-r3b
+          else git checkout -q --orphan data/news-train-r3b && git rm -rq --cached . && git clean -fdq; fi
+          cp -r /tmp/keep/* .
+          git add dev.jsonl.gz sealed_items.jsonl.gz build_report_b.json
+          git commit -qm "News train R3B build: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-r3b && break; git fetch -q origin data/news-train-r3b; git rebase -q origin/data/news-train-r3b; done
+
+  plan_eval:
+    if: inputs.mode == 'eval'
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - id: m
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          ss = [s.strip() for s in "${{ inputs.sets }}".split(",") if s.strip()]
+          n = int("${{ inputs.shards }}")
+          print("matrix=" + json.dumps({"include": [{"set": s, "shard": k, "shards": n} for s in ss for k in range(n)]}))
+          PY
+
+  eval:
+    needs: plan_eval
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.plan_eval.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Restore data
+        run: |
+          mkdir -p /tmp/data
+          git fetch origin data/news-train-r3b
+          git archive origin/data/news-train-r3b | tar -x -C /tmp/data
+      - run: python research/news_train/run_b.py eval out /tmp/data w1 ${{ matrix.set }} ${{ matrix.shard }} ${{ matrix.shards }} 300
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-w1-${{ matrix.set }}-${{ matrix.shard }}
+          path: out/
+
+  eval_merge:
+    needs: eval
+    if: always() && inputs.mode == 'eval'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-r3b-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: eval-*
+          path: parts
+          merge-multiple: true
+      - name: Restore data
+        run: |
+          mkdir -p /tmp/data
+          git fetch origin data/news-train-r3b
+          git archive origin/data/news-train-r3b | tar -x -C /tmp/data
+      - run: |
+          python research/news_train/run_b.py merge parts /tmp/data merged
+          mkdir -p sel/evals && cp -r merged/evals/. sel/evals/
+          python research/news_train/run_b.py select sel merged
+          python3 -c "import glob,json;t={};[t.__setitem__(k,t.get(k,0)+v) for f in glob.glob('parts/spend_*.json') for k,v in json.load(open(f)).items() if isinstance(v,(int,float))];print('SPEND',json.dumps(t))"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r3b-merged
+          path: merged/
+      - name: Keep on data/news-train-r3b
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r merged /tmp/keep
+          git checkout -q -B data/news-train-r3b origin/data/news-train-r3b
+          mkdir -p calls evals && cp -r /tmp/keep/calls/. calls/ && cp -r /tmp/keep/evals/. evals/
+          cp /tmp/keep/calib.json /tmp/keep/selection.json .
+          git add calls evals calib.json selection.json
+          git commit -qm "News train R3B eval: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-r3b && break; git fetch -q origin data/news-train-r3b; git rebase -q origin/data/news-train-r3b; done
+
+  analyze:
+    if: inputs.mode == 'analyze'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore data
+        run: |
+          mkdir -p /tmp/data
+          git fetch origin data/news-train-r3b
+          git archive origin/data/news-train-r3b | tar -x -C /tmp/data
+      - run: python research/news_train/run_b.py analyze /tmp/data out w1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r3b-analysis
+          path: out/
+
+  sealed:
+    if: inputs.mode == 'sealed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-r3b-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Restore data
+        run: |
+          mkdir -p /tmp/data
+          git fetch origin data/news-train-r3b
+          git archive origin/data/news-train-r3b | tar -x -C /tmp/data
+      - run: python research/news_train/run_b.py sealed out /tmp/data
+        env:
+          TRADELAB_CLAUDE_PARALLEL: "6"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r3b-sealed
+          path: out/
+      - name: Keep on data/news-train-r3b
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out/sealed_b /tmp/keep_sealed
+          git checkout -q -B data/news-train-r3b origin/data/news-train-r3b
+          mkdir -p sealed_b && cp /tmp/keep_sealed/* sealed_b/
+          git add sealed_b
+          git commit -qm "News train R3B SEALED result: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-r3b && break; git fetch -q origin data/news-train-r3b; git rebase -q origin/data/news-train-r3b; done
