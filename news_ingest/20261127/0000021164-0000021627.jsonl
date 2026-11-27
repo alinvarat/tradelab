@@ -1,0 +1,2 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17662","title":"\ud83d\udfe2 [ZECUSDT] Binance futures price surged 10.1% in the past 4 hours","t_pub":1795750746.166,"res":"s","t_seen":1795750752.3478367,"lat_s":6.182}
+{"event":"llm","source":"eqn_rest","key":"eqn:17662","t_pub":1795750746.166,"t_seen":1795750752.3478367,"t_llm":1795750757.7364564,"llm_s":5.389,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":55,"instrument":"ZEC"}}
