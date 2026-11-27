@@ -75,13 +75,20 @@ def monitoring_symbols(title: str) -> list:
 
 def fut_delist_symbols(title: str, body: str = "") -> list:
     """Coins of 'Binance Futures Will Delist ... Perpetual Contract(s)' notices: every <COIN>USDT contract named in the title and
-    body. Titles that also update leverage/margin tiers ('Delist and Update ...') are skipped (the body mixes delisted and updated
+    body (USDC-only contracts are not forced flow, see usdc_perp_only). Titles that also update leverage/margin tiers ('Delist and Update ...') are skipped (the body mixes delisted and updated
     contracts); COIN-M and delivery contracts (with an underscore date) are not included."""
     if "Perpetual" not in title or re.search(r"\bUpdate\b", title):
         return []
     toks = re.findall(r"\b([A-Z0-9]{2,15})USDT\b(?!_)", title + " " + body)
-    toks += re.findall(r"\b([A-Z0-9]{2,15})USDC\b(?!_)", title + " " + body)
     return _tokens(" ".join(toks))
+
+
+def usdc_perp_only(title: str, body: str = "") -> bool:
+    """A futures delist notice that names only <COIN>USDC contracts (no USDT contract). Binance lists many coins on both quotes,
+    so removing the single-margin USDC pair leaves the coin trading: it is NOT forced flow (v4.20: 'SOLUSDC Perpetual' was a short on SOL)."""
+    text = title + " " + body
+    return ("Perpetual" in title and bool(re.search(r"\b[A-Z0-9]{2,15}USDC\b(?!_)", text))
+            and not re.search(r"\b[A-Z0-9]{2,15}USDT\b(?!_)", text))
 
 
 def flatten_body(body) -> str:

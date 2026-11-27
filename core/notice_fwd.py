@@ -77,7 +77,10 @@ def classify(source, title):
     if syms:
         return {"cls": "monitor", "side": -1, "coins": syms}
     if _DELIST.search(t):
-        syms = ff.fut_delist_symbols(t) or _after_delist(t)
+        syms = ff.fut_delist_symbols(t)
+        if not syms and ff.usdc_perp_only(t):             # v4.20: a USDC-only perp delist leaves the coin listed elsewhere
+            return None
+        syms = syms or _after_delist(t)
         return {"cls": "delist", "side": -1, "coins": syms} if syms else None
     if _LIST.search(t):
         syms = [s for s in _PAREN.findall(t) if s not in ff._NOT_COIN]

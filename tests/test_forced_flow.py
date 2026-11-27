@@ -17,6 +17,15 @@ class Parsers(unittest.TestCase):
         self.assertEqual(ff.monitoring_symbols("Binance Will Remove the Seed Tag for BONK, EIGEN on 2025-07-21"), [])
         self.assertEqual(ff.monitoring_symbols("Binance Will List Jupiter (JUP) with Seed Tag Applied"), [])
 
+    def test_usdc_only_perp_delist_is_not_forced_flow(self):
+        t = "Binance Futures Will Delist USDⓈ-M SOLUSDC Perpetual"        # SOL stays listed on USDT perps and spot
+        self.assertEqual(ff.fut_delist_symbols(t), [])
+        self.assertTrue(ff.usdc_perp_only(t))
+        self.assertEqual(ff.fut_delist_symbols("Binance Futures Will Delist ABCUSDT and ABCUSDC Perpetual Contracts"), ["ABC"])
+        self.assertFalse(ff.usdc_perp_only("Binance Futures Will Delist ABCUSDT and ABCUSDC Perpetual Contracts"))
+        from core import notice_fwd as nf
+        self.assertIsNone(nf.classify("binance_news", t))                   # no forced short on SOL
+
     def test_fut_delist(self):
         self.assertEqual(ff.fut_delist_symbols("Binance Futures Will Delist USDⓈ-M ABCUSDT and DEFUSDT Perpetual Contracts (2026-01-01)"), ["ABC", "DEF"])
         self.assertEqual(ff.fut_delist_symbols("Binance Futures Will Delist 1000XECUSDT Perpetual Contract"), ["XEC"])

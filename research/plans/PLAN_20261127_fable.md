@@ -116,3 +116,8 @@ Numbers from the brief, not re-read here (`/api/llm_trader` did not return JSON 
 | D. Book keeping | report months-to-3x and the cohort table each session | bot reading at 30 pairs or 2026-12-26 |
 
 One dated protocol or addendum each, locked before the first price; one run and at most one dated fix; simulated money, public endpoints, no keys; "not found" is written to `RESULTS.md` and `LESSONS.md` the same day.
+
+## Correction 2026-11-27 (added after the plan; the plan body above is unchanged)
+- **The 0.33 baseline mixed two levels.** It sums coin-level x (l1f on perps 0.19, fut_delist 0.13, mon_tag 0.005, each row is one coin of a notice) with the plan's notice-level framing. The notice-level figures are lower: about 0.18 for the book, and l1f notice-level x is 0.04 (0.036 in `research/studies/protocol_d3d4_20261126.md`: perps n 65 x 0.19, notice level 24 x 0.036). Several coins of one notice are one risk unit, so the notice-level number is the one to use for months-to-3x; the 0.33 and the "8.9 months" derived from it overstate the book.
+- **Q1 failed stage 0** (`research/studies/RESULTS.md`, Q1 results 2026-11-27: train net mean -2.56%, placebo -5.21%, x -0.57, control not beaten). Stage 1 in the stage table therefore has no candidate: it needs a new component at x >= 0.35 after shrink and Q1 is not one. The Q1 rows in the tables above are not a source of x.
+

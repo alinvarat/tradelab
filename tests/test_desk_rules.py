@@ -13,7 +13,7 @@ NOW = 1_800_000_000.0
 
 
 def dec(**kw):
-    d = {"symbol": "AAA", "action": "short", "size_pct": 10.0, "leverage": 2.0, "review_in_min": 60, "expected_move_pct": None}
+    d = {"symbol": "AAA", "action": "short", "size_pct": 10.0, "leverage": 2.0, "review_in_min": 60, "expected_move_pct": 3.0}
     d.update(kw)
     return d
 
@@ -64,6 +64,12 @@ class Gate(unittest.TestCase):
         g, _ = gate(dec(expected_move_pct=50.0))
         self.assertEqual(g["size_pct"], 10.0)                  # a big stated move does not raise the size
 
+    def test_missing_expected_move_counts_as_below_the_floor_unless_forced_flow(self):
+        g, _ = gate(dec(expected_move_pct=None))
+        self.assertTrue(g["veto"].startswith("R8"))
+        self.assertIsNone(gate(dec(expected_move_pct=None), forced=True)[0]["veto"])
+        self.assertIsNone(gate(dec(expected_move_pct=0.4))[0]["veto"])
+
     def test_longs_are_halved_and_shorts_are_not_favoured(self):
         self.assertEqual(gate(dec(action="buy"))[0]["size_pct"], 5.0)
         self.assertEqual(gate(dec(action="buy"), forced=True)[0]["size_pct"], 5.0)        # listings: the playbook says abstain
@@ -89,13 +95,39 @@ class Gate(unittest.TestCase):
 
     def test_no_martingale_after_a_loss(self):
         rs = dr.new_risk_state(147.0, NOW)
-        dr.note_entry(rs, 4.0, NOW)
-        dr.risk_trade_closed(rs, -1.0)
-        g, _ = gate(dec(size_pct=10.0), rs=rs)
-        self.assertEqual(g["size_pct"], 4.0)
+        dr.note_entry(rs, 4.0, NOW, 3.0)                       # 4% margin at 3x = 12% notional
+        dr.risk_trade_closed(rs, -1.0, notional_pct=12.0)
+        g, _ = gate(dec(size_pct=10.0, leverage=3.0), rs=rs)
+        self.assertEqual(g["size_pct"], 4.0)                   # same notional again, never more
         self.assertIn("R6", g["rules"])
         dr.risk_trade_closed(rs, 1.0)
         self.assertEqual(gate(dec(size_pct=10.0), rs=rs)[0]["size_pct"], 10.0)
+
+    def test_no_martingale_compares_notional_not_margin(self):
+        rs = dr.new_risk_state(147.0, NOW)
+        dr.note_entry(rs, 4.0, NOW, 1.0)                       # a 4% notional trade lost
+        dr.risk_trade_closed(rs, -1.0, notional_pct=4.0)
+        g, _ = gate(dec(size_pct=4.0, leverage=3.0), rs=rs)    # same margin, three times the notional
+        self.assertAlmostEqual(g["size_pct"] * g["leverage"], 4.0, delta=0.001)
+        self.assertIn("R6", g["rules"])
+        g, _ = gate(dec(size_pct=1.0, leverage=3.0), rs=rs)    # 3% notional: smaller, allowed unchanged
+        self.assertEqual(g["size_pct"], 1.0)
+        self.assertNotIn("R6", g["rules"])
+        rs["loss_notional_pct"] = None                         # state without the losing trade's notional: last entry's notional
+        g, _ = gate(dec(size_pct=4.0, leverage=3.0), rs=rs)
+        self.assertAlmostEqual(g["size_pct"] * g["leverage"], 4.0, delta=0.001)
+
+    def test_risk_and_exposure_limits_are_enforced_in_one_function(self):
+        n, notes = dr.cap_notional(1000.0, eq=100.0, stop_frac=0.08, used_notional=0.0)
+        self.assertAlmostEqual(n, 25.0)                                    # 2% of 100 at an 8% stop
+        self.assertTrue(any("risk budget" in x for x in notes))
+        n, _ = dr.cap_notional(1000.0, eq=100.0, stop_frac=0.08, used_notional=0.0, held_loss=1.5)
+        self.assertAlmostEqual(n, 6.25)                                    # the held part already uses 1.5 of the 2.00
+        self.assertEqual(dr.cap_notional(1000.0, eq=100.0, stop_frac=0.08, used_notional=0.0, held_loss=3.0)[0], 0.0)
+        n, notes = dr.cap_notional(1000.0, eq=100.0, stop_frac=0.0, used_notional=140.0)
+        self.assertAlmostEqual(n, 10.0)                                    # 1.5x equity in total
+        self.assertTrue(any("exposure" in x for x in notes))
+        self.assertEqual(dr.cap_notional(50.0, eq=100.0, stop_frac=0.01, used_notional=0.0), (50.0, []))   # never raised
 
     def test_no_averaging_down(self):
         self.assertTrue(dr.may_add(1, 100.0, 101.0))
@@ -135,14 +167,44 @@ class RiskState(unittest.TestCase):
         st = dr.risk_status(rs, 79.0, NOW + 7200)
         self.assertFalse(st["allow"])
         self.assertTrue(rs["cool_until"] > NOW)
-        st = dr.risk_status(rs, 79.0, NOW + 7200 + dr.DD_COOLDOWN_S + 1)
-        self.assertEqual(rs["peak"], 79.0)                       # the brake cannot lock forever
-        self.assertTrue(st["allow"])
+        t1 = NOW + 7200 + dr.DD_COOLDOWN_S + 1
+        st = dr.risk_status(rs, 79.0, t1)
+        self.assertEqual(rs["peak"], 100.0)                      # v4.20: the peak is kept, not reset to today's equity
+        self.assertTrue(st["allow"])                             # the halt ends on time (no infinite lock) ...
+        self.assertEqual(st["mult"], 0.5)                        # ... but at half size until a new peak
+        self.assertTrue(dr.risk_status(rs, 79.5, t1 + 3600)["allow"])        # still 21% under the peak: not re-halted
+        st = dr.risk_status(rs, 101.0, t1 + 7200)
+        self.assertEqual((st["mult"], rs["peak"]), (1.0, 101.0))             # a new peak ends the recovery
+
+    def test_a_second_20_percent_fall_halts_again_so_cycles_are_not_free(self):
+        rs = dr.new_risk_state(100.0, NOW)
+        rs["day_eq"] = 80.0
+        dr.risk_status(rs, 79.0, NOW + 7200)
+        t1 = NOW + 7200 + dr.DD_COOLDOWN_S + 1
+        self.assertTrue(dr.risk_status(rs, 79.0, t1)["allow"])
+        rs["day_eq"] = 63.0
+        st = dr.risk_status(rs, 63.0, t1 + 3600)                 # a further 20% fall from the recovery high
+        self.assertFalse(st["allow"])
+        self.assertEqual(rs["peak"], 100.0)
+
+    def test_state_from_v4_19_without_the_new_keys_still_works(self):
+        rs = dr.new_risk_state(100.0, NOW)
+        for k in ("recovering", "rec_eq", "day_halt", "last_notional_pct", "loss_notional_pct"):
+            rs.pop(k)
+        self.assertTrue(dr.risk_status(rs, 100.0, NOW + 60)["allow"])
+        self.assertTrue(gate(rs=rs)[1] is rs)
 
     def test_daily_loss_halt_ends_next_utc_day(self):
         rs = dr.new_risk_state(100.0, NOW)
         self.assertFalse(dr.risk_status(rs, 96.5, NOW + 60)["allow"])
         self.assertTrue(dr.risk_status(rs, 96.5, NOW + 86400 + 60)["allow"])
+
+    def test_daily_loss_halt_is_sticky_when_equity_bounces_back_the_same_day(self):
+        rs = dr.new_risk_state(100.0, NOW)
+        self.assertFalse(dr.risk_status(rs, 96.5, NOW + 60)["allow"])
+        self.assertFalse(dr.risk_status(rs, 100.0, NOW + 120)["allow"])     # back to flat: still no new entries today
+        self.assertFalse(dr.risk_status(rs, 99.0, NOW + 3600)["allow"])
+        self.assertTrue(dr.risk_status(rs, 99.0, NOW + 86400 + 60)["allow"])
 
     def test_loss_streak_halves_size_until_a_win(self):
         rs = dr.new_risk_state(100.0, NOW)
@@ -153,9 +215,11 @@ class RiskState(unittest.TestCase):
         dr.risk_trade_closed(rs, 2)
         self.assertEqual(dr.risk_status(rs, 100.0, NOW)["mult"], 1.0)
 
-    def test_bank_and_halt_levels_are_the_event_book_levels(self):
-        from core import event_book
-        self.assertEqual((dr.BANK_MULT, dr.HALT_MULT), (event_book.BANK_MULT, event_book.HALT_MULT))
+    def test_bank_and_halt_levels_are_frozen_local_constants(self):
+        import inspect
+        self.assertEqual((dr.BANK_MULT, dr.HALT_MULT), (3.0, 0.4))
+        self.assertNotIn("event_book import", inspect.getsource(dr))          # a change in event_book cannot move these rules
+        self.assertEqual(dr.TAG, "v4.20")
 
 
 class Blocks(unittest.TestCase):
@@ -185,6 +249,13 @@ class Blocks(unittest.TestCase):
         self.assertIn("lost 1.8% per trade", dr.FLOW_RECENT_OOS)
         self.assertIn("48 trades", dr.FLOW_RECENT_OOS)
         self.assertTrue(any("mon_tag" in r for r in dr.FLOW_BASE_RATES))
+
+    def test_in_sample_rows_are_labelled_and_the_tradable_subset_comes_first(self):
+        first = dr.FLOW_BASE_RATES[0]
+        self.assertLess(first.index("perp-reachable"), first.index("14.5"))
+        self.assertIn("in-sample, not tradable by this desk", first)
+        self.assertTrue(all("in-sample" in r for r in dr.FLOW_BASE_RATES[:3]))
+        self.assertNotIn("primary 60 min hold of notice_fwd / L1f", open(dr.__file__).read())
 
 
 class Feeds(unittest.TestCase):

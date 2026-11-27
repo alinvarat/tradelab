@@ -1194,11 +1194,92 @@ class V419Rules(Base):
             self.t.links[sym].pop("max_hold_s", None)
         self.assertEqual(len(self.t.acct.positions), 4)
         self.assertEqual(self.t._rule_positions(), [])
-        self.assertEqual(self.t._rules_exposure(), 0)
+        self.assertGreater(self.t._rules_exposure(), 0)                # v4.20: legacy notional counts toward the exposure cap
         self.t.risk.update(entries_n=0)
         self.reply({"symbol": "EEE", "action": "short", "size_pct": 2, "reason": "new", "expected_move_pct": 3})
         self.go(self.market(EEE=quote("EEE", px=110, move=12)))
         self.assertIn("EEE", self.t.acct.positions)
+
+    def test_an_add_cannot_widen_the_stop_and_the_whole_position_stays_within_2_percent(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "leverage": 3, "stop_pct": 5, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        old_sl = self.t.acct.positions["AAA"].sl
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "leverage": 3, "stop_pct": 25, "reason": "add", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=95, move=-5)))          # in profit: an add is allowed, with a much wider stop asked for
+        ex = self.t.decisions[-1]["executed"]
+        self.assertEqual((ex["status"], ex.get("scaled_in")), ("filled", True))
+        p = self.t.acct.positions["AAA"]
+        self.assertAlmostEqual(p.sl, old_sl, places=6)                  # tighten-only: the stop did not move up to 25%
+        self.assertLessEqual(p.qty * (p.sl - p.entry), 0.02 * self.t.acct.equity() * 1.01)    # loss at the stop, whole position
+        self.assertTrue(any("risk budget" in c for c in ex["clipped_by"]))
+        self.assertLessEqual(ex["risk_pct_equity"], 2.0 + 1e-6)
+
+    def test_adds_to_a_position_from_before_v4_19_are_refused(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "stop_pct": 5, "reason": "old", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.t.links["AAA"].pop("max_hold_s")                          # a grandfathered position
+        qty = self.t.acct.positions["AAA"].qty
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "reason": "add", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=95, move=-5)))
+        why = self.t.decisions[-1]["executed"]["why"]
+        self.assertIn("R5", why)
+        self.assertIn("before the v4.19 rules", why)
+        self.assertEqual(self.t.acct.positions["AAA"].qty, qty)
+
+    def test_legacy_notional_uses_up_the_exposure_cap_of_new_entries(self):
+        for sym in ("AAA", "BBB"):
+            self.reply({"symbol": sym, "action": "short", "size_pct": 20, "leverage": 3, "stop_pct": 1, "reason": "old", "expected_move_pct": 3})
+            self.go(self.market(**{sym: quote(sym, px=110, move=12)}))
+            self.t.links[sym].pop("max_hold_s")
+        eq = self.t.acct.equity()
+        room = lt.dr.MAX_EXPOSURE * eq - self.t.exposure() * eq
+        self.assertLess(room, 0.6 * eq)                                 # about 1.1x of the 1.5x cap is used: a full entry no longer fits
+        self.reply({"symbol": "CCC", "action": "short", "size_pct": 20, "leverage": 3, "stop_pct": 1, "reason": "new", "expected_move_pct": 3})
+        self.go(self.market(CCC=quote("CCC", px=110, move=12)))
+        ex = self.t.decisions[-1]["executed"]
+        self.assertTrue(any("exposure" in c for c in ex["clipped_by"]))
+        self.assertLessEqual(self.t.exposure(), lt.dr.MAX_EXPOSURE * 1.01)     # legacy ignored: 1.1x + 0.6x would be about 1.7x
+
+    def test_the_gate_is_rerun_right_before_the_fill(self):
+        day = lt.dr._utc_day(time.time())
+
+        def slow_review(decisions, ctx):                                # three other entries happened while the review was running
+            self.t.risk.update(entries_day=day, entries_n=lt.dr.MAX_ENTRIES_DAY)
+            return {}, None, None
+        self.reply({"symbol": "BBB", "action": "short", "size_pct": 5, "reason": "r", "expected_move_pct": 3})
+        with mock.patch.object(self.t, "risk_review", slow_review):
+            self.go(self.market(BBB=quote("BBB", px=110, move=12)))
+        self.assertFalse(self.t.acct.positions)
+        ex = self.t.decisions[-1]["executed"]
+        self.assertEqual(ex["status"], "skipped")
+        self.assertIn("at fill", ex["why"])
+        self.assertIn("R5", ex["why"])
+
+    def test_a_missing_expected_move_is_refused(self):
+        self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "reason": "r"})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.assertFalse(self.t.acct.positions)
+        self.assertIn("R8", self.t.decisions[0]["executed"]["why"])
+
+    def test_loss_notional_of_the_losing_trade_reaches_the_risk_state(self):
+        self.reply({"symbol": "AAA", "action": "buy", "size_pct": 5, "leverage": 2, "stop_pct": 2, "reason": "r", "expected_move_pct": 3})
+        self.go(self.market(AAA=quote("AAA", px=110, move=12)))
+        self.go(self.market(AAA=quote("AAA", px=100, move=-5)))        # stopped out at a loss
+        self.assertAlmostEqual(self.t.risk["loss_notional_pct"], 5.0, delta=0.1)   # 5% x 0.5 (long) x 2x leverage
+        self.assertEqual(self.t.risk["streak"], 1)
+
+    def test_protocol_tag_and_evaluation_pooling(self):
+        import inspect
+        self.assertIn('PROTOCOL_VERSION = "v4.20"', inspect.getsource(lt))
+        self.assertIn("v4.20", lt.CLAUDE_TAGS)
+        ds = [{"id": f"d{i}", "s1": -0.01, "ctrl": 0.01, "protocol": "v4.17"} for i in range(2)]
+        c19 = [{"id": f"b{i}", "s1": 0.02, "ctrl": 0.0, "protocol": "v4.19"} for i in range(3)]
+        c20 = [{"id": f"c{i}", "s1": 0.02, "ctrl": 0.0, "protocol": "v4.20"} for i in range(2)]
+        self.t.pairs = ds + c19 + c20
+        ev = self.t.evaluate()
+        self.assertEqual(ev["closed_pairs"], 2)                         # v4.20 never leaks into the DeepSeek pool
+        self.assertEqual(ev["claude_v4_19"]["closed_pairs"], 5)         # same family: v4.19 + the v4.20 bug-fix bump
+        self.assertEqual(ev["claude_v4_20"]["closed_pairs"], 2)
 
     def test_adjust_may_tighten_a_v4_19_stop_but_never_widen_it(self):
         self.reply({"symbol": "AAA", "action": "short", "size_pct": 5, "stop_pct": 5, "reason": "r", "expected_move_pct": 3})
@@ -1260,9 +1341,9 @@ class V419Rules(Base):
         self.assertEqual(ev["by_protocol"]["v4.19"]["n"], 4)
 
     def test_protocol_tag_and_rules_tag_agree(self):
-        self.assertIn(lt.PROTOCOL_VERSION, ("v4.19", "v4.17"))         # CI has no Claude, so the tag falls back to v4.17
-        self.assertEqual(lt.dr.TAG, "v4.19")
-        self.assertIn("v4.19", (Path(lt.__file__).resolve().parent.parent / "research" / "llm_trader" / "protocol.md").read_text())
+        self.assertIn(lt.PROTOCOL_VERSION, ("v4.20", "v4.17"))         # CI has no Claude, so the tag falls back to v4.17
+        self.assertEqual(lt.dr.TAG, "v4.20")
+        self.assertIn("v4.20", (Path(lt.__file__).resolve().parent.parent / "research" / "llm_trader" / "protocol.md").read_text())
 
 
 if __name__ == "__main__":
