@@ -1,0 +1,22 @@
+{
+ "snapshots": 6,
+ "distinct_pairs": 0,
+ "pairs_per_day": 0.0,
+ "mismatch_pairs": 0,
+ "mismatch_share": null,
+ "mean_alloc_yield_per_day": 0.0,
+ "max_alloc_yield_per_day": 0.0,
+ "kills": [
+  "yield: mean 0.0000% a day < 0.5%",
+  "pairs: 0.0 distinct matched pairs a day < 10"
+ ],
+ "killed_as_standalone": true,
+ "status": "RUNNING",
+ "failed_snapshots": 0,
+ "near_miss_24h_max": 0,
+ "classified_median": {
+  "kalshi": 176.0,
+  "polymarket": 72.0
+ },
+ "updated": "2026-11-27T10:16:08Z"
+}
