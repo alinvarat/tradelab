@@ -21,3 +21,4 @@
 {"kind": "ann", "t": 1795570542.3020785, "venue": "kucoin", "ann_id": "348092", "title": "KuCoin Futures New Listing: PREDICTUSDT Perpetual Contract Pre-Market Trading", "ann_ts": 1792985520.0, "symbols": [], "backfill": true}
 {"kind": "ann", "t": 1795595186.846773, "venue": "kucoin", "ann_id": "358644", "title": "World Premiere: VerityAI (VERITY) Listed on KuCoin", "ann_ts": 1795594620.0, "symbols": ["VERITY"], "backfill": false}
 {"kind": "ann", "t": 1795603726.7032163, "venue": "kucoin", "ann_id": "360576", "title": "KuCoin Futures Will List Multiple Stock Index Perpetual Contracts (2026-11-25)", "ann_ts": 1795603320.0, "symbols": [], "backfill": false}
+{"kind": "ann", "t": 1795749790.4854007, "venue": "kucoin", "ann_id": "361565", "title": "Kinetiq (KNTQ) Listed on KuCoin", "ann_ts": 1795748640.0, "symbols": ["KNTQ"], "backfill": false}
