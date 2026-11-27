@@ -19,6 +19,7 @@ BUDGET_S = 20 * 60
 HL = "https://api.hyperliquid.xyz/info"
 CALLS = {"ok": 0, "fail": 0, "429": 0}
 _lock = threading.Lock()
+ERR_SAMPLES = []
 
 
 def log(m):
@@ -39,7 +40,13 @@ def jreq(url, body=None, timeout=20, tries=2, headers=None):
             return 200, out
         except Exception as e:  # noqa: BLE001
             st = getattr(e, "code", 0) or 0
+            try:
+                body = e.read()[:160].decode("utf-8", "replace") if hasattr(e, "read") else ""
+            except Exception:  # noqa: BLE001
+                body = ""
             with _lock:
+                if len(ERR_SAMPLES) < 6 and st:
+                    ERR_SAMPLES.append({"status": st, "url": url.split("?")[0][-70:], "q": url.split("?")[-1][:90], "body": body})
                 CALLS["fail"] += 1
                 if st == 429:
                     CALLS["429"] += 1
@@ -80,7 +87,8 @@ def med(xs):
 def finish(name, t0, summ, rows, problems):
     summ["integrity"] = {"ok": not problems, "problems": problems}
     summ["kline_fail_diag"] = dict(FAIL_DIAG)
-    summ["mexc_page_bars"] = PAGE["mexc"]
+    summ["error_samples"] = list(ERR_SAMPLES)
+    summ["gate_400_empty_pages"] = EMPTY_PAGES["gate_400"]
     summ["calls"] = dict(CALLS)
     summ["budget_s"] = BUDGET_S
     summ["elapsed_s"] = round(time.time() - t0, 1)
@@ -237,7 +245,7 @@ def study_s2(_symbols):
     summ, rows, problems = {"line": "s2_dex_trending"}, [], []
     polls, info, failed_polls = [], {}, 0
     POLL = 30
-    n_polls = 36
+    n_polls = 24
     for k in range(n_polls):
         if time.time() > dl:
             break
@@ -287,12 +295,15 @@ def study_s2(_symbols):
 
     # sells in the 60 minutes before first sight, one call per qualifying entrant (public limit 30 a minute)
     no_exit = measured = 0
-    for row, e in qual[:60]:
+    for row, e in qual[:45]:
         if time.time() > t0 + BUDGET_S - 30:
             break
         i = info[e["id"]]
         net = e["id"].split("_")[0]
-        st, d = jreq(f"{GT}/networks/{net}/pools/{i['address']}/trades", headers=GT_H)
+        st, d = jreq(f"{GT}/networks/{net}/pools/{i['address']}/trades", headers=GT_H, tries=1)
+        if st == 429:
+            time.sleep(25)
+            st, d = jreq(f"{GT}/networks/{net}/pools/{i['address']}/trades", headers=GT_H, tries=1)
         if not (isinstance(d, dict) and isinstance(d.get("data"), list)):
             row["sellers"] = None
             continue
@@ -303,7 +314,7 @@ def study_s2(_symbols):
         measured += 1
         if row["sellers"] < 2:
             no_exit += 1
-        time.sleep(2.2)
+        time.sleep(4.0)
     summ["sell_check"] = {"measured": measured, "fewer_than_2_distinct_sellers": no_exit}
     hours = (polls[-1]["t"] - polls[0]["t"]) / 3600.0 if len(polls) > 1 else 0
     summ["observed_hours"] = hours
@@ -348,12 +359,15 @@ def mexc_contracts():
     return out, bool((d or {}).get("data"))
 
 
-PAGE = {"gate": 1900, "mexc": 1900}      # bars per request; MEXC shrinks on a refusal and keeps the size that worked
+PAGE = {"gate": 1900, "mexc": 1900}      # bars per request
 FAIL_DIAG = {}
+MEXC_PACER = Pacer(5 * 60)               # 5 kline calls a second (documented limit is 20 per 2 s)
+EMPTY_PAGES = {"gate_400": 0}
 
 
 def klines(venue, name, step_s, t0, t1, want_vol=False):
-    """{t: close} and {t: volume} for [t0, t1) in pages; None when a page fails even at the smallest size."""
+    """{t: close} and {t: volume} for [t0, t1) in pages. A Gate 400 on a page (history older than the venue serves) is an
+    empty page, counted; MEXC rate-limit code 510 backs off and retries the same page; any other failure -> (None, None)."""
     close, vol = {}, {}
     t = t0
     iv = {60: ("1m", "Min1"), 300: ("5m", "Min5")}[step_s]
@@ -361,28 +375,34 @@ def klines(venue, name, step_s, t0, t1, want_vol=False):
         te = min(t + PAGE[venue] * step_s, t1)
         if venue == "gate":
             st, d = jreq(f"https://api.gateio.ws/api/v4/futures/usdt/candlesticks?contract={name}&interval={iv[0]}&from={int(t)}&to={int(te)}", tries=1)
-            if d is None:
+            if d is None and st == 400:
+                EMPTY_PAGES["gate_400"] += 1
+            elif d is None:
                 FAIL_DIAG["gate"] = st
                 return None, None
             for k in d if isinstance(d, list) else []:
                 close[int(k["t"])] = fnum(k["c"])
                 vol[int(k["t"])] = fnum(k.get("v")) or 0
         else:
-            st, d = jreq(f"https://contract.mexc.com/api/v1/contract/kline/{name}?interval={iv[1]}&start={int(t)}&end={int(te)}", tries=1)
-            x = (d or {}).get("data") if isinstance(d, dict) else None
-            if d is None or (isinstance(d, dict) and d.get("success") is False):
-                FAIL_DIAG["mexc"] = {"status": st, "page": PAGE["mexc"], "body": str(d)[:120]}
-                if PAGE["mexc"] > 100:
-                    PAGE["mexc"] = max(100, PAGE["mexc"] // 2)
+            x = None
+            for attempt in range(6):
+                MEXC_PACER.wait(1)
+                st, d = jreq(f"https://contract.mexc.com/api/v1/contract/kline/{name}?interval={iv[1]}&start={int(t)}&end={int(te)}", tries=1)
+                if isinstance(d, dict) and d.get("success") is False and d.get("code") == 510:
+                    time.sleep(3 * (attempt + 1))
                     continue
+                break
+            if d is None or (isinstance(d, dict) and d.get("success") is False):
+                FAIL_DIAG["mexc"] = {"status": st, "body": str(d)[:120]}
                 return None, None
+            x = d.get("data") if isinstance(d, dict) else None
             if x and x.get("time"):
                 vv = x.get("vol") or [0] * len(x["time"])
                 for tt, c, v in zip(x["time"], x["close"], vv):
                     close[int(tt)] = fnum(c)
                     vol[int(tt)] = fnum(v) or 0
         t = te
-        time.sleep(0.12)
+        time.sleep(0.05)
     return close, vol
 
 
@@ -472,7 +492,7 @@ def study_s3(_symbols):
                     if w is not None:
                         walks.append(w)
                 if k < 5:
-                    time.sleep(180 if os.environ.get("S15_FULL", "1") == "1" else 1)
+                    time.sleep(180 if session_open else 5)
             row["spread_walk"] = med(walks)
             row["snapshots"] = len(walks)
             if walks:
@@ -574,14 +594,15 @@ def snapshot_s4(dl):
     from datetime import datetime, timezone
     lo = datetime.fromtimestamp(now, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     hi = datetime.fromtimestamp(now + 48 * 3600, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    while off < 6000 and time.time() < dl:
-        st, d = jreq(f"{GAMMA}/markets?active=true&closed=false&limit=500&offset={off}&end_date_min={lo}&end_date_max={hi}")
+    while off < 8000 and time.time() < dl:
+        st, d = jreq(f"{GAMMA}/markets?active=true&closed=false&limit=100&offset={off}&end_date_min={lo}&end_date_max={hi}")
         if not isinstance(d, list):
             return None, None, f"gamma status {st}"
         pm += d
-        if len(d) < 500:
+        if len(d) < 100:
             break
-        off += 500
+        off += 100
+        time.sleep(0.2)
     return km, pm, None
 
 
@@ -616,6 +637,7 @@ def study_s4(_symbols):
             pf.append((m, f, iso(m.get("endDate"))))
     summ["kalshi_classified"], summ["polymarket_classified"] = len(kf), len(pf)
     summ["classified_by_cat"] = {"kalshi": count_by([f["cat"] for _, f, _ in kf]), "polymarket": count_by([f["cat"] for _, f, _ in pf])}
+    summ["unclassified_titles"] = {"kalshi": [m.get("title") for m in km[:400:27]][:15], "polymarket": [m.get("question") for m in pm[:400:27]][:15]}
     pairs = []
     for km_, kfe, kc in kf:
         for pm_, pfe, pc in pf:
@@ -746,6 +768,8 @@ def study_s5(_symbols):
     summ["events_by_coin"] = by
     if len(used) < 20:
         problems.append(f"only {len(used)} coins usable")
+    if cover is None or cover < 0.15:
+        problems.append(f"bar coverage {cover}: fewer than 5 days of common 1-minute bars (venue history limit); count not scalable")
     rows = res
     # unconditional context only
     kills = []
