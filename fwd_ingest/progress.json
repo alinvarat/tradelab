@@ -1,0 +1,17 @@
+{
+ "note": "counts only; no scoring is registered for this arm (addendum 2026-11-26)",
+ "pod_rows": 455,
+ "utc": 1795754173,
+ "wires": {
+  "globenewswire": {
+   "median_seen_minus_pub_s": 82.848,
+   "n": 120,
+   "n_llm": 5
+  },
+  "prnewswire": {
+   "median_seen_minus_pub_s": 103.729,
+   "n": 202,
+   "n_llm": 27
+  }
+ }
+}
