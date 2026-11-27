@@ -99,7 +99,7 @@ class Greedy(unittest.TestCase):
             for code, g in (("2.02", -0.02), ("8.01", 0.02)):
                 for _ in range(2 if d % 2 else 1):
                     n += 1
-                    r = row(n, d, g, items=(code,))
+                    r = row(n, d, g + 0.004 * ((n * 7) % 5 - 2), items=(code,))
                     self.rows.append(r)
                     self.decs[r["key"]] = dec("long", 1.0)
 
