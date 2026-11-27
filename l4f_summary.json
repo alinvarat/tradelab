@@ -92,6 +92,16 @@
    "stake": 7.6041,
    "entry_ts": 1795749441.3458855,
    "volume": 51664.943223
+  },
+  {
+   "id": "7206754",
+   "question": "Will Deportivo Alav\u00e9s win on 2026-11-28?",
+   "end": "2026-11-28T20:00:00Z",
+   "side": "yes",
+   "price": 0.04,
+   "stake": 7.6041,
+   "entry_ts": 1795767437.602783,
+   "volume": 51615.654662
   }
  ],
  "n_closed": 22,
