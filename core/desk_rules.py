@@ -11,9 +11,7 @@ its side: the evidence (a few days, overlapping candidates, no costs) cannot sup
 calls on public news had no edge in three rounds."""
 import time
 
-from .event_book import BANK_MULT, HALT_MULT
-
-TAG = "v4.19"
+TAG = "v4.20"
 SHRINK_K = 20                  # shrinkage toward zero: mean * n / (n + K); a cell with n = K keeps half its mean
 MIN_CELL_N = 10                # cells below this n are not shown to the model as evidence
 
@@ -25,14 +23,17 @@ MAX_POS = 3                    # open positions (was 100)
 MAX_EXPOSURE = 1.5             # total notional / equity (was 20)
 MAX_ENTRIES_DAY = 3            # new positions per UTC day: abstain more, costs and no measured text edge
 MAX_HOLD_S = 4 * 3600          # default time exit for a new entry
-FORCED_HOLD_S = 3600           # forced-flow entries: the primary 60 min hold of notice_fwd / L1f
+FORCED_HOLD_S = 3600           # forced-flow entries: 60 min (the notice_fwd forward ledger's primary hold). NOT the L1f screen's
+                               # primary hold, which is 4 h; the desk exits earlier than the screened hold (unchanged since v4.19)
 REVIEW_MAX_MIN = 120
 MIN_EXPECTED_MOVE_PCT = 0.4    # a stated expected move under 2 x the 0.2% round trip is not worth the cost (arithmetic, not a fit)
 DAILY_LOSS_HALT = 0.03         # no new entries after losing 3% of equity in one UTC day
 DD_HALF = 0.10                 # drawdown from the peak: half size
-DD_HALT = 0.20                 # drawdown from the peak: no new entries for DD_COOLDOWN_S, then the peak resets
+DD_HALT = 0.20                 # drawdown from the peak: no new entries for DD_COOLDOWN_S, then half size until a new peak (v4.20)
 DD_COOLDOWN_S = 24 * 3600
-COHORT_DAYS = 30               # bank at BANK_MULT x and halt at HALT_MULT x the cohort start, as in core/event_book.py
+COHORT_DAYS = 30               # bank at BANK_MULT x and halt at HALT_MULT x the cohort start
+BANK_MULT = 3.0                # local copies of the core/event_book.py levels (v4.20): frozen rules must not change if event_book does
+HALT_MULT = 0.4
 STREAK_HALF = 2                # two losing closed trades in a row: half size until a win
 NEWS_TYPE_ABSTAIN = {"analyst"}
 
@@ -103,13 +104,14 @@ def _utc_day(now):
 def new_risk_state(eq, now):
     return {"tag": TAG, "since": now, "peak": eq, "cohort_ts": now, "cohort_eq": eq, "day": _utc_day(now), "day_eq": eq,
             "cool_until": 0.0, "banked": False, "halted": False, "streak": 0, "last_loss": False, "last_size_pct": None,
-            "entries_day": _utc_day(now), "entries_n": 0}
+            "entries_day": _utc_day(now), "entries_n": 0,
+            "recovering": False, "rec_eq": None, "day_halt": None, "last_notional_pct": None, "loss_notional_pct": None}
 
 
 def risk_status(rs: dict, eq: float, now: float) -> dict:
     """Update the state for this equity reading and return {allow, mult, reasons, ...}. Idempotent within a reading."""
     if now - rs["cohort_ts"] >= COHORT_DAYS * 86400:      # a new cohort: bank or halt flags end, the base is today's equity
-        rs.update(cohort_ts=now, cohort_eq=eq, banked=False, halted=False, peak=eq, cool_until=0.0)
+        rs.update(cohort_ts=now, cohort_eq=eq, banked=False, halted=False, peak=eq, cool_until=0.0, recovering=False, rec_eq=None)
     if rs["day"] != _utc_day(now):
         rs.update(day=_utc_day(now), day_eq=eq)
     rs["peak"] = max(rs["peak"], eq)
@@ -118,11 +120,19 @@ def risk_status(rs: dict, eq: float, now: float) -> dict:
     if eq <= HALT_MULT * rs["cohort_eq"]:
         rs["halted"] = True
     dd = 1.0 - eq / rs["peak"] if rs["peak"] > 0 else 0.0
-    if rs["cool_until"] and now >= rs["cool_until"]:      # cooldown over: the peak resets, so the brake cannot lock forever
-        rs.update(cool_until=0.0, peak=eq)
-        dd = 0.0
-    if not rs["cool_until"] and dd >= DD_HALT:
+    if rs.get("recovering") and eq >= rs["peak"]:         # back at the old peak: the recovery is over
+        rs.update(recovering=False, rec_eq=None)
+    if rs["cool_until"] and now >= rs["cool_until"]:      # v4.20: the halt ends on time, the PEAK IS KEPT; half size until a new peak
+        rs.update(cool_until=0.0, recovering=True, rec_eq=eq)
+    if rs.get("recovering"):
+        rs["rec_eq"] = max(rs.get("rec_eq") or eq, eq)    # a new halt needs a fresh DD_HALT fall from the recovery high, so no infinite lock
+        halt_dd = 1.0 - eq / rs["rec_eq"]
+    else:
+        halt_dd = dd
+    if not rs["cool_until"] and halt_dd >= DD_HALT:
         rs["cool_until"] = now + DD_COOLDOWN_S
+    if eq <= rs["day_eq"] * (1 - DAILY_LOSS_HALT):        # v4.20: sticky for the rest of the UTC day, even if equity bounces back
+        rs["day_halt"] = rs["day"]
     reasons, mult, allow = [], 1.0, True
     if rs["banked"]:
         allow = False
@@ -133,12 +143,12 @@ def risk_status(rs: dict, eq: float, now: float) -> dict:
     if rs["cool_until"]:
         allow = False
         reasons.append(f"drawdown {dd:.0%} from the peak: no new entries until the 24 h cooldown ends")
-    if eq <= rs["day_eq"] * (1 - DAILY_LOSS_HALT):
+    if rs.get("day_halt") == rs["day"]:
         allow = False
         reasons.append(f"lost {DAILY_LOSS_HALT:.0%} today: no new entries until the next UTC day")
-    if dd >= DD_HALF:
+    if dd >= DD_HALF or rs.get("recovering"):
         mult *= 0.5
-        reasons.append(f"drawdown {dd:.0%} from the peak: half size")
+        reasons.append(f"drawdown {dd:.0%} from the peak: half size" + (" until a new peak" if rs.get("recovering") else ""))
     if rs["streak"] >= STREAK_HALF:
         mult *= 0.5
         reasons.append(f"{rs['streak']} losing trades in a row: half size until a win")
@@ -147,20 +157,23 @@ def risk_status(rs: dict, eq: float, now: float) -> dict:
             "halted": rs["halted"]}
 
 
-def risk_trade_closed(rs: dict, pnl: float):
+def risk_trade_closed(rs: dict, pnl: float, notional_pct: float = None):
     """Feed one closed model trade (P&L in account currency) into the loss streak."""
     if pnl < 0:
         rs["streak"] += 1
         rs["last_loss"] = True
+        if notional_pct is not None:
+            rs["loss_notional_pct"] = notional_pct         # v4.20: the notional (margin x leverage, % of equity) of THAT losing trade
     else:
-        rs["streak"], rs["last_loss"] = 0, False
+        rs["streak"], rs["last_loss"], rs["loss_notional_pct"] = 0, False, None
 
 
-def note_entry(rs: dict, size_pct: float, now: float):
+def note_entry(rs: dict, size_pct: float, now: float, leverage: float = 1.0):
     if rs["entries_day"] != _utc_day(now):
         rs.update(entries_day=_utc_day(now), entries_n=0)
     rs["entries_n"] += 1
     rs["last_size_pct"] = size_pct
+    rs["last_notional_pct"] = size_pct * (leverage or 1.0)
 
 
 def entries_today(rs: dict, now: float) -> int:
@@ -183,8 +196,9 @@ def gate(d: dict, *, news_type, forced: bool, rs: dict, eq: float, now: float, n
         out["veto"] = f"R1 news type {news_type!r}: abstain"
         return out
     em = d.get("expected_move_pct")
-    if em is not None and em < MIN_EXPECTED_MOVE_PCT:
-        out["veto"] = f"R8 expected move {em:g}% is under {MIN_EXPECTED_MOVE_PCT:g}%"
+    if not forced and (em is None or em < MIN_EXPECTED_MOVE_PCT):      # v4.20: a missing estimate counts as below the floor
+        out["veto"] = ("R8 no expected move stated (counts as under %g%%)" % MIN_EXPECTED_MOVE_PCT if em is None
+                       else f"R8 expected move {em:g}% is under {MIN_EXPECTED_MOVE_PCT:g}%")
         return out
     if not is_add and n_open >= MAX_POS:
         out["veto"] = f"R5 {n_open} positions open (max {MAX_POS})"
@@ -199,20 +213,40 @@ def gate(d: dict, *, news_type, forced: bool, rs: dict, eq: float, now: float, n
     if d["action"] == "buy":                              # forced-flow longs too: the playbook says abstain on listings
         size *= 0.5
         out["rules"].append("R2")
-    if rs.get("last_loss") and rs.get("last_size_pct"):
-        if size > rs["last_size_pct"]:
-            size = rs["last_size_pct"]                    # no martingale: never larger than the size that just lost
+    lev = min(float(d["leverage"]), LEV_CAP)
+    if lev < d["leverage"]:
+        out["rules"].append("R5")
+    if rs.get("last_loss"):                               # v4.20: no martingale compares NOTIONAL (margin x leverage), not margin
+        ref = rs.get("loss_notional_pct") or rs.get("last_notional_pct") or rs.get("last_size_pct") or 0   # unknown leverage: assume 1x
+        if ref and size * lev > ref:
+            size = ref / lev                              # never a larger notional than the trade that just lost
             out["rules"].append("R6")
     if size > SIZE_CAP_PCT:
         size = SIZE_CAP_PCT
-        out["rules"].append("R5")
-    lev = min(float(d["leverage"]), LEV_CAP)
-    if lev < d["leverage"]:
         out["rules"].append("R5")
     out["rules"].append("R3")                         # every accepted entry carries the time exit
     out.update(size_pct=round(size, 4), leverage=lev)
     out["rules"] = sorted(set(out["rules"]))
     return out
+
+
+def cap_notional(notional: float, *, eq: float, stop_frac: float, used_notional: float, held_loss: float = 0.0) -> tuple:
+    """The ONE place the v4.20 per-trade risk (RISK_PER_TRADE) and book exposure (MAX_EXPOSURE) limits are enforced on a fill.
+    notional: the new order's notional in account currency. stop_frac: its loss per unit of notional at the (effective) stop.
+    used_notional: notional already open (every position, legacy included). held_loss: loss at the stop of the position this
+    order adds to (0 for a new entry), so the WHOLE position stays within RISK_PER_TRADE of equity after an add.
+    Returns (notional, [clip notes]); the notional is never raised."""
+    notes = []
+    if stop_frac > 0:
+        cap = max(0.0, RISK_PER_TRADE * eq - max(0.0, held_loss)) / stop_frac
+        if notional > cap:
+            notional = cap
+            notes.append(f"risk budget: loss at the stop capped at {RISK_PER_TRADE:.0%} of equity")
+    room = max(0.0, (MAX_EXPOSURE * eq) - used_notional)
+    if notional > room:
+        notional = room
+        notes.append(f"total exposure cap ({MAX_EXPOSURE:g}x equity)")
+    return notional, notes
 
 
 def may_add(side: int, entry: float, mark: float) -> bool:
@@ -226,10 +260,11 @@ EVIDENCE_FAST_NEWS = ("context only: an LLM reading public news for direction ha
 # Base rates of the forced-flow families, from research/studies/RESULTS.md (frozen 2026-11-25 events; in-sample on the screens
 # that picked the 4 h hold, so only forward books confirm). Short = the coin is expected to fall.
 FLOW_BASE_RATES = [
-    "L1f binance delist short 4h: n=105 +14.5% spot-priced (in-sample); perp-reachable subset +4.7% (train -3.3, validation "
-    "+13.9, test +6.4), about 1.9 events a month",
-    "fut_delist short 4h: n=59 +6.2% (train n only 6), about 1.7 a month",
-    "mon_tag (monitoring tag) short 4h: n=89 +2.7%, positive in every split but small",
+    "L1f binance delist short 4h: perp-reachable subset +4.7% (train -3.3, validation +13.9, test +6.4), about 1.9 events a "
+    "month; the spot-priced n=105 +14.5% is in-sample, not tradable by this desk (it has perps only)",
+    "fut_delist short 4h: n=59 +6.2% (in-sample; train n only 6), about 1.7 a month",
+    "mon_tag (monitoring tag) short 4h: n=89 +2.7% (in-sample), positive in every "
+    "split but small",
     "bybit_delist short 4h n=74 -1.1% and okx_delist n=17 -0.5%: negative; Korean notices do not move the global perp",
 ]
 FLOW_RECENT_OOS = ("NEGATIVE out of sample: the delisting short lost 1.8% per trade over 48 trades at 1 d (sealed Aug-Nov 2026, "

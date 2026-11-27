@@ -68,8 +68,8 @@ DEBATE_ROUNDS = 2                 # v4.1: bull/bear case, then one rebuttal roun
 # the CLI is installed; v4.17 (DeepSeek) otherwise. v4.18 has no fallback to another model, so the tag stays honest.
 # v4.19 (2026-11-27, owner): the bot is improved continuously and trades on the best inputs we have; frozen hard rules from
 # the desk's own measured cells (core/desk_rules.py, research/llm_trader/protocol.md addendum 2026-11-27).
-PROTOCOL_VERSION = "v4.19" if ai_news.claude_ready() else "v4.17"
-CLAUDE_TAGS = ("v4.18", "v4.19")   # never pooled with the DeepSeek tags (AGENTS rule 7); each Claude tag is also reported alone
+PROTOCOL_VERSION = "v4.20" if ai_news.claude_ready() else "v4.17"
+CLAUDE_TAGS = ("v4.18", "v4.19", "v4.20")   # never pooled with the DeepSeek tags (AGENTS rule 7); each Claude tag is also reported alone
 NEWS_WINDOW_S = 45 * 60          # a linked headline is a candidate for this long after first sight
 BUZZ_WINDOW_S = 2 * 3600
 DEFAULT_REVIEW_MIN = 60
@@ -132,7 +132,7 @@ news had no edge in three tested rounds); at most 3 new entries a day and 3 open
 equity, leverage at most 3, loss at the stop at most 2 percent of equity; long entries are halved, analyst-note entries are \
 refused; every entry has a time exit (4 h, forced-flow notices 1 h) and a review at least every 120 minutes; never add to a \
 losing position and never size up after a loss; risk_state shows the drawdown brake and the 3x bank / 0.4x halt. Give \
-expected_move_pct (absolute percent you expect over the hold) with every buy or short: a value under 0.4 is refused and it \
+expected_move_pct (absolute percent you expect over the hold) with every buy or short: a value under 0.4, or none, is refused (forced-flow notices excepted) and it \
 is a weak size prior, never a reason to size up. data_feeds holds the fast news, flow base rates, forward ledgers and which \
 feeds are stale: a stale feed is missing data, not quiet."""
 
@@ -1247,20 +1247,14 @@ class LlmTrader:
                 held = self.acct.positions.get(sym)
                 side = -1 if d["action"] == "short" else 1
                 add = bool(held and held.side == side)
-                veto = None
-                if add:                                              # no averaging down, no limit adds
-                    last = self.acct.last.get(sym)
-                    mark = (last.bid if side > 0 else last.ask) if last else held.entry
-                    if d.get("entry") == "limit":
-                        veto = "R6 no limit adds to a held position"
-                    elif not dr.may_add(side, held.entry, mark):
-                        veto = "R6 no adding to a position that is not in profit"
+                veto = self._add_veto(d, held, side)
                 before = d["size_pct"]
                 g = dr.gate(d, news_type=(ctx_by.get(sym) or {}).get("news_type"), forced=bool(cand_by.get(sym, {}).get("forced")),
                             rs=self.risk, eq=eq, now=now, n_open=0 if add else len(self._rule_positions()) + planned,
                             extra_entries=0 if add else planned, is_add=add)
                 veto = veto or g["veto"]
                 d["rules"] = g["rules"]
+                d["rule_news_type"], d["rule_forced"] = (ctx_by.get(sym) or {}).get("news_type"), bool(cand_by.get(sym, {}).get("forced"))
                 if veto:
                     d["preflight"], d["veto_rule"] = "v4.19 " + veto, veto.split()[0]
                     self.record("rule_veto", symbol=sym, action=d["action"], rule=d["veto_rule"], why=veto)
@@ -1272,6 +1266,38 @@ class LlmTrader:
                     d["size_pct_before_rules"] = before
                     self.record("rule_reduce", symbol=sym, rules=g["rules"], before=before, after=g["size_pct"], notes=g["notes"])
 
+    def _add_veto(self, d, held, side):
+        """v4.20: why an add to a held same-side position is refused (None when it is not an add or is allowed). Only positions opened
+        under the v4.19+ rules may be added to: a grandfathered one has no max_hold_s and was sized outside the limits."""
+        if not (held and held.side == side):
+            return None
+        sym = d["symbol"]
+        if not (self.links.get(sym) or {}).get("max_hold_s"):
+            return "R5 no adds to a position opened before the v4.19 rules"
+        last = self.acct.last.get(sym)
+        mark = (last.bid if side > 0 else last.ask) if last else held.entry
+        if d.get("entry") == "limit":
+            return "R6 no limit adds to a held position"
+        if not dr.may_add(side, held.entry, mark):
+            return "R6 no adding to a position that is not in profit"
+        return None
+
+    def _rules_recheck(self, d, side, now):
+        """v4.20: the v4.19 gate again at fill time. _apply_rules runs before the multi-minute risk review, so positions, the day's
+        entries, the risk brakes and the add rules may have changed. Only vetoes are applied here (the size was already set)."""
+        held = self.acct.positions.get(d["symbol"])
+        veto = self._add_veto(d, held, side)
+        if not veto:
+            add = bool(held and held.side == side)
+            waiting = len([s for s in self.pending if s not in self.acct.positions])
+            g = dr.gate(d, news_type=d.get("rule_news_type"), forced=bool(d.get("rule_forced")), rs=self.risk, eq=self.acct.equity(),
+                        now=now, n_open=len(self._rule_positions()) + waiting, is_add=add)
+            veto = g["veto"]
+        if veto:
+            self.record("rule_veto", symbol=d["symbol"], action=d["action"], rule=veto.split()[0], why=veto, at_fill=True)
+            return "v4.20 at fill: " + veto
+        return None
+
     # ---------- execution ----------
     def _buy(self, d, quotes, now, side=1):
         sym, q = d["symbol"], quotes[d["symbol"]]
@@ -1280,6 +1306,8 @@ class LlmTrader:
             self._book_pairs(now)
         why = self.risk_block(now)
         held = self.acct.positions.get(sym)
+        if not why and self.rules_on:
+            why = self._rules_recheck(d, side, now)
         if not why and held and held.side != side:
             why = "opposite position open: sell it first"
         if not why and sym in self.pending:
@@ -1299,14 +1327,25 @@ class LlmTrader:
         eq = self.acct.equity()
         margin, clipped = eq * d["size_pct"] / 100, []
         notional = margin * lev
-        risk_frac = dr.RISK_PER_TRADE if self.rules_on else RISK_PER_TRADE
-        max_exp = dr.MAX_EXPOSURE if self.rules_on else MAX_EXPOSURE
-        cap = risk_frac * eq / stop
-        if notional > cap:
-            notional, _ = cap, clipped.append(f"risk budget: loss at the stop capped at {risk_frac:.0%} of equity")
-        room = max(0.0, (max_exp - (self._rules_exposure() if self.rules_on else self.exposure())) * eq)
-        if notional > room:
-            notional, _ = room, clipped.append(f"total exposure cap ({max_exp:g}x equity)")
+        adding = sym in self.links and sym in self.acct.positions     # buying more of a stock already held scales the position in
+        whole_loss = None
+        stop_px = ref * (1 - side * stop)
+        prev_sl = held.sl if (adding and held) else None
+        if self.rules_on:
+            if adding and prev_sl:                      # v4.20: an add may tighten the whole position's stop, never widen it
+                stop_px = max(stop_px, prev_sl) if side > 0 else min(stop_px, prev_sl)
+            held_loss = (held.qty * side * (held.entry - stop_px) * self.acct._fx(sym)) if adding and held else 0.0
+            notional, notes = dr.cap_notional(notional, eq=eq, stop_frac=side * (ref - stop_px) / ref,
+                                              used_notional=self.exposure() * eq, held_loss=held_loss)
+            clipped += notes
+            whole_loss = max(0.0, held_loss) + notional * max(0.0, side * (ref - stop_px) / ref)     # the whole position, after an add
+        else:
+            cap = RISK_PER_TRADE * eq / stop
+            if notional > cap:
+                notional, _ = cap, clipped.append(f"risk budget: loss at the stop capped at {RISK_PER_TRADE:.0%} of equity")
+            room = max(0.0, (MAX_EXPOSURE - self.exposure()) * eq)
+            if notional > room:
+                notional, _ = room, clipped.append(f"total exposure cap ({MAX_EXPOSURE:g}x equity)")
         free = self.acct.free_margin() / (1 / lev + self.acct.fee_rate + self.acct.slippage + 0.0003)   # margin + fee + slippage must fit
         if notional > free:
             notional, _ = free, clipped.append("free margin")
@@ -1317,18 +1356,17 @@ class LlmTrader:
         qty = notional / ref
         if side < 0 and target:
             target = min(target, 95.0)                  # a short's target must stay above zero
-        stop_px = ref * (1 - side * stop)
         target_px = ref * (1 + side * target / 100) if target else None
         self.acct.on_quote(self._q(q))                  # a market order must fill on today's quote, not the last one the account saw
-        adding = sym in self.links and sym in self.acct.positions     # buying more of a stock already held scales the position in
         link_id = self.links[sym]["id"] if adding else f"{_day(now)}-{sym}-{int(now)}"
         o = self.acct.place(sym, side, qty, "limit" if limit else "market", limit, stop_px, target_px, ref=link_id, leverage=lev)
         meta = {"decision": {k: d.get(k) for k in ("reason", "horizon", "review_in_min")}, "notional": notional, "margin": margin,
                 "side": side,
                 "leverage": lev, "entry_type": "limit" if limit else "market", "limit_price": limit, "stop_pct": stop * 100,
                 "target_pct": target, "stop_price": stop_px, "target_price": target_px, "clipped_by": clipped,
-                "risk_pct_equity": notional * stop / eq * 100, "order_id": o.id, "link_id": link_id,
-                "expires": now + d.get("valid_min", 60) * 60, "max_hold_s": d.get("max_hold_s")}
+                "risk_pct_equity": (whole_loss if whole_loss is not None else notional * stop) / eq * 100, "order_id": o.id, "link_id": link_id,
+                "expires": now + d.get("valid_min", 60) * 60, "max_hold_s": d.get("max_hold_s"), "prev_sl": prev_sl,
+                "notional_pct_eq": notional / eq * 100}
         out = {"status": o.status, "order_id": o.id, "usd": round(notional, 2), "notional_usd": round(notional, 2), "margin_usd": round(margin, 2),
                "leverage": lev, "entry": meta["entry_type"], "limit_price": limit, "stop_price": round(stop_px, 4),
                "target_price": round(target_px, 4) if target_px else None, "risk_pct_equity": round(meta["risk_pct_equity"], 2),
@@ -1342,7 +1380,7 @@ class LlmTrader:
             self.pending[sym] = meta
             out["valid_until"] = round(meta["expires"])
         if self.rules_on and not adding and o.status in ("filled", "pending"):
-            dr.note_entry(self.risk, d["size_pct"], now)
+            dr.note_entry(self.risk, margin / eq * 100, now, lev)
         self.record("order", symbol=sym, side="short" if side < 0 else "buy", status=o.status, reason=d["reason"], **{k: v for k, v in out.items() if k != "status"})
         return out
 
@@ -1374,7 +1412,7 @@ class LlmTrader:
                            "stop_pct": meta["stop_pct"], "target_pct": meta["target_pct"], "leverage": meta["leverage"],
                            "notional": meta["notional"], "margin": meta["margin"], "entry_type": meta["entry_type"],
                            "limit_price": meta["limit_price"], "clipped_by": meta["clipped_by"],
-                           "max_hold_s": meta.get("max_hold_s"),
+                           "max_hold_s": meta.get("max_hold_s"), "notional_pct_eq": meta.get("notional_pct_eq"),
                            "review_at": now + (d.get("review_in_min") or DEFAULT_REVIEW_MIN) * 60}
         return ctrl_sym
 
@@ -1383,7 +1421,10 @@ class LlmTrader:
         link = self.links[sym]
         p = self.acct.positions.get(sym)
         if p:
-            p.sl, p.tp = meta["stop_price"], meta["target_price"]
+            sl = meta["stop_price"]
+            if self.rules_on and meta.get("prev_sl") and sl:      # v4.20: tighten-only, so an add cannot widen the whole position's stop
+                sl = max(sl, meta["prev_sl"]) if p.side > 0 else min(sl, meta["prev_sl"])
+            p.sl, p.tp = sl, meta["target_price"]
         cs = link.get("ctrl")
         if cs and cs in self.ctrl.positions and cs in quotes:
             cq = quotes[cs]
@@ -1401,6 +1442,7 @@ class LlmTrader:
                 cp.tp = px * (1 + side * meta["target_pct"] / 100) if meta["target_pct"] else None
         old_margin = link.get("margin") or (link["notional"] / (link.get("leverage") or 1.0))
         link["notional"] += meta["notional"]
+        link["notional_pct_eq"] = (link.get("notional_pct_eq") or 0.0) + (meta.get("notional_pct_eq") or 0.0)
         link["margin"] = old_margin + meta["margin"]
         link["leverage"] = link["notional"] / link["margin"] if link["margin"] else 1.0    # effective, per committed margin
         link.update(stop_pct=meta["stop_pct"], target_pct=meta["target_pct"],
@@ -1408,15 +1450,13 @@ class LlmTrader:
         return cs
 
     def _rule_positions(self) -> list:
-        """Positions opened under the v4.19 rules (their link carries max_hold_s). Older positions are grandfathered: they keep
-        their own stops and do not use up the v4.19 position and exposure limits."""
+        """Positions opened under the v4.19+ rules (their link carries max_hold_s). Older positions are grandfathered: they keep
+        their own stops, no add may be made to them and they do not use up the position limit (they do count in the exposure cap)."""
         return [s for s in self.acct.positions if (self.links.get(s) or {}).get("max_hold_s")]
 
     def _rules_exposure(self):
-        eq = self.acct.equity()
-        used = sum(self.acct.positions[s].qty * (self.acct.last[s].bid if s in self.acct.last else self.acct.positions[s].entry)
-                   for s in self._rule_positions())
-        return used / eq if eq else 0
+        """Total notional / equity over EVERY open position (v4.20: grandfathered ones count toward the exposure cap)."""
+        return self.exposure()
 
     def _v419_exits(self, now, quotes):
         """v4.19: time exits for entries opened under the new rules, the bank at 3x, and no limit adds (no averaging down)."""
@@ -1740,7 +1780,10 @@ class LlmTrader:
             done = self.logged_trades.get(name, 0)
             for t in acct.trades[done:]:
                 if name == "model":
-                    dr.risk_trade_closed(self.risk, t.pnl)
+                    lk = next((l for l in self.links.values() if l.get("id") == t.ref), None)
+                    eq0 = self.acct.equity()
+                    dr.risk_trade_closed(self.risk, t.pnl, (lk or {}).get("notional_pct_eq")
+                                         or (t.qty * t.entry / eq0 * 100 if eq0 else None))
                 self.record("trade_closed", account=name, symbol=t.symbol, reason=t.reason, entry=round(t.entry, 4),
                             exit=round(t.exit, 4), pnl_usd=round(t.pnl, 4), pnl_pct=round(t.pnl / (t.qty * t.entry) * 100, 2),
                             held_hours=round((t.closed_ts - t.opened_ts) / 3600, 2))
@@ -1823,11 +1866,12 @@ class LlmTrader:
         # v4.18 (Claude Haiku 5.5) is never pooled with the DeepSeek tags (addendum 2026-11-25): the headline verdict is
         # DeepSeek-only, and Claude pairs get their own count from zero.
         claude = [x for x in self.pairs if x.get("protocol") == "v4.18"]
-        claude19 = [x for x in self.pairs if x.get("protocol") == "v4.19"]
+        claude19 = [x for x in self.pairs if x.get("protocol") in ("v4.19", "v4.20")]      # same family: v4.20 is a bug-fix bump of v4.19
+        claude20 = [x for x in self.pairs if x.get("protocol") == "v4.20"]
         p = [x for x in self.pairs if x.get("protocol") not in CLAUDE_TAGS]
         out = {"closed_pairs": len(p), "needed": MIN_TRADES, "discrimination": self.discrimination(),
                "headline_model": "DeepSeek v4.1 flash 1017 (tags v4 to v4.17)", "claude_v4_18": self._verdict(claude),
-               "claude_v4_19": self._verdict(claude19)}
+               "claude_v4_19": self._verdict(claude19), "claude_v4_20": self._verdict(claude20)}
         by = {}
         for x in p:
             by.setdefault(x.get("asset_class", "stock"), []).append(x["s1"] - x["ctrl"])
