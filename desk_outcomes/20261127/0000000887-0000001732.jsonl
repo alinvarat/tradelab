@@ -1,0 +1,4 @@
+{"v":2,"protocol":"v4.19","ts":1795746840.284,"symbol":"BCH-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":3600,"abn":-0.00503,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795746840.284,"symbol":"LINK-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":3600,"abn":-0.00252,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795746916.7246213,"symbol":"BCH-USD","cls":"crypto","src":"shock","news_type":null,"action":"hold","h":3600,"abn":-0.00684,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795747477.2208447,"symbol":"AUDUSD=X","cls":"fx","src":"mover","news_type":null,"action":"hold","h":3600,"abn":-0.0006,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
