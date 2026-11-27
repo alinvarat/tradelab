@@ -175,7 +175,7 @@ def crypto_own_label(bars, t_seen, llm_s, P2):
 def title_to_item(source, key, title, t_seen, coin, P2):
     """Forward crypto item from one ingest-log row: redacted title, the pod source as the source label."""
     return {"key": f"ing:{source}:{key}", "market": "crypto", "src": source, "t_pub": t_seen, "t_seen": t_seen, "sym": coin, "items": [],
-            "text": R.redact_title(title, coin, P2), "text_named": title, "descr": "Instrument: a crypto token with a perpetual contract."}
+            "text": redact_symbol(R.redact_title(title, coin, P2), coin), "text_named": title, "descr": "Instrument: a crypto token with a perpetual contract."}
 
 
 JUNK_RX = (r"^\s*(rt\s+)?@\w+", r"https?://", r"\bt\.co/", r"^\s*\W*\s*$")
@@ -186,3 +186,29 @@ def is_junk(title):
     before any outcome): tweets that start with a handle or RT, any item with a link, and empty titles."""
     t = title or ""
     return any(re.search(rx, t, re.I) for rx in JUNK_RX)
+
+
+# ------------------------------------------------------------------ widened forward crypto universe (protocol_cmp_addendum2_20261126.md)
+NOT_COINS = {"USDT", "USDC", "BUSD", "FDUSD", "TUSD", "USD", "EUR", "GBP", "KRW", "TRY", "BRL", "UTC", "ETF", "API", "FAQ", "VIP", "P2P", "KYC", "AMA",
+             "UK", "US", "EU", "UAE", "ID", "TBA", "NFT", "DEFI", "CEO", "IPO", "SEC", "FED", "CPI", "PM", "AM"}
+_SYM = r"[A-Z][A-Z0-9]{1,9}"
+COIN_RX = (r"(?<![A-Za-z0-9])(" + _SYM + r")\s*/\s*USDT(?![A-Za-z0-9])", r"(?<![A-Za-z0-9])(" + _SYM + r")USDT(?![A-Za-z0-9])",
+           r"\((" + _SYM + r")\)")
+
+
+def coin_from_title(title):
+    """Exactly one coin symbol named as XXXUSDT, XXX/USDT or (XXX) in an exchange or newswire title, else None (two different symbols are ambiguous).
+    Whether a Binance or OKX market exists at t_seen is checked later, when the bars are fetched (no bars: the item is skipped)."""
+    hits = set()
+    for rx in COIN_RX:
+        for m in re.finditer(rx, title or ""):
+            sym = m.group(1)
+            if sym not in NOT_COINS:
+                hits.add(sym)
+    return next(iter(hits)) if len(hits) == 1 else None
+
+
+def redact_symbol(text, coin):
+    """Also hide the symbol in its USDT forms (the locked redact_title only handles the bare symbol and the 20 names)."""
+    t = re.sub(r"(?<![A-Za-z0-9])" + re.escape(coin) + r"\s*/?\s*USDT(?![A-Za-z0-9])", "[COIN]/USDT", text, flags=re.I)
+    return re.sub(r"\(" + re.escape(coin) + r"\)", "([COIN])", t)

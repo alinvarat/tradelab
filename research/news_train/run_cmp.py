@@ -313,12 +313,36 @@ def spot_1m(coin, t0, t1):
     return out
 
 
+def okx_1m(coin, t0, t1, pages=40):
+    """1-minute OKX bars of COIN-USDT, newest page first (history-candles, 100 rows a page), returned ascending as [(open_ts, high, low, close)]."""
+    out, after = {}, int(t1) * 1000
+    for _ in range(pages):
+        raw = RR.http(f"https://www.okx.com/api/v5/market/history-candles?instId={urllib.parse.quote(coin)}-USDT&bar=1m&after={after}&limit=100", timeout=30)
+        if not raw:
+            break
+        rows = (json.loads(raw).get("data") or [])
+        if not rows:
+            break
+        for r in rows:
+            out[int(r[0]) // 1000] = (int(r[0]) // 1000, float(r[2]), float(r[3]), float(r[4]))
+        oldest = min(int(r[0]) for r in rows)
+        if oldest // 1000 <= t0:
+            break
+        after = oldest
+    return [out[k] for k in sorted(out) if t0 <= k <= t1]
+
+
+def bars_any(coin, t0, t1):
+    """Priceable market at t_seen: Binance spot first, then OKX spot. [] when neither lists the coin (the item is then skipped, never imputed)."""
+    return spot_1m(coin, t0, t1) or okx_1m(coin, t0, t1)
+
+
 def fwd_crypto_candidates(joined, start):
     rows = []
     for (src, key), d in joined.items():
         t = d.get("t_seen")
         if src in P["fwd"]["crypto_sources"] and isinstance(t, (int, float)) and not isinstance(t, bool) and t >= start and d.get("title") and not C.is_junk(d["title"]):
-            coin = R.coin_of(d["title"], "", P2)
+            coin = C.coin_from_title(d["title"]) or R.coin_of(d["title"], "", P2)     # addendum 2: exchange symbol first, locked 20-coin map as before
             if coin:
                 rows.append({"t": t, "coin": coin, "title": d["title"], "domain": src, "url": key})
     return R.dedupe_rows(rows, P2)
@@ -357,7 +381,7 @@ def decide_heads(items_by_head, decs, system_of, parse_of, run=run_model):
     return stopped
 
 
-def fwd(out, state, ingest, r2, now=None, bars_fn=spot_1m, run=run_model):
+def fwd(out, state, ingest, r2, now=None, bars_fn=bars_any, run=run_model):
     now = int(now or time.time())
     fdir = os.path.join(state, "fwd")
     start = L.day_ts(P["fwd"]["start_utc"])
@@ -386,7 +410,9 @@ def fwd(out, state, ingest, r2, now=None, bars_fn=spot_1m, run=run_model):
         it = C.title_to_item(c["domain"], c["url"], c["title"], c["t"], coin, P2)
         pre = C.crypto_pre_label(bars_by[coin], c["t"], P2) if bars_by[coin] else None
         if not pre:
-            continue                                                  # no price yet: retried in the next run (never imputed)
+            if now - c["t"] > 3 * 3600:                               # no Binance/OKX market after 3 h: skipped for good (counted, never imputed)
+                items[it["key"]] = {"key": it["key"], "market": "skip", "sym": coin, "t_seen": c["t"], "why": "no_market"}
+            continue                                                  # otherwise retried in the next run
         it["pre"] = pre
         it["user"] = R.render_user2(it, pre, ver_w1, None, P2)
         items[it["key"]] = it
@@ -426,7 +452,7 @@ def fwd(out, state, ingest, r2, now=None, bars_fn=spot_1m, run=run_model):
             todo["m1"].append((k, it["user_m1"]))
     # ---- decisions (identical prompt bytes for both models; a decision is made once and never changed)
     stopped = decide_heads(todo, decs, system_of, parse_of, run)
-    prog.update(items=len(items), crypto_items=sum(1 for i in items.values() if i["market"] == "crypto"),
+    prog.update(skipped_no_market=sum(1 for i in items.values() if i["market"] == "skip"), items=len(items), crypto_items=sum(1 for i in items.values() if i["market"] == "crypto"),
                 stock_items=sum(1 for i in items.values() if i["market"] == "stock"), stock_items_with_pod_row=n_stock_pod,
                 stopped_early=stopped, capped_by_usage_limit=any(stopped.values()))
     # ---- counts only: paired, settled, discordant (no outcome is read before the trigger)
