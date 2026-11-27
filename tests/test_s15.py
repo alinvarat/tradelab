@@ -146,3 +146,42 @@ class Registered(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Eval(unittest.TestCase):
+    def test_s2_evaluate(self):
+        from core import s15_eval as ev
+        polls = [{"t": i * 30, "ok": True} for i in range(10)] + [{"t": 400, "ok": False}]
+        self.assertAlmostEqual(ev.covered_hours(polls), 270 / 3600.0)
+        rows = [{"qualifies": True, "delay_s": 30, "sellers": 3} for _ in range(8)] + [{"qualifies": True, "delay_s": 30, "sellers": 0}] * 3
+        out = ev.s2_evaluate(rows, polls, hours_required=0.01)
+        self.assertEqual(out["sell_measured"], 11)
+        self.assertEqual(out["sell_no_exit"], 3)
+        self.assertTrue(any(k.startswith("exit") for k in out["kills"]))      # 3/11 > 20%
+        self.assertFalse(any(k.startswith("count") for k in out["kills"]))    # 11 in 0.075 h is a huge rate: no count kill
+        self.assertEqual(ev.s2_evaluate(rows, polls)["status"], "RUNNING")
+
+    def test_s2_count_kill_and_void(self):
+        from core import s15_eval as ev
+        polls = [{"t": i * 30, "ok": True} for i in range(3000)]              # about 25 h covered
+        out = ev.s2_evaluate([{"qualifies": True, "delay_s": 30, "sellers": 5}] * 2, polls, hours_required=20)
+        self.assertTrue(out["monthly_qualifying"] < 100)
+        self.assertTrue(out["status"].startswith("KILL: count"))
+        bad = [{"t": i * 30, "ok": i % 3 == 0} for i in range(3000)]
+        self.assertTrue(ev.s2_evaluate([], bad, hours_required=0.0)["status"].startswith("VOID"))
+
+    def test_s4_evaluate(self):
+        from core import s15_eval as ev
+        snaps = [{"t": i * 3600, "matched": [], "alloc_yield": 0.0} for i in range(48)]
+        out = ev.s4_evaluate(snaps)
+        self.assertTrue(out["status"].startswith("KILL"))
+        self.assertEqual(out["pairs_per_day"], 0.0)
+        snaps = [{"t": i * 3600, "matched": [{"k": f"K{i}-{j}", "p": f"P{i}-{j}", "mismatch": j == 0} for j in range(6)], "alloc_yield": 0.05}
+                 for i in range(48)]
+        out = ev.s4_evaluate(snaps)
+        self.assertAlmostEqual(out["pairs_per_day"], 144.0)
+        self.assertAlmostEqual(out["mismatch_share"], 1 / 6)
+        self.assertTrue(out["status"].startswith("SURVIVES"))
+        self.assertEqual(ev.s4_evaluate(snaps[:5])["status"], "RUNNING")
+        low = [{"t": i * 3600, "matched": snaps[i]["matched"], "alloc_yield": 0.01} for i in range(48)]
+        self.assertTrue(ev.s4_evaluate(low)["status"].startswith("KILLED as standalone"))

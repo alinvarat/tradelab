@@ -36,6 +36,16 @@ jobs:
             [ "$n" = "0" ] && { gh workflow run poly_rewards.yml -R "$R" --ref main -f mode=collect && echo "$(date -u +%FT%TZ) dispatched poly_rewards collect" || echo "dispatch poly_rewards failed"; }
             return 0
           }
+          ensure_s15() {   # S2 / S4 long polls chain themselves; this only restarts a chain that stopped before its window was done
+            for m in s2_collect s4_collect; do
+              br=data/s4-poll; [ "$m" = "s2_collect" ] && br=data/s2-poll
+              n=$(gh run list --workflow s2s4_poll.yml -R "$R" --limit 30 --json status,displayTitle -q "[.[]|select(.status!=\"completed\" and .displayTitle==\"$m\")]|length" 2>/dev/null || echo 1)
+              if [ "$n" = "0" ] && ! gh api "repos/$R/contents/state.json?ref=$br" -q .content 2>/dev/null | base64 -d 2>/dev/null | grep -q '"done": true'; then
+                gh workflow run s2s4_poll.yml -R "$R" --ref main -f mode=$m && echo "$(date -u +%FT%TZ) dispatched s15 $m" || echo "dispatch s15 $m failed"
+              fi
+            done
+            return 0
+          }
           ensure_news
           ensure_poly
           gh workflow run event_book.yml -R "$R" --ref main -f mode=forward && echo "$(date -u +%FT%TZ) dispatched event_book forward" || echo "dispatch event_book failed"
@@ -55,6 +65,7 @@ jobs:
               case "$h:$m" in 03:30|07:30|11:30|15:30|19:30|23:30) gh workflow run fundwin_okx.yml -R "$R" --ref main -f mode=forward && echo "$(date -u +%FT%TZ) dispatched fundwin_okx forward" || echo "dispatch fundwin_okx failed";; esac
               [ "$h:$m" = "22:40" ] && [ "$dow" -le 5 ] && { gh workflow run news_train_r2.yml -R "$R" --ref main -f mode=fwd && echo "$(date -u +%FT%TZ) dispatched news_train_r2 fwd" || echo "dispatch news_train_r2 fwd failed"; }
               { [ "$m" = "09" ] || [ "$m" = "39" ]; } && ensure_poly
+              { [ "$m" = "13" ] || [ "$m" = "43" ]; } && ensure_s15
               [ "$h:$m" = "21:45" ] && [ "$dow" -le 5 ] && { gh workflow run smallcap_intraday.yml -R "$R" --ref main -f mode=scan && echo "dispatched smallcap scan" || echo "dispatch smallcap failed"; }
             fi
             sleep 20

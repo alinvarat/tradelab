@@ -1,0 +1,65 @@
+name: S2 and S4 stage-0 long polls
+
+# Counts-only collectors for the two PENDING arms of the S1-S5 probes (RESULTS.md pre-registration,
+# research/studies/protocol_s2s4_poll_20261127.md). Public endpoints, no keys, no orders.
+#   s2_collect - GeckoTerminal trending-list poll every 30 s for 72 h (state on data/s2-poll)
+#   s4_collect - one Kalshi x Polymarket snapshot at :10 of every hour, 48 snapshots (state on data/s4-poll)
+#   s2_eval / s4_eval - recompute summary.json from the data branch
+# A collect run lasts ~330 min, flushes every 30 min and queues its own successor (the concurrency group holds it pending);
+# keeper.yml restarts the chain if nothing is running or queued. A finished window does not chain.
+run-name: ${{ inputs.mode }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "s2_collect | s4_collect | s2_eval | s4_eval"
+        required: true
+        default: "s2_eval"
+      minutes:
+        description: "collect only: run length in minutes"
+        required: false
+        default: "330"
+
+permissions:
+  contents: read
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 358
+    concurrency:
+      group: tradelab-s15-${{ startsWith(inputs.mode, 's2') && 's2' || 's4' }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      S15_PUSH: ${{ github.workspace }}/research/studies/s15_push.sh
+      S15_BRANCH: ${{ startsWith(inputs.mode, 's2') && 'data/s2-poll' || 'data/s4-poll' }}
+      S15_CHAIN: ${{ github.ref == 'refs/heads/main' && endsWith(inputs.mode, '_collect') && '1' || '0' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore state
+        run: |
+          mkdir -p /tmp/s15
+          if git ls-remote --exit-code origin "$S15_BRANCH" >/dev/null 2>&1; then
+            git fetch -q origin "$S15_BRANCH"
+            git archive "origin/$S15_BRANCH" | tar -x -C /tmp/s15
+          fi
+      - name: Run
+        run: python research/studies/s15_long.py ${{ inputs.mode }} /tmp/s15 ${{ inputs.minutes }}
+      - name: Final push
+        if: always() && endsWith(inputs.mode, '_collect')
+        run: bash "$S15_PUSH" /tmp/s15 "$S15_BRANCH"
+      - uses: actions/upload-artifact@v4
+        if: always() && endsWith(inputs.mode, '_eval')
+        with:
+          name: s15-${{ inputs.mode }}
+          path: /tmp/s15/summary.json
