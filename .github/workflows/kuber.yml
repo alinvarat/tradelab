@@ -169,6 +169,7 @@ jobs:
           # Kuber's build step has failed on the platform side ("The request could not be completed") and
           # succeeded on a manual re-run since 2026-11-24. Retry the same command instead of failing the
           # deploy on a transient platform error; a real code error still fails all three attempts.
+          set -o pipefail          # the default Actions shell has no pipefail: without it `| tee` hides a failed deploy as success
           log="$RUNNER_TEMP/kuber-ci.log"
           for attempt in 1 2 3; do
             if bunx --bun @dmgnr/kuber@2.7.3 ci --trust 2>&1 | tee "$log"; then
