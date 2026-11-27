@@ -3,3 +3,4 @@
 {"run": "20261127T0048", "chunk": 1, "ticks_ok": 62, "ticks_missed": 0, "book_fail": 188, "trades_truncated": 0, "snaps": 1904, "trades": 2765, "t": 1795744188}
 {"run": "20261127T0048", "chunk": 2, "ticks_ok": 93, "ticks_missed": 0, "book_fail": 436, "trades_truncated": 0, "snaps": 1891, "trades": 2277, "t": 1795746048}
 {"run": "20261127T0048", "chunk": 3, "ticks_ok": 124, "ticks_missed": 0, "book_fail": 684, "trades_truncated": 0, "snaps": 1891, "trades": 2001, "t": 1795747908}
+{"run": "20261127T0048", "chunk": 4, "ticks_ok": 155, "ticks_missed": 0, "book_fail": 949, "trades_truncated": 0, "snaps": 1891, "trades": 1996, "t": 1795749768}
