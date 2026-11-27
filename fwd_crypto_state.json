@@ -1,28 +1,13 @@
 {
  "version": 1,
  "start_ts": 1795564800.0,
- "h_next": 1795766400.0,
+ "h_next": 1795770000.0,
  "d_next": 1795737600.0,
  "gap_hours_missed": 0,
  "lines": {
   "L12B_F": {
-   "equity": 147.0,
+   "equity": 143.2908,
    "open": [
-    {
-     "id": "L12B_F|INITUSDT|1795683600",
-     "line": "L12B_F",
-     "symbol": "INITUSDT",
-     "entry_ts": 1795683600.0,
-     "entry_px": 0.10496,
-     "btc_entry": 60900.93,
-     "stake": 14.7,
-     "move": 0.1726,
-     "control": {
-      "symbol": "MMTUSDT",
-      "entry_px": 0.2362,
-      "btc_entry": 60900.93
-     }
-    },
     {
      "id": "L12B_F|ONEUSDT|1795687200",
      "line": "L12B_F",
@@ -52,11 +37,51 @@
       "entry_px": 93.33,
       "btc_entry": 60530.0
      }
+    },
+    {
+     "id": "L12B_F|INITUSDT|1795770000",
+     "line": "L12B_F",
+     "symbol": "INITUSDT",
+     "entry_ts": 1795770000.0,
+     "entry_px": 0.13191,
+     "btc_entry": 61729.65,
+     "stake": 14.3291,
+     "move": 0.1051,
+     "control": {
+      "symbol": "SUIUSDT",
+      "entry_px": 0.6876,
+      "btc_entry": 61729.65
+     }
     }
    ],
-   "closed": [],
+   "closed": [
+    {
+     "id": "L12B_F|INITUSDT|1795683600",
+     "line": "L12B_F",
+     "symbol": "INITUSDT",
+     "entry_ts": 1795683600.0,
+     "entry_px": 0.10496,
+     "btc_entry": 60900.93,
+     "stake": 14.7,
+     "move": 0.1726,
+     "control": {
+      "symbol": "MMTUSDT",
+      "entry_px": 0.2362,
+      "btc_entry": 60900.93
+     },
+     "exit_px": 0.13211,
+     "btc_exit": 61729.65,
+     "funding": -0.0032613344530097,
+     "net": -0.2523236299937237,
+     "control_net": 0.23331223684728528,
+     "liquidated": false,
+     "pnl_usd": -3.7092,
+     "ts": 1795770314.606414,
+     "equity_after": 143.2908
+    }
+   ],
    "last_event": {
-    "INITUSDT": 1795683600.0,
+    "INITUSDT": 1795770000.0,
     "ONEUSDT": 1795687200.0,
     "MMTUSDT": 1795716000.0
    },
