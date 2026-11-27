@@ -1,0 +1,3 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17629","title":"@ALScyborg @YouTube @neuralink !!","t_pub":1795738382.488,"res":"s","t_seen":1795738386.0856786,"lat_s":3.598}
+{"event":"llm","source":"eqn_rest","key":"eqn:17629","t_pub":1795738382.488,"t_seen":1795738386.0856786,"t_llm":1795738390.4155114,"llm_s":4.33,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":90,"instrument":null}}
+{"event":"item","source":"prnewswire","key":"prnewswire:https://www.prnewswire.com/news-releases/are-sgry-gfr-pag-obtaining-fair-deals-for-their-shareholders-302951381.html","title":"Are SGRY, GFR, PAG Obtaining Fair Deals for their Shareholders?","t_pub":1795738380.0,"res":"s","t_seen":1795738447.0998878,"lat_s":67.1}
