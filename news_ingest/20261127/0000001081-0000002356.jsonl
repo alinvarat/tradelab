@@ -1,0 +1,6 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17630","title":"Vital that children have a stake in the future https://t.co/KtSGi3dSF7","t_pub":1795739187.243,"res":"s","t_seen":1795739191.445327,"lat_s":4.202}
+{"event":"llm","source":"eqn_rest","key":"eqn:17630","t_pub":1795739187.243,"t_seen":1795739191.445327,"t_llm":1795739196.2218688,"llm_s":4.777,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":90,"instrument":null}}
+{"event":"item","source":"eqn_rest","key":"eqn:17631","title":"@billlee \u2764\ufe0f","t_pub":1795739201.405,"res":"s","t_seen":1795739204.651284,"lat_s":3.246}
+{"event":"llm","source":"eqn_rest","key":"eqn:17631","t_pub":1795739201.405,"t_seen":1795739204.651284,"t_llm":1795739208.9898164,"llm_s":4.339,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":90,"instrument":null}}
+{"event":"item","source":"eqn_rest","key":"eqn:17632","title":"@davidsenra @tobi Tobi is awesome","t_pub":1795739221.598,"res":"s","t_seen":1795739224.3947568,"lat_s":2.797}
+{"event":"llm","source":"eqn_rest","key":"eqn:17632","t_pub":1795739221.598,"t_seen":1795739224.3947568,"t_llm":1795739229.8179507,"llm_s":5.423,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":90,"instrument":null}}
