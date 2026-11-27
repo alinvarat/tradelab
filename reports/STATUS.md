@@ -151,3 +151,13 @@
 - (ทำแล้ว) Actions กลับมาด้วยการเปิด repo เป็น public; แผนระยะยาว: self-hosted runner บน Kuber แล้วกลับเป็น private
 - เพื่อน (dmgnr) ตรวจ Kuber deploy ที่ปฏิเสธทุกครั้ง (issue #80)
 - สร้าง token: รัน `claude setup-token` ใน terminal ของตัวเอง แล้ว `gh secret set CLAUDE_CODE_OAUTH_TOKEN -R alinvarat/tradelab` (วางที่ prompt แบบซ่อน ไม่ส่งในแชต); บอทจะใช้โควตา Max ร่วมกับการใช้ Claude ของเจ้าของ
+
+## S1–S5 stage-0 probes (2026-11-27)
+| เส้น | สถานะ | ผล | ขั้นต่อไป |
+|---|---|---|---|
+| S1 Hyperliquid ladder | killed | refresh 2,000 address ต้อง 240 วินาที (>60) และ sd/ต้นทุน 8.14 (<10) | — |
+| S2 DEX trending | pending | ไม่เข้ากฎตัด; หน่วงเฉลี่ย 30 วินาที; ต้องเก็บข้อมูล 3 วันบน pod | pod list poll |
+| S3 perp หุ้น/FX/สินค้า | killed | 84% ของวัน-สัญลักษณ์ gap เครื่องหมายเดียว (กฎ c) | — |
+| S4 Kalshi x Polymarket | pending | จับคู่ได้ 0 คู่ใน 4 snapshot; ต้อง snapshot รายชั่วโมง 2 วัน | snapshot รายชั่วโมง |
+| S5 stale quote | bar arm killed | 4 เหรียญแรกถือ 89% ของ 36 เหตุการณ์; seconds arm ยังไม่ทดสอบ | pod sockets |
+รายละเอียด: `research/studies/RESULTS.md` หัวข้อ "Results of the S1-S5 stage-0 probes"
