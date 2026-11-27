@@ -21,8 +21,9 @@ class Lock(unittest.TestCase):
         f = NT / "protocol_cmp_20261126.md"
         self.assertEqual(hashlib.sha256(f.read_bytes()).hexdigest(), f.with_suffix(".sha256").read_text().strip())
         self.assertIn(hashlib.sha256((NT / "params_cmp.json").read_bytes()).hexdigest(), f.read_text())
-        a = NT / "protocol_cmp_addendum_20261126.md"
-        self.assertEqual(hashlib.sha256(a.read_bytes()).hexdigest(), a.with_suffix(".sha256").read_text().strip())
+        for n in ("protocol_cmp_addendum_20261126", "protocol_cmp_addendum2_20261126"):
+            a = NT / (n + ".md")
+            self.assertEqual(hashlib.sha256(a.read_bytes()).hexdigest(), a.with_suffix(".sha256").read_text().strip())
 
     def test_models_and_registry(self):
         self.assertEqual(P["models"], {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5"})
@@ -125,6 +126,39 @@ class Forward(unittest.TestCase):
         for t in ("@telsopian Bitcoin is good crypto", "RT @lsanger: bitcoin crypto database", "Bitcoin crypto news https://t.co/abc", "  "):
             self.assertTrue(C.is_junk(t), t)
         self.assertFalse(C.is_junk("Bitcoin ETF sees record crypto inflows today"))
+
+    def test_widened_coin_rule(self):
+        f = C.coin_from_title
+        self.assertEqual(f("\U0001F7E2 [ZECUSDT] Longs building: Binance OI +1.1%"), "ZEC")
+        self.assertEqual(f("Binance Perp Monitor: BULLAUSDT (BULLA) +22% in the past 10 seconds"), "BULLA")
+        self.assertEqual(f("Binance Will List XYZ/USDT with Seed Tag"), "XYZ")
+        self.assertEqual(f("OKX to support ZETA (ZETA) migration"), "ZETA")
+        self.assertIsNone(f("Cash Dividend of The Wendy's Company (WEN), NVIDIA Corporation (NVDA)"))   # two symbols
+        self.assertIsNone(f("Deposits in (USDT) and (USD) paused"))
+        self.assertIsNone(f("Notice of Temporary Suspension of Upbit Lounge Operations"))
+
+    def test_symbol_redaction_and_candidates_widened(self):
+        it = C.title_to_item("binance_news", "k", "Binance Perp Monitor: BULLAUSDT (BULLA) +22%", 1_800_000_000, "BULLA", P2)
+        self.assertNotIn("BULLA", it["text"].replace("[COIN]", ""))
+        start = L.day_ts("2026-11-27")
+        j = {("binance_news", "1"): {"t_seen": start + 10, "title": "Binance Perp Monitor: BULLAUSDT (BULLA) +22% in the past 10 seconds"},
+             ("okx_announcements", "2"): {"t_seen": start + 20, "title": "OKX to support ZETA crypto migration notice (ZETA) today"},
+             ("eqn_rest", "3"): {"t_seen": start + 30, "title": "@someone BULLAUSDT is great https://t.co/x"}}
+        c = X.fwd_crypto_candidates(j, start)
+        self.assertEqual(sorted(x["coin"] for x in c), ["BULLA", "ZETA"])
+
+    def test_unpriceable_item_skipped_after_3h(self):
+        import tempfile
+        start = L.day_ts("2026-11-27")
+        with tempfile.TemporaryDirectory() as d:
+            import os
+            os.makedirs(d + "/ing/news_ingest/20261127")
+            row = {"event": "item", "source": "binance_news", "key": "z", "title": "Binance Perp Monitor: NOPEUSDT (NOPE) +9% in the past 10 seconds", "t_pub": start + 5, "t_seen": start + 10}
+            open(d + "/ing/news_ingest/20261127/0-1.jsonl", "w").write(json.dumps(row) + "\n")
+            X.fwd(d + "/out", d + "/state", d + "/ing", d + "/r2", now=start + 4 * 3600, bars_fn=lambda *a: [], run=lambda *a, **k: ([], False, {}))
+            prog = json.load(open(d + "/out/fwd/progress.json"))
+            self.assertEqual(prog["skipped_no_market"], 1)
+            self.assertEqual(prog["crypto_items"], 0)
 
     def test_item_redacts_and_keys(self):
         it = C.title_to_item("eqn_rest", "k1", "Bitcoin jumps 5% on 2026-11-28", 1_800_000_000, "BTC", P2)
