@@ -1,22 +1,27 @@
 {
  "capped_by_usage_limit": false,
  "crypto": {
-  "both_answered": 0,
+  "both_answered": 7,
   "discordant": 0,
   "fire": null,
   "min_discordant": 100,
   "min_paired": 300,
-  "paired_settled_capped": 0,
+  "paired_settled_capped": 2,
   "projection_discordant": null,
-  "projection_paired": null
+  "projection_paired": {
+   "date": "2026-12-15",
+   "days_left": 18.1,
+   "rate_per_day": 16.45
+  }
  },
- "crypto_items": 0,
- "ingest_rows": 392,
- "items": 0,
+ "crypto_items": 7,
+ "ingest_rows": 439,
+ "items": 7,
  "locked_models": {
   "haiku": "claude-haiku-5-5",
   "sonnet": "claude-sonnet-5-5"
  },
+ "skipped_no_market": 0,
  "stock": {
   "both_answered_w3_m1": 0,
   "min_magnitude_n": 300,
@@ -26,6 +31,9 @@
  },
  "stock_items": 0,
  "stock_items_with_pod_row": 0,
- "stopped_early": {},
- "utc": 1795737215
+ "stopped_early": {
+  "haiku": false,
+  "sonnet": false
+ },
+ "utc": 1795751083
 }
