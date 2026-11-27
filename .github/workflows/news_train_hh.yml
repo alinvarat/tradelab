@@ -1,5 +1,6 @@
 name: News train HH
 
+# RETIRED 2026-11-28 (owner: Haiku only, no Sonnet): workflow disabled; results in #294; kept as a record.
 # Historical holdout, Haiku 5.5 vs Sonnet 5.5 on non-S&P-500 8-Ks (research/news_train/protocol_hh_20261127.md, family k = 61).
 # Owner exception as news_train_cmp.yml: research only, the production bot stays on Haiku. Claude CLI on the Max plan (shared token, low parallelism).
 # Reads data/news-train, -r2, -r3, -r3b and -cmp read-only; writes only data/news-train-hh. Never touches the forward arms.

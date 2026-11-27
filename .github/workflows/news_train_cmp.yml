@@ -1,5 +1,6 @@
 name: News train CMP
 
+# RETIRED 2026-11-28 (owner: Haiku only, no Sonnet): schedule removed, workflow disabled; kept as a record.
 # Sonnet 5.5 versus Haiku 5.5 paired comparison (research/news_train/protocol_cmp_20261126.md). Owner exception 2026-11-26: research only;
 # the production bot stays on Haiku. Claude CLI on the owner's Max plan (shared token, so low parallelism). Reads data/news-train-r2, -r3 and
 # data/news-ingest read-only; writes only data/news-train-cmp.
@@ -13,8 +14,6 @@ on:
         description: "leak, hist or fwd"
         required: true
         default: "leak"
-  schedule:
-    - cron: "17 */3 * * *"
 
 permissions:
   contents: read
