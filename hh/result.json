@@ -1,0 +1,588 @@
+{
+ "alpha_k": 2.6441e-05,
+ "capped_by_usage_limit": false,
+ "count_gate": {
+  "discordant": 249,
+  "ok": {
+   "discordant": true,
+   "paired": true,
+   "traded_haiku": true,
+   "traded_sonnet": true
+  },
+  "paired": 3168,
+  "traded_haiku": 253,
+  "traded_sonnet": 184
+ },
+ "descriptive": {
+  "m1": {
+   "haiku": {
+    "excluded": {
+     "no_feat": 0,
+     "no_label": 0,
+     "no_reply": 0,
+     "no_target": 0
+    },
+    "stats": {
+     "auc_h": 0.7265024977780502,
+     "auc_hp": 0.7121586625394588,
+     "auc_kw": 0.5108921511538815,
+     "auc_pre": 0.6933287872751234,
+     "auc_rv": 0.6821906892641515,
+     "big_rate": 0.8462267129775813,
+     "mean_abs": 0.028867259320369133,
+     "n": 3167,
+     "partial_h_given_rv_pre": 0.246330818322842,
+     "partial_h_given_rv_pre_earn": 0.16563796559594116,
+     "partial_rv_given_h": -0.15548072850208858,
+     "rho_h": 0.5241275928444818,
+     "rho_hp": 0.4830881812534357,
+     "rho_kw": 0.0375254762265281,
+     "rho_pre": 0.4547781824682965,
+     "rho_rv": 0.40511010499589006,
+     "share_earn": 0.471739816861383,
+     "top_third": {
+      "big_rate": 0.941722972972973,
+      "mean_abs": 0.046672382067081464,
+      "n": 1184,
+      "rest_big_rate": 0.789208270297529,
+      "rest_mean_abs": 0.01823626318718335
+     }
+    }
+   },
+   "latency": {
+    "haiku": {
+     "mean_s": 3.14,
+     "median_s": 3.16,
+     "n": 3168,
+     "p90_s": 3.75
+    },
+    "sonnet": {
+     "mean_s": 2.02,
+     "median_s": 2.0,
+     "n": 3168,
+     "p90_s": 2.26
+    }
+   },
+   "n_paired": 3167,
+   "n_set": 3167,
+   "paired_partial": {
+    "a": 0.246330818322842,
+    "b": 0.24497627412492087,
+    "days": 80,
+    "hi": 0.02453574113015336,
+    "lo": -0.028420179189998007,
+    "n": 3167,
+    "p": 0.545,
+    "p_two_sided": 0.9099999999999999,
+    "point": -0.001354544197921137
+   },
+   "sonnet": {
+    "excluded": {
+     "no_feat": 0,
+     "no_label": 0,
+     "no_reply": 0,
+     "no_target": 0
+    },
+    "stats": {
+     "auc_h": 0.7246379754206381,
+     "auc_hp": 0.7242885929694444,
+     "auc_kw": 0.5108921511538815,
+     "auc_pre": 0.6933287872751234,
+     "auc_rv": 0.6821906892641515,
+     "big_rate": 0.8462267129775813,
+     "mean_abs": 0.028867259320369133,
+     "n": 3167,
+     "partial_h_given_rv_pre": 0.24497627412492087,
+     "partial_h_given_rv_pre_earn": 0.1868460388120348,
+     "partial_rv_given_h": -0.14557110268755794,
+     "rho_h": 0.5365063957319117,
+     "rho_hp": 0.540788579254809,
+     "rho_kw": 0.0375254762265281,
+     "rho_pre": 0.4547781824682965,
+     "rho_rv": 0.40511010499589006,
+     "share_earn": 0.471739816861383,
+     "top_third": {
+      "big_rate": 0.9351927809680065,
+      "mean_abs": 0.047068377894591215,
+      "n": 1219,
+      "rest_big_rate": 0.7905544147843943,
+      "rest_mean_abs": 0.01747754497643858
+     }
+    }
+   }
+  },
+  "per_month": {
+   "2026-08": {
+    "haiku": {
+     "offered": 1003,
+     "random_per_offered": -0.00016473532402792163,
+     "score_per_offered": 0.0009725907714692356,
+     "traded": 87
+    },
+    "sonnet": {
+     "offered": 1003,
+     "random_per_offered": -0.00012875864406779983,
+     "score_per_offered": 0.0005371532403479775,
+     "traded": 68
+    }
+   },
+   "2026-09": {
+    "haiku": {
+     "offered": 531,
+     "random_per_offered": -0.00014306516007533377,
+     "score_per_offered": -0.0006580983049795634,
+     "traded": 40
+    },
+    "sonnet": {
+     "offered": 531,
+     "random_per_offered": -0.00012875864406780097,
+     "score_per_offered": 0.0002355028405552625,
+     "traded": 36
+    }
+   },
+   "2026-10": {
+    "haiku": {
+     "offered": 780,
+     "random_per_offered": -0.00013635210256410671,
+     "score_per_offered": 0.0002520346256868414,
+     "traded": 56
+    },
+    "sonnet": {
+     "offered": 780,
+     "random_per_offered": -7.548062820513108e-05,
+     "score_per_offered": 0.0009322677411810545,
+     "traded": 31
+    }
+   },
+   "2026-11": {
+    "haiku": {
+     "offered": 853,
+     "random_per_offered": -0.00015585381008206768,
+     "score_per_offered": 0.00013736383571619803,
+     "traded": 70
+    },
+    "sonnet": {
+     "offered": 853,
+     "random_per_offered": -0.00010909766705744773,
+     "score_per_offered": -0.0010397897583991223,
+     "traded": 49
+    }
+   }
+  },
+  "w3_cells": {
+   "called": {
+    "haiku": 3168,
+    "sonnet": 3168
+   },
+   "cells": {
+    "haiku": {
+     "1h": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.001253015777703971,
+       "keyword_traded": 1817,
+       "long_all_per_offered": -0.00312254319125057,
+       "long_on_traded_per_offered": 0.00019775078107922464,
+       "random_per_offered": -0.0001517193148089721,
+       "short_on_traded_per_offered": -0.0005011894106971688
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.5296442687747036,
+      "hold": "1h",
+      "lag": "main",
+      "market": "stock",
+      "mean_per_trade": 0.0037146905286211396,
+      "mean_per_trade_2x": 0.001823245713113839,
+      "n_offered": 3167,
+      "n_traded": 253,
+      "score_per_offered": 0.00029675298507772285,
+      "vs_abstain": {
+       "days": 80,
+       "hi": 0.0010419243662144703,
+       "lo": -0.0004018860334617876,
+       "mean": 0.00029675298507772285,
+       "n": 3167,
+       "p": 0.1815
+      },
+      "vs_keyword": {
+       "days": 80,
+       "hi": 0.0029670522809626025,
+       "lo": 0.00025815430529943696,
+       "mean": 0.001549768762781694,
+       "n": 3167,
+       "p": 0.009
+      },
+      "vs_random": {
+       "days": 80,
+       "hi": 0.001148463982711809,
+       "lo": -0.0002540965197296868,
+       "mean": 0.0004484722998866949,
+       "n": 3167,
+       "p": 0.099
+      },
+      "vs_random_2x": {
+       "days": 80,
+       "hi": 0.001191202446070066,
+       "lo": -0.00023134154224886658,
+       "mean": 0.0004489616183826406,
+       "n": 3167,
+       "p": 0.1045
+      }
+     },
+     "eod": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.001985267971481385,
+       "keyword_traded": 1817,
+       "long_all_per_offered": -0.005440383910038496,
+       "long_on_traded_per_offered": -0.0013332099186925846,
+       "random_per_offered": -0.0002026922071360981,
+       "short_on_traded_per_offered": 0.0009278255044203881
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.4940828402366864,
+      "hold": "eod",
+      "lag": "main",
+      "market": "stock",
+      "mean_per_trade": -0.0011071485692653311,
+      "mean_per_trade_2x": -0.0030126654823818774,
+      "n_offered": 3167,
+      "n_traded": 338,
+      "score_per_offered": -0.00011816110401379283,
+      "vs_abstain": {
+       "days": 80,
+       "hi": 0.0011849114577370094,
+       "lo": -0.0014187557201041467,
+       "mean": -0.00011816110401379273,
+       "n": 3167,
+       "p": 0.542
+      },
+      "vs_keyword": {
+       "days": 80,
+       "hi": 0.003589778764961166,
+       "lo": 0.00020675478932194894,
+       "mean": 0.0018671068674675924,
+       "n": 3167,
+       "p": 0.0155
+      },
+      "vs_random": {
+       "days": 80,
+       "hi": 0.0013733138074691585,
+       "lo": -0.0011816094821508255,
+       "mean": 8.453110312230533e-05,
+       "n": 3167,
+       "p": 0.4245
+      },
+      "vs_random_2x": {
+       "days": 80,
+       "hi": 0.0014425921795606345,
+       "lo": -0.0012225731776346253,
+       "mean": 8.368296398956621e-05,
+       "n": 3167,
+       "p": 0.4495
+      }
+     }
+    },
+    "sonnet": {
+     "1h": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.001253015777703971,
+       "keyword_traded": 1817,
+       "long_all_per_offered": -0.00312254319125057,
+       "long_on_traded_per_offered": -0.0006858569527673874,
+       "random_per_offered": -0.00011034131986107063,
+       "short_on_traded_per_offered": 0.00046517431304524614
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.5163043478260869,
+      "hold": "1h",
+      "lag": "main",
+      "market": "stock",
+      "mean_per_trade": 0.002739374362014332,
+      "mean_per_trade_2x": 0.0008356290167764183,
+      "n_offered": 3167,
+      "n_traded": 184,
+      "score_per_offered": 0.00015915531500177994,
+      "vs_abstain": {
+       "days": 80,
+       "hi": 0.0009407174091985949,
+       "lo": -0.00047960005393342983,
+       "mean": 0.00015915531500177994,
+       "n": 3167,
+       "p": 0.332
+      },
+      "vs_keyword": {
+       "days": 80,
+       "hi": 0.00299025820230366,
+       "lo": 8.658351696525486e-05,
+       "mean": 0.001412171092705751,
+       "n": 3167,
+       "p": 0.017
+      },
+      "vs_random": {
+       "days": 80,
+       "hi": 0.0010233729212228528,
+       "lo": -0.0003561923824578103,
+       "mean": 0.0002694966348628506,
+       "n": 3167,
+       "p": 0.207
+      },
+      "vs_random_2x": {
+       "days": 80,
+       "hi": 0.0010427410574296821,
+       "lo": -0.00037305717656270417,
+       "mean": 0.0002691378525692696,
+       "n": 3167,
+       "p": 0.218
+      }
+     },
+     "eod": {
+      "baselines": {
+       "abstain": 0.0,
+       "keyword_per_offered": -0.001985267971481385,
+       "keyword_traded": 1817,
+       "long_all_per_offered": -0.005440383910038496,
+       "long_on_traded_per_offered": -0.0012245292226428295,
+       "random_per_offered": -9.055184401642261e-05,
+       "short_on_traded_per_offered": 0.0010434255346099843
+      },
+      "excluded": {
+       "no_gross": 0,
+       "no_label": 0,
+       "no_reply": 0
+      },
+      "hit_rate": 0.5231788079470199,
+      "hold": "eod",
+      "lag": "main",
+      "market": "stock",
+      "mean_per_trade": 0.006054054756529269,
+      "mean_per_trade_2x": 0.00412557636771865,
+      "n_offered": 3167,
+      "n_traded": 151,
+      "score_per_offered": 0.0002886524370811239,
+      "vs_abstain": {
+       "days": 80,
+       "hi": 0.0013049440662115017,
+       "lo": -0.0005329955111633141,
+       "mean": 0.0002886524370811239,
+       "n": 3167,
+       "p": 0.264
+      },
+      "vs_keyword": {
+       "days": 80,
+       "hi": 0.004334724740302675,
+       "lo": 0.00041492339000845867,
+       "mean": 0.002273920408562509,
+       "n": 3167,
+       "p": 0.0105
+      },
+      "vs_random": {
+       "days": 80,
+       "hi": 0.0013497420292023032,
+       "lo": -0.00044164276592302516,
+       "mean": 0.00037920428109754656,
+       "n": 3167,
+       "p": 0.191
+      },
+      "vs_random_2x": {
+       "days": 80,
+       "hi": 0.0013869600015894684,
+       "lo": -0.00041203582461360585,
+       "mean": 0.0003777305941034196,
+       "n": 3167,
+       "p": 0.1915
+      }
+     }
+    }
+   },
+   "latency": {
+    "haiku": {
+     "mean_s": 3.66,
+     "median_s": 3.65,
+     "n": 3168,
+     "p90_s": 4.62
+    },
+    "sonnet": {
+     "mean_s": 2.35,
+     "median_s": 2.26,
+     "n": 3168,
+     "p90_s": 2.69
+    }
+   },
+   "n_paired": 3167,
+   "n_set": 3167,
+   "ok": {
+    "haiku": 3168,
+    "sonnet": 3168
+   },
+   "paired_1h": {
+    "both_abstain": 2824,
+    "days": 80,
+    "discordant": 249,
+    "hi": 0.0006682520858738542,
+    "lo": -0.0008898880906653946,
+    "mean_diff": -0.00013759767007594286,
+    "mean_net_per_item": {
+     "haiku": 0.00029675298507772285,
+     "sonnet": 0.00015915531500177994
+    },
+    "n": 3167,
+    "p_boot_two_sided": 0.6950000000000001,
+    "sign": {
+     "n_nonzero": 249,
+     "neg": 127,
+     "p": 0.7999515351297235,
+     "pos": 122,
+     "ties": 2918
+    }
+   }
+  }
+ },
+ "family": {
+  "H1_haiku_vs_random": {
+   "days": 80,
+   "df": 79,
+   "mean": 0.0004484722998866949,
+   "mean_per_trade": 0.0037146905286211396,
+   "mean_per_trade_2x": 0.001823245713113839,
+   "n": 3167,
+   "n_offered": 3167,
+   "n_traded": 253,
+   "p": 0.10420341733949323,
+   "score_per_offered": 0.00029675298507772285,
+   "se": 0.0003535941513755358,
+   "t": 1.2683249939006866,
+   "vs_random_2x": {
+    "days": 80,
+    "df": 79,
+    "mean": 0.0004489616183826406,
+    "n": 3167,
+    "p": 0.10352970682219037,
+    "se": 0.0003529216538319933,
+    "t": 1.2721282854363103
+   }
+  },
+  "H2_sonnet_vs_random": {
+   "days": 80,
+   "df": 79,
+   "mean": 0.0002694966348628506,
+   "mean_per_trade": 0.002739374362014332,
+   "mean_per_trade_2x": 0.0008356290167764183,
+   "n": 3167,
+   "n_offered": 3167,
+   "n_traded": 184,
+   "p": 0.2241384875279157,
+   "score_per_offered": 0.00015915531500177994,
+   "se": 0.00035362942297146796,
+   "t": 0.7620877035579545,
+   "vs_random_2x": {
+    "days": 80,
+    "df": 79,
+    "mean": 0.0002691378525692696,
+    "n": 3167,
+    "p": 0.22387435873942751,
+    "se": 0.0003527464139844933,
+    "t": 0.7629782809956528
+   }
+  },
+  "H3_sonnet_minus_haiku": {
+   "discordant": 249,
+   "mean_diff": -0.0001375976700759429,
+   "n": 3167,
+   "sign": {
+    "n_nonzero": 249,
+    "neg": 127,
+    "p": 0.7999515351297235,
+    "pos": 122,
+    "ties": 2918
+   },
+   "t_cluster": {
+    "days": 80,
+    "df": 79,
+    "mean": -0.00013759767007594286,
+    "n": 3167,
+    "p": 0.6316438701637197,
+    "se": 0.0004078209345226627,
+    "t": -0.33739727029215694
+   }
+  },
+  "holm_adjusted": {
+   "H1_haiku_vs_random": 0.3126102520184797,
+   "H2_sonnet_vs_random": 0.4482769750558314,
+   "H3_sonnet_minus_haiku": 0.7999515351297235
+  },
+  "m": 3,
+  "p": {
+   "H1_haiku_vs_random": 0.10420341733949323,
+   "H2_sonnet_vs_random": 0.2241384875279157,
+   "H3_sonnet_minus_haiku": 0.7999515351297235
+  }
+ },
+ "integrity": {
+  "haiku": {
+   "losing_trades": 127,
+   "traded": 253,
+   "winning_trades": 126
+  },
+  "per_split_month": {
+   "2026-08": 1003,
+   "2026-09": 531,
+   "2026-10": 780,
+   "2026-11": 853
+  },
+  "round_row_count": false,
+  "rows": 3167,
+  "served_mismatch": 0,
+  "sonnet": {
+   "losing_trades": 95,
+   "traded": 184,
+   "winning_trades": 89
+  },
+  "unique_issuers": 1772,
+  "unique_keys": 3167
+ },
+ "k": 61,
+ "protocol": "protocol_hh_20261127.md",
+ "spend": {
+  "haiku": {
+   "calls": 3284,
+   "notional_usd": 2.1275000000000004,
+   "served_mismatch": 0,
+   "stopped_early_shards": 0,
+   "tokens_in": 8449223,
+   "tokens_out": 1224368
+  },
+  "sonnet": {
+   "calls": 3284,
+   "notional_usd": 33.4087,
+   "served_mismatch": 0,
+   "stopped_early_shards": 0,
+   "tokens_in": 8378240,
+   "tokens_out": 346848
+  }
+ },
+ "theta_frozen_w3_stock": {
+  "1h": 0.5,
+  "eod": 0.75
+ },
+ "verdict": {
+  "comparison": "no difference detected",
+  "nomination": {
+   "H1_haiku_vs_random": "not nominated",
+   "H2_sonnet_vs_random": "not nominated"
+  }
+ }
+}

@@ -1,22 +1,22 @@
 {
  "bars": {
   "status": {
-   "ok": 2034
+   "ok": 3060
   },
-  "symbols": 2034
+  "symbols": 3060
  },
  "callable": {
-  "cap": 2000,
+  "cap": 4000,
   "floor": 1000,
   "go": true,
-  "in_session_share": 0.032089063523248196,
-  "issuers": 1112,
-  "n": 1527,
+  "in_session_share": 0.032196969696969696,
+  "issuers": 1773,
+  "n": 3168,
   "per_month": {
-   "2026-08": 491,
-   "2026-09": 265,
-   "2026-10": 364,
-   "2026-11": 407
+   "2026-08": 1004,
+   "2026-09": 531,
+   "2026-10": 780,
+   "2026-11": 853
   }
  },
  "candidates": {
@@ -26,25 +26,26 @@
  },
  "counts_only": true,
  "drawn": {
-  "issuers": 2034,
-  "items": 3000,
+  "issuers": 3060,
+  "items": 6000,
   "per_month": {
-   "2026-08": 918,
-   "2026-09": 543,
-   "2026-10": 715,
-   "2026-11": 824
+   "2026-08": 1860,
+   "2026-09": 1063,
+   "2026-10": 1436,
+   "2026-11": 1641
   }
  },
  "labelable": {
-  "callable_before_text": 1534,
+  "callable_before_text": 3178,
   "drops": {
-   "dollar_volume_below_floor": 460,
-   "gap_in_bars": 49,
-   "no_entry_bar": 5,
-   "no_prior_bar": 18,
-   "not_callable": 4,
-   "price_below_floor": 921,
-   "too_few_prior_sessions": 9
+   "dollar_volume_below_floor": 928,
+   "gap_in_bars": 86,
+   "no_bars": 2,
+   "no_entry_bar": 6,
+   "no_prior_bar": 35,
+   "not_callable": 11,
+   "price_below_floor": 1741,
+   "too_few_prior_sessions": 13
   }
  },
  "leak": {
@@ -143,7 +144,7 @@
  },
  "text": {
   "drops": {
-   "short_text": 7
+   "short_text": 10
   }
  },
  "universe": {
