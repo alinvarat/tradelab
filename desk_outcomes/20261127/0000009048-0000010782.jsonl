@@ -1,0 +1,8 @@
+{"v":2,"protocol":"pre-v4.19","ts":1795691944.0204,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":0.01555,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"pre-v4.19","ts":1795691944.0204,"symbol":"LTC-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":86400,"abn":0.02591,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"pre-v4.19","ts":1795691944.0204,"symbol":"LINK-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":86400,"abn":0.03256,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"pre-v4.19","ts":1795692093.3921266,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":0.01686,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"pre-v4.19","ts":1795692167.1497338,"symbol":"USDCHF=X","cls":"fx","src":"mover","news_type":null,"action":"hold","h":86400,"abn":0.00132,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"pre-v4.19","ts":1795692407.93387,"symbol":"DOT-USD","cls":"crypto","src":"shock","news_type":null,"action":"hold","h":86400,"abn":0.01483,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"pre-v4.19","ts":1795692582.0829277,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"short","h":86400,"abn":0.01696,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.20","ts":1795775991.0601103,"symbol":"DOGE-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":3600,"abn":0.00085,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
