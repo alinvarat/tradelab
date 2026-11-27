@@ -3,9 +3,10 @@ name: Polymarket liquidity-reward quoting (P3)
 # Protocol: research/studies/protocol_poly_rewards_20261126.md. Public endpoints only, no keys, no orders.
 #   probe   - status and key names of the candidate endpoints
 #   measure - reward pools, competition, 147 USD allocation, trade-history replay
-#   collect - one ~58 min forward paper-tape run (5-minute book snapshots + trades); state on branch data/poly-rewards
+#   collect - continuous forward paper tape: ~330 min per run, 1-minute book snapshots + trades, pushed to data/poly-rewards every
+#             30 min; it queues its own successor ~10 min before the end (concurrency group keeps it pending: no hole), keeper.yml
+#             only restarts the chain when nothing is running or queued. Addendum protocol_poly_rewards_addendum_20261127.md.
 #   eval    - recompute the tape verdict from data/poly-rewards
-# collect is dispatched hourly by keeper.yml.
 on:
   workflow_dispatch:
     inputs:
@@ -13,6 +14,10 @@ on:
         description: "probe | measure | collect | eval"
         required: true
         default: "probe"
+      minutes:
+        description: "collect only: run length in minutes (default 335)"
+        required: false
+        default: "330"
 
 permissions:
   contents: read
@@ -37,12 +42,17 @@ jobs:
   tape:
     if: inputs.mode == 'collect' || inputs.mode == 'eval'
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 358
     concurrency:
       group: tradelab-poly-rewards-tape
       cancel-in-progress: false
     permissions:
       contents: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAPE_PUSH: ${{ github.workspace }}/research/studies/poly_rewards_push.sh
+      TAPE_CHAIN: ${{ github.ref == 'refs/heads/main' && inputs.mode == 'collect' && '1' || '0' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -58,23 +68,12 @@ jobs:
             git archive origin/data/poly-rewards | tar -x -C /tmp/tape
           fi
       - name: Run
-        run: python research/studies/poly_rewards.py ${{ inputs.mode }} /tmp/tape
-      - name: Push tape to data/poly-rewards
+        run: python research/studies/poly_rewards.py ${{ inputs.mode }} /tmp/tape ${{ inputs.minutes }}
+      - name: Final push (the run also pushes every 30 minutes)
         if: always() && inputs.mode == 'collect'
         run: |
           [ -f /tmp/tape/state.json ] || exit 0
-          mkdir -p /tmp/keep && cp -r /tmp/tape/. /tmp/keep/
-          git config user.name tradelab-research
-          git config user.email tradelab-research@users.noreply.github.com
-          if git rev-parse --verify -q origin/data/poly-rewards; then
-            git checkout -q -B data/poly-rewards origin/data/poly-rewards
-          else
-            git checkout -q --orphan data/poly-rewards && git rm -rq --cached . && git clean -fdq
-          fi
-          cp -r /tmp/keep/. .
-          git add snaps trades markets.json state.json summary.json 2>/dev/null || true
-          git commit -qm "poly-rewards tape: $(date -u +%FT%TZ)" || echo "nothing new"
-          for i in 1 2 3; do git push -q origin data/poly-rewards && break; git fetch -q origin data/poly-rewards; git rebase -q origin/data/poly-rewards || git rebase --abort; done
+          bash "$TAPE_PUSH" /tmp/tape
       - uses: actions/upload-artifact@v4
         if: always() && inputs.mode == 'eval'
         with:
