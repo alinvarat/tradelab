@@ -1,26 +1,26 @@
 {
  "capped_by_usage_limit": false,
  "crypto": {
-  "both_answered": 13,
-  "discordant": 4,
+  "both_answered": 18,
+  "discordant": 5,
   "fire": null,
   "min_discordant": 100,
   "min_paired": 300,
-  "paired_settled_capped": 12,
+  "paired_settled_capped": 14,
   "projection_discordant": {
    "date": "2026-12-05",
-   "days_left": 7.9,
-   "rate_per_day": 12.15
+   "days_left": 7.6,
+   "rate_per_day": 12.44
   },
   "projection_paired": {
    "date": "2026-12-05",
-   "days_left": 7.9,
-   "rate_per_day": 36.45
+   "days_left": 8.2,
+   "rate_per_day": 34.83
   }
  },
- "crypto_items": 13,
- "ingest_rows": 575,
- "items": 21,
+ "crypto_items": 18,
+ "ingest_rows": 655,
+ "items": 26,
  "locked_models": {
   "haiku": "claude-haiku-5-5",
   "sonnet": "claude-sonnet-5-5"
@@ -35,9 +35,23 @@
  },
  "stock_items": 0,
  "stock_items_with_pod_row": 0,
+ "stock_wide": {
+  "admitted": 0,
+  "both_answered_w3_m1": 0,
+  "days_due": 0,
+  "days_selected": 0,
+  "min_n": 300,
+  "per_day": {},
+  "pod_sec_8k_rows": 0,
+  "projection": null,
+  "rows_built": 0,
+  "settled": 0,
+  "skipped_no_bars": 0,
+  "with_pod_row": 0
+ },
  "stopped_early": {
   "haiku": false,
   "sonnet": false
  },
- "utc": 1795769022
+ "utc": 1795775306
 }
