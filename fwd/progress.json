@@ -1,27 +1,31 @@
 {
  "capped_by_usage_limit": false,
  "crypto": {
-  "both_answered": 7,
-  "discordant": 0,
+  "both_answered": 13,
+  "discordant": 4,
   "fire": null,
   "min_discordant": 100,
   "min_paired": 300,
-  "paired_settled_capped": 2,
-  "projection_discordant": null,
+  "paired_settled_capped": 12,
+  "projection_discordant": {
+   "date": "2026-12-05",
+   "days_left": 7.9,
+   "rate_per_day": 12.15
+  },
   "projection_paired": {
-   "date": "2026-12-15",
-   "days_left": 18.1,
-   "rate_per_day": 16.45
+   "date": "2026-12-05",
+   "days_left": 7.9,
+   "rate_per_day": 36.45
   }
  },
- "crypto_items": 7,
- "ingest_rows": 439,
- "items": 7,
+ "crypto_items": 13,
+ "ingest_rows": 575,
+ "items": 21,
  "locked_models": {
   "haiku": "claude-haiku-5-5",
   "sonnet": "claude-sonnet-5-5"
  },
- "skipped_no_market": 0,
+ "skipped_no_market": 8,
  "stock": {
   "both_answered_w3_m1": 0,
   "min_magnitude_n": 300,
@@ -35,5 +39,5 @@
   "haiku": false,
   "sonnet": false
  },
- "utc": 1795751083
+ "utc": 1795769022
 }
