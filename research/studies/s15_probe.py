@@ -79,6 +79,8 @@ def med(xs):
 
 def finish(name, t0, summ, rows, problems):
     summ["integrity"] = {"ok": not problems, "problems": problems}
+    summ["kline_fail_diag"] = dict(FAIL_DIAG)
+    summ["mexc_page_bars"] = PAGE["mexc"]
     summ["calls"] = dict(CALLS)
     summ["budget_s"] = BUDGET_S
     summ["elapsed_s"] = round(time.time() - t0, 1)
@@ -346,25 +348,33 @@ def mexc_contracts():
     return out, bool((d or {}).get("data"))
 
 
+PAGE = {"gate": 1900, "mexc": 1900}      # bars per request; MEXC shrinks on a refusal and keeps the size that worked
+FAIL_DIAG = {}
+
+
 def klines(venue, name, step_s, t0, t1, want_vol=False):
-    """{t: close} (and {t: volume}) for [t0, t1) in pages of 1,900 bars; None when a page fails."""
+    """{t: close} and {t: volume} for [t0, t1) in pages; None when a page fails even at the smallest size."""
     close, vol = {}, {}
-    w = 1900 * step_s
     t = t0
     iv = {60: ("1m", "Min1"), 300: ("5m", "Min5")}[step_s]
     while t < t1:
-        te = min(t + w, t1)
+        te = min(t + PAGE[venue] * step_s, t1)
         if venue == "gate":
-            st, d = jreq(f"https://api.gateio.ws/api/v4/futures/usdt/candlesticks?contract={name}&interval={iv[0]}&from={int(t)}&to={int(te)}")
+            st, d = jreq(f"https://api.gateio.ws/api/v4/futures/usdt/candlesticks?contract={name}&interval={iv[0]}&from={int(t)}&to={int(te)}", tries=1)
             if d is None:
+                FAIL_DIAG["gate"] = st
                 return None, None
             for k in d if isinstance(d, list) else []:
                 close[int(k["t"])] = fnum(k["c"])
                 vol[int(k["t"])] = fnum(k.get("v")) or 0
         else:
-            st, d = jreq(f"https://contract.mexc.com/api/v1/contract/kline/{name}?interval={iv[1]}&start={int(t)}&end={int(te)}")
+            st, d = jreq(f"https://contract.mexc.com/api/v1/contract/kline/{name}?interval={iv[1]}&start={int(t)}&end={int(te)}", tries=1)
             x = (d or {}).get("data") if isinstance(d, dict) else None
-            if d is None:
+            if d is None or (isinstance(d, dict) and d.get("success") is False):
+                FAIL_DIAG["mexc"] = {"status": st, "page": PAGE["mexc"], "body": str(d)[:120]}
+                if PAGE["mexc"] > 100:
+                    PAGE["mexc"] = max(100, PAGE["mexc"] // 2)
+                    continue
                 return None, None
             if x and x.get("time"):
                 vv = x.get("vol") or [0] * len(x["time"])
