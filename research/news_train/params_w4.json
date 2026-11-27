@@ -1,0 +1,27 @@
+{
+ "version": 1,
+ "family": "w4",
+ "k": 62,
+ "seed": 20261201,
+ "model": "claude-haiku-5-5",
+ "source_run": {"hh_run": 46002848826, "hh_labels_artifact": "hh-labels", "hh_decisions_branch": "data/news-train-hh"},
+ "split": {"rule": "temporal by UTC day of t_pub: the last ceil(D / 3) distinct days are validation, the rest train", "val_day_fraction": 0.3333333},
+ "hold": "1h",
+ "base_theta_pct": 0.5,
+ "greedy": {"max_steps": 3, "min_trades_train": 60, "min_paired_t": 2.0, "gap_threshold": 0.02},
+ "menu": {
+  "theta_pct": [0.75, 1.0, 1.5, 2.0, 3.0],
+  "min_conf": [30, 50, 65],
+  "side_only": ["long", "short"],
+  "gap_rule": ["no_fade", "no_chase"],
+  "session": ["outside_only"],
+  "excl_code": ["1.01", "2.02", "5.02", "7.01", "8.01"],
+  "min_price": [10, 20],
+  "flow": ["flow_only", "no_flow"]
+ },
+ "candidates_max": 3,
+ "validation": {"min_trades": 40, "holm_m": 3},
+ "route": {"rule": "paired difference to w3 > 0 at 1x and at 2x cost, own net per trade at 2x > 0, at least validation.min_trades trades; the best of those by paired 2x difference; none -> nothing is locked"},
+ "analysis": {"theta_grid_pct": [0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0], "conf_grid": [0, 30, 50, 65, 80], "min_group_n": 15},
+ "call": {"parallel": 3, "retries": 1, "stop_after_consecutive_empty": 12, "timeout_s": 150}
+}
