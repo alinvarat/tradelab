@@ -1,0 +1,2 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17644","title":"Binance Perp Monitor: IDOLUSDT (IDOL) -5.5% in the past 10 seconds","t_pub":1795747857.674,"res":"s","t_seen":1795747860.4230347,"lat_s":2.749}
+{"event":"llm","source":"eqn_rest","key":"eqn:17644","t_pub":1795747857.674,"t_seen":1795747860.4230347,"t_llm":1795747866.3200495,"llm_s":5.897,"model":"claude/claude-haiku-5-5","parsed":{"direction":"down","confidence":30,"instrument":"IDOL"}}
