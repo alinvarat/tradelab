@@ -14,9 +14,19 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PARAMS_PATH = os.path.join(HERE, "params_hh.json")
 
 
-def load_params(path=PARAMS_PATH):
+A1_PATH = os.path.join(HERE, "params_hh_a1.json")
+
+
+def load_params(path=PARAMS_PATH, addenda=(A1_PATH,)):
+    """params_hh.json (hash-locked in the protocol) with the dated addenda's `override` sections applied on top; the base file is never edited."""
     with open(path) as f:
-        return json.load(f)
+        p = json.load(f)
+    for a in addenda:
+        if a and os.path.exists(a):
+            with open(a) as f:
+                for section, vals in json.load(f)["override"].items():
+                    p[section].update(vals)
+    return p
 
 
 # ------------------------------------------------------------------ statistics

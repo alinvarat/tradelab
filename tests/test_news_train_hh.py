@@ -30,6 +30,20 @@ class Lock(unittest.TestCase):
         self.assertEqual(hashlib.sha256(f.read_bytes()).hexdigest(), f.with_suffix(".sha256").read_text().strip())
         self.assertIn(hashlib.sha256((NT / "params_hh.json").read_bytes()).hexdigest(), f.read_text())
 
+    def test_addendum_hash_and_override_only_changes_the_sample_size(self):
+        a = NT / "protocol_hh_addendum_20261127.md"
+        self.assertEqual(hashlib.sha256(a.read_bytes()).hexdigest(), a.with_suffix(".sha256").read_text().strip())
+        self.assertIn(hashlib.sha256((NT / "params_hh_a1.json").read_bytes()).hexdigest(), a.read_text())
+        base = json.load(open(NT / "params_hh.json"))
+        self.assertEqual((base["n"]["callable_cap"], base["universe"]["candidates_drawn"]), (2000, 3000))     # the locked base is untouched
+        self.assertEqual((P["n"]["callable_cap"], P["universe"]["candidates_drawn"]), (4000, 6000))
+        merged, bare = copy.deepcopy(P), copy.deepcopy(base)
+        for p in (merged, bare):
+            p["n"].pop("callable_cap")
+            p["universe"].pop("candidates_drawn")
+        self.assertEqual(merged, bare)                                                                          # nothing else differs
+        self.assertEqual(H.load_params(addenda=())["n"]["callable_cap"], 2000)
+
     def test_models_registry_and_core_default(self):
         self.assertEqual(P["models"], {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5"})
         for s in X.SETS:
@@ -245,6 +259,14 @@ class Universe(unittest.TestCase):
             per[c["cik"]] = per.get(c["cik"], 0) + 1
         self.assertEqual(max(per.values()), P["universe"]["per_issuer_cap"])
         self.assertEqual(len(s1), 40 * P["universe"]["per_issuer_cap"])
+
+    def test_larger_draw_extends_the_smaller_one(self):
+        cands = [{"cik": c, "acc": f"{c:05d}-{n:03d}", "sym": f"S{c}"} for c in range(2000) for n in range(2)]
+        small, large = copy.deepcopy(P), copy.deepcopy(P)
+        small["universe"]["candidates_drawn"], large["universe"]["candidates_drawn"] = 1000, 2500
+        a, b = H.sample_candidates(cands, small), H.sample_candidates(cands, large)
+        self.assertEqual((len(a), len(b)), (1000, 2500))
+        self.assertEqual([c["acc"] for c in a], [c["acc"] for c in b[:1000]])
 
     def test_first_n_is_a_prefix(self):
         keys = [f"sec:{i}" for i in range(300)]

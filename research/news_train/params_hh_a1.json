@@ -1,0 +1,8 @@
+{
+ "version": 1,
+ "addendum": 1,
+ "override": {
+  "universe": {"candidates_drawn": 6000},
+  "n": {"callable_cap": 4000}
+ }
+}
