@@ -1,0 +1,1 @@
+Append-only copy of the Kuber pod's L1f margin-arm rows (core/margin_arm.py, core/margin_publish.py): delist-notice events with the public borrow snapshot, paper trades and heartbeats. Public-market data only. Files are created once and never rewritten.
