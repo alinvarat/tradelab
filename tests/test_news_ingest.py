@@ -181,6 +181,39 @@ class BinanceFast(Base):
             self.assertIn("pageSize=10", q)
         self.assertNotEqual(set(v), set(ni.binance_variants(48)))
 
+    def test_apex_and_catalog_variants_and_parsers(self):
+        ap = ni.binance_variants(48, variant="apex")
+        self.assertEqual(len(set(ap)), 12)
+        self.assertTrue(all(u.startswith(ni.BN_PATH["apex"] + "?") and "catalogId=48" in u for u in ap))
+        ct = ni.binance_variants(49, variant="cat")
+        self.assertEqual(len(set(ct)), 12)
+        self.assertTrue(all(u.startswith(ni.BN_PATH["cat"] + "?") and "catalogId=49" in u and "type=" not in u for u in ct))
+        body = json.dumps({"data": {"articles": [{"id": 1, "code": "abc", "title": "T"}]}}).encode()
+        src = {"name": "binance_news_cat", "kind": "binance_multi", "variant": "cat", "prefix": "binance_news"}
+        it = ni.parse(src, body)[0]
+        self.assertEqual((it["key"], it["t_pub"]), ("binance_news:abc", None))
+        src = {"name": "binance_news_apex", "kind": "binance_multi", "variant": "apex", "prefix": "binance_news"}
+        it = ni.parse(src, bn_body(("abc", 1795680932541)))[0]
+        self.assertEqual(it["key"], "binance_news:abc")
+
+    def test_cat_source_logs_first_sight_without_latency(self):
+        src = next(s for s in ni.sources() if s["name"] == "binance_news_cat")
+        cond = {}
+        cat = lambda *codes: json.dumps({"data": {"articles": [{"id": i, "code": c, "title": c} for i, c in enumerate(codes)]}}).encode()
+        ni.poll_step({**src, "url": "u"}, cond, lambda u, h: (200, cat("a"), 100.0, {}))
+        ni.poll_step({**src, "url": "u"}, cond, lambda u, h: (200, cat("b", "a"), 130.0, {"X-Cache": "Miss from cloudfront"}))
+        rows = [json.loads(x) for f in Path(self.tmp.name).glob("*.jsonl") for x in f.read_text().splitlines()]
+        self.assertEqual([(r["key"], r["t_seen"], r["lat_s"], r["via"]) for r in rows], [("binance_news:b", 130.0, None, "Miss")])
+
+    def test_health_row_has_no_source_or_key(self):
+        ni._stat("okx_ann_my")["polls"] = 7
+        r = ni.health_row(50.0)
+        self.assertEqual(r["event"], "health")
+        self.assertEqual(r["sources"]["okx_ann_my"]["polls"], 7)
+        self.assertNotIn("source", r)
+        self.assertNotIn("key", r)
+        json.dumps(r)
+
     def test_cache_expiry_from_age_header(self):
         self.assertEqual(ni.cache_expiry({"Age": "104", "X-Cache": "Hit from cloudfront"}, 1000.0), 1016.0)
         self.assertEqual(ni.cache_expiry({"age": "0"}, 1000.0), 1120.0)
@@ -317,7 +350,8 @@ class OkxCandidates(Base):
             srcs = ni.sources()
         names = [s["name"] for s in srcs]
         self.assertEqual(len(names), len(set(names)))
-        new = ["binance_listings_fast", "binance_news_fast", "binance_delist_fast", "okx_ann_my", "okx_ann_listings", "okx_help_latest", "okx_help_listings"]
+        new = ["binance_listings_fast", "binance_news_fast", "binance_delist_fast", "binance_listings_apex", "binance_news_apex",
+               "binance_delist_apex", "binance_news_cat", "okx_ann_my", "okx_ann_listings", "okx_help_latest", "okx_help_listings"]
         for n in new:
             self.assertIn(n, names)
         for s in srcs:

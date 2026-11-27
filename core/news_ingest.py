@@ -67,7 +67,8 @@ OKX_ANN = "https://www.okx.com/api/v5/support/announcements"
 # Experiment sources raced against the controls: logged and measured, never shown to the bot (core.desk_feeds skips them, so
 # the bot's inputs are unchanged and the same article is not listed up to eight times).
 CANDIDATE_SOURCES = frozenset({"binance_listings_fast", "binance_news_fast", "binance_delist_fast", "okx_ann_my", "okx_ann_listings",
-                               "okx_help_latest", "okx_help_listings"})
+                               "okx_help_latest", "okx_help_listings", "binance_listings_apex", "binance_news_apex",
+                               "binance_delist_apex", "binance_news_cat"})
 BN_TTL_S = 120          # CloudFront TTL measured on 2026-11-26 (Age climbs to ~120, then RefreshHit)
 BN_KEYS = 12            # cache keys per catalog; 120 / 12 = one expiry about every 10 s
 BN_MIN_GAP_S = 2.0      # never more than one request per 2 s per catalog
@@ -145,15 +146,36 @@ def parse_eqn_frame(text):
 
 
 BN_PARAMS = ("type", "pageNo", "pageSize", "catalogId")
+BN_CMS = "https://www.binance.com/bapi/"
+BN_PATH = {"list": BN_CMS + "composite/v1/public/cms/article/list/query",          # the control's endpoint
+           "apex": BN_CMS + "apex/v1/public/apex/cms/article/list/query",          # same answer, different gateway path
+           "cat": BN_CMS + "composite/v1/public/cms/article/catalog/list/query"}   # id/code/title only (no releaseDate)
 
 
-def binance_variants(catalog_id, k=BN_KEYS, page_size=10):
+def binance_variants(catalog_id, k=BN_KEYS, page_size=10, variant="list"):
     """k distinct URLs for one catalog that return the same list but are different CloudFront cache keys. The server accepts
     the four parameters in any order (all 24 permutations checked, 200); an unknown extra parameter is a 400. The odd-indexed
     permutations are used so the control URL (permutation 0) is never reused. Deterministic."""
+    if variant == "cat":     # 3 parameters x page sizes 5 and 10 = 12 distinct cache keys
+        out = []
+        for ps in (5, 10):
+            vals = {"catalogId": str(catalog_id), "pageNo": "1", "pageSize": str(ps)}
+            out += [BN_PATH["cat"] + "?" + "&".join(f"{p}={vals[p]}" for p in perm) for perm in itertools.permutations(vals)]
+        return out[:k]
     vals = {"type": "1", "pageNo": "1", "pageSize": str(page_size), "catalogId": str(catalog_id)}
     perms = list(itertools.permutations(BN_PARAMS))[1::2][:k]
-    return [BN.split("?")[0] + "?" + "&".join(f"{p}={vals[p]}" for p in perm) for perm in perms]
+    return [BN_PATH[variant] + "?" + "&".join(f"{p}={vals[p]}" for p in perm) for perm in perms]
+
+
+def parse_binance_cat(d, prefix):
+    """catalog/list/query answer: id, code, title only. t_pub is None here; the analysis joins on the key to the control's
+    releaseDate (same prefix:code key)."""
+    out = []
+    for a in (d.get("data") or {}).get("articles") or []:
+        code = a.get("code") or a.get("id")
+        out.append({"key": f"{prefix}:{code}", "title": str(a.get("title") or "")[:300], "t_pub": None, "res": None,
+                    "link": f"https://www.binance.com/en/support/announcement/{code}", "desc": ""})
+    return out
 
 
 def _hget(hdr, name):
@@ -377,6 +399,12 @@ def sources():
         {"name": "binance_listings_fast", "kind": "binance_multi", "catalog": 48, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
         {"name": "binance_news_fast", "kind": "binance_multi", "catalog": 49, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
         {"name": "binance_delist_fast", "kind": "binance_multi", "catalog": 161, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
+        # same lists through another gateway path / endpoint, to find out whether the 60 s that remains on a cache Miss is
+        # in the shared composite backend; keys pair with the controls through `prefix`
+        {"name": "binance_listings_apex", "kind": "binance_multi", "variant": "apex", "prefix": "binance_listings", "catalog": 48, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
+        {"name": "binance_news_apex", "kind": "binance_multi", "variant": "apex", "prefix": "binance_news", "catalog": 49, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
+        {"name": "binance_delist_apex", "kind": "binance_multi", "variant": "apex", "prefix": "binance_delist", "catalog": 161, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
+        {"name": "binance_news_cat", "kind": "binance_multi", "variant": "cat", "prefix": "binance_news", "catalog": 49, "every": BN_MIN_GAP_S, "market": "crypto", "llm": False, "trace": True},
         {"name": "okx_ann_my", "kind": "okx_norm", "url": "https://my.okx.com/api/v5/support/announcements", "every": 3, "market": "crypto", "llm": False},
         {"name": "okx_ann_listings", "kind": "okx_norm", "url": OKX_ANN + "?annType=announcements-new-listings", "every": 3, "market": "crypto", "llm": False},
         {"name": "okx_help_latest", "kind": "okx_help", "url": OKX_HELP + "announcements-latest-announcements", "every": 2.5, "market": "crypto", "llm": False},
@@ -407,7 +435,10 @@ def parse(src, body):
     if k == "okx_help":
         return parse_okx_help(body)
     if k == "binance_multi":
-        return nl.parse_binance(json.loads(body), src["name"].replace("_fast", ""))
+        prefix = src.get("prefix") or src["name"].replace("_fast", "")
+        if src.get("variant") == "cat":
+            return parse_binance_cat(json.loads(body), prefix)
+        return nl.parse_binance(json.loads(body), prefix)
     raise ValueError("unknown kind " + k)
 
 
@@ -649,7 +680,7 @@ def multi_step(src, state, now=time.time, fetch_fn=fetch):
     Fetches the key whose cache entry expires first, when it expires. -> seconds until the next tick. 429/403 pause the whole
     catalog (poll_step's backoff); other errors retry that key after the backoff."""
     if "keys" not in state:
-        urls = binance_variants(src["catalog"])
+        urls = binance_variants(src["catalog"], variant=src.get("variant", "list"))
         t = now()
         # first pass: one request per TTL/k seconds, so the entries that this fills (Miss = filled now) expire evenly spread
         # over the TTL; later requests keep that phase because each is made at its own entry's expiry
@@ -756,6 +787,17 @@ def view(now=None):
                         "fetch are not counted. Minute-resolution timestamps are excluded from the statistics."}
 
 
+HEALTH_EVERY_S = 600
+
+
+def health_row(now):
+    """A log row (no source/key, so every reader of the item rows skips it) with each source's poll counters, so a quiet
+    source can be told apart from a broken one from the data branch alone."""
+    with _lock:
+        return {"event": "health", "t_seen": now, "sources": {n: {k: s.get(k) for k in ("polls", "ok", "errors", "last_status", "last_error", "new_items", "cold_items")}
+                                                              for n, s in STATE["sources"].items()}}
+
+
 def loop():
     STATE["started"] = time.time()
     reload_window()
@@ -776,8 +818,12 @@ def loop():
         spawn(s["name"], multi_loop if s["kind"] == "binance_multi" else poll_loop, s)
         time.sleep(0.3)           # stagger the first requests
     last_prune = time.time()
+    last_health = 0.0
     while True:
         time.sleep(30)
+        if time.time() - last_health > HEALTH_EVERY_S:
+            last_health = time.time()
+            log_row(health_row(last_health), last_health)
         for name, (t, target, args) in list(threads.items()):
             if not t.is_alive():
                 spawn(name, target, *args)
