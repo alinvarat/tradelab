@@ -1,0 +1,179 @@
+name: News train HH
+
+# Historical holdout, Haiku 5.5 vs Sonnet 5.5 on non-S&P-500 8-Ks (research/news_train/protocol_hh_20261127.md, family k = 61).
+# Owner exception as news_train_cmp.yml: research only, the production bot stays on Haiku. Claude CLI on the Max plan (shared token, low parallelism).
+# Reads data/news-train, -r2, -r3, -r3b and -cmp read-only; writes only data/news-train-hh. Never touches the forward arms.
+#   build - counts only: universe, filings, bars, labelable and callable counts, leak re-check (no outcome is printed)
+#   run   - build, then (only if callable >= 1,000) both models on the same prompts, then merge: counts gate first, outcomes only if it passes, one shot
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "build or run"
+        required: true
+        default: "build"
+
+permissions:
+  contents: read
+
+env:
+  TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
+  CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+  TRADELAB_CLAUDE_PARALLEL: "3"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    outputs:
+      go: ${{ steps.build.outputs.go }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore earlier data (read-only)
+        run: |
+          mkdir -p /tmp/scan /tmp/r2 /tmp/cmp /tmp/nt1
+          for b in data/news-train data/news-train-r2 data/news-train-r3 data/news-train-r3b data/news-train-cmp; do
+            git fetch origin "$b"
+            mkdir -p "/tmp/scan/$(basename "$b")"
+            git archive "origin/$b" | tar -x -C "/tmp/scan/$(basename "$b")"
+          done
+          git archive origin/data/news-train-r2 | tar -x -C /tmp/r2
+          git archive origin/data/news-train-cmp | tar -x -C /tmp/cmp
+          git archive origin/data/news-train | tar -x -C /tmp/nt1
+      - id: build
+        run: |
+          mkdir -p out
+          python research/news_train/run_hh.py build out /tmp/cmp/leak/gate.json /tmp/cmp/leak/leak.json /tmp/nt1/leak/leak.json /tmp/r2 /tmp/scan
+      - name: Prompts only for the call jobs, labels apart
+        run: |
+          mkdir -p pub lab
+          cp out/prep.jsonl.gz pub/
+          cp -r out/labels/. lab/
+          cp out/build_report.json out/leak_check.json out/items_index.jsonl.gz pub/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hh-prep
+          path: pub/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hh-labels
+          path: lab/
+
+  call:
+    needs: build
+    if: inputs.mode == 'run' && needs.build.outputs.go == '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - {set: stock_w3, shard: 0, shards: 8}
+          - {set: stock_w3, shard: 1, shards: 8}
+          - {set: stock_w3, shard: 2, shards: 8}
+          - {set: stock_w3, shard: 3, shards: 8}
+          - {set: stock_w3, shard: 4, shards: 8}
+          - {set: stock_w3, shard: 5, shards: 8}
+          - {set: stock_w3, shard: 6, shards: 8}
+          - {set: stock_w3, shard: 7, shards: 8}
+          - {set: stock_m1, shard: 0, shards: 8}
+          - {set: stock_m1, shard: 1, shards: 8}
+          - {set: stock_m1, shard: 2, shards: 8}
+          - {set: stock_m1, shard: 3, shards: 8}
+          - {set: stock_m1, shard: 4, shards: 8}
+          - {set: stock_m1, shard: 5, shards: 8}
+          - {set: stock_m1, shard: 6, shards: 8}
+          - {set: stock_m1, shard: 7, shards: 8}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - uses: actions/download-artifact@v4
+        with:
+          name: hh-prep
+          path: prep
+      - name: Cached decisions (resume)
+        run: |
+          mkdir -p /tmp/hh
+          if git fetch origin data/news-train-hh 2>/dev/null; then git archive origin/data/news-train-hh | tar -x -C /tmp/hh; fi
+      - run: python research/news_train/run_hh.py call out prep/prep.jsonl.gz ${{ matrix.set }} ${{ matrix.shard }} ${{ matrix.shards }} /tmp/hh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hh-call-${{ matrix.set }}-${{ matrix.shard }}
+          path: out/
+
+  merge:
+    needs: [build, call]
+    if: always() && inputs.mode == 'run' && needs.build.outputs.go == '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-hh-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: hh-call-*
+          path: parts
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: hh-prep
+          path: prep
+      - uses: actions/download-artifact@v4
+        with:
+          name: hh-labels
+          path: lab
+      - name: Restore data (read-only)
+        run: |
+          mkdir -p /tmp/r2 /tmp/hh
+          git fetch origin data/news-train-r2
+          git archive origin/data/news-train-r2 | tar -x -C /tmp/r2
+          if git fetch origin data/news-train-hh 2>/dev/null; then git archive origin/data/news-train-hh | tar -x -C /tmp/hh; fi
+      - run: |
+          mkdir -p merged
+          python research/news_train/run_hh.py merge parts prep/prep.jsonl.gz lab/labels.jsonl.gz merged /tmp/r2 /tmp/hh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hh-result
+          path: merged/
+      - name: Keep on data/news-train-hh
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r merged /tmp/keep
+          cp -r parts /tmp/keep_parts
+          cp -r prep /tmp/keep_prep
+          if git fetch origin data/news-train-hh 2>/dev/null; then git checkout -q -B data/news-train-hh origin/data/news-train-hh
+          else git checkout -q --orphan data/news-train-hh && git rm -rq --cached . && git clean -fdq; fi
+          mkdir -p hh/decisions
+          for f in /tmp/keep_parts/dec_*.jsonl; do [ -f "$f" ] && cp "$f" "hh/decisions/$(basename "${f%.jsonl}")_r${GITHUB_RUN_ID}.jsonl" || true; done
+          for f in /tmp/keep_parts/meta_*.json; do [ -f "$f" ] && cp "$f" "hh/decisions/$(basename "${f%.json}")_r${GITHUB_RUN_ID}.json" || true; done
+          cp /tmp/keep_prep/build_report.json /tmp/keep_prep/leak_check.json /tmp/keep_prep/items_index.jsonl.gz hh/
+          for f in result.json unread.json; do [ -f "/tmp/keep/$f" ] && cp "/tmp/keep/$f" hh/ || true; done
+          git add hh
+          git commit -qm "News train HH historical holdout: $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-hh && break; git fetch -q origin data/news-train-hh; git rebase -q origin/data/news-train-hh; done
