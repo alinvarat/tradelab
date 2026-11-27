@@ -1,28 +1,13 @@
 {
  "version": 1,
  "start_ts": 1795564800.0,
- "h_next": 1795770000.0,
+ "h_next": 1795773600.0,
  "d_next": 1795737600.0,
  "gap_hours_missed": 0,
  "lines": {
   "L12B_F": {
-   "equity": 143.2908,
+   "equity": 143.1868,
    "open": [
-    {
-     "id": "L12B_F|ONEUSDT|1795687200",
-     "line": "L12B_F",
-     "symbol": "ONEUSDT",
-     "entry_ts": 1795687200.0,
-     "entry_px": 0.001057,
-     "btc_entry": 60936.26,
-     "stake": 14.7,
-     "move": 0.1163,
-     "control": {
-      "symbol": "LINKUSDT",
-      "entry_px": 9.255,
-      "btc_entry": 60936.26
-     }
-    },
     {
      "id": "L12B_F|MMTUSDT|1795716000",
      "line": "L12B_F",
@@ -78,6 +63,30 @@
      "pnl_usd": -3.7092,
      "ts": 1795770314.606414,
      "equity_after": 143.2908
+    },
+    {
+     "id": "L12B_F|ONEUSDT|1795687200",
+     "line": "L12B_F",
+     "symbol": "ONEUSDT",
+     "entry_ts": 1795687200.0,
+     "entry_px": 0.001057,
+     "btc_entry": 60936.26,
+     "stake": 14.7,
+     "move": 0.1163,
+     "control": {
+      "symbol": "LINKUSDT",
+      "entry_px": 9.255,
+      "btc_entry": 60936.26
+     },
+     "exit_px": 0.001058,
+     "btc_exit": 61630.0,
+     "funding": -0.013513130663266,
+     "net": -0.007074521511268542,
+     "control_net": -0.028009217462977767,
+     "liquidated": false,
+     "pnl_usd": -0.104,
+     "ts": 1795773920.4443607,
+     "equity_after": 143.1868
     }
    ],
    "last_event": {

@@ -2,10 +2,10 @@
  "protocol": "research/studies/protocol_fwd_crypto_spikes_20261125.md",
  "start_ts": 1795564800.0,
  "gap_hours_missed": 0,
- "h_next": 1795770000.0,
+ "h_next": 1795773600.0,
  "d_next": 1795737600.0,
  "last_run": {
-  "run_at": 1795770314,
+  "run_at": 1795773920,
   "universe": {
    "spot_usdt": 521,
    "with_okx_perp": 206
@@ -13,9 +13,9 @@
   "closed_now": 1,
   "L12B_F": {
    "processed": 1,
-   "candidates": 1,
-   "events": 1,
-   "opened": 1,
+   "candidates": 0,
+   "events": 0,
+   "opened": 0,
    "pool": 38,
    "failed_symbols": 0
   },
@@ -27,25 +27,25 @@
  "n_errors": 0,
  "lines": {
   "L12B_F": {
-   "equity_usd": 143.2908,
+   "equity_usd": 143.1868,
    "start_usd": 147.0,
-   "open": 3,
-   "open_taken": 3,
-   "closed": 1,
-   "closed_taken": 1,
+   "open": 2,
+   "open_taken": 2,
+   "closed": 2,
+   "closed_taken": 2,
    "skipped_cap": 0,
-   "worst_drawdown": 0.0252,
+   "worst_drawdown": 0.0259,
    "liquidated": 0,
-   "funding_usd_taken": -0.0479,
-   "mean_funding": -0.00326,
-   "equity_double_cost_usd": 143.232,
-   "mean_net_double_cost": -0.25632,
-   "mean_net": -0.25232,
-   "mean_control": 0.23331,
+   "funding_usd_taken": -0.2466,
+   "mean_funding": -0.00839,
+   "equity_double_cost_usd": 143.0692,
+   "mean_net_double_cost": -0.1337,
+   "mean_net": -0.1297,
+   "mean_control": 0.10265,
    "hit_rate": 0.0,
    "worst_net": -0.2523,
    "evidence": {
-    "n_closed": 1,
+    "n_closed": 2,
     "max_events": 150,
     "verdict": "continue",
     "model": {
@@ -55,7 +55,7 @@
      "threshold": 20.0,
      "decision": "continue",
      "decided_at_unit": null,
-     "mean_scaled": -0.252324
+     "mean_scaled": -0.129699
     },
     "paired": {
      "n_units": 1,
@@ -64,7 +64,7 @@
      "threshold": 20.0,
      "decision": "continue",
      "decided_at_unit": null,
-     "mean_scaled": -0.121409
+     "mean_scaled": -0.058088
     },
     "fixed_at_max": null
    }
@@ -116,14 +116,6 @@
  "open_positions": {
   "L12B_F": [
    {
-    "symbol": "ONEUSDT",
-    "entry_ts": 1795687200.0,
-    "entry_px": 0.001057,
-    "stake": 14.7,
-    "move": 0.1163,
-    "control": "LINKUSDT"
-   },
-   {
     "symbol": "MMTUSDT",
     "entry_ts": 1795716000.0,
     "entry_px": 0.2095,
@@ -160,6 +152,15 @@
     "control_net": 0.23331223684728528,
     "funding": -0.0032613344530097,
     "pnl_usd": -3.7092,
+    "stake": 14.7
+   },
+   {
+    "symbol": "ONEUSDT",
+    "entry_ts": 1795687200.0,
+    "net": -0.007074521511268542,
+    "control_net": -0.028009217462977767,
+    "funding": -0.013513130663266,
+    "pnl_usd": -0.104,
     "stake": 14.7
    }
   ],
