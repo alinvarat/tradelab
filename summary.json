@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-11-27T10:11:25Z",
- "items_total": 644,
+ "updated_utc": "2026-11-27T10:41:16Z",
+ "items_total": 664,
  "sources": {
   "binance_news": {
    "items": 5,
@@ -43,11 +43,11 @@
    "slow": false
   },
   "eqn_rest": {
-   "items": 168,
-   "items_s": 168,
+   "items": 172,
+   "items_s": 172,
    "median_lat_s": 4.71,
-   "p90_lat_s": 18.086,
-   "share_fast": 0.946,
+   "p90_lat_s": 17.873,
+   "share_fast": 0.948,
    "notice_items": 1,
    "notices": {
     "delist": 1
@@ -55,7 +55,7 @@
    "slow": false
   },
   "globenewswire": {
-   "items": 162,
+   "items": 167,
    "items_s": 0,
    "median_lat_s": null,
    "p90_lat_s": null,
@@ -85,10 +85,10 @@
    "slow": false
   },
   "prnewswire": {
-   "items": 295,
-   "items_s": 295,
-   "median_lat_s": 110.926,
-   "p90_lat_s": 168.073,
+   "items": 306,
+   "items_s": 306,
+   "median_lat_s": 112.684,
+   "p90_lat_s": 169.479,
    "share_fast": 0.0,
    "notice_items": 0,
    "notices": {},
