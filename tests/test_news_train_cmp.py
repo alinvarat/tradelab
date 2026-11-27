@@ -21,9 +21,12 @@ class Lock(unittest.TestCase):
         f = NT / "protocol_cmp_20261126.md"
         self.assertEqual(hashlib.sha256(f.read_bytes()).hexdigest(), f.with_suffix(".sha256").read_text().strip())
         self.assertIn(hashlib.sha256((NT / "params_cmp.json").read_bytes()).hexdigest(), f.read_text())
-        for n in ("protocol_cmp_addendum_20261126", "protocol_cmp_addendum2_20261126"):
+        for n in ("protocol_cmp_addendum_20261126", "protocol_cmp_addendum2_20261126", "protocol_cmp_addendum3_20261127"):
             a = NT / (n + ".md")
             self.assertEqual(hashlib.sha256(a.read_bytes()).hexdigest(), a.with_suffix(".sha256").read_text().strip())
+        a3 = (NT / "protocol_cmp_addendum3_20261127.md").read_text()
+        self.assertIn(hashlib.sha256((NT / "params_cmp_a3.json").read_bytes()).hexdigest(), a3)
+        self.assertTrue(set(json.loads((NT / "params_cmp_a3.json").read_text())) >= {"cap_per_day", "min_n", "seed"})
 
     def test_models_and_registry(self):
         self.assertEqual(P["models"], {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5"})
@@ -225,6 +228,228 @@ class Forward(unittest.TestCase):
             self.assertIn("blocker", prog)
             self.assertEqual(prog["crypto"]["paired_settled_capped"], 0)
             self.assertFalse(prog["stock"]["scoring_open"])
+
+
+# ------------------------------------------------------------------ addendum 3: the stock-wide forward arm
+W = X.W
+PW = X.PW
+
+
+def pod_row(key, t_pub, cik, form="8-K", source="sec_8k", t_seen=None):
+    return (source, key), {"source": source, "key": key, "title": f"{form} - ACME Corp ({cik:010d}) (Filer)", "t_pub": t_pub, "t_seen": t_seen or t_pub + 5,
+                           "res": "s", "t_llm": None, "llm_s": None}
+
+
+class WideLogic(unittest.TestCase):
+    start = L.day_ts("2026-11-27")
+
+    def test_parse_title_and_pool(self):
+        self.assertEqual(W.parse_title("8-K - ACME Corp (0000001234) (Filer)"), ("8-K", "ACME Corp", 1234))
+        self.assertIsNone(W.parse_title("no cik here"))
+        j = dict([pod_row("sec:0001-26-000001", self.start + 100, 1), pod_row("sec:0001-26-000002", self.start + 200, 2, form="8-K/A"),
+                  pod_row("sec:0001-26-000003", self.start - 50, 3), pod_row("prn:x", self.start + 300, 4), pod_row("sec:0001-26-000005", self.start + 400, 5, source="prnewswire")])
+        j[("sec_8k", "sec:bad")] = {"source": "sec_8k", "key": "sec:bad", "title": "garbage", "t_pub": self.start + 10, "t_seen": self.start + 12}
+        j[("sec_8k", "sec:nopub")] = {"source": "sec_8k", "key": "sec:nopub", "title": "8-K - X (0000000009) (Filer)", "t_pub": None, "t_seen": self.start + 12}
+        rows = W.pool(j, self.start, PW)
+        self.assertEqual([r["key"] for r in rows], ["sec:0001-26-000001"])
+        self.assertEqual((rows[0]["acc"], rows[0]["cik"], rows[0]["day"]), ("0001-26-000001", 1, "2026-11-27"))
+
+    def test_day_ready_waits_after_close(self):
+        end = self.start + 86400
+        self.assertFalse(W.day_ready("2026-11-27", end + PW["day_close_wait_s"] - 1, PW))
+        self.assertTrue(W.day_ready("2026-11-27", end + PW["day_close_wait_s"], PW))
+
+    def rows(self, n):
+        return [{"key": f"sec:{i:04d}", "acc": f"{i:04d}", "cik": i + 1, "t_pub": self.start + i, "t_seen": self.start + i + 5, "day": "2026-11-27"} for i in range(n)]
+
+    def test_select_day_cap_order_and_independence_of_input_order(self):
+        p = dict(PW, cap_per_day=5, max_examine_per_day=100)
+        rows = self.rows(40)
+        ok = lambda r: ({"key": r["key"]}, "ok")                         # noqa: E731
+        a, st = W.select_day(rows, p, ok)
+        b, _ = W.select_day(list(reversed(rows)), p, ok)
+        self.assertEqual([x["key"] for x in a], [x["key"] for x in b])
+        self.assertEqual((len(a), st["examined"], st["pool"]), (5, 5, 40))
+        self.assertEqual([x["key"] for x in a], sorted((r["key"] for r in rows), key=lambda k: W.rank(p["seed"], k))[:5])
+
+    def test_select_day_rejections_errors_and_examine_limit(self):
+        p = dict(PW, cap_per_day=100, max_examine_per_day=10)
+        seen = []
+
+        def chk(r):
+            seen.append(r["key"])
+            n = len(seen)
+            if n % 3 == 0:
+                raise RuntimeError("sec down")
+            return ({"key": r["key"]}, "ok") if n % 3 == 1 else (None, "sp500")
+        items, st = W.select_day(self.rows(40), p, chk)
+        self.assertEqual(st["examined"], 10)
+        self.assertEqual((st["errors"], st["rejected"], st["admitted"]), (3, {"sp500": 3}, 4))
+        self.assertEqual(len(items), 4)
+
+    def test_universe_helpers(self):
+        self.assertEqual(W.pick_ticker(["GOOGL", "GOOG", "ZZ"]), "ZZ")
+        self.assertIsNone(W.pick_ticker([]))
+        sp = {"GOOGL": [("2010-01-01", None)], "OLD": [("2010-01-01", "2020-01-01")]}
+        self.assertTrue(W.in_spell(sp, ["GOOG", "GOOGL"], "2026-11-27"))      # any ticker of the issuer
+        self.assertFalse(W.in_spell(sp, ["OLD"], "2026-11-27"))
+        self.assertTrue(W.in_spell(sp, ["OLD"], "2019-06-01"))
+        self.assertFalse(W.in_spell(sp, ["NEW"], "2026-11-27"))
+
+
+class WideCheck(unittest.TestCase):
+    start = L.day_ts("2026-11-27")
+    r = {"key": "sec:0001-26-000007", "acc": "0001-26-000007", "cik": 7, "t_pub": start + 14 * 3600, "t_seen": start + 14 * 3600 + 5, "day": "2026-11-27"}
+
+    def run_check(self, tickers=None, spells=None, filing=None, item_ok=True):
+        f = filing if filing is not None else {"accession": "0001-26-000007", "form": "8-K", "doc": "a.htm", "items": ["2.02"], "ts": 0}
+        calls = []
+        gj = lambda url: {"sicDescription": "Biotech"}                    # noqa: E731
+        fn = lambda cik, g, since: ([f], ["ACME"])                        # noqa: E731
+
+        def item_fn(c, cache):
+            calls.append(c)
+            return {"key": "sec:" + c["acc"], "market": "stock", "src": "sec_8k", "t_pub": c["ts"], "sym": c["sym"], "items": c["items"], "text": "x" * 100,
+                    "descr": "old"} if item_ok else None
+        res = X.wide_check(self.r, {7: ["ACMEW", "ACME"]} if tickers is None else tickers, {} if spells is None else spells, PW,
+                           filings_fn=fn, get_json=gj, item_fn=item_fn)
+        return res, calls
+
+    def test_admits_non_sp500_with_arm_and_descr(self):
+        (it, why), calls = self.run_check()
+        self.assertEqual(why, "ok")
+        self.assertEqual((it["arm"], it["split"], it["sym"]), ("wide", "fwd", "ACME"))
+        self.assertEqual(it["descr"], "Issuer: a US-listed company (sector: Biotech).")
+        self.assertEqual(len(calls), 1)
+
+    def test_rejections(self):
+        self.assertEqual(self.run_check(tickers={})[0], (None, "no_ticker"))
+        self.assertEqual(self.run_check(spells={"ACME": [("2000-01-01", None)]})[0], (None, "sp500"))
+        self.assertEqual(self.run_check(filing={"accession": "other", "form": "8-K", "doc": "a", "items": [], "ts": 0})[0], (None, "no_filing"))
+        self.assertEqual(self.run_check(filing={"accession": "0001-26-000007", "form": "8-K/A", "doc": "a", "items": [], "ts": 0})[0], (None, "no_filing"))
+        self.assertEqual(self.run_check(filing={"accession": "0001-26-000007", "form": "8-K", "doc": "a", "items": ["9.01"], "ts": 0})[0], (None, "item_filtered"))
+        self.assertEqual(self.run_check(item_ok=False)[0], (None, "short_text"))
+
+    def test_no_item_code_listed_is_allowed(self):
+        (it, why), _ = self.run_check(filing={"accession": "0001-26-000007", "form": "8-K", "doc": "a", "items": [], "ts": 0})
+        self.assertEqual(why, "ok")
+
+
+class WideStep(unittest.TestCase):
+    start = L.day_ts("2026-11-27")
+
+    def pods(self, n):
+        return dict(pod_row(f"sec:0001-26-{i:06d}", self.start + 3600 * 13 + i, i + 1) for i in range(n))
+
+    def test_day_selected_once_after_close_and_only_when_due(self):
+        j = self.pods(10)
+        ws, wi, calls = {"days": {}}, {}, []
+
+        def chk(r, t, s, p):
+            calls.append(r["key"])
+            return {"key": r["key"], "sym": "S", "t_pub": r["t_pub"]}, "ok"
+        uni = lambda: ({}, {})                                          # noqa: E731
+        info = X.wide_step(j, self.start, self.start + 86400 + 60, ws, wi, uni, chk)       # closed, but not yet 3 h later
+        self.assertEqual((info["days_due"], calls, wi), (0, [], {}))
+        now = self.start + 86400 + PW["day_close_wait_s"]
+        X.wide_step(j, self.start, now, ws, wi, uni, chk)
+        self.assertEqual(len(wi), 10)
+        self.assertEqual(ws["days"]["2026-11-27"]["admitted"], 10)
+        n = len(calls)
+        X.wide_step(j, self.start, now + 7200, ws, wi, uni, chk)
+        self.assertEqual(len(calls), n)                                  # never selected twice
+
+    def test_sec_outage_retries_the_day_and_universe_failure_is_reported(self):
+        j = self.pods(10)
+        ws, wi = {"days": {}}, {}
+
+        def down(r, t, s, p):
+            raise RuntimeError("503")
+        now = self.start + 86400 + PW["day_close_wait_s"]
+        info = X.wide_step(j, self.start, now, ws, wi, lambda: ({}, {}), down)
+        self.assertEqual((info["retry_days"], ws["days"], wi), (["2026-11-27"], {}, {}))
+
+        def boom():
+            raise OSError("no network")
+        info = X.wide_step(j, self.start, now, ws, wi, boom, down)
+        self.assertIn("blocker", info)
+        self.assertEqual(ws["days"], {})
+
+
+def hourly_bars(first_day, n_days):
+    out = []
+    t0 = L.day_ts(first_day)
+    for d in range(n_days):
+        day0 = t0 + d * 86400
+        for i in range(7):
+            o = 100.0 + d + i * 0.1
+            out.append({"t": day0 + 14 * 3600 + 1800 + i * 3600, "o": o, "h": o * 1.002, "l": o * 0.998, "c": o * (1.002 if (i + d) % 2 else 0.999)})
+    return out
+
+
+class WideForward(unittest.TestCase):
+    """The whole forward step on synthetic pod rows: selection, bars, both heads, both models, the arm's own one-shot, no change to the S&P 500 arm."""
+    start = L.day_ts("2026-11-27")
+
+    def test_wide_arm_end_to_end_offline(self):
+        import os
+        import shutil
+        import tempfile
+        W3 = '{"d": {"1h": "long", "eod": "none"}, "exp": {"1h": 1.0, "eod": 0.5}, "conf": 60, "why": "x"}'
+        M1 = '{"abs1h": 1.2, "p_big": 40, "why": "x"}'
+        asked = []
+
+        def fake(mk, jobs, parse, **kw):
+            out = []
+            for j in jobs:
+                r = parse(W3)
+                if not r.get("ok"):
+                    r = parse(M1)
+                asked.append((mk, j["key"]))
+                out.append(dict(r, key=j["key"], model=mk, lat_s=2.0, user_sha=j["user_sha"]))
+            return out, False, {}
+
+        def chk(r, t, s, p):
+            return {"key": r["key"], "market": "stock", "src": "sec_8k", "t_pub": r["t_pub"], "sym": "SYM%d" % (r["cik"] % 3), "items": ["2.02"], "text": "Acme reports quarterly results " * 10,
+                    "text_kind": "main", "descr": "Issuer: a US-listed company (sector: x).", "arm": "wide", "split": "fwd"}, "ok"
+        intraday = lambda sym, p1, p2, interval: hourly_bars("2026-11-20", 14)      # noqa: E731
+        old = X.PW
+        X.PW = dict(PW, min_n=4)
+        try:
+            with tempfile.TemporaryDirectory() as d:
+                os.makedirs(d + "/ing/news_ingest/20261127")
+                rows = []
+                for i in range(6):
+                    k, v = pod_row(f"sec:0001-26-{i:06d}", self.start + 14 * 3600 + 60 * i, i + 1)
+                    rows.append({"event": "item", "source": "sec_8k", "key": v["key"], "title": v["title"], "t_pub": v["t_pub"], "t_seen": v["t_seen"], "res": "s"})
+                open(d + "/ing/news_ingest/20261127/0-1.jsonl", "w").write("\n".join(json.dumps(r) for r in rows) + "\n")
+                now = L.day_ts("2026-12-03")
+                X.fwd(d + "/out", d + "/state", d + "/ing", d + "/r2", now=now, bars_fn=lambda *a: [], run=fake,
+                      universe_fn=lambda: ({}, {}), check_fn=chk, intraday_fn=intraday)
+                prog = json.load(open(d + "/out/fwd/progress.json"))
+                w = prog["stock_wide"]
+                self.assertEqual((w["admitted"], w["rows_built"], w["with_pod_row"], w["both_answered_w3_m1"], w["settled"]), (6, 6, 6, 6, 6))
+                self.assertEqual(w["days_selected"], 1)
+                self.assertEqual(prog["stock"]["both_answered_w3_m1"], 0)            # the S&P 500 arm is untouched
+                self.assertEqual(prog["stock_items"], 0)
+                self.assertTrue(w.get("fired_now"))
+                res = json.load(open(d + "/out/fwd/result_stock_wide.json"))
+                self.assertEqual(res["n_settled"], 6)
+                self.assertFalse(res["underpowered"])
+                self.assertEqual(len(asked), 6 * 2 * 2)                              # items x heads x models
+                self.assertFalse(os.path.exists(d + "/out/fwd/result_stock.json"))
+                # next run from the kept state: no second selection, no second call, the result is not rewritten
+                shutil.copytree(d + "/out/fwd", d + "/state2/fwd")
+
+                def never(*a, **k):
+                    raise AssertionError("called again")
+                X.fwd(d + "/out2", d + "/state2", d + "/ing", d + "/r2", now=now + 3600, bars_fn=lambda *a: [], run=never,
+                      universe_fn=never, check_fn=never, intraday_fn=intraday)
+                prog2 = json.load(open(d + "/out2/fwd/progress.json"))
+                self.assertEqual(prog2["stock_wide"]["both_answered_w3_m1"], 6)
+                self.assertFalse(os.path.exists(d + "/out2/fwd/result_stock_wide.json"))
+        finally:
+            X.PW = old
 
 
 if __name__ == "__main__":
