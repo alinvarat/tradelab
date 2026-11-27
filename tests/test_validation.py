@@ -89,4 +89,4 @@ class Calendar(unittest.TestCase):
         from core import econ_calendar
         self.assertEqual(econ_calendar.CSV.parent.name, "core")
         self.assertTrue(econ_calendar.CSV.exists())
-        self.assertGreater(len(econ_calendar.events()), 5)
+        self.assertGreater(len(econ_calendar.events(days_back=3650, days_ahead=3650)), 5)

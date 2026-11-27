@@ -7,7 +7,7 @@ import time
 from pathlib import Path
 
 LOG = Path(__file__).resolve().parent.parent / "data" / "ai_log.jsonl"
-MODEL = "sonnet"
+MODEL = "claude-haiku-5-5"  # owner 2026-11-28: Haiku only, no Sonnet anywhere in TradeLab
 SYSTEM = ("You are a careful market analyst inside a paper-trading simulator. Use only the data given. "
           "Write plain English with these sections: Summary, Trend and momentum, Key levels, News and sentiment, "
           "Risks, Scenario plan (bullish / bearish triggers with price levels), Position sizing note. "
