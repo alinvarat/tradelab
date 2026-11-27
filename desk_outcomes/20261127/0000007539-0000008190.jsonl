@@ -1,0 +1,3 @@
+{"v":2,"protocol":"pre-v4.19","ts":1795686855.5837598,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":0.0113,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.20","ts":1795769984.6684537,"symbol":"USDCNY=X","cls":"fx","src":"news","news_type":"other","action":"hold","h":3600,"abn":-0.0015,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"pre-v4.19","ts":1795687599.9435358,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":0.01224,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
