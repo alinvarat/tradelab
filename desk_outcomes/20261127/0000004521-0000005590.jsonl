@@ -1,0 +1,5 @@
+{"v":2,"protocol":"pre-v4.19","ts":1795680140.0703208,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":0.01945,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795763050.3807664,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"earnings","action":"hold","h":3600,"abn":0.00118,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795763050.3807664,"symbol":"AUDUSD=X","cls":"fx","src":"mover","news_type":null,"action":"hold","h":3600,"abn":-0.0003,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795763050.3807664,"symbol":"LINK-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":3600,"abn":0.0024,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795763915.095681,"symbol":"ADA-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":3600,"abn":0.0,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
