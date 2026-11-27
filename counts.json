@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-11-27T06:41:25Z",
- "items_total": 501,
+ "updated_utc": "2026-11-27T07:11:25Z",
+ "items_total": 532,
  "sources": {
   "binance_news": {
    "items": 4,
@@ -23,17 +23,17 @@
    "slow": false
   },
   "eqn_rest": {
-   "items": 146,
-   "items_s": 146,
-   "median_lat_s": 4.441,
-   "p90_lat_s": 14.738,
-   "share_fast": 0.952,
+   "items": 152,
+   "items_s": 152,
+   "median_lat_s": 4.52,
+   "p90_lat_s": 11.74,
+   "share_fast": 0.954,
    "notice_items": 0,
    "notices": {},
    "slow": false
   },
   "globenewswire": {
-   "items": 132,
+   "items": 143,
    "items_s": 0,
    "median_lat_s": null,
    "p90_lat_s": null,
@@ -43,9 +43,9 @@
    "slow": false
   },
   "okx_announcements": {
-   "items": 5,
-   "items_s": 5,
-   "median_lat_s": 93.931,
+   "items": 6,
+   "items_s": 6,
+   "median_lat_s": 93.306,
    "p90_lat_s": 119.497,
    "share_fast": 0.0,
    "notice_items": 0,
@@ -53,9 +53,9 @@
    "slow": false
   },
   "okx_help_latest": {
-   "items": 2,
-   "items_s": 2,
-   "median_lat_s": 116.287,
+   "items": 3,
+   "items_s": 3,
+   "median_lat_s": 106.134,
    "p90_lat_s": 106.134,
    "share_fast": 0.0,
    "notice_items": 0,
@@ -63,10 +63,10 @@
    "slow": false
   },
   "prnewswire": {
-   "items": 210,
-   "items_s": 210,
+   "items": 222,
+   "items_s": 222,
    "median_lat_s": 103.729,
-   "p90_lat_s": 171.461,
+   "p90_lat_s": 169.933,
    "share_fast": 0.0,
    "notice_items": 0,
    "notices": {},
