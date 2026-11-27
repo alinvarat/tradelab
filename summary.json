@@ -1,65 +1,19 @@
 {
- "t": "2026-11-26T22:31:35.146524+00:00",
- "snaps": 666,
- "trades": 47230,
- "days": 0,
- "verdict": "collecting",
- "results": {
-  "reward|base": {
-   "days": 0,
-   "reward_mean": null,
-   "fill_mean": null,
-   "net_mean": null,
-   "net_se": null,
-   "net_p": null,
-   "monthly_net": null,
-   "end_equity": 1.0,
-   "worst_dd": 0.0,
-   "fills": 0,
-   "capital": 1146.75,
-   "markets": 50
-  },
-  "reward|haircut_x2": {
-   "days": 0,
-   "reward_mean": null,
-   "fill_mean": null,
-   "net_mean": null,
-   "net_se": null,
-   "net_p": null,
-   "monthly_net": null,
-   "end_equity": 1.0,
-   "worst_dd": 0.0,
-   "fills": 0,
-   "capital": 1146.75,
-   "markets": 50
-  },
-  "reward|zero_reward": {
-   "days": 0,
-   "reward_mean": null,
-   "fill_mean": null,
-   "net_mean": null,
-   "net_se": null,
-   "net_p": null,
-   "monthly_net": null,
-   "end_equity": 1.0,
-   "worst_dd": 0.0,
-   "fills": 0,
-   "capital": 1146.75,
-   "markets": 50
-  },
-  "control|base": {
-   "days": 0,
-   "reward_mean": null,
-   "fill_mean": null,
-   "net_mean": null,
-   "net_se": null,
-   "net_p": null,
-   "monthly_net": null,
-   "end_equity": 1.0,
-   "worst_dd": 0.0,
-   "fills": 0,
-   "capital": 95.5,
-   "markets": 5
-  }
- }
+ "t": "2026-11-27T00:47:57.186275+00:00",
+ "epoch": 1795740172,
+ "snaps": 396,
+ "trades": 68964,
+ "resolved_markets": 14,
+ "tracked_markets": 91,
+ "gaps": {
+  "ticks": 6,
+  "span_s": 300,
+  "covered_s": 300,
+  "coverage": 1.0,
+  "gaps": [],
+  "n_gaps": 0,
+  "gap_s": 0
+ },
+ "model": "addendum 2026-11-27: through-fills (0.1%), partial by size, per-minute reward samples, resolution-marked",
+ "results": {}
 }
