@@ -2333,6 +2333,7 @@ STUDIES.update({"factory_us_pit_1": study_factory_us_pit_1})
 STUDIES.update({"fxcom_1": study_fxcom_1})
 STUDIES.update({"factory_crypto_3": study_factory_crypto_3})
 STUDIES.update(__import__("research.studies.indicators_1", fromlist=["STUDIES"]).STUDIES)   # indicators_1 + its depth probe
+STUDIES.update(__import__("research.studies.s15_probe", fromlist=["STUDIES"]).STUDIES)   # S1-S5 stage-0 probes (counts only)
 
 from research.sweeps import hooks as _sweep_hooks   # noqa: E402  config-driven sweeps: research/sweeps/<family>.json
 globals().update(_sweep_hooks.shard_functions())

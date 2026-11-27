@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       study:
-        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, fwd_crypto_spikes, polymarket_llm, l7_first_red_day, factory_crypto_2, thin_a_forward or all"
+        description: "tom, momentum, items, form4, pit_momentum, llm_earnings, llm_earnings_wide, llm_earnings_forward, llm_8k_other, options_forward, l4f_forward, fwd_crypto_spikes, polymarket_llm, l7_first_red_day, factory_crypto_2, thin_a_forward, s1_hl_ladder, s2_dex_trending, s3_anchor_perps, s4_kalshi_poly, s5_stale_quote or all"
         default: all
   schedule:
     - cron: "0 3 * * 0"        # Sundays 03:00 UTC: forward DeepSeek earnings reader
@@ -334,6 +334,8 @@ jobs:
 
       - name: Run study
         if: inputs.study == 'all' || inputs.study == matrix.study
+        # S1-S5 stage-0 probes carry their own 20 minute budget; this cuts a hung one at 35 minutes (others keep the job limit)
+        timeout-minutes: ${{ (startsWith(matrix.study, 's1_') || startsWith(matrix.study, 's2_') || startsWith(matrix.study, 's3_') || startsWith(matrix.study, 's4_') || startsWith(matrix.study, 's5_')) && 35 || 240 }}
         env:
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}   # owner 2026-11-25: Claude only
