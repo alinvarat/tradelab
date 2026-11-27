@@ -2085,6 +2085,127 @@
     "5.07"
    ],
    "skipped": "liquidity 112351.49992704391"
+  },
+  "0001477932-26-007329": {
+   "symbol": "BGLC",
+   "accession": "0001477932-26-007329",
+   "accepted": "2026-11-27T14:00:47.000Z",
+   "accepted_ts": 1795788047,
+   "protocol": "options-v2-sec",
+   "items": [
+    "8.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 4606.899970769882"
+  },
+  "0001104659-26-132343": {
+   "symbol": "NVTS",
+   "accession": "0001104659-26-132343",
+   "accepted": "2026-11-27T14:00:41.000Z",
+   "accepted_ts": 1795788041,
+   "protocol": "options-v2-sec",
+   "items": [
+    "1.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 20,
+   "reason": "The 8-K discloses a patent purchase with a $5M upfront payment, a $5M contingent payment tied to litigation outcomes, and a 1.5% back-end royalty, which is small and ambiguous for NVTS's five-session outlook, and the five-session run-up and recent move don't point to a clear direction."
+  },
+  "0001040130-26-000079": {
+   "symbol": "PETS",
+   "accession": "0001040130-26-000079",
+   "accepted": "2026-11-27T13:43:11.000Z",
+   "accepted_ts": 1795786991,
+   "protocol": "options-v2-sec",
+   "items": [
+    "1.01",
+    "3.03",
+    "5.03",
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 75974.99960064888"
+  },
+  "0001104659-26-132332": {
+   "symbol": "SKYD",
+   "accession": "0001104659-26-132332",
+   "accepted": "2026-11-27T13:33:35.000Z",
+   "accepted_ts": 1795786415,
+   "protocol": "options-v2-sec",
+   "items": [
+    "1.02",
+    "8.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 20,
+   "reason": "The filing mostly restates previously announced deleveraging, and the PIPE resale registration is an overhang with a 180-day lock-up, so the evidence points in no clear direction over five sessions."
+  },
+  "0001193125-26-479217": {
+   "symbol": "CLBK",
+   "accession": "0001193125-26-479217",
+   "accepted": "2026-11-27T12:59:37.000Z",
+   "accepted_ts": 1795784377,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02",
+    "8.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 28870071.828842163"
+  },
+  "0001193125-26-479191": {
+   "symbol": "WW",
+   "accession": "0001193125-26-479191",
+   "accepted": "2026-11-27T12:40:07.000Z",
+   "accepted_ts": 1795783207,
+   "protocol": "options-v2-sec",
+   "items": [
+    "7.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 2936515.542984009"
+  },
+  "0001784254-26-000056": {
+   "symbol": "MDIA",
+   "accession": "0001784254-26-000056",
+   "accepted": "2026-11-27T12:15:39.000Z",
+   "accepted_ts": 1795781739,
+   "protocol": "options-v2-sec",
+   "items": [
+    "5.02"
+   ],
+   "skipped": "liquidity 7400.0"
+  },
+  "0001493152-26-054333": {
+   "symbol": "CD",
+   "accession": "0001493152-26-054333",
+   "accepted": "2026-11-27T11:10:06.000Z",
+   "accepted_ts": 1795777806,
+   "protocol": "options-v2-sec",
+   "items": [
+    "8.01",
+    "9.01"
+   ],
+   "skipped": "liquidity 2090699.9710083008"
+  },
+  "0001144879-26-000069": {
+   "symbol": "APLD",
+   "accession": "0001144879-26-000069",
+   "accepted": "2026-11-26T01:54:45.000Z",
+   "accepted_ts": 1795658085,
+   "protocol": "options-v2-sec",
+   "items": [
+    "7.01",
+    "9.01"
+   ],
+   "model": "claude/claude-haiku-5-5",
+   "direction": "skip",
+   "confidence": 20,
+   "reason": "The 8-K is a routine Item 7.01 furnishing of an updated investor presentation (Exhibit 99.1 not included) with no quantitative news, so the event provides no directional signal beyond the price pattern, and the -14.95% five-session run-up with flat last-close move does not support a reliable directi"
   }
  },
  "open": [
@@ -2430,5 +2551,5 @@
   "options-v1-earnings": 0.0,
   "options-v2-sec": 0.0
  },
- "last_run_ts": 1795649234
+ "last_run_ts": 1795791637
 }
