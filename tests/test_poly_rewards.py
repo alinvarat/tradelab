@@ -223,6 +223,10 @@ class Parse(unittest.TestCase):
 
 
 class Lock(unittest.TestCase):
+    def test_addendum_unchanged(self):
+        add = STUDIES / "protocol_poly_rewards_addendum_20261127.md"
+        self.assertEqual(hashlib.sha256(add.read_bytes()).hexdigest(), add.with_suffix(".sha256").read_text().strip())
+
     def test_protocol_unchanged(self):
         self.assertEqual(hashlib.sha256(PROTO.read_bytes()).hexdigest(), PROTO.with_suffix(".sha256").read_text().strip(),
                          "protocol is locked; write a dated addendum instead")
