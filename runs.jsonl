@@ -26,3 +26,4 @@
 {"run": "20261127T1149", "chunk": 2, "ticks_ok": 93, "ticks_missed": 0, "book_fail": 148, "trades_truncated": 0, "snaps": 2040, "trades": 4084, "t": 1795785688}
 {"run": "20261127T1149", "chunk": 3, "ticks_ok": 124, "ticks_missed": 0, "book_fail": 264, "trades_truncated": 0, "snaps": 2015, "trades": 2689, "t": 1795787547}
 {"run": "20261127T1149", "chunk": 4, "ticks_ok": 155, "ticks_missed": 0, "book_fail": 419, "trades_truncated": 0, "snaps": 2015, "trades": 2715, "t": 1795789407}
+{"run": "20261127T1149", "chunk": 5, "ticks_ok": 186, "ticks_missed": 0, "book_fail": 574, "trades_truncated": 0, "snaps": 2015, "trades": 3445, "t": 1795791269}
