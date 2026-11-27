@@ -72,6 +72,26 @@
    "stake": 7.6041,
    "entry_ts": 1795745689.4529703,
    "volume": 52435.188972
+  },
+  {
+   "id": "7109772",
+   "question": "Will Elon Musk post 280-299 tweets from November 20 to November 27, 2026?",
+   "end": "2026-11-27T17:00:00Z",
+   "side": "yes",
+   "price": 0.09,
+   "stake": 7.6041,
+   "entry_ts": 1795749441.3458855,
+   "volume": 88237.984321
+  },
+  {
+   "id": "7203526",
+   "question": "Will the price of Bitcoin be above $60,000 on November 27?",
+   "end": "2026-11-27T17:00:00Z",
+   "side": "no",
+   "price": 0.09,
+   "stake": 7.6041,
+   "entry_ts": 1795749441.3458855,
+   "volume": 51664.943223
   }
  ],
  "n_closed": 22,
