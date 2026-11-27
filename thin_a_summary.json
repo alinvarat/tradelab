@@ -1,13 +1,13 @@
 {
- "polls": 48,
+ "polls": 49,
  "new_listings": 1,
- "gone": 0,
- "watching": 70,
+ "gone": 5,
+ "watching": 71,
  "f2": {
   "kucoin": {
    "compared": 340,
    "collisions": 1,
-   "candidates": 2
+   "candidates": 0
   },
   "gate": {
    "compared": 387,
@@ -17,7 +17,7 @@
   "mexc": {
    "compared": 366,
    "collisions": 0,
-   "candidates": 2
+   "candidates": 3
   },
   "bitget": {
    "compared": 282,
@@ -32,6 +32,6 @@
   "bitget": false,
   "binance": false
  },
- "f2_candidates": 4,
+ "f2_candidates": 3,
  "announcements_new": 0
 }
