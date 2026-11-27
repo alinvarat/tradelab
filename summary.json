@@ -1,0 +1,16 @@
+{
+ "covered_hours": 4.908333333333333,
+ "polls": 660,
+ "poll_ok_share": 0.8848484848484849,
+ "entrants": 163,
+ "qualifying": 147,
+ "median_delay_s": 30.000102519989014,
+ "sell_measured": 32,
+ "sell_no_exit": 2,
+ "monthly_qualifying": 21862.81833616299,
+ "kills": [],
+ "status": "RUNNING",
+ "started": 1795754745.858454,
+ "reentries_not_counted": 407,
+ "updated": "2026-11-27T10:15:45Z"
+}
