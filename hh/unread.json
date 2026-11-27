@@ -1,0 +1,44 @@
+{
+ "alpha_k": 2.6441e-05,
+ "capped_by_usage_limit": false,
+ "count_gate": {
+  "discordant": 127,
+  "ok": {
+   "discordant": true,
+   "paired": true,
+   "traded_haiku": true,
+   "traded_sonnet": false
+  },
+  "paired": 1526,
+  "traded_haiku": 117,
+  "traded_sonnet": 88
+ },
+ "k": 61,
+ "protocol": "protocol_hh_20261127.md",
+ "spend": {
+  "haiku": {
+   "calls": 3054,
+   "notional_usd": 1.9728000000000003,
+   "served_mismatch": 0,
+   "stopped_early_shards": 0,
+   "tokens_in": 7841503,
+   "tokens_out": 1131108
+  },
+  "sonnet": {
+   "calls": 3054,
+   "notional_usd": 31.034200000000002,
+   "served_mismatch": 0,
+   "stopped_early_shards": 0,
+   "tokens_in": 7777418,
+   "tokens_out": 323545
+  }
+ },
+ "theta_frozen_w3_stock": {
+  "1h": 0.5,
+  "eod": 0.75
+ },
+ "verdict": {
+  "comparison": "unread (below the registered counts; no outcome was read)",
+  "nomination": {}
+ }
+}

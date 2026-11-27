@@ -1,0 +1,39 @@
+{
+ "items": 191,
+ "models": {
+  "haiku": {
+   "cached": 0,
+   "called": 191,
+   "first_served": "claude/claude-haiku-5-5",
+   "ok": 191,
+   "served_mismatch": 0,
+   "spend": {
+    "calls": 191,
+    "notional_usd": 0.1085,
+    "tokens_cached": 0,
+    "tokens_in": 381723,
+    "tokens_out": 64405,
+    "total_usd": 0.0
+   },
+   "stopped_early": false
+  },
+  "sonnet": {
+   "cached": 0,
+   "called": 191,
+   "first_served": "claude/claude-sonnet-5-5",
+   "ok": 191,
+   "served_mismatch": 0,
+   "spend": {
+    "calls": 191,
+    "notional_usd": 1.6876,
+    "tokens_cached": 0,
+    "tokens_in": 377702,
+    "tokens_out": 17756,
+    "total_usd": 0.0
+   },
+   "stopped_early": false
+  }
+ },
+ "set": "stock_m1",
+ "shard": 1
+}

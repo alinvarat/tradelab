@@ -1,0 +1,155 @@
+{
+ "bars": {
+  "status": {
+   "ok": 2034
+  },
+  "symbols": 2034
+ },
+ "callable": {
+  "cap": 2000,
+  "floor": 1000,
+  "go": true,
+  "in_session_share": 0.032089063523248196,
+  "issuers": 1112,
+  "n": 1527,
+  "per_month": {
+   "2026-08": 491,
+   "2026-09": 265,
+   "2026-10": 364,
+   "2026-11": 407
+  }
+ },
+ "candidates": {
+  "filings_in_window_with_registered_code": 13140,
+  "issuers_with_one": 3585,
+  "sec_failed": 0
+ },
+ "counts_only": true,
+ "drawn": {
+  "issuers": 2034,
+  "items": 3000,
+  "per_month": {
+   "2026-08": 918,
+   "2026-09": 543,
+   "2026-10": 715,
+   "2026-11": 824
+  }
+ },
+ "labelable": {
+  "callable_before_text": 1534,
+  "drops": {
+   "dollar_volume_below_floor": 460,
+   "gap_in_bars": 49,
+   "no_entry_bar": 5,
+   "no_prior_bar": 18,
+   "not_callable": 4,
+   "price_below_floor": 921,
+   "too_few_prior_sessions": 9
+  }
+ },
+ "leak": {
+  "answered_any_month_from_first_eligible": {
+   "haiku": 0,
+   "sonnet": 0
+  },
+  "answered_by_month_after_2025_09": {
+   "haiku": {
+    "BTC-USD 2025-09": 0,
+    "BTC-USD 2025-10": 2,
+    "BTC-USD 2025-11": 0,
+    "BTC-USD 2025-12": 0,
+    "BTC-USD 2026-01": 0,
+    "BTC-USD 2026-02": 0,
+    "BTC-USD 2026-03": 0,
+    "BTC-USD 2026-04": 0,
+    "BTC-USD 2026-05": 0,
+    "BTC-USD 2026-06": 0,
+    "BTC-USD 2026-07": 0,
+    "BTC-USD 2026-08": 0,
+    "BTC-USD 2026-09": 0,
+    "BTC-USD 2026-10": 0,
+    "BTC-USD 2026-11": 0,
+    "^GSPC 2025-09": 3,
+    "^GSPC 2025-10": 8,
+    "^GSPC 2025-11": 5,
+    "^GSPC 2025-12": 0,
+    "^GSPC 2026-01": 0,
+    "^GSPC 2026-02": 0,
+    "^GSPC 2026-03": 0,
+    "^GSPC 2026-04": 0,
+    "^GSPC 2026-05": 0,
+    "^GSPC 2026-06": 0,
+    "^GSPC 2026-07": 0,
+    "^GSPC 2026-08": 0,
+    "^GSPC 2026-09": 0,
+    "^GSPC 2026-10": 0,
+    "^GSPC 2026-11": 0
+   },
+   "sonnet": {
+    "BTC-USD 2025-09": 0,
+    "BTC-USD 2025-10": 1,
+    "BTC-USD 2025-11": 0,
+    "BTC-USD 2025-12": 0,
+    "BTC-USD 2026-01": 0,
+    "BTC-USD 2026-02": 0,
+    "BTC-USD 2026-03": 0,
+    "BTC-USD 2026-04": 0,
+    "BTC-USD 2026-05": 0,
+    "BTC-USD 2026-06": 0,
+    "BTC-USD 2026-07": 0,
+    "BTC-USD 2026-08": 0,
+    "BTC-USD 2026-09": 0,
+    "BTC-USD 2026-10": 0,
+    "BTC-USD 2026-11": 0,
+    "^GSPC 2025-09": 7,
+    "^GSPC 2025-10": 6,
+    "^GSPC 2025-11": 7,
+    "^GSPC 2025-12": 0,
+    "^GSPC 2026-01": 0,
+    "^GSPC 2026-02": 0,
+    "^GSPC 2026-03": 0,
+    "^GSPC 2026-04": 0,
+    "^GSPC 2026-05": 0,
+    "^GSPC 2026-06": 0,
+    "^GSPC 2026-07": 0,
+    "^GSPC 2026-08": 0,
+    "^GSPC 2026-09": 0,
+    "^GSPC 2026-10": 0,
+    "^GSPC 2026-11": 0
+   }
+  },
+  "first_eligible_day": "2025-12-01",
+  "gate": {
+   "cutoff_month": "2025-11",
+   "first_eligible_day": "2025-12-01",
+   "haiku_cutoff_month": "2025-11",
+   "note": "items with t_pub before first_eligible_day are excluded from every comparison (registered rule, protocol_cmp_20261126.md)",
+   "rule": {
+    "min_acc": 0.6,
+    "min_answered": 4,
+    "note": "a month is known when the probe's answered count >= min_answered and accuracy among answered >= min_acc on either asset; the cutoff is the last known month; items are eligible from the first day of the next month. Checked against the round-1 Haiku probe: last known month 2025-11.",
+    "of_days": 12
+   },
+   "sonnet_cutoff_month": "2025-11"
+  },
+  "note": "Registered rule of protocol_cmp_20261126.md (run_cmp.leak_gate). The probe asks for S&P 500 and BTC closes of named days; an answer after the cutoff would mean memory.",
+  "window_after_both_cutoffs": true,
+  "window_from": "2026-08-01"
+ },
+ "params_sha256": "14091294d1d9f5a7a088c35b5b2823ba2d4812137d6963db7ff83fdff7bc3bc9",
+ "prior_key_overlap": {
+  "candidates_excluded": 20,
+  "prior_keys_scanned": 5130
+ },
+ "text": {
+  "drops": {
+   "short_text": 7
+  }
+ },
+ "universe": {
+  "exchange_rows": 10400,
+  "excluded_sp500_or_list": 976,
+  "other_exchange": 2789,
+  "universe_issuers": 5292
+ }
+}
