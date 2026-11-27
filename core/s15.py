@@ -159,16 +159,17 @@ def pool_fee(name, dex_id=None):
 
 
 def cp_round_trip(reserve_usd, fee, size_usd=49.0):
-    """Constant-product pool with reserve_usd of total value (half quote, half base): buy size_usd of base, sell it all
-    back. Fee on each side, kept in the pool. Returns the loss as a fraction of size_usd (None if reserve is unusable)."""
+    """Plan definition: 2 pool fees + 2 price impacts. Constant-product pool with reserve_usd of total value (half quote,
+    half base). Buy size_usd, then sell the tokens back, each leg priced against the pre-trade reserves (the exit happens
+    at a later, independent price, so the entry impact is not recovered). Returns the loss as a fraction of size_usd
+    (None if reserve is unusable)."""
     if not reserve_usd or reserve_usd <= 0:
         return None
     q = b = reserve_usd / 2.0           # both in USD at the pre-trade price
     ein = size_usd * (1 - fee)
-    out = b * ein / (q + ein)           # base received (USD at the pre-trade price)
-    q1, b1 = q + size_usd, b - out
+    out = b * ein / (q + ein)           # base received, USD at the pre-trade price
     eout = out * (1 - fee)
-    back = q1 * eout / (b1 + eout)
+    back = q * eout / (b + eout)
     return 1.0 - back / size_usd
 
 

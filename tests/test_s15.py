@@ -51,9 +51,9 @@ class S2(unittest.TestCase):
         self.assertAlmostEqual(s15.pool_fee("A / B", "unknown"), 0.003)
 
     def test_cp_round_trip(self):
-        self.assertAlmostEqual(s15.cp_round_trip(98.0, 0.0), 0.0, places=9)      # no fee: a constant product returns what it took
+        self.assertAlmostEqual(s15.cp_round_trip(98.0, 0.0), 1 - (49 * 24.5 / 73.5) / 49, places=9)      # tiny pool, no fee: two impacts
         rt = s15.cp_round_trip(2_000_000.0, 0.003)
-        self.assertTrue(0.0059 < rt < 0.0062)
+        self.assertTrue(0.0059 < rt < 0.0063)
         self.assertGreater(s15.cp_round_trip(2000.0, 0.003), rt)                 # thinner pool costs more
         self.assertIsNone(s15.cp_round_trip(None, 0.003))
 
