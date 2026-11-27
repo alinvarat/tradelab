@@ -62,6 +62,16 @@
    "stake": 7.5473,
    "entry_ts": 1795726050.4404793,
    "volume": 58658
+  },
+  {
+   "id": "7203529",
+   "question": "Will the price of Bitcoin be above $64,000 on November 27?",
+   "end": "2026-11-27T17:00:00Z",
+   "side": "yes",
+   "price": 0.039,
+   "stake": 7.6041,
+   "entry_ts": 1795745689.4529703,
+   "volume": 52435.188972
   }
  ],
  "n_closed": 22,
