@@ -1,0 +1,2 @@
+{"v":2,"protocol":"v4.20","ts":1795807003.2429183,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":3600,"abn":-0.0026,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_delist","ledger:event_book","ledger:notice_fwd"]}
+{"v":2,"protocol":"v4.20","ts":1795807789.6607988,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"earnings","action":"hold","h":3600,"abn":-0.00268,"veto":null,"forced":false,"em":null,"rv":null,"stale":["ledger:event_book","ledger:notice_fwd"]}
