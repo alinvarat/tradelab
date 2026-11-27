@@ -1,0 +1,28 @@
+{
+ "version": 1,
+ "family": "hh",
+ "k": 61,
+ "seed": 20261201,
+ "models": {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5"},
+ "window": {"from": "2026-08-01", "to": "2026-11-20", "note": "t_pub (true UTC acceptance time) in [from, to); to is chosen so that every 1 h and end-of-day label settles before the forward era (2026-11-27)"},
+ "universe": {
+  "exchanges": ["Nasdaq", "NYSE"],
+  "exclude": "any ticker or CIK that is or was an S&P 500 member in the fja05680 S&P 500 membership file (all spells, any date), any symbol of core/universe.py STOCKS (the 148-stock list), and any item key already present in an item file of data/news-train, -r2, -r3, -r3b or -cmp",
+  "stock_items": ["1.01", "1.02", "2.01", "2.02", "2.05", "2.06", "3.01", "4.02", "5.02", "7.01", "8.01"],
+  "form": "8-K",
+  "per_issuer_cap": 3,
+  "candidates_drawn": 3000,
+  "descr": "Issuer: a US-listed company outside the S&P 500 (sector: {sic})."
+ },
+ "liquidity": {"min_price": 5.0, "min_dollar_volume_day": 2000000, "prior_sessions": 5, "min_prior_sessions": 3},
+ "n": {"callable_cap": 2000, "callable_floor": 1000, "min_traded": 100, "min_discordant": 100},
+ "heads": {"direction": "w3", "magnitude": "m1"},
+ "hold": "1h",
+ "family_tests": ["H1_haiku_vs_random", "H2_sonnet_vs_random", "H3_sonnet_minus_haiku"],
+ "alpha_k": 2.6441e-05,
+ "alpha_within": 0.05,
+ "bootstrap": {"n": 2000, "alpha": 0.05},
+ "call": {"parallel": 3, "retries": 1, "stop_after_consecutive_empty": 12, "timeout_s": 150},
+ "yahoo": {"sleep_s": 0.9, "tries": 5, "backoff_s": 8},
+ "text_chars_note": "text length, redaction and prompts are those of round 1/2/3 (locked files, imported)"
+}
