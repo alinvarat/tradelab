@@ -1,7 +1,7 @@
 {
- "polls": 52,
+ "polls": 53,
  "new_listings": 0,
- "gone": 2,
+ "gone": 0,
  "watching": 71,
  "f2": {
   "kucoin": {
@@ -15,7 +15,7 @@
    "candidates": 0
   },
   "mexc": {
-   "compared": 366,
+   "compared": 365,
    "collisions": 0,
    "candidates": 3
   },
