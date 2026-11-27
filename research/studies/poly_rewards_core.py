@@ -27,6 +27,12 @@ KILL_TAPE_DAYS = 14
 ALPHA_TAPE = 0.05
 CONTROL_N = 20
 TRACK_N = 50
+# ---- addendum 2026-11-27 (protocol_poly_rewards_addendum_20261127.md): honest measurement ----
+THROUGH = 0.001                        # a quote fills only on a print 0.1% THROUGH it (P1's rule), never on a touch
+SNAP_S = 60                            # tape cadence (docs: the book is sampled once a minute)
+FRESH_S = 180                          # a snapshot older than this is a gap: no quote, no reward
+GAP_S = 150                            # a hole between two ticks longer than this is logged as a gap
+TAIL_PRICE = 0.80                      # tail_stress scenario: unresolved inventory bought at or above this price goes to 0
 
 
 def score(v, s):
@@ -168,53 +174,138 @@ def _last_before(trades, ts, t):
     return trades[i] if i >= 0 else None
 
 
+def eligible_single(mid):
+    """Docs (liquidity-rewards): single-sided liquidity scores only while the midpoint is inside [0.10, 0.90]."""
+    return mid is not None and 0.10 <= mid <= 0.90
+
+
+def resolution_of(market):
+    """True / False = YES won / lost, None = not resolved. market: CLOB /markets/{condition} (closed, tokens[].winner)."""
+    try:
+        toks = market.get("tokens") or []
+        if not market.get("closed") or len(toks) != 2:
+            return None
+        w = [bool(t.get("winner")) for t in toks]
+        if w == [True, False]:
+            return True
+        if w == [False, True]:
+            return False
+    except (AttributeError, TypeError):
+        pass
+    return None
+
+
+def fills_through(trades, B, A, size, want_bid=True, want_ask=True, through=THROUGH):
+    """Partial fills of a resting YES bid at B and YES ask at A (= NO bid at 1 - A), `size` shares each, from trades in time
+    order. A bid fills only on prints with yes-equivalent price <= B x (1 - through), by the printed size, until `size` is
+    used; the ask the same on the NO leg ((1 - y) <= (1 - A) x (1 - through)). A touch (print at or inside the limit) fills
+    nothing: it hides adverse selection (P1 rejected it). Returns {'bid': [(t, qty)], 'ask': [(t, qty)]}."""
+    out = {"bid": [], "ask": []}
+    rem = {"bid": size if want_bid else 0.0, "ask": size if want_ask else 0.0}
+    for x in trades:
+        y = pf.yes_equiv(x)
+        if rem["bid"] > 1e-12 and y <= B * (1 - through) + 1e-12:
+            q = min(rem["bid"], x["size"])
+            out["bid"].append((x["t"], q))
+            rem["bid"] -= q
+        if rem["ask"] > 1e-12 and (1 - y) <= (1 - A) * (1 - through) + 1e-12:
+            q = min(rem["ask"], x["size"])
+            out["ask"].append((x["t"], q))
+            rem["ask"] -= q
+        if rem["bid"] <= 1e-12 and rem["ask"] <= 1e-12:
+            break
+    return out
+
+
 def simulate_market(trades, t0, t1, v, frac, units, min_size, share_at, mid_at, daily_pool, refresh=REFRESH_S, mark_s=MARK_S,
-                    haircut=HAIRCUT):
-    """Paper two-sided quoting of one market. Every `refresh` seconds in [t0, t1) quote YES-bid mid-d and YES-ask mid+d (= NO
-    bid) of units*min_size shares, d = frac*v cents. A bid fills in full on the first trade in the window whose yes-equivalent
-    price is <= our bid (ask: >=); a filled side stays out until the next refresh. A fill is marked at the last yes-equivalent
-    trade price within `mark_s` after the fill (at the bid: against us by `haircut`). Reward = daily_pool * share / 24 per
-    hour with both sides live. Returns {day: {'reward', 'fill_pnl', 'fills', 'quote_hours'}}."""
+                    haircut=HAIRCUT, mode="two", reward_step=REFRESH_S, yes_won=None, stress=False):
+    """Paper quoting of one market (addendum 2026-11-27). Every `refresh` seconds in [t0, t1) quote at mid -/+ d (d = frac*v
+    cents): mode 'two' = YES bid mid-d and YES ask mid+d (= NO bid) of units*min_size shares each; mode 'single' = only the
+    cheaper token's bid, and only while the midpoint is inside [0.10, 0.90]. Fills: `fills_through` (a print 0.1% through the
+    price, partial by printed size). Reward: every `reward_step` seconds while the quote is live (until the first side is
+    completely filled) daily_pool * share_at(t, B, A) * step / 86400; single-sided pays only while the midpoint at that moment is
+    in [0.10, 0.90]. Inventory is valued at resolution when `yes_won` is known (payoff 1 or 0, no haircut), else at the last
+    yes-equivalent print within `mark_s` after the fill, against us by `haircut`; `fill_pnl_mtm` always uses the latter, and
+    `stress` sends unresolved inventory bought at >= TAIL_PRICE to 0. Returns {day: {'reward', 'fill_pnl', 'fill_pnl_mtm',
+    'fills', 'quote_hours', 'filled_shares', 'open_usd'}}."""
     size = units * min_size
     d = frac * v / 100
     ts = [x["t"] for x in trades]
     import bisect
     out = {}
+
+    def row_of(day):
+        return out.setdefault(day, {"reward": 0.0, "fill_pnl": 0.0, "fill_pnl_mtm": 0.0, "fills": 0, "quote_hours": 0.0,
+                                    "filled_shares": 0.0, "open_usd": 0.0})
     T = t0
     while T + refresh <= t1:
         m = mid_at(T)
-        if m is not None and QUOTE_LO <= m - d and m + d <= QUOTE_HI:
+        ok = m is not None and QUOTE_LO <= m - d and m + d <= QUOTE_HI
+        if ok and mode == "single":
+            ok = eligible_single(m)
+        if ok:
             B, A = m - d, m + d
-            day = pf.day_of(T)
-            row = out.setdefault(day, {"reward": 0.0, "fill_pnl": 0.0, "fills": 0, "quote_hours": 0.0})
-            sh = share_at(T)
-            if sh:
-                row["reward"] += daily_pool * sh * refresh / 86400
-            row["quote_hours"] += refresh / 3600
+            want_bid, want_ask = True, True
+            if mode == "single":
+                want_bid, want_ask = (m < 0.5), (m >= 0.5)
             lo, hi = bisect.bisect_left(ts, T), bisect.bisect_left(ts, T + refresh)
-            fb = fa = None
-            for x in trades[lo:hi]:
-                y = pf.yes_equiv(x)
-                if fb is None and y <= B + 1e-9:
-                    fb = x["t"]
-                if fa is None and y >= A - 1e-9:
-                    fa = x["t"]
-                if fb is not None and fa is not None:
+            fl = fills_through(trades[lo:hi], B, A, size, want_bid, want_ask)
+            full = [f[-1][0] for f in fl.values() if f and sum(q for _, q in f) >= size - 1e-9]
+            live_until = min(full) if full else T + refresh
+            k = 0
+            while k * reward_step < refresh:
+                tt = T + k * reward_step
+                k += 1
+                if tt >= live_until:
                     break
-            for t_fill, side in ((fb, "bid"), (fa, "ask")):
-                if t_fill is None:
+                if mode == "single" and not eligible_single(mid_at(tt)):
                     continue
-                mk = _last_before(trades, ts, t_fill + mark_s)
-                if mk is None:
-                    continue
-                y = pf.yes_equiv(mk)
-                pnl = (y - haircut - B) if side == "bid" else (A - y - haircut)
-                fday = pf.day_of(t_fill)
-                frow = out.setdefault(fday, {"reward": 0.0, "fill_pnl": 0.0, "fills": 0, "quote_hours": 0.0})
-                frow["fill_pnl"] += size * pnl
-                frow["fills"] += 1
+                row = row_of(pf.day_of(tt))
+                sh = share_at(tt, B, A)
+                if sh:
+                    row["reward"] += daily_pool * sh * reward_step / 86400
+                row["quote_hours"] += reward_step / 3600
+            for side, chunks in fl.items():
+                for t_fill, q in chunks:
+                    cost = B if side == "bid" else 1 - A          # price paid per share of the token held
+                    mk = _last_before(trades, ts, t_fill + mark_s)
+                    if mk is None and yes_won is None:
+                        continue
+                    mtm = None
+                    if mk is not None:
+                        y = pf.yes_equiv(mk)
+                        mtm = (y - haircut - B) if side == "bid" else (A - y - haircut)
+                    if yes_won is not None:
+                        yf = 1.0 if yes_won else 0.0
+                        pnl = (yf - B) if side == "bid" else (A - yf)
+                    elif stress and cost >= TAIL_PRICE:
+                        pnl = -cost
+                    else:
+                        pnl = mtm
+                    if mtm is None:
+                        mtm = pnl
+                    frow = row_of(pf.day_of(t_fill))
+                    frow["fill_pnl"] += q * pnl
+                    frow["fill_pnl_mtm"] += q * mtm
+                    frow["fills"] += 1
+                    frow["filled_shares"] += q
+                    if yes_won is None:
+                        frow["open_usd"] += q * cost
         T += refresh
     return out
+
+
+def tick_gaps(ticks, gap_s=GAP_S):
+    """ticks: tape snapshot times. Returns {'ticks', 'span_s', 'covered_s', 'coverage', 'gaps': [(from, to, seconds)] (first 50),
+    'n_gaps', 'gap_s'}; a tick covers the SNAP_S seconds after it, a hole longer than gap_s is a gap."""
+    ts = sorted(set(ticks))
+    if len(ts) < 2:
+        return {"ticks": len(ts), "span_s": 0, "covered_s": 0, "coverage": None, "gaps": [], "n_gaps": 0, "gap_s": 0}
+    gaps = [(a, b, b - a) for a, b in zip(ts, ts[1:]) if b - a > gap_s]
+    span = ts[-1] - ts[0]
+    lost = sum(g[2] - SNAP_S for g in gaps)
+    return {"ticks": len(ts), "span_s": span, "covered_s": span - lost, "coverage": (span - lost) / span if span else None,
+            "gaps": gaps[:50], "n_gaps": len(gaps), "gap_s": sum(g[2] for g in gaps)}
 
 
 def equity_stats(daily_returns):
@@ -248,10 +339,13 @@ def combine(per_market, capital, days=None):
 def summarise(per_market, capital, days=None, boot=2000, seed=7):
     """Net / reward-only / fill-only daily means, day-clustered p, compounded equity, worst drawdown, 2x-haircut-free numbers."""
     ds, rew, fil, nf = combine(per_market, capital, days)
+    mtm = sum(r.get("fill_pnl_mtm", r["fill_pnl"]) for rows in per_market.values() for r in rows.values())
+    open_usd = sum(r.get("open_usd", 0.0) for rows in per_market.values() for r in rows.values())
     net = [a + b for a, b in zip(rew, fil)]
     st = pf.cluster_stats(net, ds)
     eq, dd = equity_stats(net)
     n = len(net)
     return {"days": n, "reward_mean": sum(rew) / n if n else None, "fill_mean": sum(fil) / n if n else None,
             "net_mean": st["mean"], "net_se": st["se"], "net_p": st["p"], "monthly_net": monthly(st["mean"]) if n else None,
-            "end_equity": eq, "worst_dd": dd, "fills": sum(nf)}
+            "end_equity": eq, "worst_dd": dd, "fills": sum(nf),
+            "fill_mtm_mean": mtm / capital / n if n and capital else None, "open_usd": open_usd}

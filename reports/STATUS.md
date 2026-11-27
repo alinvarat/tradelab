@@ -3,6 +3,9 @@
 อัปเดตทุกครั้งที่จบงาน ตามขั้นตอนใน `ops/RUNBOOK.md` เวลาในไฟล์นี้เป็น UTC
 งานถัดไป = แถวบนสุดของตาราง "คิวงาน" ที่ยังไม่ใช่ `done` หรือ `killed`
 
+## ด่วน (2026-11-27 P3 Polymarket reward quoting แก้การวัด)
+- **P3 Addendum 1** (`protocol_poly_rewards_addendum_20261127.md`): fill ต้องทะลุราคา 0.1% และได้บางส่วนตามขนาด, เทปเก็บทุก 60 วินาทีต่อเนื่องและบันทึกช่องว่าง, ตีราคาตอน resolve, single-sided เฉพาะ mid 0.10-0.90; `standalone_pass` เดิมเป็นแค่ขอบบนของโมเดล touch-fill (ตัวเลข "6-13%" จริงคือ 6-13 เท่าของงบ 147 USD ต่อวัน เป็นความผิดหน่วย) นาฬิกา 60 วันเริ่มใหม่จาก `epoch.json` บน `data/poly-rewards`
+
 ## ด่วน (2026-11-27 Q1 ตามกระเป๋า Polymarket/Hyperliquid)
 - **Q1 NOT FOUND (ตัดที่ด่าน stage 0):** รันหลัก 45866223489 (protocol `protocol_wallet_follow_20261127.md`): ranking ย้อนหลังแบบ point-in-time (top 50 จากกำไรจริง 180 วัน) ยังมี persistence เล็กน้อย (rho 0.10) แต่ตามช้า 60 วินาทีพร้อมต้นทุนแล้ว train n 5,552 mean -2.56% s -0.031 x -0.58 ไม่ชนะกระเป๋าสุ่ม (p 0.81); gross 1.6% ถูกต้นทุน 3.9% ต่อเทรดกินหมด. Hyperliquid ปิด (ไม่มี frame ย้อนหลัง, fill จำกัด 2,000). รายละเอียดใน RESULTS/LESSONS; ขั้นถัดไปตามแผน: Q2 (ประกาศแลกเปลี่ยน) และ Q3
 
