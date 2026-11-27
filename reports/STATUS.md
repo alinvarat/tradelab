@@ -19,6 +19,7 @@
 - **notice_fwd (research/q2-announce-ledger):** ล็อก protocol แล้ว (`protocol_notice_fwd_20261126.md`), บัญชีเดินหน้าเข้า 5 วินาทีหลัง pod เห็นประกาศ listing/delist/monitoring (OKX, Binance, EquationNews, เกาหลีถ้า wire ส่งมา), ต่อใน keeper.yml; kill ที่ n>=30 หรือแหล่งที่ median t_seen-t_pub > 25 วินาที; ยังไม่มีไม้
 
 ## ด่วน (2026-11-26 news_train รอบ 3)
+- **HH historical holdout (2026-11-27, PR #292/#293, family 61):** หุ้น non-S&P-500 8-K 2026-08-01..11-19, n 3,167, Haiku 253 เทรด +0.37%/เทรด p 0.10 (Holm 0.31), Sonnet 184 เทรด +0.27%/เทรด p 0.22, Sonnet vs Haiku sign 122:127 p 0.80: not nominated ทั้งคู่, no difference detected; รายละเอียดใน RESULTS.md (`HH results`), ข้อมูลบน `data/news-train-hh`.
 - **Round 3 (PR #247-#252):** Track A (ขนาดการเคลื่อนไหว 1 ชม.) หุ้น sealed ก.ค. n 518: partial rho beyond vol 0.145 ผ่าน T1/T2 แต่แพ้ pre-entry move (T3) จึง "not met"; คริปโตไม่ผ่านเกณฑ์เลือก (sealed ไม่เปิด). Track B2 (ข่าวคริปโตเกาหลี/จีน GDELT) sealed n 248 เทรด -0.36% ต่อไม้ not met. B1 (GlobeNewswire/PR Newswire) ดึงจาก Actions ไม่ได้. รายละเอียด RESULTS.md หัวข้อ ROUND 3
 
 ## ด่วน (2026-11-25 line/indicators-1)
