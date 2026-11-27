@@ -1,0 +1,2 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17694","title":"\ud83d\udd3b [AKEUSDT] Shorts building: Binance OI +28.8%, price -14.5% in the past 1 hour, OI $10.0M, OI/market cap 39.4%, 24h -25.8%","t_pub":1795757376.549,"res":"s","t_seen":1795757382.5795028,"lat_s":6.031}
+{"event":"llm","source":"eqn_rest","key":"eqn:17694","t_pub":1795757376.549,"t_seen":1795757382.5795028,"t_llm":1795757387.4703643,"llm_s":4.891,"model":"claude/claude-haiku-5-5","parsed":{"direction":"down","confidence":55,"instrument":"AKEUSDT"}}
