@@ -24,11 +24,13 @@ from research.news_train import logic as L  # noqa: E402
 from research.news_train import logic_cmp as C  # noqa: E402
 from research.news_train import logic_r2 as R  # noqa: E402
 from research.news_train import logic_r3 as T  # noqa: E402
+from research.news_train import logic_wide as W  # noqa: E402
 from research.news_train import run_r2 as RR  # noqa: E402
 
 P = C.load_params()
 P2 = R.load_params()
 P3 = T.load_params()
+PW = W.load_params()
 MODELS = P["models"]
 log, wjsonl, rjsonl = RR.log, RR.wjsonl, RR.rjsonl
 SETS = {"crypto_w1": ("r2", "w1", "crypto"), "stock_w3": ("r2", "w3", "stock"), "stock_m1": ("r3", "m1", "stock")}
@@ -381,7 +383,74 @@ def decide_heads(items_by_head, decs, system_of, parse_of, run=run_model):
     return stopped
 
 
-def fwd(out, state, ingest, r2, now=None, bars_fn=bars_any, run=run_model):
+def wide_universe():
+    """-> ({cik: [tickers]}, S&P 500 spells). Network: the SEC ticker map and the round-1 membership list."""
+    from core import news_backtest as nb
+    from research.studies import keyperson as kpr
+    by = {}
+    for sym, cik in nb.sec_company_tickers().items():
+        by.setdefault(cik, []).append(sym)
+    return by, kpr.load_spells()
+
+
+def wide_check(r, tickers_of, spells, p, filings_fn=None, get_json=None, item_fn=None):
+    """One pod 8-K row -> (stock item or None, reason). Not an S&P 500 member on the filing's New York date (that universe is round 2's),
+    a stock_items code or none listed, text of at least 80 characters. The item has the round-2 item shape; only `descr` differs."""
+    from core import keyperson as kp
+    from research.studies import keyperson as kpr
+    filings_fn, get_json, item_fn = filings_fn or kp.sec_filings_docs, get_json or kpr.sec_get_json, item_fn or RR.stock_item
+    tk = tickers_of.get(r["cik"])
+    if not tk:
+        return None, "no_ticker"
+    if W.in_spell(spells, tk, R.ny_date(r["t_pub"])):
+        return None, "sp500"
+    filings, issuer = filings_fn(r["cik"], get_json, since=L.day_of(r["t_pub"] - 86400))
+    x = next((f for f in filings if f.get("accession") == r["acc"]), None)
+    if not x or x["form"] != p["form"] or not x["doc"]:
+        return None, "no_filing"
+    if x["items"] and not (set(x["items"]) & set(P2["stock_items"])):
+        return None, "item_filtered"
+    try:
+        sic = get_json(f"https://data.sec.gov/submissions/CIK{r['cik']:010d}.json").get("sicDescription") or "unknown"
+    except Exception:  # noqa: BLE001
+        sic = "unknown"
+    c = {"sym": W.pick_ticker(tk), "cik": r["cik"], "ts": R.fix_ts(x["ts"]), "acc": r["acc"], "doc": x["doc"], "items": x["items"], "issuer": issuer, "sic": sic}
+    it = item_fn(c, {})
+    if not it:
+        return None, "short_text"
+    it.update(arm=p["arm"], split="fwd", descr=p["descr"].format(sic=sic))
+    return it, "ok"
+
+
+
+def wide_step(joined, start, now, wstate, witems, universe_fn=None, check_fn=None):
+    """Select every closed, not yet selected UTC day of the wide arm once (logic_wide.select_day). Mutates wstate and witems. -> counts."""
+    pl = W.pool(joined, start, PW)
+    by = {}
+    for r in pl:
+        by.setdefault(r["day"], []).append(r)
+    due = [d for d in sorted(by) if d not in wstate["days"] and W.day_ready(d, now, PW)]
+    info = {"pod_sec_8k_rows": len(pl), "days_due": len(due)}
+    if not due:
+        return info
+    try:
+        tickers_of, spells = (universe_fn or wide_universe)()
+    except Exception as e:  # noqa: BLE001
+        info["blocker"] = f"universe load failed: {e}"
+        return info
+    chk = check_fn or wide_check
+    for d in due:
+        its, st = W.select_day(by[d], PW, lambda r: chk(r, tickers_of, spells, PW))
+        if st["errors"] >= max(3, st["examined"] // 4):             # SEC trouble, not a real selection: tried again next run
+            info.setdefault("retry_days", []).append(d)
+            continue
+        for it in its:
+            witems[it["key"]] = it
+        wstate["days"][d] = st
+    return info
+
+
+def fwd(out, state, ingest, r2, now=None, bars_fn=bars_any, run=run_model, universe_fn=None, check_fn=None, intraday_fn=None):
     now = int(now or time.time())
     fdir = os.path.join(state, "fwd")
     start = L.day_ts(P["fwd"]["start_utc"])
@@ -422,19 +491,40 @@ def fwd(out, state, ingest, r2, now=None, bars_fn=bars_any, run=run_model):
     # ---- stock: round-2 forward items that the pod also saw (real t_seen), prompts from bars known at entry
     s_items = rjsonl(os.path.join(r2, "fwd", "items.jsonl.gz"))
     s_bars = jload(os.path.join(r2, "fwd", "bars1h.json"), {})
+    # ---- stock-wide arm (addendum 3): selected from pod rows once per closed day; its own raw items and bars, never written to data/news-train-r2
+    wstate = jload(os.path.join(fdir, "wide_state.json"), {"days": {}})
+    witems = {r["key"]: r for r in rjsonl(os.path.join(fdir, "wide_items.jsonl.gz"))}
+    wbars = jload(os.path.join(fdir, "wide_bars1h.json"), {})
+    winfo = wide_step(joined, start, now, wstate, witems, universe_fn, check_fn)
+    need = {}
+    for k, w in witems.items():
+        row = items.get(k)
+        if row and row["market"] == "skip":
+            continue
+        if row is None or now < row["pre"]["entry_ts"] + PW["settle_s"]:
+            need[w["sym"]] = min(need.get(w["sym"], w["t_pub"]), w["t_pub"])
+    for sym in sorted(need):
+        wbars[sym] = RR.merge_bars(wbars.get(sym, []), (intraday_fn or RR.yahoo_intraday)(sym, need[sym] - 10 * 86400, now + 86400, "1h"))
     index = None
     n_stock_pod = 0
-    for it in s_items:
+    n_wide_pod = 0
+    work = [(it, s_bars, "sp500") for it in s_items] + [(w, wbars, "wide") for w in witems.values()]
+    for it, bars_of, arm in work:
         tm = B.timing_for(it["key"], joined)
         if not tm:
             continue
-        n_stock_pod += 1
+        if arm == "wide":
+            n_wide_pod += 1
+        else:
+            n_stock_pod += 1
         if it["key"] in items:
             continue
         lag = max(0.0, tm["t_seen"] - it["t_pub"])
-        bars = s_bars.get(it["sym"]) or []
+        bars = bars_of.get(it["sym"]) or []
         lab, _ = R.stock_label_1h(bars, it["t_pub"], lag, P2)
         if not lab:
+            if arm == "wide" and now - it["t_pub"] > PW["bars_give_up_s"]:           # no entry bar after 5 days: skipped for good, counted, never imputed
+                items[it["key"]] = {"key": it["key"], "market": "skip", "arm": arm, "sym": it["sym"], "t_seen": tm["t_seen"], "why": "no_bars"}
             continue
         pre = {k: lab[k] for k in ("entry_ts", "in_session", "delay_s", "pre_move", "day_move", "runup5")}   # known at entry; gross is never stored
         rv = T.stock_rv(bars, lab["entry_ts"], P3["rv"]["stock_bars"], P3["rv"]["min_stock_bars"])
@@ -443,7 +533,7 @@ def fwd(out, state, ingest, r2, now=None, bars_fn=bars_any, run=run_model):
             index = L.AnalogIndex(RR.load_dev(r2), lag=R.LAB)
         analogs = index.query(it, it["t_pub"], P2["analogs"]["k"])
         row = {k: it[k] for k in ("key", "market", "sym", "t_pub", "items", "text", "descr") if k in it}
-        row.update(t_seen=tm["t_seen"], lag_s=lag, pre=pre, feat=feat, src="sec_8k",
+        row.update(t_seen=tm["t_seen"], lag_s=lag, pre=pre, feat=feat, src="sec_8k", arm=arm,
                    user_w3=R.render_user2(it, pre, ver_w3, analogs, P2), user_m1=T.render_user3(it, pre, feat, ver_m1, None, P3))
         items[it["key"]] = row
     for k, it in items.items():
@@ -452,8 +542,8 @@ def fwd(out, state, ingest, r2, now=None, bars_fn=bars_any, run=run_model):
             todo["m1"].append((k, it["user_m1"]))
     # ---- decisions (identical prompt bytes for both models; a decision is made once and never changed)
     stopped = decide_heads(todo, decs, system_of, parse_of, run)
-    prog.update(skipped_no_market=sum(1 for i in items.values() if i["market"] == "skip"), items=len(items), crypto_items=sum(1 for i in items.values() if i["market"] == "crypto"),
-                stock_items=sum(1 for i in items.values() if i["market"] == "stock"), stock_items_with_pod_row=n_stock_pod,
+    prog.update(skipped_no_market=sum(1 for i in items.values() if i["market"] == "skip" and i.get("arm") != "wide"), items=len(items), crypto_items=sum(1 for i in items.values() if i["market"] == "crypto"),
+                stock_items=sum(1 for i in items.values() if i["market"] == "stock" and i.get("arm") != "wide"), stock_items_with_pod_row=n_stock_pod,
                 stopped_early=stopped, capped_by_usage_limit=any(stopped.values()))
     # ---- counts only: paired, settled, discordant (no outcome is read before the trigger)
     cal = jload(os.path.join(r2, "calib.json"), {})
@@ -479,7 +569,7 @@ def fwd(out, state, ingest, r2, now=None, bars_fn=bars_any, run=run_model):
         prog["crypto"]["fired_now"] = True
     # stock: scoring stays closed until round 2's own forward trigger has fired (its one-shot must not be steered by these labels)
     r2_open = os.path.exists(os.path.join(r2, "fwd", "result.json"))
-    st_both = [k for k, it in items.items() if it["market"] == "stock" and all(decs.get((m, h, k), {}).get("ok") for m in MODELS for h in ("w3", "m1"))]
+    st_both = [k for k, it in items.items() if it["market"] == "stock" and it.get("arm") != "wide" and all(decs.get((m, h, k), {}).get("ok") for m in MODELS for h in ("w3", "m1"))]
     prog["stock"] = {"both_answered_w3_m1": len(st_both), "round2_forward_result_exists": r2_open, "scoring_open": r2_open,
                      "min_magnitude_n": P["fwd"]["min_stock_magnitude_n"],
                      "projection": C.project(len(st_both), P["fwd"]["min_stock_magnitude_n"], min((items[k]["t_seen"] for k in st_both), default=now), now)}
@@ -487,6 +577,25 @@ def fwd(out, state, ingest, r2, now=None, bars_fn=bars_any, run=run_model):
         res = fwd_score_stock({k: items[k] for k in st_both}, decs, s_bars, cal, now)
         jdump(os.path.join(out, "fwd", "result_stock.json"), res)
         prog["stock"]["fired_now"] = True
+    # ---- stock-wide arm: counts, then its own one-shot (the universe excludes S&P 500 members, so round 2's forward set and trigger are untouched)
+    w_rows = {k: it for k, it in items.items() if it["market"] == "stock" and it.get("arm") == "wide"}
+    w_both = [k for k, it in w_rows.items() if all(decs.get((m, h, k), {}).get("ok") for m in MODELS for h in ("w3", "m1"))]
+    w_settled = [k for k in w_both if now >= w_rows[k]["pre"]["entry_ts"] + PW["settle_s"]]
+    first_w = min((w_rows[k]["t_seen"] for k in w_both), default=now)
+    prog["stock_wide"] = dict(winfo, days_selected=len(wstate["days"]), admitted=len(witems), rows_built=len(w_rows), with_pod_row=n_wide_pod,
+                              skipped_no_bars=sum(1 for i in items.values() if i["market"] == "skip" and i.get("arm") == "wide"),
+                              both_answered_w3_m1=len(w_both), settled=len(w_settled), min_n=PW["min_n"],
+                              projection=C.project(len(w_settled), PW["min_n"], first_w, now), per_day=wstate["days"])
+    if (len(w_settled) >= PW["min_n"] or now >= L.day_ts(PW["hard_stop_utc"])) and w_settled and not os.path.exists(os.path.join(fdir, "result_stock_wide.json")):
+        res = fwd_score_stock({k: w_rows[k] for k in w_settled}, decs, wbars, cal, now,
+                              label="stock-wide forward arm (addendum 3, non-S&P 500 8-Ks): magnitude m1 (headline) and direction w3 (descriptive); selected before any outcome")
+        res["n_settled"] = len(w_settled)
+        res["underpowered"] = len(w_settled) < PW["min_n"]
+        jdump(os.path.join(out, "fwd", "result_stock_wide.json"), res)
+        prog["stock_wide"]["fired_now"] = True
+    jdump(os.path.join(out, "fwd", "wide_state.json"), wstate)
+    wjsonl(os.path.join(out, "fwd", "wide_items.jsonl.gz"), list(witems.values()))
+    jdump(os.path.join(out, "fwd", "wide_bars1h.json"), wbars)
     wjsonl(os.path.join(out, "fwd", "items.jsonl.gz"), list(items.values()))
     wjsonl(os.path.join(out, "fwd", "dec.jsonl.gz"), list(decs.values()))
     jdump(os.path.join(out, "fwd", "progress.json"), prog)
@@ -524,7 +633,7 @@ def fwd_score_crypto(crypto, decs, keep, th_c, now, bars_fn):
     return res
 
 
-def fwd_score_stock(sitems, decs, s_bars, cal, now):
+def fwd_score_stock(sitems, decs, s_bars, cal, now, label="stock forward: magnitude m1 (headline) and direction w3 (descriptive); round-2 forward result existed before scoring"):
     """One shot, opened only after round 2's forward result exists. Magnitude (m1) is the stock headline; direction (w3) is descriptive."""
     prim = P["fwd"]["hold"]
     labs = {m: {} for m in MODELS}
@@ -543,7 +652,7 @@ def fwd_score_stock(sitems, decs, s_bars, cal, now):
     items = {k: dict(day=L.day_of(sitems[k]["t_pub"])) for k in sitems}
     pr = C.pair_direction(items, {k: decs[("haiku", "w3", k)] for k in sitems}, {k: decs[("sonnet", "w3", k)] for k in sitems}, labs["haiku"], labs["sonnet"],
                           "stock", prim, th, True, P2)
-    return {"label": "stock forward: magnitude m1 (headline) and direction w3 (descriptive); round-2 forward result existed before scoring",
+    return {"label": label,
             "magnitude_partial": C.paired_partial(rows["haiku"], rows["sonnet"], nb, seed + 40),
             "direction_w3": dict(C.paired_summary([x["d"] for x in pr], [x["day"] for x in pr], nb, seed + 41), discordant=C.discordant(pr), n=len(pr)),
             "latency_call_s": {m: C.latency_stats([decs[(m, "m1", k)]["lat_s"] for k in sitems]) for m in MODELS}, "opened_utc": now}

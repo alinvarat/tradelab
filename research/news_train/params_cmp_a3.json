@@ -1,0 +1,16 @@
+{
+ "version": 1,
+ "family": "cmp_a3_wide",
+ "arm": "wide",
+ "seed": 20261128,
+ "source": "sec_8k",
+ "form": "8-K",
+ "cap_per_day": 60,
+ "max_examine_per_day": 400,
+ "day_close_wait_s": 10800,
+ "bars_give_up_s": 432000,
+ "settle_s": 172800,
+ "min_n": 300,
+ "hard_stop_utc": "2027-03-31",
+ "descr": "Issuer: a US-listed company (sector: {sic})."
+}
