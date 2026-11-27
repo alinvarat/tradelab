@@ -1,0 +1,6 @@
+{"v":2,"protocol":"pre-v4.19","ts":1795685192.764869,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":0.01585,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"pre-v4.19","ts":1795685192.764869,"symbol":"BCH-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":86400,"abn":0.01971,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"pre-v4.19","ts":1795685959.1502025,"symbol":"DOGE-USD","cls":"crypto","src":"shock","news_type":null,"action":"hold","h":86400,"abn":0.03103,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795768938.1670196,"symbol":"AUDUSD=X","cls":"fx","src":"mover","news_type":null,"action":"hold","h":3600,"abn":0.0,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795768938.1670196,"symbol":"LINK-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":3600,"abn":-0.00042,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795768938.1670196,"symbol":"SOL-USD","cls":"crypto","src":"mover","news_type":"other","action":"hold","h":3600,"abn":0.00382,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
