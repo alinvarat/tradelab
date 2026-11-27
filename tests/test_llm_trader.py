@@ -1341,9 +1341,9 @@ class V419Rules(Base):
         self.assertEqual(ev["by_protocol"]["v4.19"]["n"], 4)
 
     def test_protocol_tag_and_rules_tag_agree(self):
-        self.assertIn(lt.PROTOCOL_VERSION, ("v4.19", "v4.17"))         # CI has no Claude, so the tag falls back to v4.17
-        self.assertEqual(lt.dr.TAG, "v4.19")
-        self.assertIn("v4.19", (Path(lt.__file__).resolve().parent.parent / "research" / "llm_trader" / "protocol.md").read_text())
+        self.assertIn(lt.PROTOCOL_VERSION, ("v4.20", "v4.17"))         # CI has no Claude, so the tag falls back to v4.17
+        self.assertEqual(lt.dr.TAG, "v4.20")
+        self.assertIn("v4.20", (Path(lt.__file__).resolve().parent.parent / "research" / "llm_trader" / "protocol.md").read_text())
 
 
 if __name__ == "__main__":
