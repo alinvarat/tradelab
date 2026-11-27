@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-11-27T05:41:29Z",
- "items_total": 475,
+ "updated_utc": "2026-11-27T06:11:12Z",
+ "items_total": 485,
  "sources": {
   "binance_news": {
    "items": 4,
@@ -23,17 +23,17 @@
    "slow": false
   },
   "eqn_rest": {
-   "items": 135,
-   "items_s": 135,
+   "items": 139,
+   "items_s": 139,
    "median_lat_s": 4.394,
    "p90_lat_s": 11.086,
-   "share_fast": 0.97,
+   "share_fast": 0.971,
    "notice_items": 0,
    "notices": {},
    "slow": false
   },
   "globenewswire": {
-   "items": 121,
+   "items": 127,
    "items_s": 0,
    "median_lat_s": null,
    "p90_lat_s": null,
