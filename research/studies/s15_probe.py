@@ -518,6 +518,10 @@ def study_s3(_symbols):
     ep_by, total_ep, months = {}, 0, []
     days = same = 0
     for r in good:
+        d_, s_ = s15.same_sign_days(r["gaps"])     # (c) needs bars only, not the round trip: measured for every symbol with bars
+        days += d_
+        same += s_
+        r["symbol_days"], r["same_sign_days"] = d_, s_
         rt = r.get("round_trip")
         if rt is None:
             continue
@@ -527,9 +531,6 @@ def study_s3(_symbols):
         n = len(eps) * sc
         ep_by[r["base"]] = n
         total_ep += n
-        d_, s_ = s15.same_sign_days(r["gaps"])
-        days += d_
-        same += s_
         r["episodes"], r["episodes_per_month"], r["threshold"] = len(eps), n, thr
     summ["episodes_per_month"] = total_ep
     summ["top4_share"] = s15.top_share(ep_by, 4)
@@ -542,8 +543,11 @@ def study_s3(_symbols):
 
     complete = session_open and len(ratios) >= 0.8 * len(good) and len(good) >= 15
     kills, pending = [], []
+    summ["same_sign_symbols_covered"] = len(good)
+    if len(good) >= 30 and days and same / days > 0.5:       # (c) is fully measured from bars at any hour
+        kills.append(f"(c) {same}/{days} symbol-days same sign > half (all {len(good)} symbols, bars only)")
     if not complete:
-        pending.append("verdict needs the in-session run (T2) with round trips for the stock and index symbols")
+        pending.append("(a) and (b) need the in-session run (T2) with round trips for the stock and index symbols")
     else:
         if summ["median_sd_over_rt"] is not None and summ["median_sd_over_rt"] < 10:
             kills.append(f"(a) median sd/round trip {summ['median_sd_over_rt']:.2f} < 10")
@@ -551,8 +555,6 @@ def study_s3(_symbols):
             kills.append(f"(b) {total_ep:.0f} episodes a month < 100")
         if total_ep and summ["top4_share"] > 0.5:
             kills.append(f"(b) top 4 symbols hold {summ['top4_share']:.0%} > 50%")
-        if days and same / days > 0.5:
-            kills.append(f"(c) {same}/{days} symbol-days same sign > half")
     summ["kills"], summ["pending"] = kills, pending
     summ["verdict"] = ("KILL: " + "; ".join(kills)) if kills else ("PENDING: " + "; ".join(pending) if pending else "SURVIVES stage 0 counts (forward protocol next)")
     return finish("s3", t0, summ, rows, problems)
@@ -594,8 +596,8 @@ def snapshot_s4(dl):
     from datetime import datetime, timezone
     lo = datetime.fromtimestamp(now, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     hi = datetime.fromtimestamp(now + 48 * 3600, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    while off < 8000 and time.time() < dl:
-        st, d = jreq(f"{GAMMA}/markets?active=true&closed=false&limit=100&offset={off}&end_date_min={lo}&end_date_max={hi}")
+    while off < 2000 and time.time() < dl:      # gamma refuses offsets >= 2000: the 2,000 markets with the largest 24 h volume
+        st, d = jreq(f"{GAMMA}/markets?active=true&closed=false&limit=100&offset={off}&order=volume24hr&ascending=false&end_date_min={lo}&end_date_max={hi}")
         if not isinstance(d, list):
             return None, None, f"gamma status {st}"
         pm += d
