@@ -1,0 +1,97 @@
+name: News train W4
+
+# Round 4: train the next news-analyst version on the opened historical holdout (research/news_train/protocol_w4_20261127.md, family k = 62).
+# Claude Haiku 5.5 only. Writes only data/news-train-w4. Never touches the forward arms or any locked file.
+#   stage   - copy the HH labels (artifact of run 46002848826) into the temporal train / validation split on data/news-train-w4
+#   analyze - error analysis and rule fit on the TRAIN rows only (the job restores no validation file)
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "stage or analyze"
+        required: true
+        default: "stage"
+
+permissions:
+  contents: read
+
+jobs:
+  stage:
+    if: inputs.mode == 'stage'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: tradelab-news-train-w4-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: HH labels artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download 46002848826 -R "$GITHUB_REPOSITORY" -n hh-labels -D /tmp/hhl
+      - run: |
+          mkdir -p out
+          python research/news_train/run_w4.py stage /tmp/hhl/labels.jsonl.gz out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: w4-split
+          path: out/split.json
+      - name: Keep on data/news-train-w4
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          if git fetch origin data/news-train-w4 2>/dev/null; then git checkout -q -B data/news-train-w4 origin/data/news-train-w4
+          else git checkout -q --orphan data/news-train-w4 && git rm -rq --cached . && git clean -fdq; fi
+          mkdir -p w4 && cp -r /tmp/keep/train /tmp/keep/val /tmp/keep/split.json w4/
+          git add w4
+          git commit -qm "News train W4: split of the HH labels $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-w4 && break; git fetch -q origin data/news-train-w4; git rebase -q origin/data/news-train-w4; done
+
+  analyze:
+    if: inputs.mode == 'analyze'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    concurrency:
+      group: tradelab-news-train-w4-data
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Restore TRAIN rows and cached decisions only
+        run: |
+          mkdir -p /tmp/w4 /tmp/hh
+          git fetch origin data/news-train-w4 data/news-train-hh
+          git archive origin/data/news-train-w4 w4/train w4/split.json | tar -x -C /tmp/w4
+          git archive origin/data/news-train-hh | tar -x -C /tmp/hh
+      - run: |
+          mkdir -p out
+          python research/news_train/run_w4.py analyze /tmp/w4/w4/train/labels.jsonl.gz /tmp/w4/w4/split.json /tmp/hh/hh out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: w4-analysis
+          path: out/
+      - name: Keep on data/news-train-w4
+        run: |
+          git config user.name tradelab-research
+          git config user.email tradelab-research@users.noreply.github.com
+          cp -r out /tmp/keep
+          git checkout -q -B data/news-train-w4 origin/data/news-train-w4
+          mkdir -p w4 && cp /tmp/keep/analysis_train.json w4/
+          git add w4
+          git commit -qm "News train W4: train-only analysis $(date -u +%FT%TZ)" || echo "nothing new"
+          for i in 1 2 3 4; do git push -q origin data/news-train-w4 && break; git fetch -q origin data/news-train-w4; git rebase -q origin/data/news-train-w4; done
