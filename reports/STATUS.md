@@ -58,17 +58,17 @@
 
 ## ด่วน (2026-11-24 23:30 UTC)
 - **factory_crypto_3 (2026-11-25, run 45524122159):** กติกา trend/event 10 ข้อบน perp สภาพคล่องสูง 6 ตัว ไม่ผ่านทั้งหมด (validation p ดีสุด 0.17 เทียบเกณฑ์ 0.005); เดือน 3x มี 2 เดือนที่ 8x แต่ median 0.95x จึงเป็นความแปรปรวน ปิดตระกูลนี้ รายละเอียดใน RESULTS.md
-- **เครดิต DeepSeek หมด:** probe บน Actions (run 45509191649) เรียก `api.deepseek.com` model `deepseek-flash` ได้ HTTP 402 Payment Required ทุกครั้ง → N1 news_v3 สองรอบไม่ได้เรียกโมเดลเลย (v3 = 0 เทรด, ผลใช้ไม่ได้) และบอท DeepSeek บน Kuber ก็เรียกไม่ได้เช่นกัน; ต้องให้เจ้าของเติมเครดิตหรือเลือกโมเดลอื่นด้วย protocol ใหม่
+- **เครดิต DeepSeek หมด:**[STALE 2026-11-27: บอทเป็น Claude Haiku เท่านั้นแล้ว (AGENTS ข้อ 7), ไม่มี DeepSeek/OpenRouter]  probe บน Actions (run 45509191649) เรียก `api.deepseek.com` model `deepseek-flash` ได้ HTTP 402 Payment Required ทุกครั้ง → N1 news_v3 สองรอบไม่ได้เรียกโมเดลเลย (v3 = 0 เทรด, ผลใช้ไม่ได้) และบอท DeepSeek บน Kuber ก็เรียกไม่ได้เช่นกัน; ต้องให้เจ้าของเติมเครดิตหรือเลือกโมเดลอื่นด้วย protocol ใหม่
 - **ผลวันนี้:** L12 ผ่านบนทุกเหรียญ แต่ L12b (เฉพาะเหรียญที่ short ได้จริง + funding จริง) ไม่ผ่าน; factory ชุด 1 ไม่ผ่านทั้ง 11 กติกา; workflow ค้นไอเดีย 4 มุมกำลังเขียน `factory_crypto_2` และ `factory_us_pit_1`
 
 ## ด่วน (2026-11-24 22:05 UTC)
-- **รันบนเครื่องเจ้าของชั่วคราว (เจ้าของสั่ง):** unit `tradelab-local` ที่ `~/Project/tradelab-local` → http://127.0.0.1:8770; บอท v4.18 Claude Haiku 5.5 ผ่าน Claude Code ที่ล็อกอิน Max (ตรวจ 22:00 UTC: protocol v4.18, model claude/claude-haiku-5-5, error ไม่มี) เป็นบัญชีจำลองแยกจาก Kuber เริ่ม 147.5 USD
+- **รันบนเครื่องเจ้าของชั่วคราว (เจ้าของสั่ง):**[STALE 2026-11-27: unit tradelab-local ถูกลบแล้ว, ไม่มีอะไรรันบนเครื่องเจ้าของ]  unit `tradelab-local` ที่ `~/Project/tradelab-local` → http://127.0.0.1:8770; บอท v4.18 Claude Haiku 5.5 ผ่าน Claude Code ที่ล็อกอิน Max (ตรวจ 22:00 UTC: protocol v4.18, model claude/claude-haiku-5-5, error ไม่มี) เป็นบัญชีจำลองแยกจาก Kuber เริ่ม 147.5 USD
 - **N1 run 45481243341 ใช้ไม่ได้** (env ของ provider ว่าง ไม่ได้เรียกโมเดลเลย) → รันใหม่จาก main: 45495806547
 - **L8b:** ไม่ผ่าน (validation +0.52% p 0.17, ต้นทุน 2 เท่าติดลบ)
-- **cron ของ GitHub ไม่เคยยิง** → ใช้ systemd timer บนเครื่องเจ้าของสั่ง `gh workflow run` แทน: L4f ทุก :17/:47, ออปชัน จ.–ศ. 15:00 UTC, ข่าวงบ อา. 03:00 UTC (unit `tradelab-dispatch-*`); ตรวจแล้ว L4f run 45495947030 สำเร็จและ commit ledger 21:55 UTC; ทำงานเฉพาะตอนเครื่องเปิด
+- **cron ของ GitHub ไม่เคยยิง**[STALE 2026-11-27: timer tradelab-dispatch-* ถูกลบแล้ว, ไม่มีอะไรรันบนเครื่องเจ้าของ; งานตามเวลาให้ keeper.yml บน Actions]  → ใช้ systemd timer บนเครื่องเจ้าของสั่ง `gh workflow run` แทน: L4f ทุก :17/:47, ออปชัน จ.–ศ. 15:00 UTC, ข่าวงบ อา. 03:00 UTC (unit `tradelab-dispatch-*`); ตรวจแล้ว L4f run 45495947030 สำเร็จและ commit ledger 21:55 UTC; ทำงานเฉพาะตอนเครื่องเปิด
 - **Actions รันได้แล้ว:** repo เปลี่ยนเป็น public (เจ้าของเลือก แทนการจ่ายเงิน) หลังนาทีฟรีของ repo private หมด
 - **deploy ยังล้ม:** Kuber ปฏิเสธที่ "Uploading context: 0 B" ภายใน 1–2 วินาทีทุกครั้งตั้งแต่ 20:04 UTC (issue #80) → เว็บจริงค้างที่ build 19:17 UTC; PR #149–#155 merge แล้วแต่ยังไม่ขึ้นเครื่อง
-- **บอท DeepSeek v4.17 รันอยู่จริง** (ตรวจ `/api/llm_trader` ผ่าน Chrome 20:58 UTC): 284 calls วันนี้, ถือ 8 ไม้, ปิด 28/30 คู่, 142.81 vs สุ่ม 146.98 USD; หน้าเว็บโชว์ "Could not load: openrouter 402" เพราะบั๊ก `api()` (แก้แล้วใน PR #154 รอ deploy)
+- **บอท DeepSeek v4.17 รันอยู่จริง**[STALE 2026-11-27: ไม่ใช้ DeepSeek แล้ว บอทปัจจุบันคือ Claude Haiku (v4.19/v4.20)]  (ตรวจ `/api/llm_trader` ผ่าน Chrome 20:58 UTC): 284 calls วันนี้, ถือ 8 ไม้, ปิด 28/30 คู่, 142.81 vs สุ่ม 146.98 USD; หน้าเว็บโชว์ "Could not load: openrouter 402" เพราะบั๊ก `api()` (แก้แล้วใน PR #154 รอ deploy)
 - **cron ไม่เคยยิง:** ไม่มีรันจาก schedule เลย → L4f, ออปชัน, ข่าวงบรายสัปดาห์ ยังไม่เก็บข้อมูลจริง
 - **v4.18 Claude Haiku 5.5:** merge แล้ว รอ `CLAUDE_CODE_OAUTH_TOKEN` + deploy ที่ผ่าน; ผลจะไม่รวมกับ DeepSeek (PR #156)
 - **เส้นวันนี้:** L8, L9, L10, L11 ถูกตัด; บั๊กสูตร short ใน screens (L7/L8/L10) แก้แล้ว; L8b (ทุกเหรียญที่เคยลิสต์) กำลังรัน; N1 news_v3 กำลังรัน
@@ -77,13 +77,13 @@
 | ส่วน | สถานะ | รายละเอียด |
 |---|---|---|
 | deploy main | ผ่าน | PR #143 (ผล L7) และ #145 (ผู้ให้บริการ LLM ทั่วไป) merge แล้ว deploy ผ่าน (run 45467480935 success) |
-| บอท DeepSeek (v4.17) | รันอยู่ | `error` ว่าง, `paused` false, `last_scan_age_s` 21; 142.72 USD เทียบบัญชีสุ่ม 147.07 USD; ปิดแล้ว 22/30 คู่ |
+| [STALE 2026-11-27: ไม่ใช้ DeepSeek แล้ว] บอท DeepSeek (v4.17) | รันอยู่ | `error` ว่าง, `paused` false, `last_scan_age_s` 21; 142.72 USD เทียบบัญชีสุ่ม 147.07 USD; ปิดแล้ว 22/30 คู่ |
 | ค่า AI วันนี้ | เฝ้าดู | `usd_today` 2.89 จาก 247 calls (ราว 0.012 USD/ครั้ง) ยังไม่ถึงเพดาน 1,000 รอบ/วัน; ไม่มีเพดานงบตามที่เจ้าของกำหนด — บันทึกใน `reports/COSTS.md` |
 | ออปชันแบบเดินหน้า | เก็บข้อมูล | 0/150 เทรด, `gaps` 0 |
 | ข่าวงบ H5 แบบเดินหน้า | รอ | เริ่มนับ 1 ธ.ค. |
 | ตัวเก็บข้อมูล (`/api/collect`) | เก็บอยู่ | venues และ deribit มีไฟล์ของวันนี้, `errors` 0, `paused_low_disk` false; Upbit ยัง 403 จาก Kuber |
 
-## บอท DeepSeek (ตรวจ Chrome 2026-11-24 18:16 UTC)
+## บอท DeepSeek (ตรวจ Chrome 2026-11-24 18:16 UTC) [STALE 2026-11-27: ไม่ใช้ DeepSeek แล้ว; บอทเป็น Claude Haiku เท่านั้น]
 - แท็ก v4.17; ทุกบทบาทใช้ DeepSeek v4.1 flash 1017 ผ่าน ai.thirx.com (OpenRouter เครดิตหมด 402 ตั้งแต่ 16:59)
 - ทำงานเองอัตโนมัติ: desk_stats + similar_past + 8-K + sector + ความรู้ (ops/knowledge) และทุก 3 ชม. DeepSeek สรุป desk_lessons ให้ตัวเอง (รอบแรกได้ 8 บทเรียน)
 - เพดาน 1,000 รอบ/วัน
