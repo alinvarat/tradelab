@@ -1,0 +1,2 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17677","title":"Binance Perp Monitor: AKEUSDT (AKE) +5.8% in the past 10 seconds","t_pub":1795754148.432,"res":"s","t_seen":1795754152.129482,"lat_s":3.697}
+{"event":"llm","source":"eqn_rest","key":"eqn:17677","t_pub":1795754148.432,"t_seen":1795754152.129482,"t_llm":1795754157.3046045,"llm_s":5.175,"model":"claude/claude-haiku-5-5","parsed":{"direction":"up","confidence":45,"instrument":"AKE"}}
