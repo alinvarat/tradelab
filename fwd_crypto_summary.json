@@ -2,10 +2,10 @@
  "protocol": "research/studies/protocol_fwd_crypto_spikes_20261125.md",
  "start_ts": 1795564800.0,
  "gap_hours_missed": 0,
- "h_next": 1795734000.0,
- "d_next": 1795651200.0,
+ "h_next": 1795737600.0,
+ "d_next": 1795737600.0,
  "last_run": {
-  "run_at": 1795734329,
+  "run_at": 1795737910,
   "universe": {
    "spot_usdt": 521,
    "with_okx_perp": 206
@@ -20,7 +20,12 @@
    "failed_symbols": 0
   },
   "L8B_F": {
-   "processed": 0
+   "processed": 1,
+   "candidates": 1,
+   "events": 1,
+   "opened": 1,
+   "pool": 69,
+   "failed_symbols": 0
   }
  },
  "errors": [],
@@ -72,8 +77,8 @@
   "L8B_F": {
    "equity_usd": 147.0,
    "start_usd": 147.0,
-   "open": 0,
-   "open_taken": 0,
+   "open": 1,
+   "open_taken": 1,
    "closed": 0,
    "closed_taken": 0,
    "skipped_cap": 0,
@@ -140,7 +145,16 @@
     "control": "AAVEUSDT"
    }
   ],
-  "L8B_F": []
+  "L8B_F": [
+   {
+    "symbol": "INITUSDT",
+    "entry_ts": 1795737600.0,
+    "entry_px": 0.14202,
+    "stake": 14.7,
+    "move": 0.6671,
+    "control": "FILUSDT"
+   }
+  ]
  },
  "closed_last": {
   "L12B_F": [],

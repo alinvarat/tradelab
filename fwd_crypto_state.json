@@ -1,8 +1,8 @@
 {
  "version": 1,
  "start_ts": 1795564800.0,
- "h_next": 1795734000.0,
- "d_next": 1795651200.0,
+ "h_next": 1795737600.0,
+ "d_next": 1795737600.0,
  "gap_hours_missed": 0,
  "lines": {
   "L12B_F": {
@@ -64,9 +64,27 @@
   },
   "L8B_F": {
    "equity": 147.0,
-   "open": [],
+   "open": [
+    {
+     "id": "L8B_F|INITUSDT|1795737600",
+     "line": "L8B_F",
+     "symbol": "INITUSDT",
+     "entry_ts": 1795737600.0,
+     "entry_px": 0.14202,
+     "btc_entry": 60577.18,
+     "stake": 14.7,
+     "move": 0.6671,
+     "control": {
+      "symbol": "FILUSDT",
+      "entry_px": 0.5398,
+      "btc_entry": 60577.18
+     }
+    }
+   ],
    "closed": [],
-   "last_event": {},
+   "last_event": {
+    "INITUSDT": 1795737600.0
+   },
    "skipped_cap": 0
   }
  }
