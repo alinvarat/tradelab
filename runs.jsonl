@@ -1,2 +1,3 @@
 {"run": "20261127T0042", "chunk": 0, "ticks_ok": 6, "ticks_missed": 0, "book_fail": 0, "trades_truncated": 1, "snaps": 396, "trades": 21734, "t": 1795740475}
 {"run": "20261127T0048", "chunk": 0, "ticks_ok": 31, "ticks_missed": 0, "book_fail": 93, "trades_truncated": 0, "snaps": 1991, "trades": 3244, "t": 1795742329}
+{"run": "20261127T0048", "chunk": 1, "ticks_ok": 62, "ticks_missed": 0, "book_fail": 188, "trades_truncated": 0, "snaps": 1904, "trades": 2765, "t": 1795744188}
