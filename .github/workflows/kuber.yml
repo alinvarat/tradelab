@@ -55,6 +55,9 @@ jobs:
     needs: test
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write           # read the last successful run (diff baseline) and cancel this run when a newer deploy is queued
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -64,25 +67,74 @@ jobs:
       - name: Deploy only when files the pod runs changed
         id: changed
         env:
+          GH_TOKEN: ${{ github.token }}
           BEFORE: ${{ github.event.before }}
         run: |
           # Fewer deploys: every deploy rebuilds the image on Kuber; test-, workflow- and doc-only merges skip it.
-          if [ "${{ github.event_name }}" != "push" ] || [ -z "$BEFORE" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
+          # Baseline = head of the last successful run on main (a skipped deploy counts: its pod files were equal to
+          # its own baseline), not github.event.before. A run that was cancelled while queued (coalesced below) or
+          # failed is not a success, so its pod changes are still picked up by the next run instead of being lost.
+          base="$(gh run list --workflow kuber.yml --branch main --status success --limit 1 \
+                    --json headSha --jq '.[0].headSha' 2>/dev/null || true)"
+          if [ -z "$base" ] || ! git cat-file -e "$base" 2>/dev/null; then base="$BEFORE"; fi
+          if [ "${{ github.event_name }}" != "push" ] || [ -z "$base" ] || ! git cat-file -e "$base" 2>/dev/null; then
             echo "deploy=true" >> "$GITHUB_OUTPUT"; exit 0
           fi
-          if git diff --name-only "$BEFORE" "$GITHUB_SHA" | grep -qE '^(server\.py|core/|ui/|Dockerfile|compose\.yml|\.kuberrc\.ts|\.dockerignore|\.github/workflows/kuber\.yml)'; then
+          if git diff --name-only "$base" "$GITHUB_SHA" | grep -qE '^(server\.py|core/|ui/|Dockerfile|compose\.yml|\.kuberrc\.ts|\.dockerignore|\.github/workflows/kuber\.yml)'; then
             echo "deploy=true" >> "$GITHUB_OUTPUT"
           else
             echo "deploy=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::No app file changed; deploy skipped."
+            echo "::notice::No app file changed since ${base}; deploy skipped."
+          fi
+
+      - name: Let back-to-back merges coalesce into one deploy
+        id: settle
+        if: steps.changed.outputs.deploy == 'true' && github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The concurrency group already keeps only the newest queued run and never cancels a running one. Add a
+          # short settle window: if a newer run for main is already queued when this one is about to deploy, this
+          # run (still before the build, nothing running on Kuber) cancels itself and the newer run deploys the
+          # newer tree. A cancelled run is not "success", so the baseline above still covers its changes.
+          sleep 90
+          newer="$(gh run list --workflow kuber.yml --branch main --limit 20 --json status,headSha,databaseId \
+                     --jq "[.[] | select((.status == \"pending\" or .status == \"queued\" or .status == \"waiting\") and .headSha != \"$GITHUB_SHA\" and .databaseId != $GITHUB_RUN_ID)] | length" 2>/dev/null || echo 0)"
+          if [ "${newer:-0}" -gt 0 ]; then
+            echo "::notice::A newer run is queued; cancelling this one so only the newest tree is deployed."
+            gh run cancel "$GITHUB_RUN_ID" || true
+            sleep 60
+            echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Set up Bun
         if: steps.changed.outputs.deploy == 'true'
         uses: oven-sh/setup-bun@v2
 
+      - name: Slim the deploy directory
+        if: steps.changed.outputs.deploy == 'true' && steps.settle.outputs.skip != 'true'
+        run: |
+          # Kuber snapshots every file git tracks (git ls-files --cached --others; .dockerignore is not applied) and
+          # the server copies that whole tree onto its disk for each build. Keep only what the image uses: a fresh
+          # one-commit-less index of 7 paths instead of the ~90 MB repository (research data, reports, tests, .git).
+          # Same directory, so the project name and Kuber trust fingerprint are unchanged. The checkout's .git is set
+          # aside and restored by the last step.
+          keep="server.py core ui Dockerfile compose.yml .kuberrc.ts .dockerignore"
+          full_bytes="$(git ls-files -z | xargs -0 du -cb | tail -1 | cut -f1)"
+          stash="$RUNNER_TEMP/deploy-keep"
+          rm -rf "$stash"; mkdir -p "$stash"
+          for p in $keep; do cp -a --parents "$p" "$stash"/; done
+          mv .git "$RUNNER_TEMP/original.git"
+          find . -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
+          cp -a "$stash"/. .
+          git init -q .
+          git add -- $keep
+          slim_bytes="$(git ls-files -z | xargs -0 du -cb | tail -1 | cut -f1)"
+          echo "Deploy upload: ${full_bytes} bytes (full tracked tree) -> ${slim_bytes} bytes ($(git ls-files | wc -l) files)"
+          echo "::notice::Deploy upload slimmed from ${full_bytes} to ${slim_bytes} bytes."
+
       - name: Deploy
-        if: steps.changed.outputs.deploy == 'true'
+        if: steps.changed.outputs.deploy == 'true' && steps.settle.outputs.skip != 'true'
         env:
           KUBER_API_KEY: ${{ secrets.KUBER_API_TOKEN }}
           TRADELAB_SEC_UA: ${{ secrets.TRADELAB_SEC_UA }}
@@ -117,9 +169,15 @@ jobs:
           # Kuber's build step has failed on the platform side ("The request could not be completed") and
           # succeeded on a manual re-run since 2026-11-24. Retry the same command instead of failing the
           # deploy on a transient platform error; a real code error still fails all three attempts.
+          log="$RUNNER_TEMP/kuber-ci.log"
           for attempt in 1 2 3; do
-            if bunx --bun @dmgnr/kuber@2.7.3 ci --trust; then
+            if bunx --bun @dmgnr/kuber@2.7.3 ci --trust 2>&1 | tee "$log"; then
               exit 0
+            fi
+            # A full build-host disk does not heal in 5 minutes and retries only add more partial workspaces.
+            if grep -qE 'ENOSPC|no space left on device' "$log"; then
+              echo "::error::Kuber build host is out of disk space (ENOSPC). Retrying will not help: ask the Kuber admin to free disk on the build host (/data/workspaces), then re-run this workflow."
+              exit 1
             fi
             # 2026-11-25: Kuber builds can outlast Cloudflare's 120 s proxy window; the server keeps building
             # after the client gives up, and a quick retry then fails with "Build record was concurrently
@@ -129,3 +187,8 @@ jobs:
           done
           echo "::error::Deploy failed on all 3 attempts."
           exit 1
+
+      - name: Restore the full checkout
+        if: always() && steps.changed.outputs.deploy == 'true' && steps.settle.outputs.skip != 'true'
+        run: |
+          if [ -d "$RUNNER_TEMP/original.git" ]; then rm -rf .git && mv "$RUNNER_TEMP/original.git" .git; fi
