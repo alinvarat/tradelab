@@ -1,0 +1,2 @@
+{"v":2,"protocol":"v4.20","ts":1795789764.6186097,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":-0.03804,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_delist"]}
+{"v":2,"protocol":"v4.20","ts":1795873285.2728143,"symbol":"AVAX-USD","cls":"crypto","src":"shock","news_type":null,"action":"hold","h":3600,"abn":0.00387,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_delist","globenewswire","ledger:event_book","ledger:notice_fwd","ledger:okx_funding_fwd"]}
