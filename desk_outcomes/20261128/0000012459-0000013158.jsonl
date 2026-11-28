@@ -1,0 +1,3 @@
+{"v":2,"protocol":"v4.20","ts":1795786461.6827366,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":-0.05079,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_delist"]}
+{"v":2,"protocol":"v4.20","ts":1795786461.6827366,"symbol":"SOL-USD","cls":"crypto","src":"mover","news_type":"other","action":"hold","h":86400,"abn":-0.05144,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_delist"]}
+{"v":2,"protocol":"v4.20","ts":1795786461.6827366,"symbol":"DOGE-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":86400,"abn":-0.05271,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_delist"]}
