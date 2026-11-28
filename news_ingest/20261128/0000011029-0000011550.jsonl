@@ -1,0 +1,2 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17924","title":"@willdepue ??\n\nYou can find X posts on the Google search or Grok Bot. \n\nOur internal search function still sucks, but AI will fix it.","t_pub":1795826077.487,"res":"s","t_seen":1795826079.1570756,"lat_s":1.67}
+{"event":"llm","source":"eqn_rest","key":"eqn:17924","t_pub":1795826077.487,"t_seen":1795826079.1570756,"t_llm":1795826083.8019745,"llm_s":4.645,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":90,"instrument":null}}
