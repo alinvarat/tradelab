@@ -1,0 +1,5 @@
+{"v":2,"protocol":"v4.19","ts":1795744989.5835593,"symbol":"NZDUSD=X","cls":"fx","src":"mover","news_type":null,"action":"hold","h":86400,"abn":-0.02312,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795747477.2208447,"symbol":"AUDUSD=X","cls":"fx","src":"mover","news_type":null,"action":"hold","h":86400,"abn":-0.01876,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795757434.1254492,"symbol":"LINK-USD","cls":"crypto","src":"shock","news_type":null,"action":"hold","h":86400,"abn":-0.07118,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795757434.1254492,"symbol":"AUDUSD=X","cls":"fx","src":"mover","news_type":null,"action":"hold","h":86400,"abn":-0.01981,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795757434.1254492,"symbol":"BCH-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":86400,"abn":-0.06094,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
