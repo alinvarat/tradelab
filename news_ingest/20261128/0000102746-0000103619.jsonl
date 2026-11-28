@@ -1,0 +1,4 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17971","title":"You can actually do this https://t.co/EVkIYenFqH","t_pub":1795841263.705,"res":"s","t_seen":1795841264.2272618,"lat_s":0.522}
+{"event":"llm","source":"eqn_rest","key":"eqn:17971","t_pub":1795841263.705,"t_seen":1795841264.2272618,"t_llm":1795841268.4542017,"llm_s":4.227,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":90,"instrument":null}}
+{"event":"item","source":"eqn_rest","key":"eqn:17972","title":"RT @cb_doge: This. \u2665\ufe0f https://t.co/rsSGiX3WHY","t_pub":1795841311.646,"res":"s","t_seen":1795841313.4133058,"lat_s":1.767}
+{"event":"llm","source":"eqn_rest","key":"eqn:17972","t_pub":1795841311.646,"t_seen":1795841313.4133058,"t_llm":1795841326.360298,"llm_s":12.947,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":15,"instrument":null}}
