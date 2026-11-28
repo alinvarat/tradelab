@@ -1,0 +1,3 @@
+{"v":2,"protocol":"v4.19","ts":1795755619.380711,"symbol":"LINK-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":86400,"abn":-0.05613,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795755619.380711,"symbol":"DOT-USD","cls":"crypto","src":"mover","news_type":null,"action":"hold","h":86400,"abn":-0.05979,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
+{"v":2,"protocol":"v4.19","ts":1795756304.0051148,"symbol":"XRP-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":-0.03704,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
