@@ -1,0 +1,4 @@
+{"event":"item","source":"eqn_rest","key":"eqn:17946","title":"@billykyle You aren\u2019t being offered per token pricing?","t_pub":1795833154.117,"res":"s","t_seen":1795833155.8420959,"lat_s":1.725}
+{"event":"llm","source":"eqn_rest","key":"eqn:17946","t_pub":1795833154.117,"t_seen":1795833155.8420959,"t_llm":1795833159.9826868,"llm_s":4.141,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":5,"instrument":null}}
+{"event":"item","source":"eqn_rest","key":"eqn:17947","title":"\u2764\ufe0f https://t.co/qrRAdB14PN","t_pub":1795833464.449,"res":"s","t_seen":1795833465.4759016,"lat_s":1.027}
+{"event":"llm","source":"eqn_rest","key":"eqn:17947","t_pub":1795833464.449,"t_seen":1795833465.4759016,"t_llm":1795833470.1513212,"llm_s":4.675,"model":"claude/claude-haiku-5-5","parsed":{"direction":"none","confidence":90,"instrument":null}}
