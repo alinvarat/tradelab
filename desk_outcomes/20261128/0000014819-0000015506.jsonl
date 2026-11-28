@@ -1,0 +1,3 @@
+{"v":2,"protocol":"v4.20","ts":1795791157.9391828,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":-0.0071,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_listings"]}
+{"v":2,"protocol":"v4.20","ts":1795791611.4811034,"symbol":"ETH-USD","cls":"crypto","src":"mover","news_type":"other","action":"hold","h":86400,"abn":-0.01457,"veto":null,"forced":false,"em":null,"rv":null,"stale":["binance_listings"]}
+{"v":2,"protocol":"v4.20","ts":1795792234.7078485,"symbol":"BTC-USD","cls":"crypto","src":"news","news_type":"other","action":"hold","h":86400,"abn":-0.00849,"veto":null,"forced":false,"em":null,"rv":null,"stale":[]}
